@@ -152,10 +152,79 @@ namespace Main.Core.Documents
         public Guid PublicKey { get; set; }
 
         /// <summary>
+        /// Gets the wrapped questions.
+        /// </summary>
+        [JsonIgnore]
+        public IEnumerable<CompleteQuestionWrapper> WrappedQuestions
+        {
+            get
+            {
+                return this.QuestionHash.WrapedQuestions;
+            }
+        }
+
+        /// <summary>
+        /// The get question.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICompleteQuestion"/>.
+        /// </returns>
+        public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
+        {
+            return this.QuestionHash.GetQuestion(publicKey, propagationKey);
+        }
+
+        /// <summary>
+        /// The get question wrapper.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
+        {
+            return this.QuestionHash.GetQuestionWrapper(publicKey, propagationKey);
+        }
+
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
+        {
+            return this.QuestionHash.GetFeaturedQuestions();
+        }
+
+        /// <summary>
+        /// Gets the questions.
+        /// </summary>
+        [JsonIgnore]
+        public IEnumerable<ICompleteQuestion> Questions
+        {
+            get
+            {
+                return this.QuestionHash.Questions;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the question hash.
         /// </summary>
         [JsonIgnore]
-        public GroupHash QuestionHash
+        private GroupHash QuestionHash
         {
             get
             {
@@ -380,6 +449,20 @@ namespace Main.Core.Documents
         /// Raises CompositeException.
         /// </exception>
         public void Remove(IComposite c)
+        {
+            this.RemoveInt(c);
+            this.QuestionHash.RemoveGroup(c as ICompleteGroup);
+        }
+
+        /// <summary>
+        /// The remove int.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        private void RemoveInt(IComposite c)
         {
             var propogate = c as ICompleteGroup;
             if (propogate != null && propogate.PropagationPublicKey.HasValue)

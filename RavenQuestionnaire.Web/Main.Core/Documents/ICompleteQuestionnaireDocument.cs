@@ -9,6 +9,7 @@
 namespace Main.Core.Documents
 {
     using System;
+    using System.Collections.Generic;
 
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
@@ -27,11 +28,6 @@ namespace Main.Core.Documents
         UserLight Creator { get; set; }
 
         /// <summary>
-        /// Gets or sets the question hash.
-        /// </summary>
-        GroupHash QuestionHash { get; set; }
-
-        /// <summary>
         /// Gets or sets the responsible.
         /// </summary>
         UserLight Responsible { get; set; }
@@ -45,6 +41,53 @@ namespace Main.Core.Documents
         /// Gets or sets the template id.
         /// </summary>
         Guid TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets the questions.
+        /// </summary>
+        IEnumerable<ICompleteQuestion> Questions { get; }
+
+        /// <summary>
+        /// Gets the questions.
+        /// </summary>
+        IEnumerable<CompleteQuestionWrapper> WrappedQuestions { get; }
+
+        /// <summary>
+        /// The get question.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICompleteQuestion"/>.
+        /// </returns>
+        ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey);
+
+        /// <summary>
+        /// The get question wrapper.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey);
+
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<ICompleteQuestion> GetFeaturedQuestions();
+
 
         #endregion
     }

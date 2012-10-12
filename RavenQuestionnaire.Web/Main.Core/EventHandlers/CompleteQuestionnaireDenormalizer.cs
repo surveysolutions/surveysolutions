@@ -84,11 +84,9 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<CommentSeted> evnt)
         {
-            CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
 
-            CompleteQuestionWrapper questionWrapper =
-                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
+            CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
             {
@@ -121,7 +119,7 @@ namespace Main.Core.EventHandlers
             CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper =
-                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
+                item.GetQuestionWrapper(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
             {
@@ -129,15 +127,7 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
-
-
-            /*ICompleteGroup group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
-            var executor = new CompleteQuestionnaireConditionExecutor(item.QuestionHash);
-            executor.Execute(group);
-
-            var validator = new CompleteQuestionnaireValidationExecutor(item.QuestionHash);
-            validator.Execute(group);*/
-
+            
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
         }
 
@@ -156,7 +146,6 @@ namespace Main.Core.EventHandlers
 
             var newGroup = new CompleteGroup(template, evnt.Payload.PropagationKey);
             item.Add(newGroup, null);
-            item.QuestionHash.AddGroup(newGroup);
         }
 
         /// <summary>
@@ -174,7 +163,6 @@ namespace Main.Core.EventHandlers
             try
             {
                 item.Remove(group);
-                item.QuestionHash.RemoveGroup(group);
             }
             catch (CompositeException)
             {

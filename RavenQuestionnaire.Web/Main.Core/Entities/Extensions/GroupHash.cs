@@ -46,22 +46,15 @@ namespace Main.Core.Entities.Extensions
         /// <param name="root">
         /// The root.
         /// </param>
-        public GroupHash(ICompleteGroup root)
-            : this()
+        public GroupHash(ICompleteGroup root) : this()
         {
-            this.PublicKey = root.PublicKey;
             this.ProcessTree(root);
         }
 
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
-        public Guid PublicKey { get; private set; }
-
+       
         /// <summary>
         /// Gets the questions.
         /// </summary>
@@ -71,6 +64,17 @@ namespace Main.Core.Entities.Extensions
             {
                 return this.hash.Values.Select(v => v.Question);
             }
+        }
+
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
+        {
+                return this.hash.Values.Select(v => v.Question).Where(q => q.Featured);
         }
 
         /// <summary>
@@ -100,31 +104,11 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The Main.Core.Entities.SubEntities.Complete.ICompleteQuestion.
         /// </returns>
-        public ICompleteQuestion this[Guid publicKey, Guid? propagationKey]
+        public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            get
-            {
-                return this.GetQuestion(publicKey, propagationKey).Question;
-            }
+            return this.GetQuestionWrapper(publicKey, propagationKey).Question;
         }
-
-        /// <summary>
-        /// The this.
-        /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.SubEntities.Complete.ICompleteQuestion.
-        /// </returns>
-        public ICompleteQuestion this[ICompleteQuestion index]
-        {
-            get
-            {
-                return this.GetQuestion(index).Question;
-            }
-        }
-
+       
         #endregion
 
         #region Public Methods and Operators
@@ -159,7 +143,7 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The Main.Core.Entities.Extensions.GroupHash+CompleteQuestionWrapper.
         /// </returns>
-        public CompleteQuestionWrapper GetQuestion(Guid publicKey, Guid? propagationKey)
+        public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
         {
             if (this.hash.ContainsKey(this.GetQuestionKey(publicKey, null))
                 && !this.hash.ContainsKey(this.GetQuestionKey(publicKey, propagationKey)))
@@ -170,7 +154,7 @@ namespace Main.Core.Entities.Extensions
             return this.hash[this.GetQuestionKey(publicKey, propagationKey)];
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The get question screen.
         /// </summary>
         /// <param name="publicKey">
@@ -185,7 +169,7 @@ namespace Main.Core.Entities.Extensions
         public Guid GetQuestionScreen(Guid publicKey, Guid? propagationKey)
         {
             return this.GetQuestion(publicKey, propagationKey).GroupKey;
-        }
+        }*/
 
         /// <summary>
         /// The remove group.
@@ -215,7 +199,7 @@ namespace Main.Core.Entities.Extensions
 
         #region Methods
 
-        /// <summary>
+        /*/// <summary>
         /// The get question.
         /// </summary>
         /// <param name="index">
@@ -224,7 +208,7 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The Main.Core.Entities.Extensions.GroupHash+CompleteQuestionWrapper.
         /// </returns>
-        protected CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
+        private CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
         {
             if (this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, null))
                 && !this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)))
@@ -233,7 +217,7 @@ namespace Main.Core.Entities.Extensions
             }
 
             return this.hash[this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)];
-        }
+        }*/
 
         /// <summary>
         /// The get question key.
@@ -316,8 +300,6 @@ namespace Main.Core.Entities.Extensions
         /// </param>
         private void ProcessTree(ICompleteGroup root)
         {
-            /* foreach (IComposite composite in root.Children)
-             {*/
             var nodes = new Queue<CompositeWrapper>(new[] { new CompositeWrapper(root, null) });
             while (nodes.Count > 0)
             {

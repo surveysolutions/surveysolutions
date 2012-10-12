@@ -12,6 +12,7 @@ namespace Main.Core.ExpressionExecutors
     using System;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors.ExpressionExtentions;
@@ -28,7 +29,7 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// The hash.
         /// </summary>
-        private readonly GroupHash hash;
+        private readonly ICompleteQuestionnaireDocument doc;
 
         #endregion
 
@@ -37,12 +38,12 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireValidationExecutor"/> class.
         /// </summary>
-        /// <param name="hash">
+        /// <param name="doc">
         /// The hash.
         /// </param>
-        public CompleteQuestionnaireValidationExecutor(GroupHash hash)
+        public CompleteQuestionnaireValidationExecutor(ICompleteQuestionnaireDocument doc)
         {
-            this.hash = hash;
+            this.doc = doc;
         }
 
         #endregion
@@ -72,7 +73,7 @@ namespace Main.Core.ExpressionExecutors
         public bool Execute()
         {
             bool isValid = true;
-            foreach (ICompleteQuestion completeQuestion in this.hash.Questions)
+            foreach (ICompleteQuestion completeQuestion in this.doc.Questions)
             {
                 completeQuestion.Valid = this.Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
@@ -113,7 +114,7 @@ namespace Main.Core.ExpressionExecutors
                     Guid nameGuid = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
 
                     Guid? propagationKey = question.PropagationPublicKey;
-                    var targetQuestion = this.hash[nameGuid, propagationKey];
+                    var targetQuestion = this.doc.GetQuestion(nameGuid, propagationKey);
                     if (targetQuestion == null || !targetQuestion.Enabled)
                     {
                         args.Result = null;

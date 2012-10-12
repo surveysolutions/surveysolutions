@@ -11,6 +11,7 @@ namespace Main.Core.ExpressionExecutors
 {
     using System;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
@@ -34,7 +35,7 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// The hash.
         /// </summary>
-        private readonly GroupHash hash;
+        private readonly ICompleteQuestionnaireDocument doc;
 
         #endregion
 
@@ -43,12 +44,12 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireConditionExecutor"/> class.
         /// </summary>
-        /// <param name="hash">
+        /// <param name="doc">
         /// The hash.
         /// </param>
-        public CompleteQuestionnaireConditionExecutor(GroupHash hash)
+        public CompleteQuestionnaireConditionExecutor(ICompleteQuestionnaireDocument doc)
         {
-            this.hash = hash;
+            this.doc = doc;
         }
                
 
@@ -103,6 +104,11 @@ namespace Main.Core.ExpressionExecutors
         /// </exception>
         private bool? ExecuteAndChangeInternal(IConditional question, int currentStack)
         {
+            if (string.IsNullOrEmpty(question.ConditionExpression))
+            {
+                return true;
+            }
+
             if (currentStack++ >= StackDepthLimit)
             {
                 throw new Exception("Unsupported depth of expression call.");
@@ -115,7 +121,7 @@ namespace Main.Core.ExpressionExecutors
 
                 var item = question as ICompleteItem;
                 Guid? propagationKey = item != null ? item.PropagationPublicKey : null;
-                var targetQuestion = this.hash[nameGuid, propagationKey];
+                var targetQuestion = this.doc.GetQuestion(nameGuid, propagationKey);
 
                 if (targetQuestion != null && !string.IsNullOrWhiteSpace(targetQuestion.ConditionExpression))
                 {
@@ -162,6 +168,8 @@ namespace Main.Core.ExpressionExecutors
 
             bool? value = this.Execute(group);
             bool result = value ?? true; //// treat null as success 
+            
+            group.Enabled = result;
 
             foreach (IComposite child in group.Children)
             {

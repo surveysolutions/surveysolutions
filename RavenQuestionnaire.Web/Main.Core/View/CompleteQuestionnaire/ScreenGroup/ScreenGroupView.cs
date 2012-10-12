@@ -51,10 +51,10 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 new ScreenNavigationView(
                 doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(currentGroup);
 
-            var validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            var validator = new CompleteQuestionnaireValidationExecutor(doc);
             validator.Execute(currentGroup);
             BuildScreenContent(doc, currentGroup);
 

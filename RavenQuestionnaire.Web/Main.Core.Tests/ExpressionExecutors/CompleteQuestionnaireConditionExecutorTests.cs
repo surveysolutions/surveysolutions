@@ -42,7 +42,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
             bool? result = executor.Execute(new SingleCompleteQuestion());
             Assert.AreEqual(result, true);
         }
@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
             question.Children.Add(answer);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question);
             Assert.AreEqual(result, false);
         }
@@ -73,9 +73,20 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsInvalid_ReturnsNull()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
             bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "invalid condition" });
             Assert.AreEqual(result, null);
+        }
+
+        /// <summary>
+        /// The evaluate condition_ condition is invalid_ returns true.
+        /// </summary>
+        [Test]
+        public void EvaluateCondition_ConditionIsAbsent_ReturnsTrue()
+        {
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
+            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "" });
+            Assert.AreEqual(result, true);
         }
 
         /// <summary>
@@ -84,7 +95,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreEmpty_ReturnsTrue()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
 
             bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "5>3" });
             Assert.AreEqual(result, true);
@@ -106,7 +117,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             question.Children.Add(completeAnswer);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question);
             Assert.AreEqual(result, true);
         }
@@ -129,7 +140,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
             question.Children.Add(completeAnswer);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question1);
             Assert.AreEqual(result, false);
         }
@@ -163,7 +174,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer1.Selected = true;
             question1.Children.Add(completeAnswer1);
 
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(group);
             Assert.AreEqual(result, true);
         }

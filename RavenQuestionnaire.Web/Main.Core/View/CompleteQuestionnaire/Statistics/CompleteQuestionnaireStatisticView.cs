@@ -46,9 +46,9 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
         {
-            this.executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            this.executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-            this.validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            this.validator = new CompleteQuestionnaireValidationExecutor(doc);
 
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
@@ -171,7 +171,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
 
-            foreach (var question in target.QuestionHash.WrapedQuestions)
+            foreach (var question in target.WrappedQuestions)
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }

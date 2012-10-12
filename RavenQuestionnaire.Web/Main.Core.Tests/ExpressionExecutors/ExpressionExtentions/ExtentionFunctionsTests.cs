@@ -10,7 +10,6 @@
 namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
 {
     using Main.Core.Documents;
-    using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
@@ -19,10 +18,10 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
     using NUnit.Framework;
 
     /// <summary>
-    /// The extention functions tests.
+    /// The extension functions tests.
     /// </summary>
     [TestFixture]
-    public class ExtentionFunctionsTests
+    public class ExtensionFunctionsTests
     {
         /// <summary>
         /// The create objects.
@@ -60,11 +59,11 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
             question.Children.Add(answer1);
             question.Children.Add(answer2);
 
-            var executorC = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
+            var executorC = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executorC.Execute(question);
             Assert.AreEqual(result, false);
 
-            var executorE = new CompleteQuestionnaireValidationExecutor(new GroupHash(doc));
+            var executorE = new CompleteQuestionnaireValidationExecutor(doc);
             bool? result1 = executorE.Execute(question);
             Assert.AreEqual(result1, true);
         }
