@@ -56,12 +56,12 @@ namespace Web.CAPI.Controllers
         public ActionResult LogOff()
         {
             authentication.SignOut();
-
             return Redirect("~/");
         }
+
         public bool IsUserInBase()
         {
-            var count = _userEventSync.GetUsers(null);
+            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.User);
             if (count == null) return false;
             return count.ToList().Count > 0;
         }

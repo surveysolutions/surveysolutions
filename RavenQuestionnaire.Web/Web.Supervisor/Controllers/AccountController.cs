@@ -138,7 +138,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>whether users</returns>
         public bool IsUserInBase()
         {
-            var count = _userEventSync.GetUsers(null);
+            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.Supervisor);
             if (count == null) return false;
             return count.ToList().Count > 0;
 
