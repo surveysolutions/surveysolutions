@@ -47,7 +47,7 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// The description.
         /// </param>
         public AddGroupCommand(
-            Guid questionnaireId, Guid publicKey, string text, Guid? parentGroupKey, string conditionExpression, string description)
+            Guid questionnaireId, Guid publicKey, string text, Guid? parentGroupKey, string conditionExpression, string description, Propagate propagateble)
         {
             this.QuestionnaireId = questionnaireId;
             this.PublicKey = publicKey;
@@ -55,6 +55,7 @@ namespace Main.Core.Commands.Questionnaire.Group
             this.ConditionExpression = conditionExpression;
             this.ParentGroupKey = parentGroupKey;
             this.Description = description;
+            this.Propagateble = propagateble;
         }
 
         #endregion

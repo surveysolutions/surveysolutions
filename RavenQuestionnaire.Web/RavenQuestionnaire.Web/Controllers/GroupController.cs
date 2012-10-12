@@ -164,7 +164,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         Guid newItemKey = Guid.NewGuid();
                         this.commandService.Execute(new AddGroupCommand(model.QuestionnaireKey, newItemKey,
-                            model.Title, model.Parent, model.ConditionExpression, model.Description));
+                            model.Title, model.Parent, model.ConditionExpression, model.Description, model.Propagated));
 
 
                     }
