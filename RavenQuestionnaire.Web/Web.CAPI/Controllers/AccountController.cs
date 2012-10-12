@@ -61,7 +61,7 @@ namespace Web.CAPI.Controllers
 
         public bool IsUserInBase()
         {
-            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.User);
+            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.Operator);
             if (count == null) return false;
             return count.ToList().Count > 0;
         }
