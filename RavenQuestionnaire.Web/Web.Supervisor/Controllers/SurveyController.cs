@@ -474,7 +474,7 @@ namespace Web.Supervisor.Controllers
             var user = this.globalInfo.GetCurrentUser();
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            var input = new AssignmentInputModel(data.Id, null, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
+            var input = new AssignmentInputModel(data.Id, data.UserId, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
             var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);
         }
