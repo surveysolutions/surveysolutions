@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Awesomium.Core;
+using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
-using Browsing.Common.Controls;
 
 namespace Browsing.Common.Containers
 {
     public partial class Main : Screen
     {
+        private bool destroyed = false;
+        private bool checkIsRunning = false;
+
         #region C-tor
 
         public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
@@ -20,14 +24,28 @@ namespace Browsing.Common.Containers
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
 
-            WebCore.ClearCookies();
             IntitLogControls(false, false);
             //RefreshAuthentificationInfo();
+
+            this.statusLabel.ForeColor = System.Drawing.Color.Red;
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            this.destroyed = true;
+            base.OnHandleDestroyed(e);
         }
 
         #endregion
 
         #region Helpers
+
+        private void SetCheckingStatus(bool? checking)
+        {
+            this.statusLabel.Text = checking.HasValue ?
+                (checking.Value ? "Checking posibility to log in. Please, wait .." : "Please, synchronize your data to log in") 
+                : string.Empty;
+        }
 
         /// <summary>
         /// Assign access properties to Login, Logout and Dashboard buttons
@@ -39,6 +57,11 @@ namespace Browsing.Common.Containers
             this.btnDashboard.Enabled = this.btnLogout.Visible = userIsLoggedIn;
             this.btnLogin.Visible = !userIsLoggedIn;
             this.btnLogin.Enabled = loginIsPossible;
+
+            if(loginIsPossible)
+                SetCheckingStatus(null);
+            else
+                SetCheckingStatus(false);
         }
 
         private void RefreshAuthentificationInfo()
@@ -46,24 +69,65 @@ namespace Browsing.Common.Containers
             isDatabaseContainsUsers = null;
             isUserLoggedIn = null;
 
-            IntitLogControls(false, false);
+            var userIsLoggedIn = IsUserLoggedIn; // cannot be accessed in extra thread; exception in WebCore.GetCookies
 
-            new System.Threading.Thread(() => 
+            IntitLogControls(userIsLoggedIn, userIsLoggedIn);
+
+            this.statusLabel.Text = string.Empty;
+
+            if (userIsLoggedIn)
+                return;
+
+            SetCheckingStatus(true);
+
+            new System.Threading.Thread(() =>
                 {
-                    if (this.IsDisposed || !this.IsHandleCreated)
+                    if (this.checkIsRunning)
                         return;
 
-                    var userIsLoggedIn = IsUserLoggedIn;
-                    var loginIsPossible = userIsLoggedIn || IsDatabaseContainsUsers; // minimize web-application access
+                    this.checkIsRunning = true;
 
-                    this.Invoke(new MethodInvoker(() => IntitLogControls(userIsLoggedIn, loginIsPossible)));
+                    try
+                    {
+                        bool loginIsPossible = false;
+                        for (int tries = 0; !loginIsPossible; tries++)
+                        {
+                            if (this.IsDisposed)
+                                return;
+
+                            loginIsPossible = IsDatabaseContainsUsers; // minimize web-application access
+
+                            while (!this.destroyed && !this.IsHandleCreated)
+                                Thread.Sleep(300);
+
+                            if (this.destroyed)
+                                return;
+
+                            if (loginIsPossible || tries > 10) // todo: let's tune the number
+                                this.Invoke(new MethodInvoker(() => IntitLogControls(false, loginIsPossible)));
+
+                            if (loginIsPossible)
+                                return;
+
+                            Thread.Sleep(1000);
+
+                            this.Invoke(new MethodInvoker(() => SetCheckingStatus(true)));
+
+                            this.isDatabaseContainsUsers = null; // reset
+                        };
+                    }
+                    finally
+                    {
+                        this.checkIsRunning = false;
+                    }
+
                 }).Start();
         }
 
         #endregion
 
         #region Private Members
-        
+
         private ISettingsProvider clientSettings;
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
@@ -181,18 +245,6 @@ namespace Browsing.Common.Containers
             base.OnValidateContent();
 
             RefreshAuthentificationInfo();
-        }
-
-        protected override void OnHomeButtonClick(object sender, EventArgs e)
-        {
-            base.OnHomeButtonClick(sender, e);
-        }
-
-        protected override void OnParentChanged(EventArgs e)
-        {
-            base.OnParentChanged(e);
-
-            //RefreshAuthentificationInfo();
         }
 
         #endregion
