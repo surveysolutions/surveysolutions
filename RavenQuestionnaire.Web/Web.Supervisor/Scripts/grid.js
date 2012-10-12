@@ -62,7 +62,7 @@
 
             /* public methods */
             this.construct = function (settings) {
-                var g = function() {
+                return this.each(function () {
 
                     var $this, config;
 
@@ -88,8 +88,7 @@
                         });
 
                     makePagesClickable(config);
-                };
-                return g;
+                });
             };
         }
     });

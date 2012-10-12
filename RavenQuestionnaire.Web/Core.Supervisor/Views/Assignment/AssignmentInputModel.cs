@@ -36,7 +36,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// The _page size.
         /// </summary>
-        private int pageSize = 20;
+        private int pageSize = 2;
 
         #endregion
 
