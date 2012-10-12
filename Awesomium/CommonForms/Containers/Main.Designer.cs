@@ -32,13 +32,14 @@ namespace Browsing.Common.Containers
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnExit = new Browsing.Common.Controls.FlatButton();
             this.pnlHolder = new System.Windows.Forms.Panel();
             this.btnLogout = new Browsing.Common.Controls.FlatButton();
             this.btnLogin = new Browsing.Common.Controls.FlatButton();
             this.btnSyncronization = new Browsing.Common.Controls.FlatButton();
             this.btnSettings = new Browsing.Common.Controls.FlatButton();
             this.btnDashboard = new Browsing.Common.Controls.FlatButton();
-            this.btnExit = new Browsing.Common.Controls.FlatButton();
+            this.statusLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlHolder.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +59,7 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel1.Controls.Add(this.btnSyncronization, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnSettings, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnDashboard, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.statusLabel, 1, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -69,6 +71,24 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1024, 600);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // btnExit
+            // 
+            this.btnExit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnExit.FlatAppearance.BorderSize = 0;
+            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Image = ((System.Drawing.Image)(resources.GetObject("btnExit.Image")));
+            this.btnExit.Location = new System.Drawing.Point(731, 326);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(0);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
+            this.btnExit.Size = new System.Drawing.Size(215, 220);
+            this.btnExit.TabIndex = 4;
+            this.btnExit.Text = "Exit";
+            this.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // pnlHolder
             // 
@@ -102,6 +122,7 @@ namespace Browsing.Common.Containers
             // btnLogin
             // 
             this.btnLogin.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnLogin.Enabled = false;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLogin.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -113,7 +134,6 @@ namespace Browsing.Common.Containers
             this.btnLogin.Size = new System.Drawing.Size(209, 214);
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "Login";
-            this.btnLogin.Enabled = false;
             this.btnLogin.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
@@ -172,23 +192,17 @@ namespace Browsing.Common.Containers
             this.btnDashboard.UseVisualStyleBackColor = true;
             this.btnDashboard.Click += new System.EventHandler(this.btnDashboard_Click);
             // 
-            // flatButton1
+            // statusLabel
             // 
-            this.btnExit.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnExit.FlatAppearance.BorderSize = 0;
-            this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Image = ((System.Drawing.Image)(resources.GetObject("btnExit.Image")));
-            this.btnExit.Location = new System.Drawing.Point(731, 326);
-            this.btnExit.Margin = new System.Windows.Forms.Padding(0);
-            this.btnExit.Name = "flatButton1";
-            this.btnExit.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnExit.Size = new System.Drawing.Size(215, 220);
-            this.btnExit.TabIndex = 4;
-            this.btnExit.Text = "Exit";
-            this.btnExit.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
+            this.statusLabel.AutoSize = true;
+            this.tableLayoutPanel1.SetColumnSpan(this.statusLabel, 5);
+            this.statusLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.statusLabel.Location = new System.Drawing.Point(78, 273);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(865, 25);
+            this.statusLabel.TabIndex = 5;
+            this.statusLabel.Text = "label1";
             // 
             // Main
             // 
@@ -200,9 +214,9 @@ namespace Browsing.Common.Containers
             this.Size = new System.Drawing.Size(1024, 600);
             this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.pnlHolder.ResumeLayout(false);
             this.ResumeLayout(false);
-            
 
         }
 
@@ -218,5 +232,6 @@ namespace Browsing.Common.Containers
         private Controls.FlatButton btnExit;
         private System.Windows.Forms.Panel pnlHolder;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Label statusLabel;
     }
 }
