@@ -27,6 +27,8 @@ namespace Web.CAPI.Controllers
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View;
+    using Main.Core.View.SyncProcess;
+    using Main.Core.View.User;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
@@ -390,6 +392,19 @@ namespace Web.CAPI.Controllers
             return syncProcess;
         }
 
+        /// <summary>
+        /// Sync process summary
+        /// </summary>
+        /// <returns>
+        /// Json with sync process infor for current logged in user
+        /// </returns>
+        public JsonResult Statistics()
+        {
+            var user = this._globalProvider.GetCurrentUser();
+            var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
+                    new SyncProcessInputModel(user == null ? Guid.Empty : user.Id));
+            return this.Json(model, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

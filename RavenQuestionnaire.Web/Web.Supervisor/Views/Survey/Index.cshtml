@@ -31,7 +31,7 @@
     }
 
     function onPagingClick() {
-        $(".pagination a").click(function(e) {
+        $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
             getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
             return false;
         });

@@ -166,8 +166,10 @@
     <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
     <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
     <Compile Include="Documents\StatusDocument.cs" />
+    <Compile Include="Documents\SynchronizationStatisticType.cs" />
     <Compile Include="Documents\SynchronizationType.cs" />
     <Compile Include="Documents\SyncProcessDocument.cs" />
+    <Compile Include="Documents\SyncProcessStatisticsDocument.cs" />
     <Compile Include="Documents\UserDocument.cs" />
     <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
@@ -249,6 +251,7 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventSync.cs" />
     <Compile Include="Events\AbstractSnapshotableEventSync.cs" />
@@ -353,6 +356,10 @@
     <Compile Include="View\Question\QuestionView.cs" />
     <Compile Include="View\Question\QuestionViewFactory.cs" />
     <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessView.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessInputModel.cs" />
+    <Compile Include="View\SyncProcess\UserSyncProcessStatistics.cs" />
     <Compile Include="View\User\UserBrowseInputModel.cs" />
     <Compile Include="View\User\UserBrowseItem.cs" />
     <Compile Include="View\User\UserBrowseView.cs" />
