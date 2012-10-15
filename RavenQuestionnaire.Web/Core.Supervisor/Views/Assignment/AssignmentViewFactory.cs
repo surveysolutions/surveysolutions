@@ -83,7 +83,7 @@ namespace Core.Supervisor.Views.Assignment
             {
                 items = items.Where(t => t.Responsible == null);
             }
-            else if (input.UserId.HasValue)
+            else if (input.UserId.HasValue && input.UserId != Guid.Empty)
             {
                 items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId.Value);
             }
@@ -106,7 +106,6 @@ namespace Core.Supervisor.Views.Assignment
             }
             
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            List<DateTime> dates = items.Select(t => t.CreationDate).ToList();
             return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id, input.UserId);
         }
 
