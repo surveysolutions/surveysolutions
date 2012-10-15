@@ -190,8 +190,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 throw new CompositeException("answer wasn't found");
             }
 
-            if (answer.PublicKey == this.PublicKey
-                &&
+            if (answer.PublicKey == this.PublicKey &&
                 ((!answer.PropogationPublicKey.HasValue && !this.PropogationPublicKey.HasValue)
                  || answer.PropogationPublicKey == this.PropogationPublicKey))
             {

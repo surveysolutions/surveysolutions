@@ -165,7 +165,6 @@ namespace Main.Core.Documents
                 this.Children.Add(c);
                 return;
             }
-
             foreach (IComposite child in this.Children)
             {
                 try
@@ -177,9 +176,9 @@ namespace Main.Core.Documents
                 {
                 }
 
-                /* if (child.Add(c, parent))
-                     return true;*/
             }
+
+
 
             throw new CompositeException();
         }
