@@ -76,9 +76,9 @@ namespace Core.Supervisor.Views.Assignment
                                : input.Statuses.Select(Guid.Parse).ToList();
             IQueryable<CompleteQuestionnaireBrowseItem> items =
                 statuses.Count == 0
-                ? this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id))
+                ? this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id)).OrderByDescending(t => t.CreationDate)
                 : this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id))
-                                                  .Where(v => statuses.Contains(v.Status.PublicId));
+                                                  .Where(v => statuses.Contains(v.Status.PublicId)).OrderByDescending(t => t.CreationDate);
             if (input.IsNotAssigned)
             {
                 items = items.Where(t => t.Responsible == null);
@@ -106,7 +106,8 @@ namespace Core.Supervisor.Views.Assignment
             }
             
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new AssignmentView(input.Page, input.PageSize, title, count, items.OrderByDescending(t => t.CreationDate), input.Id, input.UserId);
+            List<DateTime> dates = items.Select(t => t.CreationDate).ToList();
+            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id, input.UserId);
         }
 
         #endregion
