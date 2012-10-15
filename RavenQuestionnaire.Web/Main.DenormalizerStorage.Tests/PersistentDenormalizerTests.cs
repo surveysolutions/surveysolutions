@@ -68,17 +68,18 @@ namespace Main.DenormalizerStorage.Tests
 
            // objectToStore = null;
             cache.Remove(key.ToString());
-            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Once());
+            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Exactly(2));
         }
         [Test]
         public void Remove_WhenCachedObjectIsAllover_ObjectIsAbswentInAllStoreges()
         {
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
-            PersistentStorageStub storageStub = new PersistentStorageStub(objectToStore);
+            Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
+            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
             var cache = new MemoryCache("WeakReferenceDenormalizer");
             var bag = new List<Guid>();
-            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageStub, bag);
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, bag);
            
 
             bag.Add(key);
@@ -89,9 +90,13 @@ namespace Main.DenormalizerStorage.Tests
             Thread.Sleep(1000);
             Assert.IsTrue(bag.Count==0);
             Assert.IsTrue(cache[key.ToString()] == null);
-            Assert.IsTrue(storageStub.StoreCount == 0);
+
+            storageMock.Verify(x => x.Store<TestObjectDump>(objectToStore, key), Times.Never());
+            storageMock.Verify(x => x.Remove<TestObjectDump>(key), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<TestObjectDump>(key), Times.Once());
+          /*  Assert.IsTrue(storageStub.StoreCount == 0);
             Assert.IsTrue(storageStub.DeleteCount == 1);
-            Assert.IsTrue(storageStub.GetCount == 1);
+            Assert.IsTrue(storageStub.GetCount == 1);*/
 
         }
     }
@@ -108,36 +113,4 @@ namespace Main.DenormalizerStorage.Tests
         public Guid Key { get; private set; }
     }
 
-    public class PersistentStorageStub : IPersistentStorage
-    {
-        public int GetCount { get; private set; }
-        public int StoreCount { get; private set; }
-        public int DeleteCount { get; private set; }
-        protected object retObject;
-
-        public PersistentStorageStub(object retObject)
-        {
-            this.retObject = retObject;
-        }
-
-        #region Implementation of IPersistentStorage
-
-        public T GetByGuid<T>(Guid key) where T : class
-        {
-            GetCount++;
-            return retObject as T;
-        }
-
-        public void Remove<T>(Guid key) where T : class
-        {
-            DeleteCount++;
-        }
-
-        public void Store<T>(T denormalizer, Guid key) where T : class
-        {
-            StoreCount++;
-        }
-
-        #endregion
-    }
 }
