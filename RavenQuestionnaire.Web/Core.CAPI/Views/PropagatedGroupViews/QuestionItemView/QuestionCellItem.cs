@@ -26,9 +26,9 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             PropagationKey = question.PropagationPublicKey.Value;
             Answer = question.GetAnswerObject();
             AnswerString = question.GetAnswerString();
-            var firstAnswer = question.Children.OfType<ICompleteAnswer>().FirstOrDefault(a => a.Selected);
-            if (firstAnswer != null)
-                AnswerPublicKey = firstAnswer.PublicKey;
+            var answerKeys = question.Children.OfType<ICompleteAnswer>().Where(a => a.Selected).Select(a=>a.PublicKey.ToString());
+            if (answerKeys.Any())
+                AnswerPublicKeys = string.Join(";", answerKeys);
             Enabled = question.Enabled;
             Valid = question.Valid;
             Comments = question.Comments;
@@ -38,7 +38,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
         public Guid PropagationKey { get; set; }
         public object Answer { get; set; }
         public string AnswerString { get; set; }
-        public Guid AnswerPublicKey { get; set; }
+        public string AnswerPublicKeys { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether enabled.
         /// </summary>

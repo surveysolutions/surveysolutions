@@ -55,7 +55,7 @@
 
                 }
                 <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? "" : "ui-disabled") @(questionDetails.Answered ? "answered" : "") @(questionDetails.Valid ? "" : "error_block")" style="height: 50px"
-                         question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKey" @*event-name="contextmenu" form-name="comment-form"*@
+                         question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKeys" @*event-name="contextmenu" form-name="comment-form"*@
                          question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
                     <p data-role="none" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
                         margin: 0px;">
