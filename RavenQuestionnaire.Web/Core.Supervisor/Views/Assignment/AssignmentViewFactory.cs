@@ -83,9 +83,9 @@ namespace Core.Supervisor.Views.Assignment
             {
                 items = items.Where(t => t.Responsible == null);
             }
-            else if (input.UserId.HasValue)
+            else if (input.UserId != Guid.Empty)
             {
-                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId.Value);
+                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId);
             }
 
             if (input.QuestionnaireId != Guid.Empty)

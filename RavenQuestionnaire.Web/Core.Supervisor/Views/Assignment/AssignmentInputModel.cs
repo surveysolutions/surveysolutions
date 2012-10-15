@@ -79,7 +79,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <param name="statuses">
         /// The statistic filter.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid? userId, Guid questionnaireId, ICollection<string> statuses)
+        public AssignmentInputModel(Guid id, Guid userId, Guid questionnaireId, ICollection<string> statuses)
         {
             this.Id = id;
             this.QuestionnaireId = questionnaireId;
@@ -113,7 +113,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <param name="isNotAssigned">
         /// The isNotAssigned.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid? userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
+        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
         {
             this.Id = id;
             this.Page = page;
@@ -142,7 +142,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <param name="orders">
         /// The orders.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid? userId, int page, int pageSize, List<OrderRequestItem> orders)
+        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders)
         {
             this.Id = id;
             this.Page = page;
@@ -174,7 +174,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Gets or sets UserId.
         /// </summary>
-        public Guid? UserId { get; set; }
+        public Guid UserId { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

@@ -7,10 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace Main.Core.View.Questionnaire
 {
+    using System;
+
+    using Main.Core.Documents;
+
     /// <summary>
     /// The questionnaire browse item.
     /// </summary>
@@ -40,6 +42,18 @@ namespace Main.Core.View.Questionnaire
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireBrowseItem"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        public QuestionnaireBrowseItem(QuestionnaireDocument doc)
+            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate)
+        {
+        }
+
 
         #endregion
 

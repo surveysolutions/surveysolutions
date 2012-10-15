@@ -12,14 +12,16 @@
             };
 
             var makePagesClickable = function (config) {
-                $(".pagination a").click(function (e) {
+                
+                $(".pagination li:not(.disabled):not(.active) a").click(function (e) {
+                    var page = getParameterByName($(this).attr('href'), "pager.page");
                     getTablePage(
                         config,
                         config.url, {
                             Id: config.id,
                             SortOrder: config.sortData,
                             Pager: {
-                                Page: getParameterByName($(this).attr('href'), "pager.page"),
+                                Page: page === ""? 1: parseInt(page),
                                 PageSize: config.pageSize
                             },
                             UserId: config.userId
