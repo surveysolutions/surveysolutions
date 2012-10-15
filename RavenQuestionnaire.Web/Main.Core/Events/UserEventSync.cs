@@ -4,13 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Main.Core.Events
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Main.Core.Denormalizers;
     using Main.Core.Documents;
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;

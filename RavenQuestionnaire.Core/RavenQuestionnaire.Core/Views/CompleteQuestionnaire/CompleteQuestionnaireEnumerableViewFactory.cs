@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.DenormalizerStorage;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
 {

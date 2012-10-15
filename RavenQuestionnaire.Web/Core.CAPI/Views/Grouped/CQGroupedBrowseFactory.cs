@@ -11,10 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Main.Core.Denormalizers;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.DenormalizerStorage;
 
 namespace Core.CAPI.Views.Grouped
 {

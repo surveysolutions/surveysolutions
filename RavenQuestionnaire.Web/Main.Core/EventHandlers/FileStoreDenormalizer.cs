@@ -9,10 +9,10 @@
 
 using System;
 using System.IO;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Events.File;
 using Main.Core.Services;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Main.Core.EventHandlers

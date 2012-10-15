@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.View;
+using Main.DenormalizerStorage;
 
 namespace Core.CAPI.Views.Synchronization
 {
