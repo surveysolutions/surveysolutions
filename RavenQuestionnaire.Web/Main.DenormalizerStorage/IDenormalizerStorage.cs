@@ -11,7 +11,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 
-namespace Main.Core.Denormalizers
+namespace Main.DenormalizerStorage
 {
     /// <summary>
     /// The DenormalizerStorage interface.

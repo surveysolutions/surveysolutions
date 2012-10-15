@@ -1,18 +1,15 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="IDenormalizer.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Linq;
 using Ninject;
 
-namespace Main.Core.Denormalizers
+namespace Main.DenormalizerStorage
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -93,6 +90,8 @@ namespace Main.Core.Denormalizers
 
         protected IDenormalizerStorage<T> GetDenormalizer<T>() where T : class
         {
+
+          
             return this.container.Get<IDenormalizerStorage<T>>();
         }
 

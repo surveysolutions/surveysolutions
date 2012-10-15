@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Core.Supervisor.Views.Index
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Main.Core.Denormalizers;
     using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
