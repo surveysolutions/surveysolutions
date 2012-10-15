@@ -1,6 +1,8 @@
 ﻿#region Using
 using System;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Reflection;
 
@@ -27,79 +29,108 @@ namespace Browsing.Common.Forms
         private const int DBT_DEVICEARRIVAL = 0x8000;
         private const int DBT_DEVICEREMOVECOMPLETE = 0x8004;
 
+        private bool stopThread = false;
         protected ScreenHolder Holder { get; private set; }
 
         #region C-tor
 
         public WebForm(ISettingsProvider settingsProvider)
         {
+
             // Notice that Control.DoubleBuffered has been set to true
             // in the designer, to prevent flickering.
-            InitializeComponent();
-
-            this.Holder = new ScreenHolder();
-            this.Holder.Dock = DockStyle.Fill;
-
-            var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-
-            var assembly = Assembly.GetCallingAssembly();
-            var cachePath = System.IO.Path.GetFileName(assembly.FullName);
-            cachePath = cachePath.Remove(cachePath.IndexOf(','));
-            cachePath = appDataFolder + "\\" + cachePath;// + "." + assembly.ImageRuntimeVersion;
-
-            WebCore.Initialize(new WebCoreConfig()
-                                   {
-                                       EnablePlugins = true,
-                                       SaveCacheAndCookies = true,
-                                       UserDataPath = cachePath,
-                                       LogLevel = Awesomium.Core.LogLevel.Normal,//.Verbose,
-                                       //ForceSingleProcess = true
-                                   }, true);
-
-            var webView = new WebControl();
-            var requestProcessor = new WebRequestProcessor();
-
-            var urlUtils = InstantiateUrlProvider();
-
-            System.Diagnostics.Debug.Assert(urlUtils != null);
-
-            if (settingsProvider.Settings.RunEngine)
+            try
             {
-                try
-                {
-                    RunEngine(settingsProvider);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error on Engine Run. " + ex.Message);
-                }
-            }
+                InitializeComponent();
 
-            //engine warm up
-            new System.Threading.Thread(delegate()
+                Thread splashThread = new Thread(new ThreadStart(SplashDisplayThread));
+                splashThread.Start();
+
+                this.Holder = new ScreenHolder();
+                this.Holder.Dock = DockStyle.Fill;
+
+                var appDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+
+                var assembly = Assembly.GetCallingAssembly();
+                var cachePath = System.IO.Path.GetFileName(assembly.FullName);
+                cachePath = cachePath.Remove(cachePath.IndexOf(','));
+                cachePath = appDataFolder + "\\" + cachePath; // + "." + assembly.ImageRuntimeVersion;
+
+                WebCore.Initialize(new WebCoreConfig()
+                                       {
+                                           EnablePlugins = true,
+                                           SaveCacheAndCookies = true,
+                                           UserDataPath = cachePath,
+                                           LogLevel = Awesomium.Core.LogLevel.Normal,
+                                           //.Verbose,
+                                           //ForceSingleProcess = true
+                                       }, true);
+
+                var webView = new WebControl();
+                var requestProcessor = new WebRequestProcessor();
+
+                var urlUtils = InstantiateUrlProvider();
+
+                System.Diagnostics.Debug.Assert(urlUtils != null);
+
+                if (settingsProvider.Settings.RunEngine)
                 {
                     try
                     {
-                        requestProcessor.Process(urlUtils.GetLoginUrl(), "False");
+                        RunEngine(settingsProvider);
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
-                        //throw;
+                        MessageBox.Show("Error on Engine Run. " + ex.Message);
                     }
-                }).Start();
+                }
 
-            AddMainScreen(requestProcessor, settingsProvider, urlUtils);
-            AddBrowserScreen(webView);
-            AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
-            AddSettingsScreen();
+                //engine warm up
+                new System.Threading.Thread(delegate()
+                                                {
+                                                    try
+                                                    {
+                                                        requestProcessor.Process(urlUtils.GetLoginUrl(), "False");
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        //throw;
+                                                    }
+                                                }).Start();
 
-            this.Controls.Add(this.Holder);
+                AddMainScreen(requestProcessor, settingsProvider, urlUtils);
+                AddBrowserScreen(webView);
+                AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
+                AddSettingsScreen();
+
+                this.Controls.Add(this.Holder);
+            }
+            finally
+            {
+                this.stopThread = true;
+            }
+
 
         }
 
         #endregion
 
         #region Helpers
+
+
+        private void SplashDisplayThread()
+        {
+            var splash = new SplashScreen();
+
+            splash.Show();
+
+            while (this.stopThread == false)
+            {
+                Application.DoEvents();
+                Thread.Sleep(100);
+            }
+            splash.Hide();
+        }
 
         private void AddBrowserScreen(WebControl webView)
         {
@@ -158,6 +189,13 @@ namespace Browsing.Common.Forms
 
         #region Overriden
 
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            this.stopThread = true;
+
+            base.OnHandleDestroyed(e);
+        }
+
         protected override void OnFormClosed(FormClosedEventArgs e)
         {
             base.OnFormClosed(e);
@@ -182,7 +220,7 @@ namespace Browsing.Common.Forms
                         var syncScreen = Holder.LoadedScreens.Where(s => s is Containers.Synchronization);
                         if (syncScreen != null)
                         {
-                            foreach(var screen in syncScreen)
+                            foreach (var screen in syncScreen)
                                 (screen as Containers.Synchronization).UpdateUsbList();
                         }
                     }
