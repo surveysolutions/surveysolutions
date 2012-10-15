@@ -418,8 +418,15 @@ namespace Main.Core.Domain
         /// </param>
         protected void ChangeStatus(SurveyStatus status)
         {
+            var prevStatus = this.doc.Status;
+
             this.ApplyEvent(
-                new QuestionnaireStatusChanged { CompletedQuestionnaireId = this.doc.PublicKey, Status = status });
+                new QuestionnaireStatusChanged
+                    {
+                        CompletedQuestionnaireId = this.doc.PublicKey, 
+                        Status = status,
+                        PreviousStatus = prevStatus
+                    });
         }
         
 

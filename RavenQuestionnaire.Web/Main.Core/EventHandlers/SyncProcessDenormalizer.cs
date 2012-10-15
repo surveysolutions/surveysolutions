@@ -266,7 +266,7 @@ namespace Main.Core.EventHandlers
                 Type = SynchronizationStatisticType.StatusChanged,
                 User = doc.Responsible,
                 SurveyId = evnt.Payload.CompletedQuestionnaireId,
-                PrevStatus = doc.Status,
+                PrevStatus = evnt.Payload.PreviousStatus,
                 Status = evnt.Payload.Status,
                 Title = doc.QuestionnaireTitle,
                 TemplateId = doc.TemplateId

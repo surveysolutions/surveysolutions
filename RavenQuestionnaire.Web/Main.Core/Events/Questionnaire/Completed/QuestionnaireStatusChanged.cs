@@ -33,6 +33,11 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// </summary>
         public SurveyStatus Status { get; set; }
 
+        /// <summary>
+        /// Gets or sets the status.
+        /// </summary>
+        public SurveyStatus PreviousStatus { get; set; }
+
         #endregion
     }
 }
