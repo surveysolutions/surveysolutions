@@ -17,8 +17,6 @@ namespace RavenQuestionnaire.Core.Views.Group
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities.Complete;
 
-    using RavenQuestionnaire.Core.Views.Question;
-
     /// <summary>
     /// The complete group view.
     /// </summary>

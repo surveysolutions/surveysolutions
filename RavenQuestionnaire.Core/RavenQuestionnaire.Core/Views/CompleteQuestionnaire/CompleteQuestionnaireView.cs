@@ -19,7 +19,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     using Main.Core.Entities.SubEntities.Complete;
 
     using RavenQuestionnaire.Core.Views.Group;
-    using RavenQuestionnaire.Core.Views.Question;
     using RavenQuestionnaire.Core.Views.Questionnaire;
 
     /// <summary>
