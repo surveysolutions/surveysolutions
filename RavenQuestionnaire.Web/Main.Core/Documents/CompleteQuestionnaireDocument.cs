@@ -325,15 +325,6 @@ namespace Main.Core.Documents
 
                 throw new InvalidOperationException("unknown children type");
             }
-
-            /*   foreach (IQuestion question in doc.Questions)
-            {
-                result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
-            }
-            foreach (IGroup group in doc.Groups)
-            {
-                result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
-            }**/
             return result;
         }
 
@@ -362,12 +353,12 @@ namespace Main.Core.Documents
                 }
             }
 
-            // }
             foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
                     completeGroup.Add(c, parent);
+                    this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
                 catch (CompositeException)

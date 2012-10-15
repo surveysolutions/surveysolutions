@@ -67,17 +67,6 @@ namespace Main.Core.Entities.Extensions
         }
 
         /// <summary>
-        /// The get featured questions.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
-        {
-                return this.hash.Values.Select(v => v.Question).Where(q => q.Featured);
-        }
-
-        /// <summary>
         /// Gets the questions.
         /// </summary>
         public IEnumerable<CompleteQuestionWrapper> WrapedQuestions
@@ -88,6 +77,17 @@ namespace Main.Core.Entities.Extensions
             }
         }
 
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
+        {
+                return this.hash.Values.Select(v => v.Question).Where(q => q.Featured);
+        }
+        
         #endregion
 
         #region Public Indexers
@@ -123,6 +123,11 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void AddGroup(ICompleteGroup group)
         {
+            if (group == null)
+            {
+                return;
+            }
+
             if (!group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("Only propagated group can uppdate hash.");
@@ -181,6 +186,12 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void RemoveGroup(ICompleteGroup group)
         {
+            if (group == null)
+            {
+                return;
+            }
+
+
             if (!group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("Only propagated group can uppdate hash.");
@@ -198,27 +209,7 @@ namespace Main.Core.Entities.Extensions
         #endregion
 
         #region Methods
-
-        /*/// <summary>
-        /// The get question.
-        /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.Extensions.GroupHash+CompleteQuestionWrapper.
-        /// </returns>
-        private CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
-        {
-            if (this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, null))
-                && !this.hash.ContainsKey(this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)))
-            {
-                return this.hash[this.GetQuestionKey(index.PublicKey, null)];
-            }
-
-            return this.hash[this.GetQuestionKey(index.PublicKey, index.PropagationPublicKey)];
-        }*/
-
+        
         /// <summary>
         /// The get question key.
         /// </summary>
@@ -267,7 +258,6 @@ namespace Main.Core.Entities.Extensions
         private void ProcessIComposite(CompositeWrapper node, Queue<CompositeWrapper> nodes)
         {
             var question = node.Node as ICompleteQuestion;
-            
 
             if (question == null)
             {
@@ -307,8 +297,6 @@ namespace Main.Core.Entities.Extensions
 
                 this.ProcessIComposite(node, nodes);
             }
-
-            // }
         }
 
         #endregion

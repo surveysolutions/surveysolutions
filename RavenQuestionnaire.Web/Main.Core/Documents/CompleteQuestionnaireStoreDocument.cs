@@ -411,6 +411,7 @@ namespace Main.Core.Documents
                 try
                 {
                     completeGroup.Add(c, parent);
+                    this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
                 catch (CompositeException)
