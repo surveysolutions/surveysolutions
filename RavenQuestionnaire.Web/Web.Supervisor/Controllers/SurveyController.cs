@@ -99,8 +99,8 @@ namespace Web.Supervisor.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        /// <param name="UserId">
-        /// The User Id.
+        /// <param name="userId">
+        /// The user Id.
         /// </param>
         /// <param name="input">
         /// The input.
@@ -117,8 +117,20 @@ namespace Web.Supervisor.Controllers
         public ActionResult Assigments(Guid id, Guid? userId, AssignmentInputModel input, ICollection<string> status, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new AssignmentInputModel() { Id = id, Statuses = status, UserId = userId }
-                                 : new AssignmentInputModel(id, userId, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
+                                 ? new AssignmentInputModel()
+                                     {
+                                         Id = id,
+                                         Statuses = status,
+                                         UserId = userId.HasValue ? userId.Value : Guid.Empty
+                                     }
+                                 : new AssignmentInputModel(
+                                       id,
+                                       userId.HasValue ? userId.Value : Guid.Empty,
+                                       input.Page,
+                                       input.PageSize,
+                                       input.Orders,
+                                       status,
+                                       isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(inputModel);
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
