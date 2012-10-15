@@ -461,7 +461,7 @@ namespace Web.CAPI.Controllers
             {
                 this.logger.Fatal(e);
                 return
-                    this.Json(new { questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message });
+                    this.Json(new { questionPublicKey = question.PublicKey, propogationPublicKey = settings[0].PropogationPublicKey, error = e.Message });
             }
 
             var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);
@@ -529,7 +529,13 @@ namespace Web.CAPI.Controllers
             {
                 this.logger.Fatal(e);
                 return
-                    this.Json(new {questionPublicKey = publicKey, error = e.Message});
+                    this.Json(
+                        new
+                            {
+                                questionPublicKey = publicKey,
+                                error = e.Message,
+                                propogationPublicKey = propogationPublicKey
+                            });
             }
 
             var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
@@ -555,7 +561,12 @@ namespace Web.CAPI.Controllers
             {
                 Logger logger = LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
-                return this.Json(new { question = publicKey, error = e.Message });
+                return this.Json(new
+                    {
+                        questionPublicKey = publicKey,
+                        error = e.Message,
+                        propogationPublicKey = propogationPublicKey
+                    });
             }
 
             var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
@@ -592,7 +603,7 @@ namespace Web.CAPI.Controllers
             {
                 Logger logger = LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
-                return this.Json(new { question = questions[0], settings = settings[0], error = e.Message });
+                return this.Json(new { questionPublicKey = questions[0].PublicKey, propogationPublicKey = settings[0].PropogationPublicKey, error = e.Message });
             }
 
             var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);

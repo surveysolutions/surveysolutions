@@ -183,7 +183,7 @@ namespace Main.DenormalizerStorage
                         this._bag.Add(key);
                     }
 
-                    this._storage.Store(denormalizer, key);
+                    this._storage.Store<T>(denormalizer, key);
                 }
             }
             finally
@@ -199,7 +199,7 @@ namespace Main.DenormalizerStorage
         {
             Guid key = Guid.Parse(arguments.CacheItem.Key);
             if (this._bag.Contains(key))
-                this._storage.Store(arguments.CacheItem.Value, key);
+                this._storage.Store<T>(arguments.CacheItem.Value as T, key);
         }
 
         #region Implementation of IDisposable

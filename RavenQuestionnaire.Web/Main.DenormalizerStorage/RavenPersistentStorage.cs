@@ -7,6 +7,7 @@
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
 using Raven.Abstractions.Data;
+using Raven.Abstractions.Exceptions;
 using Raven.Client;
 using Raven.Client.Document;
 
@@ -57,13 +58,17 @@ namespace Main.DenormalizerStorage
                     session.Delete(obj);
             }
         }
-
         public void Store<T>(T denormalizer, Guid key) where T : class
+        {
+            Store(denormalizer, key, 0);
+        }
+
+        protected void Store<T>(T denormalizer, Guid key, int i) where T : class
         {
             using (var session = _documentStore.OpenSession())
             {
                 session.Advanced.UseOptimisticConcurrency = true;
-                var obj = session.Load<StoredObject>(GetObjectId(typeof(T), key));
+                var obj = session.Load<StoredObject>(GetObjectId(typeof (T), key));
                 if (obj == null)
                 {
                     obj = ToStoredObject(denormalizer, key);
@@ -73,9 +78,21 @@ namespace Main.DenormalizerStorage
                 {
                     obj.Data = denormalizer;
                 }
-                session.Advanced.GetMetadataFor(obj)[Constants.RavenEntityName] = DocumentConvention.DefaultTypeTagName(denormalizer.GetType());
-                
-                session.SaveChanges();
+                session.Advanced.GetMetadataFor(obj)[Constants.RavenEntityName] =
+                    DocumentConvention.DefaultTypeTagName(denormalizer.GetType());
+                try
+                {
+                    session.SaveChanges();
+                }
+                catch (ConcurrencyException ex)
+                {
+                    if (i < 3)
+                        Store<T>(denormalizer, key, i + 1);
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
         }
 
