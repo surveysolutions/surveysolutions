@@ -111,6 +111,8 @@ namespace Browsing.Common.Containers
 
                             Thread.Sleep(1000);
 
+                            if (this.destroyed)
+                                return;
                             this.Invoke(new MethodInvoker(() => SetCheckingStatus(true)));
 
                             this.isDatabaseContainsUsers = null; // reset
