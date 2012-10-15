@@ -64,24 +64,6 @@ namespace Main.Core.Entities.Extensions
         }
 
         /// <summary>
-        /// The get all binded questions.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="questionKey">
-        /// The question key.
-        /// </param>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; Main.Core.Entities.SubEntities.Complete.BindedCompleteQuestion].
-        /// </returns>
-        public static IEnumerable<BindedCompleteQuestion> GetAllBindedQuestions(
-            this ICompleteGroup group, Guid questionKey)
-        {
-            return group.Find<BindedCompleteQuestion>(q => q.ParentPublicKey.Equals(questionKey));
-        }
-
-        /// <summary>
         /// The get all questions.
         /// </summary>
         /// <param name="entity">

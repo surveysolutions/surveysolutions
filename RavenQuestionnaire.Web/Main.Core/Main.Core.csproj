@@ -193,14 +193,11 @@
     <Compile Include="Entities\SubEntities\IConditional.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
-    <Compile Include="Entities\SubEntities\BindedQuestion.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
-    <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs" />
-    <Compile Include="Entities\SubEntities\Complete\IBinded.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteQuestion.cs" />

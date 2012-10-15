@@ -36,17 +36,6 @@ namespace Main.Core.AbstractFactories
         /// </returns>
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-            var bindedQuestion = question as BindedQuestion;
-            if (bindedQuestion != null)
-            {
-                return (BindedCompleteQuestion)bindedQuestion;
-            }
-
-            var template = question as IBinded;
-            if (template != null)
-            {
-                return new BindedCompleteQuestion(question.PublicKey, template);
-            }
 
             AbstractCompleteQuestion completeQuestion;
             if (question is IMultyOptionsQuestion)

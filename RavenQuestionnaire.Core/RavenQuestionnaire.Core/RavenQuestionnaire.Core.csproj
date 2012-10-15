@@ -181,7 +181,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
-    <Compile Include="Views\Question\BindedCompleteQuestionView.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportView.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportViewInputModel.cs" />
     <Compile Include="Views\StatusReport\CQStatusReportFactory.cs" />

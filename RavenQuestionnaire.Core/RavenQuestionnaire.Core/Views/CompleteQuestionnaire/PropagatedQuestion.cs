@@ -14,7 +14,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
     using System;
     using System.Collections.Generic;
 
-    using RavenQuestionnaire.Core.Views.Question;
 
     /// <summary>
     /// The propagated question.
