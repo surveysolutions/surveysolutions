@@ -74,7 +74,7 @@ function UpdateComments(data) {
 
 function UpdateCommentInGroup(group) {
     for (var j = 0; j < group.Children.length; j++) {
-        if (group.Children[j].QuestionType === "undefined") {
+        if (typeof (group.Children[j].QuestionType) === "undefined") {
             continue;
         }
         var key = group.Children[j].PublicKey;
@@ -111,7 +111,7 @@ function UpdateCurrentGroup(group) {
     }
     if (group.Group) {
         for (var i = 0; i < group.Group.Children.length; i++) {
-            if (group.Group.Children[i].QuestionType !== "undefined") 
+            if (typeof (group.Group.Children[i].QuestionType) !== "undefined") 
                 UpdateQuestion(group.Group.Children[i], group.Group.Children[i].GroupPublicKey);
             else {
                 UpdateInnerGroup(group.Group.Children[i]);
