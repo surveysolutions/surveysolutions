@@ -20,8 +20,6 @@ namespace RavenQuestionnaire.Core.Views.Group
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
 
-    using RavenQuestionnaire.Core.Views.Question;
-
     /// <summary>
     /// The abstract group view.
     /// </summary>
