@@ -4,11 +4,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Main.Core.EventHandlers
 {
     using System;
 
-    using Main.Core.Denormalizers;
     using Main.Core.Documents;
     using Main.Core.Events.Questionnaire;
     using Main.Core.Events.Questionnaire.Completed;

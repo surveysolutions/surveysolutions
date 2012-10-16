@@ -4,11 +4,12 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Main.Core.View.SyncProcess
 {
     using System;
 
-    using Main.Core.Denormalizers;
     using Main.Core.Documents;
     using Main.Core.View.User;
 
