@@ -58,7 +58,7 @@ function JsonResults(data, status, xhr) {
 
 
     } else
-        SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
+        SetErrorToQuestion(group.questionPublicKey, group.propogationPublicKey, group.error);
 
 }
 
@@ -69,12 +69,12 @@ function UpdateComments(data) {
         UpdateCommentInGroup(group.Group);
     }
     else
-        SetErrorToQuestion(group.question, group.settings.PropogationPublicKey, group.error);
+        SetErrorToQuestion(group.questionPublicKey, group.propogationPublicKey, group.error);
 }
 
 function UpdateCommentInGroup(group) {
     for (var j = 0; j < group.Children.length; j++) {
-        if (group.Children[j].QuestionType === "undefined") {
+        if (typeof (group.Children[j].QuestionType) === "undefined") {
             continue;
         }
         var key = group.Children[j].PublicKey;
@@ -111,7 +111,7 @@ function UpdateCurrentGroup(group) {
     }
     if (group.Group) {
         for (var i = 0; i < group.Group.Children.length; i++) {
-            if (group.Group.Children[i].QuestionType !== "undefined") 
+            if (typeof (group.Group.Children[i].QuestionType) !== "undefined") 
                 UpdateQuestion(group.Group.Children[i], group.Group.Children[i].GroupPublicKey);
             else {
                 UpdateInnerGroup(group.Group.Children[i]);
@@ -138,16 +138,16 @@ function UpdateQuestion(question) {
         element.removeClass("answered");
     }
 
-    SetErrorToQuestion(question, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
+    SetErrorToQuestion(question.PublicKey, question.QuestionType == 0 ? null : question.GroupPublicKey, '');
 }
 
 
 
-function SetErrorToQuestion(question, key, error) {
-    var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + question.PublicKey) : $('#elem-' + question.PublicKey);
+function SetErrorToQuestion(questionPublicKey, key, error) {
+    var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + questionPublicKey) : $('#elem-' + questionPublicKey);
     // questionElement.find('[data-valmsg-replace=true]').text(error);
     if (error + "" != "") {
-        $('#error-' + question.PublicKey + ' p:first').text(error);
+        $('#error-' + questionPublicKey + ' p:first').text(error);
     }
 
 }

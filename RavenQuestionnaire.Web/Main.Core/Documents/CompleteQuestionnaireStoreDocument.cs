@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -26,6 +28,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The complete questionnaire store document.
     /// </summary>
+    [SmartDenormalizer]
     public class CompleteQuestionnaireStoreDocument : ICompleteQuestionnaireDocument
     {
         #region Fields
@@ -377,7 +380,7 @@ namespace Main.Core.Documents
                     Description = doc.Description
                 };
 
-            result.Children.AddRange(doc.Children);
+            result.Children.AddRange(doc.Children.ToList());
             return result;
         }
 
@@ -411,6 +414,7 @@ namespace Main.Core.Documents
                 try
                 {
                     completeGroup.Add(c, parent);
+                    this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
                 catch (CompositeException)

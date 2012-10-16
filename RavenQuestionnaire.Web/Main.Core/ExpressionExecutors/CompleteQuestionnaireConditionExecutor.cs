@@ -51,11 +51,42 @@ namespace Main.Core.ExpressionExecutors
         {
             this.doc = doc;
         }
-               
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The execute and change state.
+        /// </summary>
+        /// <param name="group">
+        /// The group.
+        /// </param>
+        public void ExecuteAndChangeStateRecursive(ICompleteGroup group)
+        {
+
+            bool? value = this.Execute(group);
+            bool result = value ?? true; //// treat null as success 
+
+            group.Enabled = result;
+
+            foreach (IComposite child in group.Children)
+            {
+                var question = child as ICompleteQuestion;
+                if (question != null)
+                {
+                    question.Enabled = result && (this.ExecuteAndChangeInternal(question, 1) ?? true); ////method could not be executed if result is false
+                    continue;
+                }
+
+                var gr = child as ICompleteGroup;
+                if (gr != null && !gr.IsGroupPropagationTemplate())
+                {
+                    this.ExecuteAndChangeStateRecursive(gr);
+                    ////gr.Enabled = result && (this.Execute(gr) ?? true); ////method could not be executed if result is false
+                }
+            }
+        }
  
         /// <summary>
         /// The execute.
@@ -73,8 +104,8 @@ namespace Main.Core.ExpressionExecutors
                 return true;
             }
 
-            int stackDepth = 1;
-            return this.ExecuteAndChangeInternal(question, stackDepth);
+            const int StackDepth = 1;
+            return this.ExecuteAndChangeInternal(question, StackDepth);
         }
 
         /// <summary>
@@ -153,43 +184,6 @@ namespace Main.Core.ExpressionExecutors
 
             return result;
         }
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The execute and change state.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        public void ExecuteAndChangeStateRecursive(ICompleteGroup group)
-        {
-
-            bool? value = this.Execute(group);
-            bool result = value ?? true; //// treat null as success 
-            
-            group.Enabled = result;
-
-            foreach (IComposite child in group.Children)
-            {
-                var question = child as ICompleteQuestion;
-                if (question != null)
-                {
-                    question.Enabled = result && (this.ExecuteAndChangeInternal(question, 1) ?? true); ////method could not be executed if result is false
-                    continue;
-                }
-
-                var gr = child as ICompleteGroup;
-                if (gr != null && !gr.IsGroupPropagationTemplate())
-                {
-
-                    this.ExecuteAndChangeStateRecursive(gr);
-                    ////gr.Enabled = result && (this.Execute(gr) ?? true); ////method could not be executed if result is false
-                }
-            }
-        }
-
         #endregion
     }
 }

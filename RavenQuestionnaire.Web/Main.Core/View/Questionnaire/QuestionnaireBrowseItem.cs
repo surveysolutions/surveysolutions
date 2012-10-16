@@ -77,7 +77,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// Gets the title.
         /// </summary>
-        public string Title { get; private set; }
+        public string Title { get;  set; }
 
         #endregion
 

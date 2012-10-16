@@ -50,6 +50,5 @@ namespace Main.Core.Entities.Extensions
         public ICompleteQuestion Question { get; private set; }
 
         #endregion
-
     }
 }

@@ -7,8 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.View;
+using Main.DenormalizerStorage;
 
 namespace RavenQuestionnaire.Core.Views.Event.File
 {

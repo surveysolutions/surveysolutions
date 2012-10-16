@@ -75,19 +75,14 @@ namespace Main.Core.Entities.SubEntities.Complete
                 {
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
-                    if (!(newQuestion is IBinded))
-                    {
-                        foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
-                        {
-                            completeAnswer.PropogationPublicKey = propogationPublicKey;
-                        }
 
-                        this.Children.Add(newQuestion);
-                    }
-                    else
+                    foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
                     {
-                        this.Children.Add(newQuestion);
+                        completeAnswer.PropogationPublicKey = propogationPublicKey;
                     }
+
+                    this.Children.Add(newQuestion);
+
 
                     continue;
                 }

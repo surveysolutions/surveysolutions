@@ -144,8 +144,7 @@
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
-    <Compile Include="Denormalizers\IDenormalizer.cs" />
-    <Compile Include="Denormalizers\IDenormalizerStorage.cs" />
+    <Compile Include="DenormalizerStorageProvider.cs" />
     <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
     <Compile Include="Documents\ClientSettingsDocument.cs" />
@@ -196,14 +195,11 @@
     <Compile Include="Entities\SubEntities\IConditional.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />
     <Compile Include="Entities\SubEntities\AnswerType.cs" />
-    <Compile Include="Entities\SubEntities\BindedQuestion.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
-    <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs" />
-    <Compile Include="Entities\SubEntities\Complete\IBinded.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteAnswer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteQuestion.cs" />
@@ -250,6 +246,7 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
@@ -381,6 +378,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>

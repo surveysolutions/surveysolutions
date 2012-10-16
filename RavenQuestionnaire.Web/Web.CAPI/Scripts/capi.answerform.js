@@ -92,7 +92,7 @@
                     $(containers[0]).text(answerValue.AnswerString);
                     $(containers[1]).text(answerValue.Comments);
                     target.attr('question-comment-value', answerValue.Comments);
-                    target.attr('question-answer-key', answerValue.AnswerPublicKey);
+                    target.attr('question-answer-key', answerValue.AnswerPublicKeys);
                     target.attr('question-answer-value', answerValue.AnswerString);
                     if (answerValue.Enabled) {
                         target.removeClass('ui-disabled');
@@ -109,16 +109,16 @@
                     } else {
                         target.addClass('error_block');
                     }
-                    
+
                 });
             });
         };
         base.openDialog = function (target) {
             var targetPopup = $('#grid-popup-' + base.questionId);
             targetPopup.popup('open', target.offset().left, target.offset().top);
-           targetPopup.bind(
-                'closed',
-                function (event, ui) {
+
+            targetPopup.bind(
+                'closed', function(event, ui) {
                     target.removeClass('ui-bar-e');
 
                 });
@@ -150,7 +150,7 @@
             var questionAnswers = target.$el.attr('question-answer-key').split(';');
             base.$el.find("input[type='checkbox']").removeAttr('checked').checkboxradio("refresh");
             $.each(questionAnswers, function (index, value) {
-                var inputForSelect = base.$el.find("input[name='Answers[" + value + "].Selected']");
+                var inputForSelect = base.$el.find("input[name='Answers[" + value + "].Selected'][type='checkbox']");
                 inputForSelect.attr('checked', true).checkboxradio("refresh");
             });
             base.openDialog(target.$el);

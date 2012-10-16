@@ -81,7 +81,7 @@ namespace Main.Core.Domain
                     {
                         Questionnaire = document, 
                         CreationDate = clock.UtcNow(), 
-                        TotalQuestionCount = document.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()
+                        TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
         }
 
