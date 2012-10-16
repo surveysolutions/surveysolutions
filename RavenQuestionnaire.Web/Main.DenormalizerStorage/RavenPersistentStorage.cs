@@ -42,7 +42,7 @@ namespace Main.DenormalizerStorage
         {
             using (var session = _documentStore.OpenSession())
             {
-                var obj = session.Load<StoredObject>(GetObjectId(typeof(T), key));
+                var obj = GetObject<T>(session, key);
                 if (obj != null)
                     return obj.Data as T;
             }
@@ -53,7 +53,8 @@ namespace Main.DenormalizerStorage
         {
             using (var session = _documentStore.OpenSession())
             {
-                var obj = session.Load<StoredObject>(GetObjectId(typeof (T), key));
+                var obj = GetObject<T>(session,  key);
+               
                 if (obj != null)
                     session.Delete(obj);
             }
@@ -68,7 +69,7 @@ namespace Main.DenormalizerStorage
             using (var session = _documentStore.OpenSession())
             {
                 session.Advanced.UseOptimisticConcurrency = true;
-                var obj = session.Load<StoredObject>(GetObjectId(typeof (T), key));
+                var obj = GetObject<T>(session, key);
                 if (obj == null)
                 {
                     obj = ToStoredObject(denormalizer, key);
@@ -83,6 +84,7 @@ namespace Main.DenormalizerStorage
                 try
                 {
                     session.SaveChanges();
+                   
                 }
                 catch (ConcurrencyException ex)
                 {
@@ -97,9 +99,13 @@ namespace Main.DenormalizerStorage
         }
 
         #endregion
+        private StoredObject GetObject<T>(IDocumentSession session, Guid key) where T : class
+        {
+              return session.Load<StoredObject>(GetObjectId(typeof(T), key));
+        }
 
         private StoredObject ToStoredObject<T>(T obj, Guid key) where T : class
-        {
+        { 
             return new StoredObject(obj, GetObjectId(obj.GetType(), key));
         }
         private string GetObjectId(Type objType, Guid key) 

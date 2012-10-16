@@ -31,8 +31,10 @@ namespace Main.DenormalizerStorage.Tests
             var key = Guid.NewGuid();
             var objectToStore = new object();
             target.Store(objectToStore, key);
-            storageMock.Verify(x => x.Store(objectToStore, key), Times.Once());
-
+            storageMock.Verify(x => x.Store(objectToStore, key), Times.Never());
+            Assert.IsTrue(cache.Contains(key.ToString()));
+            cache.Remove(key.ToString());
+            
             storageMock.Setup(x => x.GetByGuid<object>(key)).Returns(objectToStore);
 
             var result = target.GetByGuid(key);
@@ -53,7 +55,7 @@ namespace Main.DenormalizerStorage.Tests
             storageMock.Verify(x => x.Store(It.IsAny<object>(), key), Times.Exactly(2));
         }
         [Test]
-        public void Store_WhenObjectWasChangedAndGCCollectiongId_ObjectWillDumpTheLatestVersion()
+        public void Store_WhenObjectWasChangedAndExpired_ObjectWillDumpTheLatestVersion()
         {
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
@@ -62,13 +64,13 @@ namespace Main.DenormalizerStorage.Tests
             var objectToStore = new TestObjectDump("test", key);
 
             target.Store(objectToStore, key);
-            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
+         //   storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
             var result = target.GetByGuid(key);
             result.Name = "hello world";
 
            // objectToStore = null;
             cache.Remove(key.ToString());
-            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Exactly(2));
+            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Exactly(1));
         }
         [Test]
         public void Remove_WhenCachedObjectIsAllover_ObjectIsAbswentInAllStoreges()

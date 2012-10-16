@@ -183,7 +183,11 @@ namespace Main.DenormalizerStorage
                         this._bag.Add(key);
                     }
 
-                    this._storage.Store<T>(denormalizer, key);
+                   // this._storage.Store<T>(denormalizer, key);
+                    var policy = new CacheItemPolicy();
+                    policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
+                    policy.SlidingExpiration = TimeSpan.FromSeconds(10);
+                    this._hash.Add(key.ToString(), denormalizer, policy);
                 }
             }
             finally
