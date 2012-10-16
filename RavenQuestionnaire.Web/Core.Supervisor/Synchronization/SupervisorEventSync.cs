@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View.Questionnaire;
 using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Synchronization
@@ -139,11 +140,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-            IQueryable<QuestionnaireDocument> model = this.denormalizer.Query<QuestionnaireDocument>();
+            IQueryable<QuestionnaireBrowseItem> model = this.denormalizer.Query<QuestionnaireBrowseItem>();
 
-            foreach (QuestionnaireDocument item in model)
+            foreach (QuestionnaireBrowseItem item in model)
             {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(QuestionnaireAR)));
+                retval.AddRange(base.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
             }
         }
 
