@@ -67,6 +67,9 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     
             this.Unbind<IScreenViewSupplier>();
             this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
+
+            this.Unbind<IEventSync>();
+            this.Bind<IEventSync>().To<ClientEventSync>();
         }
 
         #endregion
