@@ -51,6 +51,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public AutoPropagateCompleteQuestion(IAutoPropagate template)
         {
             this.Triggers = template.Triggers;
+            this.MaxValue = template.MaxValue;
         }
 
         #endregion
@@ -246,7 +247,10 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this.Answer = Convert.ToInt32(answerValue);
+            var answerVal = Convert.ToInt32(answerValue);
+            if (answerVal > this.MaxValue)
+                throw new ArgumentException("max value is reached");
+            this.Answer = answerVal;
         }
 
         #endregion
@@ -260,6 +264,12 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         #region Implementation of ITriggerable
 
         ////public List<Guid> Triggers { get; set; }
+
+        #endregion
+
+        #region Implementation of IAutoPropagate
+
+        public int MaxValue { get; set; }
 
         #endregion
     }

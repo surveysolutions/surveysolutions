@@ -460,8 +460,9 @@ namespace Web.CAPI.Controllers
             catch (Exception e)
             {
                 this.logger.Fatal(e);
+                var errorMessage = e.InnerException == null ? e.Message : e.InnerException.Message;
                 return
-                    this.Json(new { questionPublicKey = question.PublicKey, propogationPublicKey = settings[0].PropogationPublicKey, error = e.Message });
+                    this.Json(new { questionPublicKey = question.PublicKey, propogationPublicKey = settings[0].PropogationPublicKey, error = errorMessage });
             }
 
             var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);
