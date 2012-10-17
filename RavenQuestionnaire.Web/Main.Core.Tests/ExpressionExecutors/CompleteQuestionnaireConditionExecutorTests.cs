@@ -61,7 +61,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var question = new SingleCompleteQuestion(string.Empty);
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
-            question.Children.Add(answer);
+            question.AddAnswer(answer);
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question);
             Assert.AreEqual(result, false);
@@ -85,7 +85,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         public void EvaluateCondition_ConditionIsAbsent_ReturnsTrue()
         {
             var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
-            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "" });
+            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = string.Empty });
             Assert.AreEqual(result, true);
         }
 
@@ -116,7 +116,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            question.Children.Add(completeAnswer);
+            question.Answers.Add(completeAnswer);
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question);
             Assert.AreEqual(result, true);
@@ -139,7 +139,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            question.Children.Add(completeAnswer);
+            question.Answers.Add(completeAnswer);
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(question1);
             Assert.AreEqual(result, false);
@@ -166,13 +166,13 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            question.Children.Add(completeAnswer);
+            question.Answers.Add(completeAnswer);
 
             var completeAnswer1 = new CompleteAnswer(new Answer());
             completeAnswer1.AnswerType = AnswerType.Select;
             completeAnswer1.AnswerValue = "1";
             completeAnswer1.Selected = true;
-            question1.Children.Add(completeAnswer1);
+            question1.Answers.Add(completeAnswer1);
 
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executor.Execute(group);

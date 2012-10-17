@@ -77,7 +77,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     newQuestion.PropagationPublicKey = propogationPublicKey;
                     if (!(newQuestion is IBinded))
                     {
-                        foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
+                        foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
                         {
                             completeAnswer.PropogationPublicKey = propogationPublicKey;
                         }

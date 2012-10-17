@@ -10,7 +10,6 @@ namespace Main.Core.AbstractFactories
     using System.Collections.Generic;
     using System.Linq;
 
-    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
@@ -93,27 +92,26 @@ namespace Main.Core.AbstractFactories
                 question.Capital, 
                 question.Instructions, 
                 null);
-            completeQuestion.Comments = question.Comments;
+            ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
-            IEnumerable<IComposite> ansersToCopy =
-                new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);
-            if (ansersToCopy != null)
+            IEnumerable<IAnswer> answersToCopy = new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Answers);
+            
+            if (answersToCopy != null)
             {
-                foreach (IAnswer composite in ansersToCopy)
+                foreach (IAnswer composite in answersToCopy)
                 {
-                    IComposite newAnswer;
+                    IAnswer newAnswer;
                     if (question is ICompleteQuestion)
                     {
-                        newAnswer = new CompleteAnswer(
-                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
+                        newAnswer = new CompleteAnswer(composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
                     }
                     else
                     {
                         newAnswer = (CompleteAnswer)(composite as Answer);
                     }
 
-                    completeQuestion.Children.Add(newAnswer);
+                    completeQuestion.AddAnswer(newAnswer);
                 }
             }
 
@@ -131,65 +129,82 @@ namespace Main.Core.AbstractFactories
         /// <summary>
         /// The create.
         /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AbstractQuestion"/>.
+        /// </returns>
+        public AbstractQuestion Create(NewQuestionAdded e)
+        {
+            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+
+            q.PublicKey = e.PublicKey;
+
+            this.UpdateQuestion(
+               q,
+               e.QuestionType,
+               e.QuestionText,
+               e.StataExportCaption,
+               e.ConditionExpression,
+               e.ValidationExpression,
+               e.ValidationMessage,
+               e.AnswerOrder,
+               e.Featured,
+               e.Mandatory,
+               false,
+               e.Instructions,
+               e.Triggers);
+
+            this.UpdateAnswerList(e.Answers, q);
+
+            return q;
+        }
+
+        /// <summary>
+        /// The create question.
+        /// </summary>
         /// <param name="type">
         /// The type.
         /// </param>
         /// <returns>
-        /// The Main.Core.Entities.SubEntities.AbstractQuestion.
+        /// The <see cref="AbstractQuestion"/>.
         /// </returns>
-        public AbstractQuestion Create(QuestionType type)
+        private AbstractQuestion CreateQuestion(QuestionType type)
         {
+            AbstractQuestion q = null;
             switch (type)
             {
                 case QuestionType.MultyOption:
-                    return new MultyOptionsQuestion();
+                    q = new MultyOptionsQuestion();
+                    break;
                 case QuestionType.DropDownList:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.SingleOption:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.YesNo:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.Text:
-                    return new TextQuestion();
+                    q = new TextQuestion();
+                    break;
                 case QuestionType.DateTime:
-                    return new DateTimeQuestion();
+                    q = new DateTimeQuestion();
+                    break;
                 case QuestionType.Numeric:
-                    return new NumericQuestion();
+                    q = new NumericQuestion();
+                    break;
                 case QuestionType.AutoPropagate:
-                    return new AutoPropagateQuestion();
+                    q = new AutoPropagateQuestion();
+                    break;
                 case QuestionType.GpsCoordinates:
-                    return new GpsCoordinateQuestion();
+                    q = new GpsCoordinateQuestion();
+                    break;
             }
 
-            return null;
-        }
-
-        /// <summary>
-        /// The update question by event.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        public void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e)
-        {
-            this.UpdateQuestion(
-                question, 
-                e.QuestionType, 
-                e.QuestionText, 
-                e.StataExportCaption, 
-                e.ConditionExpression, 
-                e.ValidationExpression, 
-                e.ValidationMessage, 
-                e.AnswerOrder, 
-                e.Featured, 
-                e.Mandatory, 
-                false, 
-                e.Instructions, 
-                e.Triggers);
-            this.UpdateAnswerList(e.Answers, question);
+            return q;
         }
 
         /// <summary>
@@ -203,8 +218,12 @@ namespace Main.Core.AbstractFactories
         /// </param>
         public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
         {
+            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+
+            q.PublicKey = question.PublicKey;
+            
             this.UpdateQuestion(
-                question, 
+                q, 
                 e.QuestionType, 
                 e.QuestionText, 
                 e.StataExportCaption, 
@@ -217,8 +236,12 @@ namespace Main.Core.AbstractFactories
                 false, 
                 e.Instructions, 
                 e.Triggers);
-            this.UpdateAnswerList(e.Answers, question);
+
+            this.UpdateAnswerList(e.Answers, q);
+
+            question = q;
         }
+        
 
         #endregion
 
@@ -233,15 +256,16 @@ namespace Main.Core.AbstractFactories
         /// <param name="question">
         /// The question.
         /// </param>
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
+        private void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
         {
-            List<Answer> enumerable = (answers ?? new List<Answer>()).ToList();
+            List<Answer> enumerable = answers != null ? answers.ToList() : new List<Answer>();
+            
             if (answers != null && enumerable.Any())
             {
-                question.Children.Clear();
+                question.Answers.Clear();
                 foreach (Answer answer in enumerable)
                 {
-                    question.Add(answer, question.PublicKey);
+                    question.AddAnswer(answer);
                 }
             }
         }
@@ -259,7 +283,7 @@ namespace Main.Core.AbstractFactories
         /// The question text.
         /// </param>
         /// <param name="stataExportCaption">
-        /// The stata export caption.
+        /// The Stata export caption.
         /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
@@ -288,7 +312,7 @@ namespace Main.Core.AbstractFactories
         /// <param name="triggers">
         /// The triggers.
         /// </param>
-        protected void UpdateQuestion(
+        private void UpdateQuestion(
             IQuestion question, 
             QuestionType questionType, 
             string questionText, 

@@ -14,6 +14,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
     using Main.Core.Documents;
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.ExpressionExecutors;
@@ -141,11 +142,11 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             // Mock<ICompleteGroup> questionnaireMoq= new Mock<ICompleteGroup>();
             var mainGroup = new CompleteGroup("root");
             var q1 = new SingleCompleteQuestion("q1") { Valid = false };
-            q1.Children = new List<IComposite> { new CompleteAnswer { AnswerValue = 1, Selected = true } };
+            q1.Answers = new List<IAnswer> { new CompleteAnswer { AnswerValue = 1, Selected = true } };
 
             mainGroup.Children.Add(q1);
             var q2 = new SingleCompleteQuestion("q2") { Valid = false };
-            q2.Children = new List<IComposite> { new CompleteAnswer { AnswerValue = 2, Selected = true } };
+            q2.Answers = new List<IAnswer> { new CompleteAnswer { AnswerValue = 2, Selected = true } };
 
             q1.ValidationExpression = string.Format("[{0}]==2", q2.PublicKey);
             q2.ValidationExpression = string.Format("[{0}]==1", q1.PublicKey);

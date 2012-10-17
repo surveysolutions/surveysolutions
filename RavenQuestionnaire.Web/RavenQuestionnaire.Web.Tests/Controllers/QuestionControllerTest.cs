@@ -86,8 +86,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns
-                (new QuestionnaireView(innerDocument));
+                    It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns(new QuestionnaireView(innerDocument));
 
             this.Controller.Save(new[] { questionView }, questionView.Answers, questionView.Triggers);
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
@@ -149,8 +148,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x =>
                 x.Load<QuestionViewInputModel, QuestionView>(
                     It.Is<QuestionViewInputModel>(
-                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey)))).
-                Returns(questionView);
+                        v => v.QuestionnaireId.Equals(input.QuestionnaireId) && v.PublicKey.Equals(input.PublicKey)))).Returns(questionView);
 
             ActionResult result = this.Controller.Edit(question.PublicKey, innerDocument.PublicKey);
             Assert.AreEqual(questionView, ((PartialViewResult)result).ViewData.Model);

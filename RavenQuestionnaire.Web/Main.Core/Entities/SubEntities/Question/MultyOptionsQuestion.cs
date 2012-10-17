@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MultyOptionsQuestion.cs" company="">
-//   
+// <copyright file="MultyOptionsQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The multy options question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
@@ -61,6 +62,30 @@ namespace Main.Core.Entities.SubEntities.Question
         #region Public Methods and Operators
 
         /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="DuplicateNameException">
+        /// </exception>
+        public override void AddAnswer(IAnswer answer)
+        {
+            if (answer == null)
+            {
+                return;
+            }
+
+            // AddAnswer(answer);
+            if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
+            {
+                throw new DuplicateNameException("answer with current publick key already exist");
+            }
+
+            this.Answers.Add(answer);
+        }
+        
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -92,8 +117,8 @@ namespace Main.Core.Entities.SubEntities.Question
             }
 
             throw new CompositeException();
-        }
-
+        }*/
+        
         /// <summary>
         /// The find.
         /// </summary>
@@ -147,7 +172,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -174,7 +199,7 @@ namespace Main.Core.Entities.SubEntities.Question
             }
 
             throw new CompositeException();
-        }
+        }*/
 
         #endregion
     }

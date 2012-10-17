@@ -40,6 +40,8 @@ namespace Main.Core.Entities.SubEntities
         // }
         #region Public Properties
 
+        public List<IAnswer> Answers { get; set; }
+
         /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
@@ -198,6 +200,16 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         [JsonIgnore]
         public string ValidationMessage { get; set; }
+
+        public void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAnswer(Guid answerKey)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 

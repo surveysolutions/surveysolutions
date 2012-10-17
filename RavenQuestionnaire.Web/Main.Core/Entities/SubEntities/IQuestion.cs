@@ -23,6 +23,11 @@ namespace Main.Core.Entities.SubEntities
         #region Public Properties
 
         /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        List<IAnswer> Answers { get; set; }
+
+        /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
         Order AnswerOrder { get; set; }
@@ -36,11 +41,6 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the cards.
         /// </summary>
         List<Image> Cards { get; set; }
-
-        /// <summary>
-        /// Gets or sets the comments.
-        /// </summary>
-        string Comments { get; set; }
         
         /// <summary>
         /// Gets or sets a value indicating whether featured.
@@ -65,10 +65,10 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
-        QuestionType QuestionType { get; set; }
+        QuestionType QuestionType { get; set; } ////must be deleted
 
         /// <summary>
-        /// Gets or sets the stata export caption.
+        /// Gets or sets the Stata export caption.
         /// </summary>
         string StataExportCaption { get; set; }
 
@@ -81,12 +81,23 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
+        
+        #endregion
+
+        /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        void AddAnswer(IAnswer answer);
 
         /*/// <summary>
-        /// Gets or sets Triggers.
+        /// The remove answer.
         /// </summary>
-        List<Guid> Triggers { get; set; }*/
-
-        #endregion
+        /// <param name="answerKey">
+        /// The answer key.
+        /// </param>
+        void RemoveAnswer(Guid answerKey);*/
     }
 }

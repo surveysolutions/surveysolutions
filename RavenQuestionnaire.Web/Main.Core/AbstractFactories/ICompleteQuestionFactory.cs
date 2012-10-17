@@ -1,18 +1,17 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestionFactory.cs" company="">
-//   
+// <copyright file="ICompleteQuestionFactory.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Defines the ICompleteQuestionFactory type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Events.Questionnaire;
-
 namespace Main.Core.AbstractFactories
 {
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Events.Questionnaire;
 
     /// <summary>
     /// The CompleteQuestionFactory interface.
@@ -41,9 +40,28 @@ namespace Main.Core.AbstractFactories
         /// <returns>
         /// The Main.Core.Entities.SubEntities.AbstractQuestion.
         /// </returns>
-        AbstractQuestion Create(QuestionType type);
+        AbstractQuestion Create(NewQuestionAdded type);
 
-        void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e);
+        /*/// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e);*/
+
+        /// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         void UpdateQuestionByEvent(IQuestion question, QuestionChanged e);
 
         #endregion

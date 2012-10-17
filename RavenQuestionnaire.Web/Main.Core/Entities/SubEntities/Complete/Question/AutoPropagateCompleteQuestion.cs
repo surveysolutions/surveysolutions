@@ -12,8 +12,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
     using System.Collections.Generic;
     using System.Linq;
 
-    using Main.Core.Entities.Composite;
-
     /// <summary>
     /// The auto propagate complete question.
     /// </summary>
@@ -57,7 +55,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
         #region Public Properties
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the children.
         /// </summary>
         public override List<IComposite> Children
@@ -70,7 +68,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             set
             {
             }
-        }
+        }*/
 
         /// <summary>
         /// Gets or sets the target group key.
@@ -85,7 +83,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         // }
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -104,7 +102,12 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
             this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;*/
+            this.AnswerDate = DateTime.Now;#1#
+        }*/
+
+        public override void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -206,7 +209,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -233,7 +236,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             this.Answer = null;
-        }
+        }*/
 
         /// <summary>
         /// The set answer.

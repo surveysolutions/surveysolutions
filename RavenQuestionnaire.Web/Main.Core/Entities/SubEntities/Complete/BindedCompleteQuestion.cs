@@ -67,6 +67,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public DateTime? AnswerDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public List<IAnswer> Answers { get; set; }
+
+        /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
         public Order AnswerOrder { get; set; }
@@ -268,6 +273,16 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        public void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveAnswer(Guid answerKey)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 
