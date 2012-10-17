@@ -100,7 +100,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             catch (Exception ex)
             {
                 Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error", ex);
+                logger.Fatal("Import error: " + ex.Message, ex);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error));
             }
         }

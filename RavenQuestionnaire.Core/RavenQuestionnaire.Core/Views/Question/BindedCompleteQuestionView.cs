@@ -72,9 +72,7 @@ namespace RavenQuestionnaire.Core.Views.Question
                 }
             }
 
-            this.Answers =
-                template.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(template.PublicKey, a)).
-                    ToArray();
+            this.Answers = template.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(template.PublicKey, a)).ToArray();
             this.PublicKey = template.PublicKey;
             this.Title = template.QuestionText;
             this.Instructions = template.Instructions;
