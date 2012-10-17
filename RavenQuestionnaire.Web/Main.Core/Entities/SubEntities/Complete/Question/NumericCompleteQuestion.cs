@@ -53,7 +53,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddNumericAttr { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the children.
         /// </summary>
         public override List<IComposite> Children
@@ -66,7 +66,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             set
             {
             }
-        }
+        }*/
 
         /// <summary>
         /// Gets or sets the int attr.
@@ -77,7 +77,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -96,7 +96,12 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
             this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;*/
+            this.AnswerDate = DateTime.Now;#1#
+        }*/
+
+        public override void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -198,7 +203,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -225,7 +230,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             this.Answer = null;
-        }
+        }*/
 
         /// <summary>
         /// The set answer.

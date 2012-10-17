@@ -25,11 +25,9 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Initializes a new instance of the <see cref="Answer"/> class.
         /// </summary>
-        public Answer( /*Question owner*/)
+        public Answer(/*Question owner*/)
         {
             this.PublicKey = Guid.NewGuid();
-
-            // QuestionId = owner.QuestionId;
         }
 
         #endregion

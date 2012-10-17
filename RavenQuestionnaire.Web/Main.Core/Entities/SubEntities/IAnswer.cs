@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IAnswer.cs" company="">
-//   
+// <copyright file="IAnswer.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The Answer interface.
@@ -9,12 +9,12 @@
 
 namespace Main.Core.Entities.SubEntities
 {
-    using Main.Core.Entities.Composite;
+    using System;
 
     /// <summary>
     /// The Answer interface.
     /// </summary>
-    public interface IAnswer : IComposite
+    public interface IAnswer ////: IComposite
     {
         #region Public Properties
 
@@ -47,6 +47,11 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the name collection.
         /// </summary>
         string NameCollection { get; set; }
+        
+        /// <summary>
+        /// Gets the public key.
+        /// </summary>
+        Guid PublicKey { get; }
 
         #endregion
     }
