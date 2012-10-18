@@ -21,19 +21,19 @@
                 Answered questions</h1>
             <ul data-role="listview" data-theme="c">
                 <li data-role="list-divider" data-theme="b">
-                    <div class="ui-grid-b">
+                    <div class="ui-grid-a">
                         <div class="ui-block-a">
                             Question</div>
                         <div class="ui-block-b">
                             Answer</div>
-                        <div class="ui-block-c">
-                            Timing</div>
+                       @* <div class="ui-block-c">
+                            Timing</div>*@
                     </div>
                 </li>
                 @foreach (QuestionStatisticView question in Model.AnsweredQuestions)
                 {
                     <li>
-                        <div class="ui-grid-b">
+                        <div class="ui-grid-a">
                             <div class="ui-block-a">
                                 @if (!question.GroupPropagationPublicKey.HasValue)
                                 {
@@ -47,12 +47,12 @@
                             <div class="ui-block-b">
                                 <div class="answer-cell">@question.AnswerValue</div>
                             </div>
-                            <div class="ui-block-c">
+                           @* <div class="ui-block-c">
                                 @if (question.ApproximateTime.HasValue)
                                 {
                                     <b>@question.ApproximateTime.Value.Minutes
                                         minutes @question.ApproximateTime.Value.Seconds seconds</b>
-                                }</div>
+                                }</div>*@
                         </div>
                     </li>
                 }
