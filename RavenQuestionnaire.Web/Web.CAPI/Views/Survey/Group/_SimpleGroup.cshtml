@@ -31,7 +31,7 @@
             @if (!string.IsNullOrWhiteSpace(question.Instructions))
             {
                 <a id="inctruction-ref-@(question.PublicKey)" 
-                         onclick='ShowInfoDialog("@(question.PublicKey)","inctruction")'
+                         onclick='ShowInfoDialog(this,"@(question.PublicKey)","inctruction")'
                            data-icon="info" 
                            data-role="button" 
                            data-inline="true">Read instructions</a>
