@@ -29,7 +29,7 @@ namespace Core.CAPI.Views
                                                                                g => new CompleteGroupHeaders(g)),
                                                                            navigation))
         {
-            BuildGridContent(doc, currentGroup);
+            this.BuildGridContent(doc, currentGroup);
         }
 
 
@@ -41,19 +41,17 @@ namespace Core.CAPI.Views
             {
                 var executor = new CompleteQuestionnaireConditionExecutor(doc);
 
+                executor.ExecuteAndChangeStateRecursive(doc);
+
                 var validator = new CompleteQuestionnaireValidationExecutor(doc);
 
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 
                 foreach (ICompleteGroup completeGroup in doc.Find<ICompleteGroup>(g => g.PublicKey == currentGroup.PublicKey && g.PropagationPublicKey.HasValue))
                 {
-                    executor.ExecuteAndChangeStateRecursive(completeGroup);
-
                     validator.Execute(completeGroup);
                     this.Grid.AddRow(doc, completeGroup);
                 }
-
-                return;
             }
         }
     }

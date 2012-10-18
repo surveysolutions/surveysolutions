@@ -1,22 +1,22 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CapiScreenViewSupplier.cs" company="">
-// TODO: Update copyright text.
+//   TODO: Update copyright text.
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Documents;
-using Main.Core.Entities.Extensions;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
-using Main.Core.View.Group;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Core.CAPI.Views
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+    using Main.Core.View.Group;
 
     /// <summary>
     /// TODO: Update summary.
@@ -25,31 +25,47 @@ namespace Core.CAPI.Views
     {
         #region Implementation of IScreenViewSupplier
 
-        public override ScreenGroupView BuildView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup,
-                                         ScreenNavigation navigation)
+        /// <summary>
+        /// The build view.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="navigation">
+        /// The navigation.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ScreenGroupView"/>.
+        /// </returns>
+        public override ScreenGroupView BuildView( CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
         {
             if (currentGroup.Propagated != Propagate.None && !currentGroup.PropagationPublicKey.HasValue)
             {
                 return new CapiScreenGroupView(doc, currentGroup, navigation);
             }
+
             var baseResult = base.BuildView(doc, currentGroup, navigation);
             
-            foreach (
-                CompleteGroupMobileView completeGroupMobileView in
+            foreach (CompleteGroupMobileView completeGroupMobileView in
                     baseResult.Group.Children.OfType<CompleteGroupMobileView>().Where(
                         g => g.Propagated != Propagate.None /*&& g.Visualization == GroupVisualization.Grid*/).ToList())
             {
                 completeGroupMobileView.Children.Clear();
                 completeGroupMobileView.Propagated = Propagate.None;
             }
+
             if (currentGroup.PropagationPublicKey.HasValue)
             {
                 baseResult.Navigation.NavigationContent.BreadCumbs.Insert(
                     baseResult.Navigation.NavigationContent.BreadCumbs.Count,
-                    new CompleteGroupHeaders() {GroupText = currentGroup.Title, PublicKey = currentGroup.PublicKey});
+                    new CompleteGroupHeaders() { GroupText = currentGroup.Title, PublicKey = currentGroup.PublicKey });
                 baseResult.Navigation.NavigationContent.CurrentScreenTitle =
                     doc.GetGroupTitle(currentGroup.PropagationPublicKey.Value);
             }
+
             return baseResult;
         }
 
