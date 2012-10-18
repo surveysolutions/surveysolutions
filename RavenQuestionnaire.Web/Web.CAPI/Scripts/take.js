@@ -26,9 +26,11 @@ function GetCheck(i, j) {
         }
     });
 }
-function ShowInfoDialog(key, dialogName) {
+function ShowInfoDialog(target, key, dialogName) {
+    var jTarget = $(target);
+
     $(".ui-keyboard").hide();
-    $("#" + dialogName + "-" + key).popup("open", { positionTo: "origin" });
+    $("#" + dialogName + "-" + key).popup("open", jTarget.offset().left, jTarget.offset().top);
 }
 
 function JsonResults(data, status, xhr) {
