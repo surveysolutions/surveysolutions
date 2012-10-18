@@ -26,10 +26,11 @@ function GetCheck(i, j) {
         }
     });
 }
-function ShowErrorDialog(key) {
+function ShowInfoDialog(key, dialogName) {
     $(".ui-keyboard").hide();
-    $("#error-" + key).popup("open", { positionTo: "origin" });
+    $("#" + dialogName + "-" + key).popup("open", { positionTo: "origin" });
 }
+
 function JsonResults(data, status, xhr) {
 
     var group = jQuery.parseJSON(data.responseText);
