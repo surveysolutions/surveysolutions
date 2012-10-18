@@ -244,30 +244,26 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+            var propagatedQuestion = question as IAutoPropagate;
             ////handle group propagation
             ////to store events with guids
-            if (question is IAutoPropagate)
+            if (propagatedQuestion != null)
             {
                 int count;
                 if (!int.TryParse(completeAnswerValue, out count))
                 {
-                    return;
+                    throw new ArgumentException("value is not a number");
                 }
-
-                ////try to fix empty fields
-                if (question is IAutoPropagate)
+                if (string.IsNullOrWhiteSpace(completeAnswerValue))
                 {
-                    if (string.IsNullOrWhiteSpace(completeAnswerValue))
-                    {
-                        completeAnswerValue = "0";
-                    }
+                    completeAnswerValue = "0";
                 }
-
                 if (count < 0)
                 {
-                    throw new InvalidOperationException("count can't be bellow zero");
+                    throw new ArgumentException("count can't be bellow zero");
                 }
-
+                if (count > propagatedQuestion.MaxValue)
+                    throw new ArgumentException("max value is reached");
                 this.AddRemovePropagatedGroup(question, count);
             }
             // Apply a NewGroupAdded event that reflects the

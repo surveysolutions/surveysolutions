@@ -174,5 +174,16 @@ namespace Main.Core.Entities.SubEntities.Question
         public List<Guid> Triggers { get; set; }
 
         #endregion
+
+        #region Implementation of IAutoPropagate
+
+        public int MaxValue
+        {
+            get { return maxValue; }
+            set { maxValue = value; }
+        }
+        private int maxValue = int.MaxValue;
+
+        #endregion
     }
 }
