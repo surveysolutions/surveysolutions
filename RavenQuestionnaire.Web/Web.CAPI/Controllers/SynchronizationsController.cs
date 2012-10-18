@@ -111,9 +111,8 @@ namespace Web.CAPI.Controllers
         /// </summary>
         public void DiscoverAsync()
         {
-            this.AsyncManager.OutstandingOperations.Increment();
             UserLight user = this._globalProvider.GetCurrentUser();
-            AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
                 () =>
                 {
                     try
@@ -124,8 +123,6 @@ namespace Web.CAPI.Controllers
                     {
                         this.AsyncManager.Parameters["result"] = null;
                     }
-
-                    this.AsyncManager.OutstandingOperations.Decrement();
                 });
         }
 
@@ -166,8 +163,7 @@ namespace Web.CAPI.Controllers
         public Guid? ExportAsync(Guid syncKey)
         {
             Guid syncProcess = Guid.NewGuid();
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
                 () =>
                 {
                     byte[] file;
@@ -184,7 +180,6 @@ namespace Web.CAPI.Controllers
                     }
 
                     this.AsyncManager.Parameters["result"] = file;
-                    this.AsyncManager.OutstandingOperations.Decrement();
                 });
             return syncProcess;
         }
@@ -339,8 +334,7 @@ namespace Web.CAPI.Controllers
             var zip = ZipFile.Read(uploadFile.InputStream);
 
             Guid syncProcess = Guid.NewGuid();
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
                 () =>
                 {
                     try
@@ -353,8 +347,6 @@ namespace Web.CAPI.Controllers
                         Logger logger = LogManager.GetCurrentClassLogger();
                         logger.Fatal("Error on import ", e);
                     }
-
-                    this.AsyncManager.OutstandingOperations.Decrement();
                 });
             return syncProcess;
         }

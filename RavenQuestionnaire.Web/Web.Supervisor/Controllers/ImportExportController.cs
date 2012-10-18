@@ -54,8 +54,7 @@ namespace Web.Supervisor.Controllers
         /// </param>
         public void ExportAsync(Guid syncKey)
         {
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
+            AsyncQuestionnaireUpdater.Update(AsyncManager, () =>
             {
                 try
                 {
@@ -66,7 +65,6 @@ namespace Web.Supervisor.Controllers
                 {
                     AsyncManager.Parameters["result"] = null;
                 }
-                AsyncManager.OutstandingOperations.Decrement();
             });
         }
 
@@ -108,13 +106,8 @@ namespace Web.Supervisor.Controllers
             if (myfile == null && Request.Files.Count > 0)
                 myfile = Request.Files[0];
             if (myfile == null || myfile.ContentLength == 0) return;
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
-                () =>
-                    {
-                        this.exportimportEvents.Import(myfile);
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
+                () => this.exportimportEvents.Import(myfile));
         }
 
         /// <summary>
