@@ -487,7 +487,7 @@ namespace Web.CAPI.Controllers
             QuestionType questionType,
             CompleteAnswerView[] answers)
         {
-            //  CompleteQuestionView question = questions[0];
+            ////  CompleteQuestionView question = questions[0];
 
             List<Guid> answersGuid = new List<Guid>();
             string completeAnswerValue = null;

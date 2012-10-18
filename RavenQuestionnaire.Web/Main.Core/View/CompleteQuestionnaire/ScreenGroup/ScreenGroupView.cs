@@ -22,8 +22,20 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     public class ScreenGroupView
     {
        #region Constructors and Destructors
-        protected ScreenGroupView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation)
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScreenGroupView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="navigation">
+        /// The navigation.
+        /// </param>
+        protected ScreenGroupView (CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation)
         {
             this.QuestionnairePublicKey = doc.PublicKey;
             this.PublicKey = currentGroup.PublicKey;
@@ -45,22 +57,31 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="navigation">
         /// The navigation.
         /// </param>
-        public ScreenGroupView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
+        public ScreenGroupView( CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
             : this(doc, currentGroup,
                 new ScreenNavigationView(
-                doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
+                    doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(currentGroup);
+            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc);*/
 
             var validator = new CompleteQuestionnaireValidationExecutor(doc);
             validator.Execute(currentGroup);
-            BuildScreenContent(doc, currentGroup);
+
+            this.BuildScreenContent(doc, currentGroup);
 
         }
 
-        protected void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
+        /// <summary>
+        /// The build screen content.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        private void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
         {
             if (currentGroup.PropagationPublicKey.HasValue)
             {
@@ -103,14 +124,18 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                         {
                             propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup));
                         }
-
                     }
                 }
             }
         }
 
         #endregion
+
+        /// <summary>
+        /// Gets or sets the group.
+        /// </summary>
         public CompleteGroupMobileView Group { get; set; }
+
         /// <summary>
         /// get or set questionnaire active status - active if allow to edit, not error or completed
         /// </summary>
