@@ -37,11 +37,13 @@
 
 
         var keyboardInputs = this.find('input[draw-key-board=true][type=text], textarea[draw-key-board=true]');
+        //   var passwordInputs = this.find('input[draw-key-board=true][type=password]');
         var numericInputs = this.find('input[draw-key-board=true][type!=text]');
 
         //    keyboardInputs.add(numericInputs).removeAttr("draw-key-board");
 
         createKeyBoard({ layout: 'qwertyNoEnter', min_width: '888px', css: { container: 'text'} }, "dummyTxtKeyBoard", keyboardInputs);
+        // createKeyBoard({ layout: 'qwertyNoEnter', min_width: '888px', css: { container: 'text'} }, "dummyPassKeyBoard", passwordInputs);
 
         createKeyBoard({ layout: 'numOnly', min_width: null, css: { container: 'numeric'} }, "dummyNumericKeyBoard", numericInputs);
         hideInputsWithVirtualKeyboard(this.find('a[open-virtual-keyboar=true]'));
@@ -106,7 +108,7 @@
                 if (target.attr('submit-form') != 'false')
                     target.closest("form").submit();
 
-               
+
             });
             input.bind('visible.keyboard', function (event) {
                 // var jInput = $(this);
@@ -120,7 +122,7 @@
                 var popupKeyboard = keyboard.$preview.parent();
                 popupKeyboard.find('[additional-comments="true"]').remove();
                 var title = target.attr('question-text');
-                
+
                 if (title && title.length > 0)
                     popupKeyboard.prepend($('<p additional-comments="true">' + title + '</p>'));
             });
@@ -145,42 +147,51 @@
                 id: name,
                 name: name
             });
-            var kbOptions = {
-                keyBinding: 'mousedown touchstart',
-                position: {
-                    of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
-                    my: 'center top',
-                    at: 'center top',
-                    at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
-                },
-                autoAccept: true,
-                css: {
-                    input: '',
-                    container: '',
-                    buttonDefault: '',
-                    buttonHover: '',
-                    buttonActive: '',
-                    buttonDisabled: ''
-                }
-            };
-            var extendedOptions = $.extend({}, kbOptions, options);
-            var mobileOptions = {
-                // keyboard wrapper theme
-                container: { theme: 'c' },
-                // theme added to all regular buttons
-                buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
-                // theme added to all buttons when they are being hovered
-                buttonHover: { theme: 'c' },
-                // theme added to action buttons (e.g. tab, shift, accept, cancel);
-                // parameters here will override the settings in the buttonMarkup
-                buttonAction: { theme: 'b' },
-                // theme added to button when it is active (e.g. shift is down)
-                // All extra parameters will be ignored
-                buttonActive: { theme: 'e' }
-            };
             input.appendTo('body');
-            input.keyboard(extendedOptions).addMobile(mobileOptions);
-            return input;
+            var retval = input.initTargetInput(options);
+           
+           
+            return retval;
         }
+
+
+    };
+    $.fn.initTargetInput = function (options) {
+        var input = this;
+        var kbOptions = {
+            keyBinding: 'mousedown touchstart',
+            position: {
+                of: null, // optional - null (attach to input/textarea) or a jQuery object (attach elsewhere)
+                my: 'center top',
+                at: 'center top',
+                at2: 'center bottom' // used when "usePreview" is false (centers the keyboard at the bottom of the input/textarea)
+            },
+            autoAccept: true,
+            css: {
+                input: '',
+                container: '',
+                buttonDefault: '',
+                buttonHover: '',
+                buttonActive: '',
+                buttonDisabled: ''
+            }
+        };
+        var extendedOptions = $.extend({}, kbOptions, options);
+        var mobileOptions = {
+            // keyboard wrapper theme
+            container: { theme: 'c' },
+            // theme added to all regular buttons
+            buttonMarkup: { theme: 'c', shadow: 'true', corners: 'false' },
+            // theme added to all buttons when they are being hovered
+            buttonHover: { theme: 'c' },
+            // theme added to action buttons (e.g. tab, shift, accept, cancel);
+            // parameters here will override the settings in the buttonMarkup
+            buttonAction: { theme: 'b' },
+            // theme added to button when it is active (e.g. shift is down)
+            // All extra parameters will be ignored
+            buttonActive: { theme: 'e' }
+        };
+        input.keyboard(extendedOptions).addMobile(mobileOptions);
+        return input;
     };
 })(jQuery);
