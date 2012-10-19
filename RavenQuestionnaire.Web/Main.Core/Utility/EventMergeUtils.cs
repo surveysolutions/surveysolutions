@@ -44,7 +44,7 @@ namespace Main.Core.Utility
             {
                 throw new ArgumentException("EventSequence is empty");
             }
-
+            stream = stream.OrderBy(e => e.EventSequence);
             Guid? devergentGuid = stream.FindDivergentEventGuid(baseStream);
          /*   Guid? devergentGuid = null;
             if (dvergentPoint > 0)

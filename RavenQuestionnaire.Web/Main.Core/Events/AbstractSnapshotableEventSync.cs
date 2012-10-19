@@ -119,15 +119,16 @@ namespace Main.Core.Events
             Guid commitId = Guid.NewGuid();
             Guid eventId = Guid.NewGuid();
             var uncommitedStream = new UncommittedEventStream(commitId);
+            var dateOfEvent = NcqrsEnvironment.Get<IClock>().UtcNow();
             uncommitedStream.Append(new UncommittedEvent(eventId, aggregateRootId, aggregateRoot.Version + 1,
-                                                         aggregateRoot.InitialVersion, DateTime.Now, eventSnapshoot,
+                                                         aggregateRoot.InitialVersion, dateOfEvent, eventSnapshoot,
                                                          events.Last().GetType().Assembly.GetName().Version));
             this.myEventStore.Store(uncommitedStream);
             return new List<AggregateRootEvent>()
                        {
 
                            new AggregateRootEvent(new CommittedEvent(commitId, eventId, aggregateRootId, 1,
-                                                                     DateTime.Now, eventSnapshoot,
+                                                                     dateOfEvent, eventSnapshoot,
                                                                      events.Last().GetType().Assembly.GetName().Version))
                        };
 
