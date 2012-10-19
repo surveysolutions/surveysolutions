@@ -72,7 +72,12 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #region Public Methods and Operators
 
-        /// <summary>
+        public override void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
+        }
+        
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -86,7 +91,8 @@ namespace Main.Core.Entities.SubEntities.Question
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
-        }
+        }*/
+
 
         /// <summary>
         /// The find.
@@ -136,7 +142,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return null;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -160,7 +166,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public override void Remove(Guid publicKey)
         {
             throw new CompositeException();
-        }
+        }*/
 
         #endregion
     }

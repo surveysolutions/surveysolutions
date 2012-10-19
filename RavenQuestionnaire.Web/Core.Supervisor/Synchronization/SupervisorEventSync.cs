@@ -7,19 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View.Questionnaire;
-using Main.DenormalizerStorage;
-
 namespace Core.Supervisor.Synchronization
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Main.Core.Documents;
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.Questionnaire;
+    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Domain;

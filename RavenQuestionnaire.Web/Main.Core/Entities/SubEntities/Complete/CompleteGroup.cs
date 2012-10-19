@@ -76,7 +76,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
 
-                    foreach (ICompleteAnswer completeAnswer in newQuestion.Children)
+                        foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
                     {
                         completeAnswer.PropogationPublicKey = propogationPublicKey;
                     }

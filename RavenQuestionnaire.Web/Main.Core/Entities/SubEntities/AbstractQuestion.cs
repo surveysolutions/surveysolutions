@@ -13,7 +13,6 @@ namespace Main.Core.Entities.SubEntities
     using System.Linq;
 
     using Main.Core.Entities.Composite;
-    using Main.Core.ExpressionExecutors;
 
     using Newtonsoft.Json;
 
@@ -32,6 +31,7 @@ namespace Main.Core.Entities.SubEntities
         {
             // PublicKey = Guid.NewGuid();
             this.Cards = new List<Image>();
+            this.Answers = new List<IAnswer>();
         }
 
         /// <summary>
@@ -40,8 +40,7 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="text">
         /// The text.
         /// </param>
-        protected AbstractQuestion(string text)
-            : this()
+        protected AbstractQuestion(string text) : this()
         {
             this.QuestionText = text;
         }
@@ -49,6 +48,11 @@ namespace Main.Core.Entities.SubEntities
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public List<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets the answer order.
@@ -139,6 +143,8 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string ValidationMessage { get; set; }
 
+        public abstract void AddAnswer(IAnswer answer);
+        
         /*/// <summary>
         /// Gets or sets Triggers.
         /// </summary>
@@ -157,7 +163,10 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public abstract void Add(IComposite c, Guid? parent);
+        public void Add(IComposite c, Guid? parent)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The add card.
@@ -220,7 +229,10 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="c">
         /// The c.
         /// </param>
-        public abstract void Remove(IComposite c);
+        public void Remove(IComposite c)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The remove.
@@ -228,7 +240,10 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public abstract void Remove(Guid publicKey);
+        public void Remove(Guid publicKey)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The remove card.

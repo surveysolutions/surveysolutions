@@ -235,7 +235,7 @@ namespace Main.Core.Domain
                 var answerList = new List<string>();
                 foreach (Guid answerGuid in completeAnswers)
                 {
-                    var answer = question.Find<ICompleteAnswer>(answerGuid);
+                    var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
                     if (answer != null)
                     {
                         answerList.Add(answer.AnswerText);
@@ -263,9 +263,10 @@ namespace Main.Core.Domain
                     throw new ArgumentException("count can't be bellow zero");
                 }
                 if (count > propagatedQuestion.MaxValue)
-                    throw new ArgumentException("max value is reached");
+                    throw new ArgumentException(string.Format("value can't be greater than {0}", propagatedQuestion.MaxValue));
                 this.AddRemovePropagatedGroup(question, count);
             }
+
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -283,8 +284,6 @@ namespace Main.Core.Domain
                         QuestionText = question.QuestionText, 
                         AnswerString = answerString
                     });
-
-           
         }
 
         /// <summary>

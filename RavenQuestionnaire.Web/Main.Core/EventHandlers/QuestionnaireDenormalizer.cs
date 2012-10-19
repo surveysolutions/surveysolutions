@@ -152,10 +152,11 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-
-            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload.QuestionType);
-            result.PublicKey = evnt.Payload.PublicKey;
-            this.questionFactory.UpdateQuestionByEvent(result,evnt.Payload);
+            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
+            if (result == null)
+            {
+                return;
+            }
 
             item.Add(result, evnt.Payload.GroupPublicKey);
         }

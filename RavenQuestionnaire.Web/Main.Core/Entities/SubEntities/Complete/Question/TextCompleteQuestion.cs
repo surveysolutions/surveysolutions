@@ -49,7 +49,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddTextAttr { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the children.
         /// </summary>
         public override List<IComposite> Children
@@ -62,13 +62,13 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             set
             {
             }
-        }
+        }*/
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -87,75 +87,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             if (question == null || question.PublicKey != this.PublicKey)
                 throw new CompositeException();
             this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;*/
-        }
+            this.AnswerDate = DateTime.Now;#1#
+        }*/
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T Find<T>(Guid publicKey)
+        public override void AddAnswer(IAnswer answer)
         {
-            if (typeof(T).IsAssignableFrom(this.GetType()))
-            {
-                if (this.PublicKey.Equals(publicKey))
-                {
-                    return this as T;
-                }
-            }
-
-            return null;
+            throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            if (!(this is T))
-            {
-                return new T[0];
-            }
-
-            if (condition(this as T))
-            {
-                return new[] { this as T };
-            }
-
-            return new T[0];
-        }
-
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return this.Find(condition).FirstOrDefault();
-        }
-
+        
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -189,7 +128,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer ?? string.Empty;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -216,7 +155,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             this.Answer = null;
-        }
+        }*/
 
         /// <summary>
         /// The set answer.

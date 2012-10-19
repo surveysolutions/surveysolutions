@@ -70,7 +70,7 @@ namespace Main.Core.View.Question
             this.ValidationMessage = doc.ValidationMessage;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
-            this.Comments = doc.Comments;
+            ////this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
@@ -525,7 +525,7 @@ namespace Main.Core.View.Question
             : base(questionnaire, doc)
         {
             this.Answers =
-                doc.Children.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+                doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
             if (doc.Cards != null)
             {
                 this.Cards =

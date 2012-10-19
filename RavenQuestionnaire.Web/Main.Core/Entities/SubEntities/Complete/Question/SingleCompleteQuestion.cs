@@ -11,6 +11,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Linq;
 
     using Main.Core.Entities.Composite;
@@ -27,7 +28,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public SingleCompleteQuestion()
         {
-            this.Children = new List<IComposite>();
+            
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public SingleCompleteQuestion(string text)
             : base(text)
         {
-            this.Children = new List<IComposite>();
+           
         }
 
         #endregion
@@ -51,16 +52,16 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddSingleAttr { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the children.
         /// </summary>
-        public override List<IComposite> Children { get; set; }
+        public override List<IComposite> Children { get; set; }*/
 
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -74,98 +75,24 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
+        }*/
 
-            /*var question = c as ICompleteQuestion;
-            if (question != null && question.PublicKey == this.PublicKey)
+        public override void AddAnswer(IAnswer answer)
+        {
+            if (answer == null)
             {
-                this.Answer = question.Answer;
                 return;
             }
-            CompleteAnswer currentAnswer = c as CompleteAnswer;
-            if (currentAnswer != null)
-            {
-                foreach (IComposite child in this.Children)
-                {
-                    try
-                    {
-                        child.Add(c,null);
-                        this.Children.ForEach(q => ((ICompleteAnswer) q).Selected = q.PublicKey == child.PublicKey);
-                        return;
-                    }
-                    catch (CompositeException)
-                    {
-                        
-                    }
-                }
-                //this.Answer = currentAnswer.PublicKey;
-                
-            }
-            throw new CompositeException();*/
-        }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// T type.
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T Find<T>(Guid publicKey)
-        {
-            if (this is T)
+            if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
             {
-                if (this.PublicKey.Equals(publicKey))
-                {
-                    return this as T;
-                }
+                throw new DuplicateNameException("answer with current publick key already exist");
             }
 
-            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
-            {
-                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(
-                    result => result != null);
-            }
-
-            return null;
+            this.Answers.Add(answer);
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
-        }
-
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return this.Find(condition).FirstOrDefault();
-        }
-
+        
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -174,7 +101,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            IEnumerable<object> answers = this.Children.Where(c => ((ICompleteAnswer)c).Selected).Select(
+            IEnumerable<object> answers = this.Answers.Where(c => ((ICompleteAnswer)c).Selected).Select(
                     c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
             
             return answers.Any() ? answers.First() : null;
@@ -188,7 +115,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override bool IsAnswered()
         {
-            return this.Children.Any(c => ((ICompleteAnswer)c).Selected);
+            return this.Answers.Any(c => ((ICompleteAnswer)c).Selected);
         }
 
         /// <summary>
@@ -199,11 +126,11 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            ICompleteAnswer answer = this.Find<ICompleteAnswer>(a => a.Selected).FirstOrDefault();
+            var answer = this.Answers.FirstOrDefault(a => ((ICompleteAnswer)a).Selected);
             return answer == null ? string.Empty : answer.AnswerText;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -212,9 +139,9 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override void Remove(IComposite c)
         {
             this.Remove(c.PublicKey);
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -226,7 +153,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             if (this.PublicKey == publicKey)
             {
-                foreach (CompleteAnswer answer in this.Children)
+                foreach (CompleteAnswer answer in this.Answers)
                 {
                     answer.Remove(answer);
                 }
@@ -234,7 +161,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 return;
             }
 
-            foreach (CompleteAnswer completeAnswer in this.Children)
+            foreach (CompleteAnswer completeAnswer in this.Answers)
             {
                 try
                 {
@@ -248,7 +175,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             throw new CompositeException("answer wasn't found");
-        }
+        }*/
 
         /// <summary>
         /// The set answer.
@@ -269,18 +196,23 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             }
 
             Guid selecteAnswer = answer.First();
+            
+            foreach (var item in this.Answers)
+            {
+                (item as ICompleteAnswer).Selected = selecteAnswer == item.PublicKey;
+            }
 
-            var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
+            /*var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
             if (answerObject != null)
             {
-                this.Children.ForEach(c => ((ICompleteAnswer)c).Selected = false);
+                this.Answers.ForEach(c => ((ICompleteAnswer)c).Selected = false);
                 answerObject.Add(answerObject, null);
 
                 // this.AnswerDate = DateTime.Now;
                 return;
             }
 
-            throw new CompositeException("Answer wasn't found.");
+            throw new CompositeException("Answer wasn't found.");*/
         }
 
         #endregion

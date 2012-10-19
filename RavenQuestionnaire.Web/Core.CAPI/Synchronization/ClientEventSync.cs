@@ -86,7 +86,7 @@ namespace Core.CAPI.Synchronization
             }
 
             // return retval;
-            return retval.OrderBy(x => x.EventTimeStamp);
+            return retval.OrderBy(x => x.EventSequence);
         }
 
         #endregion

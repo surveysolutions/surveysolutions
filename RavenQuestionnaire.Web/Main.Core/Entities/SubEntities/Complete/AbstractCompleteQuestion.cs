@@ -11,6 +11,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Main.Core.Entities.Composite;
 
@@ -33,6 +34,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Valid = true;
             this.Cards = new List<Image>();
             this.AnswerDate = DateTime.Now;
+            this.Answers = new List<IAnswer>();
         }
 
         /// <summary>
@@ -41,8 +43,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="text">
         /// The text.
         /// </param>
-        protected AbstractCompleteQuestion(string text)
-            : this()
+        protected AbstractCompleteQuestion(string text) : this()
         {
             this.QuestionText = text;
         }
@@ -55,6 +56,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the answer date.
         /// </summary>
         public DateTime? AnswerDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public List<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets the answer order.
@@ -74,7 +80,19 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the children.
         /// </summary>
-        public abstract List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get
+            {
+                return null;
+            }
+
+            set
+            {
+                ////do nothing
+                ////throw new NotImplementedException();
+            } 
+        }
 
         /// <summary>
         /// Gets or sets the comments.
@@ -161,7 +179,17 @@ namespace Main.Core.Entities.SubEntities.Complete
         public string ValidationMessage { get; set; }
 
         /// <summary>
-        /// Gets or sets Triggers.
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public abstract void AddAnswer(IAnswer answer);
+
+        /// <summary>
+        /// Gets or sets the triggers.
         /// </summary>
         public List<Guid> Triggers { get; set; }
 
@@ -179,7 +207,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public abstract void Add(IComposite c, Guid? parent);
+        public void Add(IComposite c, Guid? parent)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The find.
@@ -192,7 +223,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The T.
         /// </returns>
-        public abstract T Find<T>(Guid publicKey) where T : class, IComposite;
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            return null;
+        }
 
         /// <summary>
         /// The find.
@@ -205,7 +239,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
         /// </returns>
-        public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        {
+            return Enumerable.Empty<T>();
+        }
 
         /// <summary>
         /// The first or default.
@@ -218,7 +255,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The T.
         /// </returns>
-        public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return null;
+        }
 
         /// <summary>
         /// The get answer object.
@@ -250,7 +290,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="c">
         /// The c.
         /// </param>
-        public abstract void Remove(IComposite c);
+        public void Remove(IComposite c)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The remove.
@@ -258,7 +301,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public abstract void Remove(Guid publicKey);
+        public void Remove(Guid publicKey)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// The set answer.

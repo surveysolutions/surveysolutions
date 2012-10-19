@@ -55,9 +55,9 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
             question.ValidationExpression = "contains([" + question.PublicKey + "],3)" + " and " + "contains([" + question.PublicKey + "],2)";
             
             doc.Children.Add(question);
-            question.Children.Add(answer);
-            question.Children.Add(answer1);
-            question.Children.Add(answer2);
+            question.AddAnswer(answer);
+            question.AddAnswer(answer1);
+            question.AddAnswer(answer2);
 
             var executorC = new CompleteQuestionnaireConditionExecutor(doc);
             bool? result = executorC.Execute(question);

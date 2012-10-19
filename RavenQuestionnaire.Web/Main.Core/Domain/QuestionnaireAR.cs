@@ -11,7 +11,6 @@ namespace Main.Core.Domain
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
@@ -44,7 +43,7 @@ namespace Main.Core.Domain
         /// </summary>
         public QuestionnaireAR()
         {
-            questionFactory = new CompleteQuestionFactory();
+            this.questionFactory = new CompleteQuestionFactory();
         }
 
 
@@ -57,11 +56,11 @@ namespace Main.Core.Domain
         /// <param name="text">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text)
-            : base(questionnaireId)
+        public QuestionnaireAR(Guid questionnaireId, string text) : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
-            questionFactory=new CompleteQuestionFactory();
+            this.questionFactory = new CompleteQuestionFactory();
+            
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -566,6 +565,10 @@ namespace Main.Core.Domain
         protected void OnImageUpdated(ImageUpdated e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+            if (question == null)
+            {
+                return;
+            }
 
             question.UpdateCard(e.ImageKey, e.Title, e.Description);
         }
@@ -616,12 +619,13 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            AbstractQuestion result = new CompleteQuestionFactory().Create(e.QuestionType);
-          
-            result.PublicKey = e.PublicKey;
-            this.questionFactory.UpdateQuestionByEvent(result, e);
+            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            if (question == null)
+            {
+                return;
+            }
 
-            this.innerDocument.Add(result, e.GroupPublicKey);
+            this.innerDocument.Add(question, e.GroupPublicKey);
         }
 
         /// <summary>
@@ -651,6 +655,7 @@ namespace Main.Core.Domain
             {
                 return;
             }
+
             this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 

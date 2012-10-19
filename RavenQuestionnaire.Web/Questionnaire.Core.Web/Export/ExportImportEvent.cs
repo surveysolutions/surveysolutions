@@ -136,8 +136,11 @@ namespace Questionnaire.Core.Web.Export
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        /// <param name="action">
-        /// The action.
+        /// <param name="events">
+        /// The events.
+        /// </param>
+        /// <param name="fileName">
+        /// The file Name.
         /// </param>
         /// <returns>
         /// Zip file as array of bytes

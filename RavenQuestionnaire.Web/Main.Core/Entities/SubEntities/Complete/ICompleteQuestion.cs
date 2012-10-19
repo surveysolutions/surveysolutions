@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestion.cs" company="">
-//   
+// <copyright file="ICompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The CompleteQuestion interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
@@ -28,6 +29,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         DateTime? AnswerDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the comments.
+        /// </summary>
+        string Comments { get; set; }
 
         #endregion
 
@@ -75,7 +80,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The comments.
         /// </param>
         void SetComments(string comments);
-
-        #endregion
+        
+       #endregion
     }
 }
