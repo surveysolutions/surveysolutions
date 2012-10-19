@@ -104,72 +104,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T Find<T>(Guid publicKey)
-        {
-            if (typeof(T).IsAssignableFrom(this.GetType()))
-            {
-                if (this.PublicKey.Equals(publicKey))
-                {
-                    return this as T;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            if (!(this is T))
-            {
-                return new T[0];
-            }
-
-            if (condition(this as T))
-            {
-                return new[] { this as T };
-            }
-
-            return new T[0];
-        }
-
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return this.Find(condition).FirstOrDefault();
-        }
-
+        
         /// <summary>
         /// The get answer object.
         /// </summary>

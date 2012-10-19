@@ -1,25 +1,39 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="QuestionColumnItem.cs" company="">
-// TODO: Update copyright text.
+//   TODO: Update copyright text.
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View.Answer;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.View.Answer;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class QuestionColumnItem : PropagatedGroupColumnItem
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionColumnItem"/> class.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="parentGroupPublicKey">
+        /// The parent group public key.
+        /// </param>
         public QuestionColumnItem(ICompleteQuestion question, Guid questionnaireId, Guid parentGroupPublicKey)
         {
             this.Title = question.QuestionText;
@@ -31,7 +45,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems
             this.QuestionnaireId = questionnaireId;
             this.ParentGroupPublicKey = parentGroupPublicKey;
             this.Answers =
-                question.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToList();
+                question.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToList();
         }
 
         #region Public Properties
