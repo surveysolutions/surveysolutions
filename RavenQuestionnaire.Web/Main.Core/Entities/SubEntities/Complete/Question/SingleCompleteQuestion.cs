@@ -136,7 +136,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            return this.Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
         }
 
         /// <summary>

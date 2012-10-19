@@ -4,8 +4,6 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.DenormalizerStorage;
-
 namespace Main.Core.EventHandlers
 {
     using System;
@@ -16,6 +14,7 @@ namespace Main.Core.EventHandlers
     using Main.Core.Events.Synchronization;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.SyncProcess;
+    using Main.DenormalizerStorage;
 
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Restoring.EventStapshoot;
