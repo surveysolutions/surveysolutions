@@ -26,7 +26,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
             PropagationKey = question.PropagationPublicKey.Value;
             Answer = question.GetAnswerObject();
             AnswerString = question.GetAnswerString();
-            var answerKeys = question.Children.OfType<ICompleteAnswer>().Where(a => a.Selected).Select(a=>a.PublicKey.ToString());
+            var answerKeys = question.Answers.OfType<ICompleteAnswer>().Where(a => a.Selected).Select(a=>a.PublicKey.ToString());
             if (answerKeys.Any())
                 AnswerPublicKeys = string.Join(";", answerKeys);
             Enabled = question.Enabled;

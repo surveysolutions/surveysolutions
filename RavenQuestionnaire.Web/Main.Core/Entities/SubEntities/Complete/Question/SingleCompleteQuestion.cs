@@ -92,70 +92,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             this.Answers.Add(answer);
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// T type.
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T Find<T>(Guid publicKey)
-        {
-            if (this is T)
-            {
-                if (this.PublicKey.Equals(publicKey))
-                {
-                    return this as T;
-                }
-            }
-
-            if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
-            {
-                // TODO: this.Children is always null => NullPointerException
-                return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(
-                    result => result != null);
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
-        public override IEnumerable<T> Find<T>(Func<T, bool> condition)
-        {
-            return this.Answers.Where(a => a is T && condition(a as T)).Select(a => a as T);
-        }
-
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public override T FirstOrDefault<T>(Func<T, bool> condition)
-        {
-            return this.Find(condition).FirstOrDefault();
-        }
-
+        
         /// <summary>
         /// The get answer object.
         /// </summary>

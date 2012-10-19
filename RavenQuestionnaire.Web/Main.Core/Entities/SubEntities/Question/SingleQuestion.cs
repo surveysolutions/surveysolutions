@@ -138,11 +138,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override T Find<T>(Guid publicKey)
         {
-            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
-            {
-                return this.Children.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
-            }
-
             return null;
         }
 
@@ -159,7 +154,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            return Enumerable.Empty<T>();
         }
 
         /// <summary>
@@ -175,7 +170,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override T FirstOrDefault<T>(Func<T, bool> condition)
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+            return null;
         }
 
         /*/// <summary>

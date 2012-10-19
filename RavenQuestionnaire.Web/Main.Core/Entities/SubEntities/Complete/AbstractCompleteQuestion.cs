@@ -11,6 +11,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Main.Core.Entities.Composite;
 
@@ -222,7 +223,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The T.
         /// </returns>
-        public abstract T Find<T>(Guid publicKey) where T : class, IComposite;
+        public T Find<T>(Guid publicKey) where T : class, IComposite
+        {
+            return null;
+        }
 
         /// <summary>
         /// The find.
@@ -235,7 +239,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
         /// </returns>
-        public abstract IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class;
+        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        {
+            return Enumerable.Empty<T>();
+        }
 
         /// <summary>
         /// The first or default.
@@ -248,7 +255,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The T.
         /// </returns>
-        public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
+        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
+        {
+            return null;
+        }
 
         /// <summary>
         /// The get answer object.
