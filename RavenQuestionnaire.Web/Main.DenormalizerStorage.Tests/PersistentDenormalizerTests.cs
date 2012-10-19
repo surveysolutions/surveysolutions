@@ -101,6 +101,24 @@ namespace Main.DenormalizerStorage.Tests
             Assert.IsTrue(storageStub.GetCount == 1);*/
 
         }
+        [Test]
+        public void Store_WhenObjectAlreadyInMemCache_OldObjectIsReplace()
+        {
+            var key = Guid.NewGuid();
+            var objectToStore = new TestObjectDump("test", key);
+            Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
+            var bag = new List<Guid>();
+            var cache = new MemoryCache("WeakReferenceDenormalizer");
+
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, bag);
+
+
+            bag.Add(key);
+            cache.Add(key.ToString(), objectToStore, new CacheItemPolicy());
+
+            target.Store(new TestObjectDump("hello", key), key);
+            Assert.IsTrue((cache[key.ToString()] as TestObjectDump).Name == "hello");
+        }
     }
 
     public class TestObjectDump
