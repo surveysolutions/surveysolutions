@@ -111,13 +111,14 @@ namespace Synchronization.Core.SynchronizationFlow
 
             while (percentage != 100)
             {
+                Thread.Sleep(1000);
                 percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid), -1);
                 if (percentage < 0)
                     throw new SynchronizationException("network synchronization is failed");
 
                 eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
 
-                Thread.Sleep(1000);
+                
             }
         }
 
