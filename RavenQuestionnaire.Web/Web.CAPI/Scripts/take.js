@@ -151,12 +151,17 @@ function UpdateQuestion(question) {
 
 function SetErrorToQuestion(questionPublicKey, key, error) {
     var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + questionPublicKey) : $('#elem-' + questionPublicKey);
+
     questionElement.find('[data-valmsg-replace=true]').text(error);
     if (error + "" != "") {
-        $('#error-' + questionPublicKey + ' p:first').text(error);
-    }
+        //   element.addClass("error_block");
 
+        $('#error-' + questionPublicKey + ' p:first').text(error);
+        var element = $('#elem-' + questionPublicKey);
+        element.addClass("error_block");
+    } 
 }
+
 function UpdateGroup(group) {
     if (group.FeaturedTitle) {
         $('#featured-title-' + group.PropogationKey).html(group.FeaturedTitle);
