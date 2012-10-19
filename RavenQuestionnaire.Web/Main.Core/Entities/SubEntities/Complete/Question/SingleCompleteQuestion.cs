@@ -116,6 +116,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
             if (typeof(T).IsAssignableFrom(typeof(CompleteAnswer)))
             {
+                // TODO: this.Children is always null => NullPointerException
                 return this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(
                     result => result != null);
             }
