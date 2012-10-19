@@ -1,45 +1,55 @@
-// -----------------------------------------------------------------------
-// <copyright file="ScreenGroupViewFactory.cs" company="">
-// TODO: Update copyright text.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ScreenGroupViewFactory.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
-using System;
-using Main.Core.Documents;
-using Main.Core.ExpressionExecutors;
-using Main.Core.Utility;
-using Main.DenormalizerStorage;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
+    using System;
+
+    using Main.Core.Documents;
+    using Main.Core.ExpressionExecutors;
+    using Main.Core.Utility;
+    using Main.DenormalizerStorage;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class ScreenGroupViewFactory: 
-        IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView>
+    public class ScreenGroupViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView>
     {
-         #region Constants and Fields
+        #region Constants and Fields
 
         /// <summary>
         /// The store.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        private readonly IScreenViewSupplier sreenViewSupplier;
+        /// <summary>
+        /// The screen view supplier.
+        /// </summary>
+        private readonly IScreenViewSupplier screenViewSupplier;
+
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireMobileViewFactory"/> class.
+        /// Initializes a new instance of the <see cref="ScreenGroupViewFactory"/> class.
         /// </summary>
         /// <param name="store">
         /// The store.
         /// </param>
-        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier sreenViewSupplier)
+        /// <param name="screenViewSupplier">
+        /// The screen view supplier.
+        /// </param>
+        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
         {
             this.store = store;
-            this.sreenViewSupplier = sreenViewSupplier;
+            this.screenViewSupplier = screenViewSupplier;
         }
 
         #endregion
@@ -61,14 +71,22 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             {
                 return null;
             }
+            
             CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
-            UpdateInputData(doc, input);
+            
+            if (doc == null)
+            {
+                return null;
+            }
+
+            this.UpdateInputData(doc, input);
+
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc);
 
             GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
-
-          
-            return this.sreenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
         }
 
         #endregion
@@ -82,8 +100,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="input">
         /// The input.
         /// </param>
-        protected void UpdateInputData(
-            CompleteQuestionnaireStoreDocument doc, CompleteQuestionnaireViewInputModel input)
+        protected void UpdateInputData(CompleteQuestionnaireStoreDocument doc, CompleteQuestionnaireViewInputModel input)
         {
             if (input.CurrentGroupPublicKey.HasValue)
             {

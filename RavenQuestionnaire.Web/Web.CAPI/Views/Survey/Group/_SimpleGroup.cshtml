@@ -31,11 +31,10 @@
             @if (!string.IsNullOrWhiteSpace(question.Instructions))
             {
                 <a id="inctruction-ref-@(question.PublicKey)" 
-                         href="#inctruction-@(question.PublicKey)"  
+                         onclick='ShowInfoDialog(this,"@(question.PublicKey)","inctruction")'
                            data-icon="info" 
                            data-role="button" 
-                           data-inline="true"  
-                           data-rel="popup">Read instructions</a>
+                           data-inline="true">Read instructions</a>
                 <div data-role="popup" id="inctruction-@(question.PublicKey)" class="instructions">
                     <p>@Html.Raw(question.Instructions)</p>
                 </div>

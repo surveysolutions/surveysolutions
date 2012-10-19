@@ -66,8 +66,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </param>
         public void ExportAsync(Guid clientGuid)
         {
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
                 () =>
                     {
                         try
@@ -79,7 +78,6 @@ namespace RavenQuestionnaire.Web.Controllers
                             this.AsyncManager.Parameters["result"] = null;
                         }
 
-                        this.AsyncManager.OutstandingOperations.Decrement();
                     });
         }
 
@@ -119,13 +117,8 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             if (myfile != null && myfile.ContentLength != 0)
             {
-                this.AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(
-                    () =>
-                        {
-                            this.exportimportEvents.Import(myfile);
-                            this.AsyncManager.OutstandingOperations.Decrement();
-                        });
+                AsyncQuestionnaireUpdater.Update(AsyncManager,
+                    () => this.exportimportEvents.Import(myfile));
             }
         }
 
@@ -147,8 +140,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </param>
         public void ExportTemplatesAsync(Guid? id, Guid? clientGuid)
         {
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
+            AsyncQuestionnaireUpdater.Update(AsyncManager,() =>
             {
                 try
                 {
@@ -158,8 +150,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 {
                     AsyncManager.Parameters["result"] = null;
                 }
-
-                AsyncManager.OutstandingOperations.Decrement();
             });
         }
 
