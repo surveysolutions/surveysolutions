@@ -204,7 +204,7 @@ namespace Main.Core.Domain
             this.innerDocument.Handled = EventState.InProgress;
             this.innerDocument.Chunks = e.AggregateRoots.ToList();
         }
-
+        
         #endregion
     }
 }
