@@ -169,7 +169,7 @@ namespace Web.Supervisor.Controllers
         {
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-         new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+         new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
@@ -199,7 +199,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
             }
             else
@@ -214,7 +214,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
             }
         }
@@ -264,7 +264,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Approve(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
@@ -290,7 +290,7 @@ namespace Web.Supervisor.Controllers
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
@@ -526,7 +526,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Redo(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.View(new ApproveRedoModel() { Id = id, TemplateId = template, Statistic = stat, StatusId = SurveyStatus.Redo.PublicId });
         }
 
@@ -560,7 +560,7 @@ namespace Web.Supervisor.Controllers
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
