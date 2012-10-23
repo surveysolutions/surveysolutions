@@ -30,8 +30,6 @@ namespace Browsing.Common.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Browser));
-            
             this.label1 = new System.Windows.Forms.Label();
             this.progressBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.progressBox)).BeginInit();
@@ -40,21 +38,20 @@ namespace Browsing.Common.Forms
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(43, 25);
+            this.label1.Location = new System.Drawing.Point(31, 23);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(183, 13);
+            this.label1.Size = new System.Drawing.Size(227, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Please wait while the application runs";
+            this.label1.Text = "Please wait while the application starting to run";
             // 
             // progressBox
             // 
             this.progressBox.BackColor = System.Drawing.Color.Transparent;
             this.progressBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBox.Image = ((System.Drawing.Image)(resources.GetObject("progressBox.Image")));
             this.progressBox.InitialImage = null;
-            this.progressBox.Location = new System.Drawing.Point(30, 30);
+            this.progressBox.Location = new System.Drawing.Point(0, 0);
             this.progressBox.Name = "progressBox";
-            this.progressBox.Size = new System.Drawing.Size(100, 50);
+            this.progressBox.Size = new System.Drawing.Size(284, 262);
             this.progressBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.progressBox.TabIndex = 3;
             this.progressBox.TabStop = false;
