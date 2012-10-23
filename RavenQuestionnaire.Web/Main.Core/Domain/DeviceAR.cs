@@ -63,12 +63,12 @@ namespace Main.Core.Domain
         /// <param name="registeredDate">
         /// The registered date.
         /// </param>
-        public DeviceAR(string description, Guid tabletId, byte[] publicKey, DateTime registeredDate)
+        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate)
         {
             this.ApplyEvent(
                new NewDeviceRegistered
                {
-                   SecretKey = publicKey,
+                   SecretKey = secretKey,
                    RegisteredDate = registeredDate,
                    TabletId = tabletId,
                    Description = description

@@ -18,6 +18,31 @@ namespace Main.Core.Commands.Synchronization
     [MapsToAggregateRootConstructor(typeof(DeviceAR))]
     public class RegisterNewDeviceCommand : CommandBase
     {
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RegisterNewDeviceCommand"/> class.
+        /// </summary>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <param name="secretKey">
+        /// The secret key.
+        /// </param>
+        /// <param name="tabletId">
+        /// The tablet id.
+        /// </param>
+        public RegisterNewDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        {
+            this.Description = description;
+            this.SecretKey = secretKey;
+            this.TabletId = tabletId;
+            this.RegisteredDate = DateTime.Today;
+        }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>

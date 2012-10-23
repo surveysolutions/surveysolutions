@@ -25,6 +25,7 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Synchronization;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
+    using Main.Core.Services;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
@@ -384,6 +385,7 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
+
             if (Request.IsAjaxRequest())
                 return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId }, JsonRequestBehavior.AllowGet);
             return this.RedirectToAction("Assigments", "Survey", new { id = tmptId });
