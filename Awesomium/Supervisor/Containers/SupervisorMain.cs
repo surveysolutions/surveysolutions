@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows.Forms;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Common.Utils;
@@ -18,6 +19,10 @@ namespace Browsing.Supervisor.Containers
 
         #endregion
 
+        protected override void AddRegistrationButton(TableLayoutPanel tableLayoutPanel)
+        {
+
+        }
         protected override void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is SyncChoicePage));

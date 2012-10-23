@@ -9,7 +9,7 @@ using Synchronization.Core.Interface;
 
 namespace Browsing.Common.Containers
 {
-    public partial class Main : Screen
+    public abstract partial class Main : Screen
     {
         private bool destroyed = false;
         private bool checkIsRunning = false;
@@ -25,6 +25,8 @@ namespace Browsing.Common.Containers
             this.urlUtils = urlUtils;
 
             IntitLogControls(false, false);
+
+            AddRegistrationButton(this.tableLayoutPanel1);
             //RefreshAuthentificationInfo();
 
             this.statusLabel.ForeColor = System.Drawing.Color.Red;
@@ -201,6 +203,8 @@ namespace Browsing.Common.Containers
         #endregion
 
         #region Virtual operations
+
+        protected internal abstract void AddRegistrationButton(TableLayoutPanel tableLayoutPanel);
 
         protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
