@@ -30,6 +30,7 @@ namespace Browsing.Common.Forms
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Browser));
             this.label1 = new System.Windows.Forms.Label();
             this.progressBox = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.progressBox)).BeginInit();
@@ -48,6 +49,7 @@ namespace Browsing.Common.Forms
             // 
             this.progressBox.BackColor = System.Drawing.Color.Transparent;
             this.progressBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBox.Image = ((System.Drawing.Image)(resources.GetObject("progressBox.Image")));
             this.progressBox.InitialImage = null;
             this.progressBox.Location = new System.Drawing.Point(0, 0);
             this.progressBox.Name = "progressBox";
