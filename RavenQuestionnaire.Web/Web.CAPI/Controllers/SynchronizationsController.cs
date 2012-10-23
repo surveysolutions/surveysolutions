@@ -18,6 +18,7 @@ namespace Web.CAPI.Controllers
 
     using Core.CAPI.Views.Synchronization;
 
+    using DataEntryClient;
     using DataEntryClient.CompleteQuestionnaire;
 
     using Ionic.Zip;
@@ -105,6 +106,20 @@ namespace Web.CAPI.Controllers
         {
             return this.synchronizer.ReadEvents().Any();
         }
+
+        /// <summary>
+        /// Export process summary
+        /// </summary>
+        /// <returns>
+        /// Json with sync process infor for current logged in user
+        /// </returns>
+        public JsonResult ExportStatistics()
+        {
+            var events = this.synchronizer.ReadEvents();
+            var calc = new ExportStatisticsCalculator(events);
+            return this.Json(events);
+        }
+
 
         /// <summary>
         /// The discover async.

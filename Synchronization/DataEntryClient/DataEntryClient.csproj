@@ -86,6 +86,7 @@
     <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\UsbSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
+    <Compile Include="ExportStatisticsCalculator.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
