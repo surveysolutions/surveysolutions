@@ -112,8 +112,6 @@
   <ItemGroup>
     <Compile Include="Binding\GenericBinderResolver.cs" />
     <Compile Include="Export\ExportImportEvent.cs" />
-    <Compile Include="Export\RegisterData.cs" />
-    <Compile Include="Export\RegisterEvent.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
@@ -126,6 +124,9 @@
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
+    <Compile Include="Register\RegisterData.cs" />
+    <Compile Include="Register\RegisterEvent.cs" />
+    <Compile Include="Register\RSACryptoService.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />

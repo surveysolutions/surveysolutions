@@ -13,6 +13,7 @@ namespace Web.Supervisor.Controllers
     using System.Web;
     using System.Web.Mvc;
     using Questionnaire.Core.Web.Export;
+    using Questionnaire.Core.Web.Register;
     using Questionnaire.Core.Web.Threading;
 
     /// <summary>
@@ -137,7 +138,7 @@ namespace Web.Supervisor.Controllers
         /// The register file.
         /// </param>
         [AcceptVerbs(HttpVerbs.Post)]
-        public void Register(HttpPostedFileBase registerFile)
+        public void StartRegister(HttpPostedFileBase registerFile)
         {
             if (registerFile == null && Request.Files.Count > 0) 
                 registerFile = Request.Files[0];
@@ -150,6 +151,11 @@ namespace Web.Supervisor.Controllers
         public ActionResult Register()
         {
             return this.View("Register");
+        }
+
+        public ActionResult CompleteRegister(Guid TabletId)
+        {
+            return File(this.registerEvent.CompleteRegister(TabletId), "xml");
         }
 
         #endregion

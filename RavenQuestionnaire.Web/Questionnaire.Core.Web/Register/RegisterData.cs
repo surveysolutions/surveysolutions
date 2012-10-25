@@ -4,9 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Questionnaire.Core.Web.Export
+namespace Questionnaire.Core.Web.Register
 {
     using System;
+
+    using Main.Core.Events;
 
     /// <summary>
     /// TODO: Update summary.
@@ -46,6 +48,11 @@ namespace Questionnaire.Core.Web.Export
         /// Gets or sets TabletId.
         /// </summary>
         public Guid TabletId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Event.
+        /// </summary>
+        public AggregateRootEvent Event { get; set; }
 
         #endregion
     }
