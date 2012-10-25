@@ -16,6 +16,11 @@ namespace Main.Core.Documents
         #region Fields
 
         /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation date.
         /// </summary>
         public DateTime CreationDate { get; set; }

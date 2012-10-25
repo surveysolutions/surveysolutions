@@ -19,6 +19,11 @@ namespace Main.Core.Events.Synchronization
         #region PublicProperties
 
         /// <summary>
+        /// Gets or sets the public key.
+        /// </summary>
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the creation date.
         /// </summary>
         public DateTime RegisteredDate { get; set; }

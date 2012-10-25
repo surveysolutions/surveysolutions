@@ -7,6 +7,7 @@
 namespace Questionnaire.Core.Web.Register
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
@@ -32,7 +33,7 @@ namespace Questionnaire.Core.Web.Register
         /// <param name="uploadFile">
         /// The upload file.
         /// </param>
-        void Register(HttpPostedFileBase uploadFile);
+        void Register(byte[] uploadFile);
 
         /// <summary>
         /// Complete register
@@ -82,22 +83,9 @@ namespace Questionnaire.Core.Web.Register
         /// <param name="uploadFile">
         /// The upload file.
         /// </param>
-        public void Register(HttpPostedFileBase uploadFile)
+        public void Register(byte[] uploadFile)
         {
-            uploadFile.InputStream.Position = 0;
-            var data = string.Empty;
-            var buffer = new byte[uploadFile.InputStream.Length];
-            using (var ms = new MemoryStream())
-            {
-                int read;
-                while ((read = uploadFile.InputStream.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-
-                data = Encoding.Default.GetString(ms.ToArray());
-            }
-
+            var data = Encoding.Default.GetString(uploadFile);
             var result = JsonConvert.DeserializeObject<RegisterData>(data);
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new RegisterNewDeviceCommand(result.Description, result.SecretKey, result.TabletId));
@@ -114,7 +102,8 @@ namespace Questionnaire.Core.Web.Register
         /// </returns>
         public byte[] CompleteRegister(Guid tabletId)
         {
-            var registerEvent = this.synchronizer.ReadEvents().Where(t => (t.Payload as NewDeviceRegistered).TabletId == tabletId).FirstOrDefault();
+            var e = this.synchronizer.ReadEvents();
+            var registerEvent = e.Where(t => (t.Payload as NewDeviceRegistered).TabletId == tabletId).FirstOrDefault();
             var data = new RegisterData { Event = registerEvent, TabletId = tabletId, SecretKey = this.cryptoService.GetPublicKey().Modulus };
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var stream = JsonConvert.SerializeObject(data, Formatting.Indented, settings);

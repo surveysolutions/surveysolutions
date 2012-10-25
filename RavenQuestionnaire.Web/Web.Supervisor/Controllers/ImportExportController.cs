@@ -143,8 +143,7 @@ namespace Web.Supervisor.Controllers
             if (registerFile == null && Request.Files.Count > 0) 
                 registerFile = Request.Files[0];
             if (registerFile == null || registerFile.ContentLength == 0) return;
-            AsyncQuestionnaireUpdater.Update(AsyncManager,
-                () => this.registerEvent.Register(registerFile));
+            this.registerEvent.Register(registerFile);
         }
 
         [AcceptVerbs(HttpVerbs.Get)]
@@ -155,7 +154,7 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult CompleteRegister(Guid TabletId)
         {
-            return File(this.registerEvent.CompleteRegister(TabletId), "xml");
+            return File(this.registerEvent.CompleteRegister(TabletId), "application/txt");
         }
 
         #endregion

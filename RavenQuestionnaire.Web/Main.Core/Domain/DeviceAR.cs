@@ -57,8 +57,8 @@ namespace Main.Core.Domain
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        /// <param name="publicKey">
-        /// The public key.
+        /// <param name="secretKey">
+        /// The secret Key.
         /// </param>
         /// <param name="registeredDate">
         /// The registered date.

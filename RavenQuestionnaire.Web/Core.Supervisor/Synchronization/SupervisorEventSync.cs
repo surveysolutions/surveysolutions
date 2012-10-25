@@ -88,6 +88,7 @@ namespace Core.Supervisor.Synchronization
             this.AddQuestionnairesTemplates(retval);
             this.AddUsers(retval);
             this.AddFiles(retval);
+            this.AddRegisterDevice(retval);
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
 
@@ -160,6 +161,15 @@ namespace Core.Supervisor.Synchronization
             foreach (UserDocument item in model)
             {
                 retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+            }
+        }
+
+        protected void AddRegisterDevice(List<AggregateRootEvent> retval)
+        {
+            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
+            foreach (SyncDeviceRegisterDocument item in model)
+            {
+                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(DeviceAR)));
             }
         }
 
