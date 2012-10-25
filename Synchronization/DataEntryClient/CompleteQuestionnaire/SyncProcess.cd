@@ -3,29 +3,29 @@
   <Class Name="DataEntryClient.CompleteQuestionnaire.AbstractSyncProcess">
     <Position X="3.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAABAAAACAAIAICAABIAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAACAAIAICABBIAAAAAAAAAAAAAAACAAAAA=</HashCode>
       <FileName>CompleteQuestionnaire\AbstractSyncProcess.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="DataEntryClient.CompleteQuestionnaire.CompleteQuestionnaireSync">
+  <Class Name="DataEntryClient.CompleteQuestionnaire.WirelessSyncProcess">
     <Position X="2" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAEBAAAAAAAAAACAABAAAAAAAAAAACAAAAAAAAAA=</HashCode>
-      <FileName>CompleteQuestionnaire\CompleteQuestionnaireSync.cs</FileName>
+      <HashCode>AAAAAEBAAAAAAAAAACAAAAAAAAAAAAAACAAAACAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\WirelessSyncProcess.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DataEntryClient.CompleteQuestionnaire.UsbCompleteQuestionnaireSync">
-    <Position X="5.25" Y="9" Width="1.5" />
+  <Class Name="DataEntryClient.CompleteQuestionnaire.UsbSyncProcess">
+    <Position X="4.75" Y="9" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAABAAAAAAAAIICAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>CompleteQuestionnaire\UsbCompleteQuestionnaireSync.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAIICAABAAAAAAAAAAAAAAAACAAAAA=</HashCode>
+      <FileName>CompleteQuestionnaire\UsbSyncProcess.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="DataEntryClient.CompleteQuestionnaire.ICompleteQuestionnaireSync">
     <Position X="5.75" Y="5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAAAABAAAAAAAAAIAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAIAAABAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>CompleteQuestionnaire\ICompleteQuestionnaireSync.cs</FileName>
     </TypeIdentifier>
   </Interface>
