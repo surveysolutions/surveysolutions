@@ -27,6 +27,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IExportImport exportimportEvents;
 
+        /// <summary>
+        /// The register events.
+        /// </summary>
+        private readonly IRegisterEvent registerEvent;
+
         #endregion
 
         #region Constructors and Destructors
@@ -37,9 +42,13 @@ namespace Web.Supervisor.Controllers
         /// <param name="exportImport">
         /// The export import.
         /// </param>
-        public ImportExportController(IExportImport exportImport)
+        /// <param name="register">
+        /// The register.
+        /// </param>
+        public ImportExportController(IExportImport exportImport, IRegisterEvent register)
         {
             this.exportimportEvents = exportImport;
+            this.registerEvent = register;
         }
 
         #endregion
@@ -119,6 +128,28 @@ namespace Web.Supervisor.Controllers
         public ActionResult ImportCompleted()
         {
             return this.RedirectToAction("Index", "Survey");
+        }
+
+        /// <summary>
+        /// Register PublicKey
+        /// </summary>
+        /// <param name="registerFile">
+        /// The register file.
+        /// </param>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public void Register(HttpPostedFileBase registerFile)
+        {
+            if (registerFile == null && Request.Files.Count > 0) 
+                registerFile = Request.Files[0];
+            if (registerFile == null || registerFile.ContentLength == 0) return;
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
+                () => this.registerEvent.Register(registerFile));
+        }
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Register()
+        {
+            return this.View("Register");
         }
 
         #endregion

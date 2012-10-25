@@ -215,7 +215,7 @@ namespace Web.Supervisor.Controllers
                     commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
                     return this.RedirectToAction("Assigments", new { id = model.TemplateId });
                 }
-
+                
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });

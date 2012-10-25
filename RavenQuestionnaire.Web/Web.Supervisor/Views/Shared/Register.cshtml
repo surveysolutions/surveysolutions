@@ -1,0 +1,7 @@
+﻿<div>
+    @using (Html.BeginForm("Register", "ImportExport", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="registerFile" />
+        <input type="submit" name="Submit" value="Upload" />
+    }
+</div>

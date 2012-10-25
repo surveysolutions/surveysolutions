@@ -401,6 +401,7 @@
     <Content Include="Views\Survey\Redo.cshtml" />
     <Content Include="Views\Survey\ChangeState.cshtml" />
     <Content Include="Views\Shared\Chart.cshtml" />
+    <Content Include="Views\Shared\Register.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

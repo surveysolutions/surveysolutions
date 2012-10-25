@@ -112,6 +112,8 @@
   <ItemGroup>
     <Compile Include="Binding\GenericBinderResolver.cs" />
     <Compile Include="Export\ExportImportEvent.cs" />
+    <Compile Include="Export\RegisterData.cs" />
+    <Compile Include="Export\RegisterEvent.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
