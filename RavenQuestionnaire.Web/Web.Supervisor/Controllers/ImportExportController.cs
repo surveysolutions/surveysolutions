@@ -138,11 +138,9 @@ namespace Web.Supervisor.Controllers
         /// The register file.
         /// </param>
         [AcceptVerbs(HttpVerbs.Post)]
-        public void StartRegister(HttpPostedFileBase registerFile)
+        public void StartRegister(byte[] registerFile)
         {
-            if (registerFile == null && Request.Files.Count > 0) 
-                registerFile = Request.Files[0];
-            if (registerFile == null || registerFile.ContentLength == 0) return;
+            if (registerFile.Length == 0) return;
             this.registerEvent.Register(registerFile);
         }
 
