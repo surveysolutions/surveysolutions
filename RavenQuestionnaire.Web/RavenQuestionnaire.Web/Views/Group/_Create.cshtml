@@ -5,6 +5,12 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<h3>Edit Group
+@if (Model.Parent.HasValue)
+{
+    <text>in @Model.ParentGroupTitle</text> 
+}
+</h3> 
 @using (Html.BeginForm("Save", "Group"))
  {
      @Html.BootstrapValidationSummary("")

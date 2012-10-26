@@ -109,7 +109,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.PartialView("Complete/_Answered", stat);
         }
 
@@ -143,7 +143,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(key));
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             SurveyStatus status;
@@ -182,7 +182,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.PartialView("Complete/_Main", stat);
         }
 
@@ -314,7 +314,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.PartialView("Complete/_Invalid", stat);
         }
 
@@ -651,9 +651,9 @@ namespace Web.CAPI.Controllers
         /// The id.
         /// </param>
         /// <returns>
-        /// The System.Web.Mvc.ActionResult.
+        /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Statistic(string id)
+        public ActionResult Statistic(Guid id)
         {
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
@@ -683,7 +683,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                        new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.PartialView("Complete/_Unanswered", stat);
         }
 
