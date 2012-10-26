@@ -7,11 +7,9 @@
 namespace Questionnaire.Core.Web.Register
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Web;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Events;
@@ -102,8 +100,7 @@ namespace Questionnaire.Core.Web.Register
         /// </returns>
         public byte[] CompleteRegister(Guid tabletId)
         {
-            var e = this.synchronizer.ReadEvents();
-            var registerEvent = e.Where(t => (t.Payload as NewDeviceRegistered).TabletId == tabletId).FirstOrDefault();
+            var registerEvent = this.synchronizer.ReadEvents().Where(t => (t.Payload as NewDeviceRegistered) != null && (t.Payload as NewDeviceRegistered).TabletId == tabletId).FirstOrDefault();
             var data = new RegisterData { Event = registerEvent, TabletId = tabletId, SecretKey = this.cryptoService.GetPublicKey().Modulus };
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var stream = JsonConvert.SerializeObject(data, Formatting.Indented, settings);

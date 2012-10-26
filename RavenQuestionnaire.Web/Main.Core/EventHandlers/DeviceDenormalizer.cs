@@ -7,11 +7,9 @@
 namespace Main.Core.EventHandlers
 {
     using System;
-
     using Main.Core.Documents;
     using Main.Core.Events.Synchronization;
     using Main.DenormalizerStorage;
-
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     /// <summary>
@@ -59,7 +57,8 @@ namespace Main.Core.EventHandlers
                     CreationDate = DateTime.UtcNow,
                     SecretKey = evnt.Payload.SecretKey,
                     Description = evnt.Payload.Description,
-                    TabletId = evnt.Payload.TabletId
+                    TabletId = evnt.Payload.TabletId,
+                    PublicKey = evnt.EventSourceId
                 },
                 evnt.Payload.PublicKey);
         }

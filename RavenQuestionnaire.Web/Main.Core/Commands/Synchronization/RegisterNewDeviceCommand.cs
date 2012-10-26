@@ -18,7 +18,6 @@ namespace Main.Core.Commands.Synchronization
     [MapsToAggregateRootConstructor(typeof(DeviceAR))]
     public class RegisterNewDeviceCommand : CommandBase
     {
-
         #region Constructor
 
         /// <summary>

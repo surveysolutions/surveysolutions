@@ -37,6 +37,11 @@ namespace Main.Core.Domain
         /// </summary>
         private string Description;
 
+        /// <summary>
+        /// Field PublicKey
+        /// </summary>
+        private Guid PublicKey;
+
         #endregion
 
         #region Constructor
@@ -71,7 +76,8 @@ namespace Main.Core.Domain
                    SecretKey = secretKey,
                    RegisteredDate = registeredDate,
                    TabletId = tabletId,
-                   Description = description
+                   Description = description,
+                   PublicKey = Guid.NewGuid()
                });
         }
 
@@ -92,6 +98,7 @@ namespace Main.Core.Domain
             this.SecretKey = e.SecretKey;
             this.RegisteredDate = e.RegisteredDate;
             this.TabletId = e.TabletId;
+            this.PublicKey = e.PublicKey;
         }
 
         #endregion

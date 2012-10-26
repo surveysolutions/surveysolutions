@@ -10,6 +10,7 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Questionnaire.Core.Web.Export;
@@ -144,15 +145,18 @@ namespace Web.Supervisor.Controllers
             this.registerEvent.Register(registerFile);
         }
 
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult Register()
+        /// <summary>
+        /// finish registration device
+        /// </summary>
+        /// <param name="tabletId">
+        /// The tablet id.
+        /// </param>
+        /// <returns>
+        /// return content with register event
+        /// </returns>
+        public ActionResult CompleteRegister(Guid tabletId)
         {
-            return this.View("Register");
-        }
-
-        public ActionResult CompleteRegister(Guid TabletId)
-        {
-            return File(this.registerEvent.CompleteRegister(TabletId), "application/txt");
+            return this.File(this.registerEvent.CompleteRegister(tabletId), "application/txt");
         }
 
         #endregion
