@@ -1,5 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Assignment
+@using Questionnaire.Core.Web.Helpers
 @using Web.Supervisor.Models
 @model AssignmentView
 <div>
@@ -26,32 +27,37 @@
                     </td>
                 }
                 <td id="row-@fitem.Id" style="width: 10%;">
-                    <div class="assignment-view">
-                        <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
-                    </div>
-                    <div class="assignment-form">
-                        @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
-                        {
-                            var id = fitem.Id + "";
-                            @Html.Hidden("CqId", id)
-                            @Html.Hidden("TmptId", fitem.TemplateId)
-                            var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
-                            {
-                                Value = item.Value,
-                                Text = item.Text,
-                                Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
-                            }).ToList();
-                            if (fitem.Responsible == null)
-                            {
-                                options.Add(new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
-                            }
-                            <div>@Html.DropDownList("userId", options)</div>
-                            <div>
-                                <input class="btn btn-primary" name="Save" type="submit" value="Save" />
-                                <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
-                            </div>
-                        }
-                    </div>
+                   
+
+                        <div class="assignment-view">
+                            <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                        </div>
+                        <div class="assignment-form">
+                           @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
+                           {
+                               var id = fitem.Id + "";
+                               @Html.Hidden("CqId", id)
+                               @Html.Hidden("TmptId", fitem.TemplateId)
+
+                               var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
+                                   {
+                                       Value = item.Value,
+                                       Text = item.Text,
+                                       Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
+                                   }).ToList();
+                               if (fitem.Responsible == null)
+                               {
+                                   options.Insert(0, new SelectListItem() {Selected = true, Text = string.Empty, Value = string.Empty});
+                               }
+
+                               <div>@Html.DropDownList("userId", options, new {id = "userId-" + fitem.Id})</div>
+                               <div>
+                                   <input class="btn btn-primary" name="Save" type="submit" value="Save" />
+                                   <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
+                               </div>
+                           }
+                        </div>
+                    
                 </td>
                 <td style="width: 10%;">@fitem.Status.Name
                 </td>
@@ -60,15 +66,15 @@
                         <i class="icon-list"></i>Details</a>
                     @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
                     {
-                        if (fitem.Responsible == null)
+                     @*   if (fitem.Responsible == null)
                         {
                         <a class="btn btn-small" href="@Url.Action("Assign", new { id = fitem.Id })"><i class="icon-user">
                         </i>Assign</a>
                         }
                         else
-                        {
-                        <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Change</a>
-                        <script type="text/javascript">
+                        {*@
+                        <a class="btn btn-small" id="ref-@fitem.Id" href="#" ><i class="icon-random"></i>Assign</a>
+                       <script type="text/javascript">
                             $('#ref-@(fitem.Id)').click(function () {
                                 $('#row-@(fitem.Id)').addClass("showForm");
                             });
@@ -76,7 +82,7 @@
                                 $('#row-@(fitem.Id)').removeClass("showForm");
                             });
                         </script>
-                        }
+                        //}
                     }
                     @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
                     {

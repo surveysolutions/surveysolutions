@@ -373,12 +373,21 @@ function scrollToQuestion(question) {
 $(window).bind("pagecontainercreate", function () {
     $.mobile.hashListeningEnabled = false;
 });
+
+$(document).bind('pagebeforechange', function (event, data) {
+    var doc = data.options.fromPage;
+    if (doc && !doc.data("page")) {
+        event.preventDefault();
+    }
+});
 $(document).bind('pagebeforeshow', function (event, data) {
+    
     var doc = $(event.target);
 
     doc.initPage();
-    
+
     doc.focus();
+  
 });
 
 /*$(document).bind('pageremove', function (event, data) {
