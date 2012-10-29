@@ -12,6 +12,7 @@ using Main.Core.Events;
 
 namespace Web.Supervisor.Controllers
 {
+    using System;
     using System.Web.Mvc;
     using System.Web.Security;
     using Questionnaire.Core.Web.Helpers;
@@ -143,6 +144,19 @@ namespace Web.Supervisor.Controllers
             return count.ToList().Count > 0;
 
         }
+
+        /// <summary>
+        /// Generate guid of current user
+        /// </summary>
+        /// <returns>
+        /// Guid of current user
+        /// </returns>
+        public Guid GetCurrentUser()
+        {
+            var currentUser = this.globalProvider.GetCurrentUser();
+            return currentUser != null ? currentUser.Id : Guid.Empty;
+        }
+
         #endregion
     }
 }

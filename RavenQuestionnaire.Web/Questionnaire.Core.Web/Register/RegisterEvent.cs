@@ -117,7 +117,7 @@ namespace Questionnaire.Core.Web.Register
                 {
                     sw.Write(stream);
                 }
-                var r = ms.ToArray();
+
                 return ms.ToArray();
             }
         }
