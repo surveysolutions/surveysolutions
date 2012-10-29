@@ -7,17 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Linq;
-using Main.Core.Events;
-
 namespace Web.Supervisor.Controllers
 {
+    using System.Linq;
     using System.Web.Mvc;
     using System.Web.Security;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events;
+    using Main.Core.Utility;
+
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Security;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Utility;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -102,11 +104,13 @@ namespace Web.Supervisor.Controllers
                         this.authentication.SignIn(model.UserName, false);
                         return this.Redirect("~/");
                     }
+
                     ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
                 }
                 else 
                     ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
+
             return this.View(model);
         }
 
@@ -132,6 +136,7 @@ namespace Web.Supervisor.Controllers
             this.authentication.SignOut();
             return this.Redirect("~/");
         }
+
         /// <summary>
         /// Count of available users in database
         /// </summary>

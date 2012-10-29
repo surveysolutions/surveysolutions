@@ -102,6 +102,30 @@ namespace RavenQuestionnaire.Web.Controllers
         }
 
         /// <summary>
+        /// The details.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="HttpException">
+        /// </exception>
+        public ViewResult Flow(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new HttpException(404, "Invalid quesry string parameters");
+            }
+
+            QuestionnaireView model =
+                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
+                    new QuestionnaireViewInputModel(id));
+
+            return View(model);
+        }
+
+        /// <summary>
         /// The edit.
         /// </summary>
         /// <param name="id">
