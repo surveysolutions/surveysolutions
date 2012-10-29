@@ -14,11 +14,15 @@ namespace Questionnaire.Core.Web.Register
     using Main.Core.Commands.Synchronization;
     using Main.Core.Events;
     using Main.Core.Events.Synchronization;
+    using Main.Core.View;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
+    using Ncqrs.Eventing;
 
     using Newtonsoft.Json;
+
+    using global::Core.Supervisor.Views.Register;
 
     /// <summary>
     /// TODO: Update summary.
@@ -51,9 +55,9 @@ namespace Questionnaire.Core.Web.Register
     public class RegisterEvent : IRegisterEvent
     {
         /// <summary>
-        /// Synchronizer field
+        /// ViewRepository field
         /// </summary>
-        private readonly IEventSync synchronizer;
+        private readonly IViewRepository viewRepository;
 
         /// <summary>
         /// RSACryptoService field
@@ -63,15 +67,15 @@ namespace Questionnaire.Core.Web.Register
         /// <summary>
         /// Initializes a new instance of the <see cref="RegisterEvent"/> class.
         /// </summary>
-        /// <param name="sync">
-        /// The sync.
+        /// <param name="repository">
+        /// The repository.
         /// </param>
         /// <param name="service">
         /// The service.
         /// </param>
-        public RegisterEvent(IEventSync sync, IRSACryptoService service)
+        public RegisterEvent(IViewRepository repository, IRSACryptoService service)
         {
-            this.synchronizer = sync;
+            this.viewRepository = repository;
             this.cryptoService = service;
         }
 
@@ -100,8 +104,11 @@ namespace Questionnaire.Core.Web.Register
         /// </returns>
         public byte[] CompleteRegister(Guid tabletId)
         {
-            var registerEvent = this.synchronizer.ReadEvents().Where(t => (t.Payload as NewDeviceRegistered) != null && (t.Payload as NewDeviceRegistered).TabletId == tabletId).FirstOrDefault();
-            var data = new RegisterData { Event = registerEvent, TabletId = tabletId, SecretKey = this.cryptoService.GetPublicKey().Modulus };
+            var registerEvent =
+                this.viewRepository.Load<RegisterInputModel, RegisterView>(
+                    new RegisterInputModel() { TabletId = tabletId });
+            var data = new RegisterData
+                { Event = registerEvent, TabletId = tabletId, SecretKey = this.cryptoService.GetPublicKey().Modulus };
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var stream = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
             using (var ms = new MemoryStream())

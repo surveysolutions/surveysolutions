@@ -8,7 +8,7 @@ namespace Questionnaire.Core.Web.Register
 {
     using System;
 
-    using Main.Core.Events;
+    using global::Core.Supervisor.Views.Register;
 
     /// <summary>
     /// TODO: Update summary.
@@ -52,7 +52,7 @@ namespace Questionnaire.Core.Web.Register
         /// <summary>
         /// Gets or sets Event.
         /// </summary>
-        public AggregateRootEvent Event { get; set; }
+        public RegisterView Event { get; set; }
 
         #endregion
     }

@@ -99,6 +99,9 @@
     <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
+    <Compile Include="Views\Register\RegisterInputModel.cs" />
+    <Compile Include="Views\Register\RegisterView.cs" />
+    <Compile Include="Views\Register\RegisterViewFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
@@ -121,6 +124,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
