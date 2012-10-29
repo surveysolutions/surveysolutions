@@ -12,6 +12,7 @@ namespace DataEntryClient
     using System.Text;
 
     using Main.Core.Events;
+    using Main.Core.Utility;
 
     /// <summary>
     /// TODO: Update summary.
@@ -29,6 +30,7 @@ namespace DataEntryClient
         /// </exception>
         public ExportStatisticsCalculator(IEnumerable<AggregateRootEvent> events)
         {
+            
         }
     }
 }
