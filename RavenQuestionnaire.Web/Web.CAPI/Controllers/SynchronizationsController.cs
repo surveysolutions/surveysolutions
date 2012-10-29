@@ -16,6 +16,7 @@ namespace Web.CAPI.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using Core.CAPI.Views.ExporStatistics;
     using Core.CAPI.Views.Synchronization;
 
     using DataEntryClient;
@@ -116,8 +117,11 @@ namespace Web.CAPI.Controllers
         public JsonResult ExportStatistics()
         {
             var events = this.synchronizer.ReadEvents();
-            var calc = new ExportStatisticsCalculator(events);
-            return this.Json(events);
+            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
+            var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
+                  new ExporStatisticsInputModel(keys));
+          
+            return this.Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
 

@@ -358,6 +358,7 @@
     <Compile Include="View\Question\QuestionView.cs" />
     <Compile Include="View\Question\QuestionViewFactory.cs" />
     <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\SyncProcess\CapiExportStatistics.cs" />
     <Compile Include="View\SyncProcess\SyncProcessView.cs" />
     <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />
     <Compile Include="View\SyncProcess\SyncProcessInputModel.cs" />

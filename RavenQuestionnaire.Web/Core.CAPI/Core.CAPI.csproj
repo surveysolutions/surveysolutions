@@ -79,6 +79,9 @@
     <Compile Include="Synchronization\ClientEventSync.cs" />
     <Compile Include="Views\CapiScreenGroupView.cs" />
     <Compile Include="Views\CapiScreenViewSupplier.cs" />
+    <Compile Include="Views\ExporStatistics\ExporStatisticsInputModel.cs" />
+    <Compile Include="Views\ExporStatistics\ExportStatisticsFactory.cs" />
+    <Compile Include="Views\ExporStatistics\ExportStatisticsView.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseFactory.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseInputModel.cs" />
     <Compile Include="Views\Grouped\CQGroupedBrowseView.cs" />
