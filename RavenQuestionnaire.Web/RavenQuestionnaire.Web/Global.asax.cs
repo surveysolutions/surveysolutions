@@ -79,55 +79,6 @@ namespace RavenQuestionnaire.Web
             Exception lastException = this.Server.GetLastError();
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Fatal(lastException);
-
-            Exception exception = this.Server.GetLastError();
-
-            this.Response.Clear();
-
-            var httpException = exception as HttpException;
-
-            var routeData = new RouteData();
-            routeData.Values.Add("controller", "Error");
-
-            if (httpException == null)
-            {
-                routeData.Values.Add("action", "Index");
-            }
-            else
-            {
-                // It's an Http Exception, Let's handle it.
-                switch (httpException.GetHttpCode())
-                {
-                    case 403:
-                        // No access
-                        routeData.Values.Add("action", "Http403");
-                        break;
-                    case 404:
-                        // Page not found.
-                        routeData.Values.Add("action", "Http404");
-                        break;
-                    case 500:
-                        // Server error.
-                        routeData.Values.Add("action", "Http500");
-                        break;
-                    default:
-                        routeData.Values.Add("action", "General");
-                        break;
-                }
-            }
-
-            // Pass exception details to the target error View.
-            routeData.Values.Add("error", exception);
-
-            // Clear the error on server.
-            this.Server.ClearError();
-
-            // Avoid IIS7 getting in the middle
-            this.Response.TrySkipIisCustomErrors = true;
-
-            // Call target Controller and pass the routeData.
-            IController errorController = new ErrorController();
-            errorController.Execute(new RequestContext(new HttpContextWrapper(this.Context), routeData));
         }
 
         /// <summary>

@@ -73,11 +73,20 @@ namespace RavenQuestionnaire.Web.Controllers
         /// The parent group.
         /// </param>
         /// <returns>
+        /// Create group view
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Create(string id, Guid? parentGroup)
+        public ActionResult Create(Guid id, Guid? parentGroup)
         {
-            return this.View("_Create", new GroupView(Guid.Parse(id), parentGroup));
+            var model = new GroupView(id, parentGroup);
+            if (parentGroup.HasValue)
+            {
+                GroupView group = this.viewRepository.Load<GroupViewInputModel, GroupView>(new GroupViewInputModel(parentGroup.Value, id));
+                model.Parent = group.PublicKey;
+                model.ParentGroupTitle = group.Title;
+            }
+
+            return this.View("_Create", model);
         }
 
         /// <summary>
