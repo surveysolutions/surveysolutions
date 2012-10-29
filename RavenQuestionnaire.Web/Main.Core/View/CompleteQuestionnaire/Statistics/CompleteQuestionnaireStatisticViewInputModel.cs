@@ -8,6 +8,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
+    using System;
+
     /// <summary>
     /// The complete questionnaire statistic view input model.
     /// </summary>
@@ -21,7 +23,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="id">
         /// The id.
         /// </param>
-        public CompleteQuestionnaireStatisticViewInputModel(string id)
+        public CompleteQuestionnaireStatisticViewInputModel(Guid id)
         {
             this.Id = id;
         }
@@ -33,7 +35,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public string Id { get; private set; }
+        public Guid Id { get; private set; }
 
         #endregion
     }

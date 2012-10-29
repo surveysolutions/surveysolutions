@@ -89,7 +89,7 @@ namespace Core.Supervisor.Synchronization
             this.AddUsers(retval);
             this.AddFiles(retval);
             this.AddRegisterDevice(retval);
-            return retval.OrderBy(x => x.EventTimeStamp).ToList();
+            return retval.OrderBy(x => x.EventSequence).ToList();
         }
 
         #endregion

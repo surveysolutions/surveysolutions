@@ -16,8 +16,10 @@ namespace Web.CAPI.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using Core.CAPI.Views.ExporStatistics;
     using Core.CAPI.Views.Synchronization;
 
+    using DataEntryClient;
     using DataEntryClient.CompleteQuestionnaire;
 
     using Ionic.Zip;
@@ -105,6 +107,23 @@ namespace Web.CAPI.Controllers
         {
             return this.synchronizer.ReadEvents().Any();
         }
+
+        /// <summary>
+        /// Export process summary
+        /// </summary>
+        /// <returns>
+        /// Json with sync process infor for current logged in user
+        /// </returns>
+        public JsonResult ExportStatistics()
+        {
+            var events = this.synchronizer.ReadEvents();
+            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
+            var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
+                  new ExporStatisticsInputModel(keys));
+          
+            return this.Json(model.Items, JsonRequestBehavior.AllowGet);
+        }
+
 
         /// <summary>
         /// The discover async.
@@ -284,7 +303,7 @@ namespace Web.CAPI.Controllers
         {
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+           // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
             WaitCallback callback = (state) =>
                 {
                     try

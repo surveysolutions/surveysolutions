@@ -171,6 +171,8 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
 
+            this.executor.Execute(target);
+
             foreach (var question in target.WrappedQuestions)
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
@@ -190,7 +192,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
-            question.Enabled = this.executor.Execute(question) ?? true;
+            ////question.Enabled = this.executor.Execute(question) ?? true;
 
             if (!question.Enabled)
             {
