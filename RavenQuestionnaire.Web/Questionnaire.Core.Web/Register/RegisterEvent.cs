@@ -111,10 +111,13 @@ namespace Questionnaire.Core.Web.Register
                 { Event = registerEvent, TabletId = tabletId, SecretKey = this.cryptoService.GetPublicKey().Modulus };
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             var stream = JsonConvert.SerializeObject(data, Formatting.Indented, settings);
-            using (var ms = new MemoryStream())
+            using (MemoryStream ms = new MemoryStream())
             {
-                var arr = new byte[stream.Length];
-                ms.Read(arr, 0, stream.Length);
+                using (StreamWriter sw = new StreamWriter(ms))
+                {
+                    sw.Write(stream);
+                }
+                var r = ms.ToArray();
                 return ms.ToArray();
             }
         }
