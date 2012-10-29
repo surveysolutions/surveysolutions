@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterNewDeviceCommand.cs" company="WorldBank">
+// <copyright file="RegisterNewSupervisorCommand.cs" company="WorldBank">
 // 2012
 // </copyright>
 // -----------------------------------------------------------------------
@@ -7,7 +7,9 @@
 namespace Main.Core.Commands.Synchronization
 {
     using System;
+
     using Main.Core.Domain;
+
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
@@ -16,32 +18,32 @@ namespace Main.Core.Commands.Synchronization
     /// </summary>
     [Serializable]
     [MapsToAggregateRootConstructor(typeof(DeviceAR))]
-    public class RegisterNewDeviceCommand : CommandBase
+    public class RegisterNewSupervisorCommand : CommandBase
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterNewDeviceCommand"/> class.
+        /// Initializes a new instance of the <see cref="RegisterNewSupervisorCommand"/> class.
         /// </summary>
         /// <param name="description">
         /// The description.
         /// </param>
-        /// <param name="secretKey">
-        /// The secret key.
+        /// <param name="publicKeyCapi">
+        /// The public key capi.
         /// </param>
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        public RegisterNewDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        public RegisterNewSupervisorCommand(string description, byte[] publicKeyCapi, Guid tabletId)
         {
+            this.PublicKeyCapi = publicKeyCapi;
             this.Description = description;
-            this.SecretKey = secretKey;
             this.TabletId = tabletId;
-            this.RegisteredDate = DateTime.Today;
+            this.RegisteredDate = DateTime.Now;
         }
 
         #endregion
-
+        
         #region Public Properties
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace Main.Core.Commands.Synchronization
         /// <summary>
         /// Gets or sets PublicKey.
         /// </summary>
-        public byte[] SecretKey { get; set; }
+        public byte[] PublicKeyCapi { get; set; }
 
         /// <summary>
         /// Gets or sets RegisteredDate.

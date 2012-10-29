@@ -90,7 +90,7 @@ namespace Questionnaire.Core.Web.Register
             var data = Encoding.Default.GetString(uploadFile);
             var result = JsonConvert.DeserializeObject<RegisterData>(data);
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new RegisterNewDeviceCommand(result.Description, result.SecretKey, result.TabletId));
+            commandService.Execute(new RegisterNewDeviceCapiCommand(result.Description, result.SecretKey, result.TabletId));
         }
 
         /// <summary>
