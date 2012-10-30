@@ -14,6 +14,7 @@ using Browsing.Supervisor.ClientSettings;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Browsing.Common.Forms;
+using Synchronization.Core.Registration;
 
 namespace Browsing.Supervisor.Forms
 {
@@ -63,9 +64,9 @@ namespace Browsing.Supervisor.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils)
         {
-            return new SupervisorMain(settingsProvider, requestProcessor, urlUtils, Holder)
+            return new SupervisorMain(settingsProvider, requestProcessor, rsaCryptoService,urlUtils, Holder)
             {
                 Name = "supervisorMain"
             };

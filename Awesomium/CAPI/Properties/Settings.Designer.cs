@@ -214,5 +214,17 @@ namespace Browsing.CAPI.Properties {
                 this["LoginCapabilitiesCheckPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/GetCurrentUser")]
+        public string GetCurrentUserPath {
+            get {
+                return ((string)(this["GetCurrentUserPath"]));
+            }
+            set {
+                this["GetCurrentUserPath"] = value;
+            }
+        }
     }
 }

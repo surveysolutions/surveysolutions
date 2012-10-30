@@ -4,11 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Browsing.CAPI.Synchronization
+namespace Synchronization.Core.Registration
 {
     using System.Security.Cryptography;
 
-    interface IRSACryptoService
+    public interface IRSACryptoService
     {
         /// <summary>
         /// Generate PublicKey
@@ -16,7 +16,7 @@ namespace Browsing.CAPI.Synchronization
         /// <returns>
         /// Return PrivateKey
         /// </returns>
-        RSAParameters GetPublicKey();
+        RSAParameters GetPublicKey(string key);
 
         /// <summary>
         /// Generate PrivateKey
@@ -24,7 +24,7 @@ namespace Browsing.CAPI.Synchronization
         /// <returns>
         /// Return PrivateKey
         /// </returns>
-        RSAParameters GetPrivateKey();
+        RSAParameters GetPrivateKey(string key);
     }
 
     /// <summary>
@@ -38,9 +38,10 @@ namespace Browsing.CAPI.Synchronization
         /// <returns>
         /// Return PublicKey RSACrypt
         /// </returns>
-        public RSAParameters GetPublicKey()
+        public RSAParameters GetPublicKey(string key)
         {
-            var rsa = new RSACryptoServiceProvider(2000);
+            var cp = new CspParameters {KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey};
+            var rsa = new RSACryptoServiceProvider(2000, cp);
             var publicKey = rsa.ExportParameters(false);
             return publicKey;
         }
@@ -51,9 +52,10 @@ namespace Browsing.CAPI.Synchronization
         /// <returns>
         /// Return PrivateKey RSACrypt
         /// </returns>
-        public RSAParameters GetPrivateKey()
+        public RSAParameters GetPrivateKey(string key)
         {
-            var rsa = new RSACryptoServiceProvider(2000);
+            var cp = new CspParameters { KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey };
+            var rsa = new RSACryptoServiceProvider(2000, cp);
             var privateKey = rsa.ExportParameters(true);
             return privateKey;
         }

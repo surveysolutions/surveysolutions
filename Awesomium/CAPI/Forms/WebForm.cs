@@ -22,6 +22,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Threading;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 using Synchronization.Core.SynchronizationFlow;
 using Browsing.CAPI.Synchronization;
 using Common;
@@ -71,9 +72,9 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils)
         {
-            return new CAPIMain(settingsProvider, requestProcessor, urlUtils, Holder)
+            return new CAPIMain(settingsProvider, requestProcessor, rsaCryptoService, urlUtils, Holder)
             {
                 Name = "capiMain"
             };
