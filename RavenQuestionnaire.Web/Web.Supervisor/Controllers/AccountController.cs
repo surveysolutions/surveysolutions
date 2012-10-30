@@ -44,6 +44,7 @@ namespace Web.Supervisor.Controllers
         /// Users info
         /// </summary>
         private IUserEventSync _userEventSync;
+
         #endregion
 
         #region Constructror

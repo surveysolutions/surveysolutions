@@ -20,27 +20,27 @@ namespace Main.Core.Domain
         /// <summary>
         /// Field RegisteredDate
         /// </summary>
-        private DateTime RegisteredDate;
+        private DateTime registeredDate;
 
         /// <summary>
         /// Field TabletId
         /// </summary>
-        private Guid TabletId;
+        private Guid tabletId;
 
         /// <summary>
         /// Field PublicKey
         /// </summary>
-        private byte[] SecretKey;
+        private byte[] secretKey;
 
         /// <summary>
         /// Field Description
         /// </summary>
-        private string Description;
+        private string description;
 
         /// <summary>
         /// Field PublicKey
         /// </summary>
-        private Guid PublicKey;
+        private Guid publicKey;
 
         #endregion
 
@@ -94,11 +94,11 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnNewDeviceRegister(NewDeviceRegistered e)
         {
-            this.Description = e.Description;
-            this.SecretKey = e.SecretKey;
-            this.RegisteredDate = e.RegisteredDate;
-            this.TabletId = e.TabletId;
-            this.PublicKey = e.PublicKey;
+            this.description = e.Description;
+            this.secretKey = e.SecretKey;
+            this.registeredDate = e.RegisteredDate;
+            this.tabletId = e.TabletId;
+            this.publicKey = e.PublicKey;
         }
 
         #endregion

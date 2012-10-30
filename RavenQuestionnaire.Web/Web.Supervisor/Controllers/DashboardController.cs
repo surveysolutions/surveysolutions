@@ -15,9 +15,14 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web;
     using System.Web.Mvc;
+
+    using Main.Core.Commands.Synchronization;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Questionnaire.Completed;
+
+    using Questionnaire.Core.Web.Register;
 
     /// <summary>
     /// Show Statistics
@@ -88,7 +93,6 @@ namespace Web.Supervisor.Controllers
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
             return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
-
         #endregion
     }
 }
