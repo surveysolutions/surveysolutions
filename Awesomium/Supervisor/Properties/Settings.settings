@@ -38,5 +38,8 @@
     <Setting Name="LoginCapabilitiesCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsUserInBase</Value>
     </Setting>
+    <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Account/GetCurrentUser</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

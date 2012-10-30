@@ -6,6 +6,7 @@ using Awesomium.Core;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 
 namespace Browsing.Common.Containers
 {
@@ -13,17 +14,18 @@ namespace Browsing.Common.Containers
     {
         private bool destroyed = false;
         private bool checkIsRunning = false;
-
+        protected IRSACryptoService rsaCryptoService;
+        
         #region C-tor
 
-        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils, ScreenHolder holder)
             : base(holder, false)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
-
+            this.rsaCryptoService = rsaCryptoService;
             IntitLogControls(false, false);
 
             AddRegistrationButton(this.tableLayoutPanel1);
@@ -36,6 +38,11 @@ namespace Browsing.Common.Containers
         {
             this.destroyed = true;
             base.OnHandleDestroyed(e);
+        }
+
+        protected string OnGetCurrentUser()
+        {
+            return GetCurrentUser;
         }
 
         #endregion
@@ -136,6 +143,7 @@ namespace Browsing.Common.Containers
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
+        private string getCurrentUser;
         private IUrlUtils urlUtils;
 
         #endregion
@@ -163,6 +171,18 @@ namespace Browsing.Common.Containers
 
                 this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
                 return this.isDatabaseContainsUsers.Value;
+            }
+        }
+
+        private string GetCurrentUser
+        {
+            get
+            {
+                if (!String.IsNullOrEmpty(this.getCurrentUser))
+                    return this.getCurrentUser;
+
+                this.getCurrentUser = this.requestProcessor.Process<string>(urlUtils.GetCurrentUserGetUrl(), "GET", false, "");
+                return this.getCurrentUser;
             }
         }
 
