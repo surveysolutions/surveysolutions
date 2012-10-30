@@ -615,6 +615,7 @@
     <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
     <Content Include="Views\Error\Http403.cshtml" />
     <Content Include="Views\Error\General.cshtml" />
+    <Content Include="Views\Questionnaire\Flow.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
