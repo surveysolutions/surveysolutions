@@ -60,5 +60,10 @@ namespace Browsing.Supervisor.Utils
         {
             return string.Format("{0}{1}?syncKey={2}", GetDefaultUrl(), Settings.Default.UsbImportPath, clientId);
         }
+
+        public string GetCurrentUserGetUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
+        }
     }
 }

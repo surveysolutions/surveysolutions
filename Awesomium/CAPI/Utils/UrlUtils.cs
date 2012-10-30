@@ -64,5 +64,10 @@ namespace Browsing.CAPI.Utils
         {
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CheckEventPath);
         }
+
+        public string GetCurrentUserGetUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
+        }
     }
 }
