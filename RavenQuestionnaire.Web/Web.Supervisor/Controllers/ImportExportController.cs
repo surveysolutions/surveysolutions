@@ -10,7 +10,6 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
-    using System.IO;
     using System.Web;
     using System.Web.Mvc;
     using Questionnaire.Core.Web.Export;

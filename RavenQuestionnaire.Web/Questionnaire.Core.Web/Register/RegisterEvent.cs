@@ -8,21 +8,17 @@ namespace Questionnaire.Core.Web.Register
 {
     using System;
     using System.IO;
-    using System.Linq;
     using System.Text;
 
+    using global::Core.Supervisor.Views.Register;
+
     using Main.Core.Commands.Synchronization;
-    using Main.Core.Events;
-    using Main.Core.Events.Synchronization;
     using Main.Core.View;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-    using Ncqrs.Eventing;
 
     using Newtonsoft.Json;
-
-    using global::Core.Supervisor.Views.Register;
 
     /// <summary>
     /// TODO: Update summary.
