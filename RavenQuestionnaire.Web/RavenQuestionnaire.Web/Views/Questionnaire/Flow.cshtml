@@ -1,0 +1,56 @@
+﻿@using System.Web.Script.Serialization
+@using Main.Core.View
+@using Main.Core.View.Question
+@using RavenQuestionnaire.Core.Views.Group
+@using RavenQuestionnaire.Core.Views.Questionnaire
+@model QuestionnaireView
+@{
+    ViewBag.Title = "Flow";
+    var serializer = new JavaScriptSerializer();
+}
+<script type="text/javascript">
+    var survey = @Html.Raw(serializer.Serialize(Model)) ;
+</script>
+<h2>Flow</h2>
+<div>
+   @RenderChildren(Model.Children)
+</div>
+@helper RenderChildren(IEnumerable<ICompositeView> model)
+{
+    foreach (var item in model)
+    {
+        if ((item as QuestionView) != null)
+        {
+            @RenderQuestion(item as QuestionView);
+        }
+        else
+        {
+            @RenderGroup(item as GroupView);
+        }
+    }
+}
+@helper RenderQuestion(QuestionView question)
+{
+    <div class="display-question">
+        <div class="question-header">
+            <h3>@Html.Raw(question.Title)</h3>
+        </div>
+        <div class="question-body">
+        </div>
+    </div>
+}
+@helper RenderGroup(GroupView group)
+{
+    <div class="display-group">
+        <div class="group-header">
+            <h3>@Html.DisplayFor(modelItem => group.Title)</h3>
+            @if (!string.IsNullOrEmpty(group.Description))
+            {
+                <h5>@group.Description</h5>
+            }
+        </div>
+        <div class="group-body">
+            @RenderChildren(group.Children)
+        </div>
+    </div>
+}

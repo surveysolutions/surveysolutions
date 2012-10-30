@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterNewDeviceCommand.cs" company="WorldBank">
+// <copyright file="RegisterDeviceCommand.cs" company="WorldBank">
 // 2012
 // </copyright>
 // -----------------------------------------------------------------------
@@ -16,12 +16,12 @@ namespace Main.Core.Commands.Synchronization
     /// </summary>
     [Serializable]
     [MapsToAggregateRootConstructor(typeof(DeviceAR))]
-    public class RegisterNewDeviceCommand : CommandBase
+    public class RegisterDeviceCommand : CommandBase
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterNewDeviceCommand"/> class.
+        /// Initializes a new instance of the <see cref="RegisterDeviceCommand"/> class.
         /// </summary>
         /// <param name="description">
         /// The description.
@@ -32,7 +32,7 @@ namespace Main.Core.Commands.Synchronization
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        public RegisterNewDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId)
         {
             this.Description = description;
             this.SecretKey = secretKey;
