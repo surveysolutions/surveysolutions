@@ -13,53 +13,48 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPIMain : Main
     {
-        private FlatButton btnRegistration;
-        private bool registrationFirstStep = true;
+
+        private string registrationFirstStep = Properties.Settings.Default.RegistrationStatus;
         private CapiRegistrationManager capiRegistrationManager;
         public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(clientSettings, requestProcessor, rsaCryptoService,urlUtils, holder)
+            : base(clientSettings, requestProcessor, rsaCryptoService, urlUtils, holder)
         {
             InitializeComponent();
-           
+
             capiRegistrationManager = new CapiRegistrationManager();
+            ChangeRegistrationButton(true, "");
+            if (this.registrationFirstStep == "First") ChangeRegistrationButton(true, "Finish Registration");
+            else if (this.registrationFirstStep == "Second") ChangeRegistrationButton(false, "Registration Completed");
+            else ChangeRegistrationButton(true, "Registration");
+          
         }
 
-        protected override void AddRegistrationButton(TableLayoutPanel tableLayoutPanel)
+        #region Override Methods
+        
+        protected override void OnRegistrationClicked(object sender, System.EventArgs e)
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-
-            this.btnRegistration = new Browsing.Common.Controls.FlatButton();
-            this.btnRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnRegistration.FlatAppearance.BorderSize = 0;
-            this.btnRegistration.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-
-            this.btnRegistration.Image = ((System.Drawing.Image)(resources.GetObject("btnDashboard.Image")));
-            this.btnRegistration.Location = new System.Drawing.Point(390, 43);
-            this.btnRegistration.Margin = new System.Windows.Forms.Padding(0);
-            this.btnRegistration.Name = "btnRegistration";
-            this.btnRegistration.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnRegistration.Size = new System.Drawing.Size(215, 220);
-            this.btnRegistration.TabIndex = 2;
-            this.btnRegistration.Text = "Registration";
-            this.btnRegistration.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRegistration.UseVisualStyleBackColor = true;
-            this.btnRegistration.Click += new System.EventHandler(this.btnRegistration_Click);
-            tableLayoutPanel.Controls.Add(this.btnRegistration, 5, 1);
-        }
-        private void btnRegistration_Click(object sender, EventArgs e)
-        {
-            if (this.registrationFirstStep)
+            if (String.IsNullOrEmpty(this.registrationFirstStep))
             {
-                btnRegistration.Text = "Finish Registration";
-
+                ChangeRegistrationButton(null, "Finish Registration");
                 capiRegistrationManager.RegistrationFirstStep(rsaCryptoService);
-                registrationFirstStep = false;
+                Properties.Settings.Default.RegistrationStatus = "First";
+                Properties.Settings.Default.Save();
+                registrationFirstStep = "First";
             }
             else
+            if(this.registrationFirstStep == "First")
             {
-                capiRegistrationManager.RegistrationSecondStep();
+                var res = capiRegistrationManager.RegistrationSecondStep(rsaCryptoService, this.urlUtils.GetRegistrationCapiPath());
+                if (res)
+                {
+                    ChangeRegistrationButton(false, "Registration Completed");
+                    Properties.Settings.Default.RegistrationStatus = "Second";
+                    Properties.Settings.Default.Save();
+                    registrationFirstStep = "Second";
+                }
             }
         }
+        
+        #endregion
     }
 }

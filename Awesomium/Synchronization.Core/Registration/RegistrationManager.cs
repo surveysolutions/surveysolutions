@@ -13,53 +13,66 @@ namespace Synchronization.Core.Registration
     {
         protected string SerializeRegisterData(RegisterData data)
         {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
             return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
         }
 
-        protected byte[] SendPostWebRequest(string url, string requestParams)
+        protected RegisterData DeserializeRegisterData(string data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+            return JsonConvert.DeserializeObject<RegisterData>(data, settings);
+        }
+
+        protected byte[] SendPostWebRequest(string url, byte[] requestParams)
         {
             byte[] buffer = new byte[4097];
             byte[] result = null;
-
+            
 
             WebRequest request = WebRequest.Create(url);
-            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentType = "application/json; charset=utf-8";
             request.Method = "POST";
-            byte[] bytes = Encoding.ASCII.GetBytes(requestParams);
-            request.ContentLength = bytes.Length;
+            request.ContentLength = requestParams.Length;
             Stream os = request.GetRequestStream();
-            os.Write(bytes, 0, bytes.Length); //Push it out there
+            os.Write(requestParams, 0, requestParams.Length); //Push it out there
             os.Close();
-            WebResponse response = request.GetResponse();
-
-            if (response == null) return null;
-
-            Stream responseStream = response.GetResponseStream();
-            MemoryStream memoryStream = new MemoryStream();
-
-            int count = 0;
-
-            do
+            try
             {
-                count = responseStream.Read(buffer, 0, buffer.Length);
 
-                memoryStream.Write(buffer, 0, count);
+                WebResponse response = request.GetResponse();
 
-                if (count == 0)
+                if (response == null) return null;
+
+                Stream responseStream = response.GetResponseStream();
+                MemoryStream memoryStream = new MemoryStream();
+
+                int count = 0;
+
+                do
                 {
-                    break;
-                }
+                    count = responseStream.Read(buffer, 0, buffer.Length);
+
+                    memoryStream.Write(buffer, 0, count);
+
+                    if (count == 0)
+                    {
+                        break;
+                    }
+                } while (true);
+
+                result = memoryStream.ToArray();
+                // streamReader.Close();
+                // Let the parent thread know the process is done
+
+                responseStream.Close();
+                memoryStream.Close(); 
+                return result;
             }
-            while (true);
-
-            result = memoryStream.ToArray();
-            // streamReader.Close();
-            // Let the parent thread know the process is done
-
-            responseStream.Close();
-            memoryStream.Close();
-            return result;
+            catch(Exception e)
+            {
+                return Encoding.ASCII.GetBytes("false");
+            }
+            
 
 
         }
@@ -90,9 +103,11 @@ namespace Synchronization.Core.Registration
 
         protected byte[] GetFromRegistrationFile(string filePath)
         {
+            if (!File.Exists(filePath)) throw new Exception("File from supervisor not found");
             FileStream fs = File.OpenRead(filePath);
             try
             {
+
                 byte[] bytes = new byte[fs.Length];
                 fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
                 fs.Close();
@@ -106,8 +121,8 @@ namespace Synchronization.Core.Registration
 
         public abstract void RegistrationFirstStep(IRSACryptoService rsaCryptoService);
 
-        public abstract void RegistrationFirstStep(IRSACryptoService rsaCryptoService, string user);
+        public abstract void RegistrationFirstStep(IRSACryptoService rsaCryptoService, string user, string url);
 
-        public abstract void RegistrationSecondStep();
+        public abstract bool RegistrationSecondStep(IRSACryptoService rsaCryptoService, string url);
     }
 }

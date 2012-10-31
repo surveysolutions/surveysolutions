@@ -16,5 +16,6 @@ namespace Common.Utils
         string GetUsbPullUrl(Guid clientId);
         string GetCheckPushPrerequisitesUrl();
         string GetCurrentUserGetUrl();
+        string GetRegistrationCapiPath();
     }
 }

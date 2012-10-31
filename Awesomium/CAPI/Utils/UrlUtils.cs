@@ -69,5 +69,10 @@ namespace Browsing.CAPI.Utils
         {
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
         }
+
+        public string GetRegistrationCapiPath()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetRegistrationCapiPath);
+        }
     }
 }
