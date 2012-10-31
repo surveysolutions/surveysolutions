@@ -201,6 +201,7 @@ namespace Main.Core.EventHandlers
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
+
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
