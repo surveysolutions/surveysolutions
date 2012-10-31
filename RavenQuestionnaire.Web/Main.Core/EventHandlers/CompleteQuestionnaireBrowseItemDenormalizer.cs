@@ -18,7 +18,7 @@ namespace Main.Core.EventHandlers
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Question;
-using Main.DenormalizerStorage;
+    using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Restoring.EventStapshoot;
 
