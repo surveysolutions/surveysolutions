@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -6,7 +8,6 @@ using Awesomium.Core;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
-using Synchronization.Core.Registration;
 
 namespace Browsing.Common.Containers
 {
@@ -14,18 +15,17 @@ namespace Browsing.Common.Containers
     {
         private bool destroyed = false;
         private bool checkIsRunning = false;
-        protected IRSACryptoService rsaCryptoService;
         
         #region C-tor
 
-        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils, ScreenHolder holder)
+        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(holder, false)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
-            this.rsaCryptoService = rsaCryptoService;
+
             IntitLogControls(false, false);
 
             //RefreshAuthentificationInfo();
@@ -43,22 +43,41 @@ namespace Browsing.Common.Containers
             base.OnHandleDestroyed(e);
         }
 
-        protected Guid OnGetCurrentUser()
+        protected Guid GetCurrentUser()
         {
-            return GetCurrentUser;
+            return CurrentUser;
         }
 
-        protected void ChangeRegistrationButton(bool? enabled, string text)
+        protected void ChangeRegistrationButton(bool enabled, string text)
         {
-            if (enabled.HasValue) this.btnRegistration.Enabled = enabled.Value;
-            if (!String.IsNullOrEmpty(text)) this.btnRegistration.Text = text;
+            this.btnRegistration.Enabled = enabled;
             
+            if (!String.IsNullOrEmpty(text))
+                this.btnRegistration.Text = text;
         }
 
         #endregion
         
 
         #region Helpers
+
+        /// <summary>
+        /// TODO: remove upon registration page has been implemented
+        /// </summary>
+        /// <returns></returns>
+        protected DriveInfo GetUsbDrive()
+        {
+            List<DriveInfo> drivers = new List<DriveInfo>();
+            DriveInfo[] listDrives = DriveInfo.GetDrives();
+
+            foreach (var drive in listDrives)
+            {
+                if (drive.DriveType == DriveType.Removable)
+                    return drive;
+            }
+
+            return null;
+        }
 
         private void SetCheckingStatus(bool? checking)
         {
@@ -160,7 +179,7 @@ namespace Browsing.Common.Containers
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
-        private Guid? getCurrentUser;
+        private Guid? currentUser;
         protected IUrlUtils urlUtils;
 
         #endregion
@@ -191,16 +210,16 @@ namespace Browsing.Common.Containers
             }
         }
 
-        private Guid GetCurrentUser
+        private Guid CurrentUser
         {
             get
             {
-                if (this.getCurrentUser.HasValue)
-                    return this.getCurrentUser.Value;
+                if (this.currentUser.HasValue)
+                    return this.currentUser.Value;
 
-                this.getCurrentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
                 
-                return this.getCurrentUser.Value;
+                return this.currentUser.Value;
             }
         }
 

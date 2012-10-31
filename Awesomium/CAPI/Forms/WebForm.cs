@@ -1,33 +1,17 @@
 ﻿#region Using
-using System;
-using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
+
 #if USING_MONO
 using Awesomium.Mono;
 using Awesomium.Mono.Forms;
 #else
-using Awesomium.Core;
 using Awesomium.Windows.Forms;
-using Browsing.CAPI;
-using Browsing.CAPI.Containers;
-using Browsing.CAPI.Properties;
 using Browsing.CAPI.ClientSettings;
+using Browsing.CAPI.Containers;
 using Browsing.CAPI.Utils;
-using Common.Utils;
-using Synchronization.Core.Events;
-using System.Net;
-using System.IO;
-using System.Collections.Generic;
-using System.Threading;
-using Synchronization.Core.Interface;
-using Synchronization.Core.Registration;
-using Synchronization.Core.SynchronizationFlow;
-using Browsing.CAPI.Synchronization;
-using Common;
-
 using Browsing.Common.Containers;
+using Common.Utils;
+using Synchronization.Core.Interface;
+
 
 #endif
 #endregion
@@ -72,9 +56,9 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            return new CAPIMain(settingsProvider, requestProcessor, rsaCryptoService, urlUtils, Holder)
+            return new CAPIMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {
                 Name = "capiMain"
             };

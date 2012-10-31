@@ -32,94 +32,62 @@ namespace Synchronization.Core.Registration
     }
 
     /// <summary>
-    /// TODO: Update summary.
+    /// Performs generation assymetric key pair or reading it from machine level container 
     /// </summary>
-    public class RSACryptoService:IRSACryptoService
+    public class RSACryptoService : IRSACryptoService
     {
-        /// <summary>
-        /// Generic PublicKey
-        /// </summary>
-        /// <returns>
-        /// Return PublicKey RSACrypt
-        /// </returns>
-        public RSAParameters GetPublicKey(string key)
+        private readonly int KeySize = 1024;
+
+        private RSACryptoServiceProvider InstantiateProvider(string keyContainerName, bool newKeys)
         {
             var param = new CspParameters
             {
-                 KeyContainerName = key, 
-                 Flags = CspProviderFlags.UseExistingKey | CspProviderFlags.UseMachineKeyStore    
+                KeyContainerName = keyContainerName,
+                Flags = newKeys ? 
+                        CspProviderFlags.UseMachineKeyStore : 
+                        CspProviderFlags.UseExistingKey | CspProviderFlags.UseMachineKeyStore,
+
             };
-            RSACryptoServiceProvider rsa;
 
             try
             {
-                rsa = new RSACryptoServiceProvider(2000, param);
+                return new RSACryptoServiceProvider(KeySize, param);
             }
-            catch (Exception ex)
+            catch
             {
-                try
-                {
-                    param = new CspParameters
-                    {
-                        KeyContainerName = key,
-                        Flags = CspProviderFlags.UseMachineKeyStore
-                    };
-                    rsa = new RSACryptoServiceProvider(2000, param);
-                }
-                catch (Exception e)
-                {
-                    
-                    throw e;
-                }
+                return null;
             }
-            
+        }
 
-            /*var cp = new CspParameters {KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey};
-            var rsa = new RSACryptoServiceProvider(2000, cp);*/
-            var publicKey = rsa.ExportParameters(false);
-            return publicKey;
+        private RSAParameters AcceptKey(string keyContainerName, bool includePrivate)
+        {
+            var rsa = InstantiateProvider(keyContainerName, false);
+            if (rsa == null)
+                rsa = InstantiateProvider(keyContainerName, true);
+
+            return rsa.ExportParameters(includePrivate);
         }
 
         /// <summary>
-        /// Generic PrivateKey
+        /// Reads assymetric key pair from named container or gnerates new one if container doesn't contain the key
         /// </summary>
         /// <returns>
-        /// Return PrivateKey RSACrypt
+        /// RSA PublicKey
         /// </returns>
-        public RSAParameters GetPrivateKey(string key)
+        public RSAParameters GetPublicKey(string keyContainerName)
         {
-            var param = new CspParameters
-            {
-                KeyContainerName = key,
-                Flags = CspProviderFlags.UseExistingKey | CspProviderFlags.UseMachineKeyStore
-            };
-            RSACryptoServiceProvider rsa;
+            return AcceptKey(keyContainerName, false);
+        }
 
-            try
-            {
-                rsa = new RSACryptoServiceProvider(2000, param);
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    param = new CspParameters
-                    {
-                        KeyContainerName = key,
-                        Flags = CspProviderFlags.UseMachineKeyStore
-                    };
-                    rsa = new RSACryptoServiceProvider(2000, param);
-                }
-                catch (Exception e)
-                {
-
-                    throw e;
-                }
-            }
-            /*var cp = new CspParameters { KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey };
-            var rsa = new RSACryptoServiceProvider(2000, cp);*/
-            var privateKey = rsa.ExportParameters(true);
-            return privateKey;
+        /// <summary>
+        /// Reads assymetric key pair from named container or gnerates new one if container doesn't contain the key
+        /// </summary>
+        /// <returns>
+        /// RSA PrivateKey
+        /// </returns>
+        public RSAParameters GetPrivateKey(string keyContainerName)
+        {
+            return AcceptKey(keyContainerName, true);
         }
     }
 }

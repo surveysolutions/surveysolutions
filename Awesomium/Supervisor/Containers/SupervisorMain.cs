@@ -1,31 +1,23 @@
 ﻿using System;
 using System.Linq;
-using System.Windows.Forms;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Browsing.Supervisor.Registration;
 using Common.Utils;
 using Synchronization.Core.Interface;
-using Synchronization.Core.Registration;
 
 namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorMain : Main
     {
-        private string registrationFirstStep = Properties.Settings.Default.RegistrationStatus;
-        private SupervisorRegistrationManager supervisorRegistrationManager;
-        
+        private SupervisorRegistrationManager supervisorRegistrationManager = new SupervisorRegistrationManager();
+
         #region Constructor
 
-        public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(clientSettings, requestProcessor,rsaCryptoService, urlUtils, holder)
+        public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+            : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
-            supervisorRegistrationManager = new SupervisorRegistrationManager();
-
-            
-            if (this.registrationFirstStep == "First") ChangeRegistrationButton(false, "Registration Completed");
-            else ChangeRegistrationButton(true, "Registration");
         }
 
         #endregion
@@ -34,21 +26,13 @@ namespace Browsing.Supervisor.Containers
 
         protected override void OnRegistrationClicked(object sender, System.EventArgs e)
         {
-            if (String.IsNullOrEmpty(this.registrationFirstStep))
-            {
-                var user = this.OnGetCurrentUser();
-                supervisorRegistrationManager.RegistrationFirstStep(rsaCryptoService, user.ToString(),
-                                                                    this.urlUtils.GetRegistrationCapiPath());
+            var drive = GetUsbDrive();
+            if (drive == null)
+                return;
 
-                Properties.Settings.Default.RegistrationStatus = "First";
-                Properties.Settings.Default.Save();
-                registrationFirstStep = "First";
-                ChangeRegistrationButton(false, "Registration Completed");
-            }
-            else
-            {
-                ChangeRegistrationButton(false, "Registration Completed");
-            }
+            var user = this.GetCurrentUser();
+
+            supervisorRegistrationManager.StartRegistration(drive.Name, user.ToString(), this.urlUtils.GetRegistrationCapiPath());
         }
 
         protected override void OnCheckRegistrationButton(bool userIsLoggedIn)
