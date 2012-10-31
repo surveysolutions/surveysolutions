@@ -58,10 +58,8 @@
     <Compile Include="Interface\ISyncProgressStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registration\RegisterData.cs" />
-    <Compile Include="Registration\RegisterView.cs" />
     <Compile Include="Registration\RegistrationManager.cs" />
     <Compile Include="Registration\RSACryptoService.cs" />
-    <Compile Include="Registration\SyncDeviceRegisterDocument.cs" />
     <Compile Include="SynchronizationFlow\SyncStatus.cs" />
     <Compile Include="SyncManager.cs" />
     <Compile Include="Events\SynchronizationEvent.cs" />

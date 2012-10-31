@@ -7,18 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Web.Supervisor.Controllers
+using System;
+using System.Web.Mvc;
+using Main.Core.Commands.Synchronization;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using Questionnaire.Core.Web.Register;
+
+namespace Web.CAPI.Controllers
 {
-    using System;
-    using System.Web.Mvc;
-
-    using Main.Core.Commands.Synchronization;
-
-    using Ncqrs;
-    using Ncqrs.Commanding.ServiceModel;
-
-    using Questionnaire.Core.Web.Register;
-
     /// <summary>
     /// The device controller.
     /// </summary>

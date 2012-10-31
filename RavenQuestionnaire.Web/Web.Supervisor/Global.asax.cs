@@ -42,6 +42,7 @@ namespace Web.Supervisor
             NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
         protected void Application_Error()

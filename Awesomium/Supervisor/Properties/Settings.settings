@@ -41,5 +41,11 @@
     <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/GetCurrentUser</Value>
     </Setting>
+    <Setting Name="GetRegistrationSupervisorPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/RegisterCapi</Value>
+    </Setting>
+    <Setting Name="RegistrationStatus" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -4,6 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Security.AccessControl;
+using System.Security.Principal;
+
 namespace Synchronization.Core.Registration
 {
     using System.Security.Cryptography;
@@ -40,8 +44,38 @@ namespace Synchronization.Core.Registration
         /// </returns>
         public RSAParameters GetPublicKey(string key)
         {
-            var cp = new CspParameters {KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey};
-            var rsa = new RSACryptoServiceProvider(2000, cp);
+            var param = new CspParameters
+            {
+                 KeyContainerName = key, 
+                 Flags = CspProviderFlags.UseExistingKey | CspProviderFlags.UseMachineKeyStore    
+            };
+            RSACryptoServiceProvider rsa;
+
+            try
+            {
+                rsa = new RSACryptoServiceProvider(2000, param);
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    param = new CspParameters
+                    {
+                        KeyContainerName = key,
+                        Flags = CspProviderFlags.UseMachineKeyStore
+                    };
+                    rsa = new RSACryptoServiceProvider(2000, param);
+                }
+                catch (Exception e)
+                {
+                    
+                    throw e;
+                }
+            }
+            
+
+            /*var cp = new CspParameters {KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey};
+            var rsa = new RSACryptoServiceProvider(2000, cp);*/
             var publicKey = rsa.ExportParameters(false);
             return publicKey;
         }
@@ -54,8 +88,36 @@ namespace Synchronization.Core.Registration
         /// </returns>
         public RSAParameters GetPrivateKey(string key)
         {
-            var cp = new CspParameters { KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey };
-            var rsa = new RSACryptoServiceProvider(2000, cp);
+            var param = new CspParameters
+            {
+                KeyContainerName = key,
+                Flags = CspProviderFlags.UseExistingKey | CspProviderFlags.UseMachineKeyStore
+            };
+            RSACryptoServiceProvider rsa;
+
+            try
+            {
+                rsa = new RSACryptoServiceProvider(2000, param);
+            }
+            catch (Exception ex)
+            {
+                try
+                {
+                    param = new CspParameters
+                    {
+                        KeyContainerName = key,
+                        Flags = CspProviderFlags.UseMachineKeyStore
+                    };
+                    rsa = new RSACryptoServiceProvider(2000, param);
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+            /*var cp = new CspParameters { KeyContainerName = key, Flags = CspProviderFlags.UseExistingKey };
+            var rsa = new RSACryptoServiceProvider(2000, cp);*/
             var privateKey = rsa.ExportParameters(true);
             return privateKey;
         }

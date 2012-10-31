@@ -28,11 +28,14 @@ namespace Browsing.Common.Containers
             this.rsaCryptoService = rsaCryptoService;
             IntitLogControls(false, false);
 
-            AddRegistrationButton(this.tableLayoutPanel1);
             //RefreshAuthentificationInfo();
 
             this.statusLabel.ForeColor = System.Drawing.Color.Red;
         }
+
+        #endregion
+
+        #region Protected Methods
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
@@ -40,12 +43,20 @@ namespace Browsing.Common.Containers
             base.OnHandleDestroyed(e);
         }
 
-        protected string OnGetCurrentUser()
+        protected Guid OnGetCurrentUser()
         {
             return GetCurrentUser;
         }
 
+        protected void ChangeRegistrationButton(bool? enabled, string text)
+        {
+            if (enabled.HasValue) this.btnRegistration.Enabled = enabled.Value;
+            if (!String.IsNullOrEmpty(text)) this.btnRegistration.Text = text;
+            
+        }
+
         #endregion
+        
 
         #region Helpers
 
@@ -73,6 +84,11 @@ namespace Browsing.Common.Containers
                 SetCheckingStatus(false);
         }
 
+        private void CheckRegistrationButton(bool userIsLoggedIn)
+        {
+            OnCheckRegistrationButton(userIsLoggedIn);
+        }
+
         private void RefreshAuthentificationInfo()
         {
             isDatabaseContainsUsers = null;
@@ -82,6 +98,7 @@ namespace Browsing.Common.Containers
 
             IntitLogControls(userIsLoggedIn, userIsLoggedIn);
 
+            CheckRegistrationButton(userIsLoggedIn);
             this.statusLabel.Text = string.Empty;
 
             if (userIsLoggedIn)
@@ -143,8 +160,8 @@ namespace Browsing.Common.Containers
         private IRequesProcessor requestProcessor;
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
-        private string getCurrentUser;
-        private IUrlUtils urlUtils;
+        private Guid? getCurrentUser;
+        protected IUrlUtils urlUtils;
 
         #endregion
 
@@ -174,21 +191,27 @@ namespace Browsing.Common.Containers
             }
         }
 
-        private string GetCurrentUser
+        private Guid GetCurrentUser
         {
             get
             {
-                if (!String.IsNullOrEmpty(this.getCurrentUser))
-                    return this.getCurrentUser;
+                if (this.getCurrentUser.HasValue)
+                    return this.getCurrentUser.Value;
 
-                this.getCurrentUser = this.requestProcessor.Process<string>(urlUtils.GetCurrentUserGetUrl(), "GET", false, "");
-                return this.getCurrentUser;
+                this.getCurrentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                
+                return this.getCurrentUser.Value;
             }
         }
 
         #endregion
 
         #region Handlers
+
+        private void btnRegistration_Click(object sender, EventArgs e)
+        {
+            OnRegistrationClicked(sender, e);
+        }
 
         void btnSettings_Click(object sender, System.EventArgs e)
         {
@@ -224,7 +247,7 @@ namespace Browsing.Common.Containers
 
         #region Virtual operations
 
-        protected internal abstract void AddRegistrationButton(TableLayoutPanel tableLayoutPanel);
+        //protected internal abstract void AddRegistrationButton(TableLayoutPanel tableLayoutPanel);
 
         protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
@@ -257,6 +280,14 @@ namespace Browsing.Common.Containers
             this.Holder.Redirect(settings);
         }
 
+        protected virtual void OnCheckRegistrationButton(bool userIsLoggedIn)
+        {
+        }
+
+        protected virtual void OnRegistrationClicked(object sender, System.EventArgs e)
+        {
+        }
+      
         protected virtual void OnExitClicked(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();

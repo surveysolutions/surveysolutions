@@ -12,8 +12,7 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorMain : Main
     {
-        private FlatButton btnRegistration;
-        private bool registrationFirstStep = true;
+        private string registrationFirstStep = Properties.Settings.Default.RegistrationStatus;
         private SupervisorRegistrationManager supervisorRegistrationManager;
         
         #region Constructor
@@ -23,50 +22,45 @@ namespace Browsing.Supervisor.Containers
         {
             InitializeComponent();
             supervisorRegistrationManager = new SupervisorRegistrationManager();
+
+            
+            if (this.registrationFirstStep == "First") ChangeRegistrationButton(false, "Registration Completed");
+            else ChangeRegistrationButton(true, "Registration");
         }
 
         #endregion
 
-        protected override void AddRegistrationButton(TableLayoutPanel tableLayoutPanel)
-        {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
+        #region Override Methods
 
-            this.btnRegistration = new Browsing.Common.Controls.FlatButton();
-            this.btnRegistration.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnRegistration.FlatAppearance.BorderSize = 0;
-            this.btnRegistration.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-
-            this.btnRegistration.Image = ((System.Drawing.Image)(resources.GetObject("btnDashboard.Image")));
-            this.btnRegistration.Location = new System.Drawing.Point(390, 43);
-            this.btnRegistration.Margin = new System.Windows.Forms.Padding(0);
-            this.btnRegistration.Name = "btnRegistration";
-            this.btnRegistration.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
-            this.btnRegistration.Size = new System.Drawing.Size(215, 220);
-            this.btnRegistration.TabIndex = 2;
-            this.btnRegistration.Text = "Registration";
-            this.btnRegistration.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.btnRegistration.UseVisualStyleBackColor = true;
-            this.btnRegistration.Click += new System.EventHandler(this.btnRegistration_Click);
-            tableLayoutPanel.Controls.Add(this.btnRegistration, 5, 1);
-        }
-        private void btnRegistration_Click(object sender, EventArgs e)
+        protected override void OnRegistrationClicked(object sender, System.EventArgs e)
         {
-            if (this.registrationFirstStep)
+            if (String.IsNullOrEmpty(this.registrationFirstStep))
             {
-                btnRegistration.Text = "Finish Registration";
                 var user = this.OnGetCurrentUser();
-                supervisorRegistrationManager.RegistrationFirstStep(rsaCryptoService,user);
-                registrationFirstStep = false;
+                supervisorRegistrationManager.RegistrationFirstStep(rsaCryptoService, user.ToString(),
+                                                                    this.urlUtils.GetRegistrationCapiPath());
+
+                Properties.Settings.Default.RegistrationStatus = "First";
+                Properties.Settings.Default.Save();
+                registrationFirstStep = "First";
+                ChangeRegistrationButton(false, "Registration Completed");
             }
             else
             {
-                supervisorRegistrationManager.RegistrationSecondStep();
+                ChangeRegistrationButton(false, "Registration Completed");
             }
         }
+
+        protected override void OnCheckRegistrationButton(bool userIsLoggedIn)
+        {
+            ChangeRegistrationButton(userIsLoggedIn, "");
+        }
+
         protected override void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is SyncChoicePage));
         }
+
+        #endregion
     }
 }

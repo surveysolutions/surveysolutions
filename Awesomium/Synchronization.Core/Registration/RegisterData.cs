@@ -41,10 +41,6 @@ namespace Synchronization.Core.Registration
         /// </summary>
         public Guid TabletId { get; set; }
 
-        /// <summary>
-        /// Gets or sets Event.
-        /// </summary>
-        public RegisterView Event { get; set; }
 
         #endregion
     }

@@ -178,5 +178,29 @@ namespace Browsing.Supervisor.Properties {
                 this["GetCurrentUserPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/RegisterCapi")]
+        public string GetRegistrationSupervisorPath {
+            get {
+                return ((string)(this["GetRegistrationSupervisorPath"]));
+            }
+            set {
+                this["GetRegistrationSupervisorPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RegistrationStatus {
+            get {
+                return ((string)(this["RegistrationStatus"]));
+            }
+            set {
+                this["RegistrationStatus"] = value;
+            }
+        }
     }
 }
