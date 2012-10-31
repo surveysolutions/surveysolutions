@@ -11,6 +11,7 @@ namespace RavenQuestionnaire.Core.Export.csv
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     using CsvHelper;
 
@@ -113,10 +114,10 @@ namespace RavenQuestionnaire.Core.Export.csv
                     writer.WriteField(item.CompleteQuestionnaireKey);
                     foreach (Guid guid in template.Keys)
                     {
-                        /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);
-                        writer.WriteField(completeAnswer != null
-                                              ? completeAnswer.AnswerValue?? completeAnswer.AnswerText
-                                              : null);*/
+                        /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
+                        var completeAnswer =
+                            item.CompleteQuestions.Where(a => a.PublicKey == guid).FirstOrDefault().GetAnswerString();
+                        writer.WriteField(completeAnswer ?? null);
                     }
 
                     writer.NextRecord();
