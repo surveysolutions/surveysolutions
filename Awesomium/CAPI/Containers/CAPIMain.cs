@@ -1,13 +1,9 @@
 ﻿using System;
-
-using System.Windows.Forms;
-using Awesomium.Core;
 using Browsing.CAPI.Registration;
-using Synchronization.Core.Registration;
-using Common.Utils;
-using Synchronization.Core.Interface;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
+using Common.Utils;
+using Synchronization.Core.Interface;
 
 namespace Browsing.CAPI.Containers
 {
@@ -15,36 +11,44 @@ namespace Browsing.CAPI.Containers
     {
 
         private string registrationFirstStep = Properties.Settings.Default.RegistrationStatus;
-        private CapiRegistrationManager capiRegistrationManager;
-        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(clientSettings, requestProcessor, rsaCryptoService, urlUtils, holder)
+        private CapiRegistrationManager capiRegistrationManager = new CapiRegistrationManager();
+
+        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+            : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
 
-            capiRegistrationManager = new CapiRegistrationManager();
-            ChangeRegistrationButton(true, "");
-            if (this.registrationFirstStep == "First") ChangeRegistrationButton(true, "Finish Registration");
-            else if (this.registrationFirstStep == "Second") ChangeRegistrationButton(false, "Registration Completed");
-            else ChangeRegistrationButton(true, "Registration");
-          
+            if (this.registrationFirstStep == "First")
+                ChangeRegistrationButton(true, "Finish Registration");
+            else if (this.registrationFirstStep == "Second")
+                ChangeRegistrationButton(false, "Registration Completed");
+            else
+                ChangeRegistrationButton(true, "Registration");
+
         }
 
         #region Override Methods
-        
+
         protected override void OnRegistrationClicked(object sender, System.EventArgs e)
         {
+            var drive = GetUsbDrive();
+            if (drive == null)
+                return;
+
             if (String.IsNullOrEmpty(this.registrationFirstStep))
             {
-                ChangeRegistrationButton(null, "Finish Registration");
-                capiRegistrationManager.RegistrationFirstStep(rsaCryptoService);
+                if (!capiRegistrationManager.StartRegistration(drive.Name))
+                    return;
+                
                 Properties.Settings.Default.RegistrationStatus = "First";
                 Properties.Settings.Default.Save();
                 registrationFirstStep = "First";
+
+                ChangeRegistrationButton(true, "Finish Registration");
             }
-            else
-            if(this.registrationFirstStep == "First")
+            else if (this.registrationFirstStep == "First")
             {
-                var res = capiRegistrationManager.RegistrationSecondStep(rsaCryptoService, this.urlUtils.GetRegistrationCapiPath());
+                var res = capiRegistrationManager.FinalizeRegistration(drive.Name, this.urlUtils.GetRegistrationCapiPath());
                 if (res)
                 {
                     ChangeRegistrationButton(false, "Registration Completed");
@@ -54,7 +58,7 @@ namespace Browsing.CAPI.Containers
                 }
             }
         }
-        
+
         #endregion
     }
 }

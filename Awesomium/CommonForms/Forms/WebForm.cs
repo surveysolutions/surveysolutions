@@ -1,6 +1,5 @@
 ﻿#region Using
 using System;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -17,7 +16,7 @@ using System.IO;
 using Synchronization.Core.Interface;
 using Common;
 using Browsing.Common.Controls;
-using Synchronization.Core.Registration;
+
 
 #endif
 #endregion
@@ -69,7 +68,6 @@ namespace Browsing.Common.Forms
 
                 var webView = new WebControl();
                 var requestProcessor = new WebRequestProcessor();
-                var rsaCryptoService= new RSACryptoService();
                 var urlUtils = InstantiateUrlProvider();
 
                 System.Diagnostics.Debug.Assert(urlUtils != null);
@@ -99,7 +97,7 @@ namespace Browsing.Common.Forms
                                                     }
                                                 }).Start();
 
-                AddMainScreen(requestProcessor, settingsProvider, rsaCryptoService, urlUtils);
+                AddMainScreen(requestProcessor, settingsProvider, urlUtils);
                 AddBrowserScreen(webView);
                 AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
                 AddSettingsScreen();
@@ -148,9 +146,9 @@ namespace Browsing.Common.Forms
             OnAddSettingsScreen();
         }
 
-        private void AddMainScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider,IRSACryptoService rsaCryptoService, IUrlUtils urlUtils)
+        private void AddMainScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            var capiMain = OnAddMainPageScreen(requestProcessor, settingsProvider, rsaCryptoService, urlUtils);
+            var capiMain = OnAddMainPageScreen(requestProcessor, settingsProvider, urlUtils);
 
             this.Holder.Redirect(capiMain);
         }
@@ -181,7 +179,7 @@ namespace Browsing.Common.Forms
         #region Abstract
 
         protected abstract IUrlUtils InstantiateUrlProvider();
-        protected abstract Containers.Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils);
+        protected abstract Containers.Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Settings OnAddSettingsScreen();
         protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Browser OnAddBrowserScreen(WebControl webView);

@@ -10,41 +10,33 @@ using Synchronization.Core.Registration;
 
 namespace Browsing.CAPI.Registration
 {
-
     public class CapiRegistrationManager : RegistrationManager
     {
-        #region Private fields
-
-        private readonly Guid tabletId = Guid.Parse("10000000-0000-0000-0000-000000000000");
-
-        #endregion
+        public CapiRegistrationManager()
+            : base("SupervisorRegistration.register", "CAPIRegistration.register")
+        {
+        }
 
         #region Override Methods
 
-        public override void RegistrationFirstStep(IRSACryptoService rsaCryptoService)
+        protected override Guid OnAcceptId()
         {
-            var publicKey = rsaCryptoService.GetPublicKey(this.tabletId.ToString()).Modulus;
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(new RegisterData { SecretKey = publicKey, TabletId = this.tabletId }));
-
-            FormRegistrationFile(dataToFile, "G:/CAPIRegistration.register");
+            return new Guid("{10000000-0000-0000-0000-000000000000}");
         }
 
-        public override bool RegistrationSecondStep(IRSACryptoService rsaCryptoService, string url)
+        public override bool StartRegistration(string folderPath, string keyContainerName = null, string url = null)
         {
-            var data = GetFromRegistrationFile("G:/SupervisorRegistration.register");
-            var response = SendPostWebRequest(url, data);
+            return base.StartRegistration(folderPath, Id.ToString(), url);
+        }
+
+        public override bool FinalizeRegistration(string folderPath, string url)
+        {
+            var data = GetFromRegistrationFile(folderPath + InFile);
+
+            var response = SendRegistrationRequest(url, data);
             var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-            if (result == "True")
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public override void RegistrationFirstStep(IRSACryptoService rsaCryptoService, string user, string url)
-        {
-            throw new NotImplementedException();
+            return string.Compare(result, "True", true) == 0;
         }
 
         #endregion

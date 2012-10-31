@@ -1,20 +1,10 @@
-﻿using System;
-using Common;
-using System.IO;
-using Common.Utils;
-using Awesomium.Core;
-using System.Windows.Forms;
-using Awesomium.Windows.Forms;
-using Browsing.Supervisor.Utils;
-using Browsing.Supervisor.Containers;
-using Browsing.Supervisor.Properties;
-using Synchronization.Core.Interface;
-using Browsing.Supervisor.ClientSettings;
-
+﻿using Awesomium.Windows.Forms;
 using Browsing.Common.Containers;
-using Browsing.Common.Controls;
-using Browsing.Common.Forms;
-using Synchronization.Core.Registration;
+using Browsing.Supervisor.ClientSettings;
+using Browsing.Supervisor.Containers;
+using Browsing.Supervisor.Utils;
+using Common.Utils;
+using Synchronization.Core.Interface;
 
 namespace Browsing.Supervisor.Forms
 {
@@ -27,7 +17,8 @@ namespace Browsing.Supervisor.Forms
         {
             InitializeComponent();
 
-#if DEBUG__
+#if DEBUG
+
             Properties.Settings.Default.RunClient = false;
             Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";
             Properties.Settings.Default.Save();
@@ -64,9 +55,9 @@ namespace Browsing.Supervisor.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IRSACryptoService rsaCryptoService, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
-            return new SupervisorMain(settingsProvider, requestProcessor, rsaCryptoService,urlUtils, Holder)
+            return new SupervisorMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {
                 Name = "supervisorMain"
             };

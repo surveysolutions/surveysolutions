@@ -9,35 +9,30 @@ namespace Browsing.Supervisor.Registration
 {
     public class SupervisorRegistrationManager : RegistrationManager
     {
-        #region Private fields
+        public SupervisorRegistrationManager()
+            : base("CAPIRegistration.register", "SupervisorRegistration.register")
+        {
+        }
 
-        private readonly Guid tabletId = Guid.Parse("20000000-0000-0000-0000-000000000000");
-
-        #endregion
 
         #region Override Methods
 
-        public override void RegistrationFirstStep(IRSACryptoService rsaCryptoService, string user, string url)
+        protected override Guid OnAcceptId()
         {
-            var data = GetFromRegistrationFile("G:/CAPIRegistration.register");
-            var response = SendPostWebRequest(url, data);
+            return new Guid("{20000000-0000-0000-0000-000000000000}");
+        }
+
+        public override bool StartRegistration(string folderPath, string keyContainerName, string url)
+        {
+            var data = GetFromRegistrationFile(folderPath + InFile);
+            var response = SendRegistrationRequest(url, data);
             var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-            if (result == "True")
-            {
-                var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(new RegisterData { SecretKey = rsaCryptoService.GetPublicKey(user).Modulus, TabletId = this.tabletId }));
-
-                FormRegistrationFile(dataToFile, "G:/SupervisorRegistration.register");
-            }
-
+            // G:/SupervisorRegistration.register"
+            return string.Compare(result, "True", true) == 0 && base.StartRegistration(folderPath, keyContainerName, url);
         }
 
-        public override bool RegistrationSecondStep(IRSACryptoService rsaCryptoService, string url)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void RegistrationFirstStep(IRSACryptoService rsaCryptoService)
+        public override bool FinalizeRegistration(string folderPath, string url)
         {
             throw new NotImplementedException();
         }

@@ -9,8 +9,70 @@ using Newtonsoft.Json;
 
 namespace Synchronization.Core.Registration
 {
+    /// <summary>
+    /// Base class responsible for registraction of CAPI device on Supervisor
+    /// </summary>
     public abstract class RegistrationManager
     {
+        #region Members
+
+        private IRSACryptoService rsaCryptoService = new RSACryptoService();
+
+        #endregion
+
+        #region C-tor
+
+        protected RegistrationManager(string inFile, string outFile)
+        {
+            InFile = inFile;
+            OutFile = outFile;
+
+            Id = AcceptId();
+        }
+
+        #endregion
+
+        #region Properties
+
+        public Guid Id { get; private set; }
+        protected string InFile { get; private set; }
+        protected string OutFile { get; private set; }
+
+        #endregion
+
+        #region Helpers
+
+        private Guid AcceptId()
+        {
+            try
+            {
+                return OnAcceptId();
+            }
+            catch // todo: log
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
+        #region Abstract Methods
+
+        protected abstract Guid OnAcceptId(); // todo: find out the way to initialize this value properly
+
+        public virtual bool StartRegistration(string folderPath, string keyContainerName, string url)
+        {
+            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, TabletId = Id }));
+
+            return CreateRegistrationFile(dataToFile, folderPath + OutFile);
+        }
+
+        public abstract bool FinalizeRegistration(string folderPath, string url);
+
+        #endregion
+
+        #region Protected Operations
+
         protected string SerializeRegisterData(RegisterData data)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
@@ -23,21 +85,23 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        protected byte[] SendPostWebRequest(string url, byte[] requestParams)
+        protected byte[] SendRegistrationRequest(string url, byte[] requestParams)
         {
             byte[] buffer = new byte[4097];
             byte[] result = null;
-            
 
-            WebRequest request = WebRequest.Create(url);
-            request.ContentType = "application/json; charset=utf-8";
-            request.Method = "POST";
-            request.ContentLength = requestParams.Length;
-            Stream os = request.GetRequestStream();
-            os.Write(requestParams, 0, requestParams.Length); //Push it out there
-            os.Close();
             try
             {
+                WebRequest request = WebRequest.Create(url);
+
+                request.ContentType = "application/json; charset=utf-8";
+                request.Method = "POST";
+                request.ContentLength = requestParams.Length;
+
+
+                Stream os = request.GetRequestStream();
+                os.Write(requestParams, 0, requestParams.Length); //Push it out there
+                os.Close();
 
                 WebResponse response = request.GetResponse();
 
@@ -65,36 +129,39 @@ namespace Synchronization.Core.Registration
                 // Let the parent thread know the process is done
 
                 responseStream.Close();
-                memoryStream.Close(); 
+                memoryStream.Close();
                 return result;
             }
-            catch(Exception e)
+            catch
             {
                 return Encoding.ASCII.GetBytes("false");
             }
-            
-
-
         }
-        protected bool FormRegistrationFile(byte[] data, string filePath)
+
+        protected bool CreateRegistrationFile(byte[] data, string filePath)
         {
+            FileStream fileStream = null;
+
             try
             {
                 // Open file for reading
-                FileStream _FileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
+                fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
 
                 // Writes a block of bytes to this stream using data from a byte array.
-                _FileStream.Write(data, 0, data.Length);
-
-                // close file stream
-                _FileStream.Close();
+                fileStream.Write(data, 0, data.Length);
 
                 return true;
             }
-            catch (Exception _Exception)
+            catch (Exception ex)
             {
                 // Error
-                Console.WriteLine("Exception caught in process: {0}", _Exception.ToString());
+                Console.WriteLine("Exception caught in process: {0}", ex);
+            }
+            finally
+            {
+                // close file stream
+                if (fileStream != null)
+                    fileStream.Close();
             }
 
             // error occured, return false
@@ -103,26 +170,26 @@ namespace Synchronization.Core.Registration
 
         protected byte[] GetFromRegistrationFile(string filePath)
         {
-            if (!File.Exists(filePath)) throw new Exception("File from supervisor not found");
-            FileStream fs = File.OpenRead(filePath);
+            if (!File.Exists(filePath))
+                throw new Exception("File from supervisor not found");
+
+            FileStream fileStream = null;
             try
             {
+                fileStream = File.OpenRead(filePath);
 
-                byte[] bytes = new byte[fs.Length];
-                fs.Read(bytes, 0, Convert.ToInt32(fs.Length));
-                fs.Close();
+                byte[] bytes = new byte[fileStream.Length];
+                fileStream.Read(bytes, 0, Convert.ToInt32(fileStream.Length));
+
                 return bytes;
             }
             finally
             {
-                fs.Close();
+                if (fileStream != null)
+                    fileStream.Close();
             }
         }
 
-        public abstract void RegistrationFirstStep(IRSACryptoService rsaCryptoService);
-
-        public abstract void RegistrationFirstStep(IRSACryptoService rsaCryptoService, string user, string url);
-
-        public abstract bool RegistrationSecondStep(IRSACryptoService rsaCryptoService, string url);
+        #endregion
     }
 }

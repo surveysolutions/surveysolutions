@@ -38,7 +38,6 @@
     <Reference Include="Awesomium.Windows.Forms">
       <HintPath>..\..\..\..\..\Program Files (x86)\Khrona LLC\Awesomium SDK\1.6.6\wrappers\Awesomium.NET\Assemblies\Awesomium.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="Browsing.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
