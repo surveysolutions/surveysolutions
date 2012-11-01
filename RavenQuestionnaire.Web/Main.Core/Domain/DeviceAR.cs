@@ -69,6 +69,7 @@ namespace Main.Core.Domain
         /// The registered date.
         /// </param>
         public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate)
+            : base(tabletId)
         {
             this.ApplyEvent(
                new NewDeviceRegistered

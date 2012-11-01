@@ -34,6 +34,7 @@ namespace Main.Core.Commands.Synchronization
         /// </param>
         public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId)
         {
+            this.RegisterGuid = tabletId;
             this.Description = description;
             this.SecretKey = secretKey;
             this.TabletId = tabletId;

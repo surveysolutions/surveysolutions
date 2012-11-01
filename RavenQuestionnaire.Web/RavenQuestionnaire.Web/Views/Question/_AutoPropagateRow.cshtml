@@ -16,7 +16,7 @@
 
 @using (Html.BeginCollectionItem("triggers"))
 {
-    <div id="@currentRowId" class="display-answer">
+    <div id="@currentRowId" class="display-answer form-inline">
         @Html.DropDownListFor(x => x, list, current)
         <a href="javascript:void(0)" onclick=" $('#@currentRowId').remove()" class="btn btn-danger btn-mini">
             <i class="icon-remove icon-white"></i>Delete</a>

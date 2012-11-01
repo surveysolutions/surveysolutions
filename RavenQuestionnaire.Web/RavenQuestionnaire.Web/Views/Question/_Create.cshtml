@@ -8,7 +8,7 @@
 
 
     $(function () {
-       
+
         var questionType = $("[customName=questionName] option:selected").text();
         if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
@@ -34,15 +34,13 @@
 }
 @if (Model.PublicKey != Guid.Empty)
 {
-    <h3>
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
-            <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3>
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3>
 }
 else
 {
-    <h3>
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey})" class="btn">
-            <i class="icon-arrow-left"></i></a>Edit Question  in @Model.GroupTitle</h3> 
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3> 
 }
 @using (Html.BeginForm("Save", "Question"))
 {
@@ -61,8 +59,7 @@ else
             <div class="control-group">
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
-                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes
-                    </label>
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
                 </div>
             </div>
             <div class="control-group">
@@ -79,24 +76,20 @@ else
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">
-                    Type</label>
+                <label class="control-label">Type</label>
                 <div class="controls">
                     @{
-                        IDictionary<string, object> html = new Dictionary<string, object>();
-                        html.Add("customName", "questionName");
-                        html.Add("class", "span12");
+        IDictionary<string, object> html = new Dictionary<string, object>();
+        html.Add("customName", "questionName");
+        html.Add("class", "span12");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                     }
                 </div>
             </div>
             <div class="control-group">
-                @Html.Partial("_EditAutoPropagates", Model)
-            </div>
-            <div class="control-group">
                 <label class="control-label">Answer order</label>
                 <div class="controls">
-                    @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>(){ { "class","span12"}} )
+                    @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>() { { "class", "span12" } })
                 </div>
             </div>
             <div class="control-group">
@@ -123,7 +116,7 @@ else
             <div class="control-group">
                 @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class="span12" })
+                    @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.Instructions)
                 </div>
             </div>
@@ -138,6 +131,7 @@ else
             </div>
         </div>
         <div class="span7">
+            @Html.Partial("_EditAutoPropagates", Model)
             @if (Model.PublicKey != Guid.Empty)
             {
                 @Html.HiddenFor(model => model.PublicKey)

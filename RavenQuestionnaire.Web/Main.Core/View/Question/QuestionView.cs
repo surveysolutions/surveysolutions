@@ -176,6 +176,11 @@ namespace Main.Core.View.Question
         public List<Guid> Triggers { get; set; }
 
         /// <summary>
+        /// Gets or sets MaxValue
+        /// </summary>
+        public int MaxValue { get; set; }
+
+        /// <summary>
         /// Gets or sets Groups.
         /// </summary>
         public Dictionary<string, Guid> Groups { get; set; }
@@ -534,9 +539,13 @@ namespace Main.Core.View.Question
 
 
             var autoQuestion = doc as IAutoPropagate;
-            if (autoQuestion != null && autoQuestion.Triggers != null)
+            if (autoQuestion != null)
             {
-                this.Triggers = autoQuestion.Triggers.ToList();
+                this.MaxValue = autoQuestion.MaxValue;
+                if (autoQuestion.Triggers != null)
+                {
+                    this.Triggers = autoQuestion.Triggers.ToList();
+                }
             }
 
 /*

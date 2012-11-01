@@ -168,8 +168,9 @@ namespace Main.Core.Domain
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        /// <param name="targetGroupKey">
-        /// The target group key.
+        /// <param name="triggers"></param>
+        /// <param name="maxValue">
+        /// The max value of autopropagate question
         /// </param>
         /// <param name="answers">
         /// The answers.
@@ -188,6 +189,7 @@ namespace Main.Core.Domain
             string instructions, 
             Guid? groupPublicKey,
             List<Guid> triggers, 
+            int maxValue,
             Answer[] answers)
         {
             //// performe checks before event raising
@@ -211,6 +213,7 @@ namespace Main.Core.Domain
                         AnswerOrder = answerOrder, 
                         GroupPublicKey = groupPublicKey, 
                         Triggers = triggers,
+                        MaxValue = maxValue,
                         Answers = answers, 
                         Instructions = instructions
                     });
@@ -225,8 +228,11 @@ namespace Main.Core.Domain
         /// <param name="questionText">
         /// The question text.
         /// </param>
-        /// <param name="targetGroupKey">
-        /// The target group key.
+        /// <param name="triggers">
+        /// List of triggers for autopropagate question
+        /// </param>
+        /// <param name="maxValue">
+        /// The max value of autopropagate question
         /// </param>
         /// <param name="stataExportCaption">
         /// The stata export caption.
@@ -265,6 +271,7 @@ namespace Main.Core.Domain
             Guid publicKey, 
             string questionText, 
             List<Guid> triggers, 
+            int maxValue,
             string stataExportCaption, 
             string instructions, 
             QuestionType questionType, 
@@ -282,6 +289,7 @@ namespace Main.Core.Domain
                     {
                         QuestionText = questionText, 
                         Triggers = triggers, 
+                        MaxValue = maxValue,
                         StataExportCaption = stataExportCaption, 
                         QuestionType = questionType, 
                         ConditionExpression = conditionExpression, 
