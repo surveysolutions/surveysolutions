@@ -425,7 +425,6 @@ $(document).bind('pagechange', function () {
         var q = $('.scrollHere');
         //  var target = $(q.replace('question', '#elem-'));
         scrollToQuestion(q);
-        $(q).faderEffect();
         $('.scrollHere').removeClass('scrollHere');
     }
 
@@ -434,29 +433,3 @@ $(document).bind('pagechange', function () {
 function isNumber(n) {
     return !isNaN(parseFloat(n)) && isFinite(n);
 }
-
-$.fn.faderEffect = function(options) {
-    options = jQuery.extend({
-            count: 3, // how many times to fadein
-            speed: 500, // spped of fadein
-            callback: false // call when done
-        }, options);
-
-    return this.each(function() {
-
-        // if we're done, do the callback
-        if (0 == options.count) {
-            if ($.isFunction(options.callback)) options.callback.call(this);
-            return;
-        }
-
-        // hide so we can fade in
-        if ($(this).is(':visible')) $(this).hide();
-
-        // fade in, and call again
-        $(this).fadeIn(options.speed, function() {
-            options.count = options.count - 1; // countdown
-            $(this).faderEffect(options);
-        });
-    });
-};
