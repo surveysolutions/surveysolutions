@@ -99,6 +99,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public List<Guid> Triggers { get; set; }
 
+        /// <summary>
+        /// Gets or sets MaxValue.
+        /// </summary>
+        public int MaxValue { get; set; }
+
         #endregion
     }
 }

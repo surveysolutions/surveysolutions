@@ -35,7 +35,6 @@ namespace Main.Core.AbstractFactories
         /// </returns>
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-
             AbstractCompleteQuestion completeQuestion;
             if (question is IMultyOptionsQuestion)
             {
@@ -80,7 +79,8 @@ namespace Main.Core.AbstractFactories
                 question.Mandatory, 
                 question.Capital, 
                 question.Instructions, 
-                null);
+                null,
+                int.MaxValue);
             ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
@@ -118,8 +118,8 @@ namespace Main.Core.AbstractFactories
         /// <summary>
         /// The create.
         /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
+        /// <param name="e">
+        /// The e.
         /// </param>
         /// <returns>
         /// The <see cref="AbstractQuestion"/>.
@@ -143,11 +143,48 @@ namespace Main.Core.AbstractFactories
                e.Mandatory,
                false,
                e.Instructions,
-               e.Triggers);
+               e.Triggers,
+               e.MaxValue);
 
             this.UpdateAnswerList(e.Answers, q);
 
             return q;
+        }
+
+        /// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
+        {
+            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+
+            q.PublicKey = question.PublicKey;
+
+            this.UpdateQuestion(
+                q,
+                e.QuestionType,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                e.AnswerOrder,
+                e.Featured,
+                e.Mandatory,
+                false,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue);
+
+            this.UpdateAnswerList(e.Answers, q);
+
+            question = q;
         }
 
         /// <summary>
@@ -195,42 +232,6 @@ namespace Main.Core.AbstractFactories
 
             return q;
         }
-
-        /// <summary>
-        /// The update question by event.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
-        {
-            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
-
-            q.PublicKey = question.PublicKey;
-            
-            this.UpdateQuestion(
-                q, 
-                e.QuestionType, 
-                e.QuestionText, 
-                e.StataExportCaption, 
-                e.ConditionExpression, 
-                e.ValidationExpression, 
-                e.ValidationMessage, 
-                e.AnswerOrder, 
-                e.Featured, 
-                e.Mandatory, 
-                false, 
-                e.Instructions, 
-                e.Triggers);
-
-            this.UpdateAnswerList(e.Answers, q);
-
-            question = q;
-        }
-        
 
         #endregion
 
@@ -301,6 +302,9 @@ namespace Main.Core.AbstractFactories
         /// <param name="triggers">
         /// The triggers.
         /// </param>
+        /// <param name="maxValue">
+        /// The max value
+        /// </param>
         private void UpdateQuestion(
             IQuestion question, 
             QuestionType questionType, 
@@ -314,7 +318,8 @@ namespace Main.Core.AbstractFactories
             bool mandatory, 
             bool capital, 
             string instructions, 
-            IEnumerable<Guid> triggers)
+            IEnumerable<Guid> triggers,
+            int maxValue)
         {
             question.QuestionType = questionType;
             question.QuestionText = questionText;
@@ -336,6 +341,8 @@ namespace Main.Core.AbstractFactories
                 {
                     autoQuestion.Triggers.Add(guid);
                 }
+
+                autoQuestion.MaxValue = maxValue;
             }
         }
 

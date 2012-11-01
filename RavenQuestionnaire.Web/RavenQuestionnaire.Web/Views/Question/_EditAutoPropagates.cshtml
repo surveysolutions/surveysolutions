@@ -1,22 +1,29 @@
 ﻿@using Main.Core.Entities.SubEntities
+@using RavenQuestionnaire.Web.Utils
 @model Main.Core.View.Question.QuestionView
 @{ 
     var displayStyle = Model.QuestionType == QuestionType.AutoPropagate ? "block" : "none";
 }
-
 <div id="apguid" style="display:@displayStyle; ">
-    <label class="control-label">Propagateble GUID</label>
-    <div id="divNewPropagateGroup">
-        @foreach (var item in Model.Triggers)
-        {
-            Html.RenderPartial("_AutoPropagateRow", item);
-        }
+    <div class="control-group">
+        @Html.LabelFor(model => model.MaxValue, new { @class = "control-label" })
+        <div class="controls">
+            @Html.TextBoxFor(model => Model.MaxValue, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
+            @Html.ValidationMessageFor(model => model.MaxValue)
+        </div>
     </div>
-    @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey, groupPublicKey = Model.Parent }, new AjaxOptions
+    <div class="control-group">
+        <label class="control-label">Propagateble GUID</label>
+        <div id="divNewPropagateGroup">
+            @foreach (var item in Model.Triggers)
+            {
+                Html.RenderPartial("_AutoPropagateRow", item);
+            }
+        </div>
+        @Ajax.ActionLink("Add new propagate group", "CreatePropagateGroup", "Question", new { questionPublicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey, groupPublicKey = Model.Parent }, new AjaxOptions
                                                                                                 {
                                                                                                     UpdateTargetId = "divNewPropagateGroup",
                                                                                                     InsertionMode = InsertionMode.InsertAfter
                                                                                                 })
+    </div>
 </div>
-
-    

@@ -26,6 +26,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public AutoPropagateQuestion()
         {
+            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
@@ -38,6 +39,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public AutoPropagateQuestion(string text)
             : base(text)
         {
+            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
@@ -72,14 +74,39 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #endregion
 
+        #region Implementation of ITriggerable
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+        #endregion
+
+        #region Implementation of IAutoPropagate
+
+        /// <summary>
+        /// Gets or sets MaxValue.
+        /// </summary>
+        public int MaxValue { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
+        /// <summary>
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
         }
 
-        
+
         /*/// <summary>
         /// The add.
         /// </summary>
@@ -172,24 +199,5 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #endregion
 
-        #region Implementation of ITriggerable
-
-        /// <summary>
-        /// Gets or sets Triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
-
-        #endregion
-
-        #region Implementation of IAutoPropagate
-
-        public int MaxValue
-        {
-            get { return maxValue; }
-            set { maxValue = value; }
-        }
-        private int maxValue = int.MaxValue;
-
-        #endregion
     }
 }

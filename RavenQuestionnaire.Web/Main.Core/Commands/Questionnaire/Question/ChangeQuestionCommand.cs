@@ -113,6 +113,9 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="triggers">
         /// The triggers.
         /// </param>
+        /// <param name="maxValue">
+        /// The max value
+        /// </param>
         /// <param name="stataExportCaption">
         /// The stata export caption.
         /// </param>
@@ -148,6 +151,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             Guid publicKey, 
             string questionText, 
             List<Guid> triggers, 
+            int maxValue,
             string stataExportCaption, 
             QuestionType questionType, 
             string conditionExpression, 
@@ -162,6 +166,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
             this.Triggers = triggers;
+            this.MaxValue = maxValue;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
             this.ConditionExpression = conditionExpression;
@@ -254,6 +259,11 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// Gets or sets Triggers.
         /// </summary>
         public List<Guid> Triggers { get; set; }
+
+        /// <summary>
+        /// Gets or sets MaxValue.
+        /// </summary>
+        public int MaxValue { get; set; }
 
         #endregion
     }

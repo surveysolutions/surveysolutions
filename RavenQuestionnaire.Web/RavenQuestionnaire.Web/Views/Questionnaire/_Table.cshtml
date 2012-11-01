@@ -11,11 +11,8 @@
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
-       @* <td>
-            @Html.DisplayFor(modelItem => item.LastEntryDate)
-        </td>*@
         <td class="buttons">
-            @Html.ActionLink("Flow", "Edit", "FlowGraph", new { id = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Flow", "Flow", "Questionnaire", new { id = item.Id }, new { @class = "btn small " })
         <td class="buttons">    
             @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
         </td>
