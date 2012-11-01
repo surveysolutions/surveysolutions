@@ -295,3 +295,8 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 @media screen and (orientation: landscape){
 .ui-mobile, .ui-mobile .ui-page { min-height: 100px !important; }
 }
+
+table.survey-grid{ width: 100%;border-spacing: 0px;}
+table.survey-grid tr th{ background: -moz-linear-gradient(#FFFADF, #FFF3A5) repeat scroll 0 0 #FFF9DF;padding: 10px 0 10px 10px;}
+table.survey-grid tr td{ padding: 10px 0 10px 10px;}
+table.survey-grid tr{ background: -moz-linear-gradient(#FFFFFF, #F1F1F1) repeat scroll 0 0 #EEEEEE;}
