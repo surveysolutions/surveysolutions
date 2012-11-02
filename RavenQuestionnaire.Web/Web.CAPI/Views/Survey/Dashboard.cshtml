@@ -26,8 +26,22 @@
                         </li>
                         <li>
                             <table class="survey-grid">
+                                <col width="10%" />
+                                @{
+                                    var questionCount = group.Items.First().FeaturedQuestions.Count();
+
+                                    double colWidth = 0;
+                                    if (questionCount > 0)
+                                    {
+                                        colWidth = 90/questionCount;
+                                    }
+                                }
+                                 @foreach (CompleteQuestionView featured in group.Items.First().FeaturedQuestions)
+                                    {
+                                        <col width="@colWidth%"/>
+                                    }
                                 <tr>
-                                    <th>
+                                    <th >
                                         Status
                                     </th>
                                     @foreach (CompleteQuestionView featured in group.Items.First().FeaturedQuestions)
@@ -39,8 +53,11 @@
                                 @foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
                                 {
 
-                                    <tr onclick="document.location='@Url.Action("Index", "Survey", new { id = survey.CompleteQuestionnaireId })'">
-                                        <td>@survey.Status.Name
+                                    <tr @*onclick="document.location='@Url.Action("Index", "Survey", new { id = survey.CompleteQuestionnaireId })'"*@>
+                                        <td >
+                                            <a class="nav-link" rel="external"  href="@Url.Action("Index", "Survey", new { id = survey.CompleteQuestionnaireId })" 
+                                               data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
+                                                @survey.Status.Name</a>
                                         </td>
                                         @foreach (CompleteQuestionView featured in survey.FeaturedQuestions)
                                         {
