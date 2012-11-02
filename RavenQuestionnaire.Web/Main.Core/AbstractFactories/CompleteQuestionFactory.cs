@@ -162,12 +162,12 @@ namespace Main.Core.AbstractFactories
         /// </param>
         public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
         {
-            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+            //AbstractQuestion q = this.CreateQuestion(e.QuestionType);
 
-            q.PublicKey = question.PublicKey;
+            //q.PublicKey = question.PublicKey;
 
             this.UpdateQuestion(
-                q,
+                question,
                 e.QuestionType,
                 e.QuestionText,
                 e.StataExportCaption,
@@ -182,9 +182,9 @@ namespace Main.Core.AbstractFactories
                 e.Triggers,
                 e.MaxValue);
 
-            this.UpdateAnswerList(e.Answers, q);
+            this.UpdateAnswerList(e.Answers, question);
 
-            question = q;
+            //question = q;
         }
 
         /// <summary>

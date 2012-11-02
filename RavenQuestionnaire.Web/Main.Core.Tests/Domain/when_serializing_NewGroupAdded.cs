@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RavenQuestionnaire.Core.Tests.Domain
+namespace Main.Core.Tests.Domain
 {
     using System;
 
