@@ -14,7 +14,6 @@
         <thead>
             <tr>
                 <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
-                <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
                 @foreach (var item in Model.Headers)
                 {
                     <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
@@ -28,8 +27,7 @@
                 <tr>
                     <td>@Html.ActionLink(collect.Title, "Assigments", new { id = collect.Id, userId = userKey })
                     </td>
-                    <td>
-                    </td>
+                   
                     @foreach (var it in Model.Headers)
                     {
 
@@ -68,7 +66,6 @@
             }
             <tr>
                 <th>Summary</th>
-                <th></th>
                 @foreach (var it in Model.Headers)
                 {
                     <th>
