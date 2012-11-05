@@ -36,6 +36,11 @@ namespace Main.Core.Commands.Questionnaire.Completed
         /// </summary>
         public SurveyStatus Status { get; set; }
 
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
         #endregion
     }
 }

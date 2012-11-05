@@ -310,10 +310,10 @@ namespace Main.Core.Domain
         /// <param name="completeQuestionnaireId">
         /// The complete questionnaire id.
         /// </param>
-        public void CreateCompletedQ(Guid completeQuestionnaireId)
+        public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
             //// TODO: check is it good to create new AR form another?
-            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument);
+            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
         /// <summary>

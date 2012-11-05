@@ -1,7 +1,6 @@
 ﻿@using Main.Core.View.CompleteQuestionnaire.Statistics
 @using Web.Supervisor.Models
 @using Web.Supervisor.Utils
-
 @model ApproveRedoModel
 @{
     ViewBag.Title = "Change state survey";
@@ -16,10 +15,10 @@
             <div class="control-group">
                 @Html.LabelFor(x => x.StatusId, new { @class = "control-label" })
                 <div class="controls">
-                   <select id="state" name="state">
-                    <option value="1">Approve</option>
-                    <option value="2">Redo</option>
-                </select>
+                    <select id="state" name="state">
+                        <option value="1">Approve</option>
+                        <option value="2">Redo</option>
+                    </select>
                 </div>
             </div>
 
@@ -34,7 +33,34 @@
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="button" class="btn">Cancel</button>
             </div>
+            
+            
         }
+        <table class="table table-condensed table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>set status</th>
+                    <th>with comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var ch in Model.Statistic.StatusHistory)
+                {
+                    <tr>
+                        <td>
+                            @ch.UserName
+                        </td>
+                        <td>
+                            @ch.StatusName
+                        </td>
+                        <td>
+                            @ch.Comment
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
     <div class="span6" id="state-right">
         <div class="tabbable tabs-left">
@@ -91,8 +117,8 @@
         <script>
             $(function () {
                 /*$('#state').change(function () {
-                    if ($(this).val() != "1") $('#state-right').hide();
-                    else $('#state-right').show();
+                if ($(this).val() != "1") $('#state-right').hide();
+                else $('#state-right').show();
                 });*/
                 $('#statisticTab a').click(function (e) {
                     e.preventDefault();
@@ -102,5 +128,3 @@
         </script>
     </div>
 </div>
-
-      

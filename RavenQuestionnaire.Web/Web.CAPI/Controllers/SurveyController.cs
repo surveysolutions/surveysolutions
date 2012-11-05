@@ -157,7 +157,13 @@ namespace Web.CAPI.Controllers
             }
 
             status.ChangeComment = comments;
-            commandService.Execute(new ChangeStatusCommand { CompleteQuestionnaireId = key, Status = status });
+            commandService.Execute(
+                new ChangeStatusCommand
+                    {
+                        CompleteQuestionnaireId = key,
+                        Status = status,
+                        Responsible = this._globalProvider.GetCurrentUser()
+                    });
             return this.RedirectToAction("Dashboard");
         }
 
@@ -341,7 +347,7 @@ namespace Web.CAPI.Controllers
 
             Guid newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
 
             //asssign to executor
             commandService.Execute(
@@ -400,7 +406,12 @@ namespace Web.CAPI.Controllers
         {
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(
-                new ChangeStatusCommand { CompleteQuestionnaireId = Guid.Parse(id), Status = SurveyStatus.Initial });
+                new ChangeStatusCommand
+                    {
+                        CompleteQuestionnaireId = Guid.Parse(id),
+                        Status = SurveyStatus.Initial,
+                        Responsible = this._globalProvider.GetCurrentUser()
+                    });
             return this.RedirectToAction("Index", "Survey", new { id });
         }
 

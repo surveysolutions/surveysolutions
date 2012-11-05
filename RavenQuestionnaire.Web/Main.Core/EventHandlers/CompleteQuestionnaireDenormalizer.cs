@@ -192,9 +192,13 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
+            item.StatusChangeComments.Add(new ChangeStatusDocument
+                {
+                    Status = evnt.Payload.Status, 
+                    Responsible = evnt.Payload.Responsible
+                });
         }
 
         #endregion

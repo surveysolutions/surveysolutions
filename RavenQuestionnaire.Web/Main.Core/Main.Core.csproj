@@ -150,6 +150,7 @@
     <Compile Include="DenormalizerStorageProvider.cs" />
     <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />
+    <Compile Include="Documents\ChangeStatusDocument.cs" />
     <Compile Include="Documents\ClientSettingsDocument.cs" />
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
@@ -339,6 +340,7 @@
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupView.cs" />
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticView.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />

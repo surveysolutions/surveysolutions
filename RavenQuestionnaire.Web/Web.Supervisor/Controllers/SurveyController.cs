@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
-
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -28,6 +26,7 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Services;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Group;
     using Main.Core.View.Question;
@@ -176,6 +175,13 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
+
+        public ActionResult StatusHistory(Guid id)
+        {
+            var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+         new CompleteQuestionnaireStatisticViewInputModel(id));
+            return this.PartialView("_StatusHistory", stat.StatusHistory);
+        }
         /// <summary>
         /// Save change state in database
         /// </summary>
@@ -197,7 +203,13 @@ namespace Web.Supervisor.Controllers
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     var status = SurveyStatus.Redo;
                     status.ChangeComment = model.Comment;
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                    commandService.Execute(
+                        new ChangeStatusCommand()
+                            {
+                                CompleteQuestionnaireId = model.Id,
+                                Status = status,
+                                Responsible = this.globalInfo.GetCurrentUser()
+                            });
                     return this.RedirectToAction("Assigments", new { id = model.TemplateId });
                 }
 
@@ -212,10 +224,10 @@ namespace Web.Supervisor.Controllers
                     var commandService = NcqrsEnvironment.Get<ICommandService>();
                     var status = SurveyStatus.Approve;
                     status.ChangeComment = model.Comment;
-                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
                     return this.RedirectToAction("Assigments", new { id = model.TemplateId });
                 }
-                
+
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(model.Id));
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
@@ -288,7 +300,7 @@ namespace Web.Supervisor.Controllers
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 var status = SurveyStatus.Approve;
                 status.ChangeComment = model.Comment;
-                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             }
 
@@ -552,14 +564,14 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Redo(ApproveRedoModel model, string redo, string cancel)
         {
-            if (cancel != null) 
+            if (cancel != null)
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             if (ModelState.IsValid)
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 var status = SurveyStatus.Redo;
                 status.ChangeComment = model.Comment;
-                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             }
 
@@ -582,7 +594,7 @@ namespace Web.Supervisor.Controllers
             var data = new ChartDataModel("Chart");
             if (view.Items.Count > 0)
             {
-                foreach (var item in view.Items) 
+                foreach (var item in view.Items)
                     data.Data.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
             }
 

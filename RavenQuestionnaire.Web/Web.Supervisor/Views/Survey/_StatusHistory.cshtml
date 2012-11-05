@@ -1,0 +1,28 @@
+﻿@using Main.Core.View.CompleteQuestionnaire.Statistics
+@model IEnumerable<ChangeStatusHistoryView>
+           
+<table class="table table-condensed table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>User</th>
+            <th>set status</th>
+            <th>with comment</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ch in Model)
+        {
+            <tr>
+                <td>
+                    @ch.UserName
+                </td>
+                <td>
+                    @ch.StatusName
+                </td>
+                <td>
+                    @ch.Comment
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

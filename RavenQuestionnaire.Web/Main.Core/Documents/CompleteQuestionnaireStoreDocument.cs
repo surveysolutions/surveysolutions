@@ -57,11 +57,17 @@ namespace Main.Core.Documents
 
             //// this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
+            this.StatusChangeComments = new List<ChangeStatusDocument>();
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Status Change Comments.
+        /// </summary>
+        public List<ChangeStatusDocument> StatusChangeComments { get; set; }
 
         /// <summary>
         /// Gets or sets the children.
@@ -323,6 +329,7 @@ namespace Main.Core.Documents
                     ConditionExpression = doc.ConditionExpression,
                     Description = doc.Description
                 };
+          
             foreach (IComposite child in doc.Children)
             {
                 var question = child as IQuestion;
@@ -377,8 +384,16 @@ namespace Main.Core.Documents
                     Responsible = doc.Responsible, 
                     StatusChangeComment = doc.StatusChangeComment, 
                     PropagationPublicKey = doc.PropagationPublicKey, 
-                    Description = doc.Description
-                };
+                    Description = doc.Description 
+               };
+            if (doc.Status != null)
+            {
+                result.StatusChangeComments.Add(new ChangeStatusDocument
+                    {
+                        Status = doc.Status, 
+                        Responsible = doc.Creator
+                    });
+            }
 
             result.Children.AddRange(doc.Children.ToList());
             return result;

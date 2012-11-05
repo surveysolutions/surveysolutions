@@ -38,6 +38,11 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// </summary>
         public SurveyStatus PreviousStatus { get; set; }
 
+        /// <summary>
+        /// Gets or sets the responsible.
+        /// </summary>
+        public UserLight Responsible { get; set; }
+
         #endregion
     }
 }

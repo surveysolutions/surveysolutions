@@ -52,12 +52,13 @@ namespace Main.Core.Domain
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
         /// </summary>
         /// <param name="completeQuestionnaireId">
-        /// The complete questionnaire id.
+        ///   The complete questionnaire id.
         /// </param>
         /// <param name="questionnaire">
-        /// The questionnaire.
+        ///   The questionnaire.
         /// </param>
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
+        /// <param name="creator"></param>
+        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -68,7 +69,7 @@ namespace Main.Core.Domain
             var document = (CompleteQuestionnaireDocument)questionnaire;
 
             document.PublicKey = completeQuestionnaireId;
-            document.Creator = null;
+            document.Creator = creator;
             document.Status = SurveyStatus.Initial;
             document.Responsible = null;
 
@@ -411,7 +412,10 @@ namespace Main.Core.Domain
         /// <param name="status">
         /// The status.
         /// </param>
-        protected void ChangeStatus(SurveyStatus status)
+        /// <param name="responsible">
+        /// The responsible.
+        /// </param>
+        protected void ChangeStatus(SurveyStatus status, UserLight responsible)
         {
             var prevStatus = this.doc.Status;
 
@@ -420,7 +424,8 @@ namespace Main.Core.Domain
                     {
                         CompletedQuestionnaireId = this.doc.PublicKey, 
                         Status = status,
-                        PreviousStatus = prevStatus
+                        PreviousStatus = prevStatus,
+                        Responsible = responsible
                     });
         }
         

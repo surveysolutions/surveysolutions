@@ -58,13 +58,19 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.Creator = doc.Creator;
             this.Status = doc.Status;
             this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
-
+            this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status)).ToList();
+            this.StatusHistory.Reverse();
             this.HandleQuestionTree(doc);
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets StatusHistory.
+        /// </summary>
+        public List<ChangeStatusHistoryView> StatusHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the answered questions.

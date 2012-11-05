@@ -59,13 +59,17 @@
             <div data-role="page" id="sidebar">
                 <!-- /header -->
                 <div data-role="content" class="with-footer dummy-scroll">
-                    <ul class="nav nav-list bs-docs-sidenav" data-role="listview" data-theme="c" data-dividertheme="d" data-counttheme="e">
+                    <ul class="nav nav-list bs-docs-sidenav" >
                         @foreach (CompleteGroupHeaders gh in Model.Navigation.Menu)
                         {
                             var activ = @gh.Enabled ? "" : "ui-disabled";
                             <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >@gh.GroupText
                                 <span id="counter-@(gh.PublicKey)" class="badge badge-info ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
                         }
+                    </ul>
+                    <br />
+                     <ul class="nav nav-list bs-docs-sidenav">
+                        <li id="statusHistoryLink"><a class="nav-link" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >Status history</a></li>
                     </ul>
                 </div>
             </div>
