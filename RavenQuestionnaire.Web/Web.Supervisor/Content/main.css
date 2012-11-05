@@ -24,13 +24,16 @@
 .showForm .assignment-view {
 	display: none;
 }
-.well .nav.nav-list .badge {
+.bs-docs-sidenav.nav.nav-list .badge {
 	float: right;
 }
-.well .nav.nav-list .badge:after {
+.bs-docs-sidenav.nav.nav-list .badge:after {
 	clear: both;
 }
-
+.btn-back {
+	line-height: 24px;
+    margin-top: -6px;
+}
 .sorting {
 	background: url('../Content/img/sort_both.png') no-repeat center right;
 }
@@ -48,7 +51,7 @@
 }
 
 .bs-docs-sidenav {
-  margin: 30px 0 0;
+  margin: 0;
   padding: 0;
   background-color: #fff;
   -webkit-border-radius: 6px;
@@ -119,4 +122,38 @@
 }
 .td-total {
 	font-weight: bold;
+}
+.question {
+	position: relative;
+}
+.comment-popover {
+	display: block;
+	position: relative;
+	width: auto;
+}
+.comment-popover.popover.right .arrow {
+	top: 10px;
+	margin-top: 0;
+	
+}
+.comment-popover.popover.right  .popover-title {
+	background: #fff;
+}
+legend {
+	line-height: 30px;
+	border-bottom: none;
+	margin-bottom: 10px;
+}
+h1 small {
+	font-size: 18px;
+	line-height: 1.3;
+}
+h1.inline {
+	display: inline-block;
+	vertical-align: middle;
+}
+.question 
+{
+	padding-bottom: 5px;
+	  border-bottom: 1px solid #DDDDDD;
 }
