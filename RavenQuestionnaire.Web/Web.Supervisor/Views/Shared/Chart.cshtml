@@ -19,6 +19,13 @@
 $(function () {
     var chart;
     $(document).ready(function() {
+        Highcharts.theme = {
+            colors: ["#006DCC", "#DA4F49", "#5BB75B", "#7798BF"]
+        };
+
+        // Apply the theme
+        var highchartsOptions = Highcharts.setOptions(Highcharts.theme);
+        
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',

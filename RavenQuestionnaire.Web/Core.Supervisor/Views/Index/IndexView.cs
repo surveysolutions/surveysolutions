@@ -75,13 +75,13 @@ namespace Core.Supervisor.Views.Index
                 new SurveyGroupedByStatusHeader(
                     new Dictionary<string, string>
                         {
-                            { "Total", "Total" },
                             { "Unassigned", "Unassigned" },
-                            { "Complete", SurveyStatus.Complete.Name },
-                            { "Approve", SurveyStatus.Approve.Name },
                             { "Initial", SurveyStatus.Initial.Name },
+                            { "Redo", SurveyStatus.Redo.Name },
+                            { "Complete", SurveyStatus.Complete.Name },
                             { "Error", SurveyStatus.Error.Name },
-                            { "Redo", SurveyStatus.Redo.Name }
+                            { "Approve", SurveyStatus.Approve.Name },
+                            { "Total", "Total" },
                         });
 
             foreach (IndexViewItem item in items)

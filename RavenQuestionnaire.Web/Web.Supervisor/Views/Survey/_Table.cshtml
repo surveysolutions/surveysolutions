@@ -37,7 +37,7 @@
                         if (status != null)
                         {
                 
-                        <td>
+                        <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
                                 @Html.ActionLink(value, "Assigments", new { id = collect.Id, status = status.PublicId, userId = userKey })
@@ -50,7 +50,7 @@
                         }
                         else
                         {
-                        <td>
+                        <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
                                 @Html.ActionLink(value, "Assigments", new { id = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = userKey })
