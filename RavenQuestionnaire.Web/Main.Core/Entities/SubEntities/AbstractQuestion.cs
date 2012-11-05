@@ -165,7 +165,7 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public void Add(IComposite c, Guid? parent)
         {
-            throw new NotImplementedException();
+            throw new CompositeException();
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public void Remove(IComposite c)
         {
-            throw new NotImplementedException();
+            throw new CompositeException();
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public void Remove(Guid publicKey)
         {
-            throw new NotImplementedException();
+            throw new CompositeException();
         }
 
         /// <summary>
