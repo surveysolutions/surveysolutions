@@ -1,5 +1,4 @@
-﻿
-@model Main.Core.View.Question.CompleteQuestionView
+﻿@model Main.Core.View.Question.CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
     ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
@@ -10,9 +9,24 @@
     bodyClass += " " + (Model.Answered ? "answered" : "");
     var questionId = "question" + Model.PublicKey;
 }
-<div class="@bodyClass question" id="@questionId">
-    @Html.Hidden("QuestionType", Model.QuestionType)  
-    @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }       
-    @Html.ValidationMessage("AnswerValue")
-    @Html.Hidden("PublicKey", Model.PublicKey)
+<div class="@bodyClass question row-fluid" id="@questionId">
+    <div class="span7">
+        @Html.Hidden("QuestionType", Model.QuestionType)
+        @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerList/_{0}.cshtml", Model.QuestionType), Model); }
+        @Html.ValidationMessage("AnswerValue")
+        @Html.Hidden("PublicKey", Model.PublicKey)
+    </div>
+    <div class="span5" style="position: relative">
+        @if (!string.IsNullOrEmpty(Model.Comments))
+        {
+            <div class="popover right comment-popover">
+                <div class="arrow">
+                </div>
+                <h3 class="popover-title">Comment</h3>
+                <div class="popover-content">
+                    <p>@Model.Comments</p>
+                </div>
+            </div>
+        }
+    </div>
 </div>
