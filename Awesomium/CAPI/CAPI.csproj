@@ -114,6 +114,12 @@
     <Compile Include="Containers\CAPIMain.Designer.cs">
       <DependentUpon>CAPIMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\CAPIRegistration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\CAPIRegistration.Designer.cs">
+      <DependentUpon>CAPIRegistration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Containers\CAPISettings.cs">
       <SubType>UserControl</SubType>
     </Compile>

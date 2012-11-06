@@ -24,16 +24,7 @@ namespace Browsing.Supervisor.Containers
 
         #region Override Methods
 
-        protected override void OnRegistrationClicked(object sender, System.EventArgs e)
-        {
-            var drive = GetUsbDrive();
-            if (drive == null)
-                return;
 
-            var user = this.GetCurrentUser();
-
-            supervisorRegistrationManager.StartRegistration(drive.Name, user.ToString(), this.urlUtils.GetRegistrationCapiPath());
-        }
 
         protected override void OnCheckRegistrationButton(bool userIsLoggedIn)
         {

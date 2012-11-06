@@ -41,7 +41,6 @@ namespace Browsing.Common.Containers
             this.btnDashboard = new Browsing.Common.Controls.FlatButton();
             this.statusLabel = new System.Windows.Forms.Label();
             this.btnRegistration = new Browsing.Common.Controls.FlatButton();
-            this.btnRegistration = new Browsing.Common.Controls.FlatButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlHolder.SuspendLayout();
             this.SuspendLayout();
