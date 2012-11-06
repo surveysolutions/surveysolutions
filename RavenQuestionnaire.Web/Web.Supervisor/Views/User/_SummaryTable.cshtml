@@ -1,0 +1,40 @@
+﻿@using Core.Supervisor.Views.Summary
+@model SummaryView
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td>
+            <a href="@Url.Action("Index", "Survey", new { UserId = item.User.Id })">@item.User.Name</a>
+        </td>
+        @foreach (var t in item.Items)
+        {
+            <td class="@(t.Value.Initial == 0 ? "zero" : "")">
+                @t.Value.Initial
+            </td>
+            <td class="@(t.Value.Redo == 0 ? "zero" : "")">
+                @t.Value.Redo
+            </td>
+            <td  class="@(t.Value.Total == 0 ? "zero" : "")">
+                @t.Value.Total
+            </td>
+        }
+    </tr>
+}
+<tr>
+    <td>
+       Summary
+    </td>
+    @foreach (var t in Model.Summary.Items)
+    {
+        <th class="@(t.Value.Initial==0? "zero": "" )">
+            @t.Value.Initial
+        </th>
+        <th  class="@(t.Value.Redo == 0 ? "zero" : "")">
+            @t.Value.Redo
+        </th>
+        <th  class="@(t.Value.Total == 0 ? "zero" : "")">
+            @t.Value.Total
+        </th>
+    }
+</tr>
+

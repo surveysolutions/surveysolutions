@@ -17,6 +17,9 @@ namespace Web.Supervisor.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
+
+    using Core.Supervisor.Views.Summary;
+
     using Main.Core.Commands.User;
     using Main.Core.Entities.SubEntities;
     using Ncqrs;
@@ -94,6 +97,40 @@ namespace Web.Supervisor.Controllers
             return this.SetUserLock(id, true);
         }
 
+        /// <summary>
+        /// Interviewer summary view
+        /// </summary>
+        /// <returns>
+        /// Interviewer summary view
+        /// </returns>
+        public ActionResult Summary()
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// Gets table data for some view
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        public ActionResult _SummaryData(GridDataRequestModel data)
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            var input = new SummaryInputModel(user)
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder
+            };
+            var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(input);
+            return this.PartialView("_SummaryTable", model);
+        }
 
         /// <summary>
         /// Display user's statistics grouped by surveys and statuses
@@ -162,6 +199,9 @@ namespace Web.Supervisor.Controllers
             var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.PartialView("_Table", model);
         }
+
+
+        
 
         /// <summary>
         /// Gets table data for some view
