@@ -102,6 +102,10 @@
     <Compile Include="Views\Register\RegisterInputModel.cs" />
     <Compile Include="Views\Register\RegisterView.cs" />
     <Compile Include="Views\Register\RegisterViewFactory.cs" />
+    <Compile Include="Views\Summary\SummaryFactory.cs" />
+    <Compile Include="Views\Summary\SummaryInputModel.cs" />
+    <Compile Include="Views\Summary\SummaryView.cs" />
+    <Compile Include="Views\Summary\SummaryViewItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

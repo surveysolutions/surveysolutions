@@ -36,31 +36,7 @@
             
             
         }
-        <table class="table table-condensed table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>set status</th>
-                    <th>with comment</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var ch in Model.Statistic.StatusHistory)
-                {
-                    <tr>
-                        <td>
-                            @ch.UserName
-                        </td>
-                        <td>
-                            @ch.StatusName
-                        </td>
-                        <td>
-                            @ch.Comment
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        @Html.RenderPartial("_StatusHistory", Model.Statistic.StatusHistory)
     </div>
     <div class="span6" id="state-right">
         <div class="tabbable tabs-left">

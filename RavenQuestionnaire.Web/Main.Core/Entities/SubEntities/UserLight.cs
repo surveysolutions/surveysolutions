@@ -39,6 +39,7 @@ namespace Main.Core.Entities.SubEntities
             this.Name = name;
         }
 
+
         #endregion
 
         #region Public Properties
@@ -53,6 +54,47 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string Name { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != typeof(UserLight))
+            {
+                return false;
+            }
+
+            return Equals((UserLight)obj);
+        }
         #endregion
+
+        public bool Equals(UserLight other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return other.Id.Equals(this.Id) && Equals(other.Name, this.Name);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (this.Id.GetHashCode() * 39) ^ (this.Name != null ? this.Name.GetHashCode() : 0);
+            }
+        }
     }
 }
