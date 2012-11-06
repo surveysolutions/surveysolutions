@@ -17,6 +17,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private readonly IRequesProcessor _requestProcessor;
         private readonly IUrlUtils _urlUtils;
+        private AutoResetEvent stopRequested = new AutoResetEvent(false);
 
         #endregion
 
@@ -61,7 +62,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnStop()
         {
-            // throw new NotImplementedException();
+            this.stopRequested.Set();
         }
 
         protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
@@ -111,6 +112,11 @@ namespace Synchronization.Core.SynchronizationFlow
 
             while (percentage != 100)
             {
+                if (this.stopRequested.WaitOne(100))
+                {
+                    throw new SynchronizationException("network synchronization is canceled");
+                    
+                }
                 Thread.Sleep(1000);
                 percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid), -1);
                 if (percentage < 0)
