@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using Newtonsoft.Json;
-
+using Common.Utils;
 
 namespace Synchronization.Core.Registration
 {
@@ -17,36 +17,66 @@ namespace Synchronization.Core.Registration
         #region Members
 
         private IRSACryptoService rsaCryptoService = new RSACryptoService();
+        private Guid? currentUser;
+        private IRequesProcessor requestProcessor;
+        private IUrlUtils urlUtils;
 
         #endregion
 
         #region C-tor
 
-        protected RegistrationManager(string inFile, string outFile)
+        protected RegistrationManager(string inFile, string outFile, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
         {
             InFile = inFile;
             OutFile = outFile;
 
-            Id = AcceptId();
+            this.requestProcessor = requestProcessor;
+            this.urlUtils = urlUtils;
+
+            RegisrationId = AcceptRegistrationId();
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private Guid GetCurrentUser()
+        {
+            if (this.currentUser.HasValue)
+                return this.currentUser.Value;
+
+            this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+
+            return this.currentUser.Value;
         }
 
         #endregion
 
         #region Properties
 
-        public Guid Id { get; private set; }
+        public Guid RegisrationId { get; private set; }
         protected string InFile { get; private set; }
         protected string OutFile { get; private set; }
+        protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
+
+        #endregion
+
+        #region Virtual Properties
+        
+        protected virtual string ContainerName
+        {
+            get { return GetCurrentUser().ToString(); }
+        }
 
         #endregion
 
         #region Helpers
 
-        private Guid AcceptId()
+        private Guid AcceptRegistrationId()
         {
             try
             {
-                return OnAcceptId();
+                return OnAcceptRegistrationId();
             }
             catch // todo: log
             {
@@ -56,18 +86,26 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
-        #region Abstract Methods
 
-        protected abstract Guid OnAcceptId(); // todo: find out the way to initialize this value properly
+        #region Abstract and Virtual Methods
 
-        public virtual bool StartRegistration(string folderPath, string keyContainerName = null, string url = null)
+        protected virtual Guid OnAcceptRegistrationId()
         {
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, TabletId = Id }));
+            return GetCurrentUser();
+        }
+
+        public virtual bool StartRegistration(string folderPath)
+        {
+            var keyContainerName = ContainerName;
+
+            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(
+                new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId })
+                );
 
             return CreateRegistrationFile(dataToFile, folderPath + OutFile);
         }
 
-        public abstract bool FinalizeRegistration(string folderPath, string url);
+        public abstract bool FinalizeRegistration(string folderPath);
 
         #endregion
 
@@ -85,52 +123,43 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        protected byte[] SendRegistrationRequest(string url, byte[] requestParams)
+        protected byte[] SendRegistrationRequest(byte[] requestParams)
         {
-            byte[] buffer = new byte[4097];
-            byte[] result = null;
+            string url = RegistrationService;
 
             try
             {
-                WebRequest request = WebRequest.Create(url);
+                var request = WebRequest.Create(url);
 
                 request.ContentType = "application/json; charset=utf-8";
                 request.Method = "POST";
                 request.ContentLength = requestParams.Length;
 
-
-                Stream os = request.GetRequestStream();
-                os.Write(requestParams, 0, requestParams.Length); //Push it out there
-                os.Close();
-
-                WebResponse response = request.GetResponse();
-
-                if (response == null) return null;
-
-                Stream responseStream = response.GetResponseStream();
-                MemoryStream memoryStream = new MemoryStream();
-
-                int count = 0;
-
-                do
+                using (Stream os = request.GetRequestStream())
                 {
-                    count = responseStream.Read(buffer, 0, buffer.Length);
+                    os.Write(requestParams, 0, requestParams.Length);
+                    os.Close();
+                }
 
-                    memoryStream.Write(buffer, 0, count);
+                var response = request.GetResponse();
 
-                    if (count == 0)
+                if (response == null) 
+                    return null;
+
+                byte[] buffer = new byte[4097];
+
+                using (Stream responseStream = response.GetResponseStream())
+                {
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        break;
+                        for (int count = 0; (count = responseStream.Read(buffer, 0, buffer.Length)) > 0; )
+                        {
+                            memoryStream.Write(buffer, 0, count);
+                        }
+
+                        return memoryStream.ToArray();
                     }
-                } while (true);
-
-                result = memoryStream.ToArray();
-                // streamReader.Close();
-                // Let the parent thread know the process is done
-
-                responseStream.Close();
-                memoryStream.Close();
-                return result;
+                }
             }
             catch
             {
@@ -155,7 +184,7 @@ namespace Synchronization.Core.Registration
             catch (Exception ex)
             {
                 // Error
-                Console.WriteLine("Exception caught in process: {0}", ex);
+                Console.WriteLine("Exception caught: {0}", ex);
             }
             finally
             {

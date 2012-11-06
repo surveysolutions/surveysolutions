@@ -8,14 +8,6 @@ namespace Browsing.Common.Containers
 {
     public abstract partial class Registration : Screen
     {
-        #region Private Fields
-
-        private IRequesProcessor requestProcessor;
-        protected IUrlUtils urlUtils;
-        private Guid? currentUser;
-
-        #endregion
-
         #region Fields
 
         protected internal RegistrationManager RegistrationManager { get; private set; }
@@ -28,38 +20,16 @@ namespace Browsing.Common.Containers
         {
             InitializeComponent();
 
-            this.requestProcessor = requestProcessor;
-            this.urlUtils = urlUtils;
-
-            //this.syncPanel.MakeVisiblePush(false);
-
-            this.RegistrationManager = DoInstantiateRegistrationManager();
+            this.RegistrationManager = DoInstantiateRegistrationManager(requestProcessor, urlUtils);
 
             System.Diagnostics.Debug.Assert(this.RegistrationManager != null);
-
         }
-
-        #region Properties
-
-        private Guid CurrentUser
-        {
-            get
-            {
-                if (this.currentUser.HasValue)
-                    return this.currentUser.Value;
-
-                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
-
-                return this.currentUser.Value;
-            }
-        }
-        #endregion
 
         #region Virtual and Abstract
 
-        protected abstract RegistrationManager DoInstantiateRegistrationManager();
+        protected abstract RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils);
 
-        protected abstract void OnFirstRegistrationStepButtonClicked(DriveInfo currentDrive);
+        protected abstract bool OnRegistrationButtonClicked(DriveInfo currentDrive, out string message);
 
         #endregion
 
@@ -67,45 +37,45 @@ namespace Browsing.Common.Containers
 
         private void registrationButton_Click(object sender, EventArgs e)
         {
-            OnFirstRegistrationStepButtonClicked(usbStatusPanel.ChosenUsb);
+            string statusMessage = "Registration failed";
+            bool isError = true;
+
+            try
+            {
+                DriveInfo driver = usbStatusPanel.ChosenUsb;
+
+                if (driver == null)
+                {
+                    statusMessage = "USB driver is not available";
+                    return;
+                }
+
+                isError = OnRegistrationButtonClicked(driver, out statusMessage);
+            }
+            catch (Exception ex)
+            {
+                statusMessage = "Registration failed: " + ex.Message;
+            }
+            finally
+            {
+                OutputResult(statusMessage, isError);
+            }
         }
 
         #endregion
 
         #region Protected Methods
 
-        protected override void OnLoad(EventArgs e)
+        protected void OutputResult(string text, bool error = false)
         {
-            base.OnLoad(e);
-
-            this.usbStatusPanel.UpdateLook();
-
-
+            this.usbStatusPanel.SetResult(text, error);
         }
 
-        protected void ChangeStatuslabel(string text, bool error = false)
+        protected void OutputRegistrationInfo(string[] devices)
         {
-            this.usbStatusPanel.ChangeStatusLabel(text, error);
-        }
-
-        protected void ChangeResultlabel(string text, bool error = false)
-        {
-            this.usbStatusPanel.ChangeResultLabel(text, error);
         }
 
         #endregion
-
-        #region Protected Methos
-
-        protected Guid GetCurrentUser()
-        {
-            return CurrentUser;
-        }
-        #endregion
-
-
-
-
     }
 }
 

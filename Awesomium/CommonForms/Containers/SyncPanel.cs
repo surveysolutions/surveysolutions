@@ -20,21 +20,14 @@ namespace Browsing.Common.Containers
 
     public partial class SyncPanel : UserControl, ISyncProgressObserver, IUsbProvider
     {
- 
-
         internal EventHandler PushPressed;
         internal EventHandler PullPressed;
         internal EventHandler CancelPressed;
-        
-
-
 
         public SyncPanel()
         {
             InitializeComponent();
         }
-
- 
 
         public SyncState State
         {
@@ -58,11 +51,6 @@ namespace Browsing.Common.Containers
         public void UpdateUsbStatusPanelUsbList()
         {
             this.usbStatusPanel.UpdateUsbList();
-        }
-
-        public void UpdateUsbStatusPanelLook()
-        {
-            this.usbStatusPanel.UpdateLook();
         }
 
         public void SetIdleState()
@@ -103,23 +91,14 @@ namespace Browsing.Common.Containers
                 CancelPressed(sender, e);
         }
 
-        /// <summary>
-        /// Create list of available drivers
-        /// </summary>
-        /// <returns></returns>
-        
-
-        
-
         internal void ShowResult(string log)
         {
-            usbStatusPanel.ChangeResultLabel(log);
-
+            this.usbStatusPanel.SetResult(log);
         }
 
         internal void ShowError(string log)
         {
-            usbStatusPanel.ChangeStatusLabel(log, true);
+            this.usbStatusPanel.SetStatus(log, true);
         }
 
         #region Helpers
@@ -167,8 +146,9 @@ namespace Browsing.Common.Containers
         public void SetBeginning(ISyncProgressStatus status)
         {
             SetProgress(0);
-             usbStatusPanel.ChangeStatusLabel(string.Format("{0} data is being processed. Please wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
-             usbStatusPanel.ChangeResultLabel(null);
+
+            this.usbStatusPanel.SetStatus(string.Format("{0} data is being processed. Please wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
+            this.usbStatusPanel.SetResult(null);
 
             this.usbStatusPanel.InactiveStatus.WaitOne(5000);
 
@@ -194,7 +174,7 @@ namespace Browsing.Common.Containers
                 string.Format("{0} data has been completed successfully", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing");
 
             MakeInvisibleProgressBar(0);
-            usbStatusPanel.ChangeStatusLabel(statusText, error);
+            usbStatusPanel.SetStatus(statusText, error);
             usbStatusPanel.Deactivate(false);
         }
 

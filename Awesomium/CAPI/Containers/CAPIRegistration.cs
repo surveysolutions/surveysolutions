@@ -24,74 +24,64 @@ namespace Browsing.CAPI.Containers
             : base(requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
-         
         }
+
+        #region Helpers
+
+        private void SaveRegistrationStep(string step)
+        {
+            Properties.Settings.Default.RegistrationStatus = step;
+            Properties.Settings.Default.Save();
+
+            this.registrationFirstStep = step;
+        }
+
+        #endregion
 
         #region Override Methods
 
-        protected override RegistrationManager DoInstantiateRegistrationManager()
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
         {
-            return new CapiRegistrationManager();
+            return new CapiRegistrationManager(requestProcessor, urlUtils);
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             if (registrationFirstStep.Equals("First"))
-                base.ChangeResultlabel("First registration step complited");
-            else 
-                if (registrationFirstStep.Equals("Second"))
-                    base.ChangeResultlabel("Second registration step complited");
+                base.OutputResult("First registration step has been completed");
+            else if (registrationFirstStep.Equals("Second"))
+                base.OutputResult("Second registration step completed");
+            else
+                base.OutputResult("Please, register your device on supervisor's laptop");
         }
 
-        protected override void OnFirstRegistrationStepButtonClicked(DriveInfo drive)
+        protected override bool OnRegistrationButtonClicked(DriveInfo drive, out string statusMessage)
         {
-            if (drive == null)
-                return;
-
-            if (String.IsNullOrEmpty(this.registrationFirstStep) || registrationFirstStep.Equals("Second"))
+            if (String.IsNullOrEmpty(this.registrationFirstStep) || this.registrationFirstStep.Equals("Second"))
             {
-                try
+                if (this.RegistrationManager.StartRegistration(drive.Name))
                 {
-                     if (this.RegistrationManager.StartRegistration(drive.Name))
-                         base.ChangeResultlabel("First registration step complited");
-                }
-                catch (Exception ex)
-                {
-                    base.ChangeResultlabel("Registration failed: "+ex.Message, true);
-                    return;
-                }
+                    statusMessage = "First registration step completed";
+                    SaveRegistrationStep("First");
 
-                Properties.Settings.Default.RegistrationStatus = "First";
-                Properties.Settings.Default.Save();
-                registrationFirstStep = "First";
-
-               
-            }
-            else if (registrationFirstStep.Equals("First"))
-            {
-                try
-                {
-                    var res = RegistrationManager.FinalizeRegistration(drive.Name,
-                                                                       this.urlUtils.GetRegistrationCapiPath());
-                    if (res)
-                    {
-                        base.ChangeResultlabel("Registration Completed");
-                        Properties.Settings.Default.RegistrationStatus = "Second";
-                        Properties.Settings.Default.Save();
-                        registrationFirstStep = "Second";
-                    }
-                    else
-                    {
-                        base.ChangeResultlabel("Registration Failed", true);
-                    }
-                }
-                catch(Exception ex)
-                {
-                    base.ChangeResultlabel("Registration failed: " + ex.Message, true);
-                    return;
+                    return true;
                 }
             }
+            else if (this.registrationFirstStep.Equals("First"))
+            {
+                if (RegistrationManager.FinalizeRegistration(drive.Name))
+                {
+                    statusMessage = "Registration Completed";
+                    SaveRegistrationStep("Second");
+
+                    return true;
+                }
+            }
+
+            statusMessage = "Registration failed";
+            return false;
         }
 
         #endregion

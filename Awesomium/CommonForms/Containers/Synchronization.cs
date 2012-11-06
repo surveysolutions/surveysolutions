@@ -14,7 +14,6 @@ namespace Browsing.Common.Containers
 {
     public abstract partial class Synchronization : Screen
     {
-        IRequesProcessor requestProcessor;
         IUrlUtils utils;
 
         private bool isPushPossible = false;
@@ -27,7 +26,6 @@ namespace Browsing.Common.Containers
         {
             InitializeComponent();
 
-            this.requestProcessor = requestProcessor;
             this.utils = utils;
 
             this.syncPanel.Parent = ContentPanel;
@@ -235,10 +233,11 @@ namespace Browsing.Common.Containers
         {
             base.OnLoad(e);
 
-            this.syncPanel.UpdateUsbStatusPanelLook();
             this.syncPanel.SetIdleState();
+            
             EnablePush(false);
             EnablePull(false);
+            
             this.syncPanel.ShowError("Looking for available data points ...");
 
         }
