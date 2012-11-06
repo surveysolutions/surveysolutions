@@ -24,30 +24,21 @@ namespace Browsing.Supervisor.Containers
 
         #region Override Methods
 
-        protected override RegistrationManager DoInstantiateRegistrationManager()
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
         {
-            return new SupervisorRegistrationManager();
+            return new SupervisorRegistrationManager(requestProcessor, urlUtils);
         }
 
-        protected override void OnFirstRegistrationStepButtonClicked(DriveInfo drive)
+        protected override bool OnRegistrationButtonClicked(DriveInfo drive, out string statusMessage)
         {
-            if (drive == null)
-                return;
-
-            var user = this.GetCurrentUser();
-
-            try
+            if (RegistrationManager.StartRegistration(drive.Name))
             {
-                if (RegistrationManager.StartRegistration(drive.Name, user.ToString(), this.urlUtils.GetRegistrationCapiPath()))
-                    base.ChangeResultlabel("Registration Completed");
+                statusMessage = "CAPI device has been registered";
+                return true;
             }
-            catch (Exception ex)
-            {
 
-                base.ChangeResultlabel("Registration failed: " + ex.Message, true); 
-            }
-            
-            
+            statusMessage = "Registration process failed";
+            return false;
         }
 
         #endregion

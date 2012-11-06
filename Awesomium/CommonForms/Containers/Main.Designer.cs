@@ -202,7 +202,7 @@ namespace Browsing.Common.Containers
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.statusLabel.Location = new System.Drawing.Point(78, 273);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(865, 20);
+            this.statusLabel.Size = new System.Drawing.Size(865, 25);
             this.statusLabel.TabIndex = 5;
             this.statusLabel.Text = "label1";
             // 
@@ -214,7 +214,7 @@ namespace Browsing.Common.Containers
             this.btnRegistration.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRegistration.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnRegistration.Image = ((System.Drawing.Image)(resources.GetObject("btnRegistration.Image")));
-            this.btnRegistration.Location = new System.Drawing.Point(390, 43);
+            this.btnRegistration.Location = new System.Drawing.Point(731, 53);
             this.btnRegistration.Margin = new System.Windows.Forms.Padding(0);
             this.btnRegistration.Name = "btnRegistration";
             this.btnRegistration.Padding = new System.Windows.Forms.Padding(0, 0, 0, 5);
@@ -227,7 +227,7 @@ namespace Browsing.Common.Containers
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
             this.Margin = new System.Windows.Forms.Padding(0);

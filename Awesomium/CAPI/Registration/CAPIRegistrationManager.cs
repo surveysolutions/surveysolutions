@@ -1,10 +1,6 @@
 using System;
-using System.IO;
-using System.Net;
-using System.Security.Cryptography;
 using System.Text;
-using Browsing.CAPI.Synchronization;
-using Newtonsoft.Json;
+using Common.Utils;
 using Synchronization.Core.Registration;
 
 
@@ -12,30 +8,33 @@ namespace Browsing.CAPI.Registration
 {
     public class CapiRegistrationManager : RegistrationManager
     {
-        public CapiRegistrationManager()
-            : base("SupervisorRegistration.register", "CAPIRegistration.register")
+        public CapiRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+            : base("SupervisorRegistration.register", "CAPIRegistration.register", requestProcessor, urlUtils)
         {
         }
 
         #region Override Methods
 
-        protected override Guid OnAcceptId()
+        protected override string ContainerName
+        {
+            get
+            {
+                return RegisrationId.ToString();
+            }
+        }
+
+        protected override Guid OnAcceptRegistrationId()
         {
             return new Guid("{10000000-0000-0000-0000-000000000000}");
         }
 
-        public override bool StartRegistration(string folderPath, string keyContainerName = null, string url = null)
-        {
-            return base.StartRegistration(folderPath, Id.ToString(), url);
-        }
-
-        public override bool FinalizeRegistration(string folderPath, string url)
+        public override bool FinalizeRegistration(string folderPath)
         {
             try
             {
                 var data = GetFromRegistrationFile(folderPath + InFile);
 
-                var response = SendRegistrationRequest(url, data);
+                var response = SendRegistrationRequest(data);
                 var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
                 return string.Compare(result, "True", true) == 0;

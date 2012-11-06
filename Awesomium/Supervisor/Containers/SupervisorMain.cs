@@ -1,8 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
-using Browsing.Supervisor.Registration;
 using Common.Utils;
 using Synchronization.Core.Interface;
 
@@ -10,8 +8,6 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorMain : Main
     {
-        private SupervisorRegistrationManager supervisorRegistrationManager = new SupervisorRegistrationManager();
-
         #region Constructor
 
         public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)

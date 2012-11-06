@@ -37,9 +37,9 @@ namespace Synchronization.Core.Registration
         public byte[] SecretKey { get; set; }
 
         /// <summary>
-        /// Gets or sets TabletId.
+        /// Gets or sets registered Id (tablet Id on CAPI or .
         /// </summary>
-        public Guid TabletId { get; set; }
+        public Guid RegisterId { get; set; }
 
 
         #endregion
