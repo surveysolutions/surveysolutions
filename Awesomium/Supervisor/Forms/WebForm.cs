@@ -29,6 +29,14 @@ namespace Browsing.Supervisor.Forms
 
         #region Overloaded
 
+        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        {
+            return new SupervisorRegistration(requestProcessor, urlUtils, Holder)
+            {
+                Name = "supervisorRegistration"
+            };
+        }
+
         protected override Browser OnAddBrowserScreen(WebControl webView)
         {
             return new SupervisorBrowser(webView, Holder)

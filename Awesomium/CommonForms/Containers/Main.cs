@@ -305,6 +305,8 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnRegistrationClicked(object sender, System.EventArgs e)
         {
+            var registration = this.Holder.LoadedScreens.FirstOrDefault(s => s is Registration) as Registration;
+            this.Holder.Redirect(registration);
         }
       
         protected virtual void OnExitClicked(object sender, EventArgs e)

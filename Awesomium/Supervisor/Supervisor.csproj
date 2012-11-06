@@ -61,6 +61,12 @@
     <Compile Include="Containers\SupervisorMain.Designer.cs">
       <DependentUpon>SupervisorMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\SupervisorRegistration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\SupervisorRegistration.Designer.cs">
+      <DependentUpon>SupervisorRegistration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Containers\SupervisorSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
