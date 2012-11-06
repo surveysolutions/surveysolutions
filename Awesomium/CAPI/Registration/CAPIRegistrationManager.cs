@@ -31,12 +31,19 @@ namespace Browsing.CAPI.Registration
 
         public override bool FinalizeRegistration(string folderPath, string url)
         {
-            var data = GetFromRegistrationFile(folderPath + InFile);
+            try
+            {
+                var data = GetFromRegistrationFile(folderPath + InFile);
 
-            var response = SendRegistrationRequest(url, data);
-            var result = Encoding.UTF8.GetString(response, 0, response.Length);
+                var response = SendRegistrationRequest(url, data);
+                var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-            return string.Compare(result, "True", true) == 0;
+                return string.Compare(result, "True", true) == 0;
+             }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         #endregion

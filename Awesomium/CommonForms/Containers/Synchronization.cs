@@ -35,7 +35,7 @@ namespace Browsing.Common.Containers
             this.syncPanel.PullPressed += btnPull_Click;
             this.syncPanel.PushPressed += btnPush_Click;
             this.syncPanel.CancelPressed += btnCancel_Click;
-            this.syncPanel.UsbPressed += usb_Click;
+            this.syncPanel.usbStatusPanel.UsbPressed += usb_Click;
 
             this.SyncManager = DoInstantiateSyncManager(this.syncPanel, clientSettings, requestProcessor, utils, this.syncPanel);
 
@@ -235,7 +235,8 @@ namespace Browsing.Common.Containers
         {
             base.OnLoad(e);
 
-            this.syncPanel.UpdateLook();
+            this.syncPanel.UpdateUsbStatusPanelLook();
+            this.syncPanel.SetIdleState();
             EnablePush(false);
             EnablePull(false);
             this.syncPanel.ShowError("Looking for available data points ...");
@@ -255,7 +256,7 @@ namespace Browsing.Common.Containers
 
         public void UpdateUsbList()
         {
-            this.syncPanel.UpdateUsbList();
+            this.syncPanel.UpdateUsbStatusPanelUsbList();
 
             CheckSyncPossibilities();
         }

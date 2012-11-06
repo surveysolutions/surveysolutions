@@ -57,6 +57,12 @@
     <Compile Include="Containers\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Containers\Registration.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\Registration.Designer.cs">
+      <DependentUpon>Registration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Containers\Settings.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -71,6 +77,12 @@
     </Compile>
     <Compile Include="Containers\Screen.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\UsbStatusPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\UsbStatusPanel.Designer.cs">
+      <DependentUpon>UsbStatusPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\ScreenHolder.cs">
       <SubType>Component</SubType>
@@ -115,6 +127,9 @@
     <EmbeddedResource Include="Containers\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Containers\Registration.resx">
+      <DependentUpon>Registration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Containers\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
@@ -126,6 +141,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\SyncPanel.resx">
       <DependentUpon>SyncPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\UsbStatusPanel.resx">
+      <DependentUpon>UsbStatusPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\SplashScreen.resx">
       <DependentUpon>SplashScreen.cs</DependentUpon>

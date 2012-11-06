@@ -24,12 +24,18 @@ namespace Browsing.Supervisor.Registration
 
         public override bool StartRegistration(string folderPath, string keyContainerName, string url)
         {
-            var data = GetFromRegistrationFile(folderPath + InFile);
-            var response = SendRegistrationRequest(url, data);
-            var result = Encoding.UTF8.GetString(response, 0, response.Length);
-
-            // G:/SupervisorRegistration.register"
-            return string.Compare(result, "True", true) == 0 && base.StartRegistration(folderPath, keyContainerName, url);
+            try
+            {
+                var data = GetFromRegistrationFile(folderPath + InFile);
+                var response = SendRegistrationRequest(url, data);
+                var result = Encoding.UTF8.GetString(response, 0, response.Length);
+                // G:/SupervisorRegistration.register"
+                return string.Compare(result, "True", true) == 0 && base.StartRegistration(folderPath, keyContainerName, url);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
 
         public override bool FinalizeRegistration(string folderPath, string url)

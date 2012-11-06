@@ -101,6 +101,7 @@ namespace Browsing.Common.Forms
                 AddBrowserScreen(webView);
                 AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
                 AddSettingsScreen();
+                AddRegistrationScreen(requestProcessor, urlUtils);
 
                 this.Controls.Add(this.Holder);
             }
@@ -139,6 +140,11 @@ namespace Browsing.Common.Forms
         private void AddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             OnAddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
+        }
+
+        private void AddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        {
+            OnAddRegistrationScreen(requestProcessor, urlUtils);
         }
 
         private void AddSettingsScreen()
@@ -182,6 +188,7 @@ namespace Browsing.Common.Forms
         protected abstract Containers.Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Settings OnAddSettingsScreen();
         protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
+        protected abstract Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils);
         protected abstract Containers.Browser OnAddBrowserScreen(WebControl webView);
 
         #endregion

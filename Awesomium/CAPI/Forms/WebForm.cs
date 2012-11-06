@@ -40,6 +40,14 @@ namespace Browsing.CAPI.Forms
 
         #region Overloaded
 
+        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        {
+            return new CAPIRegistration(requestProcessor,urlUtils, Holder)
+            {
+                Name = "capiRegistration"
+            };
+        }
+
         protected override Browser OnAddBrowserScreen(WebControl webView)
         {
             return new CAPIBrowser(webView, Holder)

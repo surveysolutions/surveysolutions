@@ -60,7 +60,7 @@ namespace Synchronization.Core.Registration
 
         protected abstract Guid OnAcceptId(); // todo: find out the way to initialize this value properly
 
-        public virtual bool StartRegistration(string folderPath, string keyContainerName, string url)
+        public virtual bool StartRegistration(string folderPath, string keyContainerName = null, string url = null)
         {
             var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, TabletId = Id }));
 
@@ -171,13 +171,12 @@ namespace Synchronization.Core.Registration
         protected byte[] GetFromRegistrationFile(string filePath)
         {
             if (!File.Exists(filePath))
-                throw new Exception("File from supervisor not found");
+                throw new Exception("Registration file is not found");
 
             FileStream fileStream = null;
             try
             {
                 fileStream = File.OpenRead(filePath);
-
                 byte[] bytes = new byte[fileStream.Length];
                 fileStream.Read(bytes, 0, Convert.ToInt32(fileStream.Length));
 
