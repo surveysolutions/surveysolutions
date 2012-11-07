@@ -64,7 +64,7 @@ namespace Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB
 
             return retval.Select(RavenDBEventStore.ToComittedEvent);
         }
-
+        
         #endregion
 
         #region Methods

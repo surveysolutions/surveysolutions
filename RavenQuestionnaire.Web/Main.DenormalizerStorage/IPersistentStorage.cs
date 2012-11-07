@@ -26,14 +26,14 @@ namespace Main.DenormalizerStorage
         /// <returns>
         /// The T.
         /// </returns>
-        T GetByGuid<T>(Guid key) where T : class;
+        T GetByGuid<T>(string key) where T : class;
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="key">
         /// The key.
         /// </param>
-        void Remove<T>(Guid key) where T : class;
+        void Remove<T>(string key) where T : class;
         /// <summary>
         /// The store.
         /// </summary>
@@ -43,6 +43,6 @@ namespace Main.DenormalizerStorage
         /// <param name="key">
         /// The key.
         /// </param>
-        void Store<T>(T denormalizer, Guid key) where T : class;
+        void Store<T>(T denormalizer, string key) where T : class;
     }
 }

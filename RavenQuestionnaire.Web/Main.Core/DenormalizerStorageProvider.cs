@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using Main.DenormalizerStorage;
+using Main.DenormalizerStorage.SolidDenormalizer;
 using Ninject;
 using Ninject.Activation;
 
@@ -20,6 +21,7 @@ namespace Main.Core
     /// </summary>
     public class DenormalizerStorageProvider<T> : Provider<IDenormalizerStorage<T>> where T : class
     {
+
         #region Overrides of Provider<T>
 
         protected override IDenormalizerStorage<T> CreateInstance(IContext context)
@@ -31,7 +33,7 @@ namespace Main.Core
                     result = context.Kernel.Get<PersistentDenormalizer<T>>();
                 else
                 {
-                    result = context.Kernel.Get<InMemoryDenormalizer<T>>();
+                    result = context.Kernel.Get<SolidPersistentDenormalizer<T>>();
                 }
             }
             catch (Exception ex)

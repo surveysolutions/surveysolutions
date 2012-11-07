@@ -39,7 +39,6 @@ namespace Web.Supervisor
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());

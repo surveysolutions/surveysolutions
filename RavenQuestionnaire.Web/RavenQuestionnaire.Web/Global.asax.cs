@@ -59,11 +59,11 @@ namespace RavenQuestionnaire.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "Default", 
+                "Default",
                 // Route name
-                "{controller}/{action}/{id}", 
+                "{controller}/{action}/{id}",
                 // URL with parameters
-                new { controller = "Questionnaire", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                new {controller = "Questionnaire", action = "Index", id = UrlParameter.Optional} // Parameter defaults
                 );
         }
 
@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Web
 
         #region Methods
 
-        /// <summary>
+        /* /// <summary>
         /// The application_ error.
         /// </summary>
         protected void Application_Error()
@@ -113,6 +113,7 @@ namespace RavenQuestionnaire.Web
 
             // i need to ping wcf server to make it visible or install app fabric
         }
+        */
 
         #endregion
     }
