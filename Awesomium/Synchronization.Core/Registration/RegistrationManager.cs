@@ -24,6 +24,9 @@ namespace Synchronization.Core.Registration
         private IUrlUtils urlUtils;
         private IUsbProvider usbProvider;
 
+        private string registrationName = null;
+        private Guid? registrationId = null;
+
         #endregion
 
         #region C-tor
@@ -36,8 +39,6 @@ namespace Synchronization.Core.Registration
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
             this.usbProvider = usbProvider;
-
-            RegisrationId = AcceptRegistrationId();
         }
 
         #endregion
@@ -58,7 +59,9 @@ namespace Synchronization.Core.Registration
 
         #region Properties
 
-        public Guid RegisrationId { get; private set; }
+        public Guid RegisrationId { get { return AcceptRegistrationId(); } }
+        public string RegisrationName { get { return AcceptRegistrationName();} }
+
         protected string InFile { get; private set; }
         protected string OutFile { get; private set; }
         protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
@@ -80,13 +83,36 @@ namespace Synchronization.Core.Registration
         {
             try
             {
-                return OnAcceptRegistrationId();
+                if (this.registrationId.HasValue)
+                    return this.registrationId.Value;
+
+                this.registrationId = OnAcceptRegistrationId();
+
+                return this.registrationId.Value;
             }
             catch // todo: log
             {
                 throw;
             }
         }
+
+        private string AcceptRegistrationName()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(this.registrationName))
+                    return this.registrationName;
+
+                this.registrationName = OnAcceptRegistrationName();
+
+                return this.registrationName;
+            }
+            catch // todo: log
+            {
+                throw;
+            }
+        }
+
 
         #endregion
 
@@ -98,18 +124,23 @@ namespace Synchronization.Core.Registration
             return GetCurrentUser();
         }
 
-        protected virtual bool OnStartRegistration(string folderPath)
+        protected virtual string OnAcceptRegistrationName()
+        {
+            return string.Format("supervisor #'{0}'", AcceptRegistrationId().ToString()); // todo: replace with true name
+        }
+
+        protected virtual bool OnStartRegistration(string folderPath, out Registration.RegisterData registeredData)
         {
             var keyContainerName = ContainerName;
 
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(
-                new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId })
-                );
+            registeredData = new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId, Description = RegisrationName };
+
+            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
 
             return CreateRegistrationFile(dataToFile, folderPath + OutFile);
         }
 
-        protected abstract bool OnFinalizeRegistration(string folderPath);
+        protected abstract bool OnFinalizeRegistration(string folderPath, out Registration.RegisterData registeredData);
 
         #endregion
 
@@ -130,6 +161,8 @@ namespace Synchronization.Core.Registration
         protected byte[] SendRegistrationRequest(byte[] requestParams)
         {
             string url = RegistrationService;
+
+            //return this.requestProcessor.Process<byte[]>(url, "POST", false, null);
 
             try
             {
@@ -224,7 +257,7 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
-        public bool StartRegistration()
+        public bool StartRegistration(out Registration.RegisterData registeredData)
         {
             try
             {
@@ -232,7 +265,7 @@ namespace Synchronization.Core.Registration
                 if (driver == null)
                     throw new RegistrationException();
 
-                return OnStartRegistration(driver.Name);
+                return OnStartRegistration(driver.Name, out registeredData);
             }
             catch
             {
@@ -240,7 +273,7 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        public bool FinalizeRegistration()
+        public bool FinalizeRegistration(out Registration.RegisterData registeredData)
         {
             try
             {
@@ -248,7 +281,7 @@ namespace Synchronization.Core.Registration
                 if (driver == null)
                     throw new RegistrationException();
 
-                return OnFinalizeRegistration(driver.Name);
+                return OnFinalizeRegistration(driver.Name, out registeredData);
             }
             catch
             {

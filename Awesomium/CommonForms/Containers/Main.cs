@@ -49,14 +49,14 @@ namespace Browsing.Common.Containers
             return CurrentUser;
         }
 
-        protected void ChangeRegistrationButton(bool enabled, string text, string label = null)
+        protected void ChangeRegistrationButton(bool enabled, string text, string label = "")
         {
             this.btnRegistration.Enabled = enabled;
             
             if (!String.IsNullOrEmpty(text))
                 this.btnRegistration.Text = text;
 
-            if (!String.IsNullOrEmpty(label))
+            //if (!String.IsNullOrEmpty(label))
                 this.regLabel.Text = label;
         }
 
