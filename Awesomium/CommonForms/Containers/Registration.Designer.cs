@@ -32,42 +32,42 @@ namespace Browsing.Common.Containers
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Registration));
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.registrationPanel = new System.Windows.Forms.TableLayoutPanel();
             this.usbStatusPanel = new Browsing.Common.Containers.UsbStatusPanel();
             this.registrationButton = new Browsing.Common.Controls.FlatButton();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.registrationPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // registrationPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 5;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.tableLayoutPanel1.Controls.Add(this.usbStatusPanel, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.registrationButton, 3, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 3;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(794, 554);
-            this.tableLayoutPanel1.TabIndex = 1;
+            this.registrationPanel.ColumnCount = 5;
+            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.registrationPanel.Controls.Add(this.usbStatusPanel, 1, 1);
+            this.registrationPanel.Controls.Add(this.registrationButton, 3, 1);
+            this.registrationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.registrationPanel.Location = new System.Drawing.Point(0, 0);
+            this.registrationPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.registrationPanel.Name = "registrationPanel";
+            this.registrationPanel.RowCount = 4;
+            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.registrationPanel.Size = new System.Drawing.Size(794, 554);
+            this.registrationPanel.TabIndex = 1;
             // 
             // usbStatusPanel
             // 
-            this.tableLayoutPanel1.SetColumnSpan(this.usbStatusPanel, 2);
+            this.registrationPanel.SetColumnSpan(this.usbStatusPanel, 2);
             this.usbStatusPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.usbStatusPanel.Location = new System.Drawing.Point(29, 24);
-            this.usbStatusPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.usbStatusPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 20);
             this.usbStatusPanel.Name = "usbStatusPanel";
-            this.tableLayoutPanel1.SetRowSpan(this.usbStatusPanel, 2);
+            this.registrationPanel.SetRowSpan(this.usbStatusPanel, 3);
             this.usbStatusPanel.Size = new System.Drawing.Size(536, 526);
             this.usbStatusPanel.TabIndex = 0;
             // 
@@ -91,11 +91,11 @@ namespace Browsing.Common.Containers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.tableLayoutPanel1);
+            this.Controls.Add(this.registrationPanel);
             this.Name = "Registration";
             this.Size = new System.Drawing.Size(794, 554);
-            this.Controls.SetChildIndex(this.tableLayoutPanel1, 0);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.Controls.SetChildIndex(this.registrationPanel, 0);
+            this.registrationPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -104,7 +104,7 @@ namespace Browsing.Common.Containers
 
         private FlatButton registrationButton;
         private UsbStatusPanel usbStatusPanel;
-        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel registrationPanel;
        
     }
 }

@@ -48,7 +48,7 @@ namespace Browsing.Common.Containers
             }
         }
 
-        public void UpdateUsbStatusPanelUsbList()
+        public void UpdateUsbStatus()
         {
             this.usbStatusPanel.UpdateUsbList();
         }
@@ -174,13 +174,13 @@ namespace Browsing.Common.Containers
                 string.Format("{0} data has been completed successfully", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing");
 
             MakeInvisibleProgressBar(0);
-            usbStatusPanel.SetStatus(statusText, error);
-            usbStatusPanel.Deactivate(false);
+            this.usbStatusPanel.SetStatus(statusText, error);
+            this.usbStatusPanel.Deactivate(false);
         }
 
         #endregion
 
-        #region IDriverProvider Memebers
+        #region IUsbProvider Memebers
 
         public DriveInfo ActiveUsb
         {

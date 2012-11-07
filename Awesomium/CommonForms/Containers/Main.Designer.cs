@@ -41,6 +41,7 @@ namespace Browsing.Common.Containers
             this.btnDashboard = new Browsing.Common.Controls.FlatButton();
             this.statusLabel = new System.Windows.Forms.Label();
             this.btnRegistration = new Browsing.Common.Controls.FlatButton();
+            this.regLabel = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlHolder.SuspendLayout();
             this.SuspendLayout();
@@ -62,6 +63,7 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel1.Controls.Add(this.btnDashboard, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.statusLabel, 1, 2);
             this.tableLayoutPanel1.Controls.Add(this.btnRegistration, 5, 1);
+            this.tableLayoutPanel1.Controls.Add(this.regLabel, 5, 2);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -197,12 +199,12 @@ namespace Browsing.Common.Containers
             // statusLabel
             // 
             this.statusLabel.AutoSize = true;
-            this.tableLayoutPanel1.SetColumnSpan(this.statusLabel, 5);
+            this.tableLayoutPanel1.SetColumnSpan(this.statusLabel, 4);
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Top;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.statusLabel.Location = new System.Drawing.Point(78, 273);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(865, 25);
+            this.statusLabel.Size = new System.Drawing.Size(650, 25);
             this.statusLabel.TabIndex = 5;
             this.statusLabel.Text = "label1";
             // 
@@ -224,6 +226,18 @@ namespace Browsing.Common.Containers
             this.btnRegistration.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.btnRegistration.UseVisualStyleBackColor = true;
             this.btnRegistration.Click += new System.EventHandler(this.btnRegistration_Click);
+            // 
+            // regLabel
+            // 
+            this.regLabel.AutoSize = true;
+            this.regLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.regLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.regLabel.Location = new System.Drawing.Point(734, 273);
+            this.regLabel.Name = "regLabel";
+            this.regLabel.Size = new System.Drawing.Size(209, 25);
+            this.regLabel.TabIndex = 6;
+            this.regLabel.Text = "regLabel";
+            this.regLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // Main
             // 
@@ -255,5 +269,6 @@ namespace Browsing.Common.Containers
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label statusLabel;
         private Controls.FlatButton btnRegistration;
+        private System.Windows.Forms.Label regLabel;
     }
 }

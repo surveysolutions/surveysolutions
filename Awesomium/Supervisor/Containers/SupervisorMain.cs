@@ -20,11 +20,9 @@ namespace Browsing.Supervisor.Containers
 
         #region Override Methods
 
-
-
-        protected override void OnCheckRegistrationButton(bool userIsLoggedIn)
+        protected override void OnRefreshRegistrationButton(bool userIsLoggedIn)
         {
-            ChangeRegistrationButton(userIsLoggedIn, "");
+            ChangeRegistrationButton(userIsLoggedIn, null);
         }
 
         protected override void OnSynchronizationClicked(object sender, System.EventArgs e)

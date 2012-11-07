@@ -97,11 +97,11 @@ namespace Browsing.Common.Forms
                                                     }
                                                 }).Start();
 
+                AddRegistrationScreen(requestProcessor, urlUtils);
                 AddMainScreen(requestProcessor, settingsProvider, urlUtils);
                 AddBrowserScreen(webView);
                 AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
                 AddSettingsScreen();
-                AddRegistrationScreen(requestProcessor, urlUtils);
 
                 this.Controls.Add(this.Holder);
             }
@@ -223,11 +223,11 @@ namespace Browsing.Common.Forms
 
                     if (n == DBT_DEVICEARRIVAL || n == DBT_DEVICEREMOVECOMPLETE)
                     {
-                        var syncScreen = Holder.LoadedScreens.Where(s => s is Containers.Synchronization);
-                        if (syncScreen != null)
+                        var usbWatcherScreens = Holder.LoadedScreens.Where(s => s is Common.Interfaces.IUsbWatcher);
+                        if (usbWatcherScreens != null)
                         {
-                            foreach (var screen in syncScreen)
-                                (screen as Containers.Synchronization).UpdateUsbList();
+                            foreach (var screen in usbWatcherScreens)
+                                (screen as Common.Interfaces.IUsbWatcher).UpdateUsbList();
                         }
                     }
 

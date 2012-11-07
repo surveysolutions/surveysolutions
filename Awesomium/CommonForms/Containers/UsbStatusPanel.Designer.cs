@@ -61,14 +61,14 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 272F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel2.Controls.Add(this.resultLabel, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.statusLabel, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.resultLabel, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.statusLabel, 0, 2);
             this.tableLayoutPanel2.Controls.Add(this.labelAvlUsb, 0, 3);
             this.tableLayoutPanel2.Controls.Add(this.usbStrip, 1, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 22);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 5;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -84,13 +84,13 @@
             this.resultLabel.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.resultLabel, 2);
             this.resultLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultLabel.Location = new System.Drawing.Point(4, 41);
+            this.resultLabel.Location = new System.Drawing.Point(4, 0);
             this.resultLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.resultLabel.Name = "resultLabel";
             this.resultLabel.Size = new System.Drawing.Size(1045, 29);
             this.resultLabel.TabIndex = 2;
             this.resultLabel.Text = "result";
-            this.resultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.resultLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // statusLabel
             // 
@@ -98,13 +98,13 @@
             this.tableLayoutPanel2.SetColumnSpan(this.statusLabel, 2);
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.statusLabel.Location = new System.Drawing.Point(4, 0);
+            this.statusLabel.Location = new System.Drawing.Point(4, 41);
             this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(1045, 29);
             this.statusLabel.TabIndex = 3;
-            this.statusLabel.Text = "status";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.statusLabel.Text = "status/error";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // labelAvlUsb
             // 
@@ -145,7 +145,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel2GroupBox);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UsbStatusPanel";
             this.Size = new System.Drawing.Size(1059, 682);
             this.tableLayoutPanel2GroupBox.ResumeLayout(false);

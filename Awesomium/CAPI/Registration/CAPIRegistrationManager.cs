@@ -2,14 +2,14 @@ using System;
 using System.Text;
 using Common.Utils;
 using Synchronization.Core.Registration;
-
+using Synchronization.Core.Interface;
 
 namespace Browsing.CAPI.Registration
 {
     public class CapiRegistrationManager : RegistrationManager
     {
-        public CapiRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
-            : base("SupervisorRegistration.register", "CAPIRegistration.register", requestProcessor, urlUtils)
+        public CapiRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : base("SupervisorRegistration.register", "CAPIRegistration.register", requestProcessor, urlUtils, usbProvider)
         {
         }
 
@@ -28,21 +28,14 @@ namespace Browsing.CAPI.Registration
             return new Guid("{10000000-0000-0000-0000-000000000000}");
         }
 
-        public override bool FinalizeRegistration(string folderPath)
+        protected override bool OnFinalizeRegistration(string folderPath)
         {
-            try
-            {
-                var data = GetFromRegistrationFile(folderPath + InFile);
+            var data = GetFromRegistrationFile(folderPath + InFile);
 
-                var response = SendRegistrationRequest(data);
-                var result = Encoding.UTF8.GetString(response, 0, response.Length);
+            var response = SendRegistrationRequest(data);
+            var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-                return string.Compare(result, "True", true) == 0;
-             }
-            catch(Exception e)
-            {
-                throw e;
-            }
+            return string.Compare(result, "True", true) == 0;
         }
 
         #endregion

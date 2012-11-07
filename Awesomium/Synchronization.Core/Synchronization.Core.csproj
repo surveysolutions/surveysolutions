@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="Errors\CancelledSynchronizationException.cs" />
     <Compile Include="Errors\CheckPrerequisitesException.cs" />
+    <Compile Include="Errors\RegistrationException.cs" />
     <Compile Include="Events\SynchronizationCompletedEvent.cs" />
     <Compile Include="Interface\IUsbProvider.cs" />
     <Compile Include="Interface\ISettingsProvider.cs" />

@@ -241,13 +241,13 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string RegistrationStatus {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RegistrationPhaze {
             get {
-                return ((string)(this["RegistrationStatus"]));
+                return ((int)(this["RegistrationPhaze"]));
             }
             set {
-                this["RegistrationStatus"] = value;
+                this["RegistrationPhaze"] = value;
             }
         }
     }

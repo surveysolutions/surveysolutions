@@ -6,6 +6,8 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using Common.Utils;
+using Synchronization.Core.Interface;
+using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.Registration
 {
@@ -20,18 +22,20 @@ namespace Synchronization.Core.Registration
         private Guid? currentUser;
         private IRequesProcessor requestProcessor;
         private IUrlUtils urlUtils;
+        private IUsbProvider usbProvider;
 
         #endregion
 
         #region C-tor
 
-        protected RegistrationManager(string inFile, string outFile, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        protected RegistrationManager(string inFile, string outFile, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
             InFile = inFile;
             OutFile = outFile;
 
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
+            this.usbProvider = usbProvider;
 
             RegisrationId = AcceptRegistrationId();
         }
@@ -94,7 +98,7 @@ namespace Synchronization.Core.Registration
             return GetCurrentUser();
         }
 
-        public virtual bool StartRegistration(string folderPath)
+        protected virtual bool OnStartRegistration(string folderPath)
         {
             var keyContainerName = ContainerName;
 
@@ -105,7 +109,7 @@ namespace Synchronization.Core.Registration
             return CreateRegistrationFile(dataToFile, folderPath + OutFile);
         }
 
-        public abstract bool FinalizeRegistration(string folderPath);
+        protected abstract bool OnFinalizeRegistration(string folderPath);
 
         #endregion
 
@@ -219,5 +223,73 @@ namespace Synchronization.Core.Registration
         }
 
         #endregion
+
+        public bool StartRegistration()
+        {
+            try
+            {
+                var driver = this.usbProvider.ActiveUsb;
+                if (driver == null)
+                    throw new RegistrationException();
+
+                return OnStartRegistration(driver.Name);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public bool FinalizeRegistration()
+        {
+            try
+            {
+                var driver = this.usbProvider.ActiveUsb;
+                if (driver == null)
+                    throw new RegistrationException();
+
+                return OnFinalizeRegistration(driver.Name);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        public IList<Errors.SynchronizationException> CheckIssues()
+        {
+            IList<SynchronizationException> errors = null;
+
+            var drive = this.usbProvider.ActiveUsb;
+            if (drive == null)
+            {
+                errors = new List<SynchronizationException>();
+
+                if (this.usbProvider.IsAnyAvailable)
+                    errors.Add(new UsbNotChoozenException());
+                else
+                    errors.Add(new UsbNotPluggedException());
+            }
+
+
+            try
+            {
+                if (this.requestProcessor.Process<string>(this.urlUtils.GetDefaultUrl(), "False") == "False")
+                    throw new LocalHosUnreachableException(); // there is no connection to local host
+
+                /*var netEndPoint = this.urlUtils.GetEnpointUrl();
+
+                // test if there is connection to synchronization endpoint
+                if (this.requestProcessor.Process<string>(netEndPoint, "False") == "False")
+                    throw new NetUnreachableException(netEndPoint);*/
+            }
+            catch (Exception ex)
+            {
+                errors.Add(new NetUnreachableException(ex.Message));
+            }
+
+            return errors;
+        }
     }
 }
