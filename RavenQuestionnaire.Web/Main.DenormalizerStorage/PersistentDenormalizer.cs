@@ -26,7 +26,7 @@ namespace Main.DenormalizerStorage
         /// </summary>
         private readonly MemoryCache _hash;
 
-        private readonly List<Guid> _bag;
+      //  private readonly List<Guid> _bag;
         private readonly IPersistentStorage _storage;
         private readonly object _locker=new object();
         #endregion
@@ -37,13 +37,13 @@ namespace Main.DenormalizerStorage
         /// Initializes a new instance of the <see cref="InMemoryDenormalizer{T}"/> class.
         /// </summary>
         public PersistentDenormalizer(IPersistentStorage storage)
-            : this(new MemoryCache("PersistentDenormalizer"), storage, new List<Guid>())
+            : this(new MemoryCache("PersistentDenormalizer"), storage/*, new List<Guid>()*/)
         {
         }
-        public PersistentDenormalizer(MemoryCache hash, IPersistentStorage storage, List<Guid> bag)
+        public PersistentDenormalizer(MemoryCache hash, IPersistentStorage storage/*, List<Guid> bag*/)
         {
             this._hash = hash;
-            this._bag = bag;
+          //  this._bag = bag;
             this._storage = storage;
         }
 
@@ -59,7 +59,8 @@ namespace Main.DenormalizerStorage
         /// </returns>
         public int Count()
         {
-            return this._bag.Count;
+           // return this._bag.Count;
+            throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
         }
 
         /// <summary>
@@ -79,25 +80,20 @@ namespace Main.DenormalizerStorage
             {
                 Monitor.Enter(temp, ref lockWasTaken);
                 {
-                    if (!this._bag.Contains(key))
-                    {
-                        return null;
-                    }
                     // Obtain an instance of a data 
                     // object from the cache of 
                     // of weak reference objects.
                     T retval;
                     if (!this._hash.Contains(key.ToString()))
                     {
-                        retval = this._storage.GetByGuid<T>(key);
+                        retval = this._storage.GetByGuid<T>(key.ToString());
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
-                      /*  var weekDisposable = new WeakDisposable<T>(retval, key);
-                        weekDisposable.BefoureFinalize += new EventHandler(weekDisposable_BefoureFinalize);
-                        var data = new WeakReference(weekDisposable, false);*/
-
-                        //this._hash.AddOrUpdate(key, data, (k, oldValue) => data);
+                      /*  if (!this._bag.Contains(key))
+                        {
+                            this._bag.Add(key);
+                        }*/
                         var policy = new CacheItemPolicy();
                         policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
                         policy.SlidingExpiration = TimeSpan.FromMinutes(3);
@@ -143,16 +139,16 @@ namespace Main.DenormalizerStorage
             {
                 Monitor.Enter(temp, ref lockWasTaken);
                 {
-                    if (!this._bag.Contains(key))
+                   /* if (!this._bag.Contains(key))
                     {
                         return;
                     }
-                    this._bag.Remove(key);
+                    this._bag.Remove(key);*/
                     if (this._hash.Contains(key.ToString()))
                     {
                         this._hash.Remove(key.ToString());
                     }
-                    this._storage.Remove<T>(key);
+                    this._storage.Remove<T>(key.ToString());
                 }
             }
             finally
@@ -178,10 +174,10 @@ namespace Main.DenormalizerStorage
             {
                 Monitor.Enter(temp, ref lockWasTaken);
                 {
-                    if (!this._bag.Contains(key))
+                   /* if (!this._bag.Contains(key))
                     {
                         this._bag.Add(key);
-                    }
+                    }*/
 
                    // this._storage.Store<T>(denormalizer, key);
 
@@ -209,8 +205,8 @@ namespace Main.DenormalizerStorage
         void weekDisposable_CacheEntryRemoved(CacheEntryRemovedArguments arguments)
         {
             Guid key = Guid.Parse(arguments.CacheItem.Key);
-            if (this._bag.Contains(key))
-                this._storage.Store<T>(arguments.CacheItem.Value as T, key);
+          //  if (this._bag.Contains(key))
+                this._storage.Store<T>(arguments.CacheItem.Value as T, key.ToString());
         }
 
         #region Implementation of IDisposable

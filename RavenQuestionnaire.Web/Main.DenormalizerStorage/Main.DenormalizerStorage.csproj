@@ -67,6 +67,7 @@
     <Compile Include="IDenormalizerStorage.cs" />
     <Compile Include="RavenPersistentStorage.cs" />
     <Compile Include="SmartDenormalizerAttribute.cs" />
+    <Compile Include="SolidDenormalizer\SolidPersistentDenormalizer.cs" />
     <Compile Include="StoredObject.cs" />
     <Compile Include="IPersistentStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
