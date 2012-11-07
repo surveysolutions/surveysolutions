@@ -1,4 +1,7 @@
 using System;
+using System.Linq;
+using System.Management;
+using System.Security.Cryptography;
 using System.Text;
 using Common.Utils;
 using Synchronization.Core.Registration;
@@ -13,6 +16,7 @@ namespace Browsing.CAPI.Registration
         {
         }
 
+
         #region Override Methods
 
         protected override string ContainerName
@@ -25,7 +29,7 @@ namespace Browsing.CAPI.Registration
 
         protected override Guid OnAcceptRegistrationId()
         {
-            return new Guid("{10000000-0000-0000-0000-000000000000}");
+            return GetGuidFromProcessorId();
         }
 
         public override bool FinalizeRegistration(string folderPath)
@@ -38,12 +42,39 @@ namespace Browsing.CAPI.Registration
                 var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
                 return string.Compare(result, "True", true) == 0;
-             }
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 throw e;
             }
         }
+
+        #endregion
+        #region Helpers
+
+        private Guid GetGuidFromProcessorId()
+        {
+            var cpuInfo = string.Empty;
+
+            var mc = new ManagementClass("win32_processor");
+            var moc = mc.GetInstances();
+            foreach (var mo in moc.Cast<ManagementBaseObject>().Where(mo => cpuInfo == ""))
+            {
+                cpuInfo = mo.Properties["processorID"].Value.ToString();
+                break;
+            }
+
+            using (var md5 = MD5.Create())
+            {
+                byte[] hash = md5.ComputeHash(Encoding.Default.GetBytes(cpuInfo));
+                var result = new Guid(hash);
+                return result;
+            }
+
+
+
+        }
+
 
         #endregion
     }
