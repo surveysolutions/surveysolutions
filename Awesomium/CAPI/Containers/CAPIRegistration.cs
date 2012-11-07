@@ -32,23 +32,30 @@ namespace Browsing.CAPI.Containers
         private static IDictionary<CAPIRegistration.Phaze, string> RegButtonStatus = new Dictionary<CAPIRegistration.Phaze, string>(){
             {CAPIRegistration.Phaze.NonRegistered, "(Please, register)"},
             {CAPIRegistration.Phaze.PublicKeyShared, "(Finalize ...)"},
-            {CAPIRegistration.Phaze.Confirmed, null},
+            {CAPIRegistration.Phaze.Confirmed, string.Empty},
         };
 
-        private static string ZeroStepRegisteredMessage;
-        private static string FirstStepRegisteredMessage;
-        private static string SecondStepRegisteredMessage;
+        private static string _zeroStepRegisteredMessage;
+        private static string _firstStepRegisteredMessage;
+        private static string _secondStepRegisteredMessage;
 
         public CAPIRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder)
+            : base(requestProcessor, urlUtils, holder, false)
         {
             // todo: define via resources
-            FirstStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, plug USB flash memory\nto supervisor's computer and continue.";
-            ZeroStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' should be registered.\nPlease, insert USB flush memory and press Register button.";
-            SecondStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' has been registered.\nIf neccesssary you may repeat registration process.";
+            _firstStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, plug USB flash memory\nto supervisor's computer and continue.";
+            _zeroStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' should be registered.\nPlease, insert USB flush memory and press Register button.";
+            _secondStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' has been registered by '{0}'.\nIf neccesssary you may repeat registration process.";
 
             InitializeComponent();
+
+            SetUsbStatusText("Current registration status");
         }
+
+        private string ZeroStepRegisteredMessage { get { return _zeroStepRegisteredMessage; } }
+        private string FirstStepRegisteredMessage { get { return _firstStepRegisteredMessage; } }
+        private string SecondStepRegisteredMessage { get { return string.Format(_secondStepRegisteredMessage, RegisteredSupervisor); } }
+
 
         #region Helpers
 
@@ -89,10 +96,12 @@ namespace Browsing.CAPI.Containers
         protected override bool OnRegistrationButtonClicked(out string statusMessage)
         {
             var status = RegistrationStatus;
+            RegisterData registeredData;
 
             if (status == Phaze.NonRegistered || status == Phaze.Confirmed)
             {
-                if (this.RegistrationManager.StartRegistration())
+
+                if (this.RegistrationManager.StartRegistration(out registeredData))
                 {
                     statusMessage = FirstStepRegisteredMessage;
                     RegistrationStatus = Phaze.PublicKeyShared;
@@ -100,11 +109,11 @@ namespace Browsing.CAPI.Containers
                     return true;
                 }
             }
-            else if (status.Equals("First"))
+            else if (status == Phaze.PublicKeyShared)
             {
-                if (RegistrationManager.FinalizeRegistration())
+                if (RegistrationManager.FinalizeRegistration(out registeredData))
                 {
-                    statusMessage = SecondStepRegisteredMessage;
+                    statusMessage = string.Format(_secondStepRegisteredMessage, registeredData.Description); //todo: replace with fully implemented SecondStepRegisteredMessage
                     RegistrationStatus = Phaze.Confirmed;
 
                     return true;
@@ -122,6 +131,15 @@ namespace Browsing.CAPI.Containers
             get
             {
                 return RegButtonStatus.ContainsKey(RegistrationStatus) ? RegButtonStatus[RegistrationStatus] : null;
+            }
+        }
+
+        public string RegisteredSupervisor 
+        {
+            get
+            {
+                // TODO: read by service
+                return "Supervisor";
             }
         }
     }

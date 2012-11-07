@@ -19,7 +19,7 @@ namespace Browsing.Common.Containers
         #region C-tor
 
         public Registration(IRequesProcessor requestProcessor, IUrlUtils urlUtils,
-                            ScreenHolder holder)
+                            ScreenHolder holder, bool registrationListVisible)
             : base(holder, true)
         {
             InitializeComponent();
@@ -29,6 +29,8 @@ namespace Browsing.Common.Containers
             this.usbStatusPanel.UsbPressed += usb_Click;
 
             this.RegistrationManager = DoInstantiateRegistrationManager(requestProcessor, urlUtils, this);
+
+            EnableRegistrationList(registrationListVisible);
 
             System.Diagnostics.Debug.Assert(this.RegistrationManager != null);
         }
@@ -52,6 +54,11 @@ namespace Browsing.Common.Containers
         #endregion
 
         #region Helpers
+
+        private void EnableRegistrationList(bool visible)
+        {
+            this.groupBox1.Visible = visible;
+        }
 
         private void CheckRegchannel() 
         {
@@ -173,6 +180,11 @@ namespace Browsing.Common.Containers
             base.OnValidateContent();
 
             CheckRegistractionPossibilities();
+        }
+
+        protected void SetUsbStatusText(string text)
+        {
+            this.usbStatusPanel.SetGroupText(text);
         }
 
         #endregion

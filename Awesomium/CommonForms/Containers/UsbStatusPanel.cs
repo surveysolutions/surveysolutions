@@ -229,5 +229,10 @@ namespace Browsing.Common.Containers
         {
             return imageList1.Images[index];
         }
+
+        internal void SetGroupText(string text)
+        {
+            this.tableLayoutPanel2GroupBox.Text = text;
+        }
     }
 }

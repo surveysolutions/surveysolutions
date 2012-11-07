@@ -18,9 +18,11 @@ namespace Browsing.Supervisor.Containers
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
         public SupervisorRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder)
+            : base(requestProcessor, urlUtils, holder, true)
         {
             InitializeComponent();
+
+            SetUsbStatusText("CAPI device registration  status");
         }
 
         #region Override Methods
@@ -37,13 +39,14 @@ namespace Browsing.Supervisor.Containers
 
         protected override bool OnRegistrationButtonClicked(out string statusMessage)
         {
-            if (RegistrationManager.StartRegistration())
+            RegisterData registeredData;
+            if (RegistrationManager.StartRegistration(out registeredData))
             {
-                statusMessage = "CAPI device has been registered";
+                statusMessage = string.Format("CAPI device '{0}' has been registered", registeredData.Description);
                 return true;
             }
 
-            statusMessage = "Registration of CAPI device has failed";
+            statusMessage = "Registration of CAPI device failed";
             return false;
         }
 
