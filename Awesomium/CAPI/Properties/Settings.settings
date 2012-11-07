@@ -56,8 +56,8 @@
     <Setting Name="GetRegistrationCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/RegisterSupervisor</Value>
     </Setting>
-    <Setting Name="RegistrationStatus" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="RegistrationPhaze" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

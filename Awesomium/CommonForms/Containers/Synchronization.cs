@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Browsing.Common.Controls;
+using Browsing.Common.Interfaces;
 using Common.Utils;
-using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Events;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
-
 namespace Browsing.Common.Containers
 {
-    public abstract partial class Synchronization : Screen
+    public abstract partial class Synchronization : Screen, IUsbWatcher
     {
         IUrlUtils utils;
 
@@ -255,7 +255,7 @@ namespace Browsing.Common.Containers
 
         public void UpdateUsbList()
         {
-            this.syncPanel.UpdateUsbStatusPanelUsbList();
+            this.syncPanel.UpdateUsbStatus();
 
             CheckSyncPossibilities();
         }

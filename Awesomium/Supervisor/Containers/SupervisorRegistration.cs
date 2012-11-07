@@ -11,6 +11,7 @@ using Browsing.Common.Controls;
 using Browsing.Supervisor.Registration;
 using Common.Utils;
 using Synchronization.Core.Registration;
+using Synchronization.Core.Interface;
 
 namespace Browsing.Supervisor.Containers
 {
@@ -24,20 +25,25 @@ namespace Browsing.Supervisor.Containers
 
         #region Override Methods
 
-        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        protected override string OnGetCurrentRegistrationStatus()
         {
-            return new SupervisorRegistrationManager(requestProcessor, urlUtils);
+            return string.Empty;
         }
 
-        protected override bool OnRegistrationButtonClicked(DriveInfo drive, out string statusMessage)
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
-            if (RegistrationManager.StartRegistration(drive.Name))
+            return new SupervisorRegistrationManager(requestProcessor, urlUtils, usbProvider);
+        }
+
+        protected override bool OnRegistrationButtonClicked(out string statusMessage)
+        {
+            if (RegistrationManager.StartRegistration())
             {
                 statusMessage = "CAPI device has been registered";
                 return true;
             }
 
-            statusMessage = "Registration process failed";
+            statusMessage = "Registration of CAPI device has failed";
             return false;
         }
 

@@ -44,6 +44,22 @@ namespace Synchronization.Core.Errors
         }
     }
 
+    public class UsbNotChoozenException : UsbUnacceptableException
+    {
+        public UsbNotChoozenException()
+            : base("Usb flush memory device has not been choozen")
+        {
+        }
+    }
+
+    public class UsbNotPluggedException : UsbUnacceptableException
+    {
+        public UsbNotPluggedException()
+            : base("Usb flush memory device has not been plugged")
+        {
+        }
+    }
+
     public class LocalHosUnreachableException : SynchronizationException
     {
         public LocalHosUnreachableException()

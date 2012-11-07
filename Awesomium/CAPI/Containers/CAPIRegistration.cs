@@ -16,65 +16,96 @@ using Synchronization.Core.Registration;
 
 namespace Browsing.CAPI.Containers
 {
-    public partial class CAPIRegistration : Browsing.Common.Containers.Registration
+    public partial class CAPIRegistration : Common.Containers.Registration
     {
-        private string registrationFirstStep = Properties.Settings.Default.RegistrationStatus;
+        /// <summary>
+        /// Current registration phaze
+        /// </summary>
+        internal enum Phaze
+        {
+            NonRegistered = 0,
+            PublicKeyShared = 1,
+            Confirmed = 2
+        }
+
+        // todo: define via resources
+        private static IDictionary<CAPIRegistration.Phaze, string> RegButtonStatus = new Dictionary<CAPIRegistration.Phaze, string>(){
+            {CAPIRegistration.Phaze.NonRegistered, "(Please, register)"},
+            {CAPIRegistration.Phaze.PublicKeyShared, "(Finalize ...)"},
+            {CAPIRegistration.Phaze.Confirmed, null},
+        };
+
+        private static string ZeroStepRegisteredMessage;
+        private static string FirstStepRegisteredMessage;
+        private static string SecondStepRegisteredMessage;
 
         public CAPIRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(requestProcessor, urlUtils, holder)
         {
+            // todo: define via resources
+            FirstStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, plug USB flash memory\nto supervisor's computer and continue.";
+            ZeroStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' should be registered.\nPlease, insert USB flush memory and press Register button.";
+            SecondStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' has been registered.\nIf neccesssary you may repeat registration process.";
+
             InitializeComponent();
         }
 
         #region Helpers
 
-        private void SaveRegistrationStep(string step)
+        private Phaze RegistrationStatus
         {
-            Properties.Settings.Default.RegistrationStatus = step;
-            Properties.Settings.Default.Save();
-
-            this.registrationFirstStep = step;
+            get
+            {
+                return (Phaze)Properties.Settings.Default.RegistrationPhaze;
+            }
+            set
+            {
+                Properties.Settings.Default.RegistrationPhaze = (int)value;
+                Properties.Settings.Default.Save();
+            }
         }
 
         #endregion
 
         #region Override Methods
 
-        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
-            return new CapiRegistrationManager(requestProcessor, urlUtils);
+            return new CapiRegistrationManager(requestProcessor, urlUtils, usbProvider);
         }
 
-        protected override void OnLoad(EventArgs e)
+        protected override string OnGetCurrentRegistrationStatus()
         {
-            base.OnLoad(e);
+            var status = RegistrationStatus;
 
-            if (registrationFirstStep.Equals("First"))
-                base.OutputResult("First registration step has been completed");
-            else if (registrationFirstStep.Equals("Second"))
-                base.OutputResult("Second registration step completed");
+            if (status == Phaze.PublicKeyShared)
+                return FirstStepRegisteredMessage;
+            else if (status == Phaze.Confirmed)
+                return SecondStepRegisteredMessage;
             else
-                base.OutputResult("Please, register your device on supervisor's laptop");
+                return ZeroStepRegisteredMessage;
         }
 
-        protected override bool OnRegistrationButtonClicked(DriveInfo drive, out string statusMessage)
+        protected override bool OnRegistrationButtonClicked(out string statusMessage)
         {
-            if (String.IsNullOrEmpty(this.registrationFirstStep) || this.registrationFirstStep.Equals("Second"))
+            var status = RegistrationStatus;
+
+            if (status == Phaze.NonRegistered || status == Phaze.Confirmed)
             {
-                if (this.RegistrationManager.StartRegistration(drive.Name))
+                if (this.RegistrationManager.StartRegistration())
                 {
-                    statusMessage = "First registration step completed";
-                    SaveRegistrationStep("First");
+                    statusMessage = FirstStepRegisteredMessage;
+                    RegistrationStatus = Phaze.PublicKeyShared;
 
                     return true;
                 }
             }
-            else if (this.registrationFirstStep.Equals("First"))
+            else if (status.Equals("First"))
             {
-                if (RegistrationManager.FinalizeRegistration(drive.Name))
+                if (RegistrationManager.FinalizeRegistration())
                 {
-                    statusMessage = "Registration Completed";
-                    SaveRegistrationStep("Second");
+                    statusMessage = SecondStepRegisteredMessage;
+                    RegistrationStatus = Phaze.Confirmed;
 
                     return true;
                 }
@@ -86,5 +117,12 @@ namespace Browsing.CAPI.Containers
 
         #endregion
 
+        internal string CurrentRegistrationStatus
+        {
+            get
+            {
+                return RegButtonStatus.ContainsKey(RegistrationStatus) ? RegButtonStatus[RegistrationStatus] : null;
+            }
+        }
     }
 }

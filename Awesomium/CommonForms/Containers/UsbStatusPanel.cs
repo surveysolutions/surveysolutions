@@ -98,9 +98,9 @@ namespace Browsing.Common.Containers
             SetLabel(this.statusLabel, status, error);
         }
 
-        public void SetResult(string status, bool error = false)
+        public void SetResult(string result, bool error = false)
         {
-            SetLabel(this.resultLabel, status, error);
+            SetLabel(this.resultLabel, result, error);
         }
 
         /// <summary>

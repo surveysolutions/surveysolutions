@@ -2,36 +2,30 @@
 using System.Text;
 using Common.Utils;
 using Synchronization.Core.Registration;
+using Synchronization.Core.Interface;
 
 namespace Browsing.Supervisor.Registration
 {
     public class SupervisorRegistrationManager : RegistrationManager
     {
-        public SupervisorRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
-            : base("CAPIRegistration.register", "SupervisorRegistration.register", requestProcessor, urlUtils)
+        public SupervisorRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : base("CAPIRegistration.register", "SupervisorRegistration.register", requestProcessor, urlUtils, usbProvider)
         {
         }
 
 
         #region Override Methods
 
-        public override bool StartRegistration(string folderPath)
+        protected override bool OnStartRegistration(string folderPath)
         {
-            try
-            {
-                var data = GetFromRegistrationFile(folderPath + InFile);
-                var response = SendRegistrationRequest(data);
-                var result = Encoding.UTF8.GetString(response, 0, response.Length);
+            var data = GetFromRegistrationFile(folderPath + InFile);
+            var response = SendRegistrationRequest(data);
+            var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-                return string.Compare(result, "True", true) == 0 && base.StartRegistration(folderPath);
-            }
-            catch(Exception e)
-            {
-                throw e;
-            }
+            return string.Compare(result, "True", true) == 0 && base.OnStartRegistration(folderPath);
         }
 
-        public override bool FinalizeRegistration(string folderPath)
+        protected override bool OnFinalizeRegistration(string folderPath)
         {
             throw new NotImplementedException();
         }

@@ -31,6 +31,7 @@ namespace Browsing.Common.Containers
             //RefreshAuthentificationInfo();
 
             this.statusLabel.ForeColor = System.Drawing.Color.Red;
+            this.regLabel.ForeColor = System.Drawing.Color.Red;
         }
 
         #endregion
@@ -48,12 +49,15 @@ namespace Browsing.Common.Containers
             return CurrentUser;
         }
 
-        protected void ChangeRegistrationButton(bool enabled, string text)
+        protected void ChangeRegistrationButton(bool enabled, string text, string label = null)
         {
             this.btnRegistration.Enabled = enabled;
             
             if (!String.IsNullOrEmpty(text))
                 this.btnRegistration.Text = text;
+
+            if (!String.IsNullOrEmpty(label))
+                this.regLabel.Text = label;
         }
 
         #endregion
@@ -103,9 +107,9 @@ namespace Browsing.Common.Containers
                 SetCheckingStatus(false);
         }
 
-        private void CheckRegistrationButton(bool userIsLoggedIn)
+        private void RefreshRegistrationButton(bool userIsLoggedIn)
         {
-            OnCheckRegistrationButton(userIsLoggedIn);
+            OnRefreshRegistrationButton(userIsLoggedIn);
         }
 
         private void RefreshAuthentificationInfo()
@@ -117,7 +121,8 @@ namespace Browsing.Common.Containers
 
             IntitLogControls(userIsLoggedIn, userIsLoggedIn);
 
-            CheckRegistrationButton(userIsLoggedIn);
+            RefreshRegistrationButton(userIsLoggedIn);
+
             this.statusLabel.Text = string.Empty;
 
             if (userIsLoggedIn)
@@ -299,10 +304,6 @@ namespace Browsing.Common.Containers
             this.Holder.Redirect(settings);
         }
 
-        protected virtual void OnCheckRegistrationButton(bool userIsLoggedIn)
-        {
-        }
-
         protected virtual void OnRegistrationClicked(object sender, System.EventArgs e)
         {
             var registration = this.Holder.LoadedScreens.FirstOrDefault(s => s is Registration) as Registration;
@@ -313,6 +314,8 @@ namespace Browsing.Common.Containers
         {
             System.Windows.Forms.Application.Exit();
         }
+
+        protected abstract void OnRefreshRegistrationButton(bool userIsLoggedIn);
 
         #endregion
 

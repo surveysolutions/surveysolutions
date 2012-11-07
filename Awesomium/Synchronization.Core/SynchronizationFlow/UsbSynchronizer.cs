@@ -259,9 +259,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
             if (drive == null)
                 if (this.usbProvider.IsAnyAvailable)
-                    throw new UsbUnacceptableException("Usb flush memory device has not been choozen");
+                    throw new UsbNotChoozenException();
                 else
-                    throw new UsbUnacceptableException("Usb flush memory device has not been plugged");
+                    throw new UsbNotPluggedException();
 
             return drive;
         }
