@@ -10,7 +10,6 @@
 namespace Core.Supervisor.Views.Summary
 {
     using System;
-    using System.Collections.Generic;
 
     using Main.Core.Entities.SubEntities;
 
@@ -19,28 +18,101 @@ namespace Core.Supervisor.Views.Summary
     /// </summary>
     public class SummaryViewItem
     {
+        #region Constructors and Destructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SummaryViewItem"/> class.
         /// </summary>
-        /// <param name="userLight"></param>
-        /// <param name="dict"></param>
-        public SummaryViewItem(UserLight userLight, Dictionary<TemplateLight, WorkingStatuses> dict)
+        public SummaryViewItem()
         {
-            this.User = userLight;
-            this.Items = dict;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SummaryViewItem"/> class.
+        /// </summary>
+        /// <param name="user">
+        /// The user
+        /// </param>
+        /// <param name="total">
+        /// The total.
+        /// </param>
+        /// <param name="initial">
+        /// The initial.
+        /// </param>
+        /// <param name="error">
+        /// The error.
+        /// </param>
+        /// <param name="completed">
+        /// The completed.
+        /// </param>
+        /// <param name="approve">
+        /// The approve.
+        /// </param>
+        /// <param name="redo">
+        /// The redo.
+        /// </param>
+        public SummaryViewItem(
+            UserLight user,
+            int total,
+            int initial,
+            int error,
+            int completed,
+            int approve,
+            int redo)
+            : this()
+        {
+            this.User = user;
+            this.Total = total;
+            this.Initial = initial;
+            this.Error = error;
+            this.Complete = completed;
+            this.Approve = approve;
+            this.Redo = redo;
+        }
+
+        #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets Items.
+        /// Gets or sets Approve.
         /// </summary>
-        public Dictionary<TemplateLight, WorkingStatuses> Items { get; set; }
+        public int Approve { get; set; }
 
         /// <summary>
-        /// Gets or sets User.
+        /// Gets or sets the complete.
+        /// </summary>
+        public int Complete { get; set; }
+
+        /// <summary>
+        /// Gets or sets the error.
+        /// </summary>
+        public int Error { get; set; }
+
+        /// <summary>
+        /// Gets or sets the user.
         /// </summary>
         public UserLight User { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initial.
+        /// </summary>
+        public int Initial { get; set; }
+
+        /// <summary>
+        /// Gets or sets Redo.
+        /// </summary>
+        public int Redo { get; set; }
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the total.
+        /// </summary>
+        public int Total { get; set; }
 
         #endregion
 
@@ -139,50 +211,6 @@ namespace Core.Supervisor.Views.Summary
                     return (this.TemplateId.GetHashCode() * 397) ^ (this.Title != null ? this.Title.GetHashCode() : 0);
                 }
             }
-        }
-
-        /// <summary>
-        /// The working statuses.
-        /// </summary>
-        public class WorkingStatuses
-        {
-            /// <summary>
-            /// Initializes a new instance of the <see cref="WorkingStatuses"/> class.
-            /// </summary>
-            /// <param name="total">
-            /// The total.
-            /// </param>
-            /// <param name="initial">
-            /// The initial.
-            /// </param>
-            /// <param name="redo">
-            /// The redo.
-            /// </param>
-            public WorkingStatuses(int total, int initial, int redo)
-            {
-                this.Initial = initial;
-                this.Total = total;
-                this.Redo = redo;
-            }
-
-            #region Public Properties
-
-            /// <summary>
-            /// Gets or sets Initial.
-            /// </summary>
-            public int Initial { get; set; }
-
-            /// <summary>
-            /// Gets or sets Redo.
-            /// </summary>
-            public int Redo { get; set; }
-
-            /// <summary>
-            /// Gets or sets Total.
-            /// </summary>
-            public int Total { get; set; }
-
-            #endregion
         }
     }
 }

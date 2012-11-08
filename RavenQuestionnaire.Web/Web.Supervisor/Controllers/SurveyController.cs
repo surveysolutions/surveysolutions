@@ -30,6 +30,7 @@ namespace Web.Supervisor.Controllers
     using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Group;
     using Main.Core.View.Question;
+    using Main.Core.View.Questionnaire;
     using Main.Core.View.User;
 
     using Ncqrs;
@@ -93,6 +94,15 @@ namespace Web.Supervisor.Controllers
         {
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.View(model);
+        }
+
+        public ActionResult Templates()
+        {
+            var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = int.MaxValue
+                });
+            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
