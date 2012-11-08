@@ -33,7 +33,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnPush(SyncDirection direction)
         {
-            var drive = GetDrive(); // accept driver to flush on
+            var drive = GetDrive(); // accept driver to flash on
 
             try
             {
@@ -126,7 +126,7 @@ namespace Synchronization.Core.SynchronizationFlow
         /// <param name="direction"></param>
         protected override void OnPull(SyncDirection direction)
         {
-            var drive = GetDrive(); // accept driver to flush on
+            var drive = GetDrive(); // accept driver to flash on
 
             try
             {

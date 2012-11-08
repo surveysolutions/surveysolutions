@@ -17,12 +17,14 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
+        private readonly static string RegisterButtonText = "Authorize";
+
         public SupervisorRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder, true)
+            : base(requestProcessor, urlUtils, holder, true, RegisterButtonText)
         {
             InitializeComponent();
 
-            SetUsbStatusText("CAPI device registration  status");
+            SetUsbStatusText("CAPI device authorization status");
         }
 
         #region Override Methods
@@ -42,11 +44,11 @@ namespace Browsing.Supervisor.Containers
             RegisterData registeredData;
             if (RegistrationManager.StartRegistration(out registeredData))
             {
-                statusMessage = string.Format("CAPI device '{0}' has been registered", registeredData.Description);
+                statusMessage = string.Format("CAPI device '{0}' has been authorized", registeredData.Description);
                 return true;
             }
 
-            statusMessage = "Registration of CAPI device failed";
+            statusMessage = "Authorization of CAPI device failed";
             return false;
         }
 

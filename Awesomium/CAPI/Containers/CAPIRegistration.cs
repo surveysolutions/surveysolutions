@@ -38,14 +38,15 @@ namespace Browsing.CAPI.Containers
         private static string _zeroStepRegisteredMessage;
         private static string _firstStepRegisteredMessage;
         private static string _secondStepRegisteredMessage;
+        private readonly static string RegisterButtonText = "Register";
 
         public CAPIRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder, false)
+            : base(requestProcessor, urlUtils, holder, false, RegisterButtonText)
         {
             // todo: define via resources
-            _firstStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, plug USB flash memory\nto supervisor's computer and continue.";
-            _zeroStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' should be registered.\nPlease, insert USB flush memory and press Register button.";
-            _secondStepRegisteredMessage = "CAPI device \'" + Environment.MachineName + "\' has been registered by '{0}'.\nIf neccesssary you may repeat registration process.";
+            _firstStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
+            _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + RegisterButtonText + " button to prepear authorization request on USB flash memory.";
+            _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' has been authorized by '{0}'.\nIf neccesssary you may repeat registration process.";
 
             InitializeComponent();
 
