@@ -40,7 +40,8 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                @Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, status = status.PublicId, userId = collect.User.Id }, null)
+                                <text>@value</text>
+                                @*@Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, status = status.PublicId, userId = collect.User.Id }, null)*@
                             }
                             else
                             {
@@ -53,7 +54,8 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                @Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = collect.User.Id }, null)
+                                <text>@value</text>
+                                @*@Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = collect.User.Id }, null)*@
                             }
                             else
                             {

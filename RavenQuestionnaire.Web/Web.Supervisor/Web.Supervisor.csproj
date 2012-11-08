@@ -206,6 +206,7 @@
     <Content Include="Content\img\sort_desc_disabled.png" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\grid.js" />
@@ -443,7 +444,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8084</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
