@@ -410,6 +410,7 @@
     <Content Include="Views\Survey\_StatusHistory.cshtml" />
     <Content Include="Views\User\Summary.cshtml" />
     <Content Include="Views\User\_SummaryTable.cshtml" />
+    <Content Include="Views\Device\Devices.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -10,6 +10,7 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
 
     using Main.Core.Commands.Synchronization;
@@ -79,16 +80,13 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Select from database publickey of capi
         /// </summary>
-        /// <param name="tabletId">
-        /// The tablet Id.
-        /// </param>
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
-        public JsonResult GetPublicKey(Guid tabletId)
+        public ActionResult GetRegisteredDevices()
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId));
-            return this.Json(new { PublicKey = model.SecretKey }, JsonRequestBehavior.AllowGet);
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel());
+            return this.PartialView("Devices", model);
         }
 
         #endregion
