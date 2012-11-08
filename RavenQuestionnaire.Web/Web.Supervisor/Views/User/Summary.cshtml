@@ -1,51 +1,74 @@
 ﻿@using Web.Supervisor.Models
 @model Core.Supervisor.Views.Summary.SummaryView
 
-<script>
+<script type="text/javascript">
+    var sortData = undefined;
+    var pageSize = @Model.PageSize;
+    
     $(document).ready(function() {
-        $("#questionnaireTable").tablesorter({
-                order: "@Model.Order",
+        document.filterTemplate = "";
+        $('#filter').editable().on('update', function(e, editable) {
+            document.filterTemplate = editable.value;
+            sortData = [{ Field: "Title", Direction: "Asc" }];
+            getTablePage(sortData, 1);
+        });
+
+        makeSortable();
+        onPagingClick();
+        
+    });
+
+    function makeSortable() {
+        $("#questionnaireTable table").tablesorter({
                 send: function(data) {
-                    $.ajax({
-                            type: "POST",
-                            url: "@Url.Action("_SummaryData", "User")",
-                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
-                            contentType: 'application/json, charset=utf-8',
-                            statusCode: {
-                                200: function(response) {
-                                    $("#questionnaireTable tbody").html(response);
-                                }
-                            }
-                        });
+                    sortData = JSON.parse(JSON.stringify(data));
+                    getTablePage(data, 1);
+                }
+        });
+    }
+
+    function onPagingClick() {
+        $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
+            getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
+            return false;
+        });
+    }
+
+    function getTablePage(data, page) {
+        $.ajax({
+                type: "POST",
+                url: "@Url.Action("_SummaryData", "User")",
+                data: JSON.stringify({TemplateId: document.filterTemplate, SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
+                contentType: 'application/json, charset=utf-8',
+                statusCode: {
+                    200: function(response) {
+                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
+                        $('#paging').html($(response).find('#paging').html());
+                        
+                        onPagingClick();
+                    }
                 }
             });
-    });
-</script>
+    }
 
-<h2>Summary statistics for interviewers</h2>
-<table id="questionnaireTable" class="table table-striped table-bordered table-hover">
-    <thead>
-        <tr>
-            <th></th>
-            @foreach (var item in Model.Summary.Items)
-            {
-                <td colspan="3" class="{sorter: false}">@item.Key.Title</td>
-            }
-        </tr>
-        <tr>
-            <th class="sorting" sorter='{"key":"User.Name"}'>Login</th>
-            @foreach (var item in Model.Summary.Items)
-            {
-                <th class="sorting" sorter='{"key":"@(item.Key.TemplateId).Initial"}'>Initial</th>
-                <th class="sorting" sorter='{"key":"@(item.Key.TemplateId).Redo"}'>Redo</th>
-                <th class="sorting" sorter='{"key":"@(item.Key.TemplateId).Total"}'>Total</th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @Html.Partial("_SummaryTable", Model)
-    </tbody>
-</table>
-<div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })
+    function getParameterByName(ref, name) {
+        name = name.replace( /[\[]/ , "\\\[").replace( /[\]]/ , "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(ref);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace( /\+/g , " "));
+    }
+</script>
+<h2>Summary by <a href="#" id="filter" 
+                  data-placement="bottom" 
+                  data-type="select" 
+                  data-source="@Url.Action("Templates", "Survey")"
+                  data-prepend='All'             
+                  data-original-title="Select template">@this.Model.Template.Title</a> </h2>
+
+<div id="questionnaireTable">
+    @this.Html.Partial("_SummaryTable", this.Model)
 </div>

@@ -126,7 +126,8 @@ namespace Web.Supervisor.Controllers
             {
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder
+                Orders = data.SortOrder,
+                TemplateId = data.TemplateId
             };
             var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(input);
             return this.PartialView("_SummaryTable", model);

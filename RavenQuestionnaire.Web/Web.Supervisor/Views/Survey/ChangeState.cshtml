@@ -33,10 +33,8 @@
                 <button type="submit" class="btn btn-primary">Save</button>
                 <button type="button" class="btn">Cancel</button>
             </div>
-            
-            
         }
-        @Html.RenderPartial("_StatusHistory", Model.Statistic.StatusHistory)
+        @Html.Partial("~/Views/Survey/_StatusHistory.cshtml", Model.Statistic.StatusHistory)
     </div>
     <div class="span6" id="state-right">
         <div class="tabbable tabs-left">

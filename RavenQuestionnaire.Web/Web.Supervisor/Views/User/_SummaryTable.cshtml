@@ -1,40 +1,81 @@
 ﻿@using Core.Supervisor.Views.Summary
+@using Main.Core.Entities.SubEntities
+@using Web.Supervisor.Models
 @model SummaryView
-@foreach (var item in Model.Items)
-{
-    <tr>
-        <td>
-            <a href="@Url.Action("Index", "Survey", new { UserId = item.User.Id })">@item.User.Name</a>
-        </td>
-        @foreach (var t in item.Items)
-        {
-            <td class="@(t.Value.Initial == 0 ? "zero" : "")">
-                @t.Value.Initial
-            </td>
-            <td class="@(t.Value.Redo == 0 ? "zero" : "")">
-                @t.Value.Redo
-            </td>
-            <td  class="@(t.Value.Total == 0 ? "zero" : "")">
-                @t.Value.Total
-            </td>
-        }
-    </tr>
-}
-<tr>
-    <td>
-       Summary
-    </td>
-    @foreach (var t in Model.Summary.Items)
+@{
+    Guid? templateKey = null;
+    if (Model.Template.TemplateId != Guid.Empty)
     {
-        <th class="@(t.Value.Initial==0? "zero": "" )">
-            @t.Value.Initial
-        </th>
-        <th  class="@(t.Value.Redo == 0 ? "zero" : "")">
-            @t.Value.Redo
-        </th>
-        <th  class="@(t.Value.Total == 0 ? "zero" : "")">
-            @t.Value.Total
-        </th>
+        templateKey = Model.Template.TemplateId;
     }
-</tr>
+}
+<div>
+    <table id="table" class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
+                @foreach (var item in Model.Headers)
+                {
+                    <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var collect in Model.Items)
+            {
+                <tr>
+                    <td>@Html.ActionLink(collect.User.Name, "Assigments", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
+                    </td>
+                   
+                    @foreach (var it in Model.Headers)
+                    {
 
+                        var status = SurveyStatus.IsValidStatus(it.Value);
+                        var value = Model.Headers.GetItemValue(collect, it.Key);
+
+                        if (status != null)
+                        {
+                
+                        <td class="td-@it.Key.ToLower()">
+                            @if (value != "0")
+                            {
+                                @Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, status = status.PublicId, userId = collect.User.Id }, null)
+                            }
+                            else
+                            {
+                                <text>@value</text>
+                            }
+                        </td>
+                        }
+                        else
+                        {
+                        <td class="td-@it.Key.ToLower()">
+                            @if (value != "0")
+                            {
+                                @Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = collect.User.Id }, null)
+                            }
+                            else
+                            {
+                                <text>@value</text>
+                            }
+                        </td>
+                        }
+                    }
+                </tr>
+            }
+            <tr>
+                <th>Summary</th>
+                @foreach (var it in Model.Headers)
+                {
+                    <th>
+                        @Model.Headers.GetItemValue(Model.Summary, it.Key)
+                    </th>
+                }
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination" id="paging">
+        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
+    </div>
+</div>

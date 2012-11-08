@@ -54,6 +54,15 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Equals  method
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <returns>
+        /// True if Equals
+        /// </returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
@@ -66,15 +75,18 @@ namespace Main.Core.Entities.SubEntities
                 return true;
             }
 
-            if (obj.GetType() != typeof(UserLight))
-            {
-                return false;
-            }
-
-            return Equals((UserLight)obj);
+            return obj.GetType() == typeof(UserLight) && this.Equals((UserLight)obj);
         }
-        #endregion
 
+        /// <summary>
+        /// Equals method
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// True if Equals
+        /// </returns>
         public bool Equals(UserLight other)
         {
             if (ReferenceEquals(null, other))
@@ -86,9 +98,16 @@ namespace Main.Core.Entities.SubEntities
             {
                 return true;
             }
-            return other.Id.Equals(this.Id) && Equals(other.Name, this.Name);
+
+            return other.Id.Equals(this.Id) && other.Name == this.Name;
         }
 
+        /// <summary>
+        /// GetHashCode  method
+        /// </summary>
+        /// <returns>
+        /// Get Hash Code
+        /// </returns>
         public override int GetHashCode()
         {
             unchecked
@@ -96,5 +115,7 @@ namespace Main.Core.Entities.SubEntities
                 return (this.Id.GetHashCode() * 39) ^ (this.Name != null ? this.Name.GetHashCode() : 0);
             }
         }
+
+        #endregion
     }
 }

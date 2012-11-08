@@ -52,6 +52,11 @@ namespace Core.Supervisor.Views.Summary
         public UserLight Supervisor { get; set; }
 
         /// <summary>
+        /// Gets or sets TemplateId.
+        /// </summary>
+        public Guid TemplateId { get; set; }
+
+        /// <summary>
         /// Gets or sets the order.
         /// </summary>
         public string Order
