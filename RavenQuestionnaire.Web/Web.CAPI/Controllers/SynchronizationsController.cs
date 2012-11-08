@@ -301,6 +301,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public Guid Pull(string url, Guid syncKey)
         {
+            //syncKey = Guid.Parse("2e38c8a0-c0a7-43f8-a139-dc235eab2814");
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
            // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));

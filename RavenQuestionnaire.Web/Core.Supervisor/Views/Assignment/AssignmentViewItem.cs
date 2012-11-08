@@ -46,6 +46,7 @@ namespace Core.Supervisor.Views.Assignment
             this.Id = it.CompleteQuestionnaireId;
             this.Responsible = it.Responsible;
             this.TemplateId = it.TemplateId;
+            this.LastEntryDate = it.LastEntryDate;
             this.Status = it.Status;
             foreach (var header in headers)
             {
@@ -87,6 +88,11 @@ namespace Core.Supervisor.Views.Assignment
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets LastUpdate.
+        /// </summary>
+        public DateTime LastEntryDate { get; set; }
 
         #endregion
     }
