@@ -12,6 +12,7 @@
                     <th class="sorting" sorter='{"key":"@header.Value"}'>@header.Value</th>
                 }
                 <th class="sorting" sorter='{"key":"Responsible.Name"}'>Responsible</th>
+                <th class="sorting" sorter='{"key":"LastEntryDate"}'>LastUpdate</th>
                 <th class="sorting" sorter='{"key":"Status.Name"}'>Status</th>
                 <td>
                 </td>
@@ -58,6 +59,8 @@
                            }
                         </div>
                     
+                </td>
+                <td style="width: 10%;">@fitem.LastEntryDate.ToShortDateString()
                 </td>
                 <td style="width: 10%;">@fitem.Status.Name
                 </td>

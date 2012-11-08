@@ -16,6 +16,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
+    using Main.Core.Events.User;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
@@ -50,6 +51,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </summary>
         protected readonly IEventSync EventStore;
 
+        /// <summary>
+        /// The user store
+        /// </summary>
+        protected readonly IUserEventSync UserStore;
+
         #endregion
 
         #region Constructors and Destructors
@@ -68,6 +74,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.EventStore = kernel.Get<IEventSync>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
+            this.UserStore = kernel.Get<IUserEventSync>();
         }
 
         #endregion
@@ -94,6 +101,17 @@ namespace DataEntryClient.CompleteQuestionnaire
                     return;
                 }
 
+                //var ev = new List<AggregateRootEvent>();
+               // var interviewers = this.GetInterviewersForCurrentSupervisor(syncKey).ToList<Guid>();
+                //foreach (var rootEvent in events)
+                //{
+                //    var eventRoot = (rootEvent.Payload) as CompleteQuestionnaireDocument;
+                //    if (eventRoot != null &&  interviewers.Contains(eventRoot.Responsible.Id))
+                //    {
+                //        ev.Add(rootEvent);
+                //    }
+                //}
+
                 this.EventStore.WriteEvents(events);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed));
             }
@@ -105,6 +123,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             }
         }
 
+       
         /// <summary>
         /// The export.
         /// </summary>
@@ -168,5 +187,25 @@ namespace DataEntryClient.CompleteQuestionnaire
         }
 
         #endregion
+
+        #region PrivateMethods
+
+        //private IEnumerable<Guid> GetInterviewersForCurrentSupervisor(Guid syncKey)
+        //{
+        //    var allUsers = this.UserStore.GetUsers(null);
+        //    var currentUser = allUsers.Where(t => (t.Payload as NewUserCreated).PublicKey == syncKey).FirstOrDefault();
+        //    if (currentUser != null)
+        //    {
+        //        var currentSupervisor = (currentUser.Payload as NewUserCreated).Supervisor;
+        //        foreach (var rootEvent in allUsers)
+        //        {
+        //            if ((rootEvent.Payload as NewUserCreated).Supervisor == currentSupervisor)
+        //                yield return ((rootEvent.Payload as NewUserCreated).PublicKey);
+        //        }
+        //    }
+        //}
+
+        #endregion
+
     }
 }
