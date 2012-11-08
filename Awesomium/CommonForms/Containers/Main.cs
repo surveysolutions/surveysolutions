@@ -163,6 +163,7 @@ namespace Browsing.Common.Containers
 
                             if (this.destroyed)
                                 return;
+
                             this.Invoke(new MethodInvoker(() => SetCheckingStatus(true)));
 
                             this.isDatabaseContainsUsers = null; // reset

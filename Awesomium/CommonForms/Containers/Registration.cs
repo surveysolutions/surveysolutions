@@ -19,12 +19,14 @@ namespace Browsing.Common.Containers
         #region C-tor
 
         public Registration(IRequesProcessor requestProcessor, IUrlUtils urlUtils,
-                            ScreenHolder holder, bool registrationListVisible)
+                            ScreenHolder holder, bool registrationListVisible, string registerButtonText)
             : base(holder, true)
         {
             InitializeComponent();
 
             this.registrationPanel.Parent = ContentPanel;
+            
+            this.registrationButton.Text = registerButtonText;
 
             this.usbStatusPanel.UsbPressed += usb_Click;
 
@@ -57,7 +59,7 @@ namespace Browsing.Common.Containers
 
         private void EnableRegistrationList(bool visible)
         {
-            this.groupBox1.Visible = visible;
+            this.authorizatonGroupBox.Visible = visible;
         }
 
         private void CheckRegchannel() 

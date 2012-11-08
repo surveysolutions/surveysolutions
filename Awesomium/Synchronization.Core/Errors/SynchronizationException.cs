@@ -47,7 +47,7 @@ namespace Synchronization.Core.Errors
     public class UsbNotChoozenException : UsbUnacceptableException
     {
         public UsbNotChoozenException()
-            : base("Usb flush memory device has not been choozen")
+            : base("Usb flash memory device has not been choozen")
         {
         }
     }
@@ -55,7 +55,7 @@ namespace Synchronization.Core.Errors
     public class UsbNotPluggedException : UsbUnacceptableException
     {
         public UsbNotPluggedException()
-            : base("Usb flush memory device has not been plugged")
+            : base("Usb flash memory device has not been plugged")
         {
         }
     }

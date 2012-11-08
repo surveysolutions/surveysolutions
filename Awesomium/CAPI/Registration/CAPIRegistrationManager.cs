@@ -1,11 +1,10 @@
 using System;
-using System.Linq;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
 using Common.Utils;
-using Synchronization.Core.Registration;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 
 namespace Browsing.CAPI.Registration
 {
