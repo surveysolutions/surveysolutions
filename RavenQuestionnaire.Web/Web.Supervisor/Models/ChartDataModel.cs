@@ -23,7 +23,7 @@ namespace Web.Supervisor.Models
         /// </summary>
         public ChartDataModel()
         {
-            this.Data = new List<ChartDataItem>();
+            this.Data = new Dictionary<string, int>();
         }
 
         /// <summary>
@@ -32,7 +32,8 @@ namespace Web.Supervisor.Models
         /// <param name="title">
         /// The title.
         /// </param>
-        public ChartDataModel(string title):this()
+        public ChartDataModel(string title)
+            : this()
         {
             this.Title = title;
         }
@@ -54,48 +55,8 @@ namespace Web.Supervisor.Models
         /// <summary>
         /// Gets or sets Data.
         /// </summary>
-        public List<ChartDataItem> Data { get; set; }
+        public Dictionary<string, int> Data { get; set; }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Class-helper for chartDataItem
-    /// </summary>
-    public class ChartDataItem
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChartDataItem"/> class.
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="total">
-        /// The total.
-        /// </param>
-        /// <param name="approved">
-        /// The approved.
-        /// </param>
-        public ChartDataItem(string name, int total, int approved)
-        {
-            this.Name = name;
-            this.Total = total;
-            this.Approved = approved;
-        }
-
-        /// <summary>
-        /// Gets or sets Name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets Total.
-        /// </summary>
-        public int Total { get; set; }
-
-        /// <summary>
-        /// Gets or sets Approved.
-        /// </summary>
-        public int Approved { get; set; }
     }
 }

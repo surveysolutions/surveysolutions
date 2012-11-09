@@ -21,6 +21,7 @@ namespace Web.Supervisor.Controllers
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Commands.Synchronization;
+    using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Main.Core.Services;
@@ -583,19 +584,28 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Action for preparing data for visual chart
         /// </summary>
-        /// <param name="view">
-        /// The view.
+        /// <param name="templateId">
+        /// The template Id.
         /// </param>
         /// <returns>
         /// return Partial View with visual chart
         /// </returns>
-        public PartialViewResult Chart(IndexView view)
+        public ActionResult Chart(Guid templateId)
         {
             var data = new ChartDataModel("Chart");
+            var view = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(new AssignmentInputModel(templateId, Guid.Empty, 1, 100, new List<OrderRequestItem>()));
             if (view.Items.Count > 0)
             {
-                foreach (var item in view.Items)
-                    data.Data.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
+                if (view.Items.Where(t => t.Responsible == null).Count() > 0)
+                {
+                    data.Data.Add("Unassigned", view.Items.Where(t => t.Responsible == null).Count());
+                }
+
+                var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
+                foreach (var state in statusesName)
+                {
+                    data.Data.Add(state, view.Items.Where(t => t.Status.Name == state).Count());
+                }
             }
 
             return this.PartialView(data);
