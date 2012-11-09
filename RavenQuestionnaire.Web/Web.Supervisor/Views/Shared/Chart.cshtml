@@ -7,10 +7,9 @@
  <script src="@Url.Content("~/Scripts/exporting.js")" type = "text/javascript"> </script>
 
 @{
-    var total = Json.Encode(@Model.Data.Select(t=>t.Total).ToArray());
-    var approved = Json.Encode(@Model.Data.Select(t => t.Approved).ToArray());
+    var values = Json.Encode(@Model.Data.Select(t => t.Value).ToArray());
     var r = new JavaScriptSerializer();
-    var xTitles = r.Serialize(@Model.Data.Select(t => t.Name).ToArray());
+    var xTitles = r.Serialize(@Model.Data.Select(t => t.Key).ToArray());
 }
 
 <div id="container" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
@@ -65,11 +64,7 @@ $(function () {
                 borderWidth: 0
             },
             series: [{
-                name: 'Total',
-                data: @total            
-            }, {
-                name: 'Approved',
-                data: @approved
+                data: @values            
             }]
         });
     });
