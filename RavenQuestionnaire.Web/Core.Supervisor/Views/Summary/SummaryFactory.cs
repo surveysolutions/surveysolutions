@@ -33,9 +33,14 @@ namespace Core.Supervisor.Views.Summary
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
 
         /// <summary>
-        /// The users.
+        /// The templates.
         /// </summary>
         private readonly IDenormalizerStorage<QuestionnaireBrowseItem> templates;
+
+        /// <summary>
+        /// The users.
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> users;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SummaryFactory"/> class.
@@ -43,13 +48,20 @@ namespace Core.Supervisor.Views.Summary
         /// <param name="survey">
         /// The survey.
         /// </param>
+        /// <param name="templates">
+        /// The templates.
+        /// </param>
         /// <param name="users">
         /// The users.
         /// </param>
-        public SummaryFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey, IDenormalizerStorage<QuestionnaireBrowseItem> templates)
+        public SummaryFactory(
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey, 
+            IDenormalizerStorage<QuestionnaireBrowseItem> templates,
+            IDenormalizerStorage<UserDocument> users)
         {
             this.survey = survey;
             this.templates = templates;
+            this.users = users;
         }
 
         /// <summary>
@@ -63,6 +75,7 @@ namespace Core.Supervisor.Views.Summary
         /// </returns>
         public SummaryView Load(SummaryInputModel input)
         {
+            var interviewers = this.users.Query().Where(u => u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
             var template = new SummaryViewItem.TemplateLight(Guid.Empty, "All");
             if (input.TemplateId != Guid.Empty)
             {
@@ -71,9 +84,9 @@ namespace Core.Supervisor.Views.Summary
             }
            
             var items = this.BuildItems((input.TemplateId == Guid.Empty
-                                             ? this.survey.Query().Where(x => x.Responsible != null)
+                                             ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
                                              : this.survey.Query().Where(
-                                                 x => x.Responsible != null && (x.TemplateId == input.TemplateId)))
+                                                 x => x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
                 .GroupBy(x => x.Responsible))
                 .AsQueryable();
 

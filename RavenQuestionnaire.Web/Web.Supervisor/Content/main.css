@@ -160,3 +160,13 @@ h1.inline {
 .zero {
 	color: #ccc;
 }
+.sinle-line-header {
+	overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+.popover-content p {
+	font-size: 14px;
+	font-weight: normal;
+}

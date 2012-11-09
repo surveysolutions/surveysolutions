@@ -344,8 +344,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
+            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
+                new DisplaViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
             return this.View(model);
@@ -370,8 +370,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
+            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
+                new DisplaViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return this.PartialView("_SurveyContent", model);
@@ -409,7 +409,11 @@ namespace Web.Supervisor.Controllers
             }
 
             if (Request.IsAjaxRequest())
-                return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId }, JsonRequestBehavior.AllowGet);
+            {
+                return Json(
+                    new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId },
+                    JsonRequestBehavior.AllowGet);
+            }
             return this.RedirectToAction("Assigments", "Survey", new { id = tmptId });
         }
 

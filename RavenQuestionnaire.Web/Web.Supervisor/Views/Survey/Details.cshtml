@@ -45,13 +45,15 @@
         }
     };
  </script>
- <a class="btn btn-back" title="back to list" href="@Url.Action("Assigments", new { id = ViewBag.TemplateId })"><i class=" icon-chevron-left"></i></a> <h1 class="inline">@Model.Title
-
- </h1>
+ <a class="btn btn-back" title="back to list" href="@Url.Action("Assigments", new { id = ViewBag.TemplateId })"><i class=" icon-chevron-left"></i></a>
   @if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
  {
-     <a data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" class="btn btn-link" href="#" data-original-title="Survey comment">Show comment</a>
+     <h1 class="inline"><a  data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" href="#" data-original-title="Survey comment">@Model.Title</a></h1>
  }
+ else
+  {
+      <h1 class="inline">@Model.Title</h1>
+  }
 <div class="row-fluid">
     <div class="span3">
         <div data-role="panel" data-id="menu">
