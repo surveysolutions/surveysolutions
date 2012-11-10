@@ -6,6 +6,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Services;
 using NUnit.Framework;
 using Ncqrs;
@@ -73,7 +74,7 @@ namespace AndroidMain.Core.Tests.CommonTests
 			Assert.That(storedEvents.Count(), Is.EqualTo(1));
 
 			var newTemplateGuid = Guid.NewGuid();
-			var command = new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId);
+			var command = new CreateCompleteQuestionnaireCommand(newTemplateGuid, sourceId, new UserLight());
 
 			var commandService = NcqrsEnvironment.Get<ICommandService>();
 			commandService.Execute(command);

@@ -295,6 +295,8 @@ Mono/AndroidNinject.Extensions.Conventions/obj/*
 Mono/AndroidNinject.Extensions.Factory/obj/*
 Mono/AndroidNinject/bin/*
 Mono/LibrariesPortedToAndroid/Bin/*
+Mono/AndroidMain.DenormalizerStorage/bin/*
+Mono/AndroidMain.DenormalizerStorage/obj/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*

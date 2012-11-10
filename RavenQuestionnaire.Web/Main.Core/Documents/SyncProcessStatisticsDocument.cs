@@ -4,12 +4,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.View.SyncProcess;
+
 namespace Main.Core.Documents
 {
     using System;
     using System.Collections.Generic;
 
-    using Main.Core.View.SyncProcess;
 
     /// <summary>
     /// Collect user statistics

@@ -15,11 +15,11 @@ namespace Android.Tests.Runner
 		protected override IEnumerable<TestAssemblyInfo> GetAssembliesForTest()
 		{
 			yield return NcqrsTests();
-			//yield return CapiTests();
-			//yield return NcalcTests();
-			//yield return StepshootTests();
-			//yield return MainCoreTests();
-			//yield return SQliteEventStoreTests();
+			yield return CapiTests();
+			yield return NcalcTests();
+			yield return StepshootTests();
+			yield return MainCoreTests();
+			yield return SQliteEventStoreTests();
 		}
 
 		#region TestAssemblyInfos

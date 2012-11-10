@@ -62,10 +62,10 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Kaliko.ImageLibrary">
+      <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -78,7 +78,8 @@
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions">
+    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Embedded">
@@ -115,222 +116,97 @@
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Collection\CreateCollectionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Collection\RemoveCollectionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Collection\RemoveCollectionItemCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\ConcurrencyResolveCommandService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\File\DeleteFileCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\File\UpdateFileMetaCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\File\UploadFileCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Location\CreateLocationCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
+    <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
+    <Compile Include="Commands\Collection\RemoveCollectionItemCommand.cs" />
+    <Compile Include="Commands\ConcurrencyResolveCommandService.cs" />
+    <Compile Include="Commands\File\DeleteFileCommand.cs" />
+    <Compile Include="Commands\File\UpdateFileMetaCommand.cs" />
+    <Compile Include="Commands\File\UploadFileCommand.cs" />
+    <Compile Include="Commands\Location\CreateLocationCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Question\ChangeQuestionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Questionnaire\UploadImageCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Synchronization\EndProcessComand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\Synchronization\PushEventsCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\User\ChangeUserCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\User\ChangeUserStatusCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Commands\User\CreateUserCommand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CoreRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Denormalizers\IDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Denormalizers\IDenormalizerStorage.cs">
+    <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\ChangeQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />
+    <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
+    <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
+    <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
+    <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
+    <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
+    <Compile Include="Commands\Synchronization\RegisterDeviceCommand.cs" />
+    <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
+    <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
+    <Compile Include="Commands\User\ChangeUserCommand.cs" />
+    <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
+    <Compile Include="Commands\User\CreateUserCommand.cs" />
+    <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
+    <Compile Include="Conventions\RegisterGenericTypesOfInterface.cs" />
+    <Compile Include="CoreRegistry.cs" />
+    <Compile Include="DenormalizerStorageProvider.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DocumentStoreProvider.cs" />
-    <Compile Include="Documents\AbstractDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\ClientSettingsDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\CollectionDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\CompleteQuestionnaireDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\EventState.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\ExportSchemaDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\FileDescription.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\FlowGraphDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\ICollectionDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\ICompleteQuestionnaireDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\IFlowGraphDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\IQuestionnaireDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\LocationDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\ProcessedEventChunk.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\QuestionnaireDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\StatusDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\SynchronizationType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\SyncProcessDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Documents\UserDocument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\CollectionAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\CompleteQuestionnaireAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\FileAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\LocationAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\QuestionnaireAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\SyncProcessAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\UserAR.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Documents\AbstractDocument.cs" />
+    <Compile Include="Documents\ChangeStatusDocument.cs" />
+    <Compile Include="Documents\ClientSettingsDocument.cs" />
+    <Compile Include="Documents\CollectionDocument.cs" />
+    <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
+    <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
+    <Compile Include="Documents\EventState.cs" />
+    <Compile Include="Documents\ExportSchemaDocument.cs" />
+    <Compile Include="Documents\FileDescription.cs" />
+    <Compile Include="Documents\FlowGraphDocument.cs" />
+    <Compile Include="Documents\ICollectionDocument.cs" />
+    <Compile Include="Documents\ICompleteQuestionnaireDocument.cs" />
+    <Compile Include="Documents\IFlowGraphDocument.cs" />
+    <Compile Include="Documents\IQuestionnaireDocument.cs" />
+    <Compile Include="Documents\LocationDocument.cs" />
+    <Compile Include="Documents\ProcessedEventChunk.cs" />
+    <Compile Include="Documents\QuestionnaireDocument.cs" />
+    <Compile Include="Documents\Statistics\CompleteQuestionnaireStatisticDocument.cs" />
+    <Compile Include="Documents\Statistics\QuestionStatisticDocument.cs" />
+    <Compile Include="Documents\StatusDocument.cs" />
+    <Compile Include="Documents\SyncDeviceRegisterDocument.cs" />
+    <Compile Include="Documents\SynchronizationStatisticType.cs" />
+    <Compile Include="Documents\SynchronizationType.cs" />
+    <Compile Include="Documents\SyncProcessDocument.cs" />
+    <Compile Include="Documents\SyncProcessStatisticsDocument.cs" />
+    <Compile Include="Documents\UserDocument.cs" />
+    <Compile Include="Domain\CollectionAR.cs" />
+    <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
+    <Compile Include="Domain\DeviceAR.cs" />
+    <Compile Include="Domain\FileAR.cs" />
+    <Compile Include="Domain\LocationAR.cs" />
+    <Compile Include="Domain\QuestionnaireAR.cs" />
+    <Compile Include="Domain\SyncProcessAR.cs" />
+    <Compile Include="Domain\UserAR.cs" />
     <Compile Include="Entities\Composite\CompositeException.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\Composite\IComposite.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\Extensions\CompleteQuestionWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\Extensions\CompositeWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\Extensions\GroupHash.cs">
@@ -363,16 +239,10 @@
     <Compile Include="Entities\SubEntities\AnswerType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\BindedQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\CollectionItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Entities\SubEntities\Complete\BindedCompleteQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs">
@@ -384,9 +254,6 @@
     <Compile Include="Entities\SubEntities\Complete\IAutoPropagate.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Entities\SubEntities\Complete\IBinded.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -394,6 +261,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\ICompleteGroup.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\SubEntities\Complete\ICompleteQuestion.cs">
@@ -459,6 +329,9 @@
     <Compile Include="Entities\SubEntities\ICollectionItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Entities\SubEntities\IConditional.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Entities\SubEntities\IFlowBlock.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -522,22 +395,18 @@
     <Compile Include="Entities\SubEntities\VisitedGroup.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventHandlers\FileStoreDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventHandlers\UserDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="EventHandlers\CompleteQuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandlers\DeviceDenormalizer.cs" />
+    <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
+    <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
+    <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
+    <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventSync.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\AbstractSnapshotableEventSync.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\AggregateRootEvent.cs">
@@ -645,13 +514,22 @@
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Synchronization\NewDeviceRegistered.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\Synchronization\ProcessEnded.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\UserEventSync.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\User\NewUserCreated.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Events\User\UserBaseEvent.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Events\User\UserChanged.cs">
@@ -666,96 +544,48 @@
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ExpressionExecutors\StatusProcessorExecutor.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="NCQRSInit.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\IFileStorageService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\CollectionExtensions.cs" />
-    <Compile Include="Utility\EnumerableExtensions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\EventMergeUtils.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\IdUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\LINQExtensions.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\AZStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\MaxMinStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\MinMaxStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\RandomStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\OrderStrategy\ZAStrategy.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\SimpleHash.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Utility\StringUtil.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Answer\AnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Answer\CompleteAnswerView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Card\CardView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Card\CardViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Card\CardViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMabileViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireMobileViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs">
+    <Compile Include="Services\IFileStorageService.cs" />
+    <Compile Include="Utility\EnumerableExtensions.cs" />
+    <Compile Include="Utility\EventMergeUtils.cs" />
+    <Compile Include="Utility\GroupWithRout.cs" />
+    <Compile Include="Utility\IdUtil.cs" />
+    <Compile Include="Utility\LINQExtensions.cs" />
+    <Compile Include="Utility\NodeWithLevel.cs" />
+    <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\AZStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\IOrderStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MaxMinStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\MinMaxStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\OrderStrategyFactory.cs" />
+    <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
+    <Compile Include="Utility\OrderStrategy\ZAStrategy.cs" />
+    <Compile Include="Utility\SimpleHash.cs" />
+    <Compile Include="Utility\StringUtil.cs" />
+    <Compile Include="View\Answer\AnswerView.cs" />
+    <Compile Include="View\Answer\CompleteAnswerView.cs" />
+    <Compile Include="View\Card\CardView.cs" />
+    <Compile Include="View\Card\CardViewFactory.cs" />
+    <Compile Include="View\Card\CardViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
+    <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\DefaultScreenViewSupplier.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\IScreenViewSupplier.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenGroupViewFactory.cs" />
+    <Compile Include="View\CompleteQuestionnaire\ScreenGroup\ScreenNavigationView.cs" />
+    <Compile Include="View\CompleteQuestionnaire\Statistics\ChangeStatusHistoryView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticView.cs">
@@ -768,6 +598,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="View\Device\DeviceView.cs" />
+    <Compile Include="View\Device\DeviceViewFactory.cs" />
+    <Compile Include="View\Device\DeviceViewInputModel.cs" />
+    <Compile Include="View\Group\AbstractGroupMobileView.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="View\Group\CompleteGroupHeaders.cs">
@@ -785,63 +621,30 @@
     <Compile Include="View\Group\ScreenNavigation.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="View\ICompositeView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\IViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\IViewRepsoitory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Questionnaire\QuestionnaireBrowseViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Question\CompleteQuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Question\QuestionView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Question\QuestionViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\Question\QuestionViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserBrowseInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserBrowseItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserBrowseView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserBrowseViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserViewFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\User\UserViewInputModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="View\ViewRepository.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="View\ICompositeView.cs" />
+    <Compile Include="View\IViewFactory.cs" />
+    <Compile Include="View\IViewRepsoitory.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseInputModel.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
+    <Compile Include="View\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="View\Question\CompleteQuestionView.cs" />
+    <Compile Include="View\Question\QuestionView.cs" />
+    <Compile Include="View\Question\QuestionViewFactory.cs" />
+    <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\SyncProcess\CapiExportStatistics.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessView.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />
+    <Compile Include="View\SyncProcess\SyncProcessInputModel.cs" />
+    <Compile Include="View\SyncProcess\UserSyncProcessStatistics.cs" />
+    <Compile Include="View\User\UserBrowseInputModel.cs" />
+    <Compile Include="View\User\UserBrowseItem.cs" />
+    <Compile Include="View\User\UserBrowseView.cs" />
+    <Compile Include="View\User\UserBrowseViewFactory.cs" />
+    <Compile Include="View\User\UserView.cs" />
+    <Compile Include="View\User\UserViewFactory.cs" />
+    <Compile Include="View\User\UserViewInputModel.cs" />
+    <Compile Include="View\ViewRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">
@@ -865,7 +668,9 @@
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Events\AbstractEventSync.cs.orig" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
