@@ -21,6 +21,8 @@ namespace Web.CAPI.Controllers
     using Main.Core.View;
     using Main.Core.View.Device;
 
+    using Questionnaire.Core.Web.Helpers;
+
     /// <summary>
     /// The device controller.
     /// </summary>
@@ -33,6 +35,11 @@ namespace Web.CAPI.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalProvider;
+
         #endregion
 
         #region Constructor
@@ -43,9 +50,10 @@ namespace Web.CAPI.Controllers
         /// <param name="repository">
         /// The repository.
         /// </param>
-        public DeviceController(IViewRepository repository)
+        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalProvider)
         {
             this.viewRepository = repository;
+            this.globalProvider = globalProvider;
         }
 
         #endregion
@@ -65,8 +73,9 @@ namespace Web.CAPI.Controllers
         {
             try
             {
+                var currentUser = this.globalProvider.GetCurrentUser();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, TODO));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, currentUser));
             }
             catch (Exception)
             {
@@ -87,7 +96,8 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public JsonResult GetPublicKey(Guid tabletId)
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId));
+            var currentUser = this.globalProvider.GetCurrentUser();
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId, currentUser.Id));
             return this.Json(new { PublicKey = model.Items.FirstOrDefault().SecretKey }, JsonRequestBehavior.AllowGet);
         }
 
