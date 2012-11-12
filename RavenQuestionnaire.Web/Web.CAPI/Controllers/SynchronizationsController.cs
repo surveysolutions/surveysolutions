@@ -120,7 +120,7 @@ namespace Web.CAPI.Controllers
             var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
             var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
                   new ExporStatisticsInputModel(keys));
-          
+
             return this.Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
@@ -264,12 +264,47 @@ namespace Web.CAPI.Controllers
         public int ProgressInPersentage(Guid id)
         {
             SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+
             if (stat == null)
             {
                 return -1;
             }
 
             return stat.ProgressPercentage;
+        }
+
+        /// <summary>
+        /// The progress in persentage.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The progress in persentage.
+        /// </returns>
+        public bool ProgressEnding(Guid id)
+        {
+            var invoker = NcqrsEnvironment.Get<ICommandService>();
+
+            try
+            {
+                SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+
+                if (stat == null)
+                {
+                    return false;
+                }
+
+                if (stat.ProgressPercentage < 100 && stat.ProgressPercentage > 0)
+                    invoker.Execute(new EndProcessComand(id, EventState.Error));
+                return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                return false;
+            }
+
+
         }
 
         /// <summary>
@@ -304,12 +339,13 @@ namespace Web.CAPI.Controllers
             //syncKey = Guid.Parse("2e38c8a0-c0a7-43f8-a139-dc235eab2814");
             Guid syncProcess = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-           // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
             WaitCallback callback = (state) =>
                 {
                     try
                     {
                         var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
+
                         process.Import(syncKey);
                     }
                     catch (Exception e)

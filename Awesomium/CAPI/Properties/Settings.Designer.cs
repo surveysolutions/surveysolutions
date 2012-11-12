@@ -250,5 +250,17 @@ namespace Browsing.CAPI.Properties {
                 this["RegistrationPhaze"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressEnding")]
+        public string GetEndProcessCapiPath {
+            get {
+                return ((string)(this["GetEndProcessCapiPath"]));
+            }
+            set {
+                this["GetEndProcessCapiPath"] = value;
+            }
+        }
     }
 }
