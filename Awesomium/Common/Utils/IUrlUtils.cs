@@ -17,5 +17,6 @@ namespace Common.Utils
         string GetCheckPushPrerequisitesUrl();
         string GetCurrentUserGetUrl();
         string GetRegistrationCapiPath();
+        string GetEndProcessUrl(Guid id);
     }
 }
