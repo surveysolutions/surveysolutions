@@ -8,6 +8,8 @@ namespace Main.Core.Commands.Synchronization
 {
     using System;
     using Main.Core.Domain;
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
@@ -24,26 +26,33 @@ namespace Main.Core.Commands.Synchronization
         /// Initializes a new instance of the <see cref="RegisterDeviceCommand"/> class.
         /// </summary>
         /// <param name="description">
-        /// The description.
+        ///   The description.
         /// </param>
         /// <param name="secretKey">
-        /// The secret key.
+        ///   The secret key.
         /// </param>
         /// <param name="tabletId">
-        /// The tablet id.
+        ///   The tablet id.
         /// </param>
-        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        /// <param name="currentUser"></param>
+        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId, UserLight supervisor)
         {
             this.RegisterGuid = tabletId;
             this.Description = description;
             this.SecretKey = secretKey;
             this.TabletId = tabletId;
             this.RegisteredDate = DateTime.Today;
+            this.Supervisor = supervisor;
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Supervisor.
+        /// </summary>
+        public UserLight Supervisor { get; set; }
 
         /// <summary>
         /// Gets or sets RegisterGuid.

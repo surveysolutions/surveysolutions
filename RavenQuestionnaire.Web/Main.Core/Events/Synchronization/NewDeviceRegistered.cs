@@ -7,6 +7,9 @@
 namespace Main.Core.Events.Synchronization
 {
     using System;
+
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs.Eventing.Storage;
 
     /// <summary>
@@ -42,6 +45,11 @@ namespace Main.Core.Events.Synchronization
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets Registrator.
+        /// </summary>
+        public UserLight Registrator { get; set; }
 
         #endregion
     }

@@ -58,7 +58,8 @@ namespace Main.Core.EventHandlers
                     SecretKey = evnt.Payload.SecretKey,
                     Description = evnt.Payload.Description,
                     TabletId = evnt.Payload.TabletId,
-                    PublicKey = evnt.EventSourceId
+                    PublicKey = evnt.EventSourceId,
+                    Registrator = evnt.Payload.Registrator
                 },
                 evnt.Payload.PublicKey);
         }

@@ -32,14 +32,20 @@ namespace Main.Core.View.Device
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        public DeviceViewInputModel(Guid tabletId)
+        public DeviceViewInputModel(Guid tabletId, Guid supervisorId)
         {
             this.TabletId = tabletId;
+            this.SupervisorId = supervisorId;
         }
 
         #endregion
         
         #region Properties
+
+        /// <summary>
+        /// Gets or sets SupervisorId.
+        /// </summary>
+        public Guid SupervisorId { get; set; }
 
         /// <summary>
         /// Gets or sets TabletId.

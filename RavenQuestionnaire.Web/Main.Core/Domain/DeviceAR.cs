@@ -7,6 +7,8 @@
 namespace Main.Core.Domain
 {
     using System;
+
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Ncqrs.Domain;
 
@@ -42,6 +44,8 @@ namespace Main.Core.Domain
         /// </summary>
         private Guid publicKey;
 
+        private UserLight registrator;
+
         #endregion
 
         #region Constructor
@@ -68,7 +72,7 @@ namespace Main.Core.Domain
         /// <param name="registeredDate">
         /// The registered date.
         /// </param>
-        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate)
+        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate, UserLight supervisor)
             : base(tabletId)
         {
             this.ApplyEvent(
@@ -78,7 +82,8 @@ namespace Main.Core.Domain
                    RegisteredDate = registeredDate,
                    TabletId = tabletId,
                    Description = description,
-                   PublicKey = Guid.NewGuid()
+                   PublicKey = Guid.NewGuid(),
+                   Registrator = supervisor
                });
         }
 
@@ -100,6 +105,7 @@ namespace Main.Core.Domain
             this.registeredDate = e.RegisteredDate;
             this.tabletId = e.TabletId;
             this.publicKey = e.PublicKey;
+            this.registrator = e.Registrator;
         }
 
         #endregion

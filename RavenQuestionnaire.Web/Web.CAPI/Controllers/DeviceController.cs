@@ -66,7 +66,7 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, TODO));
             }
             catch (Exception)
             {
