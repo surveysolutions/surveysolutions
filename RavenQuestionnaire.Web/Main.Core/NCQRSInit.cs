@@ -65,8 +65,16 @@ namespace Main.Core
         /// </summary>
         /// <exception cref="Exception">
         /// </exception>
-        public static void RebuildReadLayer(DocumentStore store)
+        public static void RebuildReadLayer(IKernel kernel)
         {
+            var store = kernel.Get<DocumentStore>();
+            store.Conventions = new DocumentConvention
+                {
+                    JsonContractResolver = new PropertiesOnlyContractResolver(),
+                    FindTypeTagName = x => "Events"
+                    //NewDocumentETagGenerator = GenerateETag
+                };
+
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
             {
@@ -82,19 +90,6 @@ namespace Main.Core
             store.CreateIndex();
             var myEvents = store.GetAllEvents();
             myEventBus.Publish(myEvents);
-            /* foreach (IGrouping<Guid, CommittedEvent> eventsByAggregateRoot in myEvents.GroupBy(x => x.EventSourceId))
-        {
-            myEventBus.Publish(ExcludeHistoryBefaourSnapshoot(eventsByAggregateRoot));
-        }*/
-        }
-        private static IEnumerable<CommittedEvent> ExcludeHistoryBefaourSnapshoot(IEnumerable<CommittedEvent> events)
-        {
-            var lastSnapshoot = events.LastOrDefault(x => x.Payload is SnapshootLoaded);
-            if (lastSnapshoot == null)
-                return events;
-            else
-                return events.SkipWhile(x => x != lastSnapshoot);
-
         }
 
         #endregion

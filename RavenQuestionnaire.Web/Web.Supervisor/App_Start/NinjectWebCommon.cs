@@ -46,6 +46,7 @@ namespace Web.Supervisor.App_Start
         public static void Stop()
         {
             bootstrapper.ShutDown();
+            SuccessMarker.Stop();
         }
 
         /// <summary>
@@ -67,22 +68,10 @@ namespace Web.Supervisor.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            RegisterServices(kernel);
             NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
-
+            SuccessMarker.Start(kernel);
             return kernel;
         }
 
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When( b => HttpContext.Current != null).InScope(o => HttpContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => OperationContext.Current != null).InScope(o => OperationContext.Current);
-            kernel.Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<DocumentStore>().OpenSession()).When(b => HttpContext.Current == null && OperationContext.Current == null).InScope(o => Thread.CurrentThread);
-
-        }
     }
 }

@@ -124,6 +124,7 @@
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
+    <Compile Include="Helpers\SuccessMarker.cs" />
     <Compile Include="Register\RegisterData.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />

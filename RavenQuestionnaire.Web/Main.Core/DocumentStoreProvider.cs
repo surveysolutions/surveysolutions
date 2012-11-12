@@ -33,6 +33,7 @@ namespace Main.Core
         /// </summary>
         private readonly string storage;
 
+        
         #endregion
 
         #region Constructors and Destructors
@@ -70,10 +71,10 @@ namespace Main.Core
             DocumentStore store;
             try
             {
-                store = this.isEmbedded ? 
-                    new EmbeddableDocumentStore { DataDirectory = this.storage, UseEmbeddedHttpServer = false } : 
+                store = this.isEmbedded ?
+                    GetEmbededStorage() : 
                     new DocumentStore { Url = this.storage };
-
+                
                 store.Initialize();
             }
             catch (Exception ex)
@@ -83,7 +84,17 @@ namespace Main.Core
 
             return store;
         }
-
+        protected  EmbeddableDocumentStore GetEmbededStorage()
+        {
+            if(!isEmbedded)
+                throw new InvalidOperationException("You can't call this method");
+            if(embStorage==null ||embStorage.WasDisposed)
+            {
+                embStorage = new EmbeddableDocumentStore() { DataDirectory = this.storage, UseEmbeddedHttpServer = false };
+            }
+            return embStorage;
+        }
+        private  EmbeddableDocumentStore embStorage;
         #endregion
     }
 }

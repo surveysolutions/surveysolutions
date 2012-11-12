@@ -1,7 +1,9 @@
 using System.Collections.Concurrent;
+using System.IO;
 using System.ServiceModel;
 using System.Threading;
 using System.Web.Configuration;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using Core.CAPI.Synchronization;
 using DataEntryClient.WcfInfrastructure;
@@ -48,8 +50,11 @@ namespace Web.CAPI.App_Start
         public static void Stop()
         {
             bootstrapper.ShutDown();
+
+            SuccessMarker.Stop();
         }
 
+      
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -75,32 +80,11 @@ namespace Web.CAPI.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             kernel.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
-            RegisterServices(kernel);
-            NCQRSInit.Init(/*System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
+            NCQRSInit.Init( /*System.Web.Configuration.WebConfigurationManager.AppSettings["Raven.DocumentStore"], */
+                kernel);
+            SuccessMarker.Start(kernel);
             return kernel;
         }
 
-        /// <summary>
-        /// Load your modules or register your services here!
-        /// </summary>
-        /// <param name="kernel">The kernel.</param>
-        private static void RegisterServices(IKernel kernel)
-        {
-            kernel.Bind<IDocumentSession>().ToMethod(
-               context => context.Kernel.Get<DocumentStore>().OpenSession()).When(
-                   b => HttpContext.Current != null).InScope(
-                       o => HttpContext.Current);
-
-            kernel.Bind<IDocumentSession>().ToMethod(
-                context => context.Kernel.Get<DocumentStore>().OpenSession()).When(
-                    b => HttpContext.Current == null).InScope(o => Thread.CurrentThread);
-
-            kernel.Bind<IDocumentSession>().ToMethod(
-             context => context.Kernel.Get<DocumentStore>().OpenSession()).When(
-                 b => OperationContext.Current != null).InScope(o => OperationContext.Current);
-
-        }
-
-        private static ConcurrentDictionary<string, object> cache = new ConcurrentDictionary<string, object>();
     }
 }

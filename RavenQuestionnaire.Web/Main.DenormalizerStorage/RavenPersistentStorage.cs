@@ -38,7 +38,7 @@ namespace Main.DenormalizerStorage
 
         #region Implementation of IPersistentStorage
 
-        public T GetByGuid<T>(Guid key) where T : class
+        public T GetByGuid<T>(string key) where T : class
         {
             using (var session = _documentStore.OpenSession())
             {
@@ -49,7 +49,7 @@ namespace Main.DenormalizerStorage
             return null;
         }
 
-        public void Remove<T>(Guid key) where T : class
+        public void Remove<T>(string key) where T : class
         {
             using (var session = _documentStore.OpenSession())
             {
@@ -59,12 +59,12 @@ namespace Main.DenormalizerStorage
                     session.Delete(obj);
             }
         }
-        public void Store<T>(T denormalizer, Guid key) where T : class
+        public void Store<T>(T denormalizer, string key) where T : class
         {
             Store(denormalizer, key, 0);
         }
 
-        protected void Store<T>(T denormalizer, Guid key, int i) where T : class
+        protected void Store<T>(T denormalizer, string key, int i) where T : class
         {
             using (var session = _documentStore.OpenSession())
             {
@@ -99,18 +99,18 @@ namespace Main.DenormalizerStorage
         }
 
         #endregion
-        private StoredObject GetObject<T>(IDocumentSession session, Guid key) where T : class
+        private StoredObject GetObject<T>(IDocumentSession session, string key) where T : class
         {
               return session.Load<StoredObject>(GetObjectId(typeof(T), key));
         }
 
-        private StoredObject ToStoredObject<T>(T obj, Guid key) where T : class
+        private StoredObject ToStoredObject<T>(T obj, string key) where T : class
         { 
             return new StoredObject(obj, GetObjectId(obj.GetType(), key));
         }
-        private string GetObjectId(Type objType, Guid key) 
+        private string GetObjectId(Type objType, string key) 
         {
-            return objType.Name + "/" + key.ToString();
+            return objType.Name + "/" + key;
         }
     }
 }
