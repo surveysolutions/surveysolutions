@@ -55,7 +55,7 @@ namespace Core.Supervisor.Views.Summary
         /// The users.
         /// </param>
         public SummaryFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
             IDenormalizerStorage<QuestionnaireBrowseItem> templates,
             IDenormalizerStorage<UserDocument> users)
         {
@@ -75,14 +75,14 @@ namespace Core.Supervisor.Views.Summary
         /// </returns>
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.users.Query().Where(u => u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
+            var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
             var template = new SummaryViewItem.TemplateLight(Guid.Empty, "All");
             if (input.TemplateId != Guid.Empty)
             {
                 var tbi = this.templates.GetByGuid(input.TemplateId);
                 template = new SummaryViewItem.TemplateLight(tbi.Id, tbi.Title);
             }
-           
+
             var items = this.BuildItems((input.TemplateId == Guid.Empty
                                              ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
                                              : this.survey.Query().Where(
@@ -99,12 +99,12 @@ namespace Core.Supervisor.Views.Summary
             }
 
             retval.Summary = new SummaryViewItem(
-                new UserLight(Guid.Empty, "Summary"), 
-                items.Sum(x => x.Total), 
-                items.Sum(x => x.Initial), 
-                items.Sum(x => x.Error), 
-                items.Sum(x => x.Complete), 
-                items.Sum(x => x.Approve), 
+                new UserLight(Guid.Empty, "Summary"),
+                items.Sum(x => x.Total),
+                items.Sum(x => x.Initial),
+                items.Sum(x => x.Error),
+                items.Sum(x => x.Complete),
+                items.Sum(x => x.Approve),
                 items.Sum(x => x.Redo));
 
             retval.TotalCount = items.Count();
@@ -132,7 +132,7 @@ namespace Core.Supervisor.Views.Summary
                                             templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Initial.PublicId),
                                             templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Error.PublicId),
                                             templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Complete.PublicId),
-                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId), templateGroup.Count( q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
+                                            templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Approve.PublicId), templateGroup.Count(q => q.Status.PublicId == SurveyStatus.Redo.PublicId));
             }
         }
     }
