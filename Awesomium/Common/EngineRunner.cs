@@ -7,11 +7,12 @@ namespace Common
 {
     public class EngineRunner
     {
-        private Process _process;
+        private IISExpress _process;
 
         public void RunEngine(string engninePath, string port)
         {
-            string ProgramFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            _process = IISExpress.Start(engninePath, port);
+            /*string ProgramFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
             string IIS_EXPRESS = Path.Combine(ProgramFilesX86, "IIS Express\\iisexpress.exe");
             if (!File.Exists(IIS_EXPRESS))
             {
@@ -34,7 +35,7 @@ namespace Common
             _process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
             //_process.OutputDataReceived += Write;
-            _process.Start();
+            _process.Start();*/
         }
 
         /* private void Write(object sender, DataReceivedEventArgs e)
@@ -45,8 +46,10 @@ namespace Common
 
         public void StopEngine(object sender, EventArgs e)
         {
-            if (_process != null && !_process.HasExited)
-                _process.Kill();
+            if (_process != null)
+                _process.Stop();
+         /*   if (_process != null && !_process.HasExited)
+                _process.Close();*/
         }
     }
 }
