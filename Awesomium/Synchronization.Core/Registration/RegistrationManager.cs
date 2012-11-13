@@ -45,7 +45,7 @@ namespace Synchronization.Core.Registration
 
         #region Helpers
 
-        private Guid GetCurrentUser()
+        internal Guid GetCurrentUser()
         {
             if (this.currentUser.HasValue)
                 return this.currentUser.Value;
@@ -158,23 +158,24 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        protected byte[] SendRegistrationRequest(byte[] requestParams)
+        protected byte[] SendRegistrationRequest(RegisterData reqParams)
         {
             string url = RegistrationService;
-
             //return this.requestProcessor.Process<byte[]>(url, "POST", false, null);
-
+            reqParams.GuidCurrentUser = this.GetCurrentUser();
+            var data = SerializeRegisterData(reqParams);
+            MemoryStream mStream = new MemoryStream(ASCIIEncoding.Default.GetBytes(data), true);
+            byte[] req = mStream.ToArray();
             try
             {
                 var request = WebRequest.Create(url);
-
                 request.ContentType = "application/json; charset=utf-8";
                 request.Method = "POST";
-                request.ContentLength = requestParams.Length;
+                request.ContentLength = req.Length;
 
                 using (Stream os = request.GetRequestStream())
                 {
-                    os.Write(requestParams, 0, requestParams.Length);
+                    os.Write(req, 0, Convert.ToInt32(req.Length));
                     os.Close();
                 }
 
@@ -245,7 +246,6 @@ namespace Synchronization.Core.Registration
                 fileStream = File.OpenRead(filePath);
                 byte[] bytes = new byte[fileStream.Length];
                 fileStream.Read(bytes, 0, Convert.ToInt32(fileStream.Length));
-
                 return bytes;
             }
             finally

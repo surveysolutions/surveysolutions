@@ -19,10 +19,8 @@ namespace Browsing.Supervisor.Registration
         protected override bool OnStartRegistration(string folderPath, out RegisterData registeredData)
         {
             var data = GetFromRegistrationFile(folderPath + InFile);
-
             var deviceRegisterData = DeserializeRegisterData(Encoding.ASCII.GetString(data));
-
-            var response = SendRegistrationRequest(data);
+            var response = SendRegistrationRequest(deviceRegisterData);
             var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
             try

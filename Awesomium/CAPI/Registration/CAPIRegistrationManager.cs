@@ -43,7 +43,7 @@ namespace Browsing.CAPI.Registration
 
             var supervisorRegisterData = DeserializeRegisterData(Encoding.ASCII.GetString(data));
 
-            var response = SendRegistrationRequest(data);
+            var response = SendRegistrationRequest(supervisorRegisterData);
             var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
             try

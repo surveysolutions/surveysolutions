@@ -73,9 +73,8 @@ namespace Web.Supervisor.Controllers
         {
             try
             {
-                var currentUser = this.globalProvider.GetCurrentUser();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, currentUser));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, data.GuidCurrentUser));
             }
             catch (Exception)
             {

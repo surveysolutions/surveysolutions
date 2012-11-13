@@ -41,6 +41,10 @@ namespace Synchronization.Core.Registration
         /// </summary>
         public Guid RegisterId { get; set; }
 
+        /// <summary>
+        /// Gets or sets GuidCurrentUser.
+        /// </summary>
+        public Guid GuidCurrentUser { get; set; }
 
         #endregion
     }

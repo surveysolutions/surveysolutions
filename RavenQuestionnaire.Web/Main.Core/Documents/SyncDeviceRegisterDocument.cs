@@ -45,7 +45,7 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets or sets Registrator.
         /// </summary>
-        public UserLight Registrator { get; set; }
+        public Guid Registrator { get; set; }
 
         #endregion
     }
