@@ -49,7 +49,7 @@ namespace Main.Core.Events.Synchronization
         /// <summary>
         /// Gets or sets Registrator.
         /// </summary>
-        public UserLight Registrator { get; set; }
+        public Guid Registrator { get; set; }
 
         #endregion
     }

@@ -26,23 +26,25 @@ namespace Main.Core.Commands.Synchronization
         /// Initializes a new instance of the <see cref="RegisterDeviceCommand"/> class.
         /// </summary>
         /// <param name="description">
-        ///   The description.
+        /// The description.
         /// </param>
         /// <param name="secretKey">
-        ///   The secret key.
+        /// The secret key.
         /// </param>
         /// <param name="tabletId">
-        ///   The tablet id.
+        /// The tablet id.
         /// </param>
-        /// <param name="currentUser"></param>
-        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId, UserLight supervisor)
+        /// <param name="guidSupervisor">
+        /// The guid Supervisor.
+        /// </param>
+        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId, Guid guidSupervisor)
         {
             this.RegisterGuid = tabletId;
             this.Description = description;
             this.SecretKey = secretKey;
             this.TabletId = tabletId;
             this.RegisteredDate = DateTime.Today;
-            this.Supervisor = supervisor;
+            this.GuidSupervisor = guidSupervisor;
         }
 
         #endregion
@@ -52,7 +54,7 @@ namespace Main.Core.Commands.Synchronization
         /// <summary>
         /// Gets or sets Supervisor.
         /// </summary>
-        public UserLight Supervisor { get; set; }
+        public Guid GuidSupervisor { get; set; }
 
         /// <summary>
         /// Gets or sets RegisterGuid.

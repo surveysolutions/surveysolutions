@@ -44,7 +44,7 @@ namespace Main.Core.Domain
         /// </summary>
         private Guid publicKey;
 
-        private UserLight registrator;
+        private Guid registrator;
 
         #endregion
 
@@ -72,7 +72,7 @@ namespace Main.Core.Domain
         /// <param name="registeredDate">
         /// The registered date.
         /// </param>
-        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate, UserLight supervisor)
+        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate, Guid guidSupervisor)
             : base(tabletId)
         {
             this.ApplyEvent(
@@ -83,7 +83,7 @@ namespace Main.Core.Domain
                    TabletId = tabletId,
                    Description = description,
                    PublicKey = Guid.NewGuid(),
-                   Registrator = supervisor
+                   Registrator = guidSupervisor
                });
         }
 
