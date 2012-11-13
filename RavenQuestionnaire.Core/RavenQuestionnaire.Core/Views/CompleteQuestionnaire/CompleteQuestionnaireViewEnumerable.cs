@@ -74,6 +74,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
             CompleteQuestionnaireStoreDocument doc, ICompleteGroupFactory groupFactory)
         {
             this.GroupFactory = groupFactory;
+            this.LastEntryDate = doc.LastEntryDate;
             this.Title = doc.Title;
             var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
             this.CurrentGroup = CompleteGroupView.CreateGroup(doc, group, this.GroupFactory);
