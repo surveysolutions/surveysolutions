@@ -80,32 +80,27 @@ namespace RavenQuestionnaire.Web.Tests
         [Test]
         public void ExportStatistics_ReturnsNotNull()
         {
+            var guid1 = Guid.NewGuid();
+            var guid2 = Guid.NewGuid();
             this.Synchronizer.Setup(s => s.ReadEvents()).Returns(
                 new List<AggregateRootEvent> {
                         new AggregateRootEvent(
                             new CommittedEvent(
-                            Guid.Empty, Guid.Empty, Guid.Empty, 1, DateTime.Now, new object(), new Version(1, 0))), 
+                            Guid.Empty, Guid.Empty, guid1, 1, DateTime.Now, new object(), new Version(1, 0))), 
                         new AggregateRootEvent(
                             new CommittedEvent(
-                            Guid.Empty, Guid.Empty, Guid.Empty, 1, DateTime.Now, new object(), new Version(1, 0))), 
+                            Guid.Empty, Guid.Empty, guid1, 1, DateTime.Now, new object(), new Version(1, 0))), 
                         new AggregateRootEvent(
                             new CommittedEvent(
-                            Guid.Empty, Guid.Empty, Guid.NewGuid(), 1, DateTime.Now, new object(), new Version(1, 0))), 
+                            Guid.Empty, Guid.Empty, guid2, 1, DateTime.Now, new object(), new Version(1, 0))), 
                     });
 
-            this.ViewRepository.Setup(
-                v =>
-                v.Load<ExporStatisticsInputModel, ExportStatisticsView>(
-                    new ExporStatisticsInputModel(new List<Guid> { Guid.Empty }))).Returns(
-                        new ExportStatisticsView(new List<CompleteQuestionnaireBrowseItem>()));
+            this.ViewRepository.SetReturnsDefault(new ExportStatisticsView(new List<CompleteQuestionnaireBrowseItem>()));
 
-            this.Controller = new SynchronizationsController(
-                this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object);
+            this.Controller = new SynchronizationsController(this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object);
+            this.Controller.ExportStatistics();
 
-            JsonResult expected = null;
-            JsonResult actual = this.Controller.ExportStatistics();
-
-            Assert.AreNotEqual(null, actual);
+            this.ViewRepository.Verify(x => x.Load<ExporStatisticsInputModel, ExportStatisticsView>(It.Is<ExporStatisticsInputModel>(m => m.Keys.Count==2 && m.Keys[0]==guid1 && m.Keys[1] == guid2)));
         }
         #endregion
     }

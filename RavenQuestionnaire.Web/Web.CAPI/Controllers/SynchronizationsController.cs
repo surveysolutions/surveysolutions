@@ -117,7 +117,7 @@ namespace Web.CAPI.Controllers
         public JsonResult ExportStatistics()
         {
             var events = this.synchronizer.ReadEvents();
-            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
+            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key).ToList();
             var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
                   new ExporStatisticsInputModel(keys));
 
