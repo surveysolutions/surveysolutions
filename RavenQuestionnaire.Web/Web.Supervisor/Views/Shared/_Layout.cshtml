@@ -42,18 +42,12 @@
                     {
                         <ul id="menu" class="nav" role="menu" aria-labelledby="dLabel">
                             <li class="dropdown-submenu"><a href="">Administration</a>
-                                <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
+                                 <ul class="dropdown-menu">                                    
                                     <li style="margin: 5px;"><a href="@Url.Action("Index", "User")">Users</a></li>                                    
-                                </ul>
-                            </li>
-                            <li>@Html.ActionLink("Interviewers", "Summary", "User")</li>
-                            <ul class="dropdown-menu">
-                                <li style="margin: 5px;"><a href="@Url.Action("Administration", "Survey")">Administration</a></li>
-                            </ul>
-                        </li>*@
-                            <li>@Html.ActionLink("Summary", "Summary", "User")</li>
-                            @* <li>@Html.ActionLink("Take new", "Questionnaires", "Dashboard")</li>*@ </ul>
+                                 </ul>
+                             </li>                            
+                            <li>@Html.ActionLink("Interviewers", "Summary", "User")</li>                                                   
+                       </ul> 
                     }
                     @Html.Partial("_LogOnPartial")
                 </div>
