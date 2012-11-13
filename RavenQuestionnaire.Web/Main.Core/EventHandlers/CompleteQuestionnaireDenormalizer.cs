@@ -95,6 +95,7 @@ namespace Main.Core.EventHandlers
 
             question.SetComments(evnt.Payload.Comments);
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         /// <summary>
@@ -129,6 +130,7 @@ namespace Main.Core.EventHandlers
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
             
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         /// <summary>
@@ -146,6 +148,7 @@ namespace Main.Core.EventHandlers
 
             var newGroup = new CompleteGroup(template, evnt.Payload.PropagationKey);
             item.Add(newGroup, null);
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         /// <summary>
@@ -163,6 +166,7 @@ namespace Main.Core.EventHandlers
             try
             {
                 item.Remove(group);
+                item.LastEntryDate = evnt.EventTimeStamp;
             }
             catch (CompositeException)
             {
@@ -182,6 +186,7 @@ namespace Main.Core.EventHandlers
                 this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         /// <summary>
@@ -199,6 +204,7 @@ namespace Main.Core.EventHandlers
                     Status = evnt.Payload.Status, 
                     Responsible = evnt.Payload.Responsible
                 });
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         #endregion
