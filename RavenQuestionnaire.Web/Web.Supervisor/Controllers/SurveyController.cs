@@ -625,6 +625,11 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
+        public ActionResult Administration()
+        {
+            return this.View();
+        }
+
         #endregion
 
     }
