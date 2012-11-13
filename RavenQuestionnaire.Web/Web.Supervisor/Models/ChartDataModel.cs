@@ -24,6 +24,7 @@ namespace Web.Supervisor.Models
         public ChartDataModel()
         {
             this.Data = new Dictionary<string, int>();
+            this.DataItems = new List<ChartDataItem>();
         }
 
         /// <summary>
@@ -57,6 +58,48 @@ namespace Web.Supervisor.Models
         /// </summary>
         public Dictionary<string, int> Data { get; set; }
 
+        /// <summary>
+        /// Gets or sets DataItems.
+        /// </summary>
+        public List<ChartDataItem> DataItems { get; set; }
+
         #endregion
+    }
+
+    public class ChartDataItem
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ChartDataItem"/> class.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="total">
+        /// The total.
+        /// </param>
+        /// <param name="approved">
+        /// The approved.
+        /// </param>
+        public ChartDataItem(string name, int total, int approved)
+        {
+            this.Name = name;
+            this.Total = total;
+            this.Approved = approved;
+        }
+
+        /// <summary>
+        /// Gets or sets Name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets Total.
+        /// </summary>
+        public int Total { get; set; }
+
+        /// <summary>
+        /// Gets or sets Approved.
+        /// </summary>
+        public int Approved { get; set; }
     }
 }

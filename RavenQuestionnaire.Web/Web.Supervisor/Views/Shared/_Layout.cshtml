@@ -41,13 +41,13 @@
                     @if (Request.IsAuthenticated)
                     {
                         <ul id="menu" class="nav" role="menu" aria-labelledby="dLabel">
-                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Interviewers
+                            <li class="dropdown-submenu"><a href="">Administration</a>
                                 <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="#">@Html.ActionLink("Administration", "Index", "User")</a></li>
+                                    <li style="margin: 5px;"><a href="@Url.Action("Index", "User")">Users</a></li>                                    
                                 </ul>
                             </li>
-                            @*<li class="dropdown-submenu">@Html.ActionLink("Interviewers", "Index", "User")
+                            <li>@Html.ActionLink("Interviewers", "Summary", "User")</li>
                             <ul class="dropdown-menu">
                                 <li style="margin: 5px;"><a href="@Url.Action("Administration", "Survey")">Administration</a></li>
                             </ul>
