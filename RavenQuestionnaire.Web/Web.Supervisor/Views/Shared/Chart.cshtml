@@ -3,28 +3,61 @@
 
 @model ChartDataModel
 
- <script src="@Url.Content("~/Scripts/highcharts.js")" type = "text/javascript"> </script>
- <script src="@Url.Content("~/Scripts/exporting.js")" type = "text/javascript"> </script>
+ <script src="@Url.Content("~/Scripts/highcharts.js")" type = "text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/exporting.js")" type = "text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/raphael.js")" type = "text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/popup.js")" type = "text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/analytics.js")" type = "text/javascript"></script>
+ <script src="@Url.Content("~/Scripts/pie.js")" type = "text/javascript"></script> 
 
 @{
     var values = Json.Encode(@Model.Data.Select(t => t.Value).ToArray());
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Data.Select(t => t.Key).ToArray());
+    var list = new SelectList(new List<string> {"line", "bar", "pie"}, "line") ;
 }
 
-<div id="container" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
+@Html.DropDownList("chartType", @list)
 
+<div id="container" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
+ 
 <script type="text/javascript">
 $(function () {
     var chart;
     $(document).ready(function() {
+        $("#chartType").change(function() {
+        if ($(this).val()=='line') {
+            Line();
+        }
+        else {
+            if ($(this).val()=='bar') {
+                Bar();
+            }
+            else {
+                Pie();
+            }
+        }
+        });
+        Line();
+    });
+    
+    function Line() {
+        $("#container").html('');
+        LoadGraph(@values, @Html.Raw(xTitles));
+    }
+
+    function Pie() {
+        $("#container").html('');
+        LoadPie( @values, @Html.Raw(xTitles));
+    }
+
+
+    function Bar() {
+        $("#container").html('');
         Highcharts.theme = {
             colors: ["#006DCC", "#DA4F49", "#5BB75B", "#7798BF"]
         };
-
-        // Apply the theme
         var highchartsOptions = Highcharts.setOptions(Highcharts.theme);
-        
         chart = new Highcharts.Chart({
             chart: {
                 renderTo: 'container',
@@ -67,7 +100,6 @@ $(function () {
                 data: @values            
             }]
         });
-    });
-
+    }
 });
 </script>
