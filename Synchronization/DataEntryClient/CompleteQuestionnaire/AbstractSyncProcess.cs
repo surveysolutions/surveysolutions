@@ -54,7 +54,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// The user store
         /// </summary>
-        protected readonly IUserEventSync UserStore;
+        //protected readonly IUserEventSync UserStore;
 
         #endregion
 
@@ -74,7 +74,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.EventStore = kernel.Get<IEventSync>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
-            this.UserStore = kernel.Get<IUserEventSync>();
+           // this.UserStore = kernel.Get<IUserEventSync>();
         }
 
         #endregion
