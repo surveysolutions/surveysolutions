@@ -39,12 +39,12 @@
                     </a><a href="@Url.Action("Index", "Survey")" class="brand">Surveys</a>
                     <div class="nav-collapse ">
                         <ul id="menu" class="nav" role="menu" aria-labelledby="dLabel">
-                            <li class="dropdown-submenu">@Html.ActionLink("Interviewers", "Index", "User")
+                            <li class="dropdown-submenu"><a href="">Administration</a>
                                 <ul class="dropdown-menu">                                    
-                                    <li style="margin: 5px;"><a href="@Url.Action("Administration", "Survey")">Administration</a></li>                                    
+                                    <li style="margin: 5px;"><a href="@Url.Action("Index", "User")">Users</a></li>                                    
                                 </ul>
                             </li>     
-                            <li>@Html.ActionLink("Summary", "Summary", "User")</li>
+                            <li>@Html.ActionLink("Interviewers", "Summary", "User")</li>
                             @*<li>@Html.ActionLink("Take new", "Questionnaires", "Dashboard")</li>*@
                         </ul>  
                         @Html.Partial("_LogOnPartial")
