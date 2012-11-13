@@ -4,17 +4,18 @@
 @model ChartDataModel
 
  <script src="@Url.Content("~/Scripts/highcharts.js")" type = "text/javascript"></script>
- <script src="@Url.Content("~/Scripts/exporting.js")" type = "text/javascript"></script>
- <script src="@Url.Content("~/Scripts/raphael.js")" type = "text/javascript"></script>
- <script src="@Url.Content("~/Scripts/popup.js")" type = "text/javascript"></script>
- <script src="@Url.Content("~/Scripts/analytics.js")" type = "text/javascript"></script>
- <script src="@Url.Content("~/Scripts/pie.js")" type = "text/javascript"></script> 
 
 @{
     var values = Json.Encode(@Model.Data.Select(t => t.Value).ToArray());
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Data.Select(t => t.Key).ToArray());
     var list = new SelectList(new List<string> {"line", "bar", "pie"}, "line") ;
+    var pair = "[";
+    for (int i = 0; i < Model.Data.Count(); i++)
+    {
+        pair = pair+"[\"" + Model.Data.Keys.ToArray()[i] + "\", " + Model.Data.Values.ToArray()[i] + "],";
+    }
+    pair = pair + "]";
 }
 
 @Html.DropDownList("chartType", @list)
@@ -22,84 +23,68 @@
 <div id="container" style="min-width: 400px; height: 450px; margin: 0 auto"></div>
  
 <script type="text/javascript">
-$(function () {
+$(function() {
     var chart;
     $(document).ready(function() {
         $("#chartType").change(function() {
-        if ($(this).val()=='line') {
-            Line();
-        }
-        else {
-            if ($(this).val()=='bar') {
-                Bar();
-            }
-            else {
-                Pie();
-            }
-        }
+            Draw($(this).val());
         });
-        Line();
+        Draw('line');
     });
-    
-    function Line() {
-        $("#container").html('');
-        LoadGraph(@values, @Html.Raw(xTitles));
-    }
 
-    function Pie() {
+    function Draw(typeLine) {
         $("#container").html('');
-        LoadPie( @values, @Html.Raw(xTitles));
-    }
-
-
-    function Bar() {
-        $("#container").html('');
-        Highcharts.theme = {
-            colors: ["#006DCC", "#DA4F49", "#5BB75B", "#7798BF"]
-        };
         var highchartsOptions = Highcharts.setOptions(Highcharts.theme);
         chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'container',
-                type: 'column',
-                marginRight: 130,
-                marginBottom: 70
-            },
-            title: {
-                text: '@Model.Title',
-                x: -20 
-            },
-            xAxis: {
-                categories: @Html.Raw(xTitles) 
-            },
-            yAxis: {
-                title: {
-                    text: 'Count'
+                chart: {
+                    renderTo: 'container',
+                    type: typeLine,
+                    marginRight: 130,
+                    marginBottom: 70
                 },
-                plotLines: [{
-                    value: 0,
-                    width: 1,
-                    color: '#808080'
+                title: {
+                    text: '@Model.Title',
+                    x: -20
+                },
+                xAxis: {
+                    categories: @Html.Raw(xTitles)
+                },
+                yAxis: {
+                    title: {
+                        text: 'Count'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }]
+                },
+                tooltip: {
+                    formatter: function() {
+                        return this.x + ': ' + this.y;
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: 0,
+                    y: 100,
+                    borderWidth: 0
+                },
+                series: [{
+                    data: SelectData(typeLine)
                 }]
-            },
-            tooltip: {
-                formatter: function() {
-                        return '<b>'+ this.series.name +'</b><br/>'+
-                        this.x +': '+ this.y;
-                }
-            },
-            legend: {
-                layout: 'vertical',
-                align: 'right',
-                verticalAlign: 'top',
-                x: 0,
-                y: 100,
-                borderWidth: 0
-            },
-            series: [{
-                data: @values            
-            }]
-        });
+            });
+    }
+    
+    function SelectData(typeLine) {
+        if (typeLine == 'pie') {
+            return @Html.Raw(pair) ;
+        }
+        else {
+            return @values ;
+        }
     }
 });
 </script>
