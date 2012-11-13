@@ -21,6 +21,8 @@ using Ncqrs.Restoring.EventStapshoot;
 
 namespace Main.Core.EventHandlers
 {
+    using Ncqrs.Eventing;
+
     /// <summary>
     /// The questionnaire denormalizer.
     /// </summary>
@@ -115,6 +117,7 @@ namespace Main.Core.EventHandlers
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
             item.Add(group, evnt.Payload.ParentGroupPublicKey);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -129,6 +132,7 @@ namespace Main.Core.EventHandlers
 
             // var questionnaire = new Questionnaire(item);
             item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -141,6 +145,7 @@ namespace Main.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             item.Remove(evnt.Payload.QuestionId);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -159,6 +164,7 @@ namespace Main.Core.EventHandlers
             }
 
             item.Add(result, evnt.Payload.GroupPublicKey);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         //// move it out of there
@@ -180,6 +186,7 @@ namespace Main.Core.EventHandlers
             }
 
             this.questionFactory.UpdateQuestionByEvent(question, evnt.Payload);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -193,6 +200,7 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
             question.UpdateCard(evnt.Payload.ImageKey, evnt.Payload.Title, evnt.Payload.Description);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -213,6 +221,7 @@ namespace Main.Core.EventHandlers
                 };
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             question.AddCard(newImage);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -227,6 +236,7 @@ namespace Main.Core.EventHandlers
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
 
             question.RemoveCard(evnt.Payload.ImageKey);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -240,6 +250,7 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.GroupPublicKey);
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         /// <summary>
@@ -262,21 +273,38 @@ namespace Main.Core.EventHandlers
                 group.ConditionExpression = evnt.Payload.ConditionExpression;
                 group.Update(evnt.Payload.GroupText);
             }
+            this.UpdateQuestionnaire(evnt, item);
         }
 
         #endregion
 
-
-        #region Implementation of IEventHandler<in QuestionnaireUpdated>
-
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
             if (document == null)
                 return;
             document.Title = evnt.Payload.Title;
+            this.UpdateQuestionnaire(evnt, document);
         }
 
-        #endregion
+        /// <summary>
+        /// Updates questionnaire with event' service information
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
+        /// <param name="document">
+        /// The document.
+        /// </param>
+        private void UpdateQuestionnaire(IEvent evnt, QuestionnaireDocument document)
+        {
+            document.LastEntryDate = evnt.EventTimeStamp;
+        }
     }
 }
