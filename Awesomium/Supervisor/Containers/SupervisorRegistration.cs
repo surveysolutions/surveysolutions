@@ -36,8 +36,15 @@ namespace Browsing.Supervisor.Containers
 
         private void UpdateAdministrativeContent()
         {
-            //var regDevicesList = this.urlUtils.GetRegisteredDevicesUrl();
-            //this.requestProcessor.
+            var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
+            try
+            {
+                var devices = this.requestProcessor.Process<string>(url, "False");
+            }
+            catch
+            {
+            }
+
         }
 
         #endregion

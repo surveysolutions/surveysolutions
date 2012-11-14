@@ -44,5 +44,8 @@
     <Setting Name="GetRegistrationSupervisorPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/RegisterCapi</Value>
     </Setting>
+    <Setting Name="GetAuthorizedIDs" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/GetRegisteredDevices</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

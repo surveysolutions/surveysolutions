@@ -24,13 +24,13 @@ namespace Browsing.CAPI.Registration
         {
             get
             {
-                return RegisrationId.ToString();
+                return RegistrationId.ToString();
             }
         }
 
         protected override Guid OnAcceptRegistrationId()
         {
-            return GetGuidFromProcessorId();
+            return GetGuidFromProcessorId(); // bind to processor id
         }
 
         protected override string OnAcceptRegistrationName()

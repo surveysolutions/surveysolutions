@@ -18,5 +18,6 @@ namespace Common.Utils
         string GetCurrentUserGetUrl();
         string GetRegistrationCapiPath();
         string GetEndProcessUrl(Guid id);
+        string GetAuthorizedIDsUrl(Guid registratorId);
     }
 }

@@ -87,16 +87,6 @@ namespace Synchronization.Core.Registration
 
         #region Helpers
 
-        private Guid GetCurrentUser()
-        {
-            if (this.currentUser.HasValue)
-                return this.currentUser.Value;
-
-            this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
-
-            return this.currentUser.Value;
-        }
-
         private Guid AcceptRegistrationId()
         {
             try
@@ -234,35 +224,39 @@ namespace Synchronization.Core.Registration
 
         #region Properties
 
-        public Guid RegisrationId { get { return AcceptRegistrationId(); } }
-        public string RegisrationName { get { return AcceptRegistrationName(); } }
+        public Guid RegistrationId { get { return AcceptRegistrationId(); } }
+        public string RegistrationName { get { return AcceptRegistrationName(); } }
 
         protected string InFile { get; private set; }
         protected string OutFile { get; private set; }
         protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
 
-        #endregion
-
-        #region Virtual Properties
-
-        protected virtual string ContainerName
+        protected Guid CurrentUser
         {
-            get { return GetCurrentUser().ToString(); }
+            get
+            {
+                if (this.currentUser.HasValue)
+                    return this.currentUser.Value;
+
+                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+
+                return this.currentUser.Value;
+            }
         }
 
         #endregion
 
-        #region Virtual Methods
+        #region Abstract Properties
 
-        protected virtual Guid OnAcceptRegistrationId()
-        {
-            return GetCurrentUser();
-        }
+        protected abstract string ContainerName {get;}
 
-        protected virtual string OnAcceptRegistrationName()
-        {
-            return string.Format("supervisor #'{0}'", AcceptRegistrationId().ToString()); // todo: replace with true name
-        }
+        #endregion
+
+        #region Abstract and Virtual Methods
+
+        protected abstract Guid OnAcceptRegistrationId();
+
+        protected abstract string OnAcceptRegistrationName();
 
         protected virtual RegisterData OnStartRegistration(string folderPath)
         {
@@ -270,10 +264,10 @@ namespace Synchronization.Core.Registration
 
             var registeredData = new RegisterData { 
                 SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, 
-                RegistrationId = RegisrationId, 
-                Description = RegisrationName,
+                RegistrationId = RegistrationId, 
+                Description = RegistrationName,
                 RegisterDate = DateTime.Now,
-                Registrator = GetCurrentUser(), // makes no much sence for now, since we do not require CAPI user to be logged on
+                //Registrator = CurrentUser, // makes no much sence for now, since we do not require CAPI user to be logged on
             };
 
             var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
@@ -300,7 +294,7 @@ namespace Synchronization.Core.Registration
 
                 // assign current user who made registration
                 var registerData = DeserializeRegisterData(Encoding.UTF8.GetString(data));
-                registerData.Registrator = GetCurrentUser();
+                registerData.Registrator = CurrentUser;
 
                 data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
 
