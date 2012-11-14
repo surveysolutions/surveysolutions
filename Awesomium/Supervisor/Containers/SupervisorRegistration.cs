@@ -36,7 +36,7 @@ namespace Browsing.Supervisor.Containers
 
         private void UpdateAdministrativeContent()
         {
-            var regDevicesList = this.urlUtils.GetRegisteredDevicesUrl();
+            //var regDevicesList = this.urlUtils.GetRegisteredDevicesUrl();
             //this.requestProcessor.
         }
 
