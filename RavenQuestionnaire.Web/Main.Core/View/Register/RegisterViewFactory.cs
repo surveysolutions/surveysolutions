@@ -1,20 +1,16 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterViewFactory.cs" company="WorldBank">
-// 2012
+// <copyright file="RegisterViewFactory.cs" company="">
+// TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Register
+namespace Main.Core.View.Register
 {
     using System.Linq;
 
     using Main.Core.Documents;
-    using Main.Core.View;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class RegisterViewFactory : IViewFactory<RegisterInputModel, RegisterView>
     {
 
@@ -56,7 +52,7 @@ namespace Core.Supervisor.Views.Register
         public RegisterView Load(RegisterInputModel input)
         {
             var item = this.documentItemSession.Query().Where(t => t.TabletId == input.TabletId).FirstOrDefault();
-            if (item == null)
+            if (item == null) 
                 return new RegisterView(new SyncDeviceRegisterDocument());
             return new RegisterView(item);
         }

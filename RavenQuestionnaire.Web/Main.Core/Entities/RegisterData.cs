@@ -4,13 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Questionnaire.Core.Web.Register
+namespace Main.Core.Entities
 {
     using System;
 
-    using Main.Core.Entities.SubEntities;
-
-    using global::Core.Supervisor.Views.Register;
+    using Main.Core.View.Register;
 
     /// <summary>
     /// TODO: Update summary.
@@ -24,9 +22,9 @@ namespace Questionnaire.Core.Web.Register
         /// </summary>
         public RegisterData()
         {
-#if DEBUG
-            this.RegisterDate = DateTime.MinValue;
-#endif
+            #if DEBUG
+                this.RegisterDate = DateTime.MinValue;
+            #endif
         }
 
         #endregion
