@@ -54,14 +54,16 @@ namespace Main.Core.View.Device
         /// </returns>
         public DeviceView Load(DeviceViewInputModel input)
         {
-            int count = this.devices.Query().Where(d => d.Registrator == input.SupervisorId).Count();
+            int count =
+                this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(
+                    d => d.Registrator == input.SupervisorId).Count();
 
             if (count == 0)
             {
                 return new DeviceView(0, 0, 0, new List<SyncDeviceRegisterDocument>(), string.Empty);
             }
 
-            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator == input.SupervisorId);
+            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.SupervisorId);
             if (input.TabletId != Guid.Empty)
             {
                 query = query.Where(t => t.TabletId == input.TabletId);
