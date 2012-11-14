@@ -90,6 +90,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
+        [Authorize]
         public ActionResult GetRegisteredDevices()
         {
             var currentUser = this.globalProvider.GetCurrentUser();
