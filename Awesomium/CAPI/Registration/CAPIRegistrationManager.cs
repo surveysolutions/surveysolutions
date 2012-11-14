@@ -5,6 +5,7 @@ using System.Text;
 using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Registration;
+using Synchronization.Core.Errors;
 
 namespace Browsing.CAPI.Registration
 {
@@ -37,23 +38,9 @@ namespace Browsing.CAPI.Registration
             return Environment.MachineName;
         }
 
-        protected override bool OnFinalizeRegistration(string folderPath, out RegisterData registeredData)
+        protected override RegisterData OnFinalizeRegistration(string folderPath)
         {
-            var data = GetFromRegistrationFile(folderPath + InFile);
-
-            var supervisorRegisterData = DeserializeRegisterData(Encoding.ASCII.GetString(data));
-
-            var response = SendRegistrationRequest(data);
-            var result = Encoding.UTF8.GetString(response, 0, response.Length);
-
-            try
-            {
-                return string.Compare(result, "True", true) == 0;
-            }
-            finally
-            {
-                registeredData = supervisorRegisterData;
-            }
+            return AuthorizeAccepetedData(folderPath);
         }
 
         #endregion
@@ -80,7 +67,7 @@ namespace Browsing.CAPI.Registration
             {
                 byte[] hash = md5.ComputeHash(Encoding.Default.GetBytes(cpuInfo));
                 var result = new Guid(hash);
-                
+
                 return result;
             }
         }

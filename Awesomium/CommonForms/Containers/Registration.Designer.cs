@@ -31,116 +31,75 @@ namespace Browsing.Common.Containers
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Registration));
-            this.registrationPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.usbStatusPanel = new Browsing.Common.Containers.UsbStatusPanel();
-            this.registrationButton = new Browsing.Common.Controls.FlatButton();
-            this.authorizatonGroupBox = new System.Windows.Forms.GroupBox();
-            this.authorizedDevicesListView = new System.Windows.Forms.ListView();
-            this.registrationPanel.SuspendLayout();
-            this.authorizatonGroupBox.SuspendLayout();
+            this.regContent = new System.Windows.Forms.TableLayoutPanel();
+            this.regPanel = new Browsing.Common.Containers.RegPanel();
+            this.authorizedGroupBox = new System.Windows.Forms.GroupBox();
+            this.regContent.SuspendLayout();
             this.SuspendLayout();
             // 
             // registrationPanel
             // 
-            this.registrationPanel.ColumnCount = 5;
-            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
-            this.registrationPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.registrationPanel.Controls.Add(this.usbStatusPanel, 1, 3);
-            this.registrationPanel.Controls.Add(this.registrationButton, 3, 3);
-            this.registrationPanel.Controls.Add(this.authorizatonGroupBox, 1, 1);
-            this.registrationPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.registrationPanel.Location = new System.Drawing.Point(0, 0);
-            this.registrationPanel.Margin = new System.Windows.Forms.Padding(4);
-            this.registrationPanel.Name = "registrationPanel";
-            this.registrationPanel.RowCount = 6;
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.registrationPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.registrationPanel.Size = new System.Drawing.Size(794, 554);
-            this.registrationPanel.TabIndex = 1;
+            this.regContent.ColumnCount = 5;
+            this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.regContent.Controls.Add(this.regPanel, 2, 4);
+            this.regContent.Controls.Add(this.authorizedGroupBox, 2, 1);
+            this.regContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.regContent.Location = new System.Drawing.Point(0, 0);
+            this.regContent.Margin = new System.Windows.Forms.Padding(4);
+            this.regContent.Name = "registrationPanel";
+            this.regContent.RowCount = 6;
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.Size = new System.Drawing.Size(794, 554);
+            this.regContent.TabIndex = 1;
             // 
-            // usbStatusPanel
+            // regPanel
             // 
-            this.registrationPanel.SetColumnSpan(this.usbStatusPanel, 2);
-            this.usbStatusPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.usbStatusPanel.Location = new System.Drawing.Point(29, 73);
-            this.usbStatusPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 20);
-            this.usbStatusPanel.Name = "usbStatusPanel";
-            this.registrationPanel.SetRowSpan(this.usbStatusPanel, 3);
-            this.usbStatusPanel.Size = new System.Drawing.Size(536, 526);
-            this.usbStatusPanel.TabIndex = 0;
+            this.regContent.SetColumnSpan(this.regPanel, 2);
+            this.regPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.regPanel.Location = new System.Drawing.Point(28, 149);
+            this.regPanel.Name = "regPanel";
+            this.regContent.SetRowSpan(this.regPanel, 2);
+            this.regPanel.Size = new System.Drawing.Size(738, 402);
+            this.regPanel.TabIndex = 3;
             // 
-            // registrationButton
+            // authorizedGroupBox
             // 
-            this.registrationButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.registrationButton.Enabled = false;
-            this.registrationButton.FlatAppearance.BorderSize = 0;
-            this.registrationButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.registrationButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.registrationButton.Image = ((System.Drawing.Image)(resources.GetObject("registrationButton.Image")));
-            this.registrationButton.Location = new System.Drawing.Point(572, 72);
-            this.registrationButton.Name = "registrationButton";
-            this.registrationButton.Size = new System.Drawing.Size(194, 200);
-            this.registrationButton.TabIndex = 0;
-            this.registrationButton.Text = "Register";
-            this.registrationButton.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.registrationButton.UseVisualStyleBackColor = true;
-            this.registrationButton.Click += new System.EventHandler(this.registrationButton_Click);
-            // 
-            // authorizatonGroupBox
-            // 
-            this.authorizatonGroupBox.AutoSize = true;
-            this.registrationPanel.SetColumnSpan(this.authorizatonGroupBox, 2);
-            this.authorizatonGroupBox.Controls.Add(this.authorizedDevicesListView);
-            this.authorizatonGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.authorizatonGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.authorizatonGroupBox.Location = new System.Drawing.Point(28, 23);
-            this.authorizatonGroupBox.MaximumSize = new System.Drawing.Size(0, 200);
-            this.authorizatonGroupBox.Name = "authorizatonGroupBox";
-            this.authorizatonGroupBox.Size = new System.Drawing.Size(538, 23);
-            this.authorizatonGroupBox.TabIndex = 2;
-            this.authorizatonGroupBox.TabStop = false;
-            this.authorizatonGroupBox.Text = "Authorized devices";
-            // 
-            // authorizedDevicesListView
-            // 
-            this.authorizedDevicesListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.authorizedDevicesListView.Location = new System.Drawing.Point(3, 20);
-            this.authorizedDevicesListView.MaximumSize = new System.Drawing.Size(4, 200);
-            this.authorizedDevicesListView.Name = "authorizedDevicesListView";
-            this.authorizedDevicesListView.Size = new System.Drawing.Size(4, 0);
-            this.authorizedDevicesListView.TabIndex = 1;
-            this.authorizedDevicesListView.UseCompatibleStateImageBehavior = false;
+            this.regContent.SetColumnSpan(this.authorizedGroupBox, 2);
+            this.authorizedGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.authorizedGroupBox.Location = new System.Drawing.Point(28, 23);
+            this.authorizedGroupBox.Name = "authorizedGroupBox";
+            this.authorizedGroupBox.Size = new System.Drawing.Size(738, 100);
+            this.authorizedGroupBox.TabIndex = 4;
+            this.authorizedGroupBox.TabStop = false;
+            this.authorizedGroupBox.Text = "Authorized devices";
+            this.authorizedGroupBox.Visible = false;
             // 
             // Registration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.registrationPanel);
+            this.Controls.Add(this.regContent);
             this.Name = "Registration";
             this.Size = new System.Drawing.Size(794, 554);
-            this.Controls.SetChildIndex(this.registrationPanel, 0);
-            this.registrationPanel.ResumeLayout(false);
-            this.registrationPanel.PerformLayout();
-            this.authorizatonGroupBox.ResumeLayout(false);
+            this.Controls.SetChildIndex(this.regContent, 0);
+            this.regContent.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private FlatButton registrationButton;
-        private UsbStatusPanel usbStatusPanel;
-        private TableLayoutPanel registrationPanel;
-        private ListView authorizedDevicesListView;
-        private GroupBox authorizatonGroupBox;
-       
+        private TableLayoutPanel regContent;
+        private RegPanel regPanel;
+        private GroupBox authorizedGroupBox;
     }
 }

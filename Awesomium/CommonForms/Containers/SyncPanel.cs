@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Browsing.Common.Controls;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
@@ -189,7 +185,7 @@ namespace Browsing.Common.Containers
 
         public bool IsAnyAvailable
         {
-            get { return usbStatusPanel.ReviewDriversList().Count > 0; }
+            get { return this.usbStatusPanel.ReviewDriversList().Count > 0; }
         }
 
         #endregion

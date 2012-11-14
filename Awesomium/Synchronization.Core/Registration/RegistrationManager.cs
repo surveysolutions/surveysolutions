@@ -11,6 +11,41 @@ using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.Registration
 {
+    public class RegistrationCallbackEventArgs : EventArgs
+    {
+        public Exception Error { get; private set; }
+        public string Message { get; private set; }
+        public RegisterData Data { get; private set; }
+
+        public RegistrationCallbackEventArgs(Exception error, string message, RegisterData data)
+            : base()
+        {
+            Error = error;
+            Message = message;
+            Data = data;
+        }
+
+        public bool IsPassed { get { return this.Error == null; } }
+
+        public void AppendMessage(string message)
+        {
+            if (string.IsNullOrEmpty(Message))
+                Message = message;
+            else
+                Message = Message + message;
+        }
+    }
+
+    /*public class RegistrationFirstPhaseAccomplished : RegistrationCallbackEventArgs
+    {
+    }
+
+    public class RegistrationSecondPhaseAccomplished : RegistrationCallbackEventArgs
+    {
+    }*/
+
+    public delegate void RegistrationCallback(RegistrationManager manager, RegistrationCallbackEventArgs args);
+
     /// <summary>
     /// Base class responsible for registraction of CAPI device on Supervisor
     /// </summary>
@@ -26,6 +61,13 @@ namespace Synchronization.Core.Registration
 
         private string registrationName = null;
         private Guid? registrationId = null;
+
+        #endregion
+
+        #region Events
+
+        public event RegistrationCallback FirstPhaseAccomplished;
+        public event RegistrationCallback SecondPhaseAccomplished;
 
         #endregion
 
@@ -54,30 +96,6 @@ namespace Synchronization.Core.Registration
 
             return this.currentUser.Value;
         }
-
-        #endregion
-
-        #region Properties
-
-        public Guid RegisrationId { get { return AcceptRegistrationId(); } }
-        public string RegisrationName { get { return AcceptRegistrationName();} }
-
-        protected string InFile { get; private set; }
-        protected string OutFile { get; private set; }
-        protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
-
-        #endregion
-
-        #region Virtual Properties
-        
-        protected virtual string ContainerName
-        {
-            get { return GetCurrentUser().ToString(); }
-        }
-
-        #endregion
-
-        #region Helpers
 
         private Guid AcceptRegistrationId()
         {
@@ -113,98 +131,57 @@ namespace Synchronization.Core.Registration
             }
         }
 
-
-        #endregion
-
-
-        #region Abstract and Virtual Methods
-
-        protected virtual Guid OnAcceptRegistrationId()
-        {
-            return GetCurrentUser();
-        }
-
-        protected virtual string OnAcceptRegistrationName()
-        {
-            return string.Format("supervisor #'{0}'", AcceptRegistrationId().ToString()); // todo: replace with true name
-        }
-
-        protected virtual bool OnStartRegistration(string folderPath, out Registration.RegisterData registeredData)
-        {
-            var keyContainerName = ContainerName;
-
-            registeredData = new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId, Description = RegisrationName };
-
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
-
-            return CreateRegistrationFile(dataToFile, folderPath + OutFile);
-        }
-
-        protected abstract bool OnFinalizeRegistration(string folderPath, out Registration.RegisterData registeredData);
-
-        #endregion
-
-        #region Protected Operations
-
-        protected string SerializeRegisterData(RegisterData data)
+        private string SerializeRegisterData(RegisterData data)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
             return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
         }
 
-        protected RegisterData DeserializeRegisterData(string data)
+        private RegisterData DeserializeRegisterData(string data)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        protected byte[] SendRegistrationRequest(byte[] requestParams)
+        private byte[] SendRegistrationRequest(byte[] requestParams)
         {
             string url = RegistrationService;
 
             //return this.requestProcessor.Process<byte[]>(url, "POST", false, null);
 
-            try
+            var request = WebRequest.Create(url);
+
+            request.ContentType = "application/json; charset=utf-8";
+            request.Method = "POST";
+            request.ContentLength = requestParams.Length;
+
+            using (Stream os = request.GetRequestStream())
             {
-                var request = WebRequest.Create(url);
-
-                request.ContentType = "application/json; charset=utf-8";
-                request.Method = "POST";
-                request.ContentLength = requestParams.Length;
-
-                using (Stream os = request.GetRequestStream())
-                {
-                    os.Write(requestParams, 0, requestParams.Length);
-                    os.Close();
-                }
-
-                var response = request.GetResponse();
-
-                if (response == null) 
-                    return null;
-
-                byte[] buffer = new byte[4097];
-
-                using (Stream responseStream = response.GetResponseStream())
-                {
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        for (int count = 0; (count = responseStream.Read(buffer, 0, buffer.Length)) > 0; )
-                        {
-                            memoryStream.Write(buffer, 0, count);
-                        }
-
-                        return memoryStream.ToArray();
-                    }
-                }
+                os.Write(requestParams, 0, requestParams.Length);
+                os.Close();
             }
-            catch
+
+            var response = request.GetResponse();
+
+            if (response == null)
+                return null;
+
+            byte[] buffer = new byte[4097];
+            using (Stream responseStream = response.GetResponseStream())
             {
-                return Encoding.ASCII.GetBytes("false");
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    for (int count = 0; (count = responseStream.Read(buffer, 0, buffer.Length)) > 0; )
+                    {
+                        memoryStream.Write(buffer, 0, count);
+                    }
+
+                    return memoryStream.ToArray();
+                }
             }
         }
 
-        protected bool CreateRegistrationFile(byte[] data, string filePath)
+        private void CreateRegistrationFile(byte[] data, string filePath)
         {
             FileStream fileStream = null;
 
@@ -216,12 +193,13 @@ namespace Synchronization.Core.Registration
                 // Writes a block of bytes to this stream using data from a byte array.
                 fileStream.Write(data, 0, data.Length);
 
-                return true;
             }
             catch (Exception ex)
             {
                 // Error
                 Console.WriteLine("Exception caught: {0}", ex);
+
+                throw ex;
             }
             finally
             {
@@ -229,12 +207,9 @@ namespace Synchronization.Core.Registration
                 if (fileStream != null)
                     fileStream.Close();
             }
-
-            // error occured, return false
-            return false;
         }
 
-        protected byte[] GetFromRegistrationFile(string filePath)
+        private byte[] GetFromRegistrationFile(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new Exception("Registration file is not found");
@@ -257,38 +232,153 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
-        public bool StartRegistration(out Registration.RegisterData registeredData)
+        #region Properties
+
+        public Guid RegisrationId { get { return AcceptRegistrationId(); } }
+        public string RegisrationName { get { return AcceptRegistrationName(); } }
+
+        protected string InFile { get; private set; }
+        protected string OutFile { get; private set; }
+        protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
+
+        #endregion
+
+        #region Virtual Properties
+
+        protected virtual string ContainerName
         {
+            get { return GetCurrentUser().ToString(); }
+        }
+
+        #endregion
+
+        #region Virtual Methods
+
+        protected virtual Guid OnAcceptRegistrationId()
+        {
+            return GetCurrentUser();
+        }
+
+        protected virtual string OnAcceptRegistrationName()
+        {
+            return string.Format("supervisor #'{0}'", AcceptRegistrationId().ToString()); // todo: replace with true name
+        }
+
+        protected virtual RegisterData OnStartRegistration(string folderPath)
+        {
+            var keyContainerName = ContainerName;
+
+            var registeredData = new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId, Description = RegisrationName };
+
+            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
+
+            CreateRegistrationFile(dataToFile, folderPath + OutFile);
+
+            return registeredData;
+        }
+
+        protected virtual RegisterData OnFinalizeRegistration(string folderPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Protected Operations
+
+        protected RegisterData AuthorizeAccepetedData(string folderPath)
+        {
+            try
+            {
+                var data = GetFromRegistrationFile(folderPath + InFile);
+
+                var supervisorRegisterData = DeserializeRegisterData(Encoding.ASCII.GetString(data));
+
+                var response = SendRegistrationRequest(data);
+                var result = Encoding.UTF8.GetString(response, 0, response.Length);
+
+                if (string.Compare(result, "True", true) == 0)
+                    return supervisorRegisterData;
+                else
+                    throw new RegistrationException();
+            }
+            catch (RegistrationException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new RegistrationException(ex);
+            }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void StartRegistration()
+        {
+            Exception error = null;
+            RegisterData registeredData = null;
+
             try
             {
                 var driver = this.usbProvider.ActiveUsb;
                 if (driver == null)
-                    throw new RegistrationException();
+                    throw new UsbNotChoozenException();
 
-                return OnStartRegistration(driver.Name, out registeredData);
+                registeredData = OnStartRegistration(driver.Name);
             }
-            catch
+            catch (Exception e)
             {
-                throw;
+                error = e;
+            }
+            finally
+            {
+                if (FirstPhaseAccomplished != null)
+                    FirstPhaseAccomplished(this, new RegistrationCallbackEventArgs(error,
+#if DEBUG
+ "** 1st phase completed **\n"
+#else
+                        string.Empty
+#endif
+,
+                        registeredData
+                        ));
             }
         }
 
-        public bool FinalizeRegistration(out Registration.RegisterData registeredData)
+        public void FinalizeRegistration()
         {
+            Exception error = null;
+            RegisterData registeredData = null;
+
             try
             {
                 var driver = this.usbProvider.ActiveUsb;
                 if (driver == null)
-                    throw new RegistrationException();
+                    throw new UsbNotChoozenException();
 
-                return OnFinalizeRegistration(driver.Name, out registeredData);
+                registeredData = OnFinalizeRegistration(driver.Name);
             }
-            catch
+            catch (Exception e)
             {
-                throw;
+                error = e;
+            }
+            finally
+            {
+                if (SecondPhaseAccomplished != null)
+                    SecondPhaseAccomplished(this, new RegistrationCallbackEventArgs(error,
+#if DEBUG
+ "** 2nd phase completed **\n"
+#else
+                        string.Empty
+#endif
+,
+                        registeredData
+                        ));
             }
         }
-
 
         public IList<Errors.SynchronizationException> CheckIssues()
         {
@@ -305,7 +395,6 @@ namespace Synchronization.Core.Registration
                     errors.Add(new UsbNotPluggedException());
             }
 
-
             try
             {
                 if (this.requestProcessor.Process<string>(this.urlUtils.GetDefaultUrl(), "False") == "False")
@@ -319,10 +408,15 @@ namespace Synchronization.Core.Registration
             }
             catch (Exception ex)
             {
+                if(errors == null)
+                    errors = new List<SynchronizationException>();
+                    
                 errors.Add(new NetUnreachableException(ex.Message));
             }
 
             return errors;
         }
+
+        #endregion
     }
 }

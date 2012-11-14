@@ -38,15 +38,16 @@ namespace Browsing.CAPI.Containers
         private static string _zeroStepRegisteredMessage;
         private static string _firstStepRegisteredMessage;
         private static string _secondStepRegisteredMessage;
-        private readonly static string RegisterButtonText = "Register";
+        private readonly static string Register1ButtonText = "Request";
+        private readonly static string Register2ButtonText = "Accept";
 
         public CAPIRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder, false, RegisterButtonText)
+            : base(requestProcessor, urlUtils, holder, false, Register1ButtonText, Register2ButtonText, true)
         {
             // todo: define via resources
             _firstStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
-            _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + RegisterButtonText + " button to prepear authorization request on USB flash memory.";
-            _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' has been authorized by '{0}'.\nIf neccesssary you may repeat registration process.";
+            _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + Register1ButtonText + " button to prepear authorization request on USB flash memory.";
+            _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' has been authorized by '{0}'.\nIf necessary you may repeat registration process.";
 
             InitializeComponent();
 
@@ -94,35 +95,26 @@ namespace Browsing.CAPI.Containers
                 return ZeroStepRegisteredMessage;
         }
 
-        protected override bool OnRegistrationButtonClicked(out string statusMessage)
+        protected override void OnFirstRegistrationPhaseAccomplished(RegistrationManager manager, RegistrationCallbackEventArgs args)
         {
-            var status = RegistrationStatus;
-            RegisterData registeredData;
-
-            if (status == Phaze.NonRegistered || status == Phaze.Confirmed)
+            if (args.IsPassed)
             {
-
-                if (this.RegistrationManager.StartRegistration(out registeredData))
-                {
-                    statusMessage = FirstStepRegisteredMessage;
-                    RegistrationStatus = Phaze.PublicKeyShared;
-
-                    return true;
-                }
-            }
-            else if (status == Phaze.PublicKeyShared)
-            {
-                if (RegistrationManager.FinalizeRegistration(out registeredData))
-                {
-                    statusMessage = string.Format(_secondStepRegisteredMessage, registeredData.Description); //todo: replace with fully implemented SecondStepRegisteredMessage
-                    RegistrationStatus = Phaze.Confirmed;
-
-                    return true;
-                }
+                RegistrationStatus = Phaze.PublicKeyShared;
+                args.AppendMessage(FirstStepRegisteredMessage);
             }
 
-            statusMessage = "Registration failed";
-            return false;
+            base.OnFirstRegistrationPhaseAccomplished(manager, args);
+        }
+
+        protected override void OnSecondRegistrationPhaseAccomplished(RegistrationManager manager, RegistrationCallbackEventArgs args)
+        {
+            if (args.IsPassed)
+            {
+                RegistrationStatus = Phaze.Confirmed;
+                args.AppendMessage(string.Format(_secondStepRegisteredMessage, args.Data.Description));
+            }
+
+            base.OnSecondRegistrationPhaseAccomplished(manager, args);
         }
 
         #endregion
