@@ -74,7 +74,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.RegistrationId, data.RegistratorId));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.RegistrationId, data.Registrator));
             }
             catch (Exception)
             {
