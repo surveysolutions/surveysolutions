@@ -99,9 +99,6 @@
     <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
-    <Compile Include="Views\Register\RegisterInputModel.cs" />
-    <Compile Include="Views\Register\RegisterView.cs" />
-    <Compile Include="Views\Register\RegisterViewFactory.cs" />
     <Compile Include="Views\Summary\SummaryFactory.cs" />
     <Compile Include="Views\Summary\SummaryInputModel.cs" />
     <Compile Include="Views\Summary\SummaryView.cs" />

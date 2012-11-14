@@ -8,7 +8,7 @@ namespace Main.Core.View.Device
 {
     using System.Collections.Generic;
 
-    using Main.Core.Documents;
+    using Main.Core.Entities;
 
     /// <summary>
     /// TODO: Update summary.
@@ -46,7 +46,7 @@ namespace Main.Core.View.Device
         /// The order.
         /// </param>
         public DeviceView(
-            int page, int pageSize, int totalCount, List<SyncDeviceRegisterDocument> items, string order)
+            int page, int pageSize, int totalCount, List<RegisterData> items, string order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -62,7 +62,7 @@ namespace Main.Core.View.Device
         /// <summary>
         /// Gets Items.
         /// </summary>
-        public IEnumerable<SyncDeviceRegisterDocument> Items { get; private set; }
+        public List<RegisterData> Items { get; private set; }
 
         /// <summary>
         /// Gets or sets the order.

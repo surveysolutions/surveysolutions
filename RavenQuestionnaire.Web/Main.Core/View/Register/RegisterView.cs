@@ -4,12 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Register
+namespace Main.Core.View.Register
 {
     using Main.Core.Documents;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// view register
     /// </summary>
     public class RegisterView
     {

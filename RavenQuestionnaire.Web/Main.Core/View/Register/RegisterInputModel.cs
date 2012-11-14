@@ -1,10 +1,10 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterInputModel.cs" company="">
-// TODO: Update copyright text.
+// <copyright file="RegisterInputModel.cs" company="WorldBank">
+// 2012
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Core.Supervisor.Views.Register
+namespace Main.Core.View.Register
 {
     using System;
 
