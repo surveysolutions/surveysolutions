@@ -10,13 +10,9 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Text;
     using System.Web.Mvc;
 
     using Main.Core.Entities;
-
-    using Newtonsoft.Json;
 
     using Questionnaire.Core.Web.Register;
 
@@ -77,7 +73,8 @@ namespace Web.Supervisor.Controllers
         public ActionResult GetRegisteredDevices(Guid registrator)
         {
             var model = this.deviceRegister.GetRegisterData(registrator);
-            return Json( JsonConvert.SerializeObject(model.Items), JsonRequestBehavior.AllowGet);
+            //return Json(JsonConvert.SerializeObject(model.Items), JsonRequestBehavior.AllowGet);
+            return Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
