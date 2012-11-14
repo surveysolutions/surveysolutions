@@ -292,13 +292,17 @@ namespace Synchronization.Core.Registration
             {
                 var data = GetFromRegistrationFile(folderPath + InFile);
 
-                var supervisorRegisterData = DeserializeRegisterData(Encoding.ASCII.GetString(data));
+                // assign current user who made registration
+                var registerData = DeserializeRegisterData(Encoding.UTF8.GetString(data));
+                registerData.CurrentUserGuid = GetCurrentUser();
+
+                data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
 
                 var response = SendRegistrationRequest(data);
                 var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
                 if (string.Compare(result, "True", true) == 0)
-                    return supervisorRegisterData;
+                    return registerData;
                 else
                     throw new RegistrationException();
             }
