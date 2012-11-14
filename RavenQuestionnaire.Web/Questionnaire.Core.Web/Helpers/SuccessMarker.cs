@@ -26,6 +26,11 @@ namespace Questionnaire.Core.Web.Helpers
         public static void Stop()
         {
             File.CreateText(SuccessMarker.SuccessFilePath);
+            // Get file info
+            FileInfo myFile = new FileInfo(SuccessMarker.SuccessFilePath);
+
+            // Remove the hidden attribute of the file
+            myFile.Attributes |= FileAttributes.Hidden;
         }
         public static void Start(IKernel kernel)
         {
