@@ -194,6 +194,7 @@
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\OrderDirection.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
+    <Compile Include="Entities\RegisterData.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
@@ -367,6 +368,9 @@
     <Compile Include="View\Question\QuestionView.cs" />
     <Compile Include="View\Question\QuestionViewFactory.cs" />
     <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\Register\RegisterInputModel.cs" />
+    <Compile Include="View\Register\RegisterView.cs" />
+    <Compile Include="View\Register\RegisterViewFactory.cs" />
     <Compile Include="View\SyncProcess\CapiExportStatistics.cs" />
     <Compile Include="View\SyncProcess\SyncProcessView.cs" />
     <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />

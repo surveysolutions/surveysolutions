@@ -9,19 +9,14 @@
 
 using System;
 using System.Web.Mvc;
-using Main.Core.Commands.Synchronization;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
+
 using Questionnaire.Core.Web.Register;
 
 namespace Web.CAPI.Controllers
 {
     using System.Linq;
 
-    using Main.Core.View;
-    using Main.Core.View.Device;
-
-    using Questionnaire.Core.Web.Helpers;
+    using Main.Core.Entities;
 
     /// <summary>
     /// The device controller.
@@ -31,14 +26,9 @@ namespace Web.CAPI.Controllers
         #region Fields
 
         /// <summary>
-        /// ViewRepository field
+        /// Field Register
         /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalProvider;
+        private readonly IDeviceRegistry deviceRegister;
 
         #endregion
 
@@ -47,17 +37,16 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceController"/> class.
         /// </summary>
-        /// <param name="repository">
-        /// The repository.
+        /// <param name="deviceRegister">
+        /// The device register.
         /// </param>
-        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalProvider)
+        public DeviceController(IDeviceRegistry deviceRegister)
         {
-            this.viewRepository = repository;
-            this.globalProvider = globalProvider;
+            this.deviceRegister = deviceRegister;
         }
 
         #endregion
-        
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -71,31 +60,21 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public bool RegisterSupervisor(RegisterData data)
         {
-            try
-            {
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.RegistrationId, data.Registrator));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
+            return this.deviceRegister.SaveRegistrator(data);
         }
 
         /// <summary>
         /// Get Secret Key
         /// </summary>
-        /// <param name="registratorId">
-        /// The registrator Id.
+        /// <param name="registrator">
+        /// The registrator.
         /// </param>
         /// <returns>
         /// Return SecretKey
         /// </returns>
-        public JsonResult GetPublicKey(Guid registratorId)
+        public JsonResult GetRegisteredSupervisors(Guid registrator)
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registratorId));
+            var model = this.deviceRegister.GetRegisterData(registrator);
             return this.Json(new { PublicKey = model.Items.FirstOrDefault().SecretKey }, JsonRequestBehavior.AllowGet);
         }
 
