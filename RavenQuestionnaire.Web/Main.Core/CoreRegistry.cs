@@ -80,7 +80,7 @@ namespace Main.Core
         {
             var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
-            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
+            this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 
             // Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
            this.Kernel.Bind(
@@ -104,7 +104,7 @@ namespace Main.Core
 
            this.Kernel.Bind(
                 x => x.From(GetAssweblysForRegister()).SelectAllInterfaces().BindWith(new RegisterFirstInstanceOfInterface()));
-
+            
         }
 
         #endregion

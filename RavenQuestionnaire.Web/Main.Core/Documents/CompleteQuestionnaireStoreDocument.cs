@@ -28,7 +28,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The complete questionnaire store document.
     /// </summary>
-    //[SmartDenormalizer]
+    [SmartDenormalizer]
     public class CompleteQuestionnaireStoreDocument : ICompleteQuestionnaireDocument
     {
         #region Fields

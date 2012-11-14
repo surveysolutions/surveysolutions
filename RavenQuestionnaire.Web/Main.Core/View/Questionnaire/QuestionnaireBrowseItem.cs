@@ -19,6 +19,9 @@ namespace Main.Core.View.Questionnaire
     public class QuestionnaireBrowseItem
     {
         #region Constructors and Destructors
+        public QuestionnaireBrowseItem()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireBrowseItem"/> class.
