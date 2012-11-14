@@ -73,7 +73,6 @@ namespace Web.Supervisor.Controllers
         public ActionResult GetRegisteredDevices(Guid registrator)
         {
             var model = this.deviceRegister.GetRegisterData(registrator);
-            //return Json(JsonConvert.SerializeObject(model.Items), JsonRequestBehavior.AllowGet);
             return Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
