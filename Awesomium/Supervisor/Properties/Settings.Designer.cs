@@ -190,5 +190,17 @@ namespace Browsing.Supervisor.Properties {
                 this["GetRegistrationSupervisorPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/GetRegisteredDevices")]
+        public string GetAuthorizedIDs {
+            get {
+                return ((string)(this["GetAuthorizedIDs"]));
+            }
+            set {
+                this["GetAuthorizedIDs"] = value;
+            }
+        }
     }
 }

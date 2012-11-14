@@ -79,5 +79,10 @@ namespace Browsing.CAPI.Utils
         {
             return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetEndProcessCapiPath, id);
         }
+
+        public string GetAuthorizedIDsUrl(Guid registratorId)
+        {
+            return string.Empty;
+        }
     }
 }

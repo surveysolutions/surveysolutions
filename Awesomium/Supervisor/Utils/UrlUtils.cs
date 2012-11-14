@@ -76,5 +76,10 @@ namespace Browsing.Supervisor.Utils
             //return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetEndProcessCapiPath, id);
             return String.Empty;
         }
+
+        public string GetAuthorizedIDsUrl(Guid registratorId)
+        {
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
+        }
     }
 }

@@ -95,6 +95,7 @@ namespace Web.Supervisor.Controllers
         {
             var currentUser = this.globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(Guid.Empty, currentUser.Id));
+            
             return this.PartialView("Devices", model);
         }
 
