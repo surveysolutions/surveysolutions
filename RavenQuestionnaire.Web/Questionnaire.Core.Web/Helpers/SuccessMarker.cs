@@ -18,7 +18,7 @@ namespace Questionnaire.Core.Web.Helpers
     {
         private static string SuccessFilePath
         {
-            get { return HostingEnvironment.MapPath("/" + successMarker); }
+            get { return HostingEnvironment.MapPath("/App_Data/" + successMarker); }
         }
 
         private static readonly string successMarker = "success.marker";
