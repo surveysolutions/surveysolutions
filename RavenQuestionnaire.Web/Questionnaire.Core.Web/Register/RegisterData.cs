@@ -24,7 +24,9 @@ namespace Questionnaire.Core.Web.Register
         /// </summary>
         public RegisterData()
         {
-            this.RegisterDate = DateTime.Now;
+#if DEBUG
+            this.RegisterDate = DateTime.MinValue;
+#endif
         }
 
         #endregion
@@ -47,19 +49,19 @@ namespace Questionnaire.Core.Web.Register
         public byte[] SecretKey { get; set; }
 
         /// <summary>
-        /// Gets or sets TabletId.
+        /// ID of device or supervisor
         /// </summary>
-        public Guid TabletId { get; set; }
+        public Guid Registrator { get; set; }
+
+        /// <summary>
+        /// The id of registrator who puts registration event to database
+        /// </summary>
+        public Guid RegistrationId { get; set; }
 
         /// <summary>
         /// Gets or sets Event.
         /// </summary>
         public RegisterView Event { get; set; }
-
-        /// <summary>
-        /// Gets or sets CurrentSupervisor.
-        /// </summary>
-        public Guid GuidCurrentUser { get; set; }
 
         #endregion
     }

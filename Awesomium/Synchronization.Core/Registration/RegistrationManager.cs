@@ -268,7 +268,13 @@ namespace Synchronization.Core.Registration
         {
             var keyContainerName = ContainerName;
 
-            var registeredData = new RegisterData { SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, RegisterId = RegisrationId, Description = RegisrationName };
+            var registeredData = new RegisterData { 
+                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, 
+                RegistrationId = RegisrationId, 
+                Description = RegisrationName,
+                RegisterDate = DateTime.Now,
+                Registrator = GetCurrentUser(), // makes no much sence for now, since we do not require CAPI user to be logged on
+            };
 
             var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
 
@@ -294,7 +300,7 @@ namespace Synchronization.Core.Registration
 
                 // assign current user who made registration
                 var registerData = DeserializeRegisterData(Encoding.UTF8.GetString(data));
-                registerData.CurrentUserGuid = GetCurrentUser();
+                registerData.Registrator = GetCurrentUser();
 
                 data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
 
