@@ -21,7 +21,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class ScreenGroupViewFactory : IViewFactory<CompleteQuestionnaireViewInputModel, ScreenGroupView>
+    public class DisplaySurveyViewFactory : IViewFactory<DisplaViewInputModel, ScreenGroupView>
     {
         #region Constants and Fields
 
@@ -40,7 +40,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScreenGroupViewFactory"/> class.
+        /// Initializes a new instance of the <see cref="DisplaySurveyViewFactory"/> class. 
         /// </summary>
         /// <param name="store">
         /// The store.
@@ -48,7 +48,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="screenViewSupplier">
         /// The screen view supplier.
         /// </param>
-        public ScreenGroupViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
+        public DisplaySurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
         {
             this.store = store;
             this.screenViewSupplier = screenViewSupplier;
@@ -67,7 +67,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.CompleteGroupMobileView.
         /// </returns>
-        public ScreenGroupView Load(CompleteQuestionnaireViewInputModel input)
+        public ScreenGroupView Load(DisplaViewInputModel input)
         {
             if (input.CompleteQuestionnaireId == Guid.Empty)
             {
@@ -81,14 +81,26 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 return null;
             }
 
-            input.CurrentGroupPublicKey = doc.Children.OfType<ICompleteGroup>().FirstOrDefault().PublicKey;
+            if (!input.CurrentGroupPublicKey.HasValue)
+            {
+                var firstGroup = doc.Children.OfType<ICompleteGroup>().FirstOrDefault();
+                if (firstGroup == null)
+                {
+                    return null;
+                }
+
+                input.CurrentGroupPublicKey = firstGroup.PublicKey;
+            }
 
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);
 
-            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
+            var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
-            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            var result = this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            result.Title = doc.Title;
+
+            return result;
         }
 
         #endregion

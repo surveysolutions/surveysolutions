@@ -8,6 +8,8 @@ namespace Questionnaire.Core.Web.Register
 {
     using System;
 
+    using Main.Core.Entities.SubEntities;
+
     using global::Core.Supervisor.Views.Register;
 
     /// <summary>
@@ -53,6 +55,11 @@ namespace Questionnaire.Core.Web.Register
         /// Gets or sets Event.
         /// </summary>
         public RegisterView Event { get; set; }
+
+        /// <summary>
+        /// Gets or sets CurrentSupervisor.
+        /// </summary>
+        public Guid GuidCurrentUser { get; set; }
 
         #endregion
     }

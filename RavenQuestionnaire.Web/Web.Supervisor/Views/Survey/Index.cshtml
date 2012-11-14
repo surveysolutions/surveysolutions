@@ -74,8 +74,8 @@
 <div id="questionnaireTable">
     @this.Html.Partial("_Table", this.Model)
 </div>
+ @Html.Action("QuestionnaireChart", "Survey", this.Model)
 
-@this.Html.Action("Chart", Model)
 
 
 

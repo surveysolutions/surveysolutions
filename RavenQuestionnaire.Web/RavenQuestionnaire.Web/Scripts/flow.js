@@ -1,8 +1,13 @@
 ﻿var conditions = [];
 
-var addCondition = function(condition) {
-    conditions.push(condition);
+var addCondition = function (condition, from) {
+    conditions.push(new Condition(from, condition));
 };
+
+function Condition(from, condiiton){
+    this.condition = condiiton;
+    this.id = from;
+}
 
 var parser = (function () {
     var parse = make_parse();

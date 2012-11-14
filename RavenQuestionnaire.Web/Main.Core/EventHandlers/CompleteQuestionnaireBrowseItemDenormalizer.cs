@@ -93,6 +93,7 @@ namespace Main.Core.EventHandlers
                     q => new CompleteQuestionView() {PublicKey = q.PublicKey, Answer = q.GetAnswerString(), Title = q.QuestionText}).ToArray();
             browseItem.Status = document.Status;
             browseItem.Responsible = document.Responsible;
+            browseItem.LastEntryDate = document.CreationDate;
         }
 
         /// <summary>
@@ -108,6 +109,7 @@ namespace Main.Core.EventHandlers
                 CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
                 if (item == null)
                     return;
+                item.LastEntryDate = evnt.EventTimeStamp;
                 CompleteQuestionView currentFeatured =
                     item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
 
@@ -139,6 +141,7 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             item.Status = evnt.Payload.Status;
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         /// <summary>
@@ -153,6 +156,7 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
+            item.LastEntryDate = evnt.EventTimeStamp;
         }
 
         #endregion

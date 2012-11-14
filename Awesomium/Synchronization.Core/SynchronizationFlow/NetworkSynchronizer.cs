@@ -18,6 +18,7 @@ namespace Synchronization.Core.SynchronizationFlow
         private readonly IRequesProcessor _requestProcessor;
         private readonly IUrlUtils _urlUtils;
         private AutoResetEvent stopRequested = new AutoResetEvent(false);
+        private Guid processId = Guid.Empty;
 
         #endregion
 
@@ -34,9 +35,11 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+                this.stopRequested.Reset();
 
-                WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Push, direction);
+                this.processId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+
+                WaitForEndProcess(OnSyncProgressChanged, SyncType.Push, direction);
             }
             catch (Exception e)
             {
@@ -49,9 +52,11 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                var processGuid = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
-                
-                WaitForEndProcess(processGuid, OnSyncProgressChanged, SyncType.Pull, direction);
+                this.stopRequested.Reset();
+
+                this.processId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+
+                WaitForEndProcess(OnSyncProgressChanged, SyncType.Pull, direction);
             }
             catch (Exception e)
             {
@@ -62,7 +67,17 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnStop()
         {
-            this.stopRequested.Set();
+            if (this.processId != Guid.Empty && !this.stopRequested.WaitOne(100))
+            {
+                var endProcess = this._requestProcessor.Process<bool>(this._urlUtils.GetEndProcessUrl(this.processId),
+                                                                      false);
+                if (endProcess)
+                {
+                    this.processId = Guid.Empty;
+                    this.stopRequested.Set();
+                }
+            }
+
         }
 
         protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
@@ -76,7 +91,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 if (this._requestProcessor.Process<string>(netEndPoint, "False") == "False")
                     e = new NetUnreachableException(netEndPoint);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 e = new NetUnreachableException(ex.Message);
             }
@@ -106,26 +121,26 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region utility methods
 
-        protected void WaitForEndProcess(Guid processid, Action<SynchronizationEvent> eventRiser, SyncType syncType, SyncDirection direction)
+        protected void WaitForEndProcess(Action<SynchronizationEvent> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
 
             while (percentage != 100)
             {
-                if (this.stopRequested.WaitOne(100))
-                {
-                    throw new SynchronizationException("network synchronization is canceled");
-                    
-                }
                 Thread.Sleep(1000);
-                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid), -1);
+
+                if (this.stopRequested.WaitOne(100))
+                    throw new SynchronizationException("network synchronization is canceled");
+
+                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(this.processId), -1);
                 if (percentage < 0)
                     throw new SynchronizationException("network synchronization is failed");
 
                 eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
 
-                
+
             }
+            this.processId = Guid.Empty;
         }
 
         #endregion

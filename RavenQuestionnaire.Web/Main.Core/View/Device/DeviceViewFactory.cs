@@ -6,6 +6,8 @@
 
 namespace Main.Core.View.Device
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Main.Core.Documents;
     using Main.DenormalizerStorage;
@@ -52,11 +54,22 @@ namespace Main.Core.View.Device
         /// </returns>
         public DeviceView Load(DeviceViewInputModel input)
         {
-            int count = devices.Count();
-            if (count == 0) 
-                return new DeviceView();
-            var dev = devices.Query().Where(t =>t.TabletId == input.TabletId).FirstOrDefault();
-            return new DeviceView(dev.Description, dev.CreationDate, dev.SecretKey, dev.TabletId);
+            int count = this.devices.Query().Where(d => d.Registrator == input.SupervisorId).Count();
+
+            if (count == 0)
+            {
+                return new DeviceView(0, 0, 0, new List<SyncDeviceRegisterDocument>(), string.Empty);
+            }
+
+            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator == input.SupervisorId);
+            if (input.TabletId != Guid.Empty)
+            {
+                query = query.Where(t => t.TabletId == input.TabletId);
+            }
+
+            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var items = page.ToList();
+            return new DeviceView(input.Page, input.PageSize, count, items, input.Order);
         }
 
         #endregion

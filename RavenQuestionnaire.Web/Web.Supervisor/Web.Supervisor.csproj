@@ -210,7 +210,6 @@
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\grid.js" />
-    <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
@@ -411,6 +410,9 @@
     <Content Include="Views\Survey\_StatusHistory.cshtml" />
     <Content Include="Views\User\Summary.cshtml" />
     <Content Include="Views\User\_SummaryTable.cshtml" />
+    <Content Include="Views\Device\Devices.cshtml" />
+    <Content Include="Views\Shared\Administration.cshtml" />
+    <Content Include="Views\Survey\QuestionnaireChart.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

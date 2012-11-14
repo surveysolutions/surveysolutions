@@ -23,7 +23,8 @@ namespace Web.Supervisor.Models
         /// </summary>
         public ChartDataModel()
         {
-            this.Data = new List<ChartDataItem>();
+            this.Data = new Dictionary<string, int>();
+            this.DataItems = new List<ChartDataItem>();
         }
 
         /// <summary>
@@ -32,7 +33,8 @@ namespace Web.Supervisor.Models
         /// <param name="title">
         /// The title.
         /// </param>
-        public ChartDataModel(string title):this()
+        public ChartDataModel(string title)
+            : this()
         {
             this.Title = title;
         }
@@ -54,14 +56,16 @@ namespace Web.Supervisor.Models
         /// <summary>
         /// Gets or sets Data.
         /// </summary>
-        public List<ChartDataItem> Data { get; set; }
+        public Dictionary<string, int> Data { get; set; }
+
+        /// <summary>
+        /// Gets or sets DataItems.
+        /// </summary>
+        public List<ChartDataItem> DataItems { get; set; }
 
         #endregion
     }
 
-    /// <summary>
-    /// Class-helper for chartDataItem
-    /// </summary>
     public class ChartDataItem
     {
         /// <summary>

@@ -8,6 +8,8 @@ namespace Main.Core.Commands.Synchronization
 {
     using System;
     using Main.Core.Domain;
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
@@ -32,18 +34,27 @@ namespace Main.Core.Commands.Synchronization
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        /// <param name="guidSupervisor">
+        /// The guid Supervisor.
+        /// </param>
+        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId, Guid guidSupervisor)
         {
             this.RegisterGuid = tabletId;
             this.Description = description;
             this.SecretKey = secretKey;
             this.TabletId = tabletId;
             this.RegisteredDate = DateTime.Today;
+            this.GuidSupervisor = guidSupervisor;
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Supervisor.
+        /// </summary>
+        public Guid GuidSupervisor { get; set; }
 
         /// <summary>
         /// Gets or sets RegisterGuid.

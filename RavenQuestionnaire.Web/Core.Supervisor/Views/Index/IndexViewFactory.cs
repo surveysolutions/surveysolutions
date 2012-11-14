@@ -130,20 +130,26 @@ namespace Core.Supervisor.Views.Index
                                                 templateGroup.Count(),
                                                 templateGroup.Count(
                                                     q =>
+                                                    q.Responsible != null &&
                                                     q.Status.PublicId ==
                                                     SurveyStatus.Initial.PublicId),
                                                 templateGroup.Count(
                                                     q =>
+                                                    q.Responsible != null &&
                                                     q.Status.PublicId == SurveyStatus.Error.PublicId),
                                                 templateGroup.Count(
                                                     q =>
+                                                    q.Responsible != null &&
                                                     q.Status.PublicId ==
                                                     SurveyStatus.Complete.PublicId),
                                                 templateGroup.Count(
                                                     q =>
+                                                    q.Responsible != null &&
                                                     q.Status.PublicId ==
-                                                    SurveyStatus.Approve.PublicId), templateGroup.Count(
+                                                    SurveyStatus.Approve.PublicId), 
+                                                templateGroup.Count(
                                                     q =>
+                                                    q.Responsible != null &&
                                                     q.Status.PublicId ==
                                                     SurveyStatus.Redo.PublicId));
             }

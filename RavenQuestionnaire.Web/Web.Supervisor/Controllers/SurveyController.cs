@@ -21,6 +21,7 @@ namespace Web.Supervisor.Controllers
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Commands.Synchronization;
+    using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Synchronization;
     using Main.Core.Services;
@@ -344,8 +345,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
+            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
+                new DisplaViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
             return this.View(model);
@@ -370,8 +371,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
-                new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
+            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
+                new DisplaViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return this.PartialView("_SurveyContent", model);
@@ -409,7 +410,11 @@ namespace Web.Supervisor.Controllers
             }
 
             if (Request.IsAjaxRequest())
-                return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId }, JsonRequestBehavior.AllowGet);
+            {
+                return Json(
+                    new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId },
+                    JsonRequestBehavior.AllowGet);
+            }
             return this.RedirectToAction("Assigments", "Survey", new { id = tmptId });
         }
 
@@ -593,22 +598,57 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Action for preparing data for visual chart
         /// </summary>
-        /// <param name="view">
-        /// The view.
+        /// <param name="templateId">
+        /// The template Id.
         /// </param>
         /// <returns>
         /// return Partial View with visual chart
         /// </returns>
-        public PartialViewResult Chart(IndexView view)
+        public ActionResult Chart(Guid templateId)
+        {
+            var data = new ChartDataModel("Chart");
+            var view = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(new AssignmentInputModel(templateId, Guid.Empty, 1, 100, new List<OrderRequestItem>()));
+            if (view.Items.Count > 0)
+            {
+                if (view.Items.Where(t => t.Responsible == null).Count() > 0)
+                {
+                    data.Data.Add("Unassigned", view.Items.Where(t => t.Responsible == null).Count());
+                }
+
+                var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
+                foreach (var state in statusesName)
+                {
+                    data.Data.Add(state, view.Items.Where(t => t.Status.Name == state).Count());
+                }
+            }
+
+            return this.PartialView(data);
+        }
+
+        public ActionResult Administration()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        /// Create graph on home page
+        /// </summary>
+        /// <param name="view">
+        /// The view.
+        /// </param>
+        /// <returns>
+        /// Return partial view on home page
+        /// </returns>
+        public ActionResult QuestionnaireChart(IndexView view)
         {
             var data = new ChartDataModel("Chart");
             if (view.Items.Count > 0)
             {
-                foreach (var item in view.Items)
-                    data.Data.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
+                foreach (var item in view.Items) 
+                    data.DataItems.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
             }
 
-            return this.PartialView(data);
+            return this.PartialView("QuestionnaireChart", data);
         }
 
         #endregion

@@ -62,6 +62,7 @@ namespace Core.CAPI.Tests.Synchronization
             Assert.AreEqual(target.ReadEvents().Count(), 0);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
+
         [Test]
         public void ReadEvents_EventStoreContainsCompleteQuestionnaires_NotEmptyListReturned()
         {
@@ -84,6 +85,7 @@ namespace Core.CAPI.Tests.Synchronization
             Assert.AreEqual(target.ReadEvents().Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
+
         [Test]
         public void ReadEvents_EventStoreContainsErrorQuestionnaires_NotEmptyListReturned()
         {

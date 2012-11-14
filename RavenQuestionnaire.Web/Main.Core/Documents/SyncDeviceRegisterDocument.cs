@@ -8,6 +8,8 @@ namespace Main.Core.Documents
 {
     using System;
 
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -39,6 +41,11 @@ namespace Main.Core.Documents
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets Registrator.
+        /// </summary>
+        public Guid Registrator { get; set; }
 
         #endregion
     }

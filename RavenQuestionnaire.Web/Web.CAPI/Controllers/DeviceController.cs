@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DeviceController.cs" company="">
+// <copyright file="DeviceController.cs" company="WorldBank">
 //   2012
 // </copyright>
 // <summary>
@@ -16,11 +16,48 @@ using Questionnaire.Core.Web.Register;
 
 namespace Web.CAPI.Controllers
 {
+    using System.Linq;
+
+    using Main.Core.View;
+    using Main.Core.View.Device;
+
+    using Questionnaire.Core.Web.Helpers;
+
     /// <summary>
     /// The device controller.
     /// </summary>
     public class DeviceController : Controller
     {
+        #region Fields
+
+        /// <summary>
+        /// ViewRepository field
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalProvider;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceController"/> class.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalProvider)
+        {
+            this.viewRepository = repository;
+            this.globalProvider = globalProvider;
+        }
+
+        #endregion
+        
         #region Public Methods and Operators
 
         /// <summary>
@@ -37,7 +74,7 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, data.GuidCurrentUser));
             }
             catch (Exception)
             {
@@ -45,6 +82,22 @@ namespace Web.CAPI.Controllers
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Get Secret Key
+        /// </summary>
+        /// <param name="tabletId">
+        /// The tablet id.
+        /// </param>
+        /// <returns>
+        /// Return SecretKey
+        /// </returns>
+        public JsonResult GetPublicKey(Guid tabletId)
+        {
+            var currentUser = this.globalProvider.GetCurrentUser();
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId, currentUser.Id));
+            return this.Json(new { PublicKey = model.Items.FirstOrDefault().SecretKey }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

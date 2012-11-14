@@ -10,6 +10,7 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Linq;
     using System.Web.Mvc;
 
     using Main.Core.Commands.Synchronization;
@@ -19,6 +20,7 @@ namespace Web.Supervisor.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
+    using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Register;
 
     /// <summary>
@@ -33,6 +35,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalProvider;
+
         #endregion
 
         #region Constructor
@@ -43,9 +50,10 @@ namespace Web.Supervisor.Controllers
         /// <param name="repository">
         /// The repository.
         /// </param>
-        public DeviceController(IViewRepository repository)
+        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalProvider)
         {
             this.viewRepository = repository;
+            this.globalProvider = globalProvider;
         }
 
         #endregion
@@ -66,7 +74,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId));
+                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId, data.GuidCurrentUser));
             }
             catch (Exception)
             {
@@ -79,16 +87,14 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Select from database publickey of capi
         /// </summary>
-        /// <param name="tabletId">
-        /// The tablet Id.
-        /// </param>
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
-        public JsonResult GetPublicKey(Guid tabletId)
+        public ActionResult GetRegisteredDevices()
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId));
-            return this.Json(new { PublicKey = model.SecretKey }, JsonRequestBehavior.AllowGet);
+            var currentUser = this.globalProvider.GetCurrentUser();
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(Guid.Empty, currentUser.Id));
+            return this.PartialView("Devices", model);
         }
 
         #endregion
