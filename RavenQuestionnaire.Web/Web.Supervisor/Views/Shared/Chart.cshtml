@@ -10,10 +10,10 @@
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Data.Select(t => t.Key).ToArray());
     var list = new SelectList(new List<string> {"line", "bar", "pie"}, "line") ;
-    var pair = "[";
+    var pair = string.Empty;
     for (int i = 0; i < Model.Data.Count(); i++)
     {
-        pair = pair+"[\"" + Model.Data.Keys.ToArray()[i] + "\", " + Model.Data.Values.ToArray()[i] + "],";
+        pair = (string.IsNullOrEmpty(pair) ? pair +"[" : pair+",") + " [\"" + Model.Data.Keys.ToArray()[i] + "\", " + Model.Data.Values.ToArray()[i] + "]";
     }
     pair = pair + "]";
 }
@@ -60,9 +60,7 @@ $(function() {
                     }]
                 },
                 tooltip: {
-                    formatter: function() {
-                        return this.x + ': ' + this.y;
-                    }
+                    formatter: GetToolTip(typeLine)
                 },
                 legend: {
                     layout: 'vertical',
@@ -75,7 +73,7 @@ $(function() {
                 series: [{
                     data: SelectData(typeLine)
                 }]
-            });
+        });
     }
     
     function SelectData(typeLine) {
@@ -84,6 +82,15 @@ $(function() {
         }
         else {
             return @values ;
+        }
+    }
+
+    function GetToolTip(typeLine) {
+        if (typeLine == 'pie') {
+            return;
+        }
+        else {
+            "{ function() { return this.x + ': ' + this.y; }}";
         }
     }
 });
