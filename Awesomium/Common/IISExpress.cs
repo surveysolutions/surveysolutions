@@ -77,7 +77,6 @@ namespace Common
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process.StartInfo.RedirectStandardOutput = true;
             process.Start();
         }
         IISExpress(string config, string site, string apppool)
