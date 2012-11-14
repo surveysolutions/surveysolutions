@@ -127,6 +127,7 @@ namespace RavenQuestionnaire.Web.Controllers
             this.LoadImages();
             var question = new QuestionView(id, groupPublicKey) { Parent = group.PublicKey, GroupTitle = group.Title };
             return this.View("_Create", question);
+            //return this.View("Create", question);
         }
 
         /// <summary>

@@ -29,13 +29,12 @@ namespace Main.Core.View.Device
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceViewInputModel"/> class.
         /// </summary>
-        /// <param name="tabletId">
-        /// The tablet id.
+        /// <param name="registratorId">
+        /// The registrator id.
         /// </param>
-        public DeviceViewInputModel(Guid tabletId, Guid supervisorId)
+        public DeviceViewInputModel(Guid registratorId)
         {
-            this.TabletId = tabletId;
-            this.SupervisorId = supervisorId;
+            this.RegistratorId = registratorId;
         }
 
         #endregion
@@ -43,14 +42,9 @@ namespace Main.Core.View.Device
         #region Properties
 
         /// <summary>
-        /// Gets or sets SupervisorId.
+        /// Gets or sets RegistratorId.
         /// </summary>
-        public Guid SupervisorId { get; set; }
-
-        /// <summary>
-        /// Gets or sets TabletId.
-        /// </summary>
-        public Guid TabletId { get; set; }
+        public Guid RegistratorId { get; set; }
 
         /// <summary>
         /// Gets or sets Order.

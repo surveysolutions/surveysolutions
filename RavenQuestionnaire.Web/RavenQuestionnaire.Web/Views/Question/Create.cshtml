@@ -1,0 +1,45 @@
+﻿@model Main.Core.View.Question.QuestionView
+           
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script charset="utf-8" type="text/javascript" language="javascript">
+
+    $(function () {
+        var questionType = $("[customName=questionName] option:selected").text();
+        if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
+            $("#fromDB").removeAttr('style');
+        }
+        $('[customName=questionName]').change(function () {
+            var questionType = $("[customName=questionName] option:selected").text();
+            //            if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
+            if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
+                $("#fromDB").removeAttr('style');
+            }
+            else
+                $("#fromDB").css('display', 'none');
+            if (questionType == "AutoPropagate") $("#apguid").show(); else $("#apguid").hide();
+        });
+    });
+</script>
+
+@{var hideFunctionName = Model.Parent.HasValue ? "HideCreateQuestionForm" + Model.Parent.ToString().Replace('-', '_') : "HideCreateQuestionForm";
+  if (ViewBag.Images != null)
+  {
+      var images = ViewBag.Images as SelectList;
+      this.ViewBag.Images = images;
+  }
+}
+@if (Model.PublicKey != Guid.Empty)
+{
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3>
+}
+else
+{
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3> 
+}
+
+@Html.Partial("MainInfo", Model)
