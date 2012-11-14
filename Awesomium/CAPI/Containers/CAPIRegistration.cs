@@ -117,6 +117,11 @@ namespace Browsing.CAPI.Containers
             base.OnSecondRegistrationPhaseAccomplished(manager, args);
         }
 
+        protected override void OnEnableSecondPhaseRegistration(bool enable)
+        {
+            base.OnEnableSecondPhaseRegistration(enable && RegistrationStatus == Phaze.PublicKeyShared);
+        }
+
         #endregion
 
         internal string CurrentRegistrationStatus

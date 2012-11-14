@@ -79,7 +79,7 @@ namespace Browsing.Supervisor.Utils
 
         public string GetAuthorizedIDsUrl(Guid registratorId)
         {
-            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
+            return string.Format("{0}{1}?Registrator={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
         }
     }
 }

@@ -85,6 +85,19 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
+        public string SerializeContent<T>(T data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+            return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+        }
+
+        public T DeserializeContent<T>(string data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+            return JsonConvert.DeserializeObject<T>(data, settings);
+        }
+
+
         #region Helpers
 
         private Guid AcceptRegistrationId()
