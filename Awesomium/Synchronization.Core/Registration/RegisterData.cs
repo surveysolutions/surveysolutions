@@ -4,7 +4,7 @@ namespace Synchronization.Core.Registration
 {
     /// <summary>
     /// TODO: Update summary.
-    /// </summary>
+ 
     public class RegisterData
     {
         #region Constructor
@@ -14,7 +14,9 @@ namespace Synchronization.Core.Registration
         /// </summary>
         public RegisterData()
         {
-            this.RegisterDate = DateTime.Now;
+#if DEBUG
+            this.RegisterDate = DateTime.MinValue;
+#endif
         }
 
         #endregion
@@ -37,15 +39,16 @@ namespace Synchronization.Core.Registration
         public byte[] SecretKey { get; set; }
 
         /// <summary>
-        /// Gets or sets registered Id (tablet Id on CAPI or .
+        /// ID of device or supervisor
         /// </summary>
-        public Guid RegisterId { get; set; }
+        public Guid Registrator { get; set; }
 
         /// <summary>
-        /// Gets or sets GuidCurrentUser.
+        /// The id of registrator who puts registration event to database
         /// </summary>
-        public Guid CurrentUserGuid { get; set; }
+        public Guid RegistrationId { get; set; }
 
         #endregion
     }
+
 }
