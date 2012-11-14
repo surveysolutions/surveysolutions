@@ -10,9 +10,13 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Collections.Generic;
+    using System.Text;
     using System.Web.Mvc;
 
     using Main.Core.Entities;
+
+    using Newtonsoft.Json;
 
     using Questionnaire.Core.Web.Register;
 
@@ -73,7 +77,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult GetRegisteredDevices(Guid registrator)
         {
             var model = this.deviceRegister.GetRegisterData(registrator);
-            return Json(new { items = model.Items }, JsonRequestBehavior.AllowGet);
+            var result = JsonConvert.SerializeObject(model.Items);
+            //var result = JsonConvert.SerializeObject(new ListRegisterData() { Items = model.Items });
+            return Json(new { items = result }, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
