@@ -95,7 +95,8 @@ namespace Web.Supervisor.Controllers
         public ActionResult GetRegisteredDevices(Guid registrator)
         {
             var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registrator));
-            return this.PartialView("Devices", model);
+            return Json(new { items = model.Items }, JsonRequestBehavior.AllowGet);
+            //return this.PartialView("Devices", model);
         }
 
         #endregion
