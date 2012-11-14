@@ -90,9 +90,15 @@ namespace Browsing.Supervisor.Containers
                     var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
 
                     var devices = this.requestProcessor.Process<string>(url, "False");
+
+                    List<SyncDeviceRegisterDocument> l = new List<SyncDeviceRegisterDocument> { null, null };
+
                     if (string.Compare(devices, "False", true) != 0)
                     {
-                        var content = RegistrationManager.DeserializeContent<List<SyncDeviceRegisterDocument>>(devices);
+                        var content = RegistrationManager.DeserializeContent<List<RegisterData>>(devices);
+
+                        var list = content.GroupBy((data) => { return data.RegistrationId; });
+                        //var content = RegistrationManager.DeserializeContent<List<SyncDeviceRegisterDocument>>(devices);
                     }
                 }
                 catch
