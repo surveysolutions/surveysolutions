@@ -48,7 +48,14 @@ namespace Synchronization.Core.Registration
         /// </summary>
         public Guid RegistrationId { get; set; }
 
+        public string Event { get; set; }
+
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Device: {0},\tDate: {0}", Description, RegisterDate);
+        }
     }
 
 }
