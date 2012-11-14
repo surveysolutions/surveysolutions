@@ -17,15 +17,30 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
+        private IUrlUtils urlUtils;
+        private IRequesProcessor requestProcessor;
         private readonly static string RegisterButtonText = "Authorize";
 
         public SupervisorRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder, true, RegisterButtonText)
+            : base(requestProcessor, urlUtils, holder, true, RegisterButtonText, string.Empty, false)
         {
             InitializeComponent();
 
             SetUsbStatusText("CAPI device authorization status");
+
+            this.urlUtils = urlUtils;
+            this.requestProcessor = requestProcessor;
         }
+
+        #region Helpers
+
+        private void UpdateAdministrativeContent()
+        {
+            var regDevicesList = this.urlUtils.GetRegisteredDevicesUrl();
+            //this.requestProcessor.
+        }
+
+        #endregion
 
         #region Override Methods
 
@@ -39,19 +54,29 @@ namespace Browsing.Supervisor.Containers
             return new SupervisorRegistrationManager(requestProcessor, urlUtils, usbProvider);
         }
 
-        protected override bool OnRegistrationButtonClicked(out string statusMessage)
+        protected override void OnEnableSecondPhaseRegistration(bool enable)
         {
-            RegisterData registeredData;
-            if (RegistrationManager.StartRegistration(out registeredData))
-            {
-                statusMessage = string.Format("CAPI device '{0}' has been authorized", registeredData.Description);
-                return true;
-            }
-
-            statusMessage = "Authorization of CAPI device failed";
-            return false;
+            base.OnEnableSecondPhaseRegistration(false);
         }
 
+        protected override void OnFirstRegistrationPhaseAccomplished(RegistrationManager manager, RegistrationCallbackEventArgs args)
+        {
+            if (args.IsPassed)
+                args.AppendMessage(string.Format("CAPI device {0} has been authorized", args.Data.Description));
+
+            base.OnFirstRegistrationPhaseAccomplished(manager, args);
+
+            if(args.IsPassed)
+                UpdateAdministrativeContent();
+        }
+
+
+        protected override void OnValidateContent()
+        {
+            base.OnValidateContent();
+
+            UpdateAdministrativeContent();
+        }
         #endregion
     }
 }

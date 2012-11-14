@@ -14,8 +14,8 @@ namespace Synchronization.Core.Errors
         {
         }
 
-        public SynchronizationException(string mesage, Exception inner)
-            : base(mesage, inner)
+        public SynchronizationException(string message, Exception inner)
+            : base(inner == null ? message : message + "\n" + inner.Message, inner)
         {
         }
 

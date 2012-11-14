@@ -30,11 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyncPanel));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.usbStatusPanel = new Browsing.Common.Containers.UsbStatusPanel();
             this.pullButton = new Browsing.Common.Controls.FlatButton();
             this.cancelButton = new Browsing.Common.Controls.FlatButton();
             this.pushButton = new Browsing.Common.Controls.FlatButton();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,17 +64,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(1059, 682);
             this.tableLayoutPanel1.TabIndex = 0;
-            // 
-            // progressBar
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 3);
-            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.progressBar.Location = new System.Drawing.Point(37, 295);
-            this.progressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(985, 30);
-            this.progressBar.TabIndex = 5;
-            this.progressBar.Visible = false;
             // 
             // usbStatusPanel
             // 
@@ -135,12 +124,23 @@
             this.pushButton.UseVisualStyleBackColor = true;
             this.pushButton.Click += new System.EventHandler(this.pushButton_Click);
             // 
+            // progressBar
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.progressBar, 3);
+            this.progressBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar.Location = new System.Drawing.Point(37, 295);
+            this.progressBar.Margin = new System.Windows.Forms.Padding(4);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(985, 30);
+            this.progressBar.TabIndex = 5;
+            this.progressBar.Visible = false;
+            // 
             // SyncPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "SyncPanel";
             this.Size = new System.Drawing.Size(1059, 682);
             this.tableLayoutPanel1.ResumeLayout(false);
