@@ -10,7 +10,6 @@
 namespace Web.Supervisor.Controllers
 {
     using System;
-    using System.Linq;
     using System.Web.Mvc;
 
     using Main.Core.Commands.Synchronization;
@@ -87,14 +86,15 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Select from database publickey of capi
         /// </summary>
+        /// <param name="registrator">
+        /// The registrator.
+        /// </param>
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
-        [Authorize]
-        public ActionResult GetRegisteredDevices()
+        public ActionResult GetRegisteredDevices(Guid registrator)
         {
-            var currentUser = this.globalProvider.GetCurrentUser();
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(Guid.Empty, currentUser.Id));
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registrator));
             return this.PartialView("Devices", model);
         }
 

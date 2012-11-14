@@ -87,16 +87,15 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// Get Secret Key
         /// </summary>
-        /// <param name="tabletId">
-        /// The tablet id.
+        /// <param name="registratorId">
+        /// The registrator Id.
         /// </param>
         /// <returns>
         /// Return SecretKey
         /// </returns>
-        public JsonResult GetPublicKey(Guid tabletId)
+        public JsonResult GetPublicKey(Guid registratorId)
         {
-            var currentUser = this.globalProvider.GetCurrentUser();
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId, currentUser.Id));
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registratorId));
             return this.Json(new { PublicKey = model.Items.FirstOrDefault().SecretKey }, JsonRequestBehavior.AllowGet);
         }
 
