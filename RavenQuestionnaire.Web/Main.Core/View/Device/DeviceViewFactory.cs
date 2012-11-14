@@ -56,19 +56,14 @@ namespace Main.Core.View.Device
         {
             int count =
                 this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(
-                    d => d.Registrator == input.SupervisorId).Count();
+                    d => d.Registrator == input.RegistratorId).Count();
 
             if (count == 0)
             {
                 return new DeviceView(0, 0, 0, new List<SyncDeviceRegisterDocument>(), string.Empty);
             }
 
-            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.SupervisorId);
-            if (input.TabletId != Guid.Empty)
-            {
-                query = query.Where(t => t.TabletId == input.TabletId);
-            }
-
+            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
             var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             var items = page.ToList();
             return new DeviceView(input.Page, input.PageSize, count, items, input.Order);

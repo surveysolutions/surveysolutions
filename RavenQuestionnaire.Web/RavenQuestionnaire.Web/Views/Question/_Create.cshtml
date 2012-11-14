@@ -6,9 +6,7 @@
 }
 <script charset="utf-8" type="text/javascript" language="javascript">
 
-
     $(function () {
-
         var questionType = $("[customName=questionName] option:selected").text();
         if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
