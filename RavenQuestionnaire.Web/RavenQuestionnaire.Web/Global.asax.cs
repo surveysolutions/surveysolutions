@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Web
         /// </param>
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            // filters.Add(new HandleErrorAttribute());
+             filters.Add(new HandleErrorAttribute());
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Web
             Exception lastException = this.Server.GetLastError();
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Fatal(lastException);
-        }
+        }*/
 
         /// <summary>
         /// The application_ start.
@@ -88,14 +88,20 @@ namespace RavenQuestionnaire.Web
         {
             AreaRegistration.RegisterAllAreas();
 
-            RegisterGlobalFilters(GlobalFilters.Filters);
+           /* RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
             // maybe better to move outside this class
-            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
+            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());*/
+            RegisterGlobalFilters(GlobalFilters.Filters);
+            RegisterRoutes(RouteTable.Routes);
+
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new RazorViewEngine());
+            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-        /// <summary>
+    /*    /// <summary>
         /// The host services.
         /// </summary>
         protected void HostServices()
