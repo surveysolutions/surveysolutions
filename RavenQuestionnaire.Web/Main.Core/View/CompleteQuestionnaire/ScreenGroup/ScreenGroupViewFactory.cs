@@ -81,8 +81,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 return null;
             }
 
-            input.CurrentGroupPublicKey = doc.Children.OfType<ICompleteGroup>().FirstOrDefault().PublicKey;
-
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);
 
