@@ -56,6 +56,8 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
         #endregion
 
+       
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -73,15 +75,15 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             {
                 return null;
             }
-
+            
             CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
-
+            
             if (doc == null)
             {
                 return null;
             }
 
-            input.CurrentGroupPublicKey = doc.Children.OfType<ICompleteGroup>().FirstOrDefault().PublicKey;
+            this.UpdateInputData(doc, input);
 
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);
@@ -92,5 +94,30 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         }
 
         #endregion
+
+        /// <summary>
+        /// The update input data.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        protected void UpdateInputData(CompleteQuestionnaireStoreDocument doc, CompleteQuestionnaireViewInputModel input)
+        {
+            if (input.CurrentGroupPublicKey.HasValue)
+            {
+                return;
+            }
+
+            if (doc.LastVisitedGroup == null)
+            {
+                return;
+            }
+
+            input.CurrentGroupPublicKey = doc.LastVisitedGroup.GroupKey;
+            input.PropagationKey = doc.LastVisitedGroup.PropagationKey;
+        }
     }
 }
