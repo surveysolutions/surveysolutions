@@ -17,47 +17,6 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
-        /// <summary>
-        /// TODO: Update summary.
-        /// </summary>
-        public class SyncDeviceRegisterDocument
-        {
-            #region Fields
-
-            /// <summary>
-            /// Gets or sets the public key.
-            /// </summary>
-            public Guid PublicKey { get; set; }
-
-            /// <summary>
-            /// Gets or sets the creation date.
-            /// </summary>
-            public DateTime CreationDate { get; set; }
-
-            /// <summary>
-            /// Gets or sets TabletId.
-            /// </summary>
-            public Guid TabletId { get; set; }
-
-            /// <summary>
-            /// Gets or sets PublicKey.
-            /// </summary>
-            public byte[] SecretKey { get; set; }
-
-            /// <summary>
-            /// Gets or sets Description.
-            /// </summary>
-            public string Description { get; set; }
-
-            /// <summary>
-            /// Gets or sets Registrator.
-            /// </summary>
-            public Guid Registrator { get; set; }
-
-            #endregion
-        }
-
-
         private IUrlUtils urlUtils;
         private IRequesProcessor requestProcessor;
         private readonly static string RegisterButtonText = "Authorize";
@@ -72,9 +31,27 @@ namespace Browsing.Supervisor.Containers
 
             this.urlUtils = urlUtils;
             this.requestProcessor = requestProcessor;
+
+            //AuthorizationList.Location = new Point(0, 0);
+            //AuthorizationList.AutoArrange = true;
+            //AuthorizationList.Columns.Add("Device");
+            //AuthorizationList.Columns.Add("Authorization date");
+            //AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+            //AuthorizationList.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+            AuthorizationList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
         }
 
         #region Helpers
+
+        private void UpdateListView(IEnumerable<RegisterData> source)
+        {
+            AuthorizationList.Items.Clear();
+            foreach (var item in source)
+                AuthorizationList.Items.Add(new ListViewItem(new string[] { item.Description, item.RegisterDate.ToLocalTime().ToString() }));
+
+            //AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent | ColumnHeaderAutoResizeStyle.HeaderSize);
+            AuthorizationList.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
 
         private void UpdateAuthorizedList()
         {
@@ -88,17 +65,13 @@ namespace Browsing.Supervisor.Containers
                 try
                 {
                     var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
-
                     var devices = this.requestProcessor.Process<string>(url, "False");
-
-                    List<SyncDeviceRegisterDocument> l = new List<SyncDeviceRegisterDocument> { null, null };
 
                     if (string.Compare(devices, "False", true) != 0)
                     {
                         var content = RegistrationManager.DeserializeContent<List<RegisterData>>(devices);
 
-                        var list = content.GroupBy((data) => { return data.RegistrationId; });
-                        //var content = RegistrationManager.DeserializeContent<List<SyncDeviceRegisterDocument>>(devices);
+                        UpdateListView(content);
                     }
                 }
                 catch
@@ -143,7 +116,7 @@ namespace Browsing.Supervisor.Containers
 
             base.OnFirstRegistrationPhaseAccomplished(manager, args);
 
-            if(args.IsPassed)
+            if (args.IsPassed)
                 UpdateAdministrativeContent();
         }
 
