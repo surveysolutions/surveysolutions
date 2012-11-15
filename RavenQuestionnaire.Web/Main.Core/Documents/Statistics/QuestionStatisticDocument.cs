@@ -53,6 +53,7 @@ namespace Main.Core.Documents.Statistics
             this.ScreenPublicKey = screenPublicKey;
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
+            this.QuestionScope = question.QuestionScope;
 
             if (question.IsAnswered())
             {
@@ -107,6 +108,11 @@ namespace Main.Core.Documents.Statistics
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets QuestionScope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the screen public key.
         /// </summary>
         public Guid ScreenPublicKey { get; set; }
@@ -114,5 +120,7 @@ namespace Main.Core.Documents.Statistics
         #endregion
 
         // public object AnswerValue { get; set; }
+
+        
     }
 }

@@ -68,6 +68,11 @@ namespace Main.Core.Entities.SubEntities
         QuestionType QuestionType { get; set; } ////must be deleted
 
         /// <summary>
+        /// Gets or sets the question scope.
+        /// </summary>
+        QuestionScope QuestionScope { get; set; } 
+
+        /// <summary>
         /// Gets or sets the Stata export caption.
         /// </summary>
         string StataExportCaption { get; set; }

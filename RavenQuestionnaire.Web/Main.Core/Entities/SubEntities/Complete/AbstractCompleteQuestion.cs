@@ -159,6 +159,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
         public string StataExportCaption { get; set; }
