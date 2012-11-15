@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Web
             Exception lastException = this.Server.GetLastError();
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Fatal(lastException);
-        }
+        }*/
 
         /// <summary>
         /// The application_ start.
@@ -92,10 +92,10 @@ namespace RavenQuestionnaire.Web
             RegisterRoutes(RouteTable.Routes);
 
             // maybe better to move outside this class
-            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
+            //NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
         }
 
-        /// <summary>
+       /* /// <summary>
         /// The host services.
         /// </summary>
         protected void HostServices()

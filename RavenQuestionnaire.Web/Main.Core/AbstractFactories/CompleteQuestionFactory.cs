@@ -69,6 +69,7 @@ namespace Main.Core.AbstractFactories
             this.UpdateQuestion(
                 completeQuestion, 
                 question.QuestionType, 
+                question.QuestionScope,
                 question.QuestionText, 
                 question.StataExportCaption, 
                 question.ConditionExpression, 
@@ -133,6 +134,7 @@ namespace Main.Core.AbstractFactories
             this.UpdateQuestion(
                q,
                e.QuestionType,
+               e.QuestionScope,
                e.QuestionText,
                e.StataExportCaption,
                e.ConditionExpression,
@@ -169,6 +171,7 @@ namespace Main.Core.AbstractFactories
             this.UpdateQuestion(
                 question,
                 e.QuestionType,
+                e.QuestionScope,
                 e.QuestionText,
                 e.StataExportCaption,
                 e.ConditionExpression,
@@ -269,6 +272,9 @@ namespace Main.Core.AbstractFactories
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// Thw question scope
+        /// </param>
         /// <param name="questionText">
         /// The question text.
         /// </param>
@@ -308,6 +314,7 @@ namespace Main.Core.AbstractFactories
         private void UpdateQuestion(
             IQuestion question, 
             QuestionType questionType, 
+            QuestionScope questionScope,
             string questionText, 
             string stataExportCaption, 
             string conditionExpression, 
@@ -322,6 +329,7 @@ namespace Main.Core.AbstractFactories
             int maxValue)
         {
             question.QuestionType = questionType;
+            question.QuestionScope = questionScope;
             question.QuestionText = questionText;
             question.StataExportCaption = stataExportCaption;
             question.ConditionExpression = conditionExpression;
