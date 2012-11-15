@@ -184,8 +184,10 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        private void CreateRegistrationFile(byte[] data, string filePath)
+        private void CreateRegistrationFile(RegisterData registeredData, string filePath)
         {
+            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
+
             FileStream fileStream = null;
 
             try
@@ -194,7 +196,7 @@ namespace Synchronization.Core.Registration
                 fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
 
                 // Writes a block of bytes to this stream using data from a byte array.
-                fileStream.Write(data, 0, data.Length);
+                fileStream.Write(dataToFile, 0, dataToFile.Length);
 
             }
             catch (Exception ex)
@@ -261,7 +263,7 @@ namespace Synchronization.Core.Registration
 
         #region Abstract Properties
 
-        protected abstract string ContainerName {get;}
+        protected abstract string ContainerName { get; }
 
         #endregion
 
@@ -275,17 +277,16 @@ namespace Synchronization.Core.Registration
         {
             var keyContainerName = ContainerName;
 
-            var registeredData = new RegisterData { 
-                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus, 
-                RegistrationId = RegistrationId, 
+            var registeredData = new RegisterData
+            {
+                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
+                RegistrationId = RegistrationId,
                 Description = RegistrationName,
                 RegisterDate = DateTime.Now,
-                //Registrator = CurrentUser, // makes no much sence for now, since we do not require CAPI user to be logged on
+                Registrator = CurrentUser, // makes no much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
             };
 
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
-
-            CreateRegistrationFile(dataToFile, folderPath + OutFile);
+            CreateRegistrationFile(registeredData, folderPath + OutFile);
 
             return registeredData;
         }
@@ -353,15 +354,7 @@ namespace Synchronization.Core.Registration
             finally
             {
                 if (FirstPhaseAccomplished != null)
-                    FirstPhaseAccomplished(this, new RegistrationCallbackEventArgs(error,
-#if DEBUG
- "** 1st phase completed **\n"
-#else
-                        string.Empty
-#endif
-,
-                        registeredData
-                        ));
+                    FirstPhaseAccomplished(this, new RegistrationCallbackEventArgs(error, string.Empty, registeredData));
             }
         }
 
@@ -385,15 +378,7 @@ namespace Synchronization.Core.Registration
             finally
             {
                 if (SecondPhaseAccomplished != null)
-                    SecondPhaseAccomplished(this, new RegistrationCallbackEventArgs(error,
-#if DEBUG
- "** 2nd phase completed **\n"
-#else
-                        string.Empty
-#endif
-,
-                        registeredData
-                        ));
+                    SecondPhaseAccomplished(this, new RegistrationCallbackEventArgs(error, string.Empty, registeredData));
             }
         }
 
@@ -425,9 +410,9 @@ namespace Synchronization.Core.Registration
             }
             catch (Exception ex)
             {
-                if(errors == null)
+                if (errors == null)
                     errors = new List<SynchronizationException>();
-                    
+
                 errors.Add(new NetUnreachableException(ex.Message));
             }
 

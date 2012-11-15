@@ -34,7 +34,13 @@ namespace Browsing.Supervisor.Registration
 
         protected override RegisterData OnStartRegistration(string folderPath)
         {
-            return AuthorizeAccepetedData(folderPath);
+            var data = AuthorizeAccepetedData(folderPath);
+
+            //CreateRegistrationFile(data, folderPath + OutFile);
+
+            base.OnStartRegistration(folderPath);
+
+            return data;
         }
 
         #endregion

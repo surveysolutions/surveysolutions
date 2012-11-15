@@ -20,10 +20,6 @@ namespace Browsing.Common.Containers
 
         #region C-tor
 
-        public Registration()
-        {
-        }
-
         public Registration(
             IRequesProcessor requestProcessor,
             IUrlUtils urlUtils,
@@ -59,6 +55,7 @@ namespace Browsing.Common.Containers
         #region Propeties
 
         protected internal RegistrationManager RegistrationManager { get; private set; }
+        protected ListView AuthorizationList { get { return this.authorizationList; } }
 
         #endregion
 
