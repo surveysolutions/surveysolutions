@@ -8,7 +8,6 @@ namespace Main.Core.Commands.Synchronization
 {
     using System;
     using Main.Core.Domain;
-    using Main.Core.Entities.SubEntities;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
