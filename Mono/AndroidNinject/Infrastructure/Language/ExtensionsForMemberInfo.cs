@@ -38,6 +38,8 @@ namespace Ninject.Infrastructure.Language
                 if (parentDefinitionMethodInfo == null)
                 {
                     var runtimeAssemblyInfoType = typeof(MethodInfo).Assembly.GetType("System.Reflection.RuntimeMethodInfo");
+                    if (runtimeAssemblyInfoType == null)
+                        return null;
                     parentDefinitionMethodInfo = runtimeAssemblyInfoType.GetMethod("GetParentDefinition", Flags);
                 }
 

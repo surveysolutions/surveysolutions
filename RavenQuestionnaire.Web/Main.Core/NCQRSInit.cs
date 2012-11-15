@@ -55,6 +55,7 @@ namespace Main.Core
 			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
 #else
             //NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+               NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
             NcqrsEnvironment.SetDefault(InitializeCommandService());
@@ -62,7 +63,7 @@ namespace Main.Core
 
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+         
             var bus = new InProcessEventBus(true);
             RegisterEventHandlers(bus, kernel);
 
@@ -253,12 +254,17 @@ namespace Main.Core
                 {
                     Type eventDataType = handlerInterfaceType.GetGenericArguments().First();
                     Type type1 = type;
-                    IEnumerable<object> handlers =
-                        kernel.GetAll(typeof (IEventHandler<>).MakeGenericType(eventDataType)).Where(
-                            i => i.GetType() == type1);
-                    foreach (object handler in handlers)
+                    try
                     {
-                        bus.RegisterHandler(handler, eventDataType);
+                        IEnumerable<object> handlers =
+                            kernel.GetAll(typeof (IEventHandler<>).MakeGenericType(eventDataType)).Where(
+                                i => i.GetType() == type1);
+                        foreach (object handler in handlers)
+                        {
+                            bus.RegisterHandler(handler, eventDataType);
+                        }
+                    }catch(ActivationException)
+                    {
                     }
                 }
             }
