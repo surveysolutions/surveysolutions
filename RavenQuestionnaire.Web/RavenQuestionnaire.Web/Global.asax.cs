@@ -88,23 +88,23 @@ namespace RavenQuestionnaire.Web
         {
             AreaRegistration.RegisterAllAreas();
 
-           /* RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterRoutes(RouteTable.Routes);
-
-            // maybe better to move outside this class
-            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());*/
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new RazorViewEngine());
-            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+            // maybe better to move outside this class
+            //NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
+            //RegisterGlobalFilters(GlobalFilters.Filters);
+//            RegisterRoutes(RouteTable.Routes);
+//
+//            ViewEngines.Engines.Clear();
+//            ViewEngines.Engines.Add(new RazorViewEngine());
+//            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-    /*    /// <summary>
+        /// <summary>
         /// The host services.
         /// </summary>
-        protected void HostServices()
+        /*protected void HostServices()
         {
             bool isDiscovereble;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["WCFVisible"], out isDiscovereble))

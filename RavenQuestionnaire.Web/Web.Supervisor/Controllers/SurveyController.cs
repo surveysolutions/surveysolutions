@@ -20,16 +20,12 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Interviewer;
 
     using Main.Core.Commands.Questionnaire.Completed;
-    using Main.Core.Commands.Synchronization;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Synchronization;
-    using Main.Core.Services;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
-    using Main.Core.View.Group;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
     using Main.Core.View.User;
@@ -610,15 +606,20 @@ namespace Web.Supervisor.Controllers
             var view = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(new AssignmentInputModel(templateId, Guid.Empty, 1, 100, new List<OrderRequestItem>()));
             if (view.Items.Count > 0)
             {
-                if (view.Items.Where(t => t.Responsible == null).Count() > 0)
+                int countUnassigment =
+                    view.Items.Where(
+                        t => t.Responsible == null || (t.Responsible != null && t.Responsible.Id == Guid.Empty)).Count();
+                if (countUnassigment > 0)
                 {
-                    data.Data.Add("Unassigned", view.Items.Where(t => t.Responsible == null).Count());
+                    data.Data.Add("Unassigned", countUnassigment);
                 }
 
                 var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
                 foreach (var state in statusesName)
                 {
-                    data.Data.Add(state, view.Items.Where(t => t.Status.Name == state).Count());
+                    int count = view.Items.Where(t => t.Status.Name == state).Count();
+                    if (state == "Initial") count = count - countUnassigment;
+                    data.Data.Add(state, count);
                 }
             }
 

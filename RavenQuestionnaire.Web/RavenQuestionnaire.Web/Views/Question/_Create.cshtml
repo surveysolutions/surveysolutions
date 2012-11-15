@@ -85,6 +85,16 @@ else
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label">Who can edit ansers?</label>
+                <div class="controls">
+                    @{
+        IDictionary<string, object> scope = new Dictionary<string, object>();
+        scope.Add("class", "span12");
+                        @Html.EnumDropDownListFor(model => Model.QuestionScope, scope)
+                    }
+                </div>
+            </div>
+            <div class="control-group">
                 <label class="control-label">Answer order</label>
                 <div class="controls">
                     @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>() { { "class", "span12" } })

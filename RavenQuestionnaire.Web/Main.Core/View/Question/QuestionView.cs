@@ -64,6 +64,7 @@ namespace Main.Core.View.Question
             this.PublicKey = doc.PublicKey;
             this.Title = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
+            this.QuestionScope = doc.QuestionScope;
             this.QuestionnaireKey = questionnaire.PublicKey;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
@@ -141,6 +142,11 @@ namespace Main.Core.View.Question
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the questionnaire key.
         /// </summary>
         public Guid QuestionnaireKey { get; set; }
@@ -191,6 +197,7 @@ namespace Main.Core.View.Question
         public string GroupTitle { get; set; }
 
         #endregion
+      
     }
 
     /// <summary>

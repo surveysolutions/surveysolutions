@@ -75,6 +75,11 @@ namespace Main.Core.Events.Questionnaire
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets QuestionScope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
         public string StataExportCaption { get; set; }
@@ -105,5 +110,7 @@ namespace Main.Core.Events.Questionnaire
         public int MaxValue { get; set; }
 
         #endregion
+
+        
     }
 }
