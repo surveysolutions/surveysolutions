@@ -22,33 +22,73 @@ namespace Questionnaire.Core.Web.Register
     public interface IDeviceRegistry
     {
         /// <summary>
+        /// info about register device
         /// </summary>
         /// <param name="register">
         /// The register.
         /// </param>
         /// <returns>
+        ///  register device view
         /// </returns>
         DeviceView GetRegisterData(Guid register);
 
+        /// <summary>
+        /// save info about register device to database
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// boolean about successful saving
+        /// </returns>
         bool SaveRegistrator(RegisterData data);
     }
 
+    /// <summary>
+    /// Service for device registration
+    /// </summary>
     public class DeviceRegistry : IDeviceRegistry
     {
-
+        /// <summary>
+        /// Field of ViewRepository
+        /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceRegistry"/> class.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
         public DeviceRegistry(IViewRepository repository)
         {
             this.viewRepository = repository;
         }
 
+        /// <summary>
+        /// info about register device
+        /// </summary>
+        /// <param name="registrator">
+        /// The registrator.
+        /// </param>
+        /// <returns>
+        /// register device view
+        /// </returns>
         public DeviceView GetRegisterData(Guid registrator)
         {
             var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(registrator));
             return model;
         }
 
+        /// <summary>
+        /// save info about register device to database
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// boolean about successful saving
+        /// </returns>
         public bool SaveRegistrator(RegisterData data)
         {
             try

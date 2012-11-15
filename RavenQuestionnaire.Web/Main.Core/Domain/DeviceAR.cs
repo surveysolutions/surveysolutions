@@ -104,7 +104,7 @@ namespace Main.Core.Domain
             this.secretKey = e.SecretKey;
             this.registeredDate = e.RegisteredDate;
             this.tabletId = e.TabletId;
-            this.publicKey = Guid.NewGuid();
+            this.publicKey = e.PublicKey;
             this.registrator = e.Registrator;
         }
 
