@@ -20,16 +20,12 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Interviewer;
 
     using Main.Core.Commands.Questionnaire.Completed;
-    using Main.Core.Commands.Synchronization;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Synchronization;
-    using Main.Core.Services;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
-    using Main.Core.View.Group;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
     using Main.Core.View.User;

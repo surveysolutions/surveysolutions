@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Web
        /* /// <summary>
         /// The host services.
         /// </summary>
-        protected void HostServices()
+        /*protected void HostServices()
         {
             bool isDiscovereble;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["WCFVisible"], out isDiscovereble))

@@ -54,7 +54,7 @@ namespace Main.Core.EventHandlers
             this.devices.Store(
                 new SyncDeviceRegisterDocument
                 {
-                    CreationDate = DateTime.UtcNow,
+                    CreationDate = evnt.Payload.RegisteredDate,
                     SecretKey = evnt.Payload.SecretKey,
                     Description = evnt.Payload.Description,
                     TabletId = evnt.Payload.TabletId,
