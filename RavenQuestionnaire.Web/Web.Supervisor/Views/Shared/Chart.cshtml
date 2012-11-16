@@ -11,11 +11,18 @@
     var xTitles = r.Serialize(@Model.Data.Select(t => t.Key).ToArray());
     var list = new SelectList(new List<string> {"line", "bar", "pie"}, "line") ;
     var pair = string.Empty;
+    var colors = new string[] { "#058DC7", "#50B432", "#ED561B", "#DDDF00", "#24CBE5", "#64E572", "#FF9655", "#FFF263", "#6AF9C4" };
     for (int i = 0; i < Model.Data.Count(); i++)
     {
         pair = (string.IsNullOrEmpty(pair) ? pair +"[" : pair+",") + " [\"" + Model.Data.Keys.ToArray()[i] + "\", " + Model.Data.Values.ToArray()[i] + "]";
     }
     pair = pair + "]";
+    var barValues = string.Empty;        
+    for (int i = 0; i < Model.Data.Count(); i++)
+    {
+        barValues = (string.IsNullOrEmpty(barValues) ? barValues + "[" : barValues + ",") + " { y:" +  Model.Data.Values.ToArray()[i] + ", color:'"+colors[i]+"'}";
+    }
+    barValues = barValues + "]";
 }
 
 @Html.DropDownList("chartType", @list)
@@ -34,8 +41,7 @@ $(function() {
 
     function Draw(typeLine) {
         $("#container").html('');
-        Highcharts.theme = { colors: ['#058DC7', '#50B432', '#ED561B', '#DDDF00', '#24CBE5', '#64E572', '#FF9655', '#FFF263', '#6AF9C4'] };
-        Highcharts.setOptions(Highcharts.theme);
+        var highchartsOptions = Highcharts.setOptions({ colors: ["#058DC7", "#50B432", "#ED561B", "#DDDF00", "#24CBE5", "#64E572", "#FF9655", "#FFF263", "#6AF9C4"] });
         chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
@@ -82,7 +88,12 @@ $(function() {
             return @Html.Raw(pair) ;
         }
         else {
-            return @values ;
+            if (typeLine == 'bar') {
+                return @Html.Raw(barValues) ;
+            }
+            else {
+                return @values ;   
+            }
         }
     }
 
