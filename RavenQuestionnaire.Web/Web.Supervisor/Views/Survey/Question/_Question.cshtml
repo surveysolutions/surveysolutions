@@ -1,7 +1,10 @@
 ﻿@model Main.Core.View.Question.CompleteQuestionView
 @{
     ViewBag.EnabledRadioBoxSettings = new Dictionary<string, object>();
-    ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+    if (!Model.Editable)
+    {
+        ViewBag.EnabledRadioBoxSettings.Add("Disabled", true);
+    }
 
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     var bodyClass = Model.Enabled ? "" : "ui-disabled";

@@ -337,7 +337,7 @@
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireBrowseItem.cs" />
     <Compile Include="View\CompleteQuestionnaire\CompleteQuestionnaireViewInputModel.cs" />
-    <Compile Include="View\CompleteQuestionnaire\DisplaViewInputModel.cs" />
+    <Compile Include="View\CompleteQuestionnaire\DisplayViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\DisplaySurveyViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\DefaultScreenViewSupplier.cs" />
     <Compile Include="View\CompleteQuestionnaire\ScreenGroup\IScreenViewSupplier.cs" />

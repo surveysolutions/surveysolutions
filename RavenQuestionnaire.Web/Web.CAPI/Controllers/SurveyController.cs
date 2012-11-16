@@ -17,6 +17,7 @@ namespace Web.CAPI.Controllers
     using System.Collections.Generic;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Security;
 
     using Core.CAPI.Views.Grouped;
     using Core.CAPI.Views.Json;
@@ -254,16 +255,47 @@ namespace Web.CAPI.Controllers
                 new DeletePropagatableGroupCommand(Guid.Parse(questionnaireId), propagationKey, publicKey));
             return this.Json(new { propagationKey });
         }
+
+        /// <summary>
+        /// Gets group
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupid">
+        /// The groupid.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// One screen
+        /// </returns>
         protected ScreenGroupView GetGroup(Guid questionnaireId, Guid? groupid, Guid? propagationKey)
         {
+            var user = this._globalProvider.GetCurrentUser();
+            QuestionScope scope;
+            if (Roles.IsUserInRole(user.Name, UserRoles.Administrator.ToString()))
+            {
+                scope = QuestionScope.Headquarter;
+            }
+            else if (Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString()))
+            {
+                scope = QuestionScope.Supervisor;
+            }
+            else
+            {
+                scope = QuestionScope.Interviewer;
+            }
+
             return
                 this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                     new CompleteQuestionnaireViewInputModel(questionnaireId)
                         {
                             CurrentGroupPublicKey = groupid,
-                            PropagationKey = propagationKey
+                            PropagationKey = propagationKey,
+                            Scope = scope
                         });
-
         }
 
         /// <summary>

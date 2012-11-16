@@ -62,7 +62,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             innerDoc.LastEntryDate = DateTime.Now;
             innerDoc.Status = new SurveyStatus(Guid.NewGuid(), "dummyStatus");
             innerDoc.Responsible = new UserLight(Guid.NewGuid(), "dummyUser");
-            var output = new ScreenGroupView(innerDoc, new CompleteGroup(),new ScreenNavigation() );
+            var output = new ScreenGroupView(innerDoc, new CompleteGroup(),new ScreenNavigation(), QuestionScope.Interviewer );
             var input = new CompleteQuestionnaireViewInputModel(innerDoc.PublicKey);
 
             ViewRepositoryMock.Setup(

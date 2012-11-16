@@ -13,6 +13,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     using System.Linq;
 
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors;
     using Main.Core.Utility;
@@ -21,7 +22,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DisplaySurveyViewFactory : IViewFactory<DisplaViewInputModel, ScreenGroupView>
+    public class DisplaySurveyViewFactory : IViewFactory<DisplayViewInputModel, ScreenGroupView>
     {
         #region Constants and Fields
 
@@ -67,7 +68,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <returns>
         /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.CompleteGroupMobileView.
         /// </returns>
-        public ScreenGroupView Load(DisplaViewInputModel input)
+        public ScreenGroupView Load(DisplayViewInputModel input)
         {
             if (input.CompleteQuestionnaireId == Guid.Empty)
             {
@@ -97,7 +98,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
             var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
-            var result = this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            var result = this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, QuestionScope.Supervisor);
             result.Title = doc.Title;
 
             return result;

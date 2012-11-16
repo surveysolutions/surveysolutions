@@ -144,6 +144,9 @@ namespace Main.Core.Domain
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// The question scope
+        /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
@@ -180,6 +183,7 @@ namespace Main.Core.Domain
             string questionText, 
             string stataExportCaption, 
             QuestionType questionType, 
+            QuestionScope questionScope,
             string conditionExpression, 
             string validationExpression, 
             string validationMessage, 
@@ -203,8 +207,9 @@ namespace Main.Core.Domain
                     {
                         PublicKey = publicKey, 
                         QuestionText = questionText, 
-                        StataExportCaption = stataExportCaption, 
-                        QuestionType = questionType, 
+                        StataExportCaption = stataExportCaption,
+                        QuestionType = questionType,
+                        QuestionScope = questionScope, 
                         ConditionExpression = conditionExpression, 
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
@@ -243,6 +248,9 @@ namespace Main.Core.Domain
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// The question scope
+        /// </param>
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
@@ -274,7 +282,8 @@ namespace Main.Core.Domain
             int maxValue,
             string stataExportCaption, 
             string instructions, 
-            QuestionType questionType, 
+            QuestionType questionType,
+            QuestionScope questionScope, 
             Guid? groupPublicKey, 
             string conditionExpression, 
             string validationExpression, 
@@ -291,7 +300,8 @@ namespace Main.Core.Domain
                         Triggers = triggers, 
                         MaxValue = maxValue,
                         StataExportCaption = stataExportCaption, 
-                        QuestionType = questionType, 
+                        QuestionType = questionType,
+                        QuestionScope = questionScope, 
                         ConditionExpression = conditionExpression, 
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
@@ -309,6 +319,9 @@ namespace Main.Core.Domain
         /// </summary>
         /// <param name="completeQuestionnaireId">
         /// The complete questionnaire id.
+        /// </param>
+        /// <param name="creator">
+        /// The creator.
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
@@ -427,7 +440,11 @@ namespace Main.Core.Domain
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         /// <exception cref="ArgumentException">
+        /// Some exception
         /// </exception>
         public void UpdateGroup(
             string groupText, 

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DisplaViewInputModel.cs" company="The World Bank">
+// <copyright file="DisplayViewInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,14 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-
 namespace Main.Core.View.CompleteQuestionnaire
 {
+    using Main.Core.Entities.SubEntities;
+
+    using System;
+
     /// <summary>
     /// The complete questionnaire view input model.
     /// </summary>
-    public class DisplaViewInputModel
+    public class DisplayViewInputModel
     {
         #region Fields
 
@@ -28,25 +30,25 @@ namespace Main.Core.View.CompleteQuestionnaire
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DisplaViewInputModel"/> class.
+        /// Initializes a new instance of the <see cref="DisplayViewInputModel"/> class.
         /// </summary>
-        public DisplaViewInputModel()
+        public DisplayViewInputModel()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DisplaViewInputModel"/> class.
+        /// Initializes a new instance of the <see cref="DisplayViewInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
-        public DisplaViewInputModel(Guid id)
+        public DisplayViewInputModel(Guid id)
         {
             this.CompleteQuestionnaireId = id;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DisplaViewInputModel"/> class.
+        /// Initializes a new instance of the <see cref="DisplayViewInputModel"/> class.
         /// </summary>
         /// <param name="id">
         /// The id.
@@ -57,7 +59,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         /// <param name="propagationKey">
         /// The propagation key.
         /// </param>
-        public DisplaViewInputModel(Guid id, Guid groupKey, Guid? propagationKey)
+        public DisplayViewInputModel(Guid id, Guid groupKey, Guid? propagationKey)
         {
             this.CompleteQuestionnaireId = id;
             this.CurrentGroupPublicKey = groupKey;
@@ -100,7 +102,5 @@ namespace Main.Core.View.CompleteQuestionnaire
         public Guid? PropagationKey { get; set; }
 
         #endregion
-
-        // public Guid? CurrentScreenPublicKey { get; set; }
     }
 }

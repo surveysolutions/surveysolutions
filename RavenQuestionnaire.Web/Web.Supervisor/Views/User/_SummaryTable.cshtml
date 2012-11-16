@@ -25,7 +25,15 @@
             @foreach (var collect in Model.Items)
             {
                 <tr>
-                    <td>@Html.ActionLink(collect.User.Name, "Assigments", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
+                    <td>
+                    @if (templateKey.HasValue)
+                    {
+                        @Html.ActionLink(collect.User.Name, "Assigments", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
+                    }
+                    else
+                    {
+                        <text>@collect.User.Name</text>
+                    }
                     </td>
                    
                     @foreach (var it in Model.Headers)

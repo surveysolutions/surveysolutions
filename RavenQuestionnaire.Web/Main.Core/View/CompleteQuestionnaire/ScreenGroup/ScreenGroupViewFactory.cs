@@ -81,14 +81,12 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 return null;
             }
 
-            input.CurrentGroupPublicKey = doc.Children.OfType<ICompleteGroup>().FirstOrDefault().PublicKey;
-
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);
 
             GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
-            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, input.Scope);
         }
 
         #endregion
