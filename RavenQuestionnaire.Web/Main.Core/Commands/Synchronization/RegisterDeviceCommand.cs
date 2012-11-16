@@ -42,7 +42,7 @@ namespace Main.Core.Commands.Synchronization
             this.Description = description;
             this.SecretKey = secretKey;
             this.TabletId = tabletId;
-            this.RegisteredDate = DateTime.Today;
+            this.RegisteredDate = DateTime.Now;
             this.GuidSupervisor = guidSupervisor;
         }
 
