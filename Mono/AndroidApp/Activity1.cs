@@ -72,56 +72,63 @@ namespace AndroidApp
             LinearLayout llContainer = new LinearLayout(this);
             llContainer.Orientation=Orientation.Vertical;
             llContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
+           llContainer.SetPadding(10,0,10,0);
         /*    var shape = new ShapeDrawable(new RoundRectShape(new float[]{5,5,0,0},new RectF(new Rect()),  ));
             GradientDrawable g = new GradientDrawable();//GradientDrawable.Orientation.BottomTop, new int[] { Color.ParseColor("#6FACD5"), Color.ParseColor("#497BAE") });
          //   g.SetGradientType(GradientType.LinearGradient);
             g.SetCornerRadii(new float[] { 5, 5, 0, 0 });*/
             foreach (var dashboardSurveyItem in dashboardData.Surveys)
             {
-                LinearLayout llSurvey=new LinearLayout(this);
+                RelativeLayout rlSurvey = new RelativeLayout(this);
 
 
 
-                llSurvey.SetBackgroundResource(Resource.Drawable.SurveyShape);
+                rlSurvey.SetBackgroundResource(Resource.Drawable.SurveyShape);
                // llSurvey.SetBackgroundColor(Color.ParseColor("#5E87B0"));
-                llSurvey.Orientation=Orientation.Horizontal;
                 var llSurveyLayout = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                                          ViewGroup.LayoutParams.WrapContent);
+               
                 llSurveyLayout.SetMargins(0,20,0,10);
                 
-                llSurvey.LayoutParameters = llSurveyLayout;
+                rlSurvey.LayoutParameters = llSurveyLayout;
                 
-                llSurvey.WeightSum = 12;
+                
 
                 TextView txtSurveyName = new TextView(this);
                 txtSurveyName.Text = dashboardSurveyItem.SurveyTitle;
                 txtSurveyName.SetPadding(8, 8, 8, 8);
                 txtSurveyName.SetTextColor(Color.White);
-                var txtSurveyLayout = new TableLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                var txtSurveyLayout = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                                       ViewGroup.LayoutParams.WrapContent);
-                txtSurveyLayout.Weight = 1;
-               
+
+                txtSurveyLayout.AddRule(LayoutRules.AlignParentLeft);
+             //   txtSurveyLayout.LeftMargin = 20;
+
                 txtSurveyName.LayoutParameters = txtSurveyLayout;
                 // txtStatus.SetHeight(80);
-                llSurvey.AddView(txtSurveyName);//, imageWidth, imageHeight);
+                rlSurvey.AddView(txtSurveyName);//, imageWidth, imageHeight);
 
                 TextView txtSurveyCount = new TextView(this);
                 txtSurveyCount.Text = dashboardSurveyItem.Items.Count.ToString();
                 
                 txtSurveyCount.SetTextColor(Color.Black);
                 txtSurveyCount.Gravity = GravityFlags.Center;
-                var txtSurveyCountLayout= new TableLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                      ViewGroup.LayoutParams.WrapContent);
-                txtSurveyCountLayout.SetMargins(5, 0, 5, 0);
+                var txtSurveyCountLayout = new RelativeLayout.LayoutParams(20,
+                                                                      20);
+          //      txtSurveyCountLayout.AddRule(LayoutRules.AlignTop, txtSurveyName.Id);
+                txtSurveyCountLayout.AddRule(LayoutRules.AlignParentRight);
+                txtSurveyCountLayout.AddRule(LayoutRules.CenterVertical);
+                txtSurveyCountLayout.RightMargin = 10;
+                //     txtSurveyCountLayout.AddRule(LayoutRules.RightOf, txtSurveyName.Id);
+            //    txtSurveyCountLayout.SetMargins(5, 0, 5, 0);
 
-                txtSurveyCountLayout.Weight = 11;
-                
+               // txtSurveyCount.SetWidth();
                 txtSurveyCount.LayoutParameters = txtSurveyCountLayout;
                 txtSurveyCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
-                txtSurveyCount.SetWidth(20);
+            //    txtSurveyCount.SetWidth(20);
                 // txtStatus.SetHeight(80);
-                llSurvey.AddView(txtSurveyCount);//, imageWidth, imageHeight);
-                llContainer.AddView(llSurvey);
+                rlSurvey.AddView(txtSurveyCount);//, imageWidth, imageHeight);
+                llContainer.AddView(rlSurvey);
                 RebuildSurveyView(dashboardSurveyItem, llContainer);
                 
             }
@@ -161,14 +168,20 @@ namespace AndroidApp
                 // txtStatus.SetHeight(80);
                 th.AddView(txtHeader); //, imageWidth, imageHeight);
             }
+
+            TextView txtEmpty = new TextView(this);
+            txtEmpty.SetWidth(10);
+            th.AddView(txtEmpty);
             tlSurveys.AddView(th);
 
             for (int r = 0; r < survey.Items.Count; r++)
             {
                 TableRow tr = new TableRow(this);
+                tr.SetMinimumHeight(60);
                 tr.SetTag(Resource.Id.QuestionnaireId, survey.Items[r].PublicKey.ToString());
               
                 tr.SetBackgroundResource(Resource.Drawable.cell_shape);
+                tr.Click += tr_Click;
                 for (int c = 0; c < survey.Items[r].Properties.Count + 1; c++)
                 {
                     TextView txtStatus = new TextView(this);
@@ -177,13 +190,22 @@ namespace AndroidApp
                     txtStatus.Text = c == 0 ? survey.Items[r].Status : survey.Items[r].Properties[c - 1];
                     txtStatus.SetPadding(8, 8, 8, 8);
                     txtStatus.SetTextColor(Color.ParseColor("#222222"));
+                    
                     // txtStatus.SetHeight(80);
                     tr.AddView(txtStatus);//, imageWidth, imageHeight);
                 }
+                ImageView ivArrow = new ImageView(this);
+                
+            /*    var ivArrowLayout = new RelativeLayout.LayoutParams(20, 20);
+                ivArrow.LayoutParameters = ivArrowLayout;*/
+                ivArrow.SetPadding(0,15,0,0);
+                ivArrow.SetImageResource(Android.Resource.Drawable.IcMediaPlay);
+             //   ivArrow.LayoutParameters.Width = 20;
+                tr.AddView(ivArrow);
                 tlSurveys.AddView(tr);
             }
             parent.AddView(tlSurveys);
-           
+         //  Android.Resource.Drawable.ButtonPlus
         }
 
         void tr_Click(object sender, EventArgs e)
