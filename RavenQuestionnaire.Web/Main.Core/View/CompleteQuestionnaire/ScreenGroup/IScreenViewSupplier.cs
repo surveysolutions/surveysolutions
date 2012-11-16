@@ -10,6 +10,7 @@
 namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.View.Group;
 
@@ -30,10 +31,13 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="navigation">
         /// The navigation.
         /// </param>
+        /// <param name="scope">
+        /// The scope.
+        /// </param>
         /// <returns>
         /// The <see cref="ScreenGroupView"/>.
         /// </returns>
         ScreenGroupView BuildView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation);
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation, QuestionScope scope);
     }
 }

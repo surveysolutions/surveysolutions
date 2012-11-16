@@ -86,7 +86,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
             GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
-            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, input.Scope);
         }
 
         #endregion

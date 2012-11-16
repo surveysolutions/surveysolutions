@@ -30,83 +30,6 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// Initializes a new instance of the <see cref="AddQuestionCommand"/> class.
         /// </summary>
         /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="questionText">
-        /// The question text.
-        /// </param>
-        /// <param name="stataExportCaption">
-        /// The stata export caption.
-        /// </param>
-        /// <param name="questionType">
-        /// The question type.
-        /// </param>
-        /// <param name="groupPublicKey">
-        /// The group public key.
-        /// </param>
-        /// <param name="conditionExpression">
-        /// The condition expression.
-        /// </param>
-        /// <param name="validationExpression">
-        /// The validation expression.
-        /// </param>
-        /// <param name="validationMessage">
-        /// The validation message.
-        /// </param>
-        /// <param name="instructions">
-        /// The instructions.
-        /// </param>
-        /// <param name="featured">
-        /// The featured.
-        /// </param>
-        /// <param name="mandatory">
-        /// The mandatory.
-        /// </param>
-        /// <param name="answerOrder">
-        /// The answer order.
-        /// </param>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        public AddQuestionCommand(
-            Guid questionnaireId, 
-            Guid publicKey, 
-            string questionText, 
-            string stataExportCaption, 
-            QuestionType questionType, 
-            Guid? groupPublicKey, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            string instructions, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            Answer[] answers)
-        {
-            this.QuestionnaireId = questionnaireId;
-            this.QuestionText = questionText;
-            this.StataExportCaption = stataExportCaption;
-            this.QuestionType = questionType;
-            this.ConditionExpression = conditionExpression;
-            this.ValidationExpression = validationExpression;
-            this.ValidationMessage = validationMessage;
-            this.Instructions = instructions;
-            this.Featured = featured;
-            this.Mandatory = mandatory;
-            this.AnswerOrder = answerOrder;
-            this.GroupPublicKey = groupPublicKey;
-            this.Answers = answers;
-            this.PublicKey = publicKey;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AddQuestionCommand"/> class.
-        /// </summary>
-        /// <param name="questionnaireId">
         ///   The questionnaire id.
         /// </param>
         /// <param name="publicKey">
@@ -115,15 +38,14 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="questionText">
         ///   The question text.
         /// </param>
-        /// <param name="triggers">
-        ///   The List of guids for autopropogated groups
-        /// </param>
-        /// <param name="maxValue"></param>
         /// <param name="stataExportCaption">
         ///   The stata export caption.
         /// </param>
         /// <param name="questionType">
         ///   The question type.
+        /// </param>
+        /// <param name="questionScope">
+        /// The question scope.
         /// </param>
         /// <param name="groupPublicKey">
         ///   The group public key.
@@ -152,23 +74,80 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="answers">
         ///   The answers.
         /// </param>
-        public AddQuestionCommand(
-            Guid questionnaireId, 
-            Guid publicKey, 
-            string questionText,
-            List<Guid> triggers, 
-            int maxValue,
-            string stataExportCaption, 
-            QuestionType questionType, 
-            Guid? groupPublicKey, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            string instructions, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            Answer[] answers)
+        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
+        {
+            this.QuestionnaireId = questionnaireId;
+            this.QuestionText = questionText;
+            this.StataExportCaption = stataExportCaption;
+            this.QuestionType = questionType;
+            this.QuestionScope = questionScope;
+            this.ConditionExpression = conditionExpression;
+            this.ValidationExpression = validationExpression;
+            this.ValidationMessage = validationMessage;
+            this.Instructions = instructions;
+            this.Featured = featured;
+            this.Mandatory = mandatory;
+            this.AnswerOrder = answerOrder;
+            this.GroupPublicKey = groupPublicKey;
+            this.Answers = answers;
+            this.PublicKey = publicKey;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AddQuestionCommand"/> class.
+        /// </summary>
+        /// <param name="questionnaireId">
+        ///   The questionnaire id.
+        /// </param>
+        /// <param name="publicKey">
+        ///   The public key.
+        /// </param>
+        /// <param name="questionText">
+        ///   The question text.
+        /// </param>
+        /// <param name="triggers">
+        ///   The List of guids for autopropogated groups
+        /// </param>
+        /// <param name="maxValue">
+        /// The question max value
+        /// </param>
+        /// <param name="stataExportCaption">
+        ///   The stata export caption.
+        /// </param>
+        /// <param name="questionType">
+        ///   The question type.
+        /// </param>
+        /// <param name="questionScope">
+        ///   The question scope.
+        /// </param>
+        /// <param name="groupPublicKey">
+        ///   The group public key.
+        /// </param>
+        /// <param name="conditionExpression">
+        ///   The condition expression.
+        /// </param>
+        /// <param name="validationExpression">
+        ///   The validation expression.
+        /// </param>
+        /// <param name="validationMessage">
+        ///   The validation message.
+        /// </param>
+        /// <param name="instructions">
+        ///   The instructions.
+        /// </param>
+        /// <param name="featured">
+        ///   The featured.
+        /// </param>
+        /// <param name="mandatory">
+        ///   The mandatory.
+        /// </param>
+        /// <param name="answerOrder">
+        ///   The answer order.
+        /// </param>
+        /// <param name="answers">
+        ///   The answers.
+        /// </param>
+        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, List<Guid> triggers, int maxValue, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
@@ -176,6 +155,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.MaxValue = maxValue;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
+            this.QuestionScope = questionScope;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
@@ -248,6 +228,11 @@ namespace Main.Core.Commands.Questionnaire.Question
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets QuestionScope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>
         [AggregateRootId]
@@ -279,5 +264,6 @@ namespace Main.Core.Commands.Questionnaire.Question
         public string ValidationMessage { get; set; }
 
         #endregion
+
     }
 }

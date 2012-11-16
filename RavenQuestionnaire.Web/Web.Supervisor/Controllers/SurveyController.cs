@@ -341,8 +341,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
-                new DisplaViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
+            var model = this.viewRepository.Load<DisplayViewInputModel, ScreenGroupView>(
+                new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
             return this.View(model);
@@ -367,8 +367,8 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<DisplaViewInputModel, ScreenGroupView>(
-                new DisplaViewInputModel(id, group, propagationKey));
+            var model = this.viewRepository.Load<DisplayViewInputModel, ScreenGroupView>(
+                new DisplayViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return this.PartialView("_SurveyContent", model);
