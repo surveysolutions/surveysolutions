@@ -229,6 +229,7 @@ RavenQuestionnaire.Web/Main.DenormalizerStorage/bin/*
 RavenQuestionnaire.Web/Main.DenormalizerStorage/obj/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/success.marker
 RavenQuestionnaire.Web/Web.Supervisor/success.marker
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/success.marker
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
