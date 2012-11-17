@@ -594,16 +594,15 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Action for preparing data for visual chart
         /// </summary>
-        /// <param name="templateId">
-        /// The template Id.
+        /// <param name="view">
+        /// The view.
         /// </param>
         /// <returns>
         /// return Partial View with visual chart
         /// </returns>
-        public ActionResult Chart(Guid templateId)
+        public ActionResult Chart(AssignmentView view)
         {
             var data = new ChartDataModel("Chart");
-            var view = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(new AssignmentInputModel(templateId, Guid.Empty, 1, 100, new List<OrderRequestItem>()));
             if (view.Items.Count > 0)
             {
                 int countUnassigment =
@@ -614,22 +613,21 @@ namespace Web.Supervisor.Controllers
                     data.Data.Add("Unassigned", countUnassigment);
                 }
 
-                var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
-                foreach (var state in statusesName)
+                if (countUnassigment != view.Items.Count)
                 {
-                    int count = view.Items.Where(t => t.Status.Name == state).Count();
-                    if (state == "Initial") count = count - countUnassigment;
-                    data.Data.Add(state, count);
+                    var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
+                    foreach (var state in statusesName)
+                    {
+                        int count = view.Items.Where(t => t.Status.Name == state).Count();
+                        if (state == "Initial") count = count - countUnassigment;
+                        data.Data.Add(state, count);
+                    }
                 }
             }
 
             return this.PartialView(data);
         }
 
-        public ActionResult Administration()
-        {
-            return this.View();
-        }
 
         /// <summary>
         /// Create graph on home page

@@ -3,17 +3,14 @@
 
 @model ChartDataModel
 
- <script src="@Url.Content("~/Scripts/highcharts.js")" type = "text/javascript"> </script>
-
+<script src="@Url.Content("~/Scripts/highcharts.js")" type = "text/javascript"></script>
+<div id="chartBox">
 @{
     var total = Json.Encode(@Model.DataItems.Select(t=>t.Total).ToArray());
     var approved = Json.Encode(@Model.DataItems.Select(t => t.Approved).ToArray());
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.DataItems.Select(t => t.Name).ToArray());
 }
-
-<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
-
 <script type="text/javascript">
 $(function () {
     var chart;
@@ -68,3 +65,5 @@ $(function () {
 
 });
 </script>
+<div id="container" style="min-width: 400px; height: 400px; margin: 0 auto"></div>
+</div>

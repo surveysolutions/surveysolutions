@@ -34,6 +34,13 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Initializes a new instance of the <see cref="AssignmentView"/> class.
         /// </summary>
+        public AssignmentView()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssignmentView"/> class.
+        /// </summary>
         /// <param name="page">
         ///   The page.
         /// </param>

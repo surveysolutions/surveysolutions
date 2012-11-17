@@ -412,7 +412,6 @@
     <Content Include="Views\User\Summary.cshtml" />
     <Content Include="Views\User\_SummaryTable.cshtml" />
     <Content Include="Views\Device\Devices.cshtml" />
-    <Content Include="Views\Shared\Administration.cshtml" />
     <Content Include="Views\Survey\QuestionnaireChart.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
