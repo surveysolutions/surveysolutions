@@ -1,13 +1,13 @@
 ﻿@using Core.Supervisor.Views.Index
-@using Web.Supervisor.Models
 @model IndexView
 @{
     this.ViewBag.Title = "Surveys";
 }
+
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    
+    var chart;
     $(document).ready(function() {
         document.filterUser = "";
         $('#filter').editable().on('update', function(e, editable) {
@@ -18,7 +18,7 @@
 
         makeSortable();
         onPagingClick();
-        
+
     });
 
     function makeSortable() {
@@ -45,9 +45,7 @@
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
-                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
-                        $('#paging').html($(response).find('#paging').html());
-                        
+                        $('#questionnaireTable').html($(response));
                         onPagingClick();
                     }
                 }
@@ -64,6 +62,7 @@
         else
             return decodeURIComponent(results[1].replace( /\+/g , " "));
     }
+    
 </script>
 <h2>Surveys by <a href="#" id="filter" 
                   data-placement="bottom" 
@@ -74,7 +73,6 @@
 <div id="questionnaireTable">
     @this.Html.Partial("_Table", this.Model)
 </div>
- @Html.Action("QuestionnaireChart", "Survey", this.Model)
 
 
 
