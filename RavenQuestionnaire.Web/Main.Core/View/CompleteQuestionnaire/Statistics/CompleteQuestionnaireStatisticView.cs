@@ -7,16 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.ExpressionExecutors;
-
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
+
     /// <summary>
     /// The complete questionnaire statistic view.
     /// </summary>

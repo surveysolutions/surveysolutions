@@ -31,6 +31,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         {
             this.UserName = user.Name;
             this.StatusName = status.Name;
+//          this.Date = status.
             this.Comment = status.ChangeComment;
         }
 

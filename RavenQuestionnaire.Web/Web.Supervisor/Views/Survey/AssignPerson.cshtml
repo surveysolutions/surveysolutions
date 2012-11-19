@@ -6,7 +6,7 @@
     ViewBag.Title = "Assignment";
 }
 <h2>Assignment Person</h2>
-<p><a href="@Url.Action("Assigments", new {id = Model.TemplateId, input = new AssignmentInputModel()})">Back to list</a></p>
+<p><a href="@Url.Action("Documents", new {id = Model.TemplateId, input = new AssignmentInputModel()})">Back to list</a></p>
 @using (Html.BeginForm("AssignForm", "Survey"))
 {
     @Html.Hidden("CqId", Model.Id)

@@ -31,7 +31,7 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         /// <summary>
         /// The users.
@@ -45,13 +45,13 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Initializes a new instance of the <see cref="IndexViewFactory"/> class.
         /// </summary>
-        /// <param name="documentItemSession">
+        /// <param name="surveys">
         /// The document item session.
         /// </param>
-        public IndexViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession,
+        public IndexViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
             IDenormalizerStorage<UserDocument> users)
         {
-            this.documentItemSession = documentItemSession;
+            this.surveys = surveys;
             this.users = users;
         }
 
@@ -77,8 +77,8 @@ namespace Core.Supervisor.Views.Index
             }
 
             var items = this.BuildItems((input.UserId == Guid.Empty
-                     ? this.documentItemSession.Query()
-                     : this.documentItemSession.Query().Where(
+                     ? this.surveys.Query()
+                     : this.surveys.Query().Where(
                          x => x.Responsible != null && (x.Responsible.Id == input.UserId))).GroupBy(x => x.TemplateId)).
                     AsQueryable();
 

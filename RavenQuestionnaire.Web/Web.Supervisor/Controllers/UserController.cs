@@ -105,6 +105,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Summary()
         {
+            ViewBag.ActivePage = MenuItem.Interviewers;
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
             return this.View(model);
@@ -173,6 +174,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Index(InterviewersInputModel input)
         {
+            ViewBag.ActivePage = MenuItem.Administration;
             var user = this.globalInfo.GetCurrentUser();
             input.Supervisor = user;
             var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
@@ -200,9 +202,6 @@ namespace Web.Supervisor.Controllers
             var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.PartialView("_Table", model);
         }
-
-
-        
 
         /// <summary>
         /// Gets table data for some view
