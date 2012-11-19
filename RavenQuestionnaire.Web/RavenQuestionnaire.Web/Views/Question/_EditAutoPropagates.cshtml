@@ -1,10 +1,7 @@
-﻿@using Main.Core.Entities.SubEntities
-@using RavenQuestionnaire.Web.Utils
-@model Main.Core.View.Question.QuestionView
-@{ 
-    var displayStyle = Model.QuestionType == QuestionType.AutoPropagate ? "block" : "none";
-}
-<div id="apguid" style="display:@displayStyle; ">
+﻿@using RavenQuestionnaire.Web.Utils
+@model Main.Core.View.Question.AutoPropagateQuestionView
+
+<div id="additionalInfo">
     <div class="control-group">
         @Html.LabelFor(model => model.MaxValue, new { @class = "control-label" })
         <div class="controls">

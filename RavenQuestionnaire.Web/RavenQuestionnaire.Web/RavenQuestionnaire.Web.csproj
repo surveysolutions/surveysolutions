@@ -617,8 +617,8 @@
     <Content Include="Views\Error\General.cshtml" />
     <Content Include="Views\Questionnaire\Flow.cshtml" />
     <Content Include="Views\Question\Create.cshtml" />
-    <Content Include="Views\Question\MainInfo.cshtml" />
-    <Content Include="Views\Question\MultiSelectInfo.cshtml" />
+    <Content Include="Views\Question\MainBlock.cshtml" />
+    <Content Include="Views\Question\MultiSelectBlock.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

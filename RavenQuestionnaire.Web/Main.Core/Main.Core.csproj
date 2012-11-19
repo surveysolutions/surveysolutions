@@ -365,10 +365,16 @@
     <Compile Include="View\Questionnaire\QuestionnaireBrowseItem.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseView.cs" />
     <Compile Include="View\Questionnaire\QuestionnaireBrowseViewFactory.cs" />
+    <Compile Include="View\Question\AutoPropagateQuestionView.cs" />
+    <Compile Include="View\Question\BaseQuestionView.cs" />
     <Compile Include="View\Question\CompleteQuestionView.cs" />
+    <Compile Include="View\Question\DateTimeQuestionView.cs" />
+    <Compile Include="View\Question\MultiOptionsQuestionView.cs" />
+    <Compile Include="View\Question\NumericQuestionView.cs" />
     <Compile Include="View\Question\QuestionView.cs" />
     <Compile Include="View\Question\QuestionViewFactory.cs" />
     <Compile Include="View\Question\QuestionViewInputModel.cs" />
+    <Compile Include="View\Question\TextQuestionView.cs" />
     <Compile Include="View\Register\RegisterInputModel.cs" />
     <Compile Include="View\Register\RegisterView.cs" />
     <Compile Include="View\Register\RegisterViewFactory.cs" />

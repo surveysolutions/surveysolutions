@@ -7,19 +7,17 @@
 <script charset="utf-8" type="text/javascript" language="javascript">
 
     $(function () {
-        var questionType = $("[customName=questionName] option:selected").text();
-        if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
-            $("#fromDB").removeAttr('style');
-        }
         $('[customName=questionName]').change(function () {
-            var questionType = $("[customName=questionName] option:selected").text();
-            //            if ($("[customName=questionName] option:selected").text() == "ExtendedDropDownList") {
-            if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
-                $("#fromDB").removeAttr('style');
-            }
-            else
-                $("#fromDB").css('display', 'none');
-            if (questionType == "AutoPropagate") $("#apguid").show(); else $("#apguid").hide();
+            $.ajax({
+                url: "@Url.Action("ShowBlock", "Question")",
+                data:{type: $("[customName=questionName] option:selected").val(), questionId: '@Model.PublicKey', QuestionnaireId: '@Model.QuestionnaireKey', groupPublicKey: '@Model.Parent' },
+                contentType: 'application/json, charset=utf-8',
+                statusCode: {
+                    200: function(response) {
+                        $("#additionalInfo").replaceWith(response);
+                    }
+                }
+            });
         });
     });
 </script>
@@ -42,4 +40,4 @@ else
         <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3> 
 }
 
-@Html.Partial("MainInfo", Model)
+@Html.Partial("MainBlock", Model)

@@ -1,5 +1,6 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
+@using Main.Core.Entities.SubEntities
 
 @model Main.Core.View.Question.QuestionView
 
@@ -28,6 +29,16 @@
                             @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                         }
                     </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Who should answer this question?</label>
+                        <div class="controls">
+                            @{
+                                IDictionary<string, object> scope = new Dictionary<string, object>();
+                                scope.Add("class", "span12");
+                                @Html.EnumDropDownListFor(model => Model.QuestionScope, scope)
+                            }
+                        </div>
                 </div>                              
                 <div class="control-group">
                     @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
@@ -75,8 +86,17 @@
                         @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                         @Html.ValidationMessageFor(model => model.Instructions)
                     </div>
-                </div>            
-            </div>        
+                </div>                
+            </div>  
+            <div class="span7">
+                @if (Model.PublicKey != Guid.Empty)
+                {
+                    @Html.HiddenFor(model => model.PublicKey)
+                }
+                @Html.HiddenFor(model => model.Parent)
+                @Html.HiddenFor(model => model.QuestionnaireKey)
+                @Html.Action("ShowBlock", "Question", new { type = Enum.GetName(typeof(QuestionType), @Model.QuestionType), questionId = @Model.PublicKey, QuestionnaireId = @Model.QuestionnaireKey, groupPublicKey = @Model.Parent })                
+            </div>      
         </div>
     }
     <div class="form-actions">

@@ -37,7 +37,6 @@ namespace RavenQuestionnaire.Web.Controllers
 
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Core.Views.Group;
-    using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Models;
 
     /// <summary>
@@ -126,8 +125,42 @@ namespace RavenQuestionnaire.Web.Controllers
                     new GroupViewInputModel(groupPublicKey.Value, questionnaireKey));
             this.LoadImages();
             var question = new QuestionView(id, groupPublicKey) { Parent = group.PublicKey, GroupTitle = group.Title };
-            return this.View("_Create", question);
-            //return this.View("Create", question);
+            //return this.View("_Create", question);
+            return this.View("Create", question);
+        }
+
+        /// <summary>
+        /// Display partial view for question type
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="questionId">
+        /// The question id.
+        /// </param>
+        /// <param name="QuestionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        /// <returns>
+        /// PartialView for question type
+        /// </returns>
+        public ActionResult ShowBlock(string type, Guid questionId, string QuestionnaireId, Guid? groupPublicKey)
+        {
+            var typeOfEnum = (QuestionType)Enum.Parse(typeof(QuestionType), type);
+            var view = questionId == Guid.Empty ? new QuestionView(QuestionnaireId, groupPublicKey) : this.viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(questionId, Guid.Parse(QuestionnaireId)));
+            switch (typeOfEnum)
+            {
+                case QuestionType.DropDownList: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.MultyOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.SingleOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.YesNo: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.AutoPropagate: return this.PartialView("_EditAutoPropagates", new AutoPropagateQuestionView(view));
+                default:
+                    return Content("<div id=\"additionalInfo\"></div>");
+            }
         }
 
         /// <summary>
@@ -205,7 +238,8 @@ namespace RavenQuestionnaire.Web.Controllers
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
             this.ViewBag.Group = model.Groups;
             this.ViewBag.CurrentGroup = model.Parent;
-            return this.PartialView("_Create", model);
+            //return this.PartialView("_Create", model);
+            return this.PartialView("Create", model);
         }
 
         /// <summary>
