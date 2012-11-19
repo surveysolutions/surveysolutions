@@ -1,5 +1,6 @@
 ﻿@using ClientDependency.Core
 @using ClientDependency.Core.Mvc
+@using Web.Supervisor.Models
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,17 +42,30 @@
                     @if (Request.IsAuthenticated)
                     {
                         <ul id="menu" class="nav" role="menu">
-                            <li><a href="@Url.Action("Index", "Survey")">Surveys</a></li>
-                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration
-                                <b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#">@Html.ActionLink("Users", "Index", "User")</a></li>
-                                </ul>
-                            </li>
-                            <li>@Html.ActionLink("Interviewers", "Summary", "User")</li>
-                         </ul>
+                            <li class="@(ViewBag.ActivePage == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
+                                Surveys</a></li>
+                            <li class="@(ViewBag.ActivePage == MenuItem.Interviewers ? "active" : "")">@Html.ActionLink("Interviewers", "Summary", "User")</li>
+                            <li class="@(ViewBag.ActivePage == MenuItem.Statuses ? "active" : "")">@Html.ActionLink("Statuses", "Status", "Survey")</li>
+                            <li class="@(ViewBag.ActivePage == MenuItem.Docs ? "active" : "")">@Html.ActionLink("Documents", "Documents", "Survey")</li>
+                        </ul>
                     }
-                    @Html.Partial("_LogOnPartial")
+                    @if (Request.IsAuthenticated)
+                    {
+                        <div class="pull-right">
+                            <ul class="nav pull-right" role="menu">
+                                <li class="navbar-text">@User.Identity.Name</li>
+                                <li class="divider-vertical"></li>
+                                <li class="@(ViewBag.ActivePage == MenuItem.Administration ? "active" : "")" class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
+                                    </b></a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Users", "Index", "User")</li>
+                                    </ul>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    }
                 </div>
             </div>
         </div>

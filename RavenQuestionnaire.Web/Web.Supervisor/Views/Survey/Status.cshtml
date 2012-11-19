@@ -1,0 +1,17 @@
+﻿@using Core.Supervisor.Views.Index
+@using Web.Supervisor.Models
+@using Main.Core.Entities.SubEntities
+@model IndexView
+@{
+    this.ViewBag.Title = "Statuses";
+    var statuses = SurveyStatus.GetAllStatuses().Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
+    statuses = statuses.Substring(0, statuses.Length - 1);
+    statuses += "}";
+}
+
+<h2><a href="#" id="statusFilter" 
+                  data-placement="right" 
+                  data-type="select" 
+                  data-prepend='All'             
+                  data-source="@Html.Raw(statuses)"
+                  data-original-title="Select status">@this.Model.Status.Name</a> surveys</h2>

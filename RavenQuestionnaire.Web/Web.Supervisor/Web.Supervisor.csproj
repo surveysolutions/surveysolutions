@@ -175,6 +175,7 @@
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -249,7 +250,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -302,7 +302,7 @@
     <Content Include="Views\Survey\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Survey\Assigments.cshtml" />
+    <Content Include="Views\Survey\Documents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
@@ -414,6 +414,7 @@
     <Content Include="Views\Device\Devices.cshtml" />
     <Content Include="Views\Shared\Administration.cshtml" />
     <Content Include="Views\Survey\QuestionnaireChart.cshtml" />
+    <Content Include="Views\Survey\Status.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

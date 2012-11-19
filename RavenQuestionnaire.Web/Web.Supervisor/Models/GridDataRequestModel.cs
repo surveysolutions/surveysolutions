@@ -54,6 +54,11 @@ namespace Web.Supervisor.Models
         /// Gets or sets TemplateId.
         /// </summary>
         public Guid TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets StatusId.
+        /// </summary>
+        public Guid StatusId { get; set; }
     }
 
     /// <summary>

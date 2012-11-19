@@ -1,0 +1,132 @@
+﻿@using Web.Supervisor.Models
+@using Core.Supervisor.Views.Assignment
+@using Main.Core.Entities.SubEntities
+@using System.Web.Script.Serialization
+@model AssignmentView
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
+@{
+    ViewBag.Title = "Surveys";
+    var statuses = SurveyStatus.GetAllStatuses().Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
+    statuses = statuses.Substring(0, statuses.Length - 1);
+    statuses += "}";
+}
+<script src="../../Scripts/sorter.js" type="text/javascript"></script>
+<script src="../../Scripts/grid.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var sortData = undefined;
+    var userFilter = "@(Model.User.Id)", 
+        statusFilter = "@(Model.Status.PublicId)", 
+        templateFilter = "@(Model.Template.TemplateId)";
+         var withHeaders = false;
+    var pageSize = @Model.PageSize;
+    $(document).ready(function() {
+
+       
+        $('#userFilter').editable().on('update', function(e, editable) {
+            userFilter = editable.value;
+            sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
+            withHeaders = false;
+            getTablePage(sortData, 1);
+        });
+        
+        $('#statusFilter').editable().on('update', function(e, editable) {
+            statusFilter = editable.value;
+            sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
+            withHeaders = false;
+            getTablePage(sortData, 1);
+        });
+        
+         $('#templateFilter').editable().on('update', function(e, editable) {
+            templateFilter = editable.value;
+            sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
+             withHeaders = true;
+            getTablePage(sortData, 1);
+            
+        });
+
+        makeSortable();
+        onPagingClick();
+    });
+    
+    function makeSortable() {
+        $("#questionnaireTable table").tablesorter({
+                send: function(data) {
+                    sortData = JSON.parse(JSON.stringify(data));
+                    getTablePage(data, 1);
+                }
+        });
+    }
+        
+     function onPagingClick() {
+        $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
+            getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
+            return false;
+        });
+    }
+
+    function getTablePage(data, page) {
+        $.ajax({
+                type: "POST",
+                url: "@Url.Action("AssignmentViewTable", "Survey")",
+                data: JSON.stringify({ Id: templateFilter, UserId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+                contentType: 'application/json, charset=utf-8',
+                statusCode: {
+                    200: function(response) {
+                       
+                        if(withHeaders) {
+                             $('#questionnaireTable table').html($(response).find('#table').html());    
+                         makeSortable();
+                        }else {
+                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());    
+                        }
+                         $('#paging').html($(response).find('#paging').html());
+                        onPagingClick();
+                           withHeaders = false;
+                    }
+                }
+            });
+    }
+
+    function getParameterByName(ref, name) {
+        name = name.replace( /[\[]/ , "\\\[").replace( /[\]]/ , "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(ref);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace( /\+/g , " "));
+    }
+    
+    function HideForm(data) {
+        var json = jQuery.parseJSON(data.responseText);
+        $('#row-' + json.cqId).removeClass("showForm");
+
+        if (json.userId != null && json.userName != null) {
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/' + json.userId + '">' + json.userName + '</a>');
+        }
+        else {
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/"></a>');
+        }
+    }
+</script>
+<h3><a href="#" id="statusFilter" 
+                  data-placement="right" 
+                  data-type="select" 
+                  data-prepend='All'             
+                  data-source="@Html.Raw(statuses)"
+                  data-original-title="Select status">@this.Model.Status.Name</a> by <a href="#" id="userFilter" 
+                  data-placement="bottom" 
+                  data-type="select" 
+                  data-source="@Url.Action("UsersJson", "User")"
+                  data-prepend='Anyone'             
+                  data-original-title="Select user">@this.Model.User.Name</a> in <a href="#" id="templateFilter" 
+                  data-placement="bottom" 
+                  data-type="select" 
+                  data-source="@Url.Action("Templates", "Survey")"
+                  data-prepend='Any'             
+                  data-original-title="Select template">@(Model.Template.Title)</a> survey</h3>
+<div id="questionnaireTable">
+    @Html.Partial("_TableGroup", Model)
+</div>
+@Html.Action("Chart", new { templateId = Model.Template.TemplateId })

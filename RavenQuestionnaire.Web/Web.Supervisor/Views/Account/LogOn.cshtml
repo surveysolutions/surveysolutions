@@ -6,37 +6,18 @@
 }
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"> </script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"> </script>
-@using (Html.BeginForm())
+<div class="container">
+@using (Html.BeginForm("LogOn", "Account", FormMethod.Post, new { @class = "form-signin" }))
 {
-    <div class="modal inline-modal">
-        <div class="modal-header">
-            <h3>Log On</h3>
-        </div>
-        <div class="modal-body">
-            <fieldset class="form-horizontal">
-                @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
-                <div class="control-group">
-                    @Html.LabelFor(m => m.UserName, new {@class = "control-label"})
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <span class="add-on"><i class="icon-user"></i></span>@Html.TextBoxFor(m => m.UserName, new {@class = "xlarge"})
-                            <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="control-group">
-                    @Html.LabelFor(m => m.Password, new {@class = "control-label"})
-                    <div class="controls">
-                        <div class="input-prepend">
-                            <span class="add-on"><i class="icon-envelope"></i></span>@Html.PasswordFor(m => m.Password, new {@class = "xlarge"})
-                            <span class="help-inline">@Html.ValidationMessageFor(m => m.Password)</span>
-                        </div>
-                    </div>
-                </div>                
-            </fieldset>
-        </div>
-        <div class="modal-footer">
-            <input type="submit" value="Log On" class="btn btn-primary" />
-        </div>
-    </div>
+    <h2 class="form-signin-heading">Please sign in</h2>
+    @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
+        
+    @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Email address" })
+    <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
+        
+    @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
+    <span class="help-inline">@Html.ValidationMessageFor(m => m.Password)</span>
+        
+    <button class="btn btn-large btn-primary" type="submit">Sign in</button>
 }
+</div>

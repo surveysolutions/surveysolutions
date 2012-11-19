@@ -76,11 +76,11 @@ namespace Core.Supervisor.Views.Summary
         public SummaryView Load(SummaryInputModel input)
         {
             var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
-            var template = new SummaryViewItem.TemplateLight(Guid.Empty, "All");
+            var template = new TemplateLight(Guid.Empty, "All");
             if (input.TemplateId != Guid.Empty)
             {
                 var tbi = this.templates.GetByGuid(input.TemplateId);
-                template = new SummaryViewItem.TemplateLight(tbi.Id, tbi.Title);
+                template = new TemplateLight(tbi.Id, tbi.Title);
             }
 
             var items = this.BuildItems((input.TemplateId == Guid.Empty

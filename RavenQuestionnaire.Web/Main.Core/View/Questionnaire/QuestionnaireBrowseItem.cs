@@ -12,6 +12,7 @@ namespace Main.Core.View.Questionnaire
     using System;
 
     using Main.Core.Documents;
+    using Main.Core.Entities;
 
     /// <summary>
     /// The questionnaire browse item.
@@ -95,6 +96,17 @@ namespace Main.Core.View.Questionnaire
         public static QuestionnaireBrowseItem New()
         {
             return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now);
+        }
+
+        /// <summary>
+        /// Get Template Light
+        /// </summary>
+        /// <returns>
+        /// GetTemplateLight object
+        /// </returns>
+        public TemplateLight GetTemplateLight()
+        {
+            return new TemplateLight(this.Id, this.Title);
         }
 
         #endregion

@@ -13,7 +13,7 @@
     <table id="table" class="table table-striped table-bordered table-condensed table-hover">
         <thead>
             <tr>
-                <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
+                <th class="sorting" sorter='{"key":"Title"}'><span>Interviewers</span></th>
                 @foreach (var item in Model.Headers)
                 {
                     <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
@@ -28,11 +28,11 @@
                     <td>
                     @if (templateKey.HasValue)
                     {
-                        @Html.ActionLink(collect.User.Name, "Assigments", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
+                        @Html.ActionLink(collect.User.Name, "Documents", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
                     }
                     else
                     {
-                        <text>@collect.User.Name</text>
+                        @Html.ActionLink(collect.User.Name, "Index", "Survey", new { userId = collect.User.Id }, null)
                     }
                     </td>
                    
@@ -48,8 +48,15 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                <text>@value</text>
-                                @*@Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, status = status.PublicId, userId = collect.User.Id }, null)*@
+                                if (templateKey.HasValue)
+                                {
+                                    @Html.ActionLink(value, "Documents", "Survey", new { id = templateKey, userId = collect.User.Id, status = status.PublicId }, null)
+                                }
+                                else
+                                {
+                                    @Html.ActionLink(value, "Documents", "Survey", new { userId = collect.User.Id, status = status.PublicId }, null)
+                                }
+                                @*@Html.ActionLink(value, "Documents", "Survey", new { id = templateKey, status = status.PublicId, userId = collect.User.Id }, null)*@
                             }
                             else
                             {
@@ -63,7 +70,7 @@
                             @if (value != "0")
                             {
                                 <text>@value</text>
-                                @*@Html.ActionLink(value, "Assigments", "Survey", new { id = templateKey, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = collect.User.Id }, null)*@
+                                @*@Html.ActionLink(value, "Documents", "Survey", new { id = templateKey, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = collect.User.Id }, null)*@
                             }
                             else
                             {
