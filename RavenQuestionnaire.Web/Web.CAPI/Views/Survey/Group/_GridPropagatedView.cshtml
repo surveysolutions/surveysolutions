@@ -37,7 +37,7 @@
             if (row.Enabled)
             {
             
-    <div class="ui-grid-b">
+    <div class="ui-grid-b roster">
         <div class="ui-block-a">
             <div class="ui-bar ui-bar-c" style="height: 50px">
                 <a href="@Url.Action("Screen", "Survey", new { id = Model.QuestionnairePublicKey, group = Model.PublicKey, question = Model.Columns[skipped].ItemPublicKey, propagationKey = row.PropagationKey })" data-corners="false">@row.Title&nbsp;</a>
@@ -54,7 +54,7 @@
                             var questionDetails = row.Answers[questionId];
 
                 }
-                <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? "" : "ui-disabled") @(questionDetails.Answered ? "answered" : "") @(questionDetails.Valid ? "" : "error_block")" style="height: 50px"
+                <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? questionDetails.Answered ? "answered" : ""+(questionDetails.Valid ? "" : "error_block") : "ui-disabled")" style="height: 50px"
                          question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKeys" @*event-name="contextmenu" form-name="comment-form"*@
                          question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
                     <p data-role="none" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
