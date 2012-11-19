@@ -99,6 +99,10 @@
     <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
+    <Compile Include="Views\Status\StatusView.cs" />
+    <Compile Include="Views\Status\StatusViewFactory.cs" />
+    <Compile Include="Views\Status\StatusViewInputModel.cs" />
+    <Compile Include="Views\Status\StatusViewItem.cs" />
     <Compile Include="Views\Summary\SummaryFactory.cs" />
     <Compile Include="Views\Summary\SummaryInputModel.cs" />
     <Compile Include="Views\Summary\SummaryView.cs" />
