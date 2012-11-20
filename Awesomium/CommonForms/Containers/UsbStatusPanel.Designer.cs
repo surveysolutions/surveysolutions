@@ -1,4 +1,6 @@
-﻿namespace Browsing.Common.Containers
+﻿using System.Windows.Forms;
+
+namespace Browsing.Common.Containers
 {
     partial class UsbStatusPanel
     {
@@ -34,6 +36,7 @@
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.resultLabel = new System.Windows.Forms.Label();
             this.statusLabel = new System.Windows.Forms.Label();
+            this.statisticList = new System.Windows.Forms.ListBox();
             this.labelAvlUsb = new System.Windows.Forms.Label();
             this.usbStrip = new System.Windows.Forms.ToolStrip();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -47,10 +50,10 @@
             this.tableLayoutPanel2GroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2GroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.tableLayoutPanel2GroupBox.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2GroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 20);
+            this.tableLayoutPanel2GroupBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 16);
             this.tableLayoutPanel2GroupBox.Name = "tableLayoutPanel2GroupBox";
-            this.tableLayoutPanel2GroupBox.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.tableLayoutPanel2GroupBox.Size = new System.Drawing.Size(1059, 682);
+            this.tableLayoutPanel2GroupBox.Padding = new System.Windows.Forms.Padding(2);
+            this.tableLayoutPanel2GroupBox.Size = new System.Drawing.Size(794, 554);
             this.tableLayoutPanel2GroupBox.TabIndex = 6;
             this.tableLayoutPanel2GroupBox.TabStop = false;
             this.tableLayoutPanel2GroupBox.Text = "Current status";
@@ -58,25 +61,26 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 272F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 204F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.resultLabel, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.statusLabel, 0, 2);
-            this.tableLayoutPanel2.Controls.Add(this.labelAvlUsb, 0, 3);
-            this.tableLayoutPanel2.Controls.Add(this.usbStrip, 1, 3);
+            this.tableLayoutPanel2.Controls.Add(this.statisticList, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.labelAvlUsb, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.usbStrip, 1, 4);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 22);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(2, 18);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
+            this.tableLayoutPanel2.RowCount = 6;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 12F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1053, 658);
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(790, 534);
             this.tableLayoutPanel2.TabIndex = 6;
             // 
             // resultLabel
@@ -84,10 +88,9 @@
             this.resultLabel.AutoSize = true;
             this.tableLayoutPanel2.SetColumnSpan(this.resultLabel, 2);
             this.resultLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.resultLabel.Location = new System.Drawing.Point(4, 0);
-            this.resultLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.resultLabel.Location = new System.Drawing.Point(3, 0);
             this.resultLabel.Name = "resultLabel";
-            this.resultLabel.Size = new System.Drawing.Size(1045, 29);
+            this.resultLabel.Size = new System.Drawing.Size(784, 24);
             this.resultLabel.TabIndex = 2;
             this.resultLabel.Text = "result";
             this.resultLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -98,23 +101,35 @@
             this.tableLayoutPanel2.SetColumnSpan(this.statusLabel, 2);
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.statusLabel.Location = new System.Drawing.Point(4, 41);
-            this.statusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.statusLabel.Location = new System.Drawing.Point(3, 118);
             this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Size = new System.Drawing.Size(1045, 29);
+            this.statusLabel.Size = new System.Drawing.Size(784, 24);
             this.statusLabel.TabIndex = 3;
             this.statusLabel.Text = "status/error";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // statisticList
+            // 
+            this.tableLayoutPanel2.SetColumnSpan(this.statisticList, 3);
+            this.statisticList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statisticList.ItemHeight = 24;
+            this.statisticList.Location = new System.Drawing.Point(2, 36);
+            this.statisticList.Margin = new System.Windows.Forms.Padding(2);
+            this.statisticList.Name = "statisticList";
+            this.statisticList.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.statisticList.Size = new System.Drawing.Size(786, 80);
+            this.statisticList.TabIndex = 4;
+            this.statisticList.Visible = false;
             // 
             // labelAvlUsb
             // 
             this.labelAvlUsb.AutoSize = true;
             this.labelAvlUsb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelAvlUsb.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelAvlUsb.Location = new System.Drawing.Point(4, 92);
-            this.labelAvlUsb.Margin = new System.Windows.Forms.Padding(4, 22, 4, 0);
+            this.labelAvlUsb.Location = new System.Drawing.Point(3, 160);
+            this.labelAvlUsb.Margin = new System.Windows.Forms.Padding(3, 18, 3, 0);
             this.labelAvlUsb.Name = "labelAvlUsb";
-            this.labelAvlUsb.Size = new System.Drawing.Size(264, 29);
+            this.labelAvlUsb.Size = new System.Drawing.Size(198, 24);
             this.labelAvlUsb.TabIndex = 0;
             this.labelAvlUsb.Text = "Available USB drivers:";
             this.labelAvlUsb.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -126,10 +141,10 @@
             this.usbStrip.GripMargin = new System.Windows.Forms.Padding(0);
             this.usbStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.usbStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.usbStrip.Location = new System.Drawing.Point(272, 70);
+            this.usbStrip.Location = new System.Drawing.Point(204, 142);
             this.usbStrip.Name = "usbStrip";
             this.usbStrip.ShowItemToolTips = false;
-            this.usbStrip.Size = new System.Drawing.Size(1, 51);
+            this.usbStrip.Size = new System.Drawing.Size(1, 42);
             this.usbStrip.TabIndex = 4;
             this.usbStrip.Text = "toolStrip1";
             // 
@@ -142,12 +157,11 @@
             // 
             // UsbStatusPanel
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.tableLayoutPanel2GroupBox);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UsbStatusPanel";
-            this.Size = new System.Drawing.Size(1059, 682);
+            this.Size = new System.Drawing.Size(794, 554);
             this.tableLayoutPanel2GroupBox.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
@@ -159,6 +173,7 @@
         private System.Windows.Forms.Label labelAvlUsb;
         private System.Windows.Forms.Label resultLabel;
         private System.Windows.Forms.Label statusLabel;
+        private System.Windows.Forms.ListBox statisticList;
         private System.Windows.Forms.ToolStrip usbStrip;
         private System.Windows.Forms.ImageList imageList1;
         #endregion

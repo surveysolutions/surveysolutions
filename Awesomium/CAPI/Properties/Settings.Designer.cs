@@ -262,5 +262,29 @@ namespace Browsing.CAPI.Properties {
                 this["GetEndProcessCapiPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/PushStatistics")]
+        public string GetPushStatisticCapiPath {
+            get {
+                return ((string)(this["GetPushStatisticCapiPath"]));
+            }
+            set {
+                this["GetPushStatisticCapiPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/PullStatistics")]
+        public string GetPullStatisticCapiPath {
+            get {
+                return ((string)(this["GetPullStatisticCapiPath"]));
+            }
+            set {
+                this["GetPullStatisticCapiPath"] = value;
+            }
+        }
     }
 }

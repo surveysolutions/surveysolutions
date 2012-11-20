@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -174,6 +175,28 @@ namespace Browsing.Common.Containers
             this.usbStatusPanel.Deactivate(false);
         }
 
+        public void SetStatistics(List<string> info)
+        {
+            if (this.usbStatusPanel.InvokeRequired)
+            {
+                this.usbStatusPanel.Invoke(new MethodInvoker(() => this.usbStatusPanel.ClearStatisticList()));
+            }
+            else
+                this.usbStatusPanel.ClearStatisticList();
+
+            foreach (var line in info)
+            {
+                if (this.usbStatusPanel.InvokeRequired)
+                {
+                    var temp = line;
+                    this.usbStatusPanel.Invoke(new MethodInvoker(() => this.usbStatusPanel.AddLineToStatistic(temp)));
+                }
+                else
+                    this.usbStatusPanel.AddLineToStatistic(line);
+                
+            }
+            
+        }
         #endregion
 
         #region IUsbProvider Memebers

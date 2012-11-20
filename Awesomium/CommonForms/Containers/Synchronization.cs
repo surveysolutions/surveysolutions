@@ -253,6 +253,21 @@ namespace Browsing.Common.Containers
 
         #region Operations
 
+        public void AddLineToStatistic(string line)
+        {
+            this.syncPanel.usbStatusPanel.AddLineToStatistic(line);
+        }
+
+        public void ClearStatisticList()
+        {
+            this.syncPanel.usbStatusPanel.ClearStatisticList();
+        }
+
+        public void MakeStatisticListVisible(bool value)
+        {
+            this.syncPanel.usbStatusPanel.MakeStatisticListVisible(value);
+        }
+
         public void UpdateUsbList()
         {
             this.syncPanel.UpdateUsbStatus();
