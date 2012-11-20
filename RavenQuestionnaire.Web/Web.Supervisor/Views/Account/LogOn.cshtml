@@ -12,7 +12,7 @@
     <h2 class="form-signin-heading">Please sign in</h2>
     @Html.BootstrapValidationSummary("Login was unsuccessful. Please correct the errors and try again.")
         
-    @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Email address" })
+    @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Login" })
     <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
         
     @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
