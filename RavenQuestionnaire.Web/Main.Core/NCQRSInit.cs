@@ -161,7 +161,7 @@ namespace Main.Core
         private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
             IEnumerable<object> handlers =
-                kernel.GetAll(typeof (IEventHandler<>));
+                kernel.GetAll(typeof (IEventHandler<>)).Distinct();
             foreach (object handler in handlers)
             {
                 var ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);

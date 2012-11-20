@@ -166,6 +166,7 @@ namespace Main.Core.Documents
         {
             if (!parent.HasValue)
             {
+                this.Children.RemoveAll(child => child.PublicKey == c.PublicKey);
                 this.Children.Add(c);
                 return;
             }

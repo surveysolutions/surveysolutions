@@ -112,12 +112,12 @@ namespace Main.Core
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(typeof(IViewFactory<,>));
+            BindInterface(typeof (IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(typeof (IEventHandler<>));
+            BindInterface(typeof (IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
@@ -139,14 +139,15 @@ namespace Main.Core
         }
 
         #endregion
-        protected void BindInterface(Type interfaceType)
+        protected void BindInterface(Type interfaceType, Func<IContext,object> scope)
         {
 
             var implementations =
              GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
-                this.Kernel.Bind(interfaceType).To(implementation);
+
+                this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
                 if (interfaceType.IsGenericType)
                 {
                     var interfaceImplementations =
@@ -155,9 +156,12 @@ namespace Main.Core
                     {
                         this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
                             To(
-                                implementation);
+                                implementation).InScope(scope);
                     }
                 }
+             /*   else{
+                    this.Kernel.Bind(interfaceType).To(implementation);
+                }*/
             }
         }
 
