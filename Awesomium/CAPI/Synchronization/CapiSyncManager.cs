@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using Common.Utils;
+using Newtonsoft.Json;
 using Synchronization.Core;
 using Synchronization.Core.Errors;
 using Synchronization.Core.Interface;
@@ -41,17 +43,56 @@ namespace Browsing.CAPI.Synchronization
 
         private List<string> GetPushStatistics()
         {
-            var result = this.RequestProcessor.Process<string>(UrlUtils.GetPushStatisticUrl(), String.Empty);
             var ret = new List<string>();
-            ret.Add(result);
+            try
+            {
+                var result = this.RequestProcessor.Process<string>(UrlUtils.GetPushStatisticUrl(), String.Empty);
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+                var items = JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
+
+                ret.AddRange(items.Select(syncStatisticInfo => syncStatisticInfo.ApprovedQuestionaries + " " + syncStatisticInfo.InterviewersName + " questionnaires were sent for approval"));
+                
+            }
+            catch (Exception ex)
+            {
+                ret.Add("Statistic view error: "+ex.Message);
+                
+            }
             return ret;
+            
         }
 
         private List<string> GetPullStatistics()
         {
-            var result = this.RequestProcessor.Process<string>(UrlUtils.GetPullStatisticUrl(), String.Empty);
             var ret = new List<string>();
-            ret.Add(result);
+            try
+            {
+                var result = this.RequestProcessor.Process<string>(UrlUtils.GetPullStatisticUrl(), String.Empty);
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+                var items = JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
+                var line = items.Where(syncStatisticInfo => syncStatisticInfo.New).Aggregate("New interviewers were received: ", (current, syncStatisticInfo) => current + syncStatisticInfo.InterviewersName+", ");
+                
+                if (items.Where(syncStatisticInfo => syncStatisticInfo.New).Count()>0)ret.Add(line.Substring(0,line.Length-2));
+
+                foreach (var syncStatisticInfo in items)
+                {
+                    if (syncStatisticInfo.Assignments>0)
+                    
+                        ret.Add(syncStatisticInfo.InterviewersName + " has got" + syncStatisticInfo.Assignments +" new assignments");
+
+                    if (syncStatisticInfo.RejectQuestionaries>0)
+                        ret.Add(syncStatisticInfo.RejectQuestionaries+" "+syncStatisticInfo.InterviewersName + "'s questionnaires were rejected");
+
+                    if (syncStatisticInfo.ApprovedQuestionaries>0)
+                        ret.Add(syncStatisticInfo.ApprovedQuestionaries+" "+syncStatisticInfo.InterviewersName + "'s questionnaires were approved");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ret.Add("Statistic view error: " + ex.Message);
+
+            }
             return ret;
         }
 
