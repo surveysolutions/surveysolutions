@@ -1,4 +1,6 @@
-﻿namespace Browsing.Common.Containers
+﻿using System.Collections.Generic;
+
+namespace Browsing.Common.Containers
 {
     partial class SyncPanel
     {

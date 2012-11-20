@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Web.Tests
         }
 
         /// <summary>
-        /// A test for ExportStatistics
+        /// A test for PushStatistics
         /// </summary>
         [Test]
         public void ExportStatistics_ReturnsNotNull()
@@ -98,7 +98,7 @@ namespace RavenQuestionnaire.Web.Tests
             this.ViewRepository.SetReturnsDefault(new ExportStatisticsView(new List<CompleteQuestionnaireBrowseItem>()));
 
             this.Controller = new SynchronizationsController(this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object);
-            this.Controller.ExportStatistics();
+            this.Controller.PushStatistics();
 
             this.ViewRepository.Verify(x => x.Load<ExporStatisticsInputModel, ExportStatisticsView>(It.Is<ExporStatisticsInputModel>(m => m.Keys.Count==2 && m.Keys[0]==guid1 && m.Keys[1] == guid2)));
         }

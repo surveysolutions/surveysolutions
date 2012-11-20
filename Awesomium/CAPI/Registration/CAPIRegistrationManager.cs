@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
@@ -50,6 +51,7 @@ namespace Browsing.CAPI.Registration
         private Guid GetGuidFromProcessorId()
         {
             var cpuInfo = string.Empty;
+            string selectedDrive = String.Empty;
 
             var management = new ManagementClass("win32_processor");
             var managementObjects = management.GetInstances();
@@ -63,13 +65,26 @@ namespace Browsing.CAPI.Registration
             if (cpuInfo == null)
                 return DefaultDevice;
 
+           
+            
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (!drive.IsReady) continue;
+                selectedDrive = drive.RootDirectory.ToString();
+                break;
+            }
+            var disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + selectedDrive + @":""");
+            disk.Get();
+            selectedDrive = disk["VolumeSerialNumber"].ToString();
+
             using (var md5 = MD5.Create())
             {
-                byte[] hash = md5.ComputeHash(Encoding.Default.GetBytes(cpuInfo));
+                byte[] hash = md5.ComputeHash(Encoding.Default.GetBytes(cpuInfo + selectedDrive));
                 var result = new Guid(hash);
 
                 return result;
             }
+
         }
 
 

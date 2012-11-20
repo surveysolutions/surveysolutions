@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 using Common.Utils;
+using Newtonsoft.Json;
 using Synchronization.Core;
 using Synchronization.Core.Errors;
 using Synchronization.Core.Interface;
@@ -30,7 +32,78 @@ namespace Browsing.CAPI.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
+        protected override List<string> OnGetStatisticsAfterSyncronization(SyncType action)
+        {
+            if (action==SyncType.Push)
+                return GetPushStatistics();
+            return GetPullStatistics();
+        }
+
         #region Helpers
+
+        private List<SyncStatisticInfo> GetStatItems(string url)
+        {
+            var result = this.RequestProcessor.Process<string>(url, String.Empty);
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+            return  JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
+        }
+
+        private List<string> GetPushStatistics()
+        {
+            var ret = new List<string>();
+            try
+            {
+                var items = GetStatItems(UrlUtils.GetPushStatisticUrl());
+                if (items.Count > 0)
+                    foreach (var syncStatisticInfo in items)
+                    {
+                        if (syncStatisticInfo.Approved>0)
+                            ret.Add(syncStatisticInfo.Approved + " " + syncStatisticInfo.UserName + "'s questionnaires were sent for approval");
+                    }
+                    
+                else ret.Add("Not a questionnaire was sent for approval");
+                
+            }
+            catch (Exception ex)
+            {
+                ret.Add("Statistic view error: "+ex.Message);
+                
+            }
+            return ret;
+            
+        }
+
+        private List<string> GetPullStatistics()
+        {
+            var ret = new List<string>();
+            try
+            {
+                var items = GetStatItems(UrlUtils.GetPullStatisticUrl());
+                var line = items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Aggregate("New interviewers were received: ", (current, syncStatisticInfo) => current + syncStatisticInfo.UserName+", ");
+
+                if (items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Count() > 0) ret.Add(line.Substring(0, line.Length - 2));
+
+                foreach (var syncStatisticInfo in items)
+                {
+                    if (syncStatisticInfo.NewAssignments>0)
+                    
+                        ret.Add(syncStatisticInfo.UserName + " has got" + syncStatisticInfo.NewAssignments +" new assignments");
+
+                    if (syncStatisticInfo.Rejected>0)
+                        ret.Add(syncStatisticInfo.Rejected + " " + syncStatisticInfo.UserName + "'s questionnaires were rejected");
+
+                    if (syncStatisticInfo.Approved>0)
+                        ret.Add(syncStatisticInfo.Approved + " " + syncStatisticInfo.UserName + "'s questionnaires were approved");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                ret.Add("Statistic view error: " + ex.Message);
+
+            }
+            return ret;
+        }
 
         private void DoExport()
         {
