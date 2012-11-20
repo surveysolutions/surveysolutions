@@ -10,5 +10,6 @@ namespace Synchronization.Core.Interface
         void SetBeginning(ISyncProgressStatus status);
         void SetProgress(ISyncProgressStatus status);
         void SetCompleted(ISyncProgressStatus status);
+        void SetStatistics(List<string> info);
     }
 }

@@ -79,5 +79,15 @@ namespace Browsing.CAPI.Utils
         {
             return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetEndProcessCapiPath, id);
         }
+
+        public string GetPushStatisticUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetPushStatisticCapiPath);
+        }
+
+        public string GetPullStatisticUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetPullStatisticCapiPath);
+        }
     }
 }
