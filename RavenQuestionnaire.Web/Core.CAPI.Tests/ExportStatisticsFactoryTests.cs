@@ -39,6 +39,7 @@ namespace Core.CAPI.Tests.Synchronization
                                         {
                                             new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument()
                                                                                     {
+                                                                                        Responsible = new UserLight(new Guid(), "User"),
                                                                                         PublicKey = eventSourceId,
                                                                                         Status = SurveyStatus.Initial
                                                                                     })
@@ -79,6 +80,7 @@ namespace Core.CAPI.Tests.Synchronization
                                         {
                                             new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument
                                                                                     {
+                                                                                        Responsible = new UserLight(new Guid(), "User"),
                                                                                         PublicKey = eventSourceId,
                                                                                         Status = SurveyStatus.Initial
                                                                                     })

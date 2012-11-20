@@ -9,9 +9,11 @@ namespace Main.Core.EventHandlers
     using System;
 
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Questionnaire;
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.Events.Synchronization;
+    using Main.Core.Events.User;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.SyncProcess;
     using Main.DenormalizerStorage;
@@ -29,7 +31,8 @@ namespace Main.Core.EventHandlers
                                            IEventHandler<CompleteQuestionnaireDeleted>,
                                            IEventHandler<QuestionnaireAssignmentChanged>,
                                            IEventHandler<QuestionnaireStatusChanged>,
-                                           IEventHandler<NewQuestionnaireCreated>
+                                           IEventHandler<NewQuestionnaireCreated>,
+                                           IEventHandler<NewUserCreated>
     {
         #region Constants and Fields
 
@@ -65,6 +68,28 @@ namespace Main.Core.EventHandlers
         #endregion
 
         #region Public Methods and Operators
+
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
+        public void Handle(IPublishedEvent<NewUserCreated> evnt)
+        {
+            SyncProcessStatisticsDocument item = this.docs.GetByGuid(Guid.Empty);
+            if (item == null)
+            {
+                return;
+            }
+            var stat = new UserSyncProcessStatistics
+            {
+                Type = SynchronizationStatisticType.NewUser,
+                User = new UserLight(evnt.Payload.PublicKey, evnt.Payload.Name),
+            };
+            item.Statistics.Add(stat);
+        }
 
         /// <summary>
         /// Start of sync process

@@ -14,31 +14,36 @@ namespace Main.Core.Documents
         /// <summary>
         /// The new questionnaire.
         /// </summary>
-        NewQuestionnaire = 1, 
+        NewQuestionnaire = 1,
 
         /// <summary>
         /// The questionnaire update.
         /// </summary>
-        QuestionnaireUpdate = 2, 
+        QuestionnaireUpdate = 2,
 
         /// <summary>
         /// The new survey.
         /// </summary>
-        NewSurvey = 3, 
+        NewSurvey = 3,
 
         /// <summary>
         /// The new assignment.
         /// </summary>
-        NewAssignment = 4, 
+        NewAssignment = 4,
 
         /// <summary>
         /// The assignment changed.
         /// </summary>
-        AssignmentChanged = 5, 
+        AssignmentChanged = 5,
 
         /// <summary>
         /// The status changed.
         /// </summary>
-        StatusChanged = 6
+        StatusChanged = 6,
+
+        /// <summary>
+        /// New user was added
+        /// </summary>
+        NewUser = 7
     }
 }

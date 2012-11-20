@@ -10,6 +10,7 @@ namespace Main.Core.View.SyncProcess
     using System.Collections.Generic;
 
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The user view.
@@ -26,8 +27,43 @@ namespace Main.Core.View.SyncProcess
         /// </param>
         public SyncProcessView(SyncProcessStatisticsDocument process)
         {
-            this.Messages = new List<UserSyncProcessStatistics>();
-            this.Messages.AddRange(process.Statistics);
+            this.Messages = new List<SyncStatisticInfo>();
+            var statistics = new Dictionary<Guid, SyncStatisticInfo>();
+            foreach (var statistic in process.Statistics)
+            {
+                if (!statistics.ContainsKey(statistic.User.Id))
+                {
+                    statistics.Add(statistic.User.Id, new SyncStatisticInfo(statistic.User.Name, 0, 0, 0, false));
+                }
+
+                switch (statistic.Type)
+                {
+                    case SynchronizationStatisticType.NewUser:
+                        statistics[statistic.User.Id].IsNew = true;
+                        break;
+                    case SynchronizationStatisticType.AssignmentChanged:
+                        statistics[statistic.User.Id].NewAssignments++;
+                        break;
+                    case SynchronizationStatisticType.NewAssignment:
+                        statistics[statistic.User.Id].NewAssignments++;
+                        break;
+                    case SynchronizationStatisticType.StatusChanged:
+                        if (statistic.Status.PublicId == SurveyStatus.Redo.PublicId)
+                        {
+                            statistics[statistic.User.Id].Rejected++;
+                        }
+                        else if (statistic.Status.PublicId != SurveyStatus.Redo.PublicId &&
+                            statistic.Status.PublicId != SurveyStatus.Initial.PublicId &&
+                            statistic.Status.PublicId != SurveyStatus.Complete.PublicId)
+                        {
+                            statistics[statistic.User.Id].Approved++;
+                        }
+
+                        break;
+                }
+            }
+
+            this.Messages.AddRange(statistics.Values);
             this.PublicKey = process.SyncKey;
             this.SyncType = process.SyncType;
             this.IsEnded = process.IsEnded;
@@ -42,7 +78,7 @@ namespace Main.Core.View.SyncProcess
         /// <summary>
         /// Gets or sets messages.
         /// </summary>
-        public List<UserSyncProcessStatistics> Messages { get; set; }
+        public List<SyncStatisticInfo> Messages { get; set; }
 
         /// <summary>
         /// Gets or sets the creation date.

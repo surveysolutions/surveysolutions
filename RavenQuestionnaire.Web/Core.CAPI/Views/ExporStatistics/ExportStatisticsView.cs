@@ -38,7 +38,7 @@ namespace Core.CAPI.Views.ExporStatistics
             {
                 if (dict.ContainsKey(cq.Responsible.Id))
                 {
-                    dict[cq.Responsible.Id].ApprovedQuestionaries++;
+                    dict[cq.Responsible.Id].Approved++;
                 }
                 else
                 {

@@ -383,6 +383,7 @@
     <Compile Include="View\SyncProcess\SyncProcessView.cs" />
     <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />
     <Compile Include="View\SyncProcess\SyncProcessInputModel.cs" />
+    <Compile Include="View\SyncProcess\SyncStatisticInfo.cs" />
     <Compile Include="View\SyncProcess\UserSyncProcessStatistics.cs" />
     <Compile Include="View\User\UserBrowseInputModel.cs" />
     <Compile Include="View\User\UserBrowseItem.cs" />
