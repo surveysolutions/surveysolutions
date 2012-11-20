@@ -30,7 +30,30 @@ namespace Browsing.CAPI.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
+        protected override List<string> OnGetStatisticsAfterSyncronization(SyncType action)
+        {
+            if (action==SyncType.Push)
+                return GetPushStatistics();
+            return GetPullStatistics();
+        }
+
         #region Helpers
+
+        private List<string> GetPushStatistics()
+        {
+            var result = this.RequestProcessor.Process<string>(UrlUtils.GetPushStatisticUrl(), String.Empty);
+            var ret = new List<string>();
+            ret.Add(result);
+            return ret;
+        }
+
+        private List<string> GetPullStatistics()
+        {
+            var result = this.RequestProcessor.Process<string>(UrlUtils.GetPullStatisticUrl(), String.Empty);
+            var ret = new List<string>();
+            ret.Add(result);
+            return ret;
+        }
 
         private void DoExport()
         {

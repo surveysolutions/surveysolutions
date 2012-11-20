@@ -62,5 +62,11 @@
     <Setting Name="GetEndProcessCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/ProgressEnding</Value>
     </Setting>
+    <Setting Name="GetPushStatisticCapiPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Synchronizations/PushStatistics</Value>
+    </Setting>
+    <Setting Name="GetPullStatisticCapiPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Synchronizations/PullStatistics</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
