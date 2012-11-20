@@ -29,15 +29,5 @@
       this.ViewBag.Images = images;
   }
 }
-@if (Model.PublicKey != Guid.Empty)
-{
-    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
-        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3>
-}
-else
-{
-    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey })" class="btn">
-        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3> 
-}
-
+<h3>Edit Question in @Model.GroupTitle</h3>
 @Html.Partial("MainBlock", Model)

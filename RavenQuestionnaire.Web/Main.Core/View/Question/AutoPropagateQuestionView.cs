@@ -14,7 +14,7 @@ namespace Main.Core.View.Question
     /// </summary>
     public class AutoPropagateQuestionView : BaseQuestionView
     {
-       #region Constructor
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPropagateQuestionView"/> class.
