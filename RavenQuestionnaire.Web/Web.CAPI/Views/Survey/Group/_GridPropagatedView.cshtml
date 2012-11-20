@@ -63,7 +63,7 @@
                             var questionDetails = row.Answers[questionId];
 
                 }
-                <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? questionDetails.Answered ? "answered" : "" + (questionDetails.Valid ? "" : "error_block") : "ui-disabled")" style="height: 50px"
+                <div class="ui-bar ui-bar-c @(questionDetails.Enabled ? ((questionDetails.Answered ? "answered " : "") + (questionDetails.Valid ? "" : "error_block ")) : "ui-disabled")" style="height: 50px"
                          question-item="@questionId" question-propagation-key="@row.PropagationKey" question-answer-key="@questionDetails.AnswerPublicKeys" @*event-name="contextmenu" form-name="comment-form"*@
                          question-comment-value="@questionDetails.Comments" question-answer-value="@questionDetails.AnswerString">
                     <p data-role="none" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;
