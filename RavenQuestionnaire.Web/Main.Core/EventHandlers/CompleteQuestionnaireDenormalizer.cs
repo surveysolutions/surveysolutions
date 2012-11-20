@@ -202,7 +202,8 @@ namespace Main.Core.EventHandlers
             item.StatusChangeComments.Add(new ChangeStatusDocument
                 {
                     Status = evnt.Payload.Status, 
-                    Responsible = evnt.Payload.Responsible
+                    Responsible = evnt.Payload.Responsible,
+                    ChangeDate = evnt.EventTimeStamp
                 });
             item.LastEntryDate = evnt.EventTimeStamp;
         }

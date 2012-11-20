@@ -391,7 +391,8 @@ namespace Main.Core.Documents
                 result.StatusChangeComments.Add(new ChangeStatusDocument
                     {
                         Status = doc.Status, 
-                        Responsible = doc.Creator
+                        Responsible = doc.Creator,
+                        ChangeDate = doc.CreationDate
                     });
             }
 

@@ -27,5 +27,10 @@ namespace Main.Core.Documents
         /// Gets or sets Responsible.
         /// </summary>
         public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets ChangeDate.
+        /// </summary>
+        public DateTime ChangeDate { get; set; }
     }
 }
