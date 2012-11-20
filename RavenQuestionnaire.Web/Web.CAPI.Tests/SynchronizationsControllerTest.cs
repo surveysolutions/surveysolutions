@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Web.Tests
         }
 
         /// <summary>
-        /// A test for ExportStatistics
+        /// A test for PushStatistics
         /// </summary>
         [Test]
         public void ExportStatistics_ReturnsNotNull()
@@ -103,7 +103,7 @@ namespace RavenQuestionnaire.Web.Tests
                 this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object);
 
             JsonResult expected = null;
-            JsonResult actual = this.Controller.ExportStatistics();
+            JsonResult actual = this.Controller.PushStatistics();
 
             Assert.AreNotEqual(null, actual);
         }

@@ -114,7 +114,7 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult ExportStatistics()
+        public JsonResult PushStatistics()
         {
             var events = this.synchronizer.ReadEvents();
             var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
@@ -446,7 +446,7 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult Statistics()
+        public JsonResult PullStatistics()
         {
             var user = this._globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(

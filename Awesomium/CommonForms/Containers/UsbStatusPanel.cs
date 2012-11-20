@@ -220,6 +220,21 @@ namespace Browsing.Common.Containers
             }
         }
 
+        public void MakeStatisticListVisible(bool value)
+        {
+            this.statisticList.Visible = value;
+        }
+
+        public void AddLineToStatistic(string line)
+        {
+            this.statisticList.Items.Add(line);
+        }
+
+        public void ClearStatisticList()
+        {
+            this.statisticList.Items.Clear();
+        }
+
         public ToolStripItemCollection GetStripItems()
         {
             return this.usbStrip.Items;
