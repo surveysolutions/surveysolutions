@@ -92,8 +92,6 @@ namespace Core.CAPI.Tests.Synchronization
             var target = factory.Load(new ExporStatisticsInputModel(new List<Guid>{ eventSourceId }));
 
             Assert.AreEqual(target.Items.Count(), 1);
-
-            Assert.AreEqual(target.Items[0].SurveyId, eventSourceId);
         }
     }
 }

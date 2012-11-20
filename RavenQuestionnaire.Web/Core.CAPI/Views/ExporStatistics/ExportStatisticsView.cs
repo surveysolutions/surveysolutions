@@ -9,7 +9,9 @@
 
 namespace Core.CAPI.Views.ExporStatistics
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Main.Core.Documents;
     using Main.Core.View.CompleteQuestionnaire;
@@ -30,19 +32,21 @@ namespace Core.CAPI.Views.ExporStatistics
         /// </param>
         public ExportStatisticsView(IEnumerable<CompleteQuestionnaireBrowseItem> cqs)
         {
-            this.Items = new List<CapiExportStatistics>();
-            foreach (CompleteQuestionnaireBrowseItem cq in cqs)
+            this.Items = new List<SyncStatisticInfo>();
+            var dict = new Dictionary<Guid, SyncStatisticInfo>();
+            foreach (var cq in cqs)
             {
-                this.Items.Add(
-                    new CapiExportStatistics
-                        {
-                            Status = cq.Status, 
-                            TemplateId = cq.TemplateId, 
-                            Title = cq.QuestionnaireTitle, 
-                            User = cq.Responsible, 
-                            SurveyId = cq.CompleteQuestionnaireId
-                        });
+                if (dict.ContainsKey(cq.Responsible.Id))
+                {
+                    dict[cq.Responsible.Id].ApprovedQuestionaries++;
+                }
+                else
+                {
+                    dict.Add(cq.Responsible.Id, new SyncStatisticInfo(cq.Responsible.Name, 0, 1, 0, false));
+                }
             }
+
+            this.Items.AddRange(dict.Values);
         }
 
         #endregion
@@ -52,7 +56,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <summary>
         /// Gets or sets Items.
         /// </summary>
-        public List<CapiExportStatistics> Items { get; set; }
+        public List<SyncStatisticInfo> Items { get; set; }
 
         #endregion
     }

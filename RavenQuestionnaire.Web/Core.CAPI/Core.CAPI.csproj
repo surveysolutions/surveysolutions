@@ -104,6 +104,7 @@
     <Compile Include="Views\Synchronization\SyncProgressFactory.cs" />
     <Compile Include="Views\Synchronization\SyncProgressInputModel.cs" />
     <Compile Include="Views\Synchronization\SyncProgressView.cs" />
+    <Compile Include="Views\SyncStatisticInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
