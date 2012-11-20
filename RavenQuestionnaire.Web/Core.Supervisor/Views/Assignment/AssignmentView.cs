@@ -76,17 +76,26 @@ namespace Core.Supervisor.Views.Assignment
             {
                 return;
             }
-
-            foreach (var question in
-                items.SelectMany(
-                    completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
-                        question => !this.Headers.ContainsKey(question.PublicKey)))
+            if (this.Template.TemplateId != Guid.Empty)
             {
-                this.Headers.Add(question.PublicKey, question.Title);
-            }
+                foreach (var question in
+                    items.SelectMany(
+                        completeQuestionnaireBrowseItem => completeQuestionnaireBrowseItem.FeaturedQuestions).Where(
+                            question => !this.Headers.ContainsKey(question.PublicKey)))
+                {
+                    this.Headers.Add(question.PublicKey, question.Title);
+                }
 
-            foreach (CompleteQuestionnaireBrowseItem it in items)
-                this.Items.Add(new AssignmentViewItem(it, this.Headers));
+
+                foreach (CompleteQuestionnaireBrowseItem it in items) 
+                    this.Items.Add(new AssignmentViewItem(it, this.Headers));
+            }
+            else
+            {
+                this.Headers.Add(Guid.Empty, "Featured Questions");
+                foreach (CompleteQuestionnaireBrowseItem it in items)
+                    this.Items.Add(new AssignmentViewItem(it));
+            }
         }
 
         public TemplateLight Template { get; set; }

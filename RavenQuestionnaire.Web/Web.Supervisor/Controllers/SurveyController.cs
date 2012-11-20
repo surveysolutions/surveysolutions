@@ -19,6 +19,7 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Assignment;
     using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
+    using Core.Supervisor.Views.Status;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities;
@@ -97,8 +98,14 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Status(Guid? statusId)
         {
-            ViewBag.ActivePage = MenuItem.Statuses;   
-            return this.View();
+            ViewBag.ActivePage = MenuItem.Statuses;
+            var user = this.globalInfo.GetCurrentUser();
+            var model = this.viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel()
+                {
+                    Supervisor = user,
+                    StatusId = statusId.HasValue? statusId.Value:Guid.Empty
+                });
+            return this.View(model);
         }
 
         public ActionResult Templates()
@@ -506,6 +513,30 @@ namespace Web.Supervisor.Controllers
                             };
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.PartialView("_Table", model);
+        }
+
+        /// <summary>
+        /// Display sorting questionnaire
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Return sorted partial view
+        /// </returns>
+        public ActionResult StatusViewTable(GridDataRequestModel data)
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            var input = new StatusViewInputModel
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder,
+                StatusId = data.StatusId,
+                Supervisor = user
+            };
+            var model = this.viewRepository.Load<StatusViewInputModel, StatusView>(input);
+            return this.PartialView("_StatusTable", model);
         }
 
         /// <summary>

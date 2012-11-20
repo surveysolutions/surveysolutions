@@ -12,6 +12,7 @@ namespace Core.Supervisor.Views.Status
     using System.Text;
 
     using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
 
     /// <summary>
@@ -105,14 +106,14 @@ namespace Core.Supervisor.Views.Status
         }
 
         /// <summary>
-        /// Gets or sets statistic filtres.
-        /// </summary>
-        public string Status { get; set; }
-
-        /// <summary>
         /// Gets or sets filter by user guid
         /// </summary>
         public Guid StatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Supervisor.
+        /// </summary>
+        public UserLight Supervisor { get; set; }
 
         #endregion
     }
