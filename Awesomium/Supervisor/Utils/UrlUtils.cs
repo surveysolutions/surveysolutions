@@ -77,9 +77,19 @@ namespace Browsing.Supervisor.Utils
             return String.Empty;
         }
 
+        public string GetPushStatisticUrl()
+        {
+            return String.Empty;
+        }
+
+        public string GetPullStatisticUrl()
+        {
+            return String.Empty;
+        }
         public string GetAuthorizedIDsUrl(Guid registratorId)
         {
             return string.Format("{0}{1}?Registrator={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
         }
+
     }
 }

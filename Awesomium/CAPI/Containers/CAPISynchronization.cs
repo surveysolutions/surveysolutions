@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Browsing.CAPI.Synchronization;
 using Browsing.Common.Controls;
 using Common.Utils;
@@ -38,6 +39,13 @@ namespace Browsing.CAPI.Containers
         protected override void OnPullClicked()
         {
             new Thread(ImportData).Start();
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            this.MakeStatisticListVisible(true);
+            this.AddLineToStatistic("Statistic is empty..");
         }
     }
 }

@@ -44,5 +44,10 @@ namespace Browsing.Supervisor.Synchronization
         {
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
+
+        protected override List<string> OnGetStatisticsAfterSyncronization(SyncType action)
+        {
+            return null;
+        }
     }
 }

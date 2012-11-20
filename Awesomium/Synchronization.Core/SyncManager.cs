@@ -47,6 +47,7 @@ namespace Synchronization.Core
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
+            GetStats += (s, e) => progressObserver.SetStatistics(e.Info);
 
             AddSynchronizers();
         }
@@ -153,6 +154,14 @@ namespace Synchronization.Core
                 Logger.Info(log);
 
                 EndOfSync(this, new SynchronizationCompletedEvent(new SyncStatus(syncType, direction, 100, error), log));
+                if (error == null)
+                {
+                    var statEvent = new SynchronizationStatisticEvent(OnGetStatisticsAfterSyncronization(syncType));
+                    GetStats(this, statEvent);
+
+                }
+                
+            
             }
         }
 
@@ -163,6 +172,7 @@ namespace Synchronization.Core
         public event EventHandler<SynchronizationEvent> SyncProgressChanged;
         public event EventHandler<SynchronizationEvent> BgnOfSync;
         public event EventHandler<SynchronizationCompletedEvent> EndOfSync;
+        public event EventHandler<SynchronizationStatisticEvent> GetStats;
 
         public void Push(SyncDirection direction)
         {
@@ -220,6 +230,8 @@ namespace Synchronization.Core
         #region Abstract and Virtual
 
         protected abstract void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider);
+
+        protected abstract List<string> OnGetStatisticsAfterSyncronization(SyncType action);
 
         protected virtual string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
         {
