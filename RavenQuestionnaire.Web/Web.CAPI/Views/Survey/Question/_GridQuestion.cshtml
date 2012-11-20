@@ -2,13 +2,13 @@
 @using Questionnaire.Core.Web.Helpers
 @model Core.CAPI.Views.PropagatedGroupViews.QuestionItemView.ColumnItems.QuestionColumnItem
            
-                <div class="ui-bar ui-bar-b" onclick="@(!string.IsNullOrEmpty(Model.Instructions)?"$('#instructions-popup-"+(Model.ItemPublicKey)+"').popup('open')":"")">
-                    <p ellipsis="true"  style="height: 80px; overflow: hidden;margin: 0;">
+                <div class="ui-bar ui-bar-b" onclick="@(!string.IsNullOrEmpty(Model.Instructions) ? "$('#instructions-popup-" + (Model.ItemPublicKey) + "').popup('open', $(this).offset().left, $(this).offset().top)" : "")">
+                    <p ellipsis="true"  style="height: 80px; overflow: hidden;margin: 0; margin-right: 11px;">
                         @Model.Title
                     </p>
                     @if (!string.IsNullOrEmpty(Model.Instructions))
                     {
-                        <p class="info-roster">
+                        <p class="info-roster" style="width: 24px; height: 24px;">
                             <input type="button" data-icon="info" data-role="button" data-iconpos="notext"/></p>
                     }
                 </div>
