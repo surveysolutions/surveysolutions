@@ -7,26 +7,72 @@ namespace Browsing.CAPI.Synchronization
 {
     public class SyncStatisticInfo
     {
+        #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyncStatisticInfo"/> class.
+        /// </summary>
         public SyncStatisticInfo()
         {
         }
-        
-        public SyncStatisticInfo(string interviewersName, int assignments, int approvedQuestionaries, int rejectQuestionaries, bool ifNew)
-        {
-            InterviewersName = interviewersName;
-            Assignments = assignments;
-            ApprovedQuestionaries = approvedQuestionaries;
-            RejectQuestionaries = rejectQuestionaries;
-            New = ifNew;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SyncStatisticInfo"/> class.
+        /// </summary>
+        /// <param name="interviewersName">
+        /// The interviewers name.
+        /// </param>
+        /// <param name="assignments">
+        /// The assignments.
+        /// </param>
+        /// <param name="approvedQuestionaries">
+        /// The approved questionaries.
+        /// </param>
+        /// <param name="rejectQuestionaries">
+        /// The reject questionaries.
+        /// </param>
+        /// <param name="isNew">
+        /// The if new.
+        /// </param>
+        public SyncStatisticInfo(
+            string interviewersName, int assignments, int approvedQuestionaries, int rejectQuestionaries, bool isNew)
+        {
+            this.UserName = interviewersName;
+            this.NewAssignments = assignments;
+            this.Approved = approvedQuestionaries;
+            this.Rejected = rejectQuestionaries;
+            this.IsNew = isNew;
         }
 
-        public string InterviewersName { get; private set; }
-        public int Assignments { get; private set; }
-        public int ApprovedQuestionaries { get; private set; }
-        public int RejectQuestionaries { get; private set; }
-        public bool New { get; private set; }
+        #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Approved.
+        /// </summary>
+        public int Approved { get; set; }
+
+        /// <summary>
+        /// Gets or sets Assignments.
+        /// </summary>
+        public int NewAssignments { get; set; }
+
+        /// <summary>
+        /// Gets or sets UserName.
+        /// </summary>
+        public string UserName { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether New.
+        /// </summary>
+        public bool IsNew { get; set; }
+
+        /// <summary>
+        /// Gets or sets Rejected.
+        /// </summary>
+        public int Rejected { get; set; }
+
+        #endregion
     }
 }

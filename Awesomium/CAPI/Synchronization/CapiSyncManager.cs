@@ -41,16 +41,27 @@ namespace Browsing.CAPI.Synchronization
 
         #region Helpers
 
+        private List<SyncStatisticInfo> GetStatItems(string url)
+        {
+            var result = this.RequestProcessor.Process<string>(url, String.Empty);
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
+            return  JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
+        }
+
         private List<string> GetPushStatistics()
         {
             var ret = new List<string>();
             try
             {
-                var result = this.RequestProcessor.Process<string>(UrlUtils.GetPushStatisticUrl(), String.Empty);
-                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
-                var items = JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
-
-                ret.AddRange(items.Select(syncStatisticInfo => syncStatisticInfo.ApprovedQuestionaries + " " + syncStatisticInfo.InterviewersName + " questionnaires were sent for approval"));
+                var items = GetStatItems(UrlUtils.GetPushStatisticUrl());
+                if (items.Count > 0)
+                    foreach (var syncStatisticInfo in items)
+                    {
+                        if (syncStatisticInfo.Approved>0)
+                            ret.Add(syncStatisticInfo.Approved + " " + syncStatisticInfo.UserName + "'s questionnaires were sent for approval");
+                    }
+                    
+                else ret.Add("Not a questionnaire was sent for approval");
                 
             }
             catch (Exception ex)
@@ -67,24 +78,22 @@ namespace Browsing.CAPI.Synchronization
             var ret = new List<string>();
             try
             {
-                var result = this.RequestProcessor.Process<string>(UrlUtils.GetPullStatisticUrl(), String.Empty);
-                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
-                var items = JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
-                var line = items.Where(syncStatisticInfo => syncStatisticInfo.New).Aggregate("New interviewers were received: ", (current, syncStatisticInfo) => current + syncStatisticInfo.InterviewersName+", ");
-                
-                if (items.Where(syncStatisticInfo => syncStatisticInfo.New).Count()>0)ret.Add(line.Substring(0,line.Length-2));
+                var items = GetStatItems(UrlUtils.GetPullStatisticUrl());
+                var line = items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Aggregate("New interviewers were received: ", (current, syncStatisticInfo) => current + syncStatisticInfo.UserName+", ");
+
+                if (items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Count() > 0) ret.Add(line.Substring(0, line.Length - 2));
 
                 foreach (var syncStatisticInfo in items)
                 {
-                    if (syncStatisticInfo.Assignments>0)
+                    if (syncStatisticInfo.NewAssignments>0)
                     
-                        ret.Add(syncStatisticInfo.InterviewersName + " has got" + syncStatisticInfo.Assignments +" new assignments");
+                        ret.Add(syncStatisticInfo.UserName + " has got" + syncStatisticInfo.NewAssignments +" new assignments");
 
-                    if (syncStatisticInfo.RejectQuestionaries>0)
-                        ret.Add(syncStatisticInfo.RejectQuestionaries+" "+syncStatisticInfo.InterviewersName + "'s questionnaires were rejected");
+                    if (syncStatisticInfo.Rejected>0)
+                        ret.Add(syncStatisticInfo.Rejected + " " + syncStatisticInfo.UserName + "'s questionnaires were rejected");
 
-                    if (syncStatisticInfo.ApprovedQuestionaries>0)
-                        ret.Add(syncStatisticInfo.ApprovedQuestionaries+" "+syncStatisticInfo.InterviewersName + "'s questionnaires were approved");
+                    if (syncStatisticInfo.Approved>0)
+                        ret.Add(syncStatisticInfo.Approved + " " + syncStatisticInfo.UserName + "'s questionnaires were approved");
                 }
 
             }
