@@ -28,6 +28,8 @@ namespace Main.Core.View.SyncProcess
         public SyncProcessView(SyncProcessStatisticsDocument process)
         {
             this.Messages = new List<SyncStatisticInfo>();
+            if (process == null)
+                return;
             var statistics = new Dictionary<Guid, SyncStatisticInfo>();
             foreach (var statistic in process.Statistics)
             {
@@ -38,6 +40,9 @@ namespace Main.Core.View.SyncProcess
 
                 switch (statistic.Type)
                 {
+                    case SynchronizationStatisticType.NewSurvey:
+                        statistics[statistic.User.Id].NewAssignments++;
+                        break;
                     case SynchronizationStatisticType.NewUser:
                         statistics[statistic.User.Id].IsNew = true;
                         break;

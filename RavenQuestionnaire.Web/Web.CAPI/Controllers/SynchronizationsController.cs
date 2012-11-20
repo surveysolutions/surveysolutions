@@ -451,7 +451,7 @@ namespace Web.CAPI.Controllers
             var user = this._globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
                     new SyncProcessInputModel(user == null ? Guid.Empty : user.Id));
-            return this.Json(model, JsonRequestBehavior.AllowGet);
+            return this.Json(model.Messages, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
