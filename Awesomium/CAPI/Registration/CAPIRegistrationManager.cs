@@ -50,7 +50,7 @@ namespace Browsing.CAPI.Registration
 
         private Guid GetGuidFromProcessorId()
         {
-            var cpuInfo = string.Empty;
+            string cpuInfo = null;
             string selectedDrive = String.Empty;
 
             var management = new ManagementClass("win32_processor");
@@ -73,7 +73,8 @@ namespace Browsing.CAPI.Registration
                 selectedDrive = drive.RootDirectory.ToString();
                 break;
             }
-            var disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + selectedDrive + @":""");
+            
+            var disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + selectedDrive.Substring(0,1) + @":""");
             disk.Get();
             selectedDrive = disk["VolumeSerialNumber"].ToString();
 
