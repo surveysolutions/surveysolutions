@@ -85,7 +85,7 @@ namespace Browsing.CAPI.Synchronization
                 {
                     if (syncStatisticInfo.NewAssignments>0)
                     
-                        ret.Add(syncStatisticInfo.UserName + " has got" + syncStatisticInfo.NewAssignments +" new assignments");
+                        ret.Add(syncStatisticInfo.UserName + " has got " + syncStatisticInfo.NewAssignments +" new assignments");
 
                     if (syncStatisticInfo.Rejected>0)
                         ret.Add(syncStatisticInfo.Rejected + " " + syncStatisticInfo.UserName + "'s questionnaires were rejected");
