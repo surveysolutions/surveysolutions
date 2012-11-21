@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 using Common.Utils;
 using Newtonsoft.Json;
 using Synchronization.Core;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Events;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
@@ -32,11 +32,9 @@ namespace Browsing.CAPI.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
-        protected override List<string> OnGetStatisticsAfterSyncronization(SyncType action)
+        protected override SynchronizationStatisticEvent OnGetStatisticsAfterSyncronization(SyncType action)
         {
-            if (action==SyncType.Push)
-                return GetPushStatistics();
-            return GetPullStatistics();
+            return action==SyncType.Push ? new SynchronizationStatisticEvent(GetPushStatistics()) : new SynchronizationStatisticEvent(GetPullStatistics());
         }
 
         #region Helpers
