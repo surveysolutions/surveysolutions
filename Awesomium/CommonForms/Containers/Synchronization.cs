@@ -160,7 +160,8 @@ namespace Browsing.Common.Containers
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.syncPanel.ShowResult(e.Log);
+                    if(e.Status.Error==null)
+                        this.syncPanel.ShowResult(e.Log);
                     this.syncPanel.State = SyncState.Idle;
 
                     EnablePush(true);
