@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Tests
         [Test]
         public void Load_TemplateIsAbsent_EmptyResultISReturned()
         {
-            var result = this.Target.Load(new CompleteQuestionnaireExportInputModel() {QuestionnaryId = Guid.NewGuid()});
+            var result = this.Target.Load(new CompleteQuestionnaireExportInputModel(Guid.NewGuid()));
             Assert.IsTrue(!result.Items.Any());
             Assert.IsTrue(!result.Header.Any());
             Assert.IsTrue(!result.SubPropagatebleGroups.Any());
@@ -56,7 +56,7 @@ namespace RavenQuestionnaire.Core.Tests
         public void Load_QuestionnairiesIsAbsent_EmptyResultISReturned()
         {
             this.TemplateStore.Setup(x => x.GetByGuid(It.IsAny<Guid>())).Returns(new QuestionnaireDocument());
-            var result = this.Target.Load(new CompleteQuestionnaireExportInputModel() {QuestionnaryId = Guid.NewGuid()});
+            var result = this.Target.Load(new CompleteQuestionnaireExportInputModel(Guid.NewGuid()));
             Assert.IsTrue(!result.Items.Any());
             Assert.IsTrue(!result.Header.Any());
             Assert.IsTrue(!result.SubPropagatebleGroups.Any());
@@ -118,7 +118,7 @@ namespace RavenQuestionnaire.Core.Tests
 
             public Dictionary<Guid, string> BuildHeaderTestable(IGroup template)
             {
-                return base.BuildHeader(template);
+                return base.BuildHeader(template, new List<Guid>());
             }
         }
     }

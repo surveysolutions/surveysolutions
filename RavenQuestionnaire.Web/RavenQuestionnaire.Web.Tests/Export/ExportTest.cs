@@ -255,7 +255,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
             this.ViewRepositoryMock.Setup(
                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey.HasValue))).Returns(
                    subResult);
-            Target.ProtectedCollectLEvels(Guid.NewGuid(), null, allLevels, manager);
+            Target.ProtectedCollectLEvels(Guid.NewGuid(), null,allLevels, manager);
 
             Assert.IsTrue(allLevels.Count == 3);
             provider.Verify(x => x.DoExportToStream(topResult), Times.Once());

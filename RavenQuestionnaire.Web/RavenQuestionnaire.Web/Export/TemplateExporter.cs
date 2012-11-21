@@ -94,7 +94,7 @@ namespace RavenQuestionnaire.Web.Export
                 IExportProvider provider = kernel.Get<IExportProvider>(new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));// new CSVExporter(type == "csv" ? ',' : '\t');
                 var manager = new ExportManager(provider);
                 var allLevels = new Dictionary<string, Stream>();
-                CollectLevels(templateGuid, null, allLevels, manager);
+                CollectLevels(templateGuid, null,  allLevels, manager);
                 return this.ExportInternal(allLevels,
                                            fileName);
             }
@@ -106,15 +106,11 @@ namespace RavenQuestionnaire.Web.Export
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
                     (
-                        new CompleteQuestionnaireExportInputModel
-                            {
-                                QuestionnaryId = templateGuid,
-                                PropagatableGroupPublicKey = level
-                            });
+                        new CompleteQuestionnaireExportInputModel(templateGuid, level));
             container.Add("level" + level, manager.ExportToStream(records));
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
-                CollectLevels(templateGuid, subPropagatebleGroup, container, manager);
+                CollectLevels(templateGuid, subPropagatebleGroup,container, manager);
             }
         }
 
