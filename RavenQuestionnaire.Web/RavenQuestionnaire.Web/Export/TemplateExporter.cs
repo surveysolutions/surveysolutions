@@ -4,6 +4,17 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.IO;
+using System.Web.Mvc;
+using Main.Core.View;
+using Main.Core.View.Question;
+using Ninject;
+using Ninject.Parameters;
+using RavenQuestionnaire.Core.Export;
+using RavenQuestionnaire.Core.Export.csv;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
+using RavenQuestionnaire.Core.Views.Group;
+
 namespace RavenQuestionnaire.Web.Export
 {
     using System;
@@ -23,20 +34,19 @@ namespace RavenQuestionnaire.Web.Export
     public interface ITemplateExporter
     {
         byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid);
+        byte[] ExportData(Guid templateGuid, string type);
     }
 
     /// <summary>
     /// Class for exportTempaltes
     /// </summary>
-    public class TemplateExporter : ExportImportEvent, ITemplateExporter
+    public class TemplateExporter : ZipExportImport, ITemplateExporter
     {
         #region Fields
 
-        /// <summary>
-        /// The synchronizer
-        /// </summary>
-        private readonly IEventSync synchronizer;
 
+        private readonly IViewRepository viewRepository;
+        private readonly IKernel kernel;
         #endregion
         
         #region Constructor
@@ -47,10 +57,11 @@ namespace RavenQuestionnaire.Web.Export
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
-        public TemplateExporter(IEventSync synchronizer)
-                : base(synchronizer)
+        public TemplateExporter(IKernel kernel)
+            : base(kernel.Get<IEventSync>())
         {
-            this.synchronizer = synchronizer;
+            this.kernel = kernel;
+            this.viewRepository = kernel.Get<IViewRepository>();
         }
 
         #endregion
@@ -71,7 +82,40 @@ namespace RavenQuestionnaire.Web.Export
         /// </returns>
         public byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid)
         {
-            return this.ExportInternal(clientGuid, GetTemplate(templateGuid, clientGuid), string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
+            return this.ExportInternal(EventsToString(clientGuid, GetTemplate(templateGuid, clientGuid)),
+                                       string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
+        }
+
+        public byte[] ExportData(Guid templateGuid, string type)
+        {
+            if (type == "csv" || type == "tab")
+            {
+                string fileName = string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString());
+                IExportProvider provider = kernel.Get<IExportProvider>(new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));// new CSVExporter(type == "csv" ? ',' : '\t');
+                var manager = new ExportManager(provider);
+                var allLevels = new Dictionary<string, Stream>();
+                CollectLevels(templateGuid, null, allLevels, manager);
+                return this.ExportInternal(allLevels,
+                                           fileName);
+            }
+            return null;
+        }
+
+        protected void CollectLevels(Guid templateGuid, Guid? level, Dictionary<string, Stream> container, ExportManager manager)
+        {
+            CompleteQuestionnaireExportView records =
+                this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
+                    (
+                        new CompleteQuestionnaireExportInputModel
+                            {
+                                QuestionnaryId = templateGuid,
+                                PropagatableGroupPublicKey = level
+                            });
+            container.Add("level" + level, manager.ExportToStream(records));
+            foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
+            {
+                CollectLevels(templateGuid, subPropagatebleGroup, container, manager);
+            }
         }
 
         /// <summary>
@@ -97,7 +141,7 @@ namespace RavenQuestionnaire.Web.Export
                     return payload != null && payload.PublicKey == templateGuid;
                 }).FirstOrDefault());
             else 
-                archive.AddRange(events.Where(aggregateRootEvent => ((SnapshootLoaded)(aggregateRootEvent.Payload)).Template.Payload is QuestionnaireDocument));
+                archive.AddRange(events.Where(ar=>ar.Payload is SnapshootLoaded).Where(aggregateRootEvent => ((SnapshootLoaded)(aggregateRootEvent.Payload)).Template.Payload is QuestionnaireDocument));
             return archive;
         }
 

@@ -35,7 +35,7 @@ namespace Web.Supervisor.Injections
             this.Unbind<IEventSync>();
             this.Bind<IEventSync>().To<SupervisorEventSync>();
             this.Unbind<IExportImport>();
-            this.Bind<IExportImport>().To<ExportImportEvent>();
+            this.Bind<IExportImport>().To<ZipExportImport>();
         }
     }
 }

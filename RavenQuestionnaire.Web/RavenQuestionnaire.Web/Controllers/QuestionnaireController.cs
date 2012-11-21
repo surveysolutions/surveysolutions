@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Web.Export;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
@@ -46,6 +48,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        private readonly ITemplateExporter exporter;
         #endregion
 
         #region Constructors and Destructors
@@ -56,9 +59,10 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="viewRepository">
         /// The view repository.
         /// </param>
-        public QuestionnaireController(IViewRepository viewRepository)
+        public QuestionnaireController(IViewRepository viewRepository, ITemplateExporter exporter)
         {
             this.viewRepository = viewRepository;
+            this.exporter = exporter;
         }
 
         #endregion
@@ -199,60 +203,21 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <exception cref="HttpException">
         /// </exception>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult GetExportedData(Guid id, string type)
+        public FileResult GetExportedData(Guid id, string type)
         {
             if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
             {
                 throw new HttpException(404, "Invalid quesry string parameters");
             }
 
-            QuestionnaireView model =
+          /*  QuestionnaireView model =
                 this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(id));
 
             if (model != null)
-            {
-                string fileName = string.Format("exported{0}.csv", DateTime.Now.ToLongTimeString());
+            {*/
 
-                if (type == "csv" || type == "tab")
-                {
-                    IExportProvider provider = new CSVExporter(type == "csv" ? ',' : '\t');
-                    var manager = new ExportManager(provider);
-
-                    CompleteQuestionnaireExportView records =
-                        this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
-                            (
-                                new CompleteQuestionnaireExportInputModel
-                                    {
-                                       PageSize = 100, QuestionnaryId = model.PublicKey 
-                                    });
-
-                    var header = new Dictionary<Guid, string>();
-
-                    foreach (QuestionView q in model.Questions)
-                    {
-                        header.Add(
-                            q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.Title : q.StataExportCaption);
-                    }
-
-                    foreach (GroupView group in model.Groups)
-                    {
-                        foreach (QuestionView q in group.Questions)
-                        {
-                            header.Add(
-                                q.PublicKey, string.IsNullOrEmpty(q.StataExportCaption) ? q.Title : q.StataExportCaption);
-                        }
-                    }
-
-                    Stream stream = manager.ExportToStream(header, records);
-
-                    var fsr = new FileStreamResult(stream, "text/csv") { FileDownloadName = fileName };
-
-                    return fsr;
-                }
-            }
-
-            return null;
+            return this.File(this.exporter.ExportData(id, type), "application/zip","data.zip");
         }
 
         /// <summary>

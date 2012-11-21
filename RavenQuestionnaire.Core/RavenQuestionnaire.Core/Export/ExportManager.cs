@@ -60,9 +60,9 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool Export(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items, string fileName)
+        public bool Export(CompleteQuestionnaireExportView items, string fileName)
         {
-            this._provider.DoExport(template, items, fileName);
+            this._provider.DoExport(items, fileName);
             return true;
         }
 
@@ -78,9 +78,9 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream ExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items)
+        public Stream ExportToStream(CompleteQuestionnaireExportView items)
         {
-            return this._provider.DoExportToStream(template, items);
+            return this._provider.DoExportToStream(items);
         }
 
         #endregion

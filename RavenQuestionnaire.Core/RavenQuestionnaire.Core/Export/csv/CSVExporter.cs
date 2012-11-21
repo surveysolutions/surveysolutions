@@ -63,10 +63,9 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool DoExport(
-            Dictionary<Guid, string> template, CompleteQuestionnaireExportView records, string fileName)
+        public bool DoExport(CompleteQuestionnaireExportView records, string fileName)
         {
-            using (Stream memoryStream = this.DoExportToStream(template, records))
+            using (Stream memoryStream = this.DoExportToStream(records))
             {
                 using (FileStream fileStream = File.Create(fileName))
                 {
@@ -89,7 +88,7 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream DoExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView records)
+        public Stream DoExportToStream( CompleteQuestionnaireExportView records)
         {
             Stream result = new MemoryStream();
 
@@ -101,7 +100,7 @@ namespace RavenQuestionnaire.Core.Export.csv
                 writer.WriteField("ID"); // templated column for ID
 
                 // build up header
-                foreach (string question in template.Values)
+                foreach (string question in records.Header.Values)
                 {
                     writer.WriteField(question);
                 }
@@ -111,13 +110,14 @@ namespace RavenQuestionnaire.Core.Export.csv
                 // iterate over records
                 foreach (CompleteQuestionnaireExportItem item in records.Items)
                 {
-                    writer.WriteField(item.CompleteQuestionnaireKey);
-                    foreach (Guid guid in template.Keys)
+                    foreach (Guid guid in records.Header.Keys)
                     {
                         /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
-                        var completeAnswer =
-                            item.CompleteQuestions.Where(a => a.PublicKey == guid).FirstOrDefault().GetAnswerString();
-                        writer.WriteField(completeAnswer ?? null);
+                        // var firstOrDefault = item.CompleteQuestions.FirstOrDefault(a => a.PublicKey == guid);
+                        if (item.Values.ContainsKey(guid))
+                        {
+                            writer.WriteField(item.Values[guid]);
+                        }
                     }
 
                     writer.NextRecord();
