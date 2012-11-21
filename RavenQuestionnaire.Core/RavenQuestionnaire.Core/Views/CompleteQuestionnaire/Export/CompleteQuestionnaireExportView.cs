@@ -6,6 +6,10 @@
 //   The complete questionnaire export view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Linq;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System.Collections.Generic;
@@ -15,16 +19,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
     /// </summary>
     public class CompleteQuestionnaireExportView
     {
-        #region Fields
-
-        /// <summary>
-        /// The _order.
-        /// </summary>
-        private string _order = string.Empty;
-
-        #endregion
 
         #region Constructors and Destructors
+        public CompleteQuestionnaireExportView()
+        {
+            this.Items = Enumerable.Empty<CompleteQuestionnaireExportItem>();
+            this.Header = new Dictionary<Guid, string>();
+            this.SubPropagatebleGroups = Enumerable.Empty<Guid>();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportView"/> class.
@@ -44,14 +46,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// <param name="order">
         /// The order.
         /// </param>
-        public CompleteQuestionnaireExportView(
-            int page, int pageSize, int totalCount, IEnumerable<CompleteQuestionnaireExportItem> items, string order)
+        public CompleteQuestionnaireExportView(IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, Dictionary<Guid, string> header)
         {
-            this.Page = page;
-            this.TotalCount = totalCount;
-            this.PageSize = pageSize;
             this.Items = items;
-            this.Order = order;
+            this.Header = header;
+            this.SubPropagatebleGroups = subPropagatebleGroups;
         }
 
         #endregion
@@ -63,36 +62,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </summary>
         public IEnumerable<CompleteQuestionnaireExportItem> Items { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the order.
-        /// </summary>
-        public string Order
-        {
-            get
-            {
-                return this._order;
-            }
+        public IEnumerable<Guid> SubPropagatebleGroups { get; private set; }
 
-            set
-            {
-                this._order = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets the page.
-        /// </summary>
-        public int Page { get; private set; }
-
-        /// <summary>
-        /// Gets the page size.
-        /// </summary>
-        public int PageSize { get; private set; }
-
-        /// <summary>
-        /// Gets the total count.
-        /// </summary>
-        public int TotalCount { get; private set; }
+        public Dictionary<Guid, string> Header { get; private set; }
 
         #endregion
     }

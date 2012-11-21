@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        bool DoExport(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items, string fileName);
+        bool DoExport(CompleteQuestionnaireExportView items, string fileName);
 
         /// <summary>
         /// The do export to stream.
@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        Stream DoExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items);
+        Stream DoExportToStream(CompleteQuestionnaireExportView items);
 
         #endregion
     }

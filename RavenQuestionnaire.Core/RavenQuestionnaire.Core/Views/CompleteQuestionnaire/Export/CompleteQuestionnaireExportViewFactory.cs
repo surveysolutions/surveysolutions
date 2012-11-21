@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
@@ -34,6 +37,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession;
 
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentShortView;
+        private readonly IDenormalizerStorage<QuestionnaireDocument> templateStore;
         #endregion
 
         #region Constructors and Destructors
@@ -44,9 +49,14 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// <param name="documentSession">
         /// The document session.
         /// </param>
-        public CompleteQuestionnaireExportViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession)
+        public CompleteQuestionnaireExportViewFactory(
+            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentShortView, 
+            IDenormalizerStorage<QuestionnaireDocument> templateStore)
         {
+            this.templateStore = templateStore;
             this.documentSession = documentSession;
+            this.documentShortView = documentShortView;
         }
 
         #endregion
@@ -64,48 +74,58 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </returns>
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
         {
+            var template = this.templateStore.GetByGuid(input.QuestionnaryId);
+            if(template==null)
+            {
+                return new CompleteQuestionnaireExportView();
+            }
             // Adjust the model appropriately
-            int count = this.documentSession.Count();
-            if (count == 0)
+            var questionnairies = this.documentShortView.Query().Where(t => t.TemplateId == input.QuestionnaryId);
+            if (!questionnairies.Any())
             {
-                return new CompleteQuestionnaireExportView(
-                    input.Page, input.PageSize, count, new CompleteQuestionnaireExportItem[0], input.Order);
+                return new CompleteQuestionnaireExportView();
             }
-
-            IOrderedQueryable<CompleteQuestionnaireStoreDocument> query;
-            
-            if (Guid.Empty != input.QuestionnaryId)
+            var documents = new List<CompleteQuestionnaireExportItem>(questionnairies.Count());
+            var header = BuildHeader(template);
+            foreach (CompleteQuestionnaireBrowseItem completeQuestionnaireBrowseItem in questionnairies)
             {
-                query = (IOrderedQueryable<CompleteQuestionnaireStoreDocument>)this.documentSession.Query().Where(x => x.TemplateId == input.QuestionnaryId);
+                documents.Add(
+                    new CompleteQuestionnaireExportItem(
+                        this.documentSession.GetByGuid(completeQuestionnaireBrowseItem.CompleteQuestionnaireId), header.Select(h=>h.Key),null));
             }
-            else
-            {
-                return new CompleteQuestionnaireExportView(
-                    input.Page, input.PageSize, count, new CompleteQuestionnaireExportItem[0], input.Order);
-            }
-            
-            if (input.Orders.Count > 0)
-            {
-                query = input.Orders[0].Direction == OrderDirection.Asc
-                            ? query.OrderBy(input.Orders[0].Field)
-                            : query.OrderByDescending(input.Orders[0].Field);
-            }
-
-            if (input.Orders.Count > 1)
-            {
-                foreach (OrderRequestItem order in input.Orders.Skip(1))
-                {
-                    query = order.Direction == OrderDirection.Asc
-                                ? query.ThenBy(order.Field)
-                                : query.ThenByDescending(order.Field);
-                }
-            }
-
-            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
-            IEnumerable<CompleteQuestionnaireExportItem> items = page.Select(x => new CompleteQuestionnaireExportItem(x));
-            return new CompleteQuestionnaireExportView(input.Page, input.PageSize, count, items, input.Order);
+            return new CompleteQuestionnaireExportView(documents, new List<Guid>(), header);
         }
 
         #endregion
+
+        protected Dictionary<Guid, string> BuildHeader(IGroup template)
+        {
+            var result = new Dictionary<Guid, string>();
+            result.Add(template.PublicKey, "PublicKey");
+            Queue<IComposite> queue=new Queue<IComposite>();
+            queue.Enqueue(template);
+            while (queue.Count > 0)
+            {
+                var item = queue.Dequeue();
+                var question = item as IQuestion;
+                if (question != null)
+                {
+                    result.Add(question.PublicKey, question.QuestionText);
+                    continue;
+                }
+                var group = item as IGroup;
+                if (group != null)
+                {
+                    if (group.Propagated != Propagate.None)
+                        continue;
+                    foreach (IComposite child in group.Children)
+                    {
+                        queue.Enqueue(child);
+                    }
+                }
+            }
+            result.Add(Guid.Empty, "ForeignKey");
+            return result;
+        }
     }
 }
