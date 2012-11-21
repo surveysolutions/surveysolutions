@@ -12,9 +12,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Conventions;
+using Main.Core.EventHandlers;
 using Main.Core.ExpressionExecutors;
 using Main.Core.View;
 using Main.DenormalizerStorage;
+using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ninject;
 using Ninject.Activation;
@@ -78,65 +80,122 @@ namespace Main.Core
         /// </summary>
         public override void Load()
         {
+            RegisterDenormalizers();
+            RegisterEventHandlers();
+            RegisterViewFactories();
+            RegisterAdditionalElements();
+        }
+
+        #endregion
+
+        #region virtual methods
+        protected virtual IEnumerable<Type> RegisteredCommandList()
+        {
+            var implementations =
+             GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, typeof(ICommand)));
+            return implementations;
+        }
+
+        protected virtual void RegisterAdditionalElements()
+        {
             var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 
-            // Bind<IDocumentStore>().ToProvider<DocumentStoreProvider>().InSingletonScope();
-           this.Kernel.Bind(
-                x =>
-                x.From(GetAssweblysForRegister()).SelectAllClasses().BindWith(
-                    new RegisterGenericTypesOfInterface(typeof(IViewFactory<,>))));
+            ICommandListSupplier commands=new CommandListSupplier(RegisteredCommandList());
+            this.Bind<ICommandListSupplier>().ToConstant(commands);
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllClasses().BindWith(
-                    new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
+                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface()));
 
-           
-            RegisterDenormalizers();
+        }
+
+        protected virtual void RegisterViewFactories()
+        {
+            BindInterface(typeof (IViewFactory<,>), (c) => Guid.NewGuid());
+        }
+
+        protected virtual void RegisterEventHandlers()
+        {
+            BindInterface(typeof (IEventHandler<>), (c) => this.Kernel);
+        }
+
+        protected virtual void RegisterDenormalizers()
+        {
             this.Kernel.Bind(
                 x =>
                 x.From(GetAssweblysForRegister()).Select(
                     t =>
                     t.GetInterfaces().FirstOrDefault(
-                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) != null).
-                    BindAllInterfaces());
+                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) != null)
+                    .BindToSelf().Configure(binding => binding.InSingletonScope()));
+            this.Kernel.Bind(
+                x =>
+                x.From(GetAssweblysForRegister()).Select(
+                    t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof (DenormalizerStorageProvider<>)).
+                    BindToSelf().Configure(binding => binding.InSingletonScope()));
+            Bind(typeof (IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider);
 
-           this.Kernel.Bind(
-                x => x.From(GetAssweblysForRegister()).SelectAllInterfaces().BindWith(new RegisterFirstInstanceOfInterface()));
-            
         }
 
         #endregion
-
-        protected  void RegisterDenormalizers()
+        protected void BindInterface(Type interfaceType, Func<IContext,object> scope)
         {
-            /*  if (typeof (T).GetCustomAttributes(typeof (SmartDenormalizerAttribute), true).Length > 0)
-            {
-                return this.container.Get<WeakReferenceDenormalizer<T>>();
-            }*/
-            this.Kernel.Bind(
-                 x =>
-                  x.From(GetAssweblysForRegister()).Select(
-                   t =>
-                   t.GetInterfaces().FirstOrDefault(
-                       i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDenormalizerStorage<>)) != null).BindToSelf().Configure(binding => binding.InSingletonScope()));
-            this.Kernel.Bind(
-                 x =>
-                  x.From(GetAssweblysForRegister()).Select(
-                   t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(DenormalizerStorageProvider<>)).BindToSelf().Configure(binding => binding.InSingletonScope()));
-           /* var denormalizerImpls = GetAssweblysForRegister().SelectMany(ProcessDenormalizer);
-            foreach (Type denormalizerImpl in denormalizerImpls)
-            {*/
-            Bind(typeof(IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider); 
-              /*  this.Kernel.Bind(denormalizerImpl).To(typeof (WeakReferenceDenormalizer<>)).When(
-                    f => GetWeekBinding(f.Target.Type));
-                this.Kernel.Bind(denormalizerImpl).To(typeof(InMemoryDenormalizer<>)).When(
-                 f => !GetWeekBinding(f.Target.Type));*/
-         //   }
-           
 
+            var implementations =
+             GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
+            foreach (Type implementation in implementations)
+            {
+
+                this.Kernel.Bind(interfaceType).To(implementation).InScope(scope);
+                if (interfaceType.IsGenericType)
+                {
+                    var interfaceImplementations =
+                        implementation.GetInterfaces().Where(i => IsInterfaceInterface(i, interfaceType));
+                    foreach (Type interfaceImplementation in interfaceImplementations)
+                    {
+                        this.Kernel.Bind(interfaceType.MakeGenericType(interfaceImplementation.GetGenericArguments())).
+                            To(
+                                implementation).InScope(scope);
+                    }
+                }
+             /*   else{
+                    this.Kernel.Bind(interfaceType).To(implementation);
+                }*/
+            }
         }
+
+        /// <summary>
+        /// The implements at least one i event handler interface.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        private bool ImplementsAtLeastOneInterface(Type type, Type interfaceType)
+        {
+            return type.IsClass && !type.IsAbstract &&
+                   type.GetInterfaces().Any(i => IsInterfaceInterface(i, interfaceType));
+        }
+        /// <summary>
+        /// The is i event handler interface.
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        private  bool IsInterfaceInterface(Type type, Type interfaceType)
+        {
+            return type.IsInterface &&
+                   ((interfaceType.IsGenericType && type.IsGenericType &&
+                     type.GetGenericTypeDefinition() == interfaceType) ||
+                    (!type.IsGenericType && !interfaceType.IsGenericType && type==interfaceType));
+        }
+      
         protected IEnumerable<Type> ProcessDenormalizer(Assembly assembly)
         {
             return assembly.GetTypes().Where(t => t.GetInterfaces().FirstOrDefault(

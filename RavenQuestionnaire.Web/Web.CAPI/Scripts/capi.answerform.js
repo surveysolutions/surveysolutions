@@ -94,19 +94,19 @@
                     target.attr('question-comment-value', answerValue.Comments);
                     target.attr('question-answer-key', answerValue.AnswerPublicKeys);
                     target.attr('question-answer-value', answerValue.AnswerString);
-                    if (answerValue.Enabled) {
-                        target.removeClass('ui-disabled');
-                    } else {
+
+                    target.removeClass("ui-disabled");
+                    target.removeClass("error_block");
+                    target.removeClass("answered");
+
+                    if (!answerValue.Enabled) {
                         target.addClass('ui-disabled');
+                        return;
                     }
                     if (answerValue.Answered) {
                         target.addClass('answered');
-                    } else {
-                        target.removeClass('answered');
                     }
-                    if (answerValue.Valid) {
-                        target.removeClass('error_block');
-                    } else {
+                    if (!answerValue.Valid) {
                         target.addClass('error_block');
                     }
 
@@ -118,7 +118,7 @@
             targetPopup.popup('open', target.offset().left, target.offset().top);
 
             targetPopup.bind(
-                'closed', function(event, ui) {
+                'closed', function (event, ui) {
                     target.removeClass('ui-bar-e');
 
                 });

@@ -26,6 +26,8 @@ using Ncqrs.Eventing.Storage.RavenDB;
 using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
 using Ninject;
+using Ninject.Parameters;
+using Ninject.Planning.Bindings;
 using Raven.Client.Document;
 
 namespace Main.Core
@@ -47,7 +49,7 @@ namespace Main.Core
         {
             NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
 
-            NcqrsEnvironment.SetDefault(InitializeCommandService());
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
@@ -96,33 +98,8 @@ namespace Main.Core
 
         #region Methods
 
-        /// <summary>
-        /// The implements at least one i command.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        private static bool ImplementsAtLeastOneICommand(Type type)
-        {
-            return type.IsClass && !type.IsAbstract && type.GetInterfaces().Any(IsICommandInterface);
-        }
 
-        /// <summary>
-        /// The implements at least one i event handler interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        private static bool ImplementsAtLeastOneIEventHandlerInterface(Type type)
-        {
-            return type.IsClass && !type.IsAbstract && type.GetInterfaces().Any(IsIEventHandlerInterface);
-        }
+        
 
         /// <summary>
         /// The initialize command service.
@@ -130,12 +107,12 @@ namespace Main.Core
         /// <returns>
         /// The Ncqrs.Commanding.ServiceModel.ICommandService.
         /// </returns>
-        private static ICommandService InitializeCommandService()
+        private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
 
-            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneICommand))
+            foreach (var type in commandSupplier.GetCommandList())
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
@@ -158,21 +135,6 @@ namespace Main.Core
             var eventStore = new RavenDBEventStore(store);
             return eventStore;
         }
-
-        /// <summary>
-        /// The is i command interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
-        private static bool IsICommandInterface(Type type)
-        {
-            return type.IsInterface && typeof (ICommand).IsAssignableFrom(type);
-        }
-
         /// <summary>
         /// The is i event handler interface.
         /// </summary>
@@ -198,26 +160,17 @@ namespace Main.Core
         /// </param>
         private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
-
-            /*  if (typeof (T).GetCustomAttributes(typeof (SmartDenormalizerAttribute), true).Length > 0)
+            IEnumerable<object> handlers =
+                kernel.GetAll(typeof (IEventHandler<>)).Distinct();
+            foreach (object handler in handlers)
             {
-                return this.container.Get<WeakReferenceDenormalizer<T>>();
-            }*/
-
-            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneIEventHandlerInterface))
-            {
-                foreach (Type handlerInterfaceType in type.GetInterfaces().Where(IsIEventHandlerInterface))
+                var ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
+                foreach (Type ieventHandler in ieventHandlers)
                 {
-                    Type eventDataType = handlerInterfaceType.GetGenericArguments().First();
-                    Type type1 = type;
-                    IEnumerable<object> handlers =
-                        kernel.GetAll(typeof (IEventHandler<>).MakeGenericType(eventDataType)).Where(
-                            i => i.GetType() == type1);
-                    foreach (object handler in handlers)
-                    {
-                        bus.RegisterHandler(handler, eventDataType);
-                    }
+
+                    bus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
                 }
+
             }
         }
 
