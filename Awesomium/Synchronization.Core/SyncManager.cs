@@ -156,8 +156,8 @@ namespace Synchronization.Core
                 EndOfSync(this, new SynchronizationCompletedEvent(new SyncStatus(syncType, direction, 100, error), log));
                 if (error == null)
                 {
-                    var statEvent = new SynchronizationStatisticEvent(OnGetStatisticsAfterSyncronization(syncType));
-                    GetStats(this, statEvent);
+                    var statEvent = OnGetStatisticsAfterSyncronization(syncType);
+                    if (statEvent!=null)GetStats(this, statEvent);
 
                 }
                 
@@ -231,7 +231,7 @@ namespace Synchronization.Core
 
         protected abstract void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider);
 
-        protected abstract List<string> OnGetStatisticsAfterSyncronization(SyncType action);
+        protected abstract SynchronizationStatisticEvent OnGetStatisticsAfterSyncronization(SyncType action);
 
         protected virtual string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
         {
