@@ -1,6 +1,6 @@
 ﻿using Common.Utils;
-using System.Threading;
 using System.Collections.Generic;
+using Synchronization.Core.Events;
 using global::Synchronization.Core;
 using global::Synchronization.Core.Errors;
 using global::Synchronization.Core.Interface;
@@ -45,7 +45,7 @@ namespace Browsing.Supervisor.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
-        protected override List<string> OnGetStatisticsAfterSyncronization(SyncType action)
+        protected override SynchronizationStatisticEvent OnGetStatisticsAfterSyncronization(SyncType action)
         {
             return null;
         }
