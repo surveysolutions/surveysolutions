@@ -21,13 +21,22 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
     {
 
         #region Public Properties
-        
+
+        public CompleteQuestionnaireExportInputModel(Guid questionnaryId, Guid? propagatableGroupPublicKey)
+        {
+            QuestionnaryId = questionnaryId;
+            PropagatableGroupPublicKey = propagatableGroupPublicKey;
+        }
+        public CompleteQuestionnaireExportInputModel(Guid questionnaryId)
+        {
+            QuestionnaryId = questionnaryId;
+        }
+
         /// <summary>
         /// Gets or sets the questionnary id.
         /// </summary>
-        public Guid QuestionnaryId { get; set; }
-
-        public Guid? PropagatableGroupPublicKey { get; set; }
+        public Guid QuestionnaryId { get;private set; }
+        public Guid? PropagatableGroupPublicKey { get; private set; }
 
         #endregion
     }

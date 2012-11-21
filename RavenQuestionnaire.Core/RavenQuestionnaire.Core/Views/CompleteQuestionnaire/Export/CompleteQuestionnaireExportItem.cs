@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public CompleteQuestionnaireExportItem(ICompleteGroup document, IEnumerable<Guid> headerKey, Guid? parent)
         {
             var wholeQuestionnaire = document as CompleteQuestionnaireStoreDocument;
-            Guid? templateId = null;
+            Guid templateId = document.PublicKey;
             if (wholeQuestionnaire != null)
                 templateId = wholeQuestionnaire.TemplateId;
             this.PublicKey = document.Propagated == Propagate.None ? document.PublicKey : document.PropagationPublicKey.Value;
@@ -60,9 +60,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 {
                     this.Values.Add(key, parent.ToString());
                 }
-                else if (key == this.PublicKey || (templateId.HasValue && templateId.Value==key))
+                else if (templateId==key)
                 {
-                    this.Values.Add(key, key.ToString());
+                    this.Values.Add(key, this.PublicKey.ToString());
                 }
                 else
                 {
