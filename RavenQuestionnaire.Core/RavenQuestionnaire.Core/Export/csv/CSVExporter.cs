@@ -20,7 +20,7 @@ namespace RavenQuestionnaire.Core.Export.csv
     /// <summary>
     /// Implements comma-separated values export format.
     /// </summary>
-    public class CSVExporter : IExportProvider
+    public class CSVExporter : IExportProvider<CompleteQuestionnaireExportView>
     {
         #region Constructors and Destructors
 
@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool DoExport(CompleteQuestionnaireExportView records, string fileName)
+        public bool DoExport(CompleteQuestionnaireExportView records,string fileName)
         {
             using (Stream memoryStream = this.DoExportToStream(records))
             {
@@ -88,7 +88,7 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream DoExportToStream( CompleteQuestionnaireExportView records)
+        public Stream DoExportToStream(CompleteQuestionnaireExportView records)
         {
             Stream result = new MemoryStream();
 
@@ -97,19 +97,21 @@ namespace RavenQuestionnaire.Core.Export.csv
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.Delimeter;
-                writer.WriteField("ID"); // templated column for ID
+
+                writer.WriteField("PublicKey"); // templated column for ID
 
                 // build up header
                 foreach (string question in records.Header.Values)
                 {
                     writer.WriteField(question);
                 }
-
+                writer.WriteField("ForeignKey");
                 writer.NextRecord();
 
                 // iterate over records
                 foreach (CompleteQuestionnaireExportItem item in records.Items)
                 {
+                    writer.WriteField(item.PublicKey);
                     foreach (Guid guid in records.Header.Keys)
                     {
                         /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
@@ -119,7 +121,7 @@ namespace RavenQuestionnaire.Core.Export.csv
                             writer.WriteField(item.Values[guid]);
                         }
                     }
-
+                    writer.WriteField(item.Parent);
                     writer.NextRecord();
                 }
 

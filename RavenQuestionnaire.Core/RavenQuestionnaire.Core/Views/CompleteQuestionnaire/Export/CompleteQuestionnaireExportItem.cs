@@ -47,16 +47,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </param>
         public CompleteQuestionnaireExportItem(ICompleteGroup document, IEnumerable<Guid> headerKey, Guid? parent)
         {
-            var wholeQuestionnaire = document as CompleteQuestionnaireStoreDocument;
+        /*    var wholeQuestionnaire = document as CompleteQuestionnaireStoreDocument;
             Guid templateId = document.PublicKey;
             if (wholeQuestionnaire != null)
-                templateId = wholeQuestionnaire.TemplateId;
+                templateId = wholeQuestionnaire.TemplateId;*/
             this.PublicKey = document.Propagated == Propagate.None ? document.PublicKey : document.PropagationPublicKey.Value;
+            this.Parent = parent;
             this.Values = new Dictionary<Guid, string>();
 
             foreach (Guid key in headerKey)
             {
-                if (key == Guid.Empty)
+               /* if (key == Guid.Empty)
                 {
                     this.Values.Add(key, parent.ToString());
                 }
@@ -65,10 +66,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     this.Values.Add(key, this.PublicKey.ToString());
                 }
                 else
-                {
+                {*/
                     var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
-                    this.Values.Add(key, question.GetAnswerString());
-                }
+                var answer = question.GetAnswerObject();
+                this.Values.Add(key, answer == null ? "" : answer.ToString());
+                /*   }*/
             }
         }
 
@@ -87,7 +89,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// Gets the complete questionnaire key.
         /// </summary>
         public Guid PublicKey { get; private set; }
-
+        public Guid? Parent { get; private set; }
         #endregion
     }
 }
