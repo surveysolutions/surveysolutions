@@ -112,7 +112,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     }
                 }
             }
-            return new CompleteQuestionnaireExportView(documents, subObjects, header);
+            return new CompleteQuestionnaireExportView(template.Title, documents, subObjects, header);
         }
 
         #endregion
