@@ -4,11 +4,11 @@
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    
+    var filterTemplate = '@Model.Template.TemplateId';
     $(document).ready(function() {
-        document.filterTemplate = "";
+        
         $('#filter').editable().on('update', function(e, editable) {
-            document.filterTemplate = editable.value;
+            filterTemplate = editable.value;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });
@@ -38,7 +38,7 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("_SummaryData", "User")",
-                data: JSON.stringify({TemplateId: document.filterTemplate, SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
+                data: JSON.stringify({TemplateId: filterTemplate, SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
