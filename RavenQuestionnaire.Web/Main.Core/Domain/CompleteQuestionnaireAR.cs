@@ -70,7 +70,7 @@ namespace Main.Core.Domain
 
             document.PublicKey = completeQuestionnaireId;
             document.Creator = creator;
-            document.Status = SurveyStatus.Initial;
+            document.Status = SurveyStatus.Unassign;
             document.Responsible = null;
 
             //// Apply a NewQuestionnaireCreated event that reflects the
@@ -463,6 +463,10 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnChangeAssignment(QuestionnaireAssignmentChanged e)
         {
+            if (this.doc.Status.PublicId == SurveyStatus.Unassign.PublicId)
+            {
+                this.doc.Status = SurveyStatus.Initial;
+            }
             this.doc.Responsible = e.Responsible;
         }
 
