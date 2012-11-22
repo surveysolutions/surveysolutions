@@ -24,8 +24,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public CompleteQuestionnaireExportView()
         {
             this.Items = Enumerable.Empty<CompleteQuestionnaireExportItem>();
-            this.Header = new Dictionary<Guid, string>();
             this.SubPropagatebleGroups = Enumerable.Empty<Guid>();
+            this.Header=new Dictionary<Guid, string>();
         }
 
         /// <summary>

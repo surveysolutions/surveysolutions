@@ -38,8 +38,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession;
 
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentShortView;
-        private readonly IDenormalizerStorage<QuestionnaireDocument> templateStore;
+        private readonly IDenormalizerStorage<QuestionnaireDocument> templateSession;
         #endregion
 
         #region Constructors and Destructors
@@ -51,13 +50,10 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// The document session.
         /// </param>
         public CompleteQuestionnaireExportViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession, 
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentShortView, 
-            IDenormalizerStorage<QuestionnaireDocument> templateStore)
+            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentSession, IDenormalizerStorage<QuestionnaireDocument> templateSession)
         {
-            this.templateStore = templateStore;
             this.documentSession = documentSession;
-            this.documentShortView = documentShortView;
+            this.templateSession = templateSession;
         }
 
         #endregion
@@ -75,30 +71,32 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </returns>
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
         {
-            IGroup template = this.templateStore.GetByGuid(input.QuestionnaryId);
-            if(template==null)
+            if (!input.QuestionnairiesForImport.Any())
             {
                 return new CompleteQuestionnaireExportView();
             }
+            IGroup template = this.templateSession.GetByGuid(input.TemplateId);
             if (input.PropagatableGroupPublicKey.HasValue)
-                template = template.FirstOrDefault<IGroup>(c => c.PublicKey == input.PropagatableGroupPublicKey.Value);
-            // Adjust the model appropriately
-            var questionnairies = this.documentShortView.Query().Where(t => t.TemplateId == input.QuestionnaryId);
-            if (!questionnairies.Any())
+                template = template.FirstOrDefault<IGroup>(g => g.PublicKey == input.PropagatableGroupPublicKey.Value);
+
+            if (template==null)
             {
                 return new CompleteQuestionnaireExportView();
             }
-            var documents = new List<CompleteQuestionnaireExportItem>(questionnairies.Count());
+            var documents = new List<CompleteQuestionnaireExportItem>(input.QuestionnairiesForImport.Count());
             var subObjects = new List<Guid>();
             var header = BuildHeader(template, subObjects);
-            foreach (CompleteQuestionnaireBrowseItem completeQuestionnaireBrowseItem in questionnairies)
+            var headerKey = header.Select(h => h.Key);
+            foreach (var key in input.QuestionnairiesForImport)
             {
-                var document = this.documentSession.GetByGuid(completeQuestionnaireBrowseItem.CompleteQuestionnaireId);
+                var document = this.documentSession.GetByGuid(key);
+                if(document.TemplateId!=input.TemplateId)
+                    throw new ArgumentException("questionnaire has different template");
                 if (!input.PropagatableGroupPublicKey.HasValue)
                 {
                     documents.Add(
                         new CompleteQuestionnaireExportItem(
-                            document, header.Select(h => h.Key), null));
+                            document, headerKey, null));
                 }
                 else
                 {
@@ -110,7 +108,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     {
                         documents.Add(
                             new CompleteQuestionnaireExportItem(
-                                completeGroup, header.Select(h => h.Key), document.PublicKey));
+                                completeGroup, headerKey, document.PublicKey));
                     }
                 }
             }
@@ -122,7 +120,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         protected Dictionary<Guid, string> BuildHeader(IGroup template,  List<Guid> subObjects)
         {
             var result = new Dictionary<Guid, string>();
-            result.Add(template.PublicKey, "PublicKey");
             Queue<IComposite> queue=new Queue<IComposite>();
             foreach (IComposite composite in template.Children)
             {
@@ -151,7 +148,6 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     }
                 }
             }
-            result.Add(Guid.Empty, "ForeignKey");
             return result;
         }
     }

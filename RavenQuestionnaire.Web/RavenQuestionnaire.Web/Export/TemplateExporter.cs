@@ -34,7 +34,7 @@ namespace RavenQuestionnaire.Web.Export
     public interface ITemplateExporter
     {
         byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid);
-        byte[] ExportData(Guid templateGuid, string type);
+        
     }
 
     /// <summary>
@@ -42,12 +42,7 @@ namespace RavenQuestionnaire.Web.Export
     /// </summary>
     public class TemplateExporter : ZipExportImport, ITemplateExporter
     {
-        #region Fields
-
-
-        private readonly IViewRepository viewRepository;
-        private readonly IKernel kernel;
-        #endregion
+      
         
         #region Constructor
 
@@ -57,11 +52,9 @@ namespace RavenQuestionnaire.Web.Export
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
-        public TemplateExporter(IKernel kernel)
-            : base(kernel.Get<IEventSync>())
+        public TemplateExporter(IEventSync sync)
+            : base(sync)
         {
-            this.kernel = kernel;
-            this.viewRepository = kernel.Get<IViewRepository>();
         }
 
         #endregion
@@ -86,33 +79,7 @@ namespace RavenQuestionnaire.Web.Export
                                        string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
         }
 
-        public byte[] ExportData(Guid templateGuid, string type)
-        {
-            if (type == "csv" || type == "tab")
-            {
-                string fileName = string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString());
-                IExportProvider provider = kernel.Get<IExportProvider>(new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));// new CSVExporter(type == "csv" ? ',' : '\t');
-                var manager = new ExportManager(provider);
-                var allLevels = new Dictionary<string, Stream>();
-                CollectLevels(templateGuid, null,  allLevels, manager);
-                return this.ExportInternal(allLevels,
-                                           fileName);
-            }
-            return null;
-        }
-
-        protected void CollectLevels(Guid templateGuid, Guid? level, Dictionary<string, Stream> container, ExportManager manager)
-        {
-            CompleteQuestionnaireExportView records =
-                this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
-                    (
-                        new CompleteQuestionnaireExportInputModel(templateGuid, level));
-            container.Add("level" + level, manager.ExportToStream(records));
-            foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
-            {
-                CollectLevels(templateGuid, subPropagatebleGroup,container, manager);
-            }
-        }
+      
 
         /// <summary>
         /// Gathe all templates

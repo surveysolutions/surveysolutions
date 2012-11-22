@@ -44,7 +44,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         /// </summary>
         public Mock<ICommandService> CommandServiceMock { get; set; }
 
-        public Mock<ITemplateExporter> Exporter { get; set; }
+        public Mock<IDataExport> Exporter { get; set; }
 
         /// <summary>
         /// Gets or sets the controller.
@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.ViewRepositoryMock = new Mock<IViewRepository>();
 
             this.CommandServiceMock = new Mock<ICommandService>();
-            this.Exporter = new Mock<ITemplateExporter>();
+            this.Exporter = new Mock<IDataExport>();
             NcqrsEnvironment.SetDefault(this.CommandServiceMock.Object);
             this.Controller = new QuestionnaireController(this.ViewRepositoryMock.Object, this.Exporter.Object);
         }

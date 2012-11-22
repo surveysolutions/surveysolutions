@@ -48,7 +48,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
-        private readonly ITemplateExporter exporter;
+        private readonly IDataExport exporter;
         #endregion
 
         #region Constructors and Destructors
@@ -59,7 +59,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="viewRepository">
         /// The view repository.
         /// </param>
-        public QuestionnaireController(IViewRepository viewRepository, ITemplateExporter exporter)
+        public QuestionnaireController(IViewRepository viewRepository, IDataExport exporter)
         {
             this.viewRepository = viewRepository;
             this.exporter = exporter;
@@ -217,7 +217,7 @@ namespace RavenQuestionnaire.Web.Controllers
             if (model != null)
             {*/
 
-            return this.File(this.exporter.ExportData(id, type), "application/zip","data.zip");
+            return this.File(this.exporter.ExportData(id, type), "application/zip", "data.zip");
         }
 
         /// <summary>

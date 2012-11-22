@@ -17,14 +17,14 @@ namespace RavenQuestionnaire.Core.Export
     /// <summary>
     /// The export manager.
     /// </summary>
-    public class ExportManager
+    public class ExportManager<T>
     {
         #region Fields
 
         /// <summary>
         /// The _provider.
         /// </summary>
-        private readonly IExportProvider _provider;
+        private readonly IExportProvider<T> _provider;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <param name="provider">
         /// The provider.
         /// </param>
-        public ExportManager(IExportProvider provider)
+        public ExportManager(IExportProvider<T> provider)
         {
             this._provider = provider;
         }
@@ -60,7 +60,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool Export(CompleteQuestionnaireExportView items, string fileName)
+        public bool Export(T items,string fileName)
         {
             this._provider.DoExport(items, fileName);
             return true;
@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream ExportToStream(CompleteQuestionnaireExportView items)
+        public Stream ExportToStream(T items)
         {
             return this._provider.DoExportToStream(items);
         }
