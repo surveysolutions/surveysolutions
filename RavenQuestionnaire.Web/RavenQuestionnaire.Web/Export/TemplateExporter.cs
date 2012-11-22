@@ -89,7 +89,7 @@ namespace RavenQuestionnaire.Web.Export
         protected IEnumerable<AggregateRootEvent> GetTemplate(Guid? templateGuid, Guid? clientGuid)
         {
             var archive = new List<AggregateRootEvent>();
-            var events = this.synchronizer.ReadEvents().ToList();
+            var events = this.synchronizer.ReadEvents(null).ToList();
             if (templateGuid != null)
                 archive.Add(events.Where(t =>
                 {

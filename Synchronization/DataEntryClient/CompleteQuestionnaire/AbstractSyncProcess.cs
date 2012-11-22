@@ -13,13 +13,19 @@ namespace DataEntryClient.CompleteQuestionnaire
     using System.Collections.Generic;
     using System.Linq;
 
+    using Core.Supervisor.Synchronization;
+
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.Events.User;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
+    using Ncqrs.Restoring.EventStapshoot;
 
     using Ninject;
 
@@ -54,7 +60,8 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// The user store
         /// </summary>
-        //protected readonly IUserEventSync UserStore;
+        protected readonly IUserEventSync UserStore;
+
 
         #endregion
 
@@ -64,17 +71,20 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// Initializes a new instance of the <see cref="AbstractSyncProcess"/> class.
         /// </summary>
         /// <param name="kernel">
-        ///   The kernel.
+        /// The kernel.
         /// </param>
         /// <param name="syncProcess">
         /// Sync Process Guid
+        /// </param>
+        /// <param name="surveys">
+        /// The surveys.
         /// </param>
         protected AbstractSyncProcess(IKernel kernel, Guid syncProcess)
         {
             this.EventStore = kernel.Get<IEventSync>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
-            //this.UserStore = kernel.Get<IUserEventSync>();
+            this.UserStore = kernel.Get<IUserEventSync>();
         }
 
         #endregion
@@ -95,23 +105,12 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.Invoker.Execute(new CreateNewSynchronizationProcessCommand(this.ProcessGuid, SynchronizationType.Pull));
             try
             {
-                var events = this.GetEventStream();
+                //syncKey = Guid.Parse("15a5f1ac-4d9d-4531-9b23-ff29ab8a1686");
+                var events = this.EventStore.ReadEvents(syncKey);
                 if (events == null)
                 {
                     return;
                 }
-
-                //var ev = new List<AggregateRootEvent>();
-               // var interviewers = this.GetInterviewersForCurrentSupervisor(syncKey).ToList<Guid>();
-                //foreach (var rootEvent in events)
-                //{
-                //    var eventRoot = (rootEvent.Payload) as CompleteQuestionnaireDocument;
-                //    if (eventRoot != null &&  interviewers.Contains(eventRoot.Responsible.Id))
-                //    {
-                //        ev.Add(rootEvent);
-                //    }
-                //}
-
                 this.EventStore.WriteEvents(events);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed));
             }
@@ -186,25 +185,5 @@ namespace DataEntryClient.CompleteQuestionnaire
         }
 
         #endregion
-
-        #region PrivateMethods
-
-        //private IEnumerable<Guid> GetInterviewersForCurrentSupervisor(Guid syncKey)
-        //{
-        //    var allUsers = this.UserStore.GetUsers(null);
-        //    var currentUser = allUsers.Where(t => (t.Payload as NewUserCreated).PublicKey == syncKey).FirstOrDefault();
-        //    if (currentUser != null)
-        //    {
-        //        var currentSupervisor = (currentUser.Payload as NewUserCreated).Supervisor;
-        //        foreach (var rootEvent in allUsers)
-        //        {
-        //            if ((rootEvent.Payload as NewUserCreated).Supervisor == currentSupervisor)
-        //                yield return ((rootEvent.Payload as NewUserCreated).PublicKey);
-        //        }
-        //    }
-        //}
-
-        #endregion
-
     }
 }

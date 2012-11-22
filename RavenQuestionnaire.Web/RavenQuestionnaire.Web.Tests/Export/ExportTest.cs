@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
             var synchronizer = new Mock<IEventSync>();
             var events = new TemplateExporter(synchronizer.Object);
             var result = events.ExportTemplate(Guid.NewGuid(), Guid.NewGuid());
-            synchronizer.Verify(x => x.ReadEvents(), Times.Once());
+            synchronizer.Verify(x => x.ReadEvents(null), Times.Once());
             Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
 
@@ -120,7 +120,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
                     new AggregateRootEvent(),
                     new AggregateRootEvent()
                 };
-            synchronizer.Setup(x => x.ReadEvents()).Returns(events);
+            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
             var service = new TemplateExporterServiceTest(synchronizer.Object);
             var result = service.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 4);
@@ -165,7 +165,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
                                 }
                         }
                 };
-            synchronizer.Setup(x => x.ReadEvents()).Returns(events);
+            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
             var service = new TemplateExporterServiceTest(synchronizer.Object);
             var result = service.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 2);

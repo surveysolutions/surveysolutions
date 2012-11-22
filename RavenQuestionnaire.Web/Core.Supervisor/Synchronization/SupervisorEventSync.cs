@@ -17,6 +17,7 @@ namespace Core.Supervisor.Synchronization
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
+    using Main.Core.Events.User;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Questionnaire;
     using Main.DenormalizerStorage;
@@ -81,9 +82,16 @@ namespace Core.Supervisor.Synchronization
         /// <returns>
         /// List of events
         /// </returns>
-        public override IEnumerable<AggregateRootEvent> ReadEvents()
+        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
         {
             var retval = new List<AggregateRootEvent>();
+            if (syncKey.HasValue)
+            {
+                this.AddFilteredUsers(retval, syncKey.Value);
+                this.AddFilteredCompleteQuestionnairesInitState(retval);
+                return retval.OrderBy(x => x.EventSequence).ToList();
+            }
+
             this.AddCompleteQuestionnairesInitState(retval);
             this.AddQuestionnairesTemplates(retval);
             this.AddUsers(retval);
@@ -173,7 +181,32 @@ namespace Core.Supervisor.Synchronization
             }
         }
 
-        #endregion
+        protected void AddFilteredUsers(List<AggregateRootEvent> retval, Guid syncKey)
+        {
+            IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == syncKey);
+            foreach (UserDocument item in model)
+            {
+                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+            }
+        }
 
+        protected void AddFilteredCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
+        {
+            var userGuids = retval.Select(rootEvent => (rootEvent.Payload as NewUserCreated).PublicKey).ToList();
+            var model = this.denormalizer.Query<CompleteQuestionnaireBrowseItem>();
+            foreach (var item in model)
+            {
+                if (SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status) && item.Responsible != null)
+                {
+                    foreach (var guid in userGuids)
+                    {
+                        if (item.Responsible.Id == guid)
+                        retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
