@@ -57,9 +57,7 @@ namespace Main.Core.View.SyncProcess
                         {
                             statistics[statistic.User.Id].Rejected++;
                         }
-                        else if (statistic.Status.PublicId != SurveyStatus.Redo.PublicId &&
-                            statistic.Status.PublicId != SurveyStatus.Initial.PublicId &&
-                            statistic.Status.PublicId != SurveyStatus.Complete.PublicId)
+                        else if (statistic.Status.PublicId == SurveyStatus.Approve.PublicId)
                         {
                             statistics[statistic.User.Id].Approved++;
                         }

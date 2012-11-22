@@ -121,6 +121,19 @@ namespace Main.Core.Entities.SubEntities
         }
 
         /// <summary>
+        /// Gets Redo.
+        /// </summary>
+        public static SurveyStatus Unassign
+        {
+            get
+            {
+                var identifier = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1");
+                string name = "Unassign";
+                return new SurveyStatus(identifier, name);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the change comment.
         /// </summary>
         public string ChangeComment { get; set; }
@@ -147,7 +160,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Initial, Error, Complete, Approve, Redo };
+            return new[] { Unassign, Initial, Error, Complete, Approve, Redo };
         }
 
         /// <summary>
@@ -210,6 +223,11 @@ namespace Main.Core.Entities.SubEntities
             if (statusName == Redo.Name)
             {
                 return Redo;
+            }
+
+            if (statusName == Unassign.Name)
+            {
+                return Unassign;
             }
 
             return null;
