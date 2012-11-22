@@ -45,7 +45,9 @@
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
-                        $('#questionnaireTable').html($(response));
+                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
+                        $('#paging').html($(response).find('#paging').html());
+                        
                         onPagingClick();
                     }
                 }
