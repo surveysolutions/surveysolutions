@@ -135,7 +135,7 @@ namespace Questionnaire.Core.Web.Helpers
             var items = new List<SelectListItem>();
             foreach (object item in Enum.GetValues(enumType))
             {
-                if (enumType == typeof(QuestionType) && item.ToString() != "YesNo" && item.ToString() != selectedItem)
+                if (enumType != typeof(QuestionType) || (enumType == typeof(QuestionType) && item.ToString() != "YesNo"))
                 {
                     FieldInfo fi = enumType.GetField(item.ToString());
                     object attribute = fi.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
