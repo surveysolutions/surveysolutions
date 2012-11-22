@@ -399,19 +399,19 @@ namespace Web.Supervisor.Controllers
         /// <param name="tmptId">
         /// The tmpt id.
         /// </param>
-        /// <param name="userId">
+        /// <param name="value">
         /// The user id.
         /// </param>
         /// <returns>
         /// Return redirect on assigments page
         /// </returns>
         [HttpPost]
-        public ActionResult AssignForm(Guid cqId, Guid tmptId, Guid userId)
+        public ActionResult AssignForm(Guid cqId, Guid tmptId, Guid value)
         {
             UserLight responsible = null;
             try
             {
-                var user = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(userId));
+                var user = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(value));
                 responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));

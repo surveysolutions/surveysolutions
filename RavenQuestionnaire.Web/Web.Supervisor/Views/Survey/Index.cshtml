@@ -8,10 +8,11 @@
     var sortData = undefined;
     var pageSize = @Model.PageSize;
     var chart;
+    var filterUser = '@Model.User.Id';
     $(document).ready(function() {
         document.filterUser = "";
-        $('#filter').editable().on('update', function(e, editable) {
-            document.filterUser = editable.value;
+        $('#filterUser').editable().on('update', function(e, editable) {
+            filterUser = editable.value;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });
@@ -41,11 +42,13 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("TableData", "Survey")",
-                data: JSON.stringify({ UserId: document.filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+                data: JSON.stringify({ UserId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
-                        $('#questionnaireTable').html($(response));
+                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
+                        $('#paging').html($(response).find('#paging').html());
+                        
                         onPagingClick();
                     }
                 }
@@ -64,7 +67,7 @@
     }
     
 </script>
-<h2>Surveys by <a href="#" id="filter" 
+<h2>Surveys by <a href="#" id="filterUser" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("UsersJson", "User")"
