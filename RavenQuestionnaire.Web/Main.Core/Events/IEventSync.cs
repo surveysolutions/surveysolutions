@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Events
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -23,7 +24,7 @@ namespace Main.Core.Events
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent].
         /// </returns>
-        IEnumerable<AggregateRootEvent> ReadEvents();
+        IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey);
 
         /// <summary>
         /// The write events.

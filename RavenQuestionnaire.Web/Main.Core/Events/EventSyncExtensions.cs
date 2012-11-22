@@ -35,7 +35,7 @@ namespace Main.Core.Events
         public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(
             this IEventSync source, int chunksize = 2048)
         {
-            IEnumerable<AggregateRootEvent> events = source.ReadEvents();
+            IEnumerable<AggregateRootEvent> events = source.ReadEvents(null);
 
             return events.Chunk(chunksize, (e, previous) => e.CommitId == previous.CommitId);
         }

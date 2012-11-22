@@ -57,7 +57,7 @@ namespace Main.Core.Events
 
         #region PublicMethods
 
-        public override IEnumerable<AggregateRootEvent> ReadEvents()
+        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
         {
             throw new NotImplementedException();
         }

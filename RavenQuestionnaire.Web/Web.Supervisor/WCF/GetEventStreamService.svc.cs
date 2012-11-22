@@ -15,7 +15,7 @@ namespace Web.Supervisor.WCF
         public ImportSynchronizationMessage Process(Guid firstEventPulicKey, int length)
         {
             AggregateRootEvent[] stream =
-                eventStore.ReadEvents().SkipWhile(e => e.EventIdentifier != firstEventPulicKey).Take(length).ToArray();
+                eventStore.ReadEvents(null).SkipWhile(e => e.EventIdentifier != firstEventPulicKey).Take(length).ToArray();
             //var index=stream
             return new ImportSynchronizationMessage {EventStream = stream};
         }
