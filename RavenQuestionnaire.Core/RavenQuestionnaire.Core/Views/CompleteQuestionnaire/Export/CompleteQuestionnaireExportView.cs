@@ -46,8 +46,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// <param name="order">
         /// The order.
         /// </param>
-        public CompleteQuestionnaireExportView(IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, Dictionary<Guid, string> header)
+        public CompleteQuestionnaireExportView(string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, Dictionary<Guid, string> header)
         {
+            this.GroupName = title;
             this.Items = items;
             this.Header = header;
             this.SubPropagatebleGroups = subPropagatebleGroups;
@@ -65,6 +66,8 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public IEnumerable<Guid> SubPropagatebleGroups { get; private set; }
 
         public Dictionary<Guid, string> Header { get; private set; }
+
+        public string GroupName { get; private set; }
 
         #endregion
     }

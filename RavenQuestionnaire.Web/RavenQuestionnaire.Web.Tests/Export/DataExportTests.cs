@@ -69,7 +69,6 @@ namespace RavenQuestionnaire.Web.Tests.Export
                     result);
 
             Target.ProtectedCollectLEvels(Guid.NewGuid(), Enumerable.Empty<Guid>(), null, allLevels, manager);
-
             Assert.IsTrue(allLevels.Count == 1);
             provider.Verify(x => x.DoExportToStream(result), Times.Once());
         }
@@ -82,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView(new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()}, new Dictionary<Guid, string>());
+                new CompleteQuestionnaireExportView(string.Empty,new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()}, new Dictionary<Guid, string>());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(
