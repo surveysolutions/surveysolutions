@@ -42,7 +42,6 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets MaxValue
         /// </summary>
-        [Range(0, 2147483647, ErrorMessage = "This number must be between 0 and 2147483647")]
         public int MaxValue { get; set; }
 
         #endregion

@@ -88,7 +88,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     It.Is<QuestionnaireViewInputModel>(v => v.QuestionnaireId.Equals(innerDocument.PublicKey)))).Returns(new QuestionnaireView(innerDocument));
 
-            this.Controller.Save(new[] { questionView }, questionView.Answers, questionView.Triggers, 0);
+            this.Controller.Save(new[] { questionView }, questionView.Answers, questionView.Triggers);
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<ChangeQuestionCommand>()), Times.Once());
         }
 
@@ -109,7 +109,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.Controller.Save(
                 new[] { new QuestionView { Title = "test", QuestionnaireKey = innerDocument.PublicKey } }, 
                 new AnswerView[0],
-                new Guid[0], 0);
+                new Guid[0]);
             this.CommandServiceMock.Verify(x => x.Execute(It.IsAny<AddQuestionCommand>()), Times.Once());
         }
 

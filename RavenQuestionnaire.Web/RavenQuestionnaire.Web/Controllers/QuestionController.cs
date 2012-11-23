@@ -342,7 +342,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <returns>
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Save(QuestionView[] question, AnswerView[] answers, IEnumerable<Guid> triggers, int MaxValue)
+        public ActionResult Save(QuestionView[] question, AnswerView[] answers, IEnumerable<Guid> triggers)
         {
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
@@ -382,7 +382,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Mandatory, 
                                     model.AnswerOrder, 
                                     ansverItems, 
-                                    MaxValue));
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -392,7 +392,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     newItemKey, 
                                     model.Title, 
                                     triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
-                                    MaxValue, 
+                                    model.MaxValue, 
                                     model.StataExportCaption, 
                                     model.QuestionType,
                                     model.QuestionScope,
@@ -429,7 +429,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Mandatory, 
                                     model.AnswerOrder, 
                                     ansverItems,
-                                    MaxValue));
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -439,7 +439,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.PublicKey, 
                                     model.Title, 
                                     triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
-                                    MaxValue,
+                                    model.MaxValue,
                                     model.StataExportCaption, 
                                     model.QuestionType,
                                     model.QuestionScope,
@@ -465,7 +465,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     "Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
             }
 
-            return View("_Create", model);
+            return View("Create", model);
         }
 
         /// <summary>

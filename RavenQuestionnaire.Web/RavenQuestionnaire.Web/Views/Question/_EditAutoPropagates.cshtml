@@ -1,10 +1,10 @@
 ﻿@using RavenQuestionnaire.Web.Utils
+@using Questionnaire.Core.Web.Helpers
 @model Main.Core.View.Question.AutoPropagateQuestionView
 
-<script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
-<script type="text/javascript" src="../../Scripts/MicrosoftMvcValidation.js"></script>
-
 <div id="additionalInfo">
+@using (Html.BeginCollectionItem("question", Model.PublicKey))
+    {
     <div class="control-group">
         @Html.LabelFor(model => model.MaxValue, new { @class = "control-label" })
         <div class="controls">
@@ -12,6 +12,7 @@
             @Html.ValidationMessageFor(model => model.MaxValue)
         </div>
     </div>
+    }
     <div class="control-group">
         <label class="control-label">Propagateble GUID</label>
         <div id="divNewPropagateGroup">
