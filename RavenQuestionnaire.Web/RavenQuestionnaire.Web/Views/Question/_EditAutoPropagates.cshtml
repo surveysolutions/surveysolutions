@@ -1,6 +1,9 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @model Main.Core.View.Question.AutoPropagateQuestionView
 
+<script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
+<script type="text/javascript" src="../../Scripts/MicrosoftMvcValidation.js"></script>
+
 <div id="additionalInfo">
     <div class="control-group">
         @Html.LabelFor(model => model.MaxValue, new { @class = "control-label" })
