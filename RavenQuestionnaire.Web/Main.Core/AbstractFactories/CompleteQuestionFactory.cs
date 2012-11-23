@@ -342,15 +342,17 @@ namespace Main.Core.AbstractFactories
             question.Capital = capital;
 
             var autoQuestion = question as IAutoPropagate;
-            if (autoQuestion != null && triggers != null)
+            if (autoQuestion != null)
             {
-                autoQuestion.Triggers = new List<Guid>();
-                foreach (var guid in triggers)
-                {
-                    autoQuestion.Triggers.Add(guid);
-                }
-
                 autoQuestion.MaxValue = maxValue;
+                if (triggers != null)
+                {
+                    autoQuestion.Triggers = new List<Guid>();
+                    foreach (var guid in triggers)
+                    {
+                        autoQuestion.Triggers.Add(guid);
+                    }
+                }
             }
         }
 

@@ -26,7 +26,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public AutoPropagateQuestion()
         {
-            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
@@ -39,7 +38,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public AutoPropagateQuestion(string text)
             : base(text)
         {
-            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
