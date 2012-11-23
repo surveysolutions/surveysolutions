@@ -88,12 +88,12 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.Invoker.Execute(new CreateNewSynchronizationProcessCommand(this.ProcessGuid, SynchronizationType.Pull));
             try
             {
-                //syncKey = Guid.Parse("15a5f1ac-4d9d-4531-9b23-ff29ab8a1686");
-                var events = this.EventStore.ReadEvents(syncKey);
+                var events = this.GetEventStream();
                 if (events == null)
                 {
                     return;
                 }
+
                 this.EventStore.WriteEvents(events);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed));
             }
