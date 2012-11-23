@@ -33,6 +33,11 @@ namespace Main.Core.View.SyncProcess
             var statistics = new Dictionary<Guid, SyncStatisticInfo>();
             foreach (var statistic in process.Statistics)
             {
+                if (statistic.User == null)
+                {
+                    continue;
+                }
+
                 if (!statistics.ContainsKey(statistic.User.Id))
                 {
                     statistics.Add(statistic.User.Id, new SyncStatisticInfo(statistic.User.Name, 0, 0, 0, false));
