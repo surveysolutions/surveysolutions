@@ -13,19 +13,12 @@ namespace DataEntryClient.CompleteQuestionnaire
     using System.Collections.Generic;
     using System.Linq;
 
-    using Core.Supervisor.Synchronization;
-
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
-    using Main.Core.Events.User;
-    using Main.Core.View.CompleteQuestionnaire;
-    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-    using Ncqrs.Restoring.EventStapshoot;
 
     using Ninject;
 
@@ -56,13 +49,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// The event store.
         /// </summary>
         protected readonly IEventSync EventStore;
-
-        /// <summary>
-        /// The user store
-        /// </summary>
-        protected readonly IUserEventSync UserStore;
-
-
+        
         #endregion
 
         #region Constructors and Destructors
@@ -76,15 +63,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <param name="syncProcess">
         /// Sync Process Guid
         /// </param>
-        /// <param name="surveys">
-        /// The surveys.
-        /// </param>
         protected AbstractSyncProcess(IKernel kernel, Guid syncProcess)
         {
             this.EventStore = kernel.Get<IEventSync>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
-            this.UserStore = kernel.Get<IUserEventSync>();
         }
 
         #endregion
