@@ -10,9 +10,6 @@ using Main.Core.View;
 using Main.Core.View.Question;
 using Ninject;
 using Ninject.Parameters;
-using RavenQuestionnaire.Core.Export;
-using RavenQuestionnaire.Core.Export.csv;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 using RavenQuestionnaire.Core.Views.Group;
 
 namespace RavenQuestionnaire.Web.Export

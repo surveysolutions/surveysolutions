@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IExportProvider.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,14 +6,11 @@
 //   The ExportProvider interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Export
+
+using System.IO;
+
+namespace Main.Core.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-
     /// <summary>
     /// The ExportProvider interface.
     /// </summary>

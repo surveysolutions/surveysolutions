@@ -6,12 +6,13 @@
 
 using System.IO;
 using Main.Core.Events;
+using Main.Core.Export;
 using Main.Core.View;
+using Main.Core.View.Export;
 using Moq;
 using NUnit.Framework;
 using Ninject;
-using RavenQuestionnaire.Core.Export;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
+using Questionnaire.Core.Web.Export;
 using RavenQuestionnaire.Web.Export;
 
 namespace RavenQuestionnaire.Web.Tests.Export

@@ -8,6 +8,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Questionnaire.Core.Web.Export;
 using RavenQuestionnaire.Web.Export;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers

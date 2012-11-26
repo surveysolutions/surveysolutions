@@ -100,9 +100,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper">
-      <HintPath>..\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
-    </Reference>
     <Reference Include="dotless.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotless.1.3.0.0\lib\dotless.Core.dll</HintPath>
@@ -225,7 +222,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Export\IDataExport.cs" />
     <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />

@@ -83,9 +83,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CsvHelper">
-      <HintPath>..\..\RavenQuestionnaire.Web\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
-    </Reference>
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
@@ -130,9 +127,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Export\csv\CSVExporter.cs" />
-    <Compile Include="Export\ExportManager.cs" />
-    <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />
@@ -159,11 +153,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Views\CompleteQuestionnaire\CompleteQuestionnaireViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportInputModel.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
-    <Compile Include="Views\CompleteQuestionnaire\Export\HeaderItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedGroup.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedQuestion.cs" />
     <Compile Include="Views\Event\File\FileBrowseInputModel.cs">
@@ -191,10 +180,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
-    <Compile Include="Views\StatusReport\CQStatusReportView.cs" />
-    <Compile Include="Views\StatusReport\CQStatusReportViewInputModel.cs" />
-    <Compile Include="Views\StatusReport\CQStatusReportFactory.cs" />
-    <Compile Include="Views\StatusReport\CQStatusReportItemView.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\Event\ExportCommands.xml" />

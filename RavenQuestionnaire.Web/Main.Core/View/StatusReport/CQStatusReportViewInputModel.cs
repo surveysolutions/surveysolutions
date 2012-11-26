@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportViewInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,10 +6,11 @@
 //   The cq status report view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Views.StatusReport
-{
-    using System;
 
+using System;
+
+namespace Main.Core.View.StatusReport
+{
     /// <summary>
     /// The cq status report view input model.
     /// </summary>

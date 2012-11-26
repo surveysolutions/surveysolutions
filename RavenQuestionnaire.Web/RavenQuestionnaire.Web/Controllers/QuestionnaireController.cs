@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Questionnaire.Core.Web.Export;
 using RavenQuestionnaire.Web.Export;
 
 namespace RavenQuestionnaire.Web.Controllers
@@ -27,10 +28,6 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Security;
-
-    using RavenQuestionnaire.Core.Export;
-    using RavenQuestionnaire.Core.Export.csv;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
     using RavenQuestionnaire.Core.Views.Group;
     using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Models;

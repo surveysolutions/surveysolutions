@@ -1,18 +1,15 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="HeaderItem.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
 
-namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
+namespace Main.Core.View.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

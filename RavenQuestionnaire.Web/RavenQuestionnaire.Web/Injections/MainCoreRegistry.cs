@@ -9,11 +9,11 @@ using System.Reflection;
 using Core.HQ.Synchronization;
 using Main.Core;
 using Main.Core.Events;
+using Main.Core.Export;
+using Main.Core.View.Export;
 using Questionnaire.Core.Web.Export;
+using Questionnaire.Core.Web.Export.csv;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Export;
-using RavenQuestionnaire.Core.Export.csv;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Export;
 
@@ -41,8 +41,6 @@ namespace RavenQuestionnaire.Web.Injections
             this.Bind<IExportImport>().To<TemplateExporter>();
             this.Bind<ITemplateExporter>().To<TemplateExporter>();
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
-
-            this.Bind<IDataExport>().To<DataExport>();
         }
 
     }

@@ -8,10 +8,10 @@ using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Export;
 using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 
 namespace RavenQuestionnaire.Core.Tests
 {

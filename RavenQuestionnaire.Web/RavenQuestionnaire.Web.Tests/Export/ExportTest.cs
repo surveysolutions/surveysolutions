@@ -10,8 +10,6 @@
 using System.IO;
 using Main.Core.View;
 using Ninject;
-using RavenQuestionnaire.Core.Export;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
 
 namespace RavenQuestionnaire.Web.Tests.Export
 {

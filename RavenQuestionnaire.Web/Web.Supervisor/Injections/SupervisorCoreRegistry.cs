@@ -9,6 +9,9 @@ using Core.Supervisor.Synchronization;
 using Main.Core;
 using System.Linq;
 using Main.Core.Events;
+using Main.Core.Export;
+using Main.Core.View.Export;
+using Questionnaire.Core.Web.Export.csv;
 using Questionnaire.Core.Web.Security;
 
 namespace Web.Supervisor.Injections
@@ -36,6 +39,8 @@ namespace Web.Supervisor.Injections
             this.Bind<IEventSync>().To<SupervisorEventSync>();
             this.Unbind<IExportImport>();
             this.Bind<IExportImport>().To<ZipExportImport>();
+
+            this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
         }
     }
 }

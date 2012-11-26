@@ -1,36 +1,23 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="IDataExport.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
 using System.IO;
-using Main.Core.Entities.SubEntities;
+using System.Linq;
 using Main.Core.Events;
+using Main.Core.Export;
 using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
+using Main.Core.View.Export;
+using Main.Core.View.StatusReport;
 using Ninject;
 using Ninject.Parameters;
-using Questionnaire.Core.Web.Export;
-using RavenQuestionnaire.Core.Export;
-using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-using RavenQuestionnaire.Core.Views.StatusReport;
 
-namespace RavenQuestionnaire.Web.Export
+namespace Questionnaire.Core.Web.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public interface IDataExport
-    {
-        byte[] ExportData(Guid templateGuid, string type);
-    }
-
     public class DataExport : ZipExportImport,IDataExport
     {
         #region Constructor

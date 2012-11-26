@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportFactory.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -7,19 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Documents;
-using Main.Core.View;
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
-namespace RavenQuestionnaire.Core.Views.StatusReport
+namespace Main.Core.View.StatusReport
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-
     /// <summary>
     /// The cq status report factory.
     /// </summary>

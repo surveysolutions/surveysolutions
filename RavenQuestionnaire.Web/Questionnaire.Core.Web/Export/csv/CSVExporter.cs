@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CSVExporter.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,17 +6,15 @@
 //   Implements comma-separated values export format.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Export.csv
+
+using System;
+using System.IO;
+using CsvHelper;
+using Main.Core.Export;
+using Main.Core.View.Export;
+
+namespace Questionnaire.Core.Web.Export.csv
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
-    using CsvHelper;
-
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-
     /// <summary>
     /// Implements comma-separated values export format.
     /// </summary>

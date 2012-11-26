@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompleteQuestionnaireExportItem.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -7,18 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 
-namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
+namespace Main.Core.View.Export
 {
-    using System;
-    using System.Linq;
-
-    using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.View.CompleteQuestionnaire;
-
     /// <summary>
     /// The complete questionnaire export item.
     /// </summary>

@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CompleteQuestionnaireExportInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,14 +6,12 @@
 //   The complete questionnaire export input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
+
+using System;
+using System.Collections.Generic;
+
+namespace Main.Core.View.Export
 {
-    using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities;
-    using Main.Core.Utility;
-
     /// <summary>
     /// The complete questionnaire export input model.
     /// </summary>

@@ -83,6 +83,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.1.12.1\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
@@ -111,7 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\GenericBinderResolver.cs" />
+    <Compile Include="Export\csv\CSVExporter.cs" />
+    <Compile Include="Export\DataExport.cs" />
     <Compile Include="Export\ExportImportEvent.cs" />
+    <Compile Include="Export\IDataExport.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />

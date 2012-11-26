@@ -305,6 +305,8 @@
     <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
+    <Compile Include="Export\ExportManager.cs" />
+    <Compile Include="Export\IExportProvider.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
@@ -354,6 +356,11 @@
     <Compile Include="View\Device\DeviceView.cs" />
     <Compile Include="View\Device\DeviceViewFactory.cs" />
     <Compile Include="View\Device\DeviceViewInputModel.cs" />
+    <Compile Include="View\Export\CompleteQuestionnaireExportInputModel.cs" />
+    <Compile Include="View\Export\CompleteQuestionnaireExportItem.cs" />
+    <Compile Include="View\Export\CompleteQuestionnaireExportView.cs" />
+    <Compile Include="View\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="View\Export\HeaderItem.cs" />
     <Compile Include="View\Group\AbstractGroupMobileView.cs" />
     <Compile Include="View\Group\CompleteGroupHeaders.cs" />
     <Compile Include="View\Group\CompleteGroupMobileView.cs" />
@@ -380,6 +387,10 @@
     <Compile Include="View\Register\RegisterInputModel.cs" />
     <Compile Include="View\Register\RegisterView.cs" />
     <Compile Include="View\Register\RegisterViewFactory.cs" />
+    <Compile Include="View\StatusReport\CQStatusReportFactory.cs" />
+    <Compile Include="View\StatusReport\CQStatusReportItemView.cs" />
+    <Compile Include="View\StatusReport\CQStatusReportView.cs" />
+    <Compile Include="View\StatusReport\CQStatusReportViewInputModel.cs" />
     <Compile Include="View\SyncProcess\CapiExportStatistics.cs" />
     <Compile Include="View\SyncProcess\SyncProcessView.cs" />
     <Compile Include="View\SyncProcess\SyncProcessViewFactory.cs" />
