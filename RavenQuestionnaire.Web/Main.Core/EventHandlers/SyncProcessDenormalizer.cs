@@ -215,6 +215,7 @@ namespace Main.Core.EventHandlers
 
                 var stat = new UserSyncProcessStatistics
                     {
+                        Type = SynchronizationStatisticType.NewSurvey,
                         User = cq.Responsible,
                         TemplateId = cq.TemplateId,
                         Title = cq.Title,

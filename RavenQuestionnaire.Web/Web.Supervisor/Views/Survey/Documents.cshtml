@@ -17,27 +17,27 @@
     var userFilter = "@(Model.User.Id)", 
         statusFilter = "@(Model.Status.PublicId)", 
         templateFilter = "@(Model.Template.TemplateId)";
-         var withHeaders = false;
+    var withHeaders = false;
     var pageSize = @Model.PageSize;
     $(document).ready(function() {
 
        
-        $('#userFilter').editable().on('update', function(e, editable) {
-            userFilter = editable.value;
+        $('#userFilter').editable().on('save', function(e, params) {
+            userFilter = params.newValue;
             sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
             withHeaders = false;
             getTablePage(sortData, 1);
         });
         
-        $('#statusFilter').editable().on('update', function(e, editable) {
-            statusFilter = editable.value;
+        $('#statusFilter').editable().on('save', function(e, params) {
+            statusFilter = params.newValue;
             sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
             withHeaders = false;
             getTablePage(sortData, 1);
         });
         
-         $('#templateFilter').editable().on('update', function(e, editable) {
-            templateFilter = editable.value;
+         $('#templateFilter').editable().on('save', function(e, params) {
+            templateFilter = params.newValue;
             sortData = [{ Field: "Responsible.Name", Direction: "Asc" }];
              withHeaders = true;
             getTablePage(sortData, 1);
@@ -47,13 +47,46 @@
         makeSortable();
         onPagingClick();
 
+        $.fn.editable.defaults.success = function(data) {
+            debugger;
+            if (data.status=="ok") {
+                $('#row-' + data.cqId).find('.td-status').text(data.statusName);
+                var isTransparent = false;
+                if (data.statusId!=statusFilter && statusFilter!="00000000-0000-0000-0000-000000000000") {
+                    isTransparent = true;
+                }
+                if (data.userId!=userFilter && userFilter!="00000000-0000-0000-0000-000000000000") {
+                    isTransparent = true;
+                }
+                if(isTransparent){
+                    $('#row-' + data.cqId).addClass("transparent");
+                }
+                else {
+                    $('#row-' + data.cqId).removeClass("transparent");
+                }
+            }else {
+                
+            }
+        };
+        $.fn.editable.defaults.error = function(data) {
+           debugger;
+        };
         makeAssignable();
     });
     
    function makeAssignable() {
-       $('.editable').editable().on('update', function(e, editable) {
-           editable.$element.attr('href', "@Url.Action("Index", "Survey")" + "?UserId=" + editable.value);
-        });
+       $('.editable').each(function(i, el) {
+           var element = $(el);
+           var toggler = element.attr("data-toggle-element");
+           element.editable().on('save', function(e, params) {
+               element.attr('href', "@Url.Action("Index", "Survey")" + "?UserId=" + params.newValue);
+           });
+           $(toggler).click(function(e) {
+               e.stopPropagation();
+               e.preventDefault();
+               $(element).editable("toggle");
+           });
+       });
    }
    
     function makeSortable() {

@@ -25,15 +25,16 @@
         </thead>
         @foreach (AssignmentViewItem fitem in Model.Items)
         {
-            <tr id="responsible-@(fitem.Id)">
+            <tr id="row-@(fitem.Id)">
                 @foreach (var item in fitem.FeatureadValue)
                 {
                     <td>
                         @(string.IsNullOrEmpty(item.Value) ? string.Empty : item.Value)
                     </td>
                 }
-                <td id="row-@fitem.Id" style="width: 10%;">
-                    <a id="source-@fitem.Id" 
+                <td class="td-responsible">
+                    <div class="popover-container">
+                        <a id="source-@fitem.Id" 
                     class="editable" 
                     href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
                     data-original-title="Choose user"
@@ -41,47 +42,19 @@
                     data-type="select" 
                     data-pk="1"
                     data-placement="top" 
+                    data-toggle="manual"
                     data-url="@Url.Action("AssignForm", "Survey", new { cqId = fitem.Id, tmptId = fitem.TemplateId })"
-                    data-toggle="#ref-@fitem.Id">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
-                    @*
-                    <div class="assignment-view">
-                        <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                    data-toggle-element="#ref-@fitem.Id">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
                     </div>
-                    <div class="assignment-form">
-                        
-                        @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
-                        {
-                            var id = fitem.Id + "";
-                            @Html.Hidden("CqId", id)
-                            @Html.Hidden("TmptId", fitem.TemplateId)
-
-                            var options = (ViewBag.Users as SelectList).Select(item => new SelectListItem
-                                {
-                                    Value = item.Value,
-                                    Text = item.Text,
-                                    Selected = (fitem.Responsible != null && fitem.Responsible.Id.ToString() == item.Value)
-                                }).ToList();
-                            if (fitem.Responsible == null)
-                            {
-                                options.Insert(0, new SelectListItem() { Selected = true, Text = string.Empty, Value = string.Empty });
-                            }
-
-                            <div>@Html.DropDownList("userId", options, new { id = "userId-" + fitem.Id })</div>
-                            <div>
-                                <input class="btn btn-primary" name="Save" type="submit" value="Save" />
-                                <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
-                            </div>
-                        }
-                    </div>*@
                 </td>
-                <td style="width: 10%;">@fitem.LastEntryDate.ToShortDateString()
+                <td>@fitem.LastEntryDate.ToShortDateString()
                 </td>
-                <td style="width: 10%;">@fitem.Status.Name
+                <td class="td-status">@fitem.Status.Name
                 </td>
                 <td style="width: 190px">
                     <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
                         <i class="icon-list"></i>Details</a>
-                    @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
+                    @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId || fitem.Status.PublicId == SurveyStatus.Unassign.PublicId)
                     {
                         <a class="btn btn-small @(fitem.Responsible == null ? "btn-danger" : "btn-info")" 
                            id="ref-@fitem.Id" 
@@ -98,7 +71,10 @@
         }
     </table>
     <div class="pagination" id="paging">
-        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { })
+        @if ((double)Model.TotalCount / Model.PageSize > 1)
+        {
+            Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { });
+        }
     </div>
 </div>
-@Html.Action("Chart", this.Model)
+@*@Html.Action("Chart", this.Model)*@ 

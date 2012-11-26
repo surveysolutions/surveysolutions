@@ -93,7 +93,7 @@ namespace Core.Supervisor.Views.Index
             retval.Summary = new IndexViewItem(
                 Guid.Empty,
                 "Summary",
-                items.Sum(x => x.Unassigned),
+                items.Sum(x => x.Unassign),
                 items.Sum(x => x.Total),
                 items.Sum(x => x.Initial),
                 items.Sum(x => x.Error),
@@ -126,7 +126,7 @@ namespace Core.Supervisor.Views.Index
                                                 templateGroup.FirstOrDefault().QuestionnaireTitle,
                                                 templateGroup.Count(
                                                     q =>
-                                                    q.Responsible == null),
+                                                    q.Status.PublicId == SurveyStatus.Unassign.PublicId),
                                                 templateGroup.Count(),
                                                 templateGroup.Count(
                                                     q =>

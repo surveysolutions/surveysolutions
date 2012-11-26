@@ -75,7 +75,7 @@ namespace Core.Supervisor.Views.Index
                 new SurveyGroupedByStatusHeader(
                     new Dictionary<string, string>
                         {
-                            { "Unassigned", "Unassigned" },
+                            { "Unassign", "Unassign" },
                             { "Initial", SurveyStatus.Initial.Name },
                             { "Redo", SurveyStatus.Redo.Name },
                             { "Complete", SurveyStatus.Complete.Name },
@@ -90,7 +90,7 @@ namespace Core.Supervisor.Views.Index
                     new IndexViewItem(
                         item.Id,
                         item.Title,
-                        item.Unassigned,
+                        item.Unassign,
                         item.Total,
                         item.Initial,
                         item.Error,

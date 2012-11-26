@@ -66,7 +66,7 @@ namespace Core.Supervisor.Views.Index
         {
             this.Id = id;
             this.Title = title;
-            this.Unassigned = unassigment;
+            this.Unassign = unassigment;
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
@@ -122,7 +122,7 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Gets or sets the unassigned.
         /// </summary>
-        public int Unassigned { get; set; }
+        public int Unassign { get; set; }
 
         #endregion
     }
