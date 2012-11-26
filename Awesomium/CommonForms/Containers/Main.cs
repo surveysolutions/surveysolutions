@@ -169,6 +169,9 @@ namespace Browsing.Common.Containers
                             this.isDatabaseContainsUsers = null; // reset
                         };
                     }
+                    catch
+                    {
+                    }
                     finally
                     {
                         this.checkIsRunning = false;

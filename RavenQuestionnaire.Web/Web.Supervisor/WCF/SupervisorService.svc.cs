@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Web;
 
 namespace Web.Supervisor.WCF
 {
@@ -12,7 +13,7 @@ namespace Web.Supervisor.WCF
     {
         public string GetDiscoveryServicePath()
         {
-            return OperationContext.Current.Channel.LocalAddress.Uri.AbsolutePath;
+            return OperationContext.Current.Channel.LocalAddress.Uri.LocalPath;
         }
     }
 }
