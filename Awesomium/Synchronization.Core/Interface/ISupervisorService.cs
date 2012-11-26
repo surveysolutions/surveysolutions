@@ -19,6 +19,6 @@ namespace Synchronization.Core.Interface
     public interface ISupervisorService
     {
         [OperationContract]
-        string GetSupervisorPath();
+        string GetDiscoveryServicePath();
     }
 }

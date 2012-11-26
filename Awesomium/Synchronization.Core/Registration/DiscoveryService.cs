@@ -15,8 +15,8 @@ namespace Synchronization.Core.Registration
     public interface ISupervisorService
     {
 
-        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/GetSupervisorPath", ReplyAction = "http://tempuri.org/ISupervisorService/GetSupervisorPathResponse")]
-        string GetSupervisorPath();
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/GetDiscoveryServicePath", ReplyAction = "http://tempuri.org/ISupervisorService/GetDiscoveryServicePathResponse")]
+        string GetDiscoveryServicePath();
     }
 
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -53,9 +53,9 @@ namespace Synchronization.Core.Registration
         {
         }
 
-        public string GetSupervisorPath()
+        public string GetDiscoveryServicePath()
         {
-            return base.Channel.GetSupervisorPath();
+            return base.Channel.GetDiscoveryServicePath();
         }
     }
 }
