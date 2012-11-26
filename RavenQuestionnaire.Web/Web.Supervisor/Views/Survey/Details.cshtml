@@ -1,41 +1,41 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Group
 @model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
- <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
- <script type="text/javascript">
-     $(document).ready(function () {
-         $.ajaxSetup({
-             cache: false
-         });
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajaxSetup({
+            cache: false
+        });
 
-         $('a.nav-link').live("click", function () {
-             var href = $(this).attr('href');
+        $('a.nav-link').live("click", function () {
+            var href = $(this).attr('href');
 
-             var ref = $('#sidebar a[href=\"' + href + '\"]');
+            var ref = $('#sidebar a[href=\"' + href + '\"]');
 
-             if (ref.length > 0) {
-                 $('#sidebar a').parent().removeClass('active');
+            if (ref.length > 0) {
+                $('#sidebar a').parent().removeClass('active');
 
-                 $(ref).parent().addClass('active');
-             }
+                $(ref).parent().addClass('active');
+            }
 
-             var request = $.ajax({
-                 url: href,
-                 type: "POST",
-                 data: {},
-                 dataType: "html"
-             });
+            var request = $.ajax({
+                url: href,
+                type: "POST",
+                data: {},
+                dataType: "html"
+            });
 
-             request.done(function (msg) {
-                 $("#content_container").html(msg);
-             });
+            request.done(function (msg) {
+                $("#content_container").html(msg);
+            });
 
-             request.fail(function (jqXHR, textStatus) {
-                 alert("Request failed: " + textStatus);
-             });
-             return false;
-         });
-     });
+            request.fail(function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus);
+            });
+            return false;
+        });
+    });
     function JsonResults(data) {
         var response = jQuery.parseJSON(data.responseText);
         if (response.status === "ok") {
@@ -44,16 +44,18 @@
             alert(response.error);
         }
     };
- </script>
- <a class="btn btn-back" title="back to list" href="@Url.Action("Documents", new { id = ViewBag.TemplateId })"><i class=" icon-chevron-left"></i></a>
-  @if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
- {
-     <h1 class="inline"><a  data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" href="#" data-original-title="Survey comment">@Model.Title</a></h1>
- }
- else
-  {
-      <h1 class="inline">@Model.Title</h1>
-  }
+</script>
+<h2 class="inline"><a class="btn btn-back" title="back to list" href="@Url.Action("Documents", new { id = ViewBag.TemplateId })">
+    <i class=" icon-chevron-left"></i></a>
+    @if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
+    { 
+        <a  data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" href="#" data-original-title="Survey comment">@Model.Title</a>
+    }
+    else
+    {
+        <text>@Model.Title</text>
+    }
+</h2>
 <div class="row-fluid">
     <div class="span3">
         <div data-role="panel" data-id="menu">
@@ -61,17 +63,20 @@
             <div data-role="page" id="sidebar">
                 <!-- /header -->
                 <div data-role="content" class="with-footer dummy-scroll">
-                    <ul class="nav nav-list bs-docs-sidenav" >
+                    <ul class="nav nav-list bs-docs-sidenav">
                         @foreach (CompleteGroupHeaders gh in Model.Navigation.Menu)
                         {
                             var activ = @gh.Enabled ? "" : "ui-disabled";
-                            <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >@gh.GroupText
-                                <span id="counter-@(gh.PublicKey)" class="badge badge-info ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span></a></li>
+                            <li class="@activ" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@(gh.PublicKey)"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >
+                                <span id="counter-@(gh.PublicKey)" class="badge badge-info ui-li-count current">@(gh.Totals.Answered)/@gh.Totals.Enablad</span>
+                                <span class="link-text">@gh.GroupText</span>
+                                </a></li>
                         }
                     </ul>
                     <br />
-                     <ul class="nav nav-list bs-docs-sidenav">
-                        <li id="statusHistoryLink"><a class="nav-link" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >Status history</a></li>
+                    <ul class="nav nav-list bs-docs-sidenav">
+                        <li id="statusHistoryLink"><a class="nav-link" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >
+                            Status history</a></li>
                     </ul>
                 </div>
             </div>

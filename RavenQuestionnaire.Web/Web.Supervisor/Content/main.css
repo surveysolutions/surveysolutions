@@ -101,6 +101,10 @@
 	-moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
 	box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
 }
+.bs-docs-sidenav a .link-text {
+	display: block;
+	margin-right: 50px;
+}
 /* Chevrons */
 .bs-docs-sidenav .icon-chevron-right
 {
