@@ -1,6 +1,9 @@
 ﻿@using Questionnaire.Core.Web.Helpers
 @model Main.Core.View.Question.MultyOptionsQuestionView
 
+@{ 
+    var currentRowId = "divEditAnswer" + Model.PublicKey.ToString();
+}
 <div id="additionalInfo">
     <div class="control-group">
         <label class="control-label">Answer order</label>
@@ -14,7 +17,7 @@
             {
                 UpdateTargetId = "divNewAnswer",
                 InsertionMode = InsertionMode.InsertAfter
-            })
+            })            
         </div>
     </div>          
     @Html.Partial("~/Views/Answer/_EditAnswers.cshtml", Model)

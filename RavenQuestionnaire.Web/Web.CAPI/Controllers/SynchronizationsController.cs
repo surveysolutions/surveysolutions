@@ -105,7 +105,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public bool CheckIsThereSomethingToPush()
         {
-            return this.synchronizer.ReadEvents().Any();
+            return this.synchronizer.ReadEvents(null).Any();
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public JsonResult PushStatistics()
         {
-            var events = this.synchronizer.ReadEvents();
+            var events = this.synchronizer.ReadEvents(null);
             var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key).ToList();
             var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
                   new ExporStatisticsInputModel(keys));

@@ -20,6 +20,8 @@ using Ncqrs.Eventing.Storage;
 
 namespace Core.CAPI.Tests.Synchronization
 {
+    using Main.Core.EventHandlers;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -30,9 +32,10 @@ namespace Core.CAPI.Tests.Synchronization
         public void ReadEvents_EventStoreIsEmpty_EmptyListReturned()
         {
             Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>> repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
-            ClientEventSync target = new ClientEventSync(repositoryMock.Object);
+            Mock<IDenormalizerStorage<UserDocument>> users = new Mock<IDenormalizerStorage<UserDocument>>();
+            ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
             
-            Assert.AreEqual(target.ReadEvents().Count(), 0);
+            Assert.AreEqual(target.ReadEvents(null).Count(), 0);
            
         }
 
@@ -40,6 +43,7 @@ namespace Core.CAPI.Tests.Synchronization
         public void ReadEvents_EventStoreContainsinitialQuestionnaires_EmptyListReturned()
         {
             Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>> repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            Mock<IDenormalizerStorage<UserDocument>> users=new Mock<IDenormalizerStorage<UserDocument>>();
             Mock<IEventStore> storeMock = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault<IEventStore>(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
@@ -58,8 +62,8 @@ namespace Core.CAPI.Tests.Synchronization
             repositoryMock.Setup(
                 x =>
                 x.Query()).Returns(questionnaireList);
-            ClientEventSync target = new ClientEventSync(repositoryMock.Object);
-            Assert.AreEqual(target.ReadEvents().Count(), 0);
+            ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
+            Assert.AreEqual(target.ReadEvents(null).Count(), 0);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
 
@@ -68,6 +72,7 @@ namespace Core.CAPI.Tests.Synchronization
         {
             Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>> repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             Mock<IEventStore> storeMock=new Mock<IEventStore>();
+            Mock<IDenormalizerStorage<UserDocument>> users = new Mock<IDenormalizerStorage<UserDocument>>();
             NcqrsEnvironment.SetDefault<IEventStore>(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
             storeMock.Setup(x => x.ReadFrom(eventSourceId, int.MinValue, int.MaxValue)).Returns(
@@ -81,8 +86,8 @@ namespace Core.CAPI.Tests.Synchronization
             repositoryMock.Setup(
                 x =>
                 x.Query()).Returns(questionnaireList);
-            ClientEventSync target = new ClientEventSync(repositoryMock.Object);
-            Assert.AreEqual(target.ReadEvents().Count(), 1);
+            ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
+            Assert.AreEqual(target.ReadEvents(null).Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
 
@@ -90,6 +95,7 @@ namespace Core.CAPI.Tests.Synchronization
         public void ReadEvents_EventStoreContainsErrorQuestionnaires_NotEmptyListReturned()
         {
             Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>> repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            Mock<IDenormalizerStorage<UserDocument>> users = new Mock<IDenormalizerStorage<UserDocument>>();
             Mock<IEventStore> storeMock = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault<IEventStore>(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
@@ -108,8 +114,8 @@ namespace Core.CAPI.Tests.Synchronization
             repositoryMock.Setup(
                 x =>
                 x.Query()).Returns(questionnaireList);
-            ClientEventSync target = new ClientEventSync(repositoryMock.Object);
-            Assert.AreEqual(target.ReadEvents().Count(), 1);
+            ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
+            Assert.AreEqual(target.ReadEvents(null).Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
     }

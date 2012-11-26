@@ -46,8 +46,16 @@
 
         makeSortable();
         onPagingClick();
+
+        makeAssignable();
     });
     
+   function makeAssignable() {
+       $('.editable').editable().on('update', function(e, editable) {
+           editable.$element.attr('href', "@Url.Action("Index", "Survey")" + "?UserId=" + editable.value);
+        });
+   }
+   
     function makeSortable() {
         $("#questionnaireTable table").tablesorter({
                 send: function(data) {
@@ -75,12 +83,14 @@
                        
                         if(withHeaders) {
                              $('#questionnaireTable table').html($(response).find('#table').html());    
-                         makeSortable();
-                        }else {
-                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());    
+                            makeSortable();
+                        }
+                        else {
+                            $('#questionnaireTable tbody').html($(response).find('#table tbody').html());    
                         }
                          $('#paging').html($(response).find('#paging').html());
                         onPagingClick();
+                        makeAssignable();
                            withHeaders = false;
                     }
                 }
@@ -115,7 +125,8 @@
                   data-type="select" 
                   data-prepend='All'             
                   data-source="@Html.Raw(statuses)"
-                  data-original-title="Select status">@this.Model.Status.Name</a> by <a href="#" id="userFilter" 
+                  data-original-title="Select status">@this.Model.Status.Name</a> by
+    <a href="#" id="userFilter" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("UsersJson", "User")"
@@ -125,7 +136,8 @@
                   data-type="select" 
                   data-source="@Url.Action("Templates", "Survey")"
                   data-prepend='Any'             
-                  data-original-title="Select template">@(Model.Template.Title)</a> survey</h3>
+                  data-original-title="Select template">@(Model.Template.Title)</a>
+    survey</h3>
 <div id="questionnaireTable">
     @Html.Partial("_TableGroup", Model)
 </div>

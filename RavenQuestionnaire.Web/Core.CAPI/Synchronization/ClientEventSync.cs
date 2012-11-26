@@ -14,7 +14,10 @@ namespace Core.CAPI.Synchronization
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.EventHandlers;
     using Main.Core.Events;
     using Main.Core.View.CompleteQuestionnaire;
 
@@ -39,6 +42,11 @@ namespace Core.CAPI.Synchronization
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
 
+        /// <summary>
+        /// The users
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> user;
+
         #endregion
 
         #region Constructors and Destructors
@@ -49,8 +57,12 @@ namespace Core.CAPI.Synchronization
         /// <param name="storage">
         /// The storage.
         /// </param>
-        public ClientEventSync(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
+        /// <param name="users">
+        /// The users.
+        /// </param>
+        public ClientEventSync(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage, IDenormalizerStorage<UserDocument> users)
         {
+            this.user = users;
             this.storage = storage;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
         }
@@ -62,30 +74,42 @@ namespace Core.CAPI.Synchronization
         /// <summary>
         /// The read events.
         /// </summary>
+        /// <param name="syncKey">
+        /// The sync Key.
+        /// </param>
         /// <returns>
         /// </returns>
         /// <exception cref="Exception">
         /// </exception>
-        public override IEnumerable<AggregateRootEvent> ReadEvents()
+        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
             {
                 throw new Exception("IEventStore is not correct.");
             }
-
+            var usersGuid = new List<Guid>();
             var retval = new List<AggregateRootEvent>();
-            foreach (CompleteQuestionnaireBrowseItem item in this.storage.Query())
+            if (syncKey.HasValue)
             {
-                if (!SurveyStatus.IsStatusAllowCapiSync(item.Status))
-                {
-                    continue;
-                }
-
-                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
+                usersGuid = this.GetUsersGuid(syncKey.Value);
+                foreach (var item in from item in this.storage.Query()
+                                     where
+                                         SurveyStatus.IsStatusAllowCapiSync(item.Status)
+                                         && item.Responsible != null
+                                     from guid in
+                                         usersGuid.Where(
+                                             guid => item.Responsible.Id == guid)
+                                     select item)
+                    retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
+            }
+            else
+            {
+                foreach (var item in this.storage.Query().
+                    Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status))) 
+                    retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
             }
 
-            // return retval;
             return retval.OrderBy(x => x.EventSequence);
         }
 
@@ -105,6 +129,22 @@ namespace Core.CAPI.Synchronization
         {
             CommittedEventStream events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
             return events.Select(e => new AggregateRootEvent(e)).ToList();
+        }
+
+        /// <summary>
+        /// Select user Guid for current supervisor
+        /// </summary>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        /// <returns>
+        /// List of guids
+        /// </returns>
+        private List<Guid> GetUsersGuid(Guid syncKey)
+        {
+            return
+                this.user.Query().Where(t => t.Supervisor != null && t.Supervisor.Id == syncKey).Select(
+                    t => t.PublicKey).ToList();
         }
 
         #endregion

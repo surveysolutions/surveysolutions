@@ -60,7 +60,9 @@ namespace Main.Core.Events
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent].
         /// </returns>
-        public abstract IEnumerable<AggregateRootEvent> ReadEvents();
+        public abstract IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey);
+
+        //public abstract IEnumerable<AggregateRootEvent> ReadFilteredEvents(Guid syncKey);
 
         /// <summary>
         /// The write events.

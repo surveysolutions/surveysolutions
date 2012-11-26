@@ -3,6 +3,11 @@
 @using Questionnaire.Core.Web.Helpers
 @using Web.Supervisor.Models
 @model AssignmentView
+@{
+    var users = (ViewBag.Users as SelectList).Aggregate("{", (current, user) => current + string.Format("'{0}':'{1}',", user.Value, user.Text));
+    users = users.Substring(0, users.Length - 1);
+    users += "}";
+}
 <div>
     <table id="table" class="table-hover table table-striped table-bordered table-condensed">
         <thead>
@@ -28,10 +33,22 @@
                     </td>
                 }
                 <td id="row-@fitem.Id" style="width: 10%;">
+                    <a id="source-@fitem.Id" 
+                    class="editable" 
+                    href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
+                    data-original-title="Choose user"
+                    data-source="@Html.Raw(users)"
+                    data-type="select" 
+                    data-pk="1"
+                    data-placement="top" 
+                    data-url="@Url.Action("AssignForm", "Survey", new { cqId = fitem.Id, tmptId = fitem.TemplateId })"
+                    data-toggle="#ref-@fitem.Id">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
+                    @*
                     <div class="assignment-view">
                         <a id="link-@fitem.Id" href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
                     </div>
                     <div class="assignment-form">
+                        
                         @using (Ajax.BeginForm("AssignForm", "Survey", new AjaxOptions { OnComplete = "HideForm" }))
                         {
                             var id = fitem.Id + "";
@@ -55,27 +72,21 @@
                                 <input class="btn btn-danger" id="canc-@fitem.Id" name="Cancel" type="button" value="Cancel" />
                             </div>
                         }
-                    </div>
+                    </div>*@
                 </td>
                 <td style="width: 10%;">@fitem.LastEntryDate.ToShortDateString()
                 </td>
                 <td style="width: 10%;">@fitem.Status.Name
                 </td>
-                <td style="width: 20%;">
+                <td style="width: 190px">
                     <a class="btn btn-small" href="@Url.Action("Details", new { id = fitem.Id, template = fitem.TemplateId })">
                         <i class="icon-list"></i>Details</a>
                     @if (fitem.Status.PublicId == SurveyStatus.Initial.PublicId || fitem.Status.PublicId == SurveyStatus.Redo.PublicId)
                     {
-                        <a class="btn btn-small @(fitem.Responsible==null? "btn-danger":"btn-info")" id="ref-@fitem.Id" href="#" ><i class="icon-random icon-white"></i>Assign</a>
-                        <script type="text/javascript">
-                            $('#ref-@(fitem.Id)').click(function () {
-                                $('#row-@(fitem.Id)').addClass("showForm");
-                            });
-                            $('#canc-@(fitem.Id)').click(function () {
-                                $('#row-@(fitem.Id)').removeClass("showForm");
-                            });
-                        </script>
-                       
+                        <a class="btn btn-small @(fitem.Responsible == null ? "btn-danger" : "btn-info")" 
+                           id="ref-@fitem.Id" 
+                           href="#" ><i class="icon-random icon-white"></i>Assign</a>
+
                     }
                     @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
                     {

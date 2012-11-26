@@ -33,6 +33,11 @@ namespace Main.Core.View.SyncProcess
             var statistics = new Dictionary<Guid, SyncStatisticInfo>();
             foreach (var statistic in process.Statistics)
             {
+                if (statistic.User == null)
+                {
+                    continue;
+                }
+
                 if (!statistics.ContainsKey(statistic.User.Id))
                 {
                     statistics.Add(statistic.User.Id, new SyncStatisticInfo(statistic.User.Name, 0, 0, 0, false));
@@ -57,9 +62,7 @@ namespace Main.Core.View.SyncProcess
                         {
                             statistics[statistic.User.Id].Rejected++;
                         }
-                        else if (statistic.Status.PublicId != SurveyStatus.Redo.PublicId &&
-                            statistic.Status.PublicId != SurveyStatus.Initial.PublicId &&
-                            statistic.Status.PublicId != SurveyStatus.Complete.PublicId)
+                        else if (statistic.Status.PublicId == SurveyStatus.Approve.PublicId)
                         {
                             statistics[statistic.User.Id].Approved++;
                         }

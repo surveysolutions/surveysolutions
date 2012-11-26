@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Web.Tests
         {
             var guid1 = Guid.NewGuid();
             var guid2 = Guid.NewGuid();
-            this.Synchronizer.Setup(s => s.ReadEvents()).Returns(
+            this.Synchronizer.Setup(s => s.ReadEvents(null)).Returns(
                 new List<AggregateRootEvent> {
                         new AggregateRootEvent(
                             new CommittedEvent(

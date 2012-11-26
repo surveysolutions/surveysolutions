@@ -381,7 +381,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Featured, 
                                     model.Mandatory, 
                                     model.AnswerOrder, 
-                                    ansverItems));
+                                    ansverItems, 
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -427,7 +428,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Featured, 
                                     model.Mandatory, 
                                     model.AnswerOrder, 
-                                    ansverItems));
+                                    ansverItems,
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -463,7 +465,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     "Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
             }
 
-            return View("_Create", model);
+            return View("Create", model);
         }
 
         /// <summary>

@@ -64,7 +64,7 @@ namespace Core.Supervisor.Views.Status
             var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
             var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == input.StatusId)
                          ?? new SurveyStatus(Guid.Empty, "Any");
-            
+
             var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
 
             var items = this.BuildItems(
@@ -76,13 +76,15 @@ namespace Core.Supervisor.Views.Status
                 headers).AsQueryable();
 
             var retval = new StatusView(input.Page, input.PageSize, 0, status, headers);
-            if (input.Orders.Count > 0)
-            {/*
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? items.OrderBy(input.Orders[0].Field)
-                                                      : items.OrderByDescending(input.Orders[0].Field);
-              */
+            if (input.Orders.Count == 0)
+            {
+                input.Orders.Add(new OrderRequestItem() { Direction = OrderDirection.Asc, Field = "Title" });
             }
+
+            items = input.Orders[0].Direction == OrderDirection.Asc
+                                                  ? items.OrderBy(i => this.GetOrderValue(i, input.Orders[0].Field))
+                                                  : items.OrderByDescending(i => this.GetOrderValue(i, input.Orders[0].Field));
+
 
             retval.BuildSummary(items, headers);
 
@@ -90,6 +92,40 @@ namespace Core.Supervisor.Views.Status
 
             retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return retval;
+        }
+
+        /// <summary>
+        /// Value order
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <param name="field">
+        /// The field.
+        /// </param>
+        /// <returns>
+        /// Field value
+        /// </returns>
+        private object GetOrderValue(StatusViewItem item, string field)
+        {
+            if (field == "Title")
+            {
+                return item.User.Name;
+            }
+
+            Guid templateId;
+            if (Guid.TryParse(field, out templateId))
+            {
+                var key = item.Items.Keys.SingleOrDefault(k => k.TemplateId == templateId);
+                if (key == null)
+                {
+                    return 0;
+                }
+
+                return item.Items[key];
+            }
+
+            return item.User.Name;
         }
 
         /// <summary>
@@ -106,8 +142,8 @@ namespace Core.Supervisor.Views.Status
         /// </returns>
         protected IEnumerable<StatusViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
         {
-            return from templateGroup in grouped 
-                   let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count()) 
+            return from templateGroup in grouped
+                   let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count())
                    select new StatusViewItem(templateGroup.Key, tgroup, headers);
         }
     }

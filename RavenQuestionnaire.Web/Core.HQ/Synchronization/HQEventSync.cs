@@ -43,13 +43,13 @@ namespace Core.HQ.Synchronization
 
         #region OverrideMethods
 
-        public override IEnumerable<AggregateRootEvent> ReadEvents()
+        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
         {
             var retval = new List<AggregateRootEvent>();
             this.AddQuestionnairesTemplates(retval);
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
-
+        
         #endregion
 
         #region Private Methods

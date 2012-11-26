@@ -211,15 +211,36 @@ namespace Main.Core.EventHandlers
             }
 
             {
+                var doc = this.documentItemStore.GetByGuid(cq.PublicKey);
+
                 var stat = new UserSyncProcessStatistics
                     {
-                        Type = SynchronizationStatisticType.NewSurvey,
                         User = cq.Responsible,
                         TemplateId = cq.TemplateId,
                         Title = cq.Title,
                         SurveyId = cq.PublicKey,
                         Status = cq.Status
                     };
+
+                if (doc == null)
+                {
+                    stat.Type = SynchronizationStatisticType.NewSurvey;
+                }
+                else if (cq.Status.PublicId != doc.Status.PublicId)
+                {
+                    stat.Type = SynchronizationStatisticType.StatusChanged;
+                }
+                else
+                {
+                    if (doc.Responsible == null)
+                    {
+                        stat.Type = SynchronizationStatisticType.NewAssignment;
+                    }
+                    else if (cq.Responsible.Id != doc.Responsible.Id)
+                    {
+                        stat.Type = SynchronizationStatisticType.AssignmentChanged;
+                    }
+                }
 
                 item.Statistics.Add(stat);
             }

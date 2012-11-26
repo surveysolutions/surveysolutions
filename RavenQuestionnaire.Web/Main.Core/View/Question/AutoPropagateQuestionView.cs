@@ -8,6 +8,7 @@ namespace Main.Core.View.Question
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// Question view for autopropagate

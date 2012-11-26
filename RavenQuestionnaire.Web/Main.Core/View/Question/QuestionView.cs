@@ -19,6 +19,8 @@ using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// The abstract question view.
     /// </summary>
@@ -184,6 +186,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets MaxValue
         /// </summary>
+        [Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]
         public int MaxValue { get; set; }
 
         /// <summary>
