@@ -7,8 +7,8 @@
     var filterTemplate = '@Model.Template.TemplateId';
     $(document).ready(function() {
         
-        $('#filter').editable().on('update', function(e, editable) {
-            filterTemplate = editable.value;
+        $('#filter').editable().on('save', function(e, params) {
+            filterTemplate = params.newValue;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });

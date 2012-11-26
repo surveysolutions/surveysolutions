@@ -129,7 +129,7 @@ namespace Core.Supervisor.Views.Assignment
 
             if (input.Orders.Count > 0)
             {
-                //items = this.DefineOrderBy(items, input);
+                items = this.DefineOrderBy(items, input);
             }
 
             view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));

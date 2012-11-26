@@ -57,9 +57,9 @@
                         }
                         else
                         {
-                            <td class="td-@it.Key.ToLower()">
-                                <text>@value</text>
-                            </td>
+                        <td class="td-@it.Key.ToLower()">
+                            <text>@value</text>
+                        </td>
                         }
                     }
                 </tr>
@@ -76,6 +76,9 @@
         </tbody>
     </table>
     <div class="pagination" id="paging">
-        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
+        @if ((double)Model.TotalCount / Model.PageSize > 1)
+        {
+            Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { });
+        }
     </div>
 </div>

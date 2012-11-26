@@ -91,7 +91,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Index(IndexInputModel input)
         {
-            ViewBag.ActivePage = MenuItem.Surveys;   
+            ViewBag.ActivePage = MenuItem.Surveys;
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.View(model);
         }
@@ -103,7 +103,7 @@ namespace Web.Supervisor.Controllers
             var model = this.viewRepository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel()
                 {
                     Supervisor = user,
-                    StatusId = statusId.HasValue? statusId.Value:Guid.Empty
+                    StatusId = statusId.HasValue ? statusId.Value : Guid.Empty
                 });
             return this.View(model);
         }
@@ -140,7 +140,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Documents(Guid? templateId, Guid? userId, AssignmentInputModel input, ICollection<Guid> status, bool? isNotAssigned)
         {
-            ViewBag.ActivePage = MenuItem.Docs;   
+            ViewBag.ActivePage = MenuItem.Docs;
             var inputModel = input == null
                                  ? new AssignmentInputModel()
                                      {
@@ -409,24 +409,41 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignForm(Guid cqId, Guid tmptId, Guid value)
         {
             UserLight responsible = null;
-            try
+            CompleteQuestionnaireStatisticView stat = null;
+
+            var user = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(value));
+            stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(new CompleteQuestionnaireStatisticViewInputModel(cqId));
+            responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+            commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
+            if (stat.Status.PublicId == SurveyStatus.Unassign.PublicId)
             {
-                var user = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(value));
-                responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
+                stat.Status = SurveyStatus.Initial;
+                commandService.Execute(
+                    new ChangeStatusCommand()
+                        {
+                            CompleteQuestionnaireId = cqId,
+                            Status = SurveyStatus.Initial,
+                            Responsible = this.globalInfo.GetCurrentUser()
+                        });
             }
-            catch (Exception e)
-            {
-                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
-            }
+
 
             if (Request.IsAjaxRequest())
             {
-                return Json(
-                    new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId },
-                    JsonRequestBehavior.AllowGet);
+                return this.Json(
+                        new
+                            {
+                                status = "ok",
+                                userId = responsible.Id,
+                                userName = responsible.Name,
+                                cqId = cqId,
+                                statusName = stat.Status.Name,
+                                statusId = stat.Status.PublicId
+                            },
+                        JsonRequestBehavior.AllowGet);
             }
+
             return this.RedirectToAction("Documents", "Survey", new { id = tmptId });
         }
 
@@ -652,23 +669,11 @@ namespace Web.Supervisor.Controllers
             var data = new ChartDataModel("Chart");
             if (view.Items.Count > 0)
             {
-                int countUnassigment =
-                    view.Items.Where(
-                        t => t.Responsible == null || (t.Responsible != null && t.Responsible.Id == Guid.Empty)).Count();
-                if (countUnassigment > 0)
+                var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
+                foreach (var state in statusesName)
                 {
-                    data.Data.Add("Unassigned", countUnassigment);
-                }
-
-                if (countUnassigment != view.Items.Count)
-                {
-                    var statusesName = view.Items.Select(t => t.Status.Name).Distinct().ToList();
-                    foreach (var state in statusesName)
-                    {
-                        int count = view.Items.Where(t => t.Status.Name == state).Count();
-                        if (state == "Initial") count = count - countUnassigment;
-                        data.Data.Add(state, count);
-                    }
+                    int count = view.Items.Where(t => t.Status.Name == state).Count();
+                    data.Data.Add(state, count);
                 }
             }
 
@@ -690,7 +695,7 @@ namespace Web.Supervisor.Controllers
             var data = new ChartDataModel("Chart");
             if (view.Items.Count > 0)
             {
-                foreach (var item in view.Items) 
+                foreach (var item in view.Items)
                     data.DataItems.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
             }
 

@@ -27,7 +27,6 @@
                 <tr>
                     <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, userId = userKey })
                     </td>
-                   
                     @foreach (var it in Model.Headers)
                     {
 
@@ -76,7 +75,10 @@
         </tbody>
     </table>
     <div class="pagination" id="paging">
-        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
-   </div>    
-    @Html.Action("QuestionnaireChart", "Survey", this.Model)          
+        @if ((double)Model.TotalCount / Model.PageSize > 1)
+        {
+            @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
+        }
+    </div>
+    @Html.Action("QuestionnaireChart", "Survey", this.Model)
 </div>
