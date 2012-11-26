@@ -50,7 +50,7 @@ namespace Browsing.Supervisor.Containers
                 var serviceAddress = this.urlUtils.GetSupervisorDiscoveryService();
 
                 SupervisorServiceClient client = new SupervisorServiceClient("mexHttpBinding_ISupervisorService", serviceAddress);
-                var host = client.GetSupervisorPath(); // do nothing with result; just push the service to run
+                var host = client.GetDiscoveryServicePath(); // do nothing with result; just push the service to run
             }
             catch
             { }

@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Web.Supervisor.WCF.SupervisorService" CodeBehind="SupervisorService.svc.cs" %>
