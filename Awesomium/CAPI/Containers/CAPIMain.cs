@@ -28,12 +28,14 @@ namespace Browsing.CAPI.Containers
         protected override void OnLoad(System.EventArgs e)
         {
             base.OnLoad(e);
+
             new System.Threading.Thread(LookupSupervisor).Start();
         }
 
         private void LookupSupervisor()
         {
             ISupervisorService channelService = null;
+            string supervisorHost = "Not found";
 
             try
             {
@@ -55,18 +57,18 @@ namespace Browsing.CAPI.Containers
                 channelService = factory.CreateChannel();
 
                 var channelResponce = channelService.GetDiscoveryServicePath();
-                var supervisorHost = endpoints[0].Address.ToString();
-
+                
+                supervisorHost = endpoints[0].Address.ToString();
                 supervisorHost = supervisorHost.Replace(channelResponce, "");
 
+                Properties.Settings.Default.EndpointExportPath = supervisorHost;
+                Properties.Settings.Default.Save();
 
-                if (Parent.InvokeRequired)
-                    Parent.Invoke(new System.Windows.Forms.MethodInvoker(() => 
-                    { 
-                        Parent.Parent.Text = string.Format("{0} - (supervisor: {1})", Parent.Parent.Text, supervisorHost); 
+                if (Holder.InvokeRequired)
+                    Holder.Invoke(new System.Windows.Forms.MethodInvoker(() =>
+                    {
+                        Holder.UpdateConfigDependencies();
                     }));
-                else
-                    Parent.Parent.Text = string.Format("{0} - (supervisor: {1})", Parent.Parent.Text, supervisorHost);
             }
             catch
             {
@@ -75,6 +77,13 @@ namespace Browsing.CAPI.Containers
             {
                 if (channelService != null)
                     ((IChannel)channelService).Close();
+
+                if (Holder.InvokeRequired)
+                    Holder.Invoke(new System.Windows.Forms.MethodInvoker(() =>
+                    {
+                        var textToShow = string.Format("{0} - (supervisor runs at: {1})", Holder.Parent.Text, supervisorHost);
+                        Holder.Parent.Text = textToShow;
+                    }));
             }
         }
     }
