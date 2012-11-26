@@ -108,8 +108,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
         public void When_TemplatesExport()
         {
             var result = this.Target.ExportTemplate(Guid.NewGuid(), Guid.NewGuid());
-            SynchronizerMock.Verify(x => x.ReadEvents(), Times.Once());
-            synchronizer.Verify(x => x.ReadEvents(null), Times.Once());
+            SynchronizerMock.Verify(x => x.ReadEvents(null), Times.Once());
             Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
 
@@ -158,7 +157,8 @@ namespace RavenQuestionnaire.Web.Tests.Export
                                     }
                         }
                 };
-            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
+
+            SynchronizerMock.Setup(x => x.ReadEvents(null)).Returns(events);
             var result = Target.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 4);
             var resultGuidTemplate = Target.PrivateGetTemplate(fakeGuid, null);
@@ -202,7 +202,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
                                 }
                         }
                 };
-            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
+            SynchronizerMock.Setup(x => x.ReadEvents(null)).Returns(events);
             var result = Target.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 2);
         }
