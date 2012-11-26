@@ -283,7 +283,7 @@ namespace Web.Supervisor.Controllers
                 Text = item.Login,
                 Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
             }).ToList();
-            ViewBag.userId = options;
+            ViewBag.value = options;
             return this.View(model);
         }
 
