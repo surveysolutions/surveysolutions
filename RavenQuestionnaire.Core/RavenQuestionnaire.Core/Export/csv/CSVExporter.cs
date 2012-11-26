@@ -101,9 +101,9 @@ namespace RavenQuestionnaire.Core.Export.csv
                 writer.WriteField("PublicKey"); // templated column for ID
 
                 // build up header
-                foreach (string question in records.Header.Values)
+                foreach (var question in records.Header.Values)
                 {
-                    writer.WriteField(question);
+                    writer.WriteField(question.Caption);
                 }
                 writer.WriteField("ForeignKey");
                 writer.NextRecord();
