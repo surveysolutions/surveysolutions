@@ -69,7 +69,20 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 {*/
                     var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
                 var answer = question.GetAnswerObject();
-                this.Values.Add(key, answer == null ? "" : answer.ToString());
+                if (question.QuestionType == QuestionType.MultyOption)
+                {
+                    var answers = answer as ICompleteAnswer[];
+                    if (answers != null && answers.Length > 0)
+                        this.Values.Add(key, answers[0].AnswerValue.ToString());
+                    else
+                        this.Values.Add(key, "");
+                }
+                else
+                {
+
+
+                    this.Values.Add(key, answer == null ? "" : answer.ToString());
+                }
                 /*   }*/
             }
         }

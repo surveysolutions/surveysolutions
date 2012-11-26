@@ -117,9 +117,9 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
         #endregion
 
-        protected Dictionary<Guid, string> BuildHeader(IGroup template,  List<Guid> subObjects)
+        protected Dictionary<Guid, HeaderItem> BuildHeader(IGroup template, List<Guid> subObjects)
         {
-            var result = new Dictionary<Guid, string>();
+            var result = new Dictionary<Guid, HeaderItem>();
             Queue<IComposite> queue=new Queue<IComposite>();
             foreach (IComposite composite in template.Children)
             {
@@ -131,7 +131,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 var question = item as IQuestion;
                 if (question != null)
                 {
-                    result.Add(question.PublicKey, question.QuestionText);
+                    result.Add(question.PublicKey, new HeaderItem(question));
                     continue;
                 }
                 var group = item as IGroup;

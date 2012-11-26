@@ -78,7 +78,7 @@ namespace RavenQuestionnaire.Web.Export
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
                     (
                         new CompleteQuestionnaireExportInputModel(questionnairiesGuids, templateId, level));
-            container.Add(records.GroupName+".csv", manager.ExportToStream(records));
+            container.Add(records.GroupName+level+".csv", manager.ExportToStream(records));
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
                 CollectLevels(templateId,questionnairiesGuids, subPropagatebleGroup, container, manager);

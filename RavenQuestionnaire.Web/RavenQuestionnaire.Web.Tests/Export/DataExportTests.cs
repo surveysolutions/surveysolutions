@@ -40,11 +40,11 @@ namespace RavenQuestionnaire.Web.Tests.Export
         [SetUp]
         public void CreateObjects()
         {
-        
+            this.Kernel=new StandardKernel();
             this.ViewRepositoryMock = new Mock<IViewRepository>();
 
             this.SynchronizerMock = new Mock<IEventSync>();
-                this.Kernel.Bind<IViewRepository>().ToConstant(this.ViewRepositoryMock.Object);
+            this.Kernel.Bind<IViewRepository>().ToConstant(this.ViewRepositoryMock.Object);
             this.Kernel.Bind<IEventSync>().ToConstant(this.SynchronizerMock.Object);
             this.Target = new DataExportServiceTest(this.Kernel);
         }
@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView(string.Empty,new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()}, new Dictionary<Guid, string>());
+                new CompleteQuestionnaireExportView("top group",new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()}, new Dictionary<Guid, HeaderItem>());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(

@@ -73,7 +73,7 @@ namespace RavenQuestionnaire.Core.Tests
             group.Add(new SingleQuestion(questionKey, "questionText"), null);
             var result = this.Target.BuildHeaderTestable(group);
             Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
         }
         [Test]
         public void BuildHeader_GroupWithQuestionInsideSubGroup_QuestionISAddedToHeader()
@@ -85,7 +85,7 @@ namespace RavenQuestionnaire.Core.Tests
             subGroup.Add(new SingleQuestion(questionKey, "questionText"), null);
             var result = this.Target.BuildHeaderTestable(group);
             Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
         }
         [Test]
         public void BuildHeader_PropagatedGroupWithQuestionInsideSubGroup_QuestionISAddedToHeader()
@@ -108,7 +108,7 @@ namespace RavenQuestionnaire.Core.Tests
             {
             }
 
-            public Dictionary<Guid, string> BuildHeaderTestable(IGroup template)
+            public Dictionary<Guid, HeaderItem> BuildHeaderTestable(IGroup template)
             {
                 return base.BuildHeader(template, new List<Guid>());
             }
