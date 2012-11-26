@@ -21,6 +21,6 @@ namespace Common.Utils
         string GetPushStatisticUrl();
         string GetPullStatisticUrl();
         string GetAuthorizedIDsUrl(Guid registratorId);
-
+        string GetSupervisorDiscoveryService();
     }
 }
