@@ -13,7 +13,12 @@ namespace Web.Supervisor.WCF
     {
         public string GetDiscoveryServicePath()
         {
-            return OperationContext.Current.Channel.LocalAddress.Uri.LocalPath;
+            var virtualPath = System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath;
+            var absolutePath = OperationContext.Current.Channel.LocalAddress.Uri.AbsolutePath;
+    
+            var path = absolutePath.Substring(virtualPath.Length);
+
+            return path;
         }
     }
 }
