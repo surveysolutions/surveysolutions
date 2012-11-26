@@ -89,9 +89,15 @@ namespace Browsing.CAPI.Utils
         {
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetPullStatisticCapiPath);
         }
+     
         public string GetAuthorizedIDsUrl(Guid registratorId)
         {
             return string.Empty;
+        }
+
+        public string GetSupervisorDiscoveryService()
+        {
+            throw new NotImplementedException();
         }
     }
 }

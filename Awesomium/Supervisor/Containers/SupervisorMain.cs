@@ -3,17 +3,22 @@ using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 
 namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorMain : Main
     {
+        private IUrlUtils urlUtils;
+
         #region Constructor
 
         public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
+
+            this.urlUtils = urlUtils;
         }
 
         #endregion
@@ -31,5 +36,24 @@ namespace Browsing.Supervisor.Containers
         }
 
         #endregion
+
+        protected override void OnLoad(System.EventArgs e)
+        {
+            base.OnLoad(e);
+            new System.Threading.Thread(ForceDiscoveryService).Start();
+        }
+
+        private void ForceDiscoveryService()
+        {
+            try
+            {
+                var serviceAddress = this.urlUtils.GetSupervisorDiscoveryService();
+
+                SupervisorServiceClient client = new SupervisorServiceClient("mexHttpBinding_ISupervisorService", serviceAddress);
+                var host = client.GetSupervisorPath(); // do nothing with result; just push the service to run
+            }
+            catch
+            { }
+        }
     }
 }

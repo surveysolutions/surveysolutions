@@ -86,10 +86,15 @@ namespace Browsing.Supervisor.Utils
         {
             return String.Empty;
         }
+
         public string GetAuthorizedIDsUrl(Guid registratorId)
         {
             return string.Format("{0}{1}?Registrator={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
         }
 
+        public string GetSupervisorDiscoveryService()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.DiscoveryService);
+        }
     }
 }

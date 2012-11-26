@@ -286,5 +286,7 @@ namespace Browsing.CAPI.Properties {
                 this["GetPullStatisticCapiPath"] = value;
             }
         }
+
+        public object[] DiscoveryService { get; set; }
     }
 }
