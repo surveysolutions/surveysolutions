@@ -111,6 +111,8 @@ namespace Main.Core.View.Export
                 else
                     result = CreateVew(groupTemplate, template.PublicKey, trigger, questionnairies);
             }
+            if (result == null)
+                result = new CompleteQuestionnaireExportView();
             return result;
         }
 
