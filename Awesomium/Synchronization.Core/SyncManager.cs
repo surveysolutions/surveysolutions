@@ -158,6 +158,7 @@ namespace Synchronization.Core
                 {
                     var statEvent = OnGetStatisticsAfterSyncronization(syncType);
                     if (statEvent!=null)GetStats(this, statEvent);
+                    
 
                 }
                 

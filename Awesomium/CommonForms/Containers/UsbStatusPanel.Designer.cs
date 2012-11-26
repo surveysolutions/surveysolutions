@@ -101,7 +101,7 @@ namespace Browsing.Common.Containers
             this.tableLayoutPanel2.SetColumnSpan(this.statusLabel, 2);
             this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.statusLabel.Location = new System.Drawing.Point(3, 118);
+            this.statusLabel.Location = new System.Drawing.Point(3, 138);
             this.statusLabel.Name = "statusLabel";
             this.statusLabel.Size = new System.Drawing.Size(784, 24);
             this.statusLabel.TabIndex = 3;
@@ -112,12 +112,13 @@ namespace Browsing.Common.Containers
             // 
             this.tableLayoutPanel2.SetColumnSpan(this.statisticList, 3);
             this.statisticList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statisticList.ItemHeight = 24;
-            this.statisticList.Location = new System.Drawing.Point(2, 36);
-            this.statisticList.Margin = new System.Windows.Forms.Padding(2);
+            this.statisticList.Font = new System.Drawing.Font("Microsoft Tai Le", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statisticList.ItemHeight = 25;
+            this.statisticList.Location = new System.Drawing.Point(12, 46);
+            this.statisticList.Margin = new System.Windows.Forms.Padding(12);
             this.statisticList.Name = "statisticList";
             this.statisticList.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.statisticList.Size = new System.Drawing.Size(786, 80);
+            this.statisticList.Size = new System.Drawing.Size(766, 80);
             this.statisticList.TabIndex = 4;
             this.statisticList.Visible = false;
             // 
@@ -126,7 +127,7 @@ namespace Browsing.Common.Containers
             this.labelAvlUsb.AutoSize = true;
             this.labelAvlUsb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.labelAvlUsb.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelAvlUsb.Location = new System.Drawing.Point(3, 160);
+            this.labelAvlUsb.Location = new System.Drawing.Point(3, 180);
             this.labelAvlUsb.Margin = new System.Windows.Forms.Padding(3, 18, 3, 0);
             this.labelAvlUsb.Name = "labelAvlUsb";
             this.labelAvlUsb.Size = new System.Drawing.Size(198, 24);
@@ -141,7 +142,7 @@ namespace Browsing.Common.Containers
             this.usbStrip.GripMargin = new System.Windows.Forms.Padding(0);
             this.usbStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.usbStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
-            this.usbStrip.Location = new System.Drawing.Point(204, 142);
+            this.usbStrip.Location = new System.Drawing.Point(204, 162);
             this.usbStrip.Name = "usbStrip";
             this.usbStrip.ShowItemToolTips = false;
             this.usbStrip.Size = new System.Drawing.Size(1, 42);

@@ -227,12 +227,14 @@ namespace Browsing.Common.Containers
 
         public void AddLineToStatistic(string line)
         {
-            this.statisticList.Items.Add(line);
+            this.statisticList.Items.Add(" "+line);
+            this.statisticList.Visible = true;
         }
 
         public void ClearStatisticList()
         {
             this.statisticList.Items.Clear();
+            this.statisticList.Visible = false;
         }
 
         public ToolStripItemCollection GetStripItems()
