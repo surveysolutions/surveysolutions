@@ -233,8 +233,23 @@ h1.inline
 	padding: 7px 9px;
 }
 
-.popover.editable-popover {
+.popover.editable-container {
 	z-index: 1080;
+}
+.popover.editable-container .control-group .btn {
+	vertical-align: top;
+}
+
+.editableform select{
+	width: 150px;
+}
+.table tbody tr.transparent td{
+	opacity: 0.35;
+	filter:alpha(opacity=35)
+}
+.table tbody tr.transparent td.td-responsible {
+	opacity: 1;
+	filter:alpha(opacity=100)
 }
 /* Responsive
 -------------------------------------------------- */

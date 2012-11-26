@@ -57,6 +57,9 @@
         </tbody>
     </table>
     <div class="pagination" id="paging">
-        @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
+        @if ((double)Model.TotalCount / Model.PageSize > 1)
+        {
+            @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
+        }
     </div>
 </div>

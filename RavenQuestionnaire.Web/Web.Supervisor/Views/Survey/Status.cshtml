@@ -15,8 +15,8 @@
     var chart;
     $(document).ready(function() {
         document.filterUser = "";
-        $('#statusFilter').editable().on('update', function(e, editable) {
-            statusFilter = editable.value;
+        $('#statusFilter').editable().on('save', function(e, params) {
+            statusFilter = params.newValue;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });

@@ -10,9 +10,8 @@
     var chart;
     var filterUser = '@Model.User.Id';
     $(document).ready(function() {
-        document.filterUser = "";
-        $('#filterUser').editable().on('update', function(e, editable) {
-            filterUser = editable.value;
+        $('#filterUser').editable().on('save', function(e, params) {
+            filterUser = params.newValue;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });
