@@ -6,6 +6,10 @@
 //   The complete questionnaire export item.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+using Main.Core.Entities.SubEntities;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System;
@@ -23,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 
         #region Constructors and Destructors
 
-        /// <summary>
+        /*/// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportItem"/> class.
         /// </summary>
         /// <param name="doc">
@@ -34,35 +38,71 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
             this.CompleteQuestionnaireKey = doc.PublicKey;
             this.CompleteAnswers = doc.Find<ICompleteAnswer>(a => a.Selected).ToArray();
         }
-
+        */
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportItem"/> class.
         /// </summary>
         /// <param name="document">
         /// The document.
         /// </param>
-        public CompleteQuestionnaireExportItem(CompleteQuestionnaireStoreDocument document)
+        public CompleteQuestionnaireExportItem(ICompleteGroup document, IEnumerable<Guid> headerKey, Guid? parent)
         {
-            this.CompleteQuestionnaireKey = document.PublicKey;
-            this.CompleteQuestions = document.Questions.ToArray();
+        /*    var wholeQuestionnaire = document as CompleteQuestionnaireStoreDocument;
+            Guid templateId = document.PublicKey;
+            if (wholeQuestionnaire != null)
+                templateId = wholeQuestionnaire.TemplateId;*/
+            this.PublicKey = document.Propagated == Propagate.None ? document.PublicKey : document.PropagationPublicKey.Value;
+            this.Parent = parent;
+            this.Values = new Dictionary<Guid, string>();
+
+            foreach (Guid key in headerKey)
+            {
+               /* if (key == Guid.Empty)
+                {
+                    this.Values.Add(key, parent.ToString());
+                }
+                else if (templateId==key)
+                {
+                    this.Values.Add(key, this.PublicKey.ToString());
+                }
+                else
+                {*/
+                    var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
+                var answer = question.GetAnswerObject();
+                if (question.QuestionType == QuestionType.MultyOption)
+                {
+                    var answers = answer as ICompleteAnswer[];
+                    if (answers != null && answers.Length > 0)
+                        this.Values.Add(key, answers[0].AnswerValue.ToString());
+                    else
+                        this.Values.Add(key, "");
+                }
+                else
+                {
+
+
+                    this.Values.Add(key, answer == null ? "" : answer.ToString());
+                }
+                /*   }*/
+            }
         }
 
         #endregion
 
         #region Public Properties
 
-        public ICompleteQuestion[] CompleteQuestions { get; set; }
+        public Dictionary<Guid,string> Values { get; set; }
 
-        /// <summary>
+   /*     /// <summary>
         /// Gets or sets the complete answers.
         /// </summary>
-        public ICompleteAnswer[] CompleteAnswers { get; set; }
+        public ICompleteAnswer[] CompleteAnswers { get; set; }*/
 
         /// <summary>
         /// Gets the complete questionnaire key.
         /// </summary>
-        public Guid CompleteQuestionnaireKey { get; private set; }
-
+        public Guid PublicKey { get; private set; }
+        public Guid? Parent { get; private set; }
         #endregion
     }
 }

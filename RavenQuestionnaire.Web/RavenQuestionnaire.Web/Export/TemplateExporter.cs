@@ -4,6 +4,17 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.IO;
+using System.Web.Mvc;
+using Main.Core.View;
+using Main.Core.View.Question;
+using Ninject;
+using Ninject.Parameters;
+using RavenQuestionnaire.Core.Export;
+using RavenQuestionnaire.Core.Export.csv;
+using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
+using RavenQuestionnaire.Core.Views.Group;
+
 namespace RavenQuestionnaire.Web.Export
 {
     using System;
@@ -23,21 +34,15 @@ namespace RavenQuestionnaire.Web.Export
     public interface ITemplateExporter
     {
         byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid);
+        
     }
 
     /// <summary>
     /// Class for exportTempaltes
     /// </summary>
-    public class TemplateExporter : ExportImportEvent, ITemplateExporter
+    public class TemplateExporter : ZipExportImport, ITemplateExporter
     {
-        #region Fields
-
-        /// <summary>
-        /// The synchronizer
-        /// </summary>
-        private readonly IEventSync synchronizer;
-
-        #endregion
+      
         
         #region Constructor
 
@@ -47,10 +52,9 @@ namespace RavenQuestionnaire.Web.Export
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
-        public TemplateExporter(IEventSync synchronizer)
-                : base(synchronizer)
+        public TemplateExporter(IEventSync sync)
+            : base(sync)
         {
-            this.synchronizer = synchronizer;
         }
 
         #endregion
@@ -71,8 +75,11 @@ namespace RavenQuestionnaire.Web.Export
         /// </returns>
         public byte[] ExportTemplate(Guid? templateGuid, Guid? clientGuid)
         {
-            return this.ExportInternal(clientGuid, GetTemplate(templateGuid, clientGuid), string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
+            return this.ExportInternal(EventsToString(clientGuid, GetTemplate(templateGuid, clientGuid)),
+                                       string.Format("template{0}.txt", templateGuid == null ? "s" : string.Empty));
         }
+
+      
 
         /// <summary>
         /// Gathe all templates
@@ -97,7 +104,7 @@ namespace RavenQuestionnaire.Web.Export
                     return payload != null && payload.PublicKey == templateGuid;
                 }).FirstOrDefault());
             else 
-                archive.AddRange(events.Where(aggregateRootEvent => ((SnapshootLoaded)(aggregateRootEvent.Payload)).Template.Payload is QuestionnaireDocument));
+                archive.AddRange(events.Where(ar=>ar.Payload is SnapshootLoaded).Where(aggregateRootEvent => ((SnapshootLoaded)(aggregateRootEvent.Payload)).Template.Payload is QuestionnaireDocument));
             return archive;
         }
 

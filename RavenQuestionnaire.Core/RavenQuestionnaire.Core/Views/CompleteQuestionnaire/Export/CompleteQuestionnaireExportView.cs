@@ -6,6 +6,10 @@
 //   The complete questionnaire export view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Linq;
+
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
 {
     using System.Collections.Generic;
@@ -15,16 +19,23 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
     /// </summary>
     public class CompleteQuestionnaireExportView
     {
-        #region Fields
-
-        /// <summary>
-        /// The _order.
-        /// </summary>
-        private string _order = string.Empty;
-
-        #endregion
 
         #region Constructors and Destructors
+        public CompleteQuestionnaireExportView()
+        {
+            this.Items = Enumerable.Empty<CompleteQuestionnaireExportItem>();
+            this.SubPropagatebleGroups = Enumerable.Empty<Guid>();
+            this.Header = new Dictionary<Guid, HeaderItem>();
+            this.AutoPropagatebleQuestionsPublicKeys=new List<Guid>();
+        }
+       /* public CompleteQuestionnaireExportView(string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subGroups, Dictionary<Guid, HeaderItem> header, List<Guid> autoQuestions)
+        {
+            this.Items = items;
+            this.SubPropagatebleGroups = subGroups;
+            this.Header = header;
+            this.AutoPropagatebleQuestionsPublicKeys = autoQuestions;
+            this.GroupName = title;
+        }*/
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportView"/> class.
@@ -44,14 +55,13 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// <param name="order">
         /// The order.
         /// </param>
-        public CompleteQuestionnaireExportView(
-            int page, int pageSize, int totalCount, IEnumerable<CompleteQuestionnaireExportItem> items, string order)
+        public CompleteQuestionnaireExportView(string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, IEnumerable<Guid> autoQuestions, Dictionary<Guid, HeaderItem> header)
         {
-            this.Page = page;
-            this.TotalCount = totalCount;
-            this.PageSize = pageSize;
+            this.GroupName = title;
             this.Items = items;
-            this.Order = order;
+            this.Header = header;
+            this.SubPropagatebleGroups = subPropagatebleGroups;
+            this.AutoPropagatebleQuestionsPublicKeys = autoQuestions;
         }
 
         #endregion
@@ -63,37 +73,51 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         /// </summary>
         public IEnumerable<CompleteQuestionnaireExportItem> Items { get; private set; }
 
-        /// <summary>
-        /// Gets or sets the order.
-        /// </summary>
-        public string Order
-        {
-            get
-            {
-                return this._order;
-            }
+        public IEnumerable<Guid> SubPropagatebleGroups { get; private set; }
 
-            set
-            {
-                this._order = value;
-            }
-        }
+        public Dictionary<Guid, HeaderItem> Header { get; private set; }
 
-        /// <summary>
-        /// Gets the page.
-        /// </summary>
-        public int Page { get; private set; }
-
-        /// <summary>
-        /// Gets the page size.
-        /// </summary>
-        public int PageSize { get; private set; }
-
-        /// <summary>
-        /// Gets the total count.
-        /// </summary>
-        public int TotalCount { get; private set; }
-
+        public string GroupName { get; private set; }
+        public IEnumerable<Guid> AutoPropagatebleQuestionsPublicKeys { get; private set; }
         #endregion
+
+        public CompleteQuestionnaireExportView Merge(CompleteQuestionnaireExportView view)
+        {
+
+            List<CompleteQuestionnaireExportItem> items = new List<CompleteQuestionnaireExportItem>(this.Items);
+          /*  for (int i = 0; i < items.Count; i++)
+            {
+
+                foreach (KeyValuePair<Guid, string> value in view.Items[i].Values)
+                {
+                    items[i].Values.Add(value.Key, value.Value);
+                }
+            }*/
+            int i = 0;
+            foreach (CompleteQuestionnaireExportItem completeQuestionnaireExportItem in view.Items)
+            {
+                foreach (KeyValuePair<Guid, string> value in completeQuestionnaireExportItem.Values)
+                {
+                    items[i].Values.Add(value.Key, value.Value);
+                }
+                i++;
+            }
+
+            List<Guid> subgroups = new List<Guid>(this.SubPropagatebleGroups);
+            subgroups.AddRange(view.SubPropagatebleGroups);
+            subgroups = subgroups.Distinct().ToList();
+
+            Dictionary<Guid, HeaderItem> header = new Dictionary<Guid, HeaderItem>(this.Header);
+            foreach (KeyValuePair<Guid, HeaderItem> headerITem in view.Header)
+            {
+                header.Add(headerITem.Key, headerITem.Value);
+            }
+
+            List<Guid> autoQuestions = new List<Guid>(this.AutoPropagatebleQuestionsPublicKeys);
+            autoQuestions.AddRange(view.AutoPropagatebleQuestionsPublicKeys);
+            autoQuestions = subgroups.Distinct().ToList();
+            var result = new CompleteQuestionnaireExportView(this.GroupName, items, subgroups, autoQuestions, header);
+            return result;
+        }
     }
 }

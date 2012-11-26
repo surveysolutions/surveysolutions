@@ -53,26 +53,26 @@ namespace Questionnaire.Core.Web.Export
     /// <summary>
     /// The export import event helper class.
     /// </summary>
-    public class ExportImportEvent : IExportImport
+    public class ZipExportImport : IExportImport
     {
         #region Fields
 
         /// <summary>
         /// The synchronizer.
         /// </summary>
-        private readonly IEventSync synchronizer;
+        protected readonly IEventSync synchronizer;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExportImportEvent"/> class.
+        /// Initializes a new instance of the <see cref="ZipExportImport"/> class.
         /// </summary>
         /// <param name="synchronizer">
         /// The synchronizer to collect events
         /// </param>
-        public ExportImportEvent(IEventSync synchronizer)
+        public ZipExportImport(IEventSync synchronizer)
         {
             this.synchronizer = synchronizer;
         }
@@ -92,7 +92,7 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         public byte[] Export(Guid clientGuid)
         {
-            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents(null), "backup.txt");
+            return this.ExportInternal(EventsToString(clientGuid, this.synchronizer.ReadEvents()), "backup.txt");
         }
 
 
@@ -136,7 +136,7 @@ namespace Questionnaire.Core.Web.Export
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        /// <param name="events">
+        /// <param name="data">
         /// The events.
         /// </param>
         /// <param name="fileName">
@@ -145,15 +145,43 @@ namespace Questionnaire.Core.Web.Export
         /// <returns>
         /// Zip file as array of bytes
         /// </returns>
-        protected byte[] ExportInternal(Guid? clientGuid, IEnumerable<AggregateRootEvent> events, string fileName)
+        protected byte[] ExportInternal(string data, string fileName)
         {
-            var data = new ZipFileData { ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value, Events = events };
-            var outputStream = new MemoryStream();
-            using (var zip = new ZipFile())
+            return ExportInternal((zip) => zip.AddEntry(fileName, data), fileName);
+        }
+
+        protected byte[] ExportInternal(Stream data, string fileName)
+        {
+            return ExportInternal((zip) => zip.AddEntry(fileName, data), fileName);
+        }
+        protected byte[] ExportInternal(Dictionary<string, Stream> files, string entryFileName)
+        {
+            return ExportInternal((zip) =>
+                {
+                    foreach (KeyValuePair<string, Stream> file in files)
+                    {
+                        zip.AddEntry(file.Key, file.Value);
+                    }
+                }, entryFileName);
+        }
+        protected byte[] ExportInternal(Dictionary<string, string> files, string entryFileName)
+        {
+            return ExportInternal((zip) =>
             {
-                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                foreach (KeyValuePair<string, string> file in files)
+                {
+                    zip.AddEntry(file.Key, file.Value);
+                }
+            }, entryFileName);
+        }
+        private byte[] ExportInternal(Action<ZipFile> action, string entryFileName)
+        {
+            var outputStream = new MemoryStream();
+            using (var zip = new ZipFile(entryFileName))
+            {
+                // var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.BestCompression;
-                zip.AddEntry(fileName, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                action(zip);
                 zip.Save(outputStream);
             }
 
@@ -161,7 +189,13 @@ namespace Questionnaire.Core.Web.Export
             return outputStream.ToArray();
         }
 
-        
+        protected string EventsToString(Guid? clientGuid, IEnumerable<AggregateRootEvent> events)
+        {
+            var data = new ZipFileData { ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value, Events = events };
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
+        }
+
         #endregion
     }
 }

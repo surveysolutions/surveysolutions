@@ -163,6 +163,7 @@
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="Views\CompleteQuestionnaire\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="Views\CompleteQuestionnaire\Export\HeaderItem.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedGroup.cs" />
     <Compile Include="Views\CompleteQuestionnaire\PropagatedQuestion.cs" />
     <Compile Include="Views\Event\File\FileBrowseInputModel.cs">
