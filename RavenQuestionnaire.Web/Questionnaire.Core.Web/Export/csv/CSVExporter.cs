@@ -63,13 +63,15 @@ namespace Questionnaire.Core.Web.Export.csv
         /// </returns>
         public bool DoExport(CompleteQuestionnaireExportView records,string fileName)
         {
-            using (Stream memoryStream = this.DoExportToStream(records))
-            {
+            var bytes = this.DoExportToStream(records);
+           /* using (Stream memoryStream = this.DoExportToStream(records))
+            {*/
                 using (FileStream fileStream = File.Create(fileName))
                 {
-                    memoryStream.CopyTo(fileStream);
+                    fileStream.Write(bytes,0,bytes.Length);
+                   // memoryStream.CopyTo(fileStream);
                 }
-            }
+           // }
 
             return true;
         }
@@ -86,9 +88,9 @@ namespace Questionnaire.Core.Web.Export.csv
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream DoExportToStream(CompleteQuestionnaireExportView records)
+        public byte[] DoExportToStream(CompleteQuestionnaireExportView records)
         {
-            Stream result = new MemoryStream();
+            //Stream result = new MemoryStream();
 
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream))
@@ -122,12 +124,12 @@ namespace Questionnaire.Core.Web.Export.csv
                     writer.WriteField(item.Parent);
                     writer.NextRecord();
                 }
-
+                streamWriter.Flush();
                 memoryStream.Position = 0;
-                memoryStream.CopyTo(result);
+             //   memoryStream.CopyTo(result);
 
-                result.Position = 0;
-                return result;
+             //   result.Position = 0;
+                return memoryStream.ToArray();
             }
         }
 

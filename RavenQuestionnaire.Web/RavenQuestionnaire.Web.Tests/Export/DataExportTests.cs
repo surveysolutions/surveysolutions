@@ -58,7 +58,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
         [Test]
         public void CollectLEvels_OnlyONeLEvel_OneLEvelFileIsCreated()
         {
-            var allLevels = new Dictionary<string, Stream>();
+            var allLevels = new Dictionary<string, byte[]>();
             Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
             var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
 
@@ -77,7 +77,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
         [Test]
         public void CollectLEvels_2LEvels_AllLEvelsAreCollected()
         {
-            var allLevels = new Dictionary<string, Stream>();
+            var allLevels = new Dictionary<string, byte[]>();
             Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
             var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
 
@@ -117,7 +117,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
             }
 
 
-            public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
+            public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
             {
                 CollectLevels(input, container, manager);
             }

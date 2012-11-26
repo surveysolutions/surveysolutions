@@ -6,6 +6,9 @@
 //   The i export import.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Text.RegularExpressions;
+
 namespace Questionnaire.Core.Web.Export
 {
     using System;
@@ -147,20 +150,20 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         protected byte[] ExportInternal(string data, string fileName)
         {
-            return ExportInternal((zip) => zip.AddEntry(fileName, data), fileName);
+            return ExportInternal((zip) => zip.AddEntry(MakeValidFileName(fileName), data), fileName);
         }
 
         protected byte[] ExportInternal(Stream data, string fileName)
         {
-            return ExportInternal((zip) => zip.AddEntry(fileName, data), fileName);
+            return ExportInternal((zip) => zip.AddEntry(MakeValidFileName(fileName), data), fileName);
         }
-        protected byte[] ExportInternal(Dictionary<string, Stream> files, string entryFileName)
+        protected byte[] ExportInternal(Dictionary<string, byte[]> files, string entryFileName)
         {
             return ExportInternal((zip) =>
                 {
-                    foreach (KeyValuePair<string, Stream> file in files)
+                    foreach (KeyValuePair<string, byte[]> file in files)
                     {
-                        zip.AddEntry(file.Key, file.Value);
+                        zip.AddEntry(MakeValidFileName(file.Key), file.Value);
                     }
                 }, entryFileName);
         }
@@ -170,14 +173,14 @@ namespace Questionnaire.Core.Web.Export
             {
                 foreach (KeyValuePair<string, string> file in files)
                 {
-                    zip.AddEntry(file.Key, file.Value);
+                    zip.AddEntry(MakeValidFileName(file.Key), file.Value);
                 }
             }, entryFileName);
         }
         private byte[] ExportInternal(Action<ZipFile> action, string entryFileName)
         {
             var outputStream = new MemoryStream();
-            using (var zip = new ZipFile(entryFileName))
+            using (var zip = new ZipFile(MakeValidFileName(entryFileName)))
             {
                 // var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
                 zip.CompressionLevel = CompressionLevel.BestCompression;
@@ -195,7 +198,12 @@ namespace Questionnaire.Core.Web.Export
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
         }
-
+        protected string MakeValidFileName(string name)
+        {
+            string invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            string invalidReStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            return Regex.Replace(name, invalidReStr, "_");
+        }
         #endregion
     }
 }

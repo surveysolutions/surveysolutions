@@ -48,7 +48,7 @@ namespace Questionnaire.Core.Web.Export
                 string fileName = string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString());
                 var provider = kernel.Get<IExportProvider<CompleteQuestionnaireExportView>>(new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));// new CSVExporter(type == "csv" ? ',' : '\t');
                 var manager = new ExportManager<CompleteQuestionnaireExportView>(provider);
-                var allLevels = new Dictionary<string, Stream>();
+                var allLevels = new Dictionary<string, byte[]>();
                 var questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
                         new CQStatusReportViewInputModel(templateGuid/*, SurveyStatus.Complete.PublicId*/));
@@ -58,9 +58,9 @@ namespace Questionnaire.Core.Web.Export
             }
             return null;
         }
-        
 
-        protected void CollectLevels(/*Guid templateId, */CompleteQuestionnaireExportInputModel input, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
+
+        protected void CollectLevels(/*Guid templateId, */CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
@@ -79,7 +79,7 @@ namespace Questionnaire.Core.Web.Export
             }
         
         }
-        protected string GetName(string name, Dictionary<string, Stream> container, int i)
+        protected string GetName(string name, Dictionary<string, byte[]> container, int i)
         {
             if (i == 0)
             {

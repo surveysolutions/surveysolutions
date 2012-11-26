@@ -47,7 +47,7 @@ namespace Main.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        Stream DoExportToStream(T items);
+        byte[] DoExportToStream(T items);
 
         #endregion
     }

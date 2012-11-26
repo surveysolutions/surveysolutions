@@ -75,7 +75,7 @@ namespace Main.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream ExportToStream(T items)
+        public byte[] ExportToStream(T items)
         {
             return this._provider.DoExportToStream(items);
         }
