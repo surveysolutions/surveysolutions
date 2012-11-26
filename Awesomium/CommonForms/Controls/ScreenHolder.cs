@@ -37,5 +37,11 @@ namespace Browsing.Common.Controls
         {
             get { return this.loadedScreens; }
         }
+
+        public void UpdateConfigDependencies()
+        {
+            foreach (var screen in this.LoadedScreens)
+                screen.UpdateConfigDependencies();
+        }
     }
 }
