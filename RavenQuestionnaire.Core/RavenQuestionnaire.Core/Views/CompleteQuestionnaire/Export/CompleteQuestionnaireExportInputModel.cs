@@ -36,6 +36,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
         public Guid TemplateId { get; private set; }
         public IEnumerable<Guid> QuestionnairiesForImport { get;private set; }
         public Guid? PropagatableGroupPublicKey { get; private set; }
+        public Guid? AutoPropagatebleQuestionPublicKey { get;  set; }
 
         #endregion
     }

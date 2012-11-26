@@ -76,6 +76,48 @@ namespace RavenQuestionnaire.Core.Tests
             Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
         }
         [Test]
+        public void BuildHeader_GroupWithAutoQuestion_QuestionISAddedToHeaderAndQuestionISAddedToAutoQuestionList()
+        {
+            var group = new Group("some group");
+            var questionKey = Guid.NewGuid();
+            var subOBjects = new List<Guid>();
+            var autoQuestions = new List<CompleteQuestionnaireExportViewFactory.AutoQuestionWithTriggers>();
+            group.Add(new AutoPropagateQuestion() { QuestionText = "questionText", PublicKey = questionKey }, null);
+            var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
+            Assert.IsTrue(result.Count == 1);
+            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(subOBjects.Count == 0);
+            Assert.IsTrue(autoQuestions.Count == 1);
+            Assert.IsTrue(autoQuestions[0].PublicKey == questionKey);
+
+        }
+
+
+        [Test]
+        public void BuildHeader_GroupWithAutoQuestionAndPropagationGroupFromTrigger_QuestionISAddedToHeaderAndQuestionISAddedToAutoQuestionListPropagationGroupNotAdded()
+        {
+            var group = new Group("some group");
+            var questionKey = Guid.NewGuid();
+            var groupKey = Guid.NewGuid();
+            var subOBjects = new List<Guid>();
+            var autoQuestions = new List<CompleteQuestionnaireExportViewFactory.AutoQuestionWithTriggers>();
+            group.Add(
+                new AutoPropagateQuestion()
+                    {QuestionText = "questionText", PublicKey = questionKey, Triggers = new List<Guid> {groupKey}}, null);
+
+            var subGroup = new Group("subgroup") { Propagated = Propagate.Propagated, PublicKey = groupKey};
+            group.Add(subGroup, null);
+
+            var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
+            Assert.IsTrue(result.Count == 1);
+            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(subOBjects.Count == 0);
+            Assert.IsTrue(autoQuestions.Count == 1);
+            Assert.IsTrue(autoQuestions[0].PublicKey == questionKey && autoQuestions[0].Triggers.Count() == 1 &&
+                          autoQuestions[0].Triggers.First() == groupKey);
+
+        }
+        [Test]
         public void BuildHeader_GroupWithQuestionInsideSubGroup_QuestionISAddedToHeader()
         {
             var group = new Group("some group");
@@ -110,7 +152,11 @@ namespace RavenQuestionnaire.Core.Tests
 
             public Dictionary<Guid, HeaderItem> BuildHeaderTestable(IGroup template)
             {
-                return base.BuildHeader(template, new List<Guid>());
+                return base.BuildHeader(template, new List<Guid>(), new List<AutoQuestionWithTriggers>());
+            }
+            public Dictionary<Guid, HeaderItem> BuildHeaderTestable(IGroup template, List<Guid> subObject, List<AutoQuestionWithTriggers> autoQuestions)
+            {
+                return base.BuildHeader(template, subObject,autoQuestions);
             }
         }
     }

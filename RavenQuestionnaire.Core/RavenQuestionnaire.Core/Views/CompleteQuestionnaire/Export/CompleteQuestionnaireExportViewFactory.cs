@@ -11,6 +11,7 @@ using System.Collections;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.View;
 
 namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
@@ -75,24 +76,65 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
             {
                 return new CompleteQuestionnaireExportView();
             }
-            IGroup template = this.templateSession.GetByGuid(input.TemplateId);
-            if (input.PropagatableGroupPublicKey.HasValue)
-                template = template.FirstOrDefault<IGroup>(g => g.PublicKey == input.PropagatableGroupPublicKey.Value);
-
-            if (template==null)
+            var template = this.templateSession.GetByGuid(input.TemplateId);
+            if (template == null)
             {
                 return new CompleteQuestionnaireExportView();
             }
-            var documents = new List<CompleteQuestionnaireExportItem>(input.QuestionnairiesForImport.Count());
+            if (input.PropagatableGroupPublicKey.HasValue)
+            {
+                var groupTemplate =
+                    template.FirstOrDefault<IGroup>(g => g.PublicKey == input.PropagatableGroupPublicKey.Value);
+
+                if (groupTemplate == null)
+                {
+                    return new CompleteQuestionnaireExportView();
+                }
+                return CreateVew(groupTemplate, input.TemplateId, input.PropagatableGroupPublicKey,
+                                 input.QuestionnairiesForImport);
+            }
+            else if (input.AutoPropagatebleQuestionPublicKey.HasValue)
+                return HandleAutoPropagatedQuestion(template, input.AutoPropagatebleQuestionPublicKey.Value,
+                                                    input.QuestionnairiesForImport);
+            else
+                return CreateVew(template, input.TemplateId, input.PropagatableGroupPublicKey,
+                                 input.QuestionnairiesForImport);
+        }
+
+        #endregion
+        protected CompleteQuestionnaireExportView HandleAutoPropagatedQuestion(QuestionnaireDocument template, Guid questionKey, IEnumerable<Guid> questionnairies)
+        {
+            var question = template.FirstOrDefault<IQuestion>(q => q.PublicKey == questionKey);
+            var autoQuestion = question as IAutoPropagate;
+            CompleteQuestionnaireExportView result = null;
+            if (autoQuestion == null)
+                return null;
+
+            foreach (Guid trigger in autoQuestion.Triggers)
+            {
+                var groupTemplate =
+                    template.FirstOrDefault<IGroup>(g => g.PublicKey == trigger);
+                if (result != null)
+                    result = result.Merge(CreateVew(groupTemplate, template.PublicKey, trigger, questionnairies));
+                else
+                    result = CreateVew(groupTemplate, template.PublicKey, trigger, questionnairies);
+            }
+            return result;
+        }
+
+        protected CompleteQuestionnaireExportView CreateVew(IGroup template,Guid questionnaieKey,Guid? propagatableGroupPublicKey,  IEnumerable<Guid> questionnairies )
+        {
+            var documents = new List<CompleteQuestionnaireExportItem>(questionnairies.Count());
             var subObjects = new List<Guid>();
-            var header = BuildHeader(template, subObjects);
+            var autoQuestions = new List<AutoQuestionWithTriggers>();
+            var header = BuildHeader(template, subObjects, autoQuestions);
             var headerKey = header.Select(h => h.Key);
-            foreach (var key in input.QuestionnairiesForImport)
+            foreach (var key in questionnairies)
             {
                 var document = this.documentSession.GetByGuid(key);
-                if(document.TemplateId!=input.TemplateId)
+                if (document.TemplateId != questionnaieKey)
                     throw new ArgumentException("questionnaire has different template");
-                if (!input.PropagatableGroupPublicKey.HasValue)
+                if (!propagatableGroupPublicKey.HasValue)
                 {
                     documents.Add(
                         new CompleteQuestionnaireExportItem(
@@ -103,7 +145,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     var subGroups =
                         document.Find<ICompleteGroup>(
                             g =>
-                            g.PropagationPublicKey.HasValue && g.PublicKey == input.PropagatableGroupPublicKey.Value);
+                            g.PropagationPublicKey.HasValue && g.PublicKey == propagatableGroupPublicKey.Value);
                     foreach (ICompleteGroup completeGroup in subGroups)
                     {
                         documents.Add(
@@ -112,12 +154,11 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                     }
                 }
             }
-            return new CompleteQuestionnaireExportView(template.Title, documents, subObjects, header);
+            return new CompleteQuestionnaireExportView(template.Title, documents, subObjects,
+                                                       autoQuestions.Select(q => q.PublicKey), header);
         }
 
-        #endregion
-
-        protected Dictionary<Guid, HeaderItem> BuildHeader(IGroup template, List<Guid> subObjects)
+        protected Dictionary<Guid, HeaderItem> BuildHeader(IGroup template, List<Guid> subObjects, List<AutoQuestionWithTriggers> autoQuestions)
         {
             var result = new Dictionary<Guid, HeaderItem>();
             Queue<IComposite> queue=new Queue<IComposite>();
@@ -132,14 +173,24 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 if (question != null)
                 {
                     result.Add(question.PublicKey, new HeaderItem(question));
+                    var autoQuestion = question as AutoPropagateQuestion;
+                    if (autoQuestion != null)
+                    {
+                        autoQuestions.Add(new AutoQuestionWithTriggers(autoQuestion));
+                        foreach (Guid guid in autoQuestion.Triggers)
+                        {
+                            subObjects.Remove(guid);
+                        }
+                    }
                     continue;
                 }
                 var group = item as IGroup;
                 if (group != null)
                 {
-                    if (group.Propagated != Propagate.None )
+                    if (group.Propagated != Propagate.None)
                     {
-                        subObjects.Add(group.PublicKey);
+                        if (!autoQuestions.SelectMany(q=>q.Triggers).Contains(group.PublicKey))
+                            subObjects.Add(group.PublicKey);
                         continue;
                     }
                     foreach (IComposite child in group.Children)
@@ -149,6 +200,17 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export
                 }
             }
             return result;
+        }
+        public class AutoQuestionWithTriggers
+        {
+            public AutoQuestionWithTriggers(AutoPropagateQuestion question)
+            {
+                PublicKey = question.PublicKey;
+                Triggers = question.Triggers;
+            }
+
+            public Guid PublicKey { get; private set; }
+            public IEnumerable<Guid> Triggers { get; private set; }
         }
     }
 }

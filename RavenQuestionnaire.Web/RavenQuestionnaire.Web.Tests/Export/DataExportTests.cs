@@ -68,7 +68,8 @@ namespace RavenQuestionnaire.Web.Tests.Export
                 x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.IsAny<CompleteQuestionnaireExportInputModel>())).Returns(
                     result);
 
-            Target.ProtectedCollectLEvels(Guid.NewGuid(), Enumerable.Empty<Guid>(), null, allLevels, manager);
+            Target.ProtectedCollectLEvels(
+                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels, manager);
             Assert.IsTrue(allLevels.Count == 1);
             provider.Verify(x => x.DoExportToStream(result), Times.Once());
         }
@@ -81,7 +82,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView("top group",new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()}, new Dictionary<Guid, HeaderItem>());
+                new CompleteQuestionnaireExportView("top group",new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()},Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(
@@ -90,7 +91,9 @@ namespace RavenQuestionnaire.Web.Tests.Export
             this.ViewRepositoryMock.Setup(
                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey.HasValue))).Returns(
                    subResult);
-            Target.ProtectedCollectLEvels(Guid.NewGuid(), Enumerable.Empty<Guid>(), null,allLevels, manager);
+            Target.ProtectedCollectLEvels(
+                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels,
+                manager);
 
             Assert.IsTrue(allLevels.Count == 3);
             provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
@@ -113,9 +116,9 @@ namespace RavenQuestionnaire.Web.Tests.Export
             }
 
 
-            public void ProtectedCollectLEvels(Guid templateGuid,IEnumerable<Guid> questionnairies, Guid? level, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
+            public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
             {
-                CollectLevels(templateGuid, questionnairies, level, container, manager);
+                CollectLevels(input, container, manager);
             }
         }
     }

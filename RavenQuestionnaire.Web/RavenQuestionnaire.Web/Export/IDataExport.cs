@@ -65,24 +65,46 @@ namespace RavenQuestionnaire.Web.Export
                 var questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
                         new CQStatusReportViewInputModel(templateGuid/*, SurveyStatus.Complete.PublicId*/));
-                CollectLevels(templateGuid, questionnairies.Items.Select(q=>q.PublicKey), null, allLevels, manager);
+                CollectLevels(new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), allLevels, manager);
                 return this.ExportInternal(allLevels,
                                            fileName);
             }
             return null;
         }
+        
 
-        protected void CollectLevels(Guid templateId, IEnumerable<Guid> questionnairiesGuids, Guid? level, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
+        protected void CollectLevels(/*Guid templateId, */CompleteQuestionnaireExportInputModel input, Dictionary<string, Stream> container, ExportManager<CompleteQuestionnaireExportView> manager)
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
-                    (
-                        new CompleteQuestionnaireExportInputModel(questionnairiesGuids, templateId, level));
-            container.Add(records.GroupName+level+".csv", manager.ExportToStream(records));
+                    (input);
+            container.Add(GetName(records.GroupName, container, 0), manager.ExportToStream(records));
+
+            foreach (Guid autoPropagatebleQuestionPublicKey in records.AutoPropagatebleQuestionsPublicKeys)
+            {
+
+                CollectLevels(new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId) { AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey }, container,
+                                  manager);
+            }
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
-                CollectLevels(templateId,questionnairiesGuids, subPropagatebleGroup, container, manager);
+                CollectLevels(new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup), container, manager);
             }
+        
+        }
+        protected string GetName(string name, Dictionary<string, Stream> container, int i)
+        {
+            if (i == 0)
+            {
+                if (!container.ContainsKey(name + ".csv"))
+                    return name + ".csv";
+                else
+                    return GetName(name, container, i + 1);
+            }
+            if (!container.ContainsKey(name + i + ".csv"))
+                return name + i + ".csv";
+            else
+                return GetName(name, container, i + 1);
         }
     }
 }
