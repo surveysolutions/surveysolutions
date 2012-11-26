@@ -63,21 +63,21 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// </returns>
         public CQStatusReportView Load(CQStatusReportViewInputModel input)
         {
-            // var statuses = documentSession.Query<StatusDocument>().FirstOrDefault(u => u.QuestionnaireId == input.QuestionnaireId);
+           /* // var statuses = documentSession.Query<StatusDocument>().FirstOrDefault(u => u.QuestionnaireId == input.QuestionnaireId);
             SurveyStatus statuseFirst = SurveyStatus.GetAllStatuses().FirstOrDefault();
             if (statuseFirst == null)
             {
                 return null; // no satelite status document 
             }
 
-            var status = new StatusItem {Title = statuseFirst.Name};
+            var status = new StatusItem {Title = statuseFirst.Name};*/
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
             List<CompleteQuestionnaireBrowseItem> query =
                 this.documentItemSession.Query().Where(
-                    x => (x.TemplateId == input.QuestionnaireId) && (x.Status.PublicId == input.StatusId)).ToList();
+                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList();
 
-            return new CQStatusReportView(status, query);
+            return new CQStatusReportView(query);
         }
 
         #endregion

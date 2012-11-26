@@ -19,6 +19,17 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
     {
         #region Public Properties
 
+        public CQStatusReportItemView(Guid publicKey, UserLight assignToUser, string description, DateTime lastChangeDate, DateTime lastSyncDate)
+        {
+            PublicKey = publicKey;
+            AssignToUser = assignToUser;
+            Description = description;
+            LastChangeDate = lastChangeDate;
+            LastSyncDate = lastSyncDate;
+        }
+
+        public Guid PublicKey { get; set; }
+
         /// <summary>
         /// Gets or sets the assign to user.
         /// </summary>
