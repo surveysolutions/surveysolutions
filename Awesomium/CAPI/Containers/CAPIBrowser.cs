@@ -6,8 +6,8 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPIBrowser : Browser
     {
-        public CAPIBrowser(WebControl webView, ScreenHolder holder)
-            : base(webView, holder)
+        public CAPIBrowser(ScreenHolder holder)
+            : base(holder)
         {
             InitializeComponent();
         }
