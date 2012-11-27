@@ -47,7 +47,7 @@ namespace Synchronization.Core.Errors
     public class UsbNotChoozenException : UsbUnacceptableException
     {
         public UsbNotChoozenException()
-            : base("Usb flash memory device has not been choozen")
+            : base("Usb flash memory device has not been choosen")
         {
         }
     }
