@@ -29,6 +29,7 @@
         Html.RequiresJs("bootstrap-datepicker.js", "Scripts", 31);
         Html.RequiresJs("bootstrap-editable.js", "Scripts", 32);
         //Html.RequiresJs("bootstrap-editable-inline.js", "Scripts", 32);
+        Html.RequiresJs("highcharts.js", "Scripts", 40);
         Html.RequiresJs("sorter.js", "Scripts", 50);
     }
 </head>
@@ -36,6 +37,7 @@
     <div class="navbar  navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
+                <a class="brand" href="@Url.Action("GotoBrowser","Survey")">Home</a>
                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
                 </a>
