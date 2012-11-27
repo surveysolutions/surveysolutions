@@ -230,7 +230,7 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                var drive = GetDrive(); // only check if usb driver available and choozen
+                var drive = GetDrive(); // only check if usb driver available and choosen
                 return null;
             }
             catch (Exception ex)
