@@ -81,7 +81,7 @@ namespace Synchronization.Core
         protected abstract void CheckPushPrerequisites(SyncDirection direction);
         protected abstract void CheckPullPrerequisites(SyncDirection direction);
 
-        protected virtual void CheckPrerequisites(SyncType typeSync, SyncDirection direction)
+        private void CheckPrerequisites(SyncType typeSync, SyncDirection direction)
         {
             if (typeSync == SyncType.Push)
             {

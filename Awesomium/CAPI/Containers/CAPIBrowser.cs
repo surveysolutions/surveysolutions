@@ -7,7 +7,7 @@ namespace Browsing.CAPI.Containers
     public partial class CAPIBrowser : Browser
     {
         public CAPIBrowser(ScreenHolder holder)
-            : base(holder)
+            : base(holder, true)
         {
             InitializeComponent();
         }
