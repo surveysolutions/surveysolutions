@@ -18,8 +18,8 @@ namespace Browsing.Common.Containers
 
         #region C-tor
 
-        public Browser(ScreenHolder holder)
-            : base(holder, true)
+        public Browser(ScreenHolder holder, bool menuIsVisible)
+            : base(holder, menuIsVisible)
         {
             this.webView = new WebControl();
 
@@ -43,11 +43,6 @@ namespace Browsing.Common.Containers
                 GoHome();
         }
 
-        void homeButton_Click(object sender, System.EventArgs e)
-        {
-            GoHome();
-        }
-
         #endregion
 
         public void SetMode(bool isSinglePageMode, string rootPath)
@@ -56,7 +51,7 @@ namespace Browsing.Common.Containers
             this.progressBox.Visible = true;
             this.isSinglePage = isSinglePageMode;
 
-            MenuPanel.Visible = true;
+            //MenuPanel.Visible = true;
 
             try
             {
@@ -79,7 +74,7 @@ namespace Browsing.Common.Containers
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            MenuPanel.Visible = string.Compare(e.Url, this.rootPathString, true) == 0;
+            EnableHomeButton(string.Compare(e.Url, this.rootPathString, true) == 0);
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
@@ -91,14 +86,14 @@ namespace Browsing.Common.Containers
 
         protected virtual bool OnResourceRequest(ResourceRequest resourceRequest)
         {
-            return false;
+            return true;
         }
 
         void webView_LoadCompleted(object sender, EventArgs e)
         {
             this.progressBox.Visible = false;
             if (this.isSinglePage && string.Compare(this.webView.Source.ToString(), this.rootPathString, true) != 0)
-                homeButton_Click(sender, e);
+                GoHome();
         }
 
         #endregion

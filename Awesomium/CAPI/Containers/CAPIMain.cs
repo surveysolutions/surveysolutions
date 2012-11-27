@@ -81,7 +81,7 @@ namespace Browsing.CAPI.Containers
                 if (Holder.InvokeRequired)
                     Holder.Invoke(new System.Windows.Forms.MethodInvoker(() =>
                     {
-                        var textToShow = string.Format("{0} - (supervisor runs at: {1})", Holder.Parent.Text, supervisorHost);
+                        var textToShow = string.Format("{0} - supervisor runs by address: {1}", Holder.Parent.Text, supervisorHost);
                         Holder.Parent.Text = textToShow;
                     }));
             }

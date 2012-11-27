@@ -13,7 +13,7 @@ namespace Browsing.Supervisor.Containers
         #region Constructor
 
         public SupervisorBrowser(ScreenHolder holder)
-            : base(holder)
+            : base(holder, false)
         {
             InitializeComponent();
         }
