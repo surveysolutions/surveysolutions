@@ -22,7 +22,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var collect in Model.Items)
+            @foreach (var collect in Model.Items.Skip((Model.Page - 1) * Model.PageSize).Take(Model.PageSize))
             {
                 <tr>
                     <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, userId = userKey })
@@ -81,6 +81,6 @@
         }
     </div>
     <div id="chartBox">
-        @*@Html.Partial("QuestionnaireChart", this.Model.Chart)*@
+        @Html.Partial("QuestionnaireChart", this.Model)
     </div>
 </div>
