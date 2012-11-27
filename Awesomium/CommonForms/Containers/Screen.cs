@@ -27,7 +27,7 @@ namespace Browsing.Common.Containers
 
             this.holder = holder;
             if (this.holder != null)
-                this.holder.LoadedScreens.Add(this);
+                this.holder.AddScreen(this);
         }
 
         #endregion
@@ -148,7 +148,7 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnHomeButtonClick(object sender, EventArgs e)
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Main));
+            this.Holder.NavigateMain();
         }
 
         protected virtual void OnUpdateConfigDependencies() { }

@@ -36,9 +36,9 @@ namespace Browsing.Supervisor.Forms
             };
         }
 
-        protected override Browser OnAddBrowserScreen(WebControl webView)
+        protected override Browser OnAddBrowserScreen()
         {
-            return new SupervisorBrowser(webView, Holder)
+            return new SupervisorBrowser(Holder)
             {
                 Name = "supervisorBrowser"
             };

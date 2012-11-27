@@ -66,7 +66,6 @@ namespace Browsing.Common.Forms
                                            //ForceSingleProcess = true
                                        }, true);
 
-                var webView = new WebControl();
                 var requestProcessor = new WebRequestProcessor();
                 var urlUtils = InstantiateUrlProvider();
 
@@ -99,17 +98,17 @@ namespace Browsing.Common.Forms
 
                 AddRegistrationScreen(requestProcessor, urlUtils);
                 AddMainScreen(requestProcessor, settingsProvider, urlUtils);
-                AddBrowserScreen(webView);
+                AddBrowserScreen();
                 AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
                 AddSettingsScreen();
 
                 this.Controls.Add(this.Holder);
+
             }
             finally
             {
                 this.stopThread = true;
             }
-
 
         }
 
@@ -132,9 +131,9 @@ namespace Browsing.Common.Forms
             splash.Hide();
         }
 
-        private void AddBrowserScreen(WebControl webView)
+        private void AddBrowserScreen()
         {
-            OnAddBrowserScreen(webView);
+            OnAddBrowserScreen();
         }
 
         private void AddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
@@ -189,7 +188,7 @@ namespace Browsing.Common.Forms
         protected abstract Containers.Settings OnAddSettingsScreen();
         protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils);
-        protected abstract Containers.Browser OnAddBrowserScreen(WebControl webView);
+        protected abstract Containers.Browser OnAddBrowserScreen();
 
         #endregion
 
@@ -239,4 +238,5 @@ namespace Browsing.Common.Forms
 
         #endregion
     }
+
 }

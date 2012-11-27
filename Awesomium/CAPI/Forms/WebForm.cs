@@ -48,9 +48,9 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Browser OnAddBrowserScreen(WebControl webView)
+        protected override Browser OnAddBrowserScreen()
         {
-            return new CAPIBrowser(webView, Holder)
+            return new CAPIBrowser(Holder)
                         {
                             Name = "capiBrowser1"
                         };
