@@ -281,7 +281,6 @@ namespace Web.Supervisor.Controllers
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             var model = this.viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
-            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false));
             var options = r.Select(item => new SelectListItem
             {
                 Value = item.Id.ToString(),
