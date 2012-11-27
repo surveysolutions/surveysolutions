@@ -96,6 +96,11 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
+        public ActionResult GotoBrowser()
+        {
+            return this.RedirectToAction("Index");
+        }
+
         public ActionResult Status(Guid? statusId)
         {
             ViewBag.ActivePage = MenuItem.Statuses;
@@ -276,7 +281,6 @@ namespace Web.Supervisor.Controllers
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             var model = this.viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
-            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false));
             var options = r.Select(item => new SelectListItem
             {
                 Value = item.Id.ToString(),
@@ -680,29 +684,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-
-        /// <summary>
-        /// Create graph on home page
-        /// </summary>
-        /// <param name="view">
-        /// The view.
-        /// </param>
-        /// <returns>
-        /// Return partial view on home page
-        /// </returns>
-        public ActionResult QuestionnaireChart(IndexView view)
-        {
-            var data = new ChartDataModel("Chart");
-            if (view.Items.Count > 0)
-            {
-                foreach (var item in view.Items)
-                    data.DataItems.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
-            }
-
-            return this.PartialView("QuestionnaireChart", data);
-        }
-
         #endregion
-
     }
 }
