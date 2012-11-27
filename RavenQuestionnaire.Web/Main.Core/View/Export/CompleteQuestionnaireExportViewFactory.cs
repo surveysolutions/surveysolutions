@@ -64,10 +64,6 @@ namespace Main.Core.View.Export
         /// </returns>
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
         {
-            if (!input.QuestionnairiesForImport.Any())
-            {
-                return new CompleteQuestionnaireExportView();
-            }
             var template = this.templateSession.GetByGuid(input.TemplateId);
             if (template == null)
             {
