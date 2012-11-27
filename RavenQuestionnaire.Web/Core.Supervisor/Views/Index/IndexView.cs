@@ -171,8 +171,6 @@ namespace Core.Supervisor.Views.Index
         /// </summary>
         public IndexViewItem Summary { get; set; }
 
-        public object Chart { get; set; }
-
         #endregion
     }
 }

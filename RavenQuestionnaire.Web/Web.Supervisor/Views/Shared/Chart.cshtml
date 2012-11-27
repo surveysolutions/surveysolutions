@@ -54,7 +54,11 @@ $(function() {
                     x: -20
                 },
                 xAxis: {
-                    categories: @Html.Raw(xTitles)
+                    categories: @Html.Raw(xTitles),
+                    labels: {
+                        rotation: -45,
+                        align: 'right'
+                    }
                 },
                 yAxis: {
                     title: {

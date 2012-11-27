@@ -103,8 +103,8 @@ namespace Core.Supervisor.Views.Index
 
             retval.TotalCount = items.Count();
 
-            retval.Items =
-                items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            retval.Items = items.ToList();
+                //items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return retval;
         }
 
