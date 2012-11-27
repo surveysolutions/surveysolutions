@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportFactory.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -7,19 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Documents;
-using Main.Core.View;
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 using Main.DenormalizerStorage;
 
-namespace RavenQuestionnaire.Core.Views.StatusReport
+namespace Main.Core.View.StatusReport
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-
     /// <summary>
     /// The cq status report factory.
     /// </summary>
@@ -63,21 +57,21 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// </returns>
         public CQStatusReportView Load(CQStatusReportViewInputModel input)
         {
-            // var statuses = documentSession.Query<StatusDocument>().FirstOrDefault(u => u.QuestionnaireId == input.QuestionnaireId);
+           /* // var statuses = documentSession.Query<StatusDocument>().FirstOrDefault(u => u.QuestionnaireId == input.QuestionnaireId);
             SurveyStatus statuseFirst = SurveyStatus.GetAllStatuses().FirstOrDefault();
             if (statuseFirst == null)
             {
                 return null; // no satelite status document 
             }
 
-            var status = new StatusItem {Title = statuseFirst.Name};
+            var status = new StatusItem {Title = statuseFirst.Name};*/
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
             List<CompleteQuestionnaireBrowseItem> query =
                 this.documentItemSession.Query().Where(
-                    x => (x.TemplateId == input.QuestionnaireId) && (x.Status.PublicId == input.StatusId)).ToList();
+                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList();
 
-            return new CQStatusReportView(status, query);
+            return new CQStatusReportView(query);
         }
 
         #endregion

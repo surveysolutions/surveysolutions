@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CSVExporter.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,21 +6,19 @@
 //   Implements comma-separated values export format.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Export.csv
+
+using System;
+using System.IO;
+using CsvHelper;
+using Main.Core.Export;
+using Main.Core.View.Export;
+
+namespace Questionnaire.Core.Web.Export.csv
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-
-    using CsvHelper;
-
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-
     /// <summary>
     /// Implements comma-separated values export format.
     /// </summary>
-    public class CSVExporter : IExportProvider
+    public class CSVExporter : IExportProvider<CompleteQuestionnaireExportView>
     {
         #region Constructors and Destructors
 
@@ -63,16 +61,17 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool DoExport(
-            Dictionary<Guid, string> template, CompleteQuestionnaireExportView records, string fileName)
+        public bool DoExport(CompleteQuestionnaireExportView records,string fileName)
         {
-            using (Stream memoryStream = this.DoExportToStream(template, records))
-            {
+            var bytes = this.DoExportToStream(records);
+           /* using (Stream memoryStream = this.DoExportToStream(records))
+            {*/
                 using (FileStream fileStream = File.Create(fileName))
                 {
-                    memoryStream.CopyTo(fileStream);
+                    fileStream.Write(bytes,0,bytes.Length);
+                   // memoryStream.CopyTo(fileStream);
                 }
-            }
+           // }
 
             return true;
         }
@@ -89,45 +88,48 @@ namespace RavenQuestionnaire.Core.Export.csv
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        public Stream DoExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView records)
+        public byte[] DoExportToStream(CompleteQuestionnaireExportView records)
         {
-            Stream result = new MemoryStream();
+            //Stream result = new MemoryStream();
 
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream))
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.Delimeter;
-                writer.WriteField("ID"); // templated column for ID
+
+                writer.WriteField("PublicKey"); // templated column for ID
 
                 // build up header
-                foreach (string question in template.Values)
+                foreach (var question in records.Header.Values)
                 {
-                    writer.WriteField(question);
+                    writer.WriteField(question.Caption);
                 }
-
+                writer.WriteField("ForeignKey");
                 writer.NextRecord();
 
                 // iterate over records
                 foreach (CompleteQuestionnaireExportItem item in records.Items)
                 {
-                    writer.WriteField(item.CompleteQuestionnaireKey);
-                    foreach (Guid guid in template.Keys)
+                    writer.WriteField(item.PublicKey);
+                    foreach (Guid guid in records.Header.Keys)
                     {
                         /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
-                        var completeAnswer =
-                            item.CompleteQuestions.Where(a => a.PublicKey == guid).FirstOrDefault().GetAnswerString();
-                        writer.WriteField(completeAnswer ?? null);
+                        // var firstOrDefault = item.CompleteQuestions.FirstOrDefault(a => a.PublicKey == guid);
+                        if (item.Values.ContainsKey(guid))
+                        {
+                            writer.WriteField(item.Values[guid]);
+                        }
                     }
-
+                    writer.WriteField(item.Parent);
                     writer.NextRecord();
                 }
-
+                streamWriter.Flush();
                 memoryStream.Position = 0;
-                memoryStream.CopyTo(result);
+             //   memoryStream.CopyTo(result);
 
-                result.Position = 0;
-                return result;
+             //   result.Position = 0;
+                return memoryStream.ToArray();
             }
         }
 

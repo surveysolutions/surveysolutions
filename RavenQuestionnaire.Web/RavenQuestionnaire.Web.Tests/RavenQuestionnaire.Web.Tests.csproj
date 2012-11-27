@@ -96,6 +96,7 @@
     <Compile Include="Controllers\QuestionControllerTest.cs" />
     <Compile Include="Controllers\QuestionnaireControllerTest.cs" />
     <Compile Include="Controllers\SurveyControllerTest.cs" />
+    <Compile Include="Export\DataExportTests.cs" />
     <Compile Include="Export\ExportTest.cs" />
     <Compile Include="Membership\QuestionnaireMembershipProviderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

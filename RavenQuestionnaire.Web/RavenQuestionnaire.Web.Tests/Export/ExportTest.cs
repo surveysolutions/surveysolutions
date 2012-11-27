@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.IO;
+using Main.Core.View;
+using Ninject;
+
 namespace RavenQuestionnaire.Web.Tests.Export
 {
     #region Libraries
@@ -44,8 +48,8 @@ namespace RavenQuestionnaire.Web.Tests.Export
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
-        public TemplateExporterServiceTest(IEventSync synchronizer)
-            : base(synchronizer)
+        public TemplateExporterServiceTest(IEventSync sync)
+            : base(sync)
         {
         }
 
@@ -76,15 +80,33 @@ namespace RavenQuestionnaire.Web.Tests.Export
     public class ExportTest
     {
         /// <summary>
+        /// Gets or sets the command service mock.
+        /// </summary>
+        public Mock<IEventSync> SynchronizerMock { get; set; }
+
+        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+        public TemplateExporterServiceTest Target { get; set; }
+        /// <summary>
+        /// The create objects.
+        /// </summary>
+        [SetUp]
+        public void CreateObjects()
+        {
+        
+            this.ViewRepositoryMock = new Mock<IViewRepository>();
+
+            this.SynchronizerMock = new Mock<IEventSync>();
+        
+            this.Target = new TemplateExporterServiceTest(this.SynchronizerMock.Object);
+        }
+        /// <summary>
         /// Export templates
         /// </summary>
         [Test]
         public void When_TemplatesExport()
         {
-            var synchronizer = new Mock<IEventSync>();
-            var events = new TemplateExporter(synchronizer.Object);
-            var result = events.ExportTemplate(Guid.NewGuid(), Guid.NewGuid());
-            synchronizer.Verify(x => x.ReadEvents(null), Times.Once());
+            var result = this.Target.ExportTemplate(Guid.NewGuid(), Guid.NewGuid());
+            SynchronizerMock.Verify(x => x.ReadEvents(null), Times.Once());
             Assert.AreEqual(result.GetType(), typeof(byte[]));
         }
 
@@ -94,18 +116,16 @@ namespace RavenQuestionnaire.Web.Tests.Export
         [Test]
         public void When_ExportDataIsIEnumerable()
         {
-            var synchronizer = new Mock<IEventSync>();
-            var service = new TemplateExporterServiceTest(synchronizer.Object);
-            var result = service.PrivateGetTemplate(null, Guid.NewGuid());
+            var result = this.Target.PrivateGetTemplate(null, Guid.NewGuid());
             Assert.AreEqual(result.GetType(), typeof(List<AggregateRootEvent>));
         }
 
         /// <summary>
         /// Check returning data without and with guid template
         /// </summary>
+        [Test]
         public void When_ExportDataAllAndSingleTemplates()
         {
-            var synchronizer = new Mock<IEventSync>();
             var fakeGuid = Guid.NewGuid();
             var events = new[]
                 {
@@ -113,27 +133,42 @@ namespace RavenQuestionnaire.Web.Tests.Export
                         {
                             Payload = new SnapshootLoaded()
                                     {
-                                        Template = new Snapshot(Guid.NewGuid(), 0, new QuestionnaireDocument() { PublicKey = fakeGuid })
+                                        Template = new Snapshot(fakeGuid, 0, new QuestionnaireDocument() { PublicKey = fakeGuid })
                                     }
                         },
-                    new AggregateRootEvent(),
-                    new AggregateRootEvent(),
-                    new AggregateRootEvent()
+                    new AggregateRootEvent(){
+                            Payload = new SnapshootLoaded()
+                                    {
+                                        Template = new Snapshot(Guid.NewGuid(), 0, new QuestionnaireDocument() { PublicKey = Guid.NewGuid() })
+                                    }
+                        },
+                    new AggregateRootEvent(){
+                            Payload = new SnapshootLoaded()
+                                    {
+                                        Template = new Snapshot(Guid.NewGuid(), 0, new QuestionnaireDocument() { PublicKey = Guid.NewGuid() })
+                                    }
+                        },
+                    new AggregateRootEvent(){
+                            Payload = new SnapshootLoaded()
+                                    {
+                                        Template = new Snapshot(Guid.NewGuid(), 0, new QuestionnaireDocument() { PublicKey = Guid.NewGuid() })
+                                    }
+                        }
                 };
-            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
-            var service = new TemplateExporterServiceTest(synchronizer.Object);
-            var result = service.PrivateGetTemplate(null, null);
+
+            SynchronizerMock.Setup(x => x.ReadEvents(null)).Returns(events);
+            var result = Target.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 4);
-            var resultGuidTemplate = service.PrivateGetTemplate(fakeGuid, null);
+            var resultGuidTemplate = Target.PrivateGetTemplate(fakeGuid, null);
             Assert.AreEqual(resultGuidTemplate.Count(), 1);
         }
 
         /// <summary>
         /// Check if returning data is template of questionnaire
         /// </summary>
+        [Test]
         public void Check_IfExportDataIsQuestionnaireDocument()
         {
-            var synchronizer = new Mock<IEventSync>();
             var events = new[]
                 {
                     new AggregateRootEvent()
@@ -165,10 +200,10 @@ namespace RavenQuestionnaire.Web.Tests.Export
                                 }
                         }
                 };
-            synchronizer.Setup(x => x.ReadEvents(null)).Returns(events);
-            var service = new TemplateExporterServiceTest(synchronizer.Object);
-            var result = service.PrivateGetTemplate(null, null);
+            SynchronizerMock.Setup(x => x.ReadEvents(null)).Returns(events);
+            var result = Target.PrivateGetTemplate(null, null);
             Assert.AreEqual(result.ToList().Count, 2);
         }
+       
     }
 }

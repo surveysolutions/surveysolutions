@@ -15,14 +15,15 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     public class ImportExportControllerTest
     {
         public Mock<IExportImport> ExportImportMock { get; set; }
-
+        public Mock<IDataExport> DataExportMock { get; set; }
         public ImportExportController Controller { get; set; }
 
         [SetUp]
         public void CreateObjects()
         {
             ExportImportMock = new Mock<IExportImport>();
-            Controller = new ImportExportController(ExportImportMock.Object);
+            DataExportMock = new Mock<IDataExport>();
+            Controller = new ImportExportController(ExportImportMock.Object, DataExportMock.Object);
         }
 
         [Test]

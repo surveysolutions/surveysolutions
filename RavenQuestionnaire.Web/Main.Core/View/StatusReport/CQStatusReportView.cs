@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportView.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -7,18 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Main.Core.View.CompleteQuestionnaire;
 
-namespace RavenQuestionnaire.Core.Views.StatusReport
+namespace Main.Core.View.StatusReport
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.SubEntities;
-
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire;
-
     /// <summary>
     /// The cq status report view.
     /// </summary>
@@ -35,23 +30,22 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <param name="statisticDocuments">
         /// The statistic documents.
         /// </param>
-        public CQStatusReportView(StatusItem status, IEnumerable<CompleteQuestionnaireBrowseItem> statisticDocuments)
+        public CQStatusReportView(IEnumerable<CompleteQuestionnaireBrowseItem> statisticDocuments)
         {
-            this.StatusName = status.Title;
 
             this.Items = new List<CQStatusReportItemView>();
             foreach (CompleteQuestionnaireBrowseItem statisticDocument in statisticDocuments)
             {
-                var view = new CQStatusReportItemView
-                    {
-                        AssignToUser = statisticDocument.Responsible, 
-                        LastChangeDate = statisticDocument.LastEntryDate, 
-                        LastSyncDate = DateTime.Now, 
-                        Description =
-                            string.Join(
-                                ", ", 
-                                statisticDocument.FeaturedQuestions.Select(f => f.Title + ": " + f.Answer.ToString()))
-                    };
+                var view = new CQStatusReportItemView(statisticDocument.CompleteQuestionnaireId,
+                                                      statisticDocument.Responsible,
+
+                                                      string.Join(
+                                                          ", ",
+                                                          statisticDocument.FeaturedQuestions.Select(
+                                                              f => f.Title + ": " + f.Answer.ToString())),
+                                                      statisticDocument.LastEntryDate,
+                                                      DateTime.Now
+                    );
                 this.Items.Add(view);
             }
         }
@@ -70,10 +64,6 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// </summary>
         public string QuestionnaireId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the status name.
-        /// </summary>
-        public string StatusName { get; set; }
 
         /// <summary>
         /// Gets or sets the title.

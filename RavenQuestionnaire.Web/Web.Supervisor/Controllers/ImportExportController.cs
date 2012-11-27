@@ -27,7 +27,7 @@ namespace Web.Supervisor.Controllers
         /// The exportimport events.
         /// </summary>
         private readonly IExportImport exportimportEvents;
-
+        private readonly IDataExport exporter;
         #endregion
 
         #region Constructors and Destructors
@@ -38,9 +38,10 @@ namespace Web.Supervisor.Controllers
         /// <param name="exportImport">
         /// The export import.
         /// </param>
-        public ImportExportController(IExportImport exportImport)
+        public ImportExportController(IExportImport exportImport, IDataExport exporter)
         {
             this.exportimportEvents = exportImport;
+            this.exporter = exporter;
         }
 
         #endregion
@@ -129,7 +130,31 @@ namespace Web.Supervisor.Controllers
         {
             return this.RedirectToAction("Index", "Survey");
         }
-
+        public void GetExportedDataAsync(Guid id, string type)
+        {
+            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
+            {
+                throw new HttpException(404, "Invalid quesry string parameters");
+            }
+            AsyncQuestionnaireUpdater.Update(
+               this.AsyncManager,
+               () =>
+               {
+                   try
+                   {
+                       this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                   }
+                   catch
+                   {
+                       this.AsyncManager.Parameters["result"] = null;
+                   }
+               });
+        }
+        public ActionResult GetExportedDataCompleted(byte[] result)
+        {
+            return this.File(
+                result, "application/zip", "data.zip");
+        }
         #endregion
     }
 }

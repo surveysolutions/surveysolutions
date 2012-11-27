@@ -54,7 +54,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
             postedfile.Setup(f => f.InputStream).Returns(outputStream);
 
-            var events = new ExportImportEvent(synchronizer.Object);
+            var events = new ZipExportImport(synchronizer.Object);
             events.Import(postedfile.Object);
 
             synchronizer.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Once());

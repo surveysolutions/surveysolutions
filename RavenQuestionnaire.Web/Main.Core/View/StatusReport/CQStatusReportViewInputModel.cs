@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportViewInputModel.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,10 +6,11 @@
 //   The cq status report view input model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Views.StatusReport
-{
-    using System;
 
+using System;
+
+namespace Main.Core.View.StatusReport
+{
     /// <summary>
     /// The cq status report view input model.
     /// </summary>
@@ -31,7 +32,10 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
             this.StatusId = sId;
             this.QuestionnaireId = qId;
         }
-
+        public CQStatusReportViewInputModel(Guid qId)
+        {
+            this.QuestionnaireId = qId;
+        }
         #endregion
 
         #region Public Properties
@@ -44,7 +48,7 @@ namespace RavenQuestionnaire.Core.Views.StatusReport
         /// <summary>
         /// Gets or sets the status id.
         /// </summary>
-        public Guid StatusId { get; set; }
+        public Guid? StatusId { get; set; }
 
         #endregion
     }

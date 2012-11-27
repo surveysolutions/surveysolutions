@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IExportProvider.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,18 +6,15 @@
 //   The ExportProvider interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Export
+
+using System.IO;
+
+namespace Main.Core.Export
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-
-    using RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Export;
-
     /// <summary>
     /// The ExportProvider interface.
     /// </summary>
-    public interface IExportProvider
+    public interface IExportProvider<T>
     {
         #region Public Methods and Operators
 
@@ -36,7 +33,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        bool DoExport(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items, string fileName);
+        bool DoExport(T items, string fileName);
 
         /// <summary>
         /// The do export to stream.
@@ -50,7 +47,7 @@ namespace RavenQuestionnaire.Core.Export
         /// <returns>
         /// The System.IO.Stream.
         /// </returns>
-        Stream DoExportToStream(Dictionary<Guid, string> template, CompleteQuestionnaireExportView items);
+        byte[] DoExportToStream(T items);
 
         #endregion
     }

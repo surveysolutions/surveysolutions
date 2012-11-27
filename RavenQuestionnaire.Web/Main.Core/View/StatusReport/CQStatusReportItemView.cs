@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="CQStatusReportItemView.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,18 +6,29 @@
 //   The cq status report item view.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace RavenQuestionnaire.Core.Views.StatusReport
+
+using System;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.View.StatusReport
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
     /// <summary>
     /// The cq status report item view.
     /// </summary>
     public class CQStatusReportItemView
     {
         #region Public Properties
+
+        public CQStatusReportItemView(Guid publicKey, UserLight assignToUser, string description, DateTime lastChangeDate, DateTime lastSyncDate)
+        {
+            PublicKey = publicKey;
+            AssignToUser = assignToUser;
+            Description = description;
+            LastChangeDate = lastChangeDate;
+            LastSyncDate = lastSyncDate;
+        }
+
+        public Guid PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the assign to user.

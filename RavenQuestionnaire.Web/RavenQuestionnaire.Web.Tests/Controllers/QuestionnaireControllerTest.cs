@@ -8,6 +8,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Questionnaire.Core.Web.Export;
+using RavenQuestionnaire.Web.Export;
+
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -42,6 +45,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         /// </summary>
         public Mock<ICommandService> CommandServiceMock { get; set; }
 
+        public Mock<IDataExport> Exporter { get; set; }
+
         /// <summary>
         /// Gets or sets the controller.
         /// </summary>
@@ -65,8 +70,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.ViewRepositoryMock = new Mock<IViewRepository>();
 
             this.CommandServiceMock = new Mock<ICommandService>();
+            this.Exporter = new Mock<IDataExport>();
             NcqrsEnvironment.SetDefault(this.CommandServiceMock.Object);
-            this.Controller = new QuestionnaireController(this.ViewRepositoryMock.Object);
+            this.Controller = new QuestionnaireController(this.ViewRepositoryMock.Object, this.Exporter.Object);
         }
 
         /// <summary>
@@ -149,7 +155,18 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             ViewResult result = this.Controller.Details(output.PublicKey);
             Assert.AreEqual(output, result.ViewData.Model);
         }
-
+        [Test]
+        public void GetExportedData_TemplateIdIsEmpty_HttpException()
+        {
+            Assert.Throws<HttpException>(() => this.Controller.GetExportedData(Guid.Empty, "some type"));
+        }
+        [Test]
+        public void GetExportedData_TemplateIdIsNotEmpty_TemplateExporterWillPrepareSomeData()
+        {
+            var templateGuid = Guid.NewGuid();
+            this.Controller.GetExportedData(templateGuid, "type");
+            this.Exporter.Verify(x => x.ExportData(templateGuid, "type"), Times.Once());
+        }
         #endregion
     }
 }
