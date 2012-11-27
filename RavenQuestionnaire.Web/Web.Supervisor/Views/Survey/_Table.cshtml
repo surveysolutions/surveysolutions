@@ -85,12 +85,12 @@
         </tbody>
     </table>
     <div class="pagination" id="paging">
-        @if ((double)Model.TotalCount / Model.PageSize > 1)
+        @if (((double)Model.TotalCount / Model.PageSize) > 1d)
         {
             @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
         }
     </div>
     <div id="chartBox">
-        @Html.Partial("QuestionnaireChart", this.Model)
+        @Html.Partial("IndexChart", this.Model)
     </div>
 </div>

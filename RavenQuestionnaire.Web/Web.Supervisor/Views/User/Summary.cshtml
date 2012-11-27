@@ -16,6 +16,7 @@
         makeSortable();
         onPagingClick();
         
+        init();
     });
 
     function makeSortable() {
@@ -44,6 +45,13 @@
                     200: function(response) {
                         $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
                         $('#paging').html($(response).find('#paging').html());
+                        var parsedHTML = response.replace(/script/gi, 'rickscript'); 
+                        $(parsedHTML).find('rickscript').each(function (index, domEle) {
+                            if (!$(this).attr('src')) {
+                                eval($(this).text()); 
+                            }
+                        });
+                        init();
                         
                         onPagingClick();
                     }

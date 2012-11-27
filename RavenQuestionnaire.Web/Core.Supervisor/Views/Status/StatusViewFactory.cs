@@ -90,7 +90,7 @@ namespace Core.Supervisor.Views.Status
 
             retval.TotalCount = items.Count();
 
-            retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            retval.Items = items.ToList();//.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
             return retval;
         }
 

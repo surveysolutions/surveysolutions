@@ -1,10 +1,12 @@
 ﻿@using System.Web.Script.Serialization
 @using Core.Supervisor.Views.Index
-@model IndexView
+@using Core.Supervisor.Views.Summary
+@model SummaryView
 @{
     var r = new JavaScriptSerializer();
-    var xTitles = r.Serialize(@Model.Items.Select(t => t.Title).ToArray());
-    var colors = new string[] { "#049cdb", "#46a546", "#f89406", "#c3325f", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
+    var xTitles = r.Serialize(@Model.Items.Select(t => t.User.Name).ToArray());
+    var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
+
 }
 <p>
     <div id="switcher" class="btn-group">
@@ -13,8 +15,10 @@
         <button id="pie" class="btn">Pie</button>
     </div>
 </p>
+
 <script type="text/javascript">
-    $(document).ready(function () {
+
+    init = function() {
         var active = "btn-primary";
         $("#column").click(function() {
             if (!$(this).hasClass(active)) {
@@ -24,7 +28,7 @@
             $('#container').css('height', '400px');
             drawPlot('column');
         });
-        
+
         $("#bar").click(function() {
             if (!$(this).hasClass(active)) {
                 $("#switcher .btn").removeClass(active);
@@ -33,7 +37,7 @@
             $('#container').css('height', '800px');
             drawPlot('bar');
         });
-        
+
         $("#pie").click(function() {
             if (!$(this).hasClass(active)) {
                 $("#switcher .btn").removeClass(active);
@@ -42,12 +46,11 @@
             $('#container').css('height', '600px');
             drawPlot('pie');
         });
-       
 
-        drawPlot('column');
-    });
+        $("#column").click();
+    };
 
-    var barData = [
+    barData = [
         {
             name: 'Total',
             data: @Json.Encode(@Model.Items.Select(t => t.Total).ToArray()) ,
@@ -56,11 +59,6 @@
         {
             name: 'Approved',
             data: @Json.Encode(@Model.Items.Select(t => t.Approve).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Unassign',
-            data: @Json.Encode(@Model.Items.Select(t => t.Unassign).ToArray()) ,
             stack: 'parts'
         },
         {
@@ -84,81 +82,67 @@
             stack: 'parts'
         }
     ];
-    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new
-    {
-        y = t.Total, 
-        color = colors[index],
-        drilldown = new
-        {
-            name = t.Title,
-            title = string.Join(string.Empty, t.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])),
-            categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" },
-            data = new[] { t.Unassign, t.Initial, t.Redo, t.Complete, t.Approve, t.Error },
-            color = colors[index]
-        }
-    }).ToArray())) ; 
-    
+    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new { y = t.Total, color = colors[index], drilldown = new { name = t.User.Name, categories = new[] {"Initial", "Redo", "Complete", "Approve", "Error" }, data = new[] {t.Initial, t.Redo, t.Complete, t.Approve, t.Error }, color = colors[index] } }).ToArray())) ;
+
     // Build the data arrays
-        var browserData = [];
-        var versionsData = [];
-        for (var i = 0; i < data.length; i++) {
-    
-            // add browser data
-            browserData.push({
+    browserData = [];
+    versionsData = [];
+    for (var i = 0; i < data.length; i++) {
+
+        // add browser data
+        browserData.push({
                 name: data[i].drilldown.name,
-                title: data[i].drilldown.title,
                 y: data[i].y,
                 color: data[i].color
             });
-    
-            // add version data
-            for (var j = 0; j < data[i].drilldown.data.length; j++) {
-                var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5 ;
-                versionsData.push({
+
+        // add version data
+        for (var j = 0; j < data[i].drilldown.data.length; j++) {
+            var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
+            versionsData.push({
                     name: data[i].drilldown.categories[j],
                     y: data[i].drilldown.data[j],
                     color: Highcharts.Color(data[i].color).brighten(brightness).get()
                 });
+        }
+    }
+
+    pieData = [
+        {
+            type: 'pie',
+            name: 'Totals',
+            data: browserData,
+            size: '60%',
+            dataLabels: {
+                formatter: function() {
+                    return this.y > 0 ? this.point.name : null;
+                },
+                color: 'white',
+                distance: -40
+            }
+        },
+        {
+            type: 'pie',
+            name: 'Statuses',
+            data: versionsData,
+            showInLegend: false,
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function() {
+                    // display only if larger than 1
+                    return this.y > 0 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
+                }
             }
         }
-
-    var pieData = [
-            {
-                type: 'pie',
-                name: 'Totals',
-                data: browserData,
-                size: '60%',
-                dataLabels: {
-                    formatter: function() {
-                        return this.y > 0 ? this.point.title : null;
-                    },
-                    color: 'white',
-                    distance: -40
-                }
-            }, 
-            {
-                type: 'pie',
-                name: 'Statuses',
-                data: versionsData,
-                showInLegend: false,
-                innerSize: '60%',
-                dataLabels: {
-                    formatter: function() {
-                        // display only if larger than 1
-                        return this.y > 0 ? '<b>'+ this.point.name +':</b> '+ this.y   : null;
-                    }
-                }
-            }
     ];
-    var data = {
+    data = {
         column: barData,
         bar: barData,
         pie: pieData
     };
-    var chart;
-    var drawPlot = function(type) {
+    drawPlot = function(type) {
         $("#container").html('');
-        var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors))});
+        var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors)) });
         chart = new Highcharts.Chart({
                 chart: {
                     renderTo: 'container',
@@ -197,6 +181,9 @@
                     y: -10
                 },
                 plotOptions: {
+                    column: {
+                        stacking: 'normal'
+                    },
                     series: {
                         pointWidth: 20
                     },
@@ -210,9 +197,6 @@
             });
     };
 </script>
-<script type="text/javascript">
 
-</script>
-<div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px;
-    margin: 0 auto">
+<div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px; margin: 0 auto">
 </div>

@@ -19,6 +19,7 @@
         makeSortable();
         onPagingClick();
 
+        init();
     });
 
     function makeSortable() {
@@ -45,10 +46,16 @@
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
+                        debugger;
                         $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
                         $('#paging').html($(response).find('#paging').html());
-                        $('#paging').html($(response).find('#paging').html());
-                        
+                        var parsedHTML = response.replace(/script/gi, 'rickscript'); 
+                        $(parsedHTML).find('rickscript').each(function (index, domEle) {
+                            if (!$(this).attr('src')) {
+                                eval($(this).text()); //feeling lucky execute it
+                            }
+                        });
+                        init();
                         onPagingClick();
                     }
                 }
