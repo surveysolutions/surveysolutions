@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Main.Core.Export;
 using Main.Core.View;
@@ -51,7 +52,7 @@ namespace Questionnaire.Core.Web.Export
                 var allLevels = new Dictionary<string, byte[]>();
                 var questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
-                        new CQStatusReportViewInputModel(templateGuid/*, SurveyStatus.Complete.PublicId*/));
+                        new CQStatusReportViewInputModel(templateGuid, SurveyStatus.Approve.PublicId));
                 CollectLevels(new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), allLevels, manager);
                 return this.ExportInternal(allLevels,
                                            fileName);
