@@ -80,5 +80,7 @@
             @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())
         }
     </div>
-    @Html.Action("QuestionnaireChart", "Survey", this.Model)
+    <div id="chartBox">
+        @*@Html.Partial("QuestionnaireChart", this.Model.Chart)*@
+    </div>
 </div>

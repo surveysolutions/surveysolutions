@@ -96,6 +96,11 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
+        public ActionResult GotoBrowser()
+        {
+            return this.RedirectToAction("Index");
+        }
+
         public ActionResult Status(Guid? statusId)
         {
             ViewBag.ActivePage = MenuItem.Statuses;
@@ -680,29 +685,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-
-        /// <summary>
-        /// Create graph on home page
-        /// </summary>
-        /// <param name="view">
-        /// The view.
-        /// </param>
-        /// <returns>
-        /// Return partial view on home page
-        /// </returns>
-        public ActionResult QuestionnaireChart(IndexView view)
-        {
-            var data = new ChartDataModel("Chart");
-            if (view.Items.Count > 0)
-            {
-                foreach (var item in view.Items)
-                    data.DataItems.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
-            }
-
-            return this.PartialView("QuestionnaireChart", data);
-        }
-
         #endregion
-
     }
 }
