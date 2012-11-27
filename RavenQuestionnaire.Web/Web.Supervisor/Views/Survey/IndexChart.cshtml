@@ -33,7 +33,7 @@
                 $("#switcher .btn").removeClass(active);
                 $(this).addClass(active);
             }
-            $('#container').css('height', '800px');
+            $('#container').css('height', 80*@(@Model.Items.Count) + 'px');
             drawPlot('bar');
         });
 
@@ -182,13 +182,16 @@
                     }
                 },
                 legend: {
-                    align: 'right',
+                    align: 'center',
                     verticalAlign: 'top',
                     borderWidth: 0,
                     y: -10
                 },
                 plotOptions: {
                     column: {
+                        stacking: 'normal'
+                    },
+                    bar: {
                         stacking: 'normal'
                     },
                     series: {
