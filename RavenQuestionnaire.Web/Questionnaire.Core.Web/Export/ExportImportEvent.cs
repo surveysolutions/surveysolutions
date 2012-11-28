@@ -95,7 +95,7 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         public byte[] Export(Guid clientGuid)
         {
-            return this.ExportInternal(EventsToString(clientGuid, this.synchronizer.ReadEvents(null)), "backup.txt");
+            return this.ExportInternal(EventsToString(clientGuid, this.synchronizer.ReadEvents()), "backup.txt");
         }
 
 

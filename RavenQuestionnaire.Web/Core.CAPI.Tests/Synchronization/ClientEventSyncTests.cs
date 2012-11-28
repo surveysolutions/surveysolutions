@@ -35,7 +35,7 @@ namespace Core.CAPI.Tests.Synchronization
             Mock<IDenormalizerStorage<UserDocument>> users = new Mock<IDenormalizerStorage<UserDocument>>();
             ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
             
-            Assert.AreEqual(target.ReadEvents(null).Count(), 0);
+            Assert.AreEqual(target.ReadEvents().Count(), 0);
            
         }
 
@@ -63,7 +63,7 @@ namespace Core.CAPI.Tests.Synchronization
                 x =>
                 x.Query()).Returns(questionnaireList);
             ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
-            Assert.AreEqual(target.ReadEvents(null).Count(), 0);
+            Assert.AreEqual(target.ReadEvents().Count(), 0);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
 
@@ -87,7 +87,7 @@ namespace Core.CAPI.Tests.Synchronization
                 x =>
                 x.Query()).Returns(questionnaireList);
             ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
-            Assert.AreEqual(target.ReadEvents(null).Count(), 1);
+            Assert.AreEqual(target.ReadEvents().Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
 
@@ -115,7 +115,7 @@ namespace Core.CAPI.Tests.Synchronization
                 x =>
                 x.Query()).Returns(questionnaireList);
             ClientEventSync target = new ClientEventSync(repositoryMock.Object, users.Object);
-            Assert.AreEqual(target.ReadEvents(null).Count(), 1);
+            Assert.AreEqual(target.ReadEvents().Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
     }

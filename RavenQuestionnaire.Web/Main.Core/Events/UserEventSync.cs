@@ -92,5 +92,14 @@ namespace Main.Core.Events
         }
 
         #endregion
+
+        #region Overrides of AbstractEventSync
+
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
