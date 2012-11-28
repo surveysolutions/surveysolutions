@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
 using Main.Core.Export;
@@ -53,7 +54,12 @@ namespace Questionnaire.Core.Web.Export
                 var questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
                         new CQStatusReportViewInputModel(templateGuid, SurveyStatus.Approve.PublicId));
-                CollectLevels(new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), allLevels, manager);
+                StringBuilder doContent=new StringBuilder();
+                System.Text.ASCIIEncoding encoding = new ASCIIEncoding();
+                
+                CollectLevels(new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), allLevels, manager, doContent, string.Empty);
+                doContent.AppendLine("list");
+                allLevels.Add("data.do", encoding.GetBytes(doContent.ToString()));
                 return this.ExportInternal(allLevels,
                                            fileName);
             }
@@ -61,22 +67,45 @@ namespace Questionnaire.Core.Web.Export
         }
 
 
-        protected void CollectLevels(/*Guid templateId, */CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
+        protected void CollectLevels(/*Guid templateId, */CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager, StringBuilder doContent, string parentName)
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
                     (input);
-            container.Add(GetName(records.GroupName, container, 0), manager.ExportToStream(records));
+            var fileName = GetName(records.GroupName, container, 0);
+            var currentName = "PublicKey";
+            container.Add(fileName, manager.ExportToStream(records));
+            doContent.AppendLine("clear");
+            doContent.AppendLine(string.Format("insheet using \"{0}\", comma", fileName));
+           
+            if(!input.AutoPropagatebleQuestionPublicKey.HasValue && !input.PropagatableGroupPublicKey.HasValue)
+            {
+                doContent.AppendLine("sort " + currentName);
+                doContent.AppendLine("tempfile ind");
+                doContent.AppendLine("save \"`ind'\"");
+            }
+            else
+            {
+                currentName += (input.AutoPropagatebleQuestionPublicKey??input.PropagatableGroupPublicKey).ToString();
+                doContent.AppendLine(string.Format("gen {0}=string(PublicKey)", currentName));
+                doContent.AppendLine("drop PublicKey");
 
+                doContent.AppendLine(string.Format("gen {0}=string(ForeignKey)", parentName));
+                doContent.AppendLine("drop ForeignKey");
+                doContent.AppendLine("sort " + parentName);
+                doContent.AppendLine(string.Format("merge m:1 {0} using \"`ind'\"", parentName));
+                doContent.AppendLine("drop _merge");
+                
+            }
             foreach (Guid autoPropagatebleQuestionPublicKey in records.AutoPropagatebleQuestionsPublicKeys)
             {
 
                 CollectLevels(new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId) { AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey }, container,
-                                  manager);
+                                  manager, doContent, currentName);
             }
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
-                CollectLevels(new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup), container, manager);
+                CollectLevels(new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup), container, manager, doContent, currentName);
             }
         
         }

@@ -69,21 +69,25 @@ namespace RavenQuestionnaire.Web.Tests.Export
                 x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.IsAny<CompleteQuestionnaireExportInputModel>())).Returns(
                     result);
 
-            Target.ProtectedCollectLEvels(
+            var doResult = Target.ProtectedCollectLEvels(
                 new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels, manager);
             Assert.IsTrue(allLevels.Count == 1);
+
+            Assert.IsTrue(doResult == "clear\r\ninsheet using \".csv\", comma\r\nsort PublicKey\r\ntempfile ind\r\nsave \"`ind'\"\r\n");
             provider.Verify(x => x.DoExportToStream(result), Times.Once());
         }
         [Test]
         public void CollectLEvels_2LEvels_AllLEvelsAreCollected()
         {
             var allLevels = new Dictionary<string, byte[]>();
+            var guid1 = Guid.NewGuid();
+            var guid2 = Guid.NewGuid();
             Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
             var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView("top group",new CompleteQuestionnaireExportItem[0], new []{Guid.NewGuid(),Guid.NewGuid()},Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
+                new CompleteQuestionnaireExportView("top group",new CompleteQuestionnaireExportItem[0], new []{guid1,guid2},Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(
@@ -92,13 +96,46 @@ namespace RavenQuestionnaire.Web.Tests.Export
             this.ViewRepositoryMock.Setup(
                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey.HasValue))).Returns(
                    subResult);
-            Target.ProtectedCollectLEvels(
+            var doResult = Target.ProtectedCollectLEvels(
                 new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels,
                 manager);
-
+            Assert.IsTrue(string.Format("clear\r\ninsheet using \"top group.csv\", comma\r\nsort PublicKey\r\ntempfile ind\r\nsave \"`ind'\"\r\nclear\r\ninsheet using \".csv\", comma\r\ngen PublicKey{0}=string(PublicKey)\r\ndrop PublicKey\r\ngen PublicKey=string(ForeignKey)\r\ndrop ForeignKey\r\nsort PublicKey\r\nmerge m:1 PublicKey using \"`ind'\"\r\ndrop _merge\r\nclear\r\ninsheet using \"1.csv\", comma\r\ngen PublicKey{1}=string(PublicKey)\r\ndrop PublicKey\r\ngen PublicKey=string(ForeignKey)\r\ndrop ForeignKey\r\nsort PublicKey\r\nmerge m:1 PublicKey using \"`ind'\"\r\ndrop _merge\r\n", guid1,guid2)==doResult);
             Assert.IsTrue(allLevels.Count == 3);
             provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
             provider.Verify(x => x.DoExportToStream(subResult), Times.Exactly(2));
+        }
+
+        [Test]
+        public void CollectLEvels_3LEvels_AllLEvelsAreCollected()
+        {
+            var allLevels = new Dictionary<string, byte[]>();
+            var guid1 = Guid.NewGuid();
+            var guid2 = Guid.NewGuid();
+            Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
+            var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
+
+
+            CompleteQuestionnaireExportView topResult =
+                new CompleteQuestionnaireExportView("top group", new CompleteQuestionnaireExportItem[0], new[] { guid1}, Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
+            CompleteQuestionnaireExportView subResult =
+               new CompleteQuestionnaireExportView("sub group", new CompleteQuestionnaireExportItem[0], new[] { guid2 }, Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
+            this.ViewRepositoryMock.Setup(
+                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => !i.PropagatableGroupPublicKey.HasValue))).Returns(
+                    topResult);
+            this.ViewRepositoryMock.Setup(
+               x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey==guid1))).Returns(
+                   subResult);
+            this.ViewRepositoryMock.Setup(
+               x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey == guid2))).Returns(
+                   new CompleteQuestionnaireExportView());
+            var doResult = Target.ProtectedCollectLEvels(
+                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels,
+                manager);
+            Console.WriteLine(doResult);
+            Assert.IsTrue(string.Format("clear\r\ninsheet using \"top group.csv\", comma\r\nsort PublicKey\r\ntempfile ind\r\nsave \"`ind'\"\r\nclear\r\ninsheet using \"sub group.csv\", comma\r\ngen PublicKey{0}=string(PublicKey)\r\ndrop PublicKey\r\ngen PublicKey=string(ForeignKey)\r\ndrop ForeignKey\r\nsort PublicKey\r\nmerge m:1 PublicKey using \"`ind'\"\r\ndrop _merge\r\nclear\r\ninsheet using \".csv\", comma\r\ngen PublicKey{1}=string(PublicKey)\r\ndrop PublicKey\r\ngen PublicKey{0}=string(ForeignKey)\r\ndrop ForeignKey\r\nsort PublicKey{0}\r\nmerge m:1 PublicKey{0} using \"`ind'\"\r\ndrop _merge\r\n",guid1,guid2)==doResult);
+            Assert.IsTrue(allLevels.Count == 3);
+            provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
+            provider.Verify(x => x.DoExportToStream(subResult), Times.Once());
         }
         /// <summary>
         /// Class-helper for testing protected and private methods
@@ -117,9 +154,11 @@ namespace RavenQuestionnaire.Web.Tests.Export
             }
 
 
-            public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
+            public string ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
             {
-                CollectLevels(input, container, manager);
+                var result = new StringBuilder();
+                CollectLevels(input, container, manager, result, "");
+                return result.ToString();
             }
         }
     }

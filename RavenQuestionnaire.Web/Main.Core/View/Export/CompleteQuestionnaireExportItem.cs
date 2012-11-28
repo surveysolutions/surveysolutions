@@ -52,18 +52,25 @@ namespace Main.Core.View.Export
 
             foreach (Guid key in headerKey)
             {
-               /* if (key == Guid.Empty)
+                /* if (key == Guid.Empty)
+                 {
+                     this.Values.Add(key, parent.ToString());
+                 }
+                 else if (templateId==key)
+                 {
+                     this.Values.Add(key, this.PublicKey.ToString());
+                 }
+                 else
+                 {*/
+                var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
+                if (question == null)
                 {
-                    this.Values.Add(key, parent.ToString());
+                    this.Values.Add(key, "");
+                    continue;
+
                 }
-                else if (templateId==key)
-                {
-                    this.Values.Add(key, this.PublicKey.ToString());
-                }
-                else
-                {*/
-                    var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
                 var answer = question.GetAnswerObject();
+
                 if (question.QuestionType == QuestionType.MultyOption)
                 {
                     var answers = answer as ICompleteAnswer[];
