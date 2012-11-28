@@ -81,7 +81,7 @@ namespace Core.CAPI.Synchronization
         /// </returns>
         /// <exception cref="Exception">
         /// </exception>
-        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
             var myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (myEventStore == null)
@@ -90,25 +90,11 @@ namespace Core.CAPI.Synchronization
             }
             var usersGuid = new List<Guid>();
             var retval = new List<AggregateRootEvent>();
-            if (syncKey.HasValue)
-            {
-                usersGuid = this.GetUsersGuid(syncKey.Value);
-                foreach (var item in from item in this.storage.Query()
-                                     where
-                                         SurveyStatus.IsStatusAllowCapiSync(item.Status)
-                                         && item.Responsible != null
-                                     from guid in
-                                         usersGuid.Where(
-                                             guid => item.Responsible.Id == guid)
-                                     select item)
-                    retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
-            }
-            else
-            {
-                foreach (var item in this.storage.Query().
-                    Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status))) 
-                    retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
-            }
+
+            foreach (var item in this.storage.Query().
+                Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)))
+                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
+
 
             return retval.OrderBy(x => x.EventSequence);
         }

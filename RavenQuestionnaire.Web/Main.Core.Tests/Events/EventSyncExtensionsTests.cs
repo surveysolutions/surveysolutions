@@ -47,7 +47,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { CommitId = guid3 }, new AggregateRootEvent { CommitId = guid3 }, 
                     new AggregateRootEvent { CommitId = guid3 }, new AggregateRootEvent { CommitId = guid4 }, 
                 };
-            eventSource.Setup(x => x.ReadEvents(null)).Returns(result);
+            eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(2).ToList();
             Assert.AreEqual(chunckedList.Count, 3);
             foreach (AggregateRootEvent firstChunckitem in chunckedList[0])
@@ -72,7 +72,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         {
             var eventSource = new Mock<IEventSync>();
             var result = new[] { new AggregateRootEvent(), new AggregateRootEvent() };
-            eventSource.Setup(x => x.ReadEvents(null)).Returns(result);
+            eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(2).ToList();
             Assert.AreEqual(chunckedList.Count, 1);
             Assert.AreEqual(chunckedList[0].First(), result[0]);
@@ -92,7 +92,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { CommitId = Guid.NewGuid() }, 
                     new AggregateRootEvent { CommitId = Guid.NewGuid() }
                 };
-            eventSource.Setup(x => x.ReadEvents(null)).Returns(result);
+            eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(1).ToList();
             Assert.AreEqual(chunckedList.Count, 2);
             Assert.AreEqual(chunckedList[0].First(), result[0]);
@@ -107,7 +107,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         {
             var eventSource = new Mock<IEventSync>();
             var result = new[] { new AggregateRootEvent(), new AggregateRootEvent() };
-            eventSource.Setup(x => x.ReadEvents(null)).Returns(result);
+            eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(1).ToList();
             Assert.AreEqual(chunckedList.Count, 1);
             Assert.AreEqual(chunckedList[0].First(), result[0]);
@@ -121,7 +121,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         public void ReadEventsByChunks_WhenEmptyEventList_OneEmptyChunckReturned()
         {
             var eventSource = new Mock<IEventSync>();
-            eventSource.Setup(x => x.ReadEvents(null)).Returns(new AggregateRootEvent[0]);
+            eventSource.Setup(x => x.ReadEvents()).Returns(new AggregateRootEvent[0]);
             var chunckedList = eventSource.Object.ReadEventsByChunks();
             Assert.AreEqual(chunckedList.Count(), 0);
         }

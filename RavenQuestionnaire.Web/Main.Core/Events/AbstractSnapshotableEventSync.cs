@@ -57,10 +57,6 @@ namespace Main.Core.Events
 
         #region PublicMethods
 
-        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <summary>
         /// Select from database all event for creation templates

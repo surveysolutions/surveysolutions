@@ -82,19 +82,23 @@ namespace Core.Supervisor.Synchronization
         /// <returns>
         /// List of events
         /// </returns>
-        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
             var retval = new List<AggregateRootEvent>();
-            if (syncKey.HasValue)
+            var supervisorKey = GetSupervisor();
+            if (supervisorKey.HasValue)
             {
-                this.AddFilteredUsers(retval, syncKey.Value);
+                this.AddFilteredUsers(retval, supervisorKey.Value);
                 this.AddFilteredCompleteQuestionnairesInitState(retval);
-                return retval.OrderBy(x => x.EventSequence).ToList();
-            }
 
-            this.AddCompleteQuestionnairesInitState(retval);
+            }
+            else
+            {
+                this.AddUsers(retval);
+                this.AddCompleteQuestionnairesInitState(retval);
+            }
             this.AddQuestionnairesTemplates(retval);
-            this.AddUsers(retval);
+            
             this.AddFiles(retval);
             this.AddRegisterDevice(retval);
             return retval.OrderBy(x => x.EventSequence).ToList();
@@ -103,6 +107,14 @@ namespace Core.Supervisor.Synchronization
         #endregion
 
         #region Methods
+        protected Guid? GetSupervisor()
+        {
+            var supervisor =
+                this.denormalizer.Query<UserDocument>().FirstOrDefault(u => u.Roles.Contains(UserRoles.Supervisor));
+            if (supervisor == null)
+                return null;
+            return supervisor.PublicKey;
+        }
 
         /// <summary>
         /// Responsible for added init state

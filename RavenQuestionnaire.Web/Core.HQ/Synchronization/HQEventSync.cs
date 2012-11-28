@@ -43,7 +43,7 @@ namespace Core.HQ.Synchronization
 
         #region OverrideMethods
 
-        public override IEnumerable<AggregateRootEvent> ReadEvents(Guid? syncKey)
+        public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
             var retval = new List<AggregateRootEvent>();
             this.AddQuestionnairesTemplates(retval);
