@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Runtime.Caching;
+using System.Threading;
 
 namespace Main.DenormalizerStorage.SolidDenormalizer
 {
@@ -24,6 +25,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// The _hash.
         /// </summary>
         private readonly MemoryCache _memoryhash;
+        private readonly object _locker = new object();
       /*  /// <summary>
         /// The _hash.
         /// </summary>
@@ -41,39 +43,56 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
 
         public int Count()
         {
-            return this.Hash.Count;
+            int result = 0;
+            ThreadSafe(() =>
+                { result = this.Hash.Count; });
+            return result;
         }
 
         public T GetByGuid(Guid key)
         {
-            if (!this.Hash.ContainsKey(key))
-            {
-                return null;
-            }
-
-            return this.Hash[key];
+            T result = null;
+            ThreadSafe(() =>
+                {
+                    if (this.Hash.ContainsKey(key))
+                    {
+                        result = this.Hash[key];
+                    }
+                });
+            return result;
         }
 
         public IQueryable<T> Query()
         {
-            return this.Hash.Values.AsQueryable();
+            IQueryable<T> result = null;
+            ThreadSafe(() =>
+                { result= this.Hash.Values.AsQueryable(); });
+            return result;
         }
 
         public void Remove(Guid key)
         {
-            T val;
-            this.Hash.TryRemove(key, out val);
+            ThreadSafe(() =>
+                {
+                    T val;
+                    this.Hash.TryRemove(key, out val);
+                });
         }
 
         public void Store(T denormalizer, Guid key)
         {
-            if (this.Hash.ContainsKey(key))
-            {
-                this.Hash[key] = denormalizer;
-                return;
-            }
+            ThreadSafe(() =>
+                {
+                    if (this.Hash.ContainsKey(key))
+                    {
+                        this.Hash[key] = denormalizer;
+                        return;
+                    }
 
-            this.Hash.TryAdd(key, denormalizer);
+                    this.Hash.TryAdd(key, denormalizer);
+                });
+
+
         }
 
         #endregion
@@ -82,11 +101,13 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
 
         public void Dispose()
         {
+            ThreadSafe(() => { 
             if (this._memoryhash[HashKey] != null)
             {
                 this._storage.Store<ConcurrentDictionary<Guid, T>>(this._memoryhash[HashKey] as ConcurrentDictionary<Guid, T>, HashKey);
             }
             this._memoryhash.Dispose();
+            });
         }
 
         #endregion
@@ -95,10 +116,11 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         {
             get
             {
+
                 if (this._memoryhash[HashKey] == null)
                 {
                     var retval = this._storage.GetByGuid<ConcurrentDictionary<Guid, T>>(HashKey);
-                    if(retval==null)
+                    if (retval == null)
                     {
                         retval = new ConcurrentDictionary<Guid, T>();
                     }
@@ -113,7 +135,25 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
                     return this._memoryhash[HashKey.ToString()] as ConcurrentDictionary<Guid, T>;
                 }
             }
+
         }
+        protected void ThreadSafe( Action action)
+        {
+            bool lockWasTaken = false;
+            var temp = _locker;
+            try
+            {
+                Monitor.Enter(temp, ref lockWasTaken);
+                {
+                    action();
+                }
+            }
+            finally
+            {
+                if (lockWasTaken) Monitor.Exit(temp);
+            }
+        }
+
         void weekDisposable_CacheEntryRemoved(CacheEntryRemovedArguments arguments)
         {
             this._storage.Store<ConcurrentDictionary<Guid, T>>(arguments.CacheItem.Value as ConcurrentDictionary<Guid, T>, HashKey);

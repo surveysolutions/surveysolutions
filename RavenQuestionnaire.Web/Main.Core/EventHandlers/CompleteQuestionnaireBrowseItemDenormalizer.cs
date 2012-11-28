@@ -79,21 +79,17 @@ namespace Main.Core.EventHandlers
 
         protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
         {
-            // getting all featured questions
-            var browseItem = this.documentItemStore.GetByGuid(document.PublicKey);
-            if (browseItem == null)
-            {
-                browseItem = new CompleteQuestionnaireBrowseItem(document);
-                this.documentItemStore.Store(browseItem, document.PublicKey);
-            }
+            var browseItem = new CompleteQuestionnaireBrowseItem(document);
             List<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
 
             browseItem.FeaturedQuestions =
                 featuredQuestions.Select(
-                    q => new CompleteQuestionView() {PublicKey = q.PublicKey, Answer = q.GetAnswerString(), Title = q.QuestionText}).ToArray();
-            browseItem.Status = document.Status;
-            browseItem.Responsible = document.Responsible;
-            browseItem.LastEntryDate = document.CreationDate;
+                    q =>
+                    new CompleteQuestionView()
+                        {PublicKey = q.PublicKey, Answer = q.GetAnswerString(), Title = q.QuestionText}).ToArray();
+
+
+            this.documentItemStore.Store(browseItem, document.PublicKey);
         }
 
         /// <summary>
@@ -115,6 +111,8 @@ namespace Main.Core.EventHandlers
 
                 if (currentFeatured != null)
                     currentFeatured.Answer = evnt.Payload.AnswerString;
+
+                this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
             }
         }
 
@@ -142,6 +140,7 @@ namespace Main.Core.EventHandlers
 
             item.Status = evnt.Payload.Status;
             item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
         /// <summary>
@@ -157,6 +156,7 @@ namespace Main.Core.EventHandlers
 
             item.Responsible = evnt.Payload.Responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
         #endregion
