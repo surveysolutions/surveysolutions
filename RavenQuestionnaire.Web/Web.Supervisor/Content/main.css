@@ -255,6 +255,15 @@ h1.inline
 	opacity: 1;
 	filter:alpha(opacity=100)
 }
+.table thead th.sorting.header {
+	padding-right: 20px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+.table thead td {
+	vertical-align: middle;
+	font-weight: bold;
+}
 /* Responsive
 -------------------------------------------------- */
 
