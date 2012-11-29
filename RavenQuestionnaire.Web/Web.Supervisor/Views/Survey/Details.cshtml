@@ -45,8 +45,8 @@
         }
     };
 </script>
-<h2 class="inline"><a class="btn btn-back" title="back to list" href="@Url.Action("Documents", new { id = ViewBag.TemplateId })">
-    <i class=" icon-chevron-left"></i></a>
+<h2 class="inline">@*<a class="btn btn-back" title="back to list" href="@Url.Action("Documents", new { id = ViewBag.TemplateId })">
+    <i class=" icon-chevron-left"></i></a>*@
     @if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
     { 
         <a  data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" href="#" data-original-title="Survey comment">@Model.Title</a>
