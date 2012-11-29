@@ -83,7 +83,7 @@
         }
     ];
     data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new { y = t.Total, color = colors[index], drilldown = new { name = t.User.Name, categories = new[] {"Initial", "Redo", "Complete", "Approve", "Error" }, data = new[] {t.Initial, t.Redo, t.Complete, t.Approve, t.Error }, color = colors[index] } }).ToArray())) ;
-
+    xTitles = @Html.Raw(xTitles);
     // Build the data arrays
     browserData = [];
     versionsData = [];
@@ -91,6 +91,7 @@
 
         // add browser data
         browserData.push({
+                category: xTitles[i],
                 name: data[i].drilldown.name,
                 y: data[i].y * 1,
                 color: data[i].color
@@ -100,6 +101,7 @@
         for (var j = 0; j < data[i].drilldown.data.length; j++) {
             var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
             versionsData.push({
+                    category: xTitles[i],
                     name: data[i].drilldown.categories[j],
                     y: data[i].drilldown.data[j] * 1,
                     color: Highcharts.Color(data[i].color).brighten(brightness).get()

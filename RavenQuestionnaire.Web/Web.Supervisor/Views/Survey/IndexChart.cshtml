@@ -49,7 +49,7 @@
 
         $("#column").click();
     };
-
+    xTitles = @Html.Raw(xTitles);
     barData = [
         {
             name: 'Total',
@@ -96,6 +96,7 @@
 
         // add browser data
         browserData.push({
+                category: xTitles[i],
                 name: data[i].drilldown.name,
                 title: data[i].drilldown.title,
                 y: data[i].y,
@@ -106,6 +107,7 @@
         for (var j = 0; j < data[i].drilldown.data.length; j++) {
             var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
             versionsData.push({
+                    category: xTitles[i],
                     name: data[i].drilldown.categories[j],
                     y: data[i].drilldown.data[j],
                     color: Highcharts.Color(data[i].color).brighten(brightness).get()

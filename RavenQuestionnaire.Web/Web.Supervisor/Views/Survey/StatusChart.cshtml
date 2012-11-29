@@ -50,7 +50,7 @@
 
         $("#column").click();
     };
-
+    xTitles = @Html.Raw(xTitles);
     barData = [
         {
             name: 'Total',
@@ -60,27 +60,28 @@
         @foreach (var header in Model.Headers)
         {
             <text>,</text>
-            <text>@Html.Raw(Json.Encode(new {
-                name = string.Join(string.Empty, header.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])),
-                title = header.Title,
-                data = @Model.Items.Select(t => t.Items[header]).ToArray(),
-                stack = "parts"
-            }))</text>
+            <text>@Html.Raw(Json.Encode(new
+             {
+                 name = string.Join(string.Empty, header.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])),
+                 title = header.Title,
+                 data = @Model.Items.Select(t => t.Items[header]).ToArray(),
+                 stack = "parts"
+             }))</text>
         }
     ];
-    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => 
+    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) =>
     new
+    {
+        y = t.Items.Values.Sum(),
+        color = colors[index],
+        drilldown = new
         {
-            y = t.Items.Values.Sum(), 
-            color = colors[index], 
-            drilldown = new
-                {
-                    name = t.User.Name, 
-                    categories = t.Items.Keys.Select(k=>string.Join(string.Empty, k.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]))).ToArray(), 
-                    data = t.Items.Values.ToArray(), 
-                    color = colors[index]
-                }
-        }).ToArray())) ;
+            name = t.User.Name,
+            categories = t.Items.Keys.Select(k => string.Join(string.Empty, k.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]))).ToArray(),
+            data = t.Items.Values.ToArray(),
+            color = colors[index]
+        }
+    }).ToArray())) ;
 
     // Build the data arrays
     browserData = [];
@@ -91,6 +92,7 @@
         browserData.push({
                 name: data[i].drilldown.name,
                 title: data[i].drilldown.title,
+                category: xTitles[i],
                 y: data[i].y,
                 color: data[i].color
             });
@@ -99,6 +101,7 @@
         for (var j = 0; j < data[i].drilldown.data.length; j++) {
             var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
             versionsData.push({
+                    category: xTitles[i],
                     name: data[i].drilldown.categories[j],
                     y: data[i].drilldown.data[j],
                     color: Highcharts.Color(data[i].color).brighten(brightness).get()
@@ -114,7 +117,7 @@
             size: '60%',
             dataLabels: {
                 formatter: function() {
-                    return this.y > 0 ? this.point.title : null;
+                    return this.y > 0 ? this.point.category : null;
                 },
                 color: 'white',
                 distance: -40
