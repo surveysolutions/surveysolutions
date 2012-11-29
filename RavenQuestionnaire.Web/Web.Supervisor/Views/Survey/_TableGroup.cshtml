@@ -73,7 +73,7 @@
     <div class="pagination" id="paging">
         @if (((double)Model.TotalCount / Model.PageSize) > 1d)
         {
-            Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { });
+           <text>@Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { })</text>
         }
     </div>
 </div>
