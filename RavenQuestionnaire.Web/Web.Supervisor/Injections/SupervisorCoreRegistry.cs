@@ -41,6 +41,7 @@ namespace Web.Supervisor.Injections
             this.Bind<IExportImport>().To<ZipExportImport>();
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
+            this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
         }
     }
 }

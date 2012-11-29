@@ -8,6 +8,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Export;
 using Questionnaire.Core.Web.Export;
 using RavenQuestionnaire.Web.Export;
 

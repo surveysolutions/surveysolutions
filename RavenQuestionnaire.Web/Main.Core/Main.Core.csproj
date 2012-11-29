@@ -307,7 +307,10 @@
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="Export\ExportManager.cs" />
+    <Compile Include="Export\IDataExport.cs" />
+    <Compile Include="Export\IEnvironmentSupplier.cs" />
     <Compile Include="Export\IExportProvider.cs" />
+    <Compile Include="Export\StataSuplier.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />

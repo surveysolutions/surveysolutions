@@ -119,6 +119,7 @@ namespace Main.Core.View.Export
             var autoQuestions = new List<AutoQuestionWithTriggers>();
             var header = BuildHeader(template, subObjects, autoQuestions);
             var headerKey = header.Select(h => h.Key);
+            
             foreach (var key in questionnairies)
             {
                 var document = this.documentSession.GetByGuid(key);
@@ -144,7 +145,7 @@ namespace Main.Core.View.Export
                     }
                 }
             }
-            return new CompleteQuestionnaireExportView(template.Title, documents, subObjects,
+            return new CompleteQuestionnaireExportView(template.PublicKey,propagatableGroupPublicKey, template.Title, documents, subObjects,
                                                        autoQuestions.Select(q => q.PublicKey), header);
         }
 
