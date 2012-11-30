@@ -28,6 +28,10 @@ namespace Main.Core.View.Export
                 this.Labels.Add(answer.PublicKey, new LabelItem(answer));
             }
         }
+        public HeaderItem(IQuestion question,char symbol):this(question)
+        {
+            this.Caption += symbol;
+        }
 
         public Guid PublicKey { get; private set; }
         public string Caption { get; private set; }

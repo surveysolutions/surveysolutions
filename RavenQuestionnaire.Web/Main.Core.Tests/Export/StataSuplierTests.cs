@@ -45,15 +45,15 @@ namespace Main.Core.Tests.Export
         public void BuildLabels_HeaderISEmpty_ResultIsEmpty()
         {
             StataSuplierFake target = new StataSuplierFake();
-            target.BuildLabelsTestable(new Dictionary<Guid, HeaderItem>());
+            target.BuildLabelsTestable(new HeaderCollection());
             Assert.IsTrue(string.IsNullOrEmpty(target.Result));
         }
         [Test]
         public void BuildLabels_OneHeaderLAbelsAreEmpty_ResultIsEmpty()
         {
             StataSuplierFake target = new StataSuplierFake();
-            target.BuildLabelsTestable(new Dictionary<Guid, HeaderItem>()
-                {{Guid.NewGuid(), new HeaderItem(new SingleQuestion())}});
+            target.BuildLabelsTestable(new HeaderCollection()
+                {{ new HeaderItem(new SingleQuestion())}});
             Assert.IsTrue(string.IsNullOrEmpty(target.Result));
         }
         [Test]
@@ -61,11 +61,11 @@ namespace Main.Core.Tests.Export
         {
             StataSuplierFake target = new StataSuplierFake();
             var labelGuid = Guid.NewGuid();
-            var header = new Dictionary<Guid, HeaderItem>();
-            var headeritem = new HeaderItem(new SingleQuestion(){ StataExportCaption = "q"});
+            var header = new HeaderCollection();
+            var headeritem = new HeaderItem(new SingleQuestion(){ StataExportCaption = "q", PublicKey = labelGuid});
             headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer(){ AnswerValue = "aValue1", AnswerText = "label text 1"}));
             headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue2", AnswerText = "label text 2" }));
-            header.Add(labelGuid, headeritem);
+            header.Add(headeritem);
             target.BuildLabelsTestable(header);
             Console.WriteLine(target.Result);
             Assert.AreEqual(target.Result, string.Format("\r\nlabel define {0} aValue1 \"label text 1\" aValue2 \"label text 2\" \r\nlabel var q {0}\r\n", labelGuid));
@@ -76,13 +76,13 @@ namespace Main.Core.Tests.Export
             StataSuplierFake target = new StataSuplierFake();
             var labelGuid1 = Guid.NewGuid();
             var labelGuid2 = Guid.NewGuid();
-            var header = new Dictionary<Guid, HeaderItem>();
-            var headeritem1 = new HeaderItem(new SingleQuestion() { StataExportCaption = "q1" });
+            var header = new HeaderCollection();
+            var headeritem1 = new HeaderItem(new SingleQuestion() { StataExportCaption = "q1", PublicKey = labelGuid1});
             headeritem1.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue1", AnswerText = "label text 1" }));
-            var headeritem2 = new HeaderItem(new SingleQuestion() { StataExportCaption = "q2" });
+            var headeritem2 = new HeaderItem(new SingleQuestion() { StataExportCaption = "q2", PublicKey = labelGuid2});
             headeritem2.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue2", AnswerText = "label text 2" }));
-            header.Add(labelGuid1, headeritem1);
-            header.Add(labelGuid2, headeritem2);
+            header.Add( headeritem1);
+            header.Add(headeritem2);
             target.BuildLabelsTestable(header);
             Console.WriteLine(target.Result);
             Assert.AreEqual(target.Result,
@@ -96,7 +96,7 @@ namespace Main.Core.Tests.Export
             {
                 base.BuildMerge(parentPrimaryKeyName, primaryKeyColumnName, fileName);
             }
-            public void BuildLabelsTestable(IDictionary<Guid, HeaderItem> header)
+            public void BuildLabelsTestable(HeaderCollection header)
             {
                 base.BuildLabels(header);
             }

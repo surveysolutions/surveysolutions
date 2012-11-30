@@ -364,7 +364,9 @@
     <Compile Include="View\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="View\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="View\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="View\Export\HeaderCollection.cs" />
     <Compile Include="View\Export\HeaderItem.cs" />
+    <Compile Include="View\Export\ValueCollection.cs" />
     <Compile Include="View\Group\AbstractGroupMobileView.cs" />
     <Compile Include="View\Group\CompleteGroupHeaders.cs" />
     <Compile Include="View\Group\CompleteGroupMobileView.cs" />

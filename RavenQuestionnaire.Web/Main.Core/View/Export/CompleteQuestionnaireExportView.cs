@@ -24,7 +24,7 @@ namespace Main.Core.View.Export
         {
             this.Items = Enumerable.Empty<CompleteQuestionnaireExportItem>();
             this.SubPropagatebleGroups = Enumerable.Empty<Guid>();
-            this.Header = new Dictionary<Guid, HeaderItem>();
+            this.Header = new HeaderCollection();
             this.AutoPropagatebleQuestionsPublicKeys=new List<Guid>();
         }
        /* public CompleteQuestionnaireExportView(string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subGroups, Dictionary<Guid, HeaderItem> header, List<Guid> autoQuestions)
@@ -54,7 +54,7 @@ namespace Main.Core.View.Export
         /// <param name="order">
         /// The order.
         /// </param>
-        public CompleteQuestionnaireExportView(Guid publicKey, Guid? parent, string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, IEnumerable<Guid> autoQuestions, Dictionary<Guid, HeaderItem> header)
+        public CompleteQuestionnaireExportView(Guid publicKey, Guid? parent, string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, IEnumerable<Guid> autoQuestions, HeaderCollection header)
         {
             this.PublicKey = publicKey;
             this.Parent = parent;
@@ -76,7 +76,7 @@ namespace Main.Core.View.Export
 
         public IEnumerable<Guid> SubPropagatebleGroups { get; private set; }
 
-        public Dictionary<Guid, HeaderItem> Header { get; private set; }
+        public HeaderCollection Header { get; private set; }
 
         public string GroupName { get; private set; }
 
@@ -93,10 +93,8 @@ namespace Main.Core.View.Export
             int i = 0;
             foreach (CompleteQuestionnaireExportItem completeQuestionnaireExportItem in view.Items)
             {
-                foreach (KeyValuePair<Guid, string> value in completeQuestionnaireExportItem.Values)
-                {
-                    items[i].Values.Add(value.Key, value.Value);
-                }
+                items[i].Values.AddRange(completeQuestionnaireExportItem.Values);
+
                 i++;
             }
 
@@ -104,11 +102,8 @@ namespace Main.Core.View.Export
             subgroups.AddRange(view.SubPropagatebleGroups);
             subgroups = subgroups.Distinct().ToList();
 
-            Dictionary<Guid, HeaderItem> header = new Dictionary<Guid, HeaderItem>(this.Header);
-            foreach (KeyValuePair<Guid, HeaderItem> headerITem in view.Header)
-            {
-                header.Add(headerITem.Key, headerITem.Value);
-            }
+            var header = new HeaderCollection(this.Header);
+            header.Merge(view.Header);
 
             List<Guid> autoQuestions = new List<Guid>(this.AutoPropagatebleQuestionsPublicKeys);
             autoQuestions.AddRange(view.AutoPropagatebleQuestionsPublicKeys);

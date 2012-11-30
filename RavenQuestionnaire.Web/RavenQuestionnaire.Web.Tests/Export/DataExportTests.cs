@@ -88,7 +88,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView(Guid.NewGuid(), null,"top group",new CompleteQuestionnaireExportItem[0], new []{guid1,guid2},Enumerable.Empty<Guid>(), new Dictionary<Guid, HeaderItem>());
+                new CompleteQuestionnaireExportView(Guid.NewGuid(), null, "top group", new CompleteQuestionnaireExportItem[0], new[] { guid1, guid2 }, Enumerable.Empty<Guid>(), new HeaderCollection());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(

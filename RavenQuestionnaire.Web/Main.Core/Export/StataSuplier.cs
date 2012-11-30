@@ -17,10 +17,11 @@ namespace Main.Core.Export
     public class StataSuplier : IEnvironmentSupplier<CompleteQuestionnaireExportView>
     {
         protected readonly StringBuilder doContent;
-
+        protected readonly List<Guid> createdLabels;
         public StataSuplier()
         {
             doContent = new StringBuilder();
+            createdLabels=new List<Guid>();
         }
 
         #region Implementation of IEnvironmentSupplier<CompleteQuestionnaireExportInputModel>
@@ -56,21 +57,26 @@ namespace Main.Core.Export
 
             }
         }
-        protected void BuildLabels(IDictionary<Guid,HeaderItem> header)
+        protected void BuildLabels(HeaderCollection header)
         {
-            foreach (KeyValuePair<Guid, HeaderItem> headerItem in header)
+            foreach (var headerItem in header)
             {
-                if(headerItem.Value.Labels.Count==0)
+                if(headerItem.Labels.Count==0)
                     continue;
-                doContent.AppendLine();
-                doContent.AppendFormat(string.Format("label define {0} ", headerItem.Key));
-                foreach (var label in headerItem.Value.Labels)
+                if (!createdLabels.Contains(headerItem.PublicKey))
                 {
 
-                    doContent.AppendFormat("{0} \"{1}\" ", label.Value.Caption, label.Value.Title);
+                    doContent.AppendLine();
+                    doContent.AppendFormat(string.Format("label define {0} ", headerItem.PublicKey));
+                    foreach (var label in headerItem.Labels)
+                    {
+
+                        doContent.AppendFormat("{0} \"{1}\" ", label.Value.Caption, label.Value.Title);
+                    }
+                    doContent.AppendLine();
                 }
-                doContent.AppendLine();
-                doContent.AppendLine(string.Format("label var {0} {1}", headerItem.Value.Caption, headerItem.Key));
+                doContent.AppendLine(string.Format("label var {0} {1}", headerItem.Caption, headerItem.PublicKey));
+                createdLabels.Add(headerItem.PublicKey);
             }
         }
 

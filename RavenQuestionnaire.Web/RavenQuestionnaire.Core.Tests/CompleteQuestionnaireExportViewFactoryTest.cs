@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Core.Tests
         {
             var group = new Group("some group");
             var result = this.Target.BuildHeaderTestable(group);
-            Assert.IsTrue(result.Count == 0);
+            Assert.IsTrue(!result.Any());
         }
         [Test]
         public void BuildHeader_GroupWithQuestion_QuestionISAddedToHeader()
@@ -72,8 +72,8 @@ namespace RavenQuestionnaire.Core.Tests
             var questionKey = Guid.NewGuid();
             group.Add(new SingleQuestion(questionKey, "questionText"), null);
             var result = this.Target.BuildHeaderTestable(group);
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.Count() == 1);
+            Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
         }
         [Test]
         public void BuildHeader_GroupWithAutoQuestion_QuestionISAddedToHeaderAndQuestionISAddedToAutoQuestionList()
@@ -84,8 +84,8 @@ namespace RavenQuestionnaire.Core.Tests
             var autoQuestions = new List<CompleteQuestionnaireExportViewFactory.AutoQuestionWithTriggers>();
             group.Add(new AutoPropagateQuestion() { QuestionText = "questionText", PublicKey = questionKey }, null);
             var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.Count() == 1);
+            Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
             Assert.IsTrue(subOBjects.Count == 0);
             Assert.IsTrue(autoQuestions.Count == 1);
             Assert.IsTrue(autoQuestions[0].PublicKey == questionKey);
@@ -109,8 +109,8 @@ namespace RavenQuestionnaire.Core.Tests
             group.Add(subGroup, null);
 
             var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.Count() == 1);
+            Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
             Assert.IsTrue(subOBjects.Count == 0);
             Assert.IsTrue(autoQuestions.Count == 1);
             Assert.IsTrue(autoQuestions[0].PublicKey == questionKey && autoQuestions[0].Triggers.Count() == 1 &&
@@ -126,8 +126,8 @@ namespace RavenQuestionnaire.Core.Tests
             var questionKey = Guid.NewGuid();
             subGroup.Add(new SingleQuestion(questionKey, "questionText"), null);
             var result = this.Target.BuildHeaderTestable(group);
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result.First().Value.Title == "questionText" && result.First().Key == questionKey);
+            Assert.IsTrue(result.Count() == 1);
+            Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
         }
         [Test]
         public void BuildHeader_PropagatedGroupWithQuestionInsideSubGroup_QuestionISAddedToHeader()
@@ -138,7 +138,7 @@ namespace RavenQuestionnaire.Core.Tests
             var questionKey = Guid.NewGuid();
             subGroup.Add(new SingleQuestion(questionKey, "questionText"), null);
             var result = this.Target.BuildHeaderTestable(group);
-            Assert.IsTrue(result.Count ==0);
+            Assert.IsTrue(!result.Any());
            
         }
         protected class CompleteQuestionnaireExportViewFactoryTestable : CompleteQuestionnaireExportViewFactory
@@ -150,11 +150,11 @@ namespace RavenQuestionnaire.Core.Tests
             {
             }
 
-            public Dictionary<Guid, HeaderItem> BuildHeaderTestable(IGroup template)
+            public HeaderCollection BuildHeaderTestable(IGroup template)
             {
                 return base.BuildHeader(template, new List<Guid>(), new List<AutoQuestionWithTriggers>());
             }
-            public Dictionary<Guid, HeaderItem> BuildHeaderTestable(IGroup template, List<Guid> subObject, List<AutoQuestionWithTriggers> autoQuestions)
+            public HeaderCollection BuildHeaderTestable(IGroup template, List<Guid> subObject, List<AutoQuestionWithTriggers> autoQuestions)
             {
                 return base.BuildHeader(template, subObject,autoQuestions);
             }
