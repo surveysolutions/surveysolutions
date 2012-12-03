@@ -419,7 +419,6 @@ namespace Web.Supervisor.Controllers
             stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(new CompleteQuestionnaireStatisticViewInputModel(cqId));
             responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
             if (stat.Status.PublicId == SurveyStatus.Unassign.PublicId)
             {
                 stat.Status = SurveyStatus.Initial;
@@ -432,6 +431,7 @@ namespace Web.Supervisor.Controllers
                         });
             }
 
+            commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
 
             if (Request.IsAjaxRequest())
             {

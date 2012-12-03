@@ -14,6 +14,9 @@ namespace Core.Supervisor.Views.Index
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Core.Supervisor.DenormalizerStorageItem;
+
     using Main.Core.Documents;
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
@@ -37,6 +40,11 @@ namespace Core.Supervisor.Views.Index
         /// The users.
         /// </summary>
         private readonly IDenormalizerStorage<UserDocument> users;
+
+        /// <summary>
+        /// The stat
+        /// </summary>
+        private readonly IDenormalizerStorage<SupervisorStatisticsItem> stat;
 
         #endregion
 
