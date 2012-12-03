@@ -90,6 +90,28 @@ namespace Main.Core.Tests.Export
                                 "\r\nlabel define {0} aValue1 \"label text 1\" \r\nlabel var q1 {0}\r\n\r\nlabel define {1} aValue2 \"label text 2\" \r\nlabel var q2 {1}\r\n",
                                 labelGuid1, labelGuid2));
         }
+
+        [Test]
+        public void BuildLabels_OneHeaderTwoColumnsWithSameLabel_OnlyOneLabalWasCreatedAttachedToBothVariables()
+        {
+            StataSuplierFake target = new StataSuplierFake();
+            var header = new HeaderCollection();
+            var labelGuid = Guid.NewGuid();
+            var headeritem1 = new HeaderItem(new MultyOptionsQuestion() { StataExportCaption = "q1a", PublicKey = labelGuid });
+
+            headeritem1.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue1", AnswerText = "label text 1" }));
+            var headeritem2 = new HeaderItem(new MultyOptionsQuestion() { StataExportCaption = "q1b", PublicKey = labelGuid });
+            headeritem2.Labels.Add(headeritem1.Labels.First().Key, headeritem1.Labels.First().Value);
+            header.Add(headeritem1);
+            header.Add(headeritem2);
+            target.BuildLabelsTestable(header);
+            Console.WriteLine(target.Result);
+            Assert.AreEqual(target.Result,
+                           string.Format(
+                               "\r\nlabel define {0} aValue1 \"label text 1\" \r\nlabel var q1a {0}\r\nlabel var q1b {0}\r\n",
+                               labelGuid));
+        }
+
         public class StataSuplierFake : StataSuplier
         {
             public void BuildMergeTestable(string parentPrimaryKeyName, string primaryKeyColumnName, string fileName)

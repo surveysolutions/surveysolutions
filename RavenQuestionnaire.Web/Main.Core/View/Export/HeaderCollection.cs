@@ -20,7 +20,7 @@ namespace Main.Core.View.Export
     /// </summary>
     public class HeaderCollection:IEnumerable<HeaderItem>
     {
-        private readonly IDictionary<Guid, IEnumerable<HeaderItem>> container;
+        protected IDictionary<Guid, IEnumerable<HeaderItem>> container;
         char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
 
         public HeaderCollection()
@@ -60,16 +60,20 @@ namespace Main.Core.View.Export
         }
         public void Add(HeaderItem item)
         {
-            this.container.Add(item.PublicKey, new HeaderItem[] { item });
+            if (!this.container.ContainsKey(item.PublicKey))
+            {
+                this.container.Add(item.PublicKey, new HeaderItem[] {item});
+                return;
+            }
+
+            this.container[item.PublicKey] = this.container[item.PublicKey].Union(new HeaderItem[] { item });
 
         }
+       
         public IEnumerable<Guid> Keys
         {
             get { return this.container.Select(c => c.Key); }
         }
-
-  /*      public HeaderItem this[Guid publicKey] { get { return this.container[publicKey]; }
-        }*/
 
         #region Implementation of IEnumerable
 

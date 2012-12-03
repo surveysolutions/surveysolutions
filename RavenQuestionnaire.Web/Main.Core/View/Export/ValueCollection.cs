@@ -20,7 +20,7 @@ namespace Main.Core.View.Export
     /// </summary>
     public class ValueCollection : IEnumerable<KeyValuePair<Guid, IEnumerable<string>>>
     {
-        private readonly IDictionary<Guid,IEnumerable<string>> container;
+        protected readonly IDictionary<Guid,IEnumerable<string>> container;
 
         public ValueCollection()
         {
