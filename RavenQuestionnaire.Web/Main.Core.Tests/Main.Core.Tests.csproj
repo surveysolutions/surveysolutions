@@ -102,7 +102,6 @@
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
-    <Compile Include="EventHandlers\SyncProcessDenormalizerTests.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="Export\StataSuplierTests.cs" />
