@@ -28,6 +28,8 @@
 
             request.done(function (msg) {
                 $("#content_container").html(msg);
+
+                $('div.expander').expander();
             });
 
             request.fail(function (jqXHR, textStatus) {

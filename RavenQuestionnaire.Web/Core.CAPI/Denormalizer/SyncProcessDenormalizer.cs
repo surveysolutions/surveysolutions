@@ -1,17 +1,18 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcessDenormalizer.cs" company="The World Bank">
-//   2012
+// <copyright file="SyncProcessDenormalizer.cs" company="">
+//   
 // </copyright>
+// <summary>
+//   TODO: Update summary.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.EventHandlers
+namespace Core.CAPI.Denormalizer
 {
     using System;
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Events.Questionnaire;
-    using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.Events.Synchronization;
     using Main.Core.Events.User;
     using Main.Core.View.CompleteQuestionnaire;
@@ -24,9 +25,9 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SyncProcessDenormalizer : IEventHandler<NewSynchronizationProcessCreated>,
-                                           IEventHandler<ProcessEnded>,
-                                           IEventHandler<SnapshootLoaded>,
+    public class SyncProcessDenormalizer : IEventHandler<NewSynchronizationProcessCreated>, 
+                                           IEventHandler<ProcessEnded>, 
+                                           IEventHandler<SnapshootLoaded>, 
                                            IEventHandler<NewUserCreated>
     {
         #region Constants and Fields
@@ -66,7 +67,6 @@ namespace Main.Core.EventHandlers
 
         #region Public Methods and Operators
 
-
         /// <summary>
         /// The handle.
         /// </summary>
@@ -80,11 +80,12 @@ namespace Main.Core.EventHandlers
             {
                 return;
             }
+
             var stat = new UserSyncProcessStatistics
-            {
-                Type = SynchronizationStatisticType.NewUser,
-                User = new UserLight(evnt.Payload.PublicKey, evnt.Payload.Name),
-            };
+                {
+                    Type = SynchronizationStatisticType.NewUser, 
+                    User = new UserLight(evnt.Payload.PublicKey, evnt.Payload.Name), 
+                };
             item.Statistics.Add(stat);
         }
 
@@ -99,9 +100,8 @@ namespace Main.Core.EventHandlers
             this.docs.Store(
                 new SyncProcessStatisticsDocument
                     {
-                        SyncKey = evnt.Payload.ProcessGuid,
-                        SyncType = evnt.Payload.SynckType
-                    },
+                       SyncKey = evnt.Payload.ProcessGuid, SyncType = evnt.Payload.SynckType 
+                    }, 
                 Guid.Empty);
         }
 
@@ -123,7 +123,6 @@ namespace Main.Core.EventHandlers
             item.EndDate = DateTime.Now;
         }
 
-
         /// <summary>
         /// The handle.
         /// </summary>
@@ -132,6 +131,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
+            /*
             SyncProcessStatisticsDocument item = this.docs.GetByGuid(Guid.Empty);
             if (item == null || item.IsEnded)
             {
@@ -192,6 +192,7 @@ namespace Main.Core.EventHandlers
 
                 item.Statistics.Add(stat);
             }
+             */
         }
 
         #endregion
