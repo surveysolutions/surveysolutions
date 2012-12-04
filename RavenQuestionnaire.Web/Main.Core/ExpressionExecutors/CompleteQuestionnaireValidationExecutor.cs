@@ -106,7 +106,7 @@ namespace Main.Core.ExpressionExecutors
         /// </returns>
         public bool Execute(ICompleteQuestion question)
         {
-            if (question.QuestionScope <= this.scope)
+            if (question.QuestionScope > this.scope)
             {
                 return true;
             }

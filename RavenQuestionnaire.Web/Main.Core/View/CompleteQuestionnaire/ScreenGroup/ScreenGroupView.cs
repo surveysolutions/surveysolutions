@@ -44,8 +44,9 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     doc.Children.OfType<ICompleteGroup>().Where(
                         g =>
                         (g.Children.OfType<ICompleteGroup>().Count()
-                         + g.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= scope).Count())
-                        != 0).Select(g => new CompleteGroupHeaders(g)), navigation))
+                         + g.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= scope).Count()) != 0
+                        || g.Children.Count() == 0).Select(g => new CompleteGroupHeaders(g)),
+                    navigation))
         {
             /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);*/

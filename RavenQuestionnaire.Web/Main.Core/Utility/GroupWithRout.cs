@@ -64,7 +64,7 @@ namespace Main.Core.Utility
                 {
                     NodeWithLevel node = treeStack.Pop();
                     group = this.ProceedGroup(node.Group, publicKey.Value, propagationKey);
-                    
+
                     this.UpdateNavigation(rout, node);
 
                     if (group != null)
@@ -76,7 +76,8 @@ namespace Main.Core.Utility
                     for (int i = subGroups.Length - 1; i >= 0; i--)
                     {
                         var count = subGroups[i].Children.OfType<ICompleteGroup>().Count() + subGroups[i].Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= this.Scope).Count();
-                        if (count == 0)
+                        // questions exists, but they are hidden 
+                        if (count == 0 && subGroups[i].Children.Count != 0)
                         {
                             continue;
                         }
@@ -93,7 +94,7 @@ namespace Main.Core.Utility
                 group = doc.Children.OfType<ICompleteGroup>().First();
                 rout.Add(new NodeWithLevel(group, 1));
             }
-            
+
             this.CurrentRout = rout;
             this.Group = group;
         }
@@ -155,7 +156,7 @@ namespace Main.Core.Utility
         protected ScreenNavigation CompileNavigation()
         {
             var temtNavigation = new ScreenNavigation { PublicKey = this.Group.PublicKey, CurrentScreenTitle = this.Group.Title };
-            
+
             var rout = this.CurrentRout.Take(this.CurrentRout.Count() - 1).ToList();
             temtNavigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
             NodeWithLevel parent = rout.Last();
@@ -176,23 +177,24 @@ namespace Main.Core.Utility
                 groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>()
                     .Where(g => !g.PropagationPublicKey.HasValue)
                     .Where(
+                        //filter all empty groups or groups with any visible question
                         g =>
                         (g.Children.OfType<ICompleteGroup>().Count()
                          + g.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= this.Scope).Count())
-                        != 0).ToList();
+                        != 0 || g.Children.Count() == 0).ToList();
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
             }
-          /*  if (indexOfTarget < 0)
-                throw new InvalidOperationException("groups wasn't founded");*/
+            /*  if (indexOfTarget < 0)
+                  throw new InvalidOperationException("groups wasn't founded");*/
             if (indexOfTarget > 0)
             {
                 temtNavigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
             }
 
             if (indexOfTarget < groupNeighbors.Count - 1)
-            { 
+            {
                 temtNavigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
             }
 
