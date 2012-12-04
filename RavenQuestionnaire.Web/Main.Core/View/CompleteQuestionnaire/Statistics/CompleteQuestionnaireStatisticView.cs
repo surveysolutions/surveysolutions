@@ -45,11 +45,11 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="doc">
         /// The doc.
         /// </param>
-        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
+        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc, QuestionScope scope)
         {
             this.executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-            this.validator = new CompleteQuestionnaireValidationExecutor(doc);
+            this.validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
 
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
@@ -61,7 +61,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
             this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status, s.ChangeDate)).ToList();
             this.StatusHistory.Reverse();
-            this.HandleQuestionTree(doc);
+            this.HandleQuestionTree(doc, scope);
         }
 
         #endregion
@@ -171,7 +171,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="target">
         /// The target.
         /// </param>
-        protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target)
+        protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target, QuestionScope scope)
         {
             this.InvalidQuestions = new List<QuestionStatisticView>();
             this.AnsweredQuestions = new List<QuestionStatisticView>();
@@ -180,7 +180,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
 
             this.executor.Execute(target);
 
-            foreach (var question in target.WrappedQuestions)
+            foreach (var question in target.WrappedQuestions.Where(q=>q.Question.QuestionScope <= scope))
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }

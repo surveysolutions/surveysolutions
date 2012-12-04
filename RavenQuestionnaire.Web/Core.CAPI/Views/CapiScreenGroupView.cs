@@ -64,7 +64,7 @@ namespace Core.CAPI.Views
 
                 executor.ExecuteAndChangeStateRecursive(doc);
 
-                var validator = new CompleteQuestionnaireValidationExecutor(doc);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
 
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 

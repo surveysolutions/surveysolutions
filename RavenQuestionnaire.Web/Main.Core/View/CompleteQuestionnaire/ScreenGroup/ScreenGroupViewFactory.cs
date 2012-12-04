@@ -56,8 +56,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
         #endregion
 
-       
-
         #region Public Methods and Operators
 
         /// <summary>

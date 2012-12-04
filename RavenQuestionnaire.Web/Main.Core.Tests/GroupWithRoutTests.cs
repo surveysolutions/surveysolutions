@@ -15,6 +15,8 @@ namespace Main.Core.Tests
     using System.Linq;
     using System.Text;
 
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -94,7 +96,7 @@ namespace Main.Core.Tests
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
-            var navigation = new GroupWithRout(rout, doc).Navigation;
+            var navigation = new GroupWithRout(rout, doc, QuestionScope.Interviewer).Navigation;
             Assert.IsNull(navigation.NextScreen);
             Assert.IsNull(navigation.PrevScreen);
         }
@@ -108,7 +110,7 @@ namespace Main.Core.Tests
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
-            var navigation = new GroupWithRout(rout, doc).Navigation;
+            var navigation = new GroupWithRout(rout, doc, QuestionScope.Interviewer).Navigation;
             Assert.IsTrue(navigation.NextScreen.PublicKey==parent.Children[1].PublicKey);
             Assert.IsNull(navigation.PrevScreen);
         }
@@ -122,7 +124,7 @@ namespace Main.Core.Tests
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
-            var navigation = new GroupWithRout(rout, doc).Navigation;
+            var navigation = new GroupWithRout(rout, doc, QuestionScope.Interviewer).Navigation;
             Assert.IsNull(navigation.NextScreen);
             Assert.IsNull(navigation.PrevScreen);
         }
@@ -137,7 +139,7 @@ namespace Main.Core.Tests
             List<NodeWithLevel> rout = new List<NodeWithLevel>();
             rout.Add(new NodeWithLevel(parent, 0));
             rout.Add(new NodeWithLevel(doc, 1));
-            var navigation = new GroupWithRout(rout, doc).Navigation;
+            var navigation = new GroupWithRout(rout, doc, QuestionScope.Interviewer).Navigation;
             Assert.IsTrue(navigation.PrevScreen.PublicKey == parent.Children[0].PublicKey);
             Assert.IsNull(navigation.NextScreen);
         }
