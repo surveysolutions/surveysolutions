@@ -44,6 +44,7 @@ namespace Main.Core.Entities.SubEntities
         
         /// <summary>
         /// Gets or sets a value indicating whether featured.
+        /// Is used for visual item distinguish.
         /// </summary>
         bool Featured { get; set; }
 
@@ -81,7 +82,17 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the conditional dependent questions.
+        /// </summary>
+        List<Guid> ConditionalDependentQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the dependent items.
+        /// </summary>
+        List<Guid> ConditionalDependentGroups { get; set; }
+
         #endregion
 
         /// <summary>

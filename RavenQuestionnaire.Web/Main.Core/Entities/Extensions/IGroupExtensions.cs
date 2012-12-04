@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IGroupExtensions.cs" company="">
-//   
+// <copyright file="IGroupExtensions.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.Extensions
 {
     using System;
@@ -16,7 +17,7 @@ namespace Main.Core.Entities.Extensions
     using Main.Core.Entities.SubEntities;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// The i group extensions.
     /// </summary>
     public static class IGroupExtensions
     {
@@ -46,6 +47,27 @@ namespace Main.Core.Entities.Extensions
             return MoveItem(root, itemPublicKey, groupKey, after, root);
         }
 
+        /// <summary>
+        /// The move item.
+        /// </summary>
+        /// <param name="root">
+        /// The root.
+        /// </param>
+        /// <param name="itemPublicKey">
+        /// The item public key.
+        /// </param>
+        /// <param name="groupKey">
+        /// The group key.
+        /// </param>
+        /// <param name="after">
+        /// The after.
+        /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         private static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
 
@@ -79,13 +101,15 @@ namespace Main.Core.Entities.Extensions
         /// <param name="after">
         /// The after.
         /// </param>
+        /// <param name="parent">
+        /// The parent.
+        /// </param>
         /// <returns>
-        /// The System.Boolean.
+        /// The <see cref="bool"/>.
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
-        private static bool Move(
-            this IComposite root, List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
+        private static bool Move(this IComposite root, List<IComposite> groups, Guid itemPublicKey, Guid? groupKey, Guid? after, IComposite parent)
         {
             IComposite moveble = groups.FirstOrDefault(g => g.PublicKey == itemPublicKey);
             if (moveble == null)
@@ -95,7 +119,6 @@ namespace Main.Core.Entities.Extensions
 
             if (groupKey.HasValue)
             {
-                //var moveToGroup = root.Find<Group>((Guid)groupKey);
                 var moveToGroup = parent.Find<Group>((Guid)groupKey);
                 if (moveToGroup != null)
                 {

@@ -107,12 +107,17 @@ namespace Main.Core.EventHandlers
             {
                 CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
                 if (item == null)
+                {
                     return;
+                }
+
                 CompleteQuestionView currentFeatured =
                     item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
 
                 if (currentFeatured != null)
+                {
                     currentFeatured.Answer = evnt.Payload.AnswerString;
+                }
             }
         }
 

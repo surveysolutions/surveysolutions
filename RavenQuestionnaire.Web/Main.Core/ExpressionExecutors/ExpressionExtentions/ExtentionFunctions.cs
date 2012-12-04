@@ -1,18 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ExtentionFunctions.cs" company="The World Bank">
+//   2012
+// </copyright>
+// <summary>
+//   The extension functions.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.ExpressionExecutors.ExpressionExtentions
 {
+    using System;
     using System.Collections;
+    using System.Collections.Generic;
 
     using NCalc;
 
     /// <summary>
-    /// The extention functions.
+    /// The extension functions.
     /// </summary>
-    public static class ExtentionFunctions
+    public static class ExtensionFunctions
     {
         private static Type[] CommonTypes = new[] { typeof(Int64), typeof(Double), typeof(Boolean), typeof(String), typeof(Decimal) };
 
@@ -63,7 +69,7 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
                     var enumerator = values.GetEnumerator();
                     while (enumerator.MoveNext())
                     {
-                        if (ExtentionFunctions.CompareUsingMostPreciseType(argument, enumerator.Current) == 0)
+                        if (ExtensionFunctions.CompareUsingMostPreciseType(argument, enumerator.Current) == 0)
                         {
                             evaluation = true;
                             break;
@@ -73,7 +79,7 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
                 else
                 {
                     ////singleoption
-                    if (ExtentionFunctions.CompareUsingMostPreciseType(argument, parameter) == 0)
+                    if (ExtensionFunctions.CompareUsingMostPreciseType(argument, parameter) == 0)
                     {
                         evaluation = true;
                     }

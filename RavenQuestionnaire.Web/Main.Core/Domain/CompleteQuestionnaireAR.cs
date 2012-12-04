@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireAR.cs" company="">
-//   
+// <copyright file="CompleteQuestionnaireAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   CompleteQuestionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete.Question;
 
 namespace Main.Core.Domain
 {
@@ -20,7 +18,9 @@ namespace Main.Core.Domain
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.Events.Questionnaire.Completed;
+    using Main.Core.ExpressionExecutors;
 
     using Ncqrs;
     using Ncqrs.Restoring.EventStapshoot;
@@ -36,6 +36,26 @@ namespace Main.Core.Domain
         /// The doc.
         /// </summary>
         private CompleteQuestionnaireDocument doc = new CompleteQuestionnaireDocument();
+
+        /*/// <summary>
+        /// The condition question dependencies.
+        /// </summary>
+        private Dictionary<Guid, List<Guid>> conditionQuestionDependencies;
+
+        /// <summary>
+        /// The condition group dependencies.
+        /// </summary>
+        private Dictionary<Guid, List<Guid>> conditionGroupDependencies;*/
+
+        /*/// <summary>
+        /// The condition executor.
+        /// </summary>
+        private CompleteQuestionnaireConditionExecutor conditionExecutor;
+
+        /// <summary>
+        /// The validation executor.
+        /// </summary>
+        private CompleteQuestionnaireValidationExecutor validationExecutor;*/
 
         #endregion
 
@@ -64,13 +84,18 @@ namespace Main.Core.Domain
 
             //// all checks using read layer.
 
-            //// TODO: is it good to use explicit type cast?
+            //// TODO: think: is it good to use explicit type cast?
             var document = (CompleteQuestionnaireDocument)questionnaire;
+
+            //// connections are set during type casting
+            //// document.ConnectChildsWithParent();
 
             document.PublicKey = completeQuestionnaireId;
             document.Creator = null;
             document.Status = SurveyStatus.Initial;
             document.Responsible = null;
+
+            ////document.ConnectChildsWithParent();
 
             //// Apply a NewQuestionnaireCreated event that reflects the
             //// creation of this instance. The state of this
@@ -90,7 +115,7 @@ namespace Main.Core.Domain
         #region Public Methods and Operators
 
         /// <summary>
-        /// The add propagatable group.
+        /// The add propagate group.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
@@ -101,7 +126,7 @@ namespace Main.Core.Domain
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             //// performe check before event raising
-            var template = this.doc.Find<CompleteGroup>(publicKey);
+            var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
 
             // Apply a NewGroupAdded event that reflects the
             // creation of this instance. The state of this
@@ -110,22 +135,23 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new PropagatableGroupAdded
                     {
-                        CompletedQuestionnaireId = this.doc.PublicKey, 
                         PublicKey = publicKey, 
                         PropagationKey = propagationKey
                     });
-            if (template.Triggers.Count > 0)
+
+            if (templateGroup.Triggers.Count <= 0)
             {
-                foreach (Guid trigger in template.Triggers)
-                {
-                    this.ApplyEvent(
-                        new PropagatableGroupAdded
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = trigger, 
-                                PropagationKey = propagationKey
-                            });
-                }
+                return;
+            }
+
+            foreach (Guid trigger in templateGroup.Triggers)
+            {
+                this.ApplyEvent(
+                    new PropagatableGroupAdded
+                        {
+                            PublicKey = trigger, 
+                            PropagationKey = propagationKey
+                        });
             }
         }
 
@@ -156,17 +182,18 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
-        /// The delete propagatable group.
+        /// The delete propagate group.
         /// </summary>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public void DeletePropagatableGroup(Guid propagationKey, Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void DeletePropagatableGroup(Guid publicKey, Guid propagationKey)
         {
             var group = this.doc.Find<CompleteGroup>(publicKey);
+            
             this.ApplyEvent(
                 new PropagatableGroupDeleted
                     {
@@ -174,18 +201,21 @@ namespace Main.Core.Domain
                         PublicKey = publicKey, 
                         PropagationKey = propagationKey
                     });
-            if (group.Triggers.Count > 0)
+
+            if (group.Triggers.Count <= 0)
             {
-                foreach (Guid trigger in group.Triggers)
-                {
-                    this.ApplyEvent(
-                        new PropagatableGroupDeleted
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = trigger, 
-                                PropagationKey = propagationKey
-                            });
-                }
+                return;
+            }
+
+            foreach (Guid trigger in group.Triggers)
+            {
+                this.ApplyEvent(
+                    new PropagatableGroupDeleted
+                        {
+                            CompletedQuestionnaireId = this.doc.PublicKey, 
+                            PublicKey = trigger, 
+                            PropagationKey = propagationKey
+                        });
             }
         }
 
@@ -198,6 +228,32 @@ namespace Main.Core.Domain
         public override void RestoreFromSnapshot(CompleteQuestionnaireDocument snapshot)
         {
             this.doc = snapshot;
+            snapshot.ConnectChildsWithParent();
+            
+            ////this.conditionDependencies = ExpressionDependencyBuilder.Build(this.doc);
+        }
+
+        /// <summary>
+        /// The set comment.
+        /// </summary>
+        /// <param name="questionPublickey">
+        /// The question public key.
+        /// </param>
+        /// <param name="comments">
+        /// The comments.
+        /// </param>
+        /// <param name="propogationPublicKey">
+        /// The propagation public key.
+        /// </param>
+        public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
+        {
+            this.ApplyEvent(
+                new CommentSet
+                {
+                    Comments = comments,
+                    PropagationPublicKey = propogationPublicKey,
+                    QuestionPublickey = questionPublickey
+                });
         }
 
         /// <summary>
@@ -207,7 +263,7 @@ namespace Main.Core.Domain
         /// The question public key.
         /// </param>
         /// <param name="propogationPublicKey">
-        /// The propogation public key.
+        /// The propagation public key.
         /// </param>
         /// <param name="completeAnswerValue">
         /// The complete answer value.
@@ -218,8 +274,7 @@ namespace Main.Core.Domain
         /// <exception cref="InvalidOperationException">
         /// Raises InvalidOperationException.
         /// </exception>
-        public void SetAnswer(
-            Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers)
+        public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers)
         {
             ////performe check before event raising!!
             ICompleteQuestion question = this.doc.GetQuestion(questionPublicKey, propogationPublicKey);
@@ -244,26 +299,35 @@ namespace Main.Core.Domain
 
                 answerString = string.Join(", ", answerList.ToArray());
             }
+            ///////////////
+
             var propagatedQuestion = question as IAutoPropagate;
             ////handle group propagation
             ////to store events with guids
             if (propagatedQuestion != null)
             {
-                int count;
-                if (!int.TryParse(completeAnswerValue, out count))
-                {
-                    throw new ArgumentException("value is not a number");
-                }
+                //// check is it true for all cases?
                 if (string.IsNullOrWhiteSpace(completeAnswerValue))
                 {
                     completeAnswerValue = "0";
                 }
+
+                int count;
+                if (!int.TryParse(completeAnswerValue, out count))
+                {
+                    throw new ArgumentException("Value is not a number");
+                }
+
                 if (count < 0)
                 {
-                    throw new ArgumentException("count can't be bellow zero");
+                    throw new ArgumentException("Count can't be bellow zero");
                 }
+
                 if (count > propagatedQuestion.MaxValue)
+                {
                     throw new ArgumentException(string.Format("value can't be greater than {0}", propagatedQuestion.MaxValue));
+                }
+
                 this.AddRemovePropagatedGroup(question, count);
             }
 
@@ -284,32 +348,26 @@ namespace Main.Core.Domain
                         QuestionText = question.QuestionText, 
                         AnswerString = answerString
                     });
-        }
 
-        /// <summary>
-        /// The set comment.
-        /// </summary>
-        /// <param name="questionPublickey">
-        /// The question publickey.
-        /// </param>
-        /// <param name="comments">
-        /// The comments.
-        /// </param>
-        /// <param name="propogationPublicKey">
-        /// The propogation public key.
-        /// </param>
-        public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
-        {
+
+            // string is used for combination of guid\propagation guid
+            // think about using separate structure to hold 2 keys 
+            var resultQuestionsStatus = new Dictionary<string, bool?>();
+            var resultGroupsStatus = new Dictionary<string, bool?>();
+
+            var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
+
+            collector.ExecuteConditionAfterAnswer(question, resultQuestionsStatus, resultGroupsStatus);
+            
             this.ApplyEvent(
-                new CommentSeted
-                    {
-                        Comments = comments, 
-                        CompleteQuestionnaireId = this.doc.PublicKey, 
-                        PropogationPublicKey = propogationPublicKey, 
-                        QuestionPublickey = questionPublickey
-                    });
+                new ConditionalStatusChanged()
+                {
+                    CompletedQuestionnaireId = this.EventSourceId,
+                    ResultGroupsStatus = resultGroupsStatus,
+                    ResultQuestionsStatus = resultQuestionsStatus
+                });
         }
-
+        
         #endregion
 
         #region Methods
@@ -327,63 +385,143 @@ namespace Main.Core.Domain
         /// </exception>
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
+            if (count < 0)
+            {
+                throw new InvalidOperationException("Count can't be bellow zero.");
+            }
+
             var autoQuestion = question as AutoPropagateCompleteQuestion;
-            var currentAnswer = autoQuestion.Answer ?? 0;
             if (autoQuestion == null)
             {
                 return;
             }
 
-            if (count < 0)
-            {
-                throw new InvalidOperationException("count can't be bellow zero");
-            }
-
+            var currentAnswer = autoQuestion.Answer ?? 0;
+            
             if (currentAnswer == count)
             {
                 return;
             }
 
+            this.HandlePropagation(autoQuestion, currentAnswer, count);
+        }
+
+        /// <summary>
+        /// The handle propagation.
+        /// </summary>
+        /// <param name="autoQuestion">
+        /// The auto question.
+        /// </param>
+        /// <param name="currentAnswer">
+        /// The current answer.
+        /// </param>
+        /// <param name="count">
+        /// The count.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        /// </exception>
+        private void HandlePropagation(AutoPropagateCompleteQuestion autoQuestion, int currentAnswer, int count)
+        {
             if (currentAnswer < count)
             {
-                for (int i = 0; i < count - currentAnswer; i++)
+                //// collect all group templates by trigger keys
+                var triggers = autoQuestion.Triggers.Distinct().ToList();
+                if (triggers.Any())
                 {
-                    var propagationKey = Guid.NewGuid();
-                    foreach (Guid trigger in autoQuestion.Triggers)
+                    ////Create keys for propagation
+                    Guid[] keysPropagate = new Guid[count - currentAnswer];
+                    for (int i = 0; i < count - currentAnswer; i++)
                     {
-                        this.ApplyEvent(
-                            new PropagatableGroupAdded
+                        keysPropagate[i] = Guid.NewGuid();
+                    }
+
+                    //// get the scope of the changes
+                    IComposite scopeRoot = this.GetRootForQuestion(autoQuestion);
+
+                    ////iterate over all triggers for question
+                    foreach (var trigger in triggers)
+                    {
+                        Guid trigger1 = trigger;
+                        //// find all templates by trigger
+                        var templatesToCreate = scopeRoot.Find<CompleteGroup>(g => g.PublicKey == trigger1 && g.PropagationPublicKey == null).ToList();
+
+                        foreach (var completeGroup in templatesToCreate)
+                        {
+                            foreach (var guid in keysPropagate)
+                            {
+                                var parent = completeGroup.Parent as CompleteGroup;
+                                if (parent == null)
                                 {
-                                    CompletedQuestionnaireId = this.doc.PublicKey,
-                                    PublicKey = trigger,
-                                    PropagationKey = propagationKey
-                                });
+                                    throw new InvalidOperationException("Incorrect parent-child relationship.");
+                                }
+
+                                // temporary old  event is back
+                                this.ApplyEvent(
+                                    new PropagatableGroupAdded
+                                    {
+                                        CompletedQuestionnaireId = this.doc.PublicKey,
+                                        PublicKey = trigger,
+                                        PropagationKey = guid,
+                                        QuestionPropagationKey = autoQuestion.PropagationPublicKey
+                                    });
+
+                                /*this.ApplyEvent(new PropagateGroupCreated
+                                {
+                                    Group = new CompleteGroup(completeGroup, guid),
+                                    ParentPublicKey = parent.PublicKey,
+                                    ParentPropagationKey = parent.PropagationPublicKey
+                                });*/
+                            }
+                        }
                     }
                 }
             }
             else
             {
-                for (int i = count; i < currentAnswer; i++)
+                //// assuming that all propagations were correct
+                //// so we need just get correspondent number of propagation keys
+
+                //// collect all group templates by trigger keys
+                var triggers = autoQuestion.Triggers.Distinct().ToList();
+                if (triggers.Any())
                 {
-                    foreach (Guid trigger in autoQuestion.Triggers)
+                    //// get the scope of the changes
+                    IComposite scopeRoot = this.GetRootForQuestion(autoQuestion);
+
+                    //// key of first triggered group 
+                    var firstKey = triggers.First();
+
+                    //// list of groups created by propagation
+                    var propagatedGroups = scopeRoot.Find<ICompleteGroup>(g => g.PublicKey == firstKey && g.PropagationPublicKey.HasValue).ToArray();
+
+                    if (propagatedGroups.Length < count)
                     {
-                        Guid trigger1 = trigger;
-                        var lastGroup =
-                            this.doc.Find<ICompleteGroup>(
-                                g => g.PublicKey == trigger1 && g.PropagationPublicKey.HasValue).LastOrDefault();
-                        if (lastGroup == null)
-                            break;
-                        this.ApplyEvent(
-                            new PropagatableGroupDeleted
-                                {
-                                    CompletedQuestionnaireId = this.doc.PublicKey,
-                                    PublicKey = trigger,
-                                    PropagationKey = lastGroup.PropagationPublicKey.Value
-                                });
+                        throw new InvalidOperationException("Mismatch butween structure and answer.");
+                    }
+
+                    for (int i = count; i < currentAnswer; i++)
+                    {
+                        foreach (Guid trigger in triggers)
+                        {
+                            var lastGroup = propagatedGroups[i];
+                            if (lastGroup != null)
+                            {
+
+                                this.ApplyEvent(
+                                    new PropagatableGroupDeleted
+                                    {
+                                        CompletedQuestionnaireId = this.doc.PublicKey,
+                                        PublicKey = trigger,
+                                        QuestionPropagationKey = autoQuestion.PropagationPublicKey,
+                                        PropagationKey = lastGroup.PropagationPublicKey.Value
+                                    });
+                            }
+                        }
                     }
                 }
             }
         }
+
 
         /// <summary>
         /// The change assignment.
@@ -439,12 +577,10 @@ namespace Main.Core.Domain
             ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
             if (question == null)
             {
-                return; ////is it good or exception is better decision
+                return; ////is it good or exception is better decision?
             }
-
+            
             question.SetAnswer(e.AnswerKeys, e.AnswerValue);
-
-            // _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
         // Event handler for the PropagatableGroupAdded event. This method
@@ -492,6 +628,8 @@ namespace Main.Core.Domain
         protected void OnNewQuestionnaireCreated(NewCompleteQuestionnaireCreated e)
         {
             this.doc = e.Questionnaire;
+            this.doc.ConnectChildsWithParent();
+            ////this.conditionDependencies = ExpressionDependencyBuilder.Build(this.doc);
         }
 
         /// <summary>
@@ -502,10 +640,115 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
-            var template = this.doc.Find<CompleteGroup>(e.PublicKey);
+            /*1. Find Question had triggered propagation
+             *2. Define the scope of influence of question - only the boundaries of current propagation
+             *If this question belongs to propagated group
+             *Global questions don't affect through propagation boundary
+             *For instance Nested group of 2 level cannot be referenced from outside question
+             *if 
+             */
+            //// write now this ivent is not handeled correctly for autopropagate questions
+            //// which are laying inside propagated group
+
+            var template = this.doc.Find<CompleteGroup>(g => g.PublicKey == e.PublicKey && g.PropagationPublicKey == null).FirstOrDefault();
 
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             this.doc.Add(newGroup, null);
+        }
+
+        /// <summary>
+        /// The on propagate group created.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnConditionalStatusChanged(ConditionalStatusChanged e)
+        {
+            // to do the serching and set status. 
+            foreach (var item in e.ResultGroupsStatus)
+            {
+                var group =
+                    this.doc.Find<ICompleteGroup>(
+                        q => CompleteQuestionnaireConditionExecuteCollector.GetGroupHashKey(q) == item.Key).FirstOrDefault();
+                if (group != null)
+                {
+                    group.Enabled = item.Value != false;
+                }
+
+            }
+
+            foreach (var item in e.ResultQuestionsStatus)
+            {
+                var question = this.doc.QuestionHash.GetQuestionByKey(item.Key);
+                if (question != null)
+                {
+                    question.Question.Enabled = item.Value != false;
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// The on propagate group created.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnPropagateGroupCreated(PropagateGroupCreated e)
+        {
+            var parentToAdd = this.doc.FirstOrDefault<CompleteGroup>(
+                    g => g.PublicKey == e.ParentPublicKey && g.PropagationPublicKey == e.ParentPropagationKey);
+
+            if (parentToAdd == null)
+            {
+                return; ////is it good or exception is better decision?
+            }
+
+            parentToAdd.Add(e.Group, null);
+
+            //// badd approach
+            //// change icomposite interface
+            this.doc.QuestionHash.AddGroup(e.Group as ICompleteGroup);
+        }
+
+        /// <summary>
+        /// The get root for question.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        private IComposite GetRootForQuestion(ICompleteQuestion question)
+        {
+            //// question doesn't belog to propagate group
+            //// so the root is the whole document
+            if (question.PropagationPublicKey == null)
+            {
+                return this.doc;
+            }
+
+            //// Navigate throught hierarchy to find scope bounds 
+            IComposite parent = question.Parent;
+
+            while (true)
+            {
+                var item = parent as CompleteGroup;
+                if (item == null)
+                {
+                    break;
+                }
+                
+                if (item.PropagationPublicKey != question.PropagationPublicKey || item.Parent == null)
+                {
+                    break;
+                }
+
+                parent = item.Parent;
+            }
+
+            return parent;
         }
 
         /// <summary>
@@ -514,16 +757,26 @@ namespace Main.Core.Domain
         /// <param name="e">
         /// The e.
         /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
-            var group = new CompleteGroup(this.doc.Find<CompleteGroup>(e.PublicKey), e.PropagationKey);
-            try
+            ///// find group to be deleted
+            var groupToDelete =
+                this.doc.FirstOrDefault<CompleteGroup>(g => g.PublicKey == e.PublicKey && g.PropagationPublicKey == e.PropagationKey);
+
+            if (groupToDelete != null)
             {
-                this.doc.Remove(group);
-            }
-            catch (CompositeException)
-            {
-                //// in case if group was deleted earlier
+                if (groupToDelete.Parent == null)
+                {
+                    //// temporary check that Parent was set
+                    //// 
+                    throw new CompositeException(); 
+                }
+
+                groupToDelete.Parent.Remove(groupToDelete);
+
+                this.doc.QuestionHash.RemoveGroup(groupToDelete as ICompleteGroup);
             }
         }
 
@@ -533,9 +786,9 @@ namespace Main.Core.Domain
         /// <param name="e">
         /// The e.
         /// </param>
-        protected void OnSetCommentCommand(CommentSeted e)
+        protected void OnSetCommentCommand(CommentSet e)
         {
-            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropogationPublicKey);
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
             if (question == null)
             {
                 return;
@@ -543,7 +796,6 @@ namespace Main.Core.Domain
 
             question.SetComments(e.Comments);
         }
-
         #endregion
     }
 }

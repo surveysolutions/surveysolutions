@@ -86,19 +86,10 @@ namespace Main.Core.Documents
         public DateTime? OpenDate { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// Raises NotImplementedException.
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the propagated.
@@ -164,26 +155,22 @@ namespace Main.Core.Documents
         /// </exception>
         public void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue)
+            if (!parent.HasValue || this.PublicKey == parent)
             {
+                ////add to the root
+                c.Parent = this;
                 this.Children.Add(c);
                 return;
             }
-            foreach (IComposite child in this.Children)
+            
+            var group = this.Find<Group>(parent.Value);
+            if (@group != null)
             {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-
+                @group.Add(c, null);
+                return;
             }
 
-
-
+            //// leave legacy for awhile
             throw new CompositeException();
         }
 
@@ -278,18 +265,19 @@ namespace Main.Core.Documents
         /// </param>
         public void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
+            this.Remove(c.PublicKey, null);
         }
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (group != null)
@@ -302,7 +290,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    child.Remove(publicKey);
+                    child.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -311,6 +299,18 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
         }
 
         #endregion

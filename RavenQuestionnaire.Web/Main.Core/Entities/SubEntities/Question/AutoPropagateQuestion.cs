@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateQuestion.cs" company="">
-//   
+// <copyright file="AutoPropagateQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The auto propagate question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
@@ -72,13 +73,21 @@ namespace Main.Core.Entities.SubEntities.Question
 
         #endregion
 
+        #region Implementation of ITriggerable
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+        #endregion
+
         #region Public Methods and Operators
 
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
         }
-
         
         /*/// <summary>
         /// The add.
@@ -143,51 +152,21 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }*/
-
+        
         #endregion
-
-        #region Implementation of ITriggerable
-
-        /// <summary>
-        /// Gets or sets Triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
-
-        #endregion
+        
 
         #region Implementation of IAutoPropagate
 
-        public int MaxValue
+        /// <summary>
+        /// Gets or sets the max value.
+        /// </summary>
+        int IAutoPropagate.MaxValue
         {
             get { return maxValue; }
             set { maxValue = value; }
         }
+
         private int maxValue = int.MaxValue;
 
         #endregion

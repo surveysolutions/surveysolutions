@@ -124,7 +124,7 @@ namespace Main.Core.ExpressionExecutors
                     args.Result = targetQuestion.GetAnswerObject();
                 };
 
-            e.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+            e.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains; ////support for multioption
 
             bool result = false;
             try

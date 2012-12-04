@@ -140,7 +140,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            item.Remove(evnt.Payload.QuestionId);
+            item.Remove(evnt.Payload.QuestionId, null);
         }
 
         /// <summary>
@@ -239,7 +239,7 @@ namespace Main.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            item.Remove(evnt.Payload.GroupPublicKey);
+            item.Remove(evnt.Payload.GroupPublicKey, null);
         }
 
         /// <summary>

@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddPropagatableGroupCommand.cs" company="">
-//   
+// <copyright file="AddPropagatableGroupCommand.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The add propagatable group command.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Commands.Questionnaire.Group
 {
     using System;

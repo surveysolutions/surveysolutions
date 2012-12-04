@@ -52,6 +52,8 @@ namespace Main.Core.Entities.SubEntities.Complete
 
         #region Public Properties
 
+        public DateTime ValidatedTime { get; set; }
+
         /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
@@ -110,6 +112,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the enable state calculated.
+        /// </summary>
+        public DateTime EnableStateCalculated { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether featured.
         /// </summary>
         public bool Featured { get; set; }
@@ -125,18 +132,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         public bool Mandatory { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the propogation public key.
@@ -179,15 +178,15 @@ namespace Main.Core.Entities.SubEntities.Complete
         public string ValidationMessage { get; set; }
 
         /// <summary>
-        /// The add answer.
+        /// Gets or sets the conditional dependent questions.
         /// </summary>
-        /// <param name="answer">
-        /// The answer.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public abstract void AddAnswer(IAnswer answer);
+        public List<Guid> ConditionalDependentQuestions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the conditional dependent groups.
+        /// </summary>
+        public List<Guid> ConditionalDependentGroups { get; set; }
+        
         /// <summary>
         /// Gets or sets the triggers.
         /// </summary>
@@ -197,6 +196,17 @@ namespace Main.Core.Entities.SubEntities.Complete
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public abstract void AddAnswer(IAnswer answer);
+
 
         /// <summary>
         /// The add.
@@ -294,16 +304,29 @@ namespace Main.Core.Entities.SubEntities.Complete
         {
             throw new NotImplementedException();
         }
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            //// do nothing
         }
 
         /// <summary>
