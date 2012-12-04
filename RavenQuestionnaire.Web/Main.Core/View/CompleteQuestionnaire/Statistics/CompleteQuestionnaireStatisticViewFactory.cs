@@ -58,7 +58,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         public CompleteQuestionnaireStatisticView Load(CompleteQuestionnaireStatisticViewInputModel input)
         {
             CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.Id);
-            return new CompleteQuestionnaireStatisticView(doc);
+            return new CompleteQuestionnaireStatisticView(doc, input.Scope);
         }
 
         #endregion

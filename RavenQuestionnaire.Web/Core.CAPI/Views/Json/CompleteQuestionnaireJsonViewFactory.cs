@@ -73,7 +73,7 @@ namespace Core.CAPI.Views.Json
                     group = doc.FindGroupByKey(input.CurrentGroupPublicKey.Value, input.PropagationKey);
                 }
 
-                return new CompleteQuestionnaireJsonView(doc, group);
+                return new CompleteQuestionnaireJsonView(doc, group, input.Scope);
             }
 
             return null;

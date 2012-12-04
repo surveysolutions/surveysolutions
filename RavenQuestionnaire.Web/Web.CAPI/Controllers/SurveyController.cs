@@ -110,7 +110,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Answered", stat);
         }
 
@@ -144,7 +144,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(key));
+                        new CompleteQuestionnaireStatisticViewInputModel(key) { Scope = QuestionScope.Interviewer });
 
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             SurveyStatus status;
@@ -189,7 +189,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Main", stat);
         }
 
@@ -352,7 +352,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Invalid", stat);
         }
 
@@ -701,7 +701,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return View(stat);
         }
 
@@ -726,7 +726,7 @@ namespace Web.CAPI.Controllers
             CompleteQuestionnaireStatisticView stat =
                 this.viewRepository.Load
                     <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(id));
+                        new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Unanswered", stat);
         }
 

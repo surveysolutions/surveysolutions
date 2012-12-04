@@ -50,7 +50,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
 
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, true);
         }
@@ -67,7 +67,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, false);
         }
@@ -84,7 +84,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, true);
         }
@@ -107,7 +107,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, false);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[1]).Valid, false);
@@ -127,7 +127,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[1]).Valid, true);
@@ -155,7 +155,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             executor.Execute();
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
             Assert.AreEqual(((ICompleteQuestion)mainGroup.Children[0]).Valid, true);
@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             executor.Execute(subGroup1);
             Assert.AreEqual(((ICompleteQuestion)subGroup1.Children[0]).Valid, false);
             Assert.AreEqual(((ICompleteQuestion)subGroup2.Children[0]).Valid, true);
@@ -207,7 +207,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, false);
         }
@@ -229,7 +229,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, true);
         }
@@ -250,7 +250,7 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var doc = new CompleteQuestionnaireDocument();
             doc.Children.Add(mainGroup);
 
-            var executor = new CompleteQuestionnaireValidationExecutor(doc);
+            var executor = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             var result = executor.Execute(q1);
             Assert.AreEqual(result, true);
         }
