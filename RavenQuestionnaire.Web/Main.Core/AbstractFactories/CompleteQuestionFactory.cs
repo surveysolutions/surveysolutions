@@ -350,6 +350,8 @@ namespace Main.Core.AbstractFactories
                     autoQuestion.Triggers = new List<Guid>();
                     foreach (var guid in triggers)
                     {
+                    if (!autoQuestion.Triggers.Contains(guid))
+                    {
                         autoQuestion.Triggers.Add(guid);
                     }
                 }

@@ -1,22 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="FeaturedQuestionUpdated.cs" company="">
-//   
+// <copyright file="FeaturedQuestionUpdated.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The featured question updated.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
-
-    using Ncqrs.Eventing.Storage;
 
     /// <summary>
     /// The featured question updated.
     /// </summary>
     [Serializable]
-    [EventName("RavenQuestionnaire.Core:Events:FeaturedQuestionUpdated")]
     public class FeaturedQuestionUpdated
     {
         #region Public Properties

@@ -55,7 +55,7 @@ namespace Ncqrs.Restoring.EventStapshoot
                                                           new CommittedEvent(e.CommitId, e.EventIdentifier,
                                                                              e.EventSourceId, e.EventSequence, e.EventTimeStamp,
                                                                              e.Payload, e.EventVersion)));
-            Snapshot snapshotEvent = ((SnapshootLoaded) lastSnapshoot.Payload).Template;
+            Snapshot snapshotEvent = ((SnapshootLoaded)lastSnapshoot.Payload).Template;
             this.InitializeFromSnapshot(new Snapshot(snapshotEvent.EventSourceId, lastSnapshoot.EventSequence, null));
             this.RestoreFromSnapshot((T)snapshotEvent.Payload);
             base.InitializeFromHistory(newHistory);

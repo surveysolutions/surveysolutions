@@ -100,6 +100,11 @@ namespace Main.Core.Documents
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the enable state calculated.
+        /// </summary>
+        public DateTime EnableStateCalculated { get; set; }
+
+        /// <summary>
         /// Gets or sets the forcing propagation public key.
         /// </summary>
         public Guid? ForcingPropagationPublicKey
@@ -246,7 +251,7 @@ namespace Main.Core.Documents
         /// Gets or sets the question hash.
         /// </summary>
         [JsonIgnore]
-        private GroupHash QuestionHash
+        public GroupHash QuestionHash
         {
             get
             {
@@ -420,6 +425,7 @@ namespace Main.Core.Documents
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
+                    c.Parent = this;
                     this.Children.Add(c);
                     return;
                 }
@@ -429,6 +435,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
+                    //// c.Parent = completeGroup;
                     completeGroup.Add(c, parent);
                     this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
@@ -569,14 +576,13 @@ namespace Main.Core.Documents
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// Raises CompositeException.
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
+            if (forRemove != null && forRemove is ICompleteGroup && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;
@@ -586,7 +592,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    completeGroup.Remove(publicKey);
+                    completeGroup.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -595,6 +601,18 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
         }
 
         #endregion

@@ -1,16 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateCompleteQuestion.cs" company="">
-//   
+// <copyright file="AutoPropagateCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The auto propagate complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     /// <summary>
     /// The auto propagate complete question.
@@ -145,35 +145,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (publicKey != this.PublicKey)
-            {
-                throw new CompositeException();
-            }
-
-            this.Answer = null;
-        }*/
-
+        
         /// <summary>
         /// The set answer.
         /// </summary>

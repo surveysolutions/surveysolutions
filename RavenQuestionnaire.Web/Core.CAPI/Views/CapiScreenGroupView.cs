@@ -6,6 +6,7 @@
 
 namespace Core.CAPI.Views
 {
+    using System;
     using System.Linq;
 
     using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
@@ -60,9 +61,9 @@ namespace Core.CAPI.Views
         {
             if (currentGroup.Propagated != Propagate.None /* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
-                var executor = new CompleteQuestionnaireConditionExecutor(doc);
+               /* var executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-                executor.ExecuteAndChangeStateRecursive(doc);
+                executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);*/
 
                 var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
 
