@@ -13,40 +13,35 @@
         <button id="column" class="btn btn-primary">Column</button>
         <button id="bar" class="btn">Bar</button>
         <button id="pie" class="btn">Pie</button>
+        <button id="scatter" class="btn">Scatter</button>
     </div>
 </p>
 
 <script type="text/javascript">
 
     init = function() {
+        var containerSettings = {
+            column: { 'height': '400px' },
+            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
+            pie: { 'height': '600px' },
+            scatter: { 'height': '500px' }
+        };
+
         var active = "btn-primary";
-        $("#column").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', '400px');
-            drawPlot('column');
-        });
 
-        $("#bar").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', 80*@(@Model.Items.Count) + 'px');
-            drawPlot('bar');
+        $('#switcher button').each(function(i, el) {
+            var self = this;
+            $(self).click(function() {
+                var id = $(self).attr('id');
+                if (!$(self).hasClass(active)) {
+                    $("#switcher .btn").removeClass(active);
+                    $(self).addClass(active);
+                }
+                $('#container').css(containerSettings[id]);
+                drawPlot(id);
+            });
         });
-
-        $("#pie").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', '600px');
-            drawPlot('pie');
-        });
-
+       
         $("#column").click();
     };
 
@@ -137,69 +132,222 @@
             }
         }
     ];
-    data = {
-        column: barData,
-        bar: barData,
-        pie: pieData
+    var scatterData = @Html.Raw(Json.Encode(@Model.Items.Select(
+    (t, index) => new
+        {
+            name = t.User.Name,
+            color = colors[index], 
+            data = new []{ new[] {t.Initial + t.Redo, t.Complete + t.Approve } }
+        }).ToArray())) ;
+
+    plotSettings = {
+        column: {
+            chart: {
+                renderTo: 'container',
+                type: 'column',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            xAxis: {
+                categories: @Html.Raw(xTitles)
+            },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                allowDecimals: false
+            },
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                },
+                bar: {
+                    stacking: 'normal'
+                },
+                series: {
+                    pointWidth: 20
+                },
+                pie: {
+                    shadow: false,
+                    allowPointSelect: true,
+                    showInLegend: true
+                }
+            },
+            series: barData
+        },
+        bar: {
+            chart: {
+                renderTo: 'container',
+                type: 'bar',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            xAxis: {
+                categories: @Html.Raw(xTitles)
+            },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                allowDecimals: false
+            },
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                },
+                bar: {
+                    stacking: 'normal'
+                },
+                series: {
+                    pointWidth: 20
+                }
+            },
+            series: barData
+        },
+        pie: {
+            chart: {
+                renderTo: 'container',
+                type: 'pie',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                pie: {
+                    shadow: false,
+                    allowPointSelect: true,
+                    showInLegend: true
+                }
+            },
+            series: pieData
+        },
+        scatter: {
+            chart: {
+                renderTo: 'container',
+                type: 'scatter',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30,
+                zoomType: 'xy'
+            },
+            xAxis: {
+                title: {
+                    text: 'In progress'
+                },
+                allowDecimals: false
+            },
+            yAxis: {
+                title: {
+                    text: 'Complete'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                allowDecimals: false
+            },
+            title: {
+                text: ""
+            },
+            tooltip: {
+                 formatter: function() {
+                        return ''+
+                        this.x +' in progress, '+ this.y +' complete';
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 7,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    }
+                }
+            },
+            series: scatterData
+        }
     };
+    
     drawPlot = function(type) {
         $("#container").html('');
         var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors)) });
-        chart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'container',
-                    type: type,
-                    marginBottom: 70,
-                    marginRight: 5,
-                    marginTop: 30
-                },
-                xAxis: {
-                    categories: @Html.Raw(xTitles)
-                },
-                yAxis: {
-                    title: {
-                        text: 'Count'
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }],
-                    allowDecimals: false
-                },
-                title: {
-                    text: ""
-                },
-                tooltip: {
-                    formatter: function() {
-                        return '<b>' + this.series.name + '</b><br/>' +
-                            this.x + ': ' + this.y;
-                    }
-                },
-                legend: {
-                    align: 'right',
-                    verticalAlign: 'top',
-                    borderWidth: 0,
-                    y: -10
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal'
-                    },
-                    bar: {
-                        stacking: 'normal'
-                    },
-                    series: {
-                        pointWidth: 20
-                    },
-                    pie: {
-                        shadow: false,
-                        allowPointSelect: true,
-                        showInLegend: true
-                    }
-                },
-                series: data[type]
-            });
+        chart = new Highcharts.Chart(plotSettings[type]);
     };
 </script>
 
