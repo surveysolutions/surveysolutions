@@ -381,7 +381,7 @@ namespace Web.CAPI.Controllers
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
 
-            //asssign to executor
+            ////asssign to executor
             commandService.Execute(
                 new ChangeAssignmentCommand(newQuestionnairePublicKey, this._globalProvider.GetCurrentUser()));
             
@@ -511,6 +511,7 @@ namespace Web.CAPI.Controllers
             var model = GetGroup(settings[0].QuestionnaireId, settings[0].ParentGroupPublicKey, settings[0].PropogationPublicKey);
             return this.Json(model);
         }
+
         /// <summary>
         /// The save answer.
         /// </summary>
@@ -585,6 +586,28 @@ namespace Web.CAPI.Controllers
             var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
             return this.Json(model);
         }
+
+        /// <summary>
+        /// The save group comment.
+        /// </summary>
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propogationPublicKey">
+        /// The propogation public key.
+        /// </param>
+        /// <param name="parentGroupPublicKey">
+        /// The parent group public key.
+        /// </param>
+        /// <param name="comment">
+        /// The comment.
+        /// </param>
+        /// <returns>
+        /// The <see cref="JsonResult"/>.
+        /// </returns>
         public JsonResult SaveGroupComment(Guid questionnaireId,
             Guid publicKey,
             Guid propogationPublicKey,
@@ -616,6 +639,7 @@ namespace Web.CAPI.Controllers
             var model = GetGroup(questionnaireId, parentGroupPublicKey, null);
             return this.Json(model);
         }
+
         /// <summary>
         /// The save comments.
         /// </summary>
@@ -699,8 +723,7 @@ namespace Web.CAPI.Controllers
         public ActionResult Statistic(Guid id)
         {
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return View(stat);
         }
@@ -724,8 +747,7 @@ namespace Web.CAPI.Controllers
             }
 
             CompleteQuestionnaireStatisticView stat =
-                this.viewRepository.Load
-                    <CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
                         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Interviewer });
             return this.PartialView("Complete/_Unanswered", stat);
         }

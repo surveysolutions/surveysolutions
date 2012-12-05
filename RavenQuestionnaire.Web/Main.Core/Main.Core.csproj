@@ -277,12 +277,15 @@
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\PropagateGroupCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs" />
+    <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
     <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
     <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
@@ -312,6 +315,8 @@
     <Compile Include="Export\StataSuplier.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollector.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />

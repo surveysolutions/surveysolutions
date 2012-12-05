@@ -14,5 +14,6 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// </summary>
     public interface ICompleteGroup : IGroup, ICompleteItem
     {
+        
     }
 }

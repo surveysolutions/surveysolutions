@@ -194,16 +194,26 @@ namespace Main.Core.Entities.Extensions
             return dependency;
         }
 
+        /// <summary>
+        /// The get group title.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
         public static string GetGroupTitle(this ICompleteGroup doc, Guid propagationKey)
         {
-
-            return
-                string.Concat(doc.GetPropagatedGroupsByKey(propagationKey).
-                                  SelectMany(q => q.Children).
-                                  OfType
-                                  <ICompleteQuestion>().Where(q => q.Capital).Select(
-                                      q => q.GetAnswerString() + " "));
-
+            return string.Concat(
+                doc.GetPropagatedGroupsByKey(propagationKey)
+                .SelectMany(q => q.Children)
+                .OfType<ICompleteQuestion>()
+                .Where(q => q.Capital)
+                .Select(q => q.GetAnswerString() + " "));
         }
 
         #endregion

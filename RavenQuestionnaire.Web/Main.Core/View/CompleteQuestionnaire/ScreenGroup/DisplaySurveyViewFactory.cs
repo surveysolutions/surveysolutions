@@ -93,8 +93,8 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 input.CurrentGroupPublicKey = firstGroup.PublicKey;
             }
 
-            var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);
+            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc);*/
 
             var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 

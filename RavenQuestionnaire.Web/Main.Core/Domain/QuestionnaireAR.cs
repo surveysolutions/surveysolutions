@@ -544,7 +544,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnGroupDeleted(GroupDeleted e)
         {
-            this.innerDocument.Remove(e.GroupPublicKey);
+            this.innerDocument.Remove(e.GroupPublicKey, null);
         }
 
         /// <summary>
@@ -692,7 +692,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
-            this.innerDocument.Remove(e.QuestionId);
+            this.innerDocument.Remove(e.QuestionId, null);
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public interface IConditional
     {
-       /// <summary>
+        /// <summary>
         /// Gets or sets the condition expression.
         /// </summary>
         string ConditionExpression { get; set; }

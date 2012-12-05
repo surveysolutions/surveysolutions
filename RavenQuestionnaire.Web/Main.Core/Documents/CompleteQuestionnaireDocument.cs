@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocument.cs" company="">
-//   
+// <copyright file="CompleteQuestionnaireDocument.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Defines the ICompleteQuestionnaireDocument type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Documents
 {
     using System;
@@ -88,6 +89,8 @@ namespace Main.Core.Documents
         /// </summary>
         public bool Enabled { get; set; }
 
+        public DateTime EnableStateCalculated { get; set; }
+
         /// <summary>
         /// Gets or sets the last entry date.
         /// </summary>
@@ -164,6 +167,18 @@ namespace Main.Core.Documents
         }
 
         /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
+        }
+
+        /// <summary>
         /// The get question.
         /// </summary>
         /// <param name="publicKey">
@@ -224,16 +239,11 @@ namespace Main.Core.Documents
         /// Gets or sets the question hash.
         /// </summary>
         [JsonIgnore]
-        private GroupHash QuestionHash
+        public GroupHash QuestionHash
         {
             get
             {
-                if (this.questionHash == null)
-                {
-                    this.questionHash = new GroupHash(this);
-                }
-
-                return this.questionHash;
+                return this.questionHash ?? (this.questionHash = new GroupHash(this));
             }
 
             set
@@ -312,19 +322,24 @@ namespace Main.Core.Documents
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    result.Children.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+                    IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    questionItem.Parent = result;
+                    result.Children.Add(questionItem);
                     continue;
                 }
 
                 var group = child as IGroup;
                 if (group != null)
                 {
-                    result.Children.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+                    IComposite groupItem = new CompleteGroupFactory().ConvertToCompleteGroup(group);
+                    groupItem.Parent = result;
+                    result.Children.Add(groupItem);
                     continue;
                 }
 
-                throw new InvalidOperationException("unknown children type");
+                throw new InvalidOperationException("Unknown children type.");
             }
+
             return result;
         }
 
@@ -336,28 +351,32 @@ namespace Main.Core.Documents
         /// <param name="c">
         /// The c.
         /// </param>
-        /// <param name="parent">
+        /// <param name="parentKey">
         /// The parent.
         /// </param>
         /// <exception cref="CompositeException">
         /// Raises CompositeException.
         /// </exception>
-        public virtual void Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parentKey)
         {
-            if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parent.HasValue)
+
+            if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parentKey.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
+                    c.Parent = this;
                     this.Children.Add(c);
                     return;
                 }
             }
 
+
+
             foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
-                    completeGroup.Add(c, parent);
+                    completeGroup.Add(c, parentKey);
                     this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
@@ -365,6 +384,8 @@ namespace Main.Core.Documents
                 {
                 }
             }
+
+
 
             throw new CompositeException();
         }
@@ -490,21 +511,20 @@ namespace Main.Core.Documents
 
             throw new CompositeException();
         }
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// Raises CompositeException.
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
+            if (forRemove != null && forRemove is ICompleteGroup && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;
@@ -514,7 +534,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    completeGroup.Remove(publicKey);
+                    completeGroup.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)

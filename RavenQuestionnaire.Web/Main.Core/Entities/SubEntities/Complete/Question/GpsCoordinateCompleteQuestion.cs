@@ -134,35 +134,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer;
         }
 
-       /* /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (publicKey != this.PublicKey)
-            {
-                throw new CompositeException();
-            }
-
-            this.Answer = null;
-        }*/
-
+       
         /// <summary>
         /// The set answer.
         /// </summary>

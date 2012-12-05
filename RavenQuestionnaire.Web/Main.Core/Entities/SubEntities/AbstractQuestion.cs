@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractQuestion.cs" company="">
-//   
+// <copyright file="AbstractQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The abstract question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -100,18 +101,10 @@ namespace Main.Core.Entities.SubEntities
         public bool Mandatory { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -147,6 +140,16 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent questions.
+        /// </summary>
+        public List<Guid> ConditionalDependentQuestions { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent groups.
+        /// </summary>
+        public List<Guid> ConditionalDependentGroups { get; set; }
 
         public abstract void AddAnswer(IAnswer answer);
         
@@ -238,16 +241,29 @@ namespace Main.Core.Entities.SubEntities
         {
             throw new CompositeException();
         }
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            //// do nothing
         }
 
         /// <summary>
