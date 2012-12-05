@@ -122,7 +122,7 @@ namespace Main.Core.EventHandlers
                 {
                     currentFeatured.Answer = evnt.Payload.AnswerString;
                 }
-                }
+                
 
                 this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
             }

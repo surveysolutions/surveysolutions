@@ -67,26 +67,27 @@ namespace Main.Core.AbstractFactories
 
             completeQuestion.PublicKey = question.PublicKey;
             this.UpdateQuestion(
-                completeQuestion, 
-                question.QuestionType, 
+                completeQuestion,
+                question.QuestionType,
                 question.QuestionScope,
-                question.QuestionText, 
-                question.StataExportCaption, 
-                question.ConditionExpression, 
-                question.ValidationExpression, 
-                question.ValidationMessage, 
-                question.AnswerOrder, 
-                question.Featured, 
-                question.Mandatory, 
-                question.Capital, 
-                question.Instructions, 
+                question.QuestionText,
+                question.StataExportCaption,
+                question.ConditionExpression,
+                question.ValidationExpression,
+                question.ValidationMessage,
+                question.AnswerOrder,
+                question.Featured,
+                question.Mandatory,
+                question.Capital,
+                question.Instructions,
                 null,
                 int.MaxValue);
             ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 
-            IEnumerable<IAnswer> answersToCopy = new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Answers);
-            
+            IEnumerable<IAnswer> answersToCopy =
+                new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Answers);
+
             if (answersToCopy != null)
             {
                 foreach (IAnswer composite in answersToCopy)
@@ -94,7 +95,8 @@ namespace Main.Core.AbstractFactories
                     IAnswer newAnswer;
                     if (question is ICompleteQuestion)
                     {
-                        newAnswer = new CompleteAnswer(composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
+                        newAnswer = new CompleteAnswer(
+                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
                     }
                     else
                     {
@@ -132,21 +134,21 @@ namespace Main.Core.AbstractFactories
             q.PublicKey = e.PublicKey;
 
             this.UpdateQuestion(
-               q,
-               e.QuestionType,
-               e.QuestionScope,
-               e.QuestionText,
-               e.StataExportCaption,
-               e.ConditionExpression,
-               e.ValidationExpression,
-               e.ValidationMessage,
-               e.AnswerOrder,
-               e.Featured,
-               e.Mandatory,
-               false,
-               e.Instructions,
-               e.Triggers,
-               e.MaxValue);
+                q,
+                e.QuestionType,
+                e.QuestionScope,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                e.AnswerOrder,
+                e.Featured,
+                e.Mandatory,
+                false,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue);
 
             this.UpdateAnswerList(e.Answers, q);
 
@@ -252,7 +254,7 @@ namespace Main.Core.AbstractFactories
         private void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
         {
             List<Answer> enumerable = answers != null ? answers.ToList() : new List<Answer>();
-            
+
             if (answers != null && enumerable.Any())
             {
                 question.Answers.Clear();
@@ -263,68 +265,20 @@ namespace Main.Core.AbstractFactories
             }
         }
 
-        /// <summary>
-        /// The update question.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="questionType">
-        /// The question type.
-        /// </param>
-        /// <param name="questionScope">
-        /// Thw question scope
-        /// </param>
-        /// <param name="questionText">
-        /// The question text.
-        /// </param>
-        /// <param name="stataExportCaption">
-        /// The Stata export caption.
-        /// </param>
-        /// <param name="conditionExpression">
-        /// The condition expression.
-        /// </param>
-        /// <param name="validationExpression">
-        /// The validation expression.
-        /// </param>
-        /// <param name="validationMessage">
-        /// The validation message.
-        /// </param>
-        /// <param name="answerOrder">
-        /// The answer order.
-        /// </param>
-        /// <param name="featured">
-        /// The featured.
-        /// </param>
-        /// <param name="mandatory">
-        /// The mandatory.
-        /// </param>
-        /// <param name="capital">
-        /// The capital.
-        /// </param>
-        /// <param name="instructions">
-        /// The instructions.
-        /// </param>
-        /// <param name="triggers">
-        /// The triggers.
-        /// </param>
-        /// <param name="maxValue">
-        /// The max value
-        /// </param>
         private void UpdateQuestion(
-            IQuestion question, 
-            QuestionType questionType, 
+            IQuestion question,
+            QuestionType questionType,
             QuestionScope questionScope,
-            string questionText, 
-            string stataExportCaption, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            Order answerOrder, 
-            bool featured, 
-            bool mandatory, 
-            bool capital, 
-            string instructions, 
+            string questionText,
+            string stataExportCaption,
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            Order answerOrder,
+            bool featured,
+            bool mandatory,
+            bool capital,
+            string instructions,
             IEnumerable<Guid> triggers,
             int maxValue)
         {
@@ -350,14 +304,15 @@ namespace Main.Core.AbstractFactories
                     autoQuestion.Triggers = new List<Guid>();
                     foreach (var guid in triggers)
                     {
-                    if (!autoQuestion.Triggers.Contains(guid))
-                    {
-                        autoQuestion.Triggers.Add(guid);
+                        if (!autoQuestion.Triggers.Contains(guid))
+                        {
+                            autoQuestion.Triggers.Add(guid);
+                        }
                     }
                 }
             }
-        }
 
-        #endregion
+            #endregion
+        }
     }
 }
