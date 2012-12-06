@@ -128,11 +128,15 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            var items = this.GetAnswerObject() as IEnumerable<object>;
+
+            var items = this.Answers.Where(a => ((ICompleteAnswer)a).Selected).ToArray();
+        //    return answer == null ? string.Empty : answer.AnswerText;
+
+         //   var items = this.GetAnswerObject() as IEnumerable<object>;
             
-            if (items != null && items.ToArray().Any())
+            if (items.Any())
             {
-                return string.Join(", ", items.Select(a => a.ToString()));
+                return string.Join(", ", items.Select(a => a.AnswerText.ToString()));
             }
             
             return string.Empty;
