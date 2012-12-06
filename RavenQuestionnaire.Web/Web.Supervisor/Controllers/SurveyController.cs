@@ -93,6 +93,7 @@ namespace Web.Supervisor.Controllers
         {
             ViewBag.ActivePage = MenuItem.Surveys;
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
+            ViewBag.GraphData = new InterviewerChartModel(model);
             return this.View(model);
         }
 
@@ -533,6 +534,7 @@ namespace Web.Supervisor.Controllers
                                 UserId = data.UserId
                             };
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
+            ViewBag.GraphData = new InterviewerChartModel(model);
             return this.PartialView("_Table", model);
         }
 
