@@ -18,23 +18,24 @@ namespace Main.Core.View.Export
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class HeaderCollection:IEnumerable<HeaderItem>
+    public class HeaderCollection : IEnumerable<HeaderItem>
     {
         protected IDictionary<Guid, IEnumerable<HeaderItem>> container;
-        char[] alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
+
 
         public HeaderCollection()
         {
-            this.container = new Dictionary<Guid,IEnumerable<HeaderItem>>();
+            this.container = new Dictionary<Guid, IEnumerable<HeaderItem>>();
         }
-       
-        public HeaderCollection(HeaderCollection collection):this()
+
+        public HeaderCollection(HeaderCollection collection) : this()
         {
             foreach (var headerItem in collection.container)
             {
                 this.container.Add(headerItem.Key, headerItem.Value);
             }
         }
+
         public void Merge(HeaderCollection collection)
         {
             foreach (var headerItem in collection.container)
@@ -45,19 +46,20 @@ namespace Main.Core.View.Export
 
         public void Add(IQuestion question)
         {
-            if(!(question is IMultyOptionsQuestion))
+            if (!(question is IMultyOptionsQuestion))
             {
-                this.container.Add(question.PublicKey, new HeaderItem[] { new HeaderItem(question) });
+                this.container.Add(question.PublicKey, new HeaderItem[] {new HeaderItem(question)});
                 return;
             }
             var headerItems = new List<HeaderItem>(question.Answers.Count);
             for (int i = 0; i < question.Answers.Count; i++)
             {
-                headerItems.Add(new HeaderItem(question, alpha[i]));
-               
+                headerItems.Add(new HeaderItem(question, i));
+
             }
             this.container.Add(question.PublicKey, headerItems);
         }
+
         public void Add(HeaderItem item)
         {
             if (!this.container.ContainsKey(item.PublicKey))
@@ -66,10 +68,10 @@ namespace Main.Core.View.Export
                 return;
             }
 
-            this.container[item.PublicKey] = this.container[item.PublicKey].Union(new HeaderItem[] { item });
+            this.container[item.PublicKey] = this.container[item.PublicKey].Union(new HeaderItem[] {item});
 
         }
-       
+
         public IEnumerable<Guid> Keys
         {
             get { return this.container.Select(c => c.Key); }
@@ -88,5 +90,6 @@ namespace Main.Core.View.Export
         }
 
         #endregion
+
     }
 }

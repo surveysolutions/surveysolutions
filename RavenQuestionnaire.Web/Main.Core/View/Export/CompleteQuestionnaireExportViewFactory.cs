@@ -145,7 +145,7 @@ namespace Main.Core.View.Export
                     }
                 }
             }
-            return new CompleteQuestionnaireExportView(template.PublicKey,propagatableGroupPublicKey, template.Title, documents, subObjects,
+            return new CompleteQuestionnaireExportView(template.PublicKey,/*propagatableGroupPublicKey,*/ template.Title, documents, subObjects,
                                                        autoQuestions.Select(q => q.PublicKey), header);
         }
 

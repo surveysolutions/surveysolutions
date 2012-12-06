@@ -74,7 +74,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
            Target.ProtectedCollectLEvels(
                 new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels, manager);
             Assert.IsTrue(allLevels.Count == 1);
-            Supplier.Verify(x => x.BuildContent(result, It.IsAny<string>(), It.IsAny<string>()), Times.Once());
+            Supplier.Verify(x => x.BuildContent(result, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<FileType>()), Times.Once());
             provider.Verify(x => x.DoExportToStream(result), Times.Once());
         }
         [Test]
@@ -88,7 +88,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
 
             CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView(Guid.NewGuid(), null, "top group", new CompleteQuestionnaireExportItem[0], new[] { guid1, guid2 }, Enumerable.Empty<Guid>(), new HeaderCollection());
+                new CompleteQuestionnaireExportView(Guid.NewGuid(), "top group", new CompleteQuestionnaireExportItem[0], new[] { guid1, guid2 }, Enumerable.Empty<Guid>(), new HeaderCollection());
             CompleteQuestionnaireExportView subResult =
                new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(
@@ -104,7 +104,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
             Assert.IsTrue(allLevels.Count == 3);
             provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
             provider.Verify(x => x.DoExportToStream(subResult), Times.Exactly(2));
-            Supplier.Verify(x => x.BuildContent(It.IsAny<CompleteQuestionnaireExportView>(), It.IsAny<string>(), It.IsAny<string>()), Times.Exactly(3));
+            Supplier.Verify(x => x.BuildContent(It.IsAny<CompleteQuestionnaireExportView>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<FileType>()), Times.Exactly(3));
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace RavenQuestionnaire.Web.Tests.Export
 
             public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
             {
-                CollectLevels(input, container, manager, "");
+                CollectLevels(input, container, manager, "", FileType.Csv);
             }
         }
     }

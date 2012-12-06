@@ -56,7 +56,10 @@ namespace Questionnaire.Core.Web.Export
                 var questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
                         new CQStatusReportViewInputModel(templateGuid, SurveyStatus.Approve.PublicId));
-                CollectLevels(new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), allLevels, manager,null);
+                CollectLevels(
+                    new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey),
+                                                              templateGuid, null), allLevels, manager, null,
+                    type == "csv" ? FileType.Csv : FileType.Tab);
                 this.supplier.AddCompledResults(allLevels);
                 return this.ExportInternal(allLevels,
                                            fileName);
@@ -65,27 +68,27 @@ namespace Questionnaire.Core.Web.Export
         }
 
 
-        protected void CollectLevels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager, string parentName)
+        protected void CollectLevels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager, string parentName,FileType type)
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
                     (input);
             var fileName = GetName(records.GroupName, container, 0);
             container.Add(fileName, manager.ExportToStream(records));
-            var currentName = this.supplier.BuildContent(records, parentName, fileName);
+            var currentName = this.supplier.BuildContent(records, parentName, fileName, type);
             foreach (Guid autoPropagatebleQuestionPublicKey in records.AutoPropagatebleQuestionsPublicKeys)
             {
 
                 CollectLevels(
                     new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId)
                         {AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey}, container,
-                    manager, currentName);
+                    manager, currentName, type);
             }
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
                 CollectLevels(
                     new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId,
-                                                              subPropagatebleGroup), container, manager, currentName);
+                                                              subPropagatebleGroup), container, manager, currentName, type);
             }
 
         }

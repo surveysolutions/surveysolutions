@@ -54,10 +54,10 @@ namespace Main.Core.View.Export
         /// <param name="order">
         /// The order.
         /// </param>
-        public CompleteQuestionnaireExportView(Guid publicKey, Guid? parent, string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, IEnumerable<Guid> autoQuestions, HeaderCollection header)
+        public CompleteQuestionnaireExportView(Guid publicKey,/* Guid? parent,*/ string title, IEnumerable<CompleteQuestionnaireExportItem> items, IEnumerable<Guid> subPropagatebleGroups, IEnumerable<Guid> autoQuestions, HeaderCollection header)
         {
             this.PublicKey = publicKey;
-            this.Parent = parent;
+            //this.Parent = parent;
             this.GroupName = title;
             this.Items = items;
             this.Header = header;
@@ -82,7 +82,7 @@ namespace Main.Core.View.Export
 
         public IEnumerable<Guid> AutoPropagatebleQuestionsPublicKeys { get; private set; }
 
-        public Guid? Parent { get; private set; }
+       // public Guid? Parent { get; private set; }
         public Guid PublicKey { get; private set; }
         #endregion
 
@@ -108,7 +108,7 @@ namespace Main.Core.View.Export
             List<Guid> autoQuestions = new List<Guid>(this.AutoPropagatebleQuestionsPublicKeys);
             autoQuestions.AddRange(view.AutoPropagatebleQuestionsPublicKeys);
             autoQuestions = subgroups.Distinct().ToList();
-            var result = new CompleteQuestionnaireExportView(this.PublicKey, this.Parent, this.GroupName, items, subgroups, autoQuestions, header);
+            var result = new CompleteQuestionnaireExportView(this.PublicKey,/* this.Parent,*/ this.GroupName, items, subgroups, autoQuestions, header);
             return result;
         }
     }
