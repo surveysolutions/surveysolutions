@@ -106,6 +106,7 @@
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="Export\HeaderCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
+    <Compile Include="Export\HeaderItemTests.cs" />
     <Compile Include="Export\StataSuplierTests.cs" />
     <Compile Include="Export\ValueCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />

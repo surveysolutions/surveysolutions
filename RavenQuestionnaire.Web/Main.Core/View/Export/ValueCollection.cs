@@ -60,7 +60,7 @@ namespace Main.Core.View.Export
                 var answers = new List<string>();
                 foreach (ICompleteAnswer answer in question.Answers)
                 {
-                    answers.Add(answer.Selected? (answer.AnswerValue?? answer.AnswerText).ToString():string.Empty);
+                    answers.Add(answer.Selected ? "1" : "0");
                 }
                 this.container.Add(key, answers);
                 /*  var answers = answer as object[];

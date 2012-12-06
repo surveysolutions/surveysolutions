@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using Main.Core.View.Export;
 
 namespace Main.Core.Export
@@ -26,33 +27,41 @@ namespace Main.Core.Export
 
         #region Implementation of IEnvironmentSupplier<CompleteQuestionnaireExportInputModel>
 
-        public string BuildContent(CompleteQuestionnaireExportView result, string parentTableName, string fileName)
+        public string BuildContent(CompleteQuestionnaireExportView result, string parentTableName, string fileName,  FileType type)
         {
-            var primaryKeyColumnName = "PublicKey" + result.Parent.ToString();
-            this.BuildMerge(parentTableName, primaryKeyColumnName, fileName);
+            //var primaryKeyColumnName = "PublicKey" + result.Parent.ToString();
+            var primaryKeyColumnName = CreateColumnName(parentTableName,result.GroupName);
+            this.BuildMerge(parentTableName, primaryKeyColumnName, fileName, type);
             this.BuildLabels(result.Header);
+
+            this.SaveTempFile(primaryKeyColumnName);
             return primaryKeyColumnName;
         }
-        protected void BuildMerge(string parentPrimaryKeyName, string primaryKeyColumnName, string fileName)
+        protected void SaveTempFile(string primaryKeyColumnName)
+        {
+            doContent.AppendLine(string.Format("tempfile {0}ind",primaryKeyColumnName));
+            doContent.AppendLine(string.Format("save \"`{0}ind'\"", primaryKeyColumnName));
+        }
+
+        protected void BuildMerge(string parentPrimaryKeyName, string primaryKeyColumnName, string fileName,  FileType type)
         {
             doContent.AppendLine("clear");
-            doContent.AppendLine(string.Format("insheet using \"{0}\", comma", fileName));
+            doContent.AppendLine(string.Format("insheet using \"{0}\", {1}", fileName, type == FileType.Csv ? "comma" : "tab"));
 
-            if (string.IsNullOrEmpty(parentPrimaryKeyName))
-            {
+            if (!string.IsNullOrEmpty(parentPrimaryKeyName))
+          /*  {
                 doContent.AppendLine("sort " + primaryKeyColumnName);
                 doContent.AppendLine("tempfile ind");
                 doContent.AppendLine("save \"`ind'\"");
             }
-            else
+            else*/
             {
-                doContent.AppendLine(string.Format("gen {0}=string(PublicKey)", primaryKeyColumnName));
-                doContent.AppendLine("drop PublicKey");
+                doContent.AppendLine(string.Format("rename PublicKey {0}", primaryKeyColumnName));
+                doContent.AppendLine(string.Format("rename ForeignKey {0}", parentPrimaryKeyName));
 
-                doContent.AppendLine(string.Format("gen {0}=string(ForeignKey)", parentPrimaryKeyName));
-                doContent.AppendLine("drop ForeignKey");
                 doContent.AppendLine("sort " + parentPrimaryKeyName);
-                doContent.AppendLine(string.Format("merge m:1 {0} using \"`ind'\"", parentPrimaryKeyName));
+
+                doContent.AppendLine(string.Format("merge m:1 {0} using \"`{0}ind'\"", parentPrimaryKeyName));
                 doContent.AppendLine("drop _merge");
 
             }
@@ -61,22 +70,27 @@ namespace Main.Core.Export
         {
             foreach (var headerItem in header)
             {
-                if(headerItem.Labels.Count==0)
-                    continue;
-                if (!createdLabels.Contains(headerItem.PublicKey))
+                if (headerItem.Labels.Count > 0)
                 {
-
-                    doContent.AppendLine();
-                    doContent.AppendFormat(string.Format("label define {0} ", headerItem.PublicKey));
-                    foreach (var label in headerItem.Labels)
+                    var labelName = CreateLabelName(headerItem);
+                    if (!createdLabels.Contains(headerItem.PublicKey))
                     {
+                        doContent.AppendLine();
+                        doContent.AppendFormat(string.Format("label define {0} ", labelName));
+                        foreach (var label in headerItem.Labels)
+                        {
+                            doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, label.Value.Title);
+                        }
+                        doContent.AppendLine();
 
-                        doContent.AppendFormat("{0} \"{1}\" ", label.Value.Caption, label.Value.Title);
                     }
-                    doContent.AppendLine();
+                    doContent.AppendLine(string.Format("label values {0} {1}", headerItem.Caption, labelName));
+                    
+
+
+                    createdLabels.Add(headerItem.PublicKey);
                 }
-                doContent.AppendLine(string.Format("label var {0} {1}", headerItem.Caption, headerItem.PublicKey));
-                createdLabels.Add(headerItem.PublicKey);
+                doContent.AppendLine(string.Format("label var {0} `\"{1}\"'", headerItem.Caption, headerItem.Title));
             }
         }
 
@@ -88,11 +102,20 @@ namespace Main.Core.Export
         protected byte[] CompileResult()
         {
             doContent.AppendLine("list");
-            return  new ASCIIEncoding().GetBytes(doContent.ToString());
+            return  new ASCIIEncoding().GetBytes(doContent.ToString().ToLower());
         }
 
        
 
         #endregion
+        protected string CreateLabelName(HeaderItem item)
+        {
+            return string.Format("l{0}", item.Caption);
+        }
+        protected string CreateColumnName(string parentTableName, string tableName)
+        {
+
+            return string.IsNullOrEmpty(parentTableName) ? "PublicKey" : Regex.Replace(tableName, "[^_a-zA-Z0-9]", string.Empty);
+        }
     }
 }
