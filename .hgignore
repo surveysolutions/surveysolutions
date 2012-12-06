@@ -231,6 +231,8 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web/success.marker
 RavenQuestionnaire.Web/Web.Supervisor/success.marker
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/success.marker
 RavenQuestionnaire.Web/Web.Headquarter/App_Data/success.marker
+RavenQuestionnaire.Web/Main.Core.Tests/bin/
+RavenQuestionnaire.Web/Main.Core.Tests/obj/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
@@ -426,7 +428,6 @@ Externals/Framework/src/Ncqrs/bin/*
 Externals/Framework/src/Ncqrs.Spec/bin/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
 
-RavenQuestionnaire.Web/Main.Core.Tests/*
 RavenQuestionnaire.Web/Main.Core/bin/*
 RavenQuestionnaire.Web/Main.Core/obj/Debug/*.*
 RavenQuestionnaire.Web/Web.Supervisor/Bin/*.*
