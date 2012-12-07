@@ -25,10 +25,10 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
     {
         #region Fields
 
-        /// <summary>
+        /*/// <summary>
         /// The executor.
         /// </summary>
-        protected readonly CompleteQuestionnaireConditionExecutor executor;
+        protected readonly CompleteQuestionnaireConditionExecutor executor;*/
 
         /// <summary>
         /// The validator.
@@ -47,7 +47,8 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc, QuestionScope scope)
         {
-            this.executor = new CompleteQuestionnaireConditionExecutor(doc);
+            // moved to the wright layer
+            // this.executor = new CompleteQuestionnaireConditionExecutor(doc);
 
             this.validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
 
@@ -178,7 +179,8 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
 
-            this.executor.Execute(target);
+            // moved to the write layer
+            // this.executor.Execute(target);
 
             foreach (var question in target.WrappedQuestions.Where(q=>q.Question.QuestionScope <= scope))
             {

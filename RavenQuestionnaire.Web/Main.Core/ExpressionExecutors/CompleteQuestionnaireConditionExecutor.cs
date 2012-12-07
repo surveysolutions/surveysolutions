@@ -23,6 +23,7 @@ namespace Main.Core.ExpressionExecutors
     /// <summary>
     /// The complete questionnaire condition executor.
     /// </summary>
+    [Obsolete]
     public class CompleteQuestionnaireConditionExecutor
     {
         #region Fields

@@ -82,8 +82,8 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             }
 
             this.UpdateInputData(doc, input);
-            var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);
+            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);*/
 
             GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
 
