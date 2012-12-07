@@ -68,5 +68,8 @@
     <Setting Name="GetPullStatisticCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/PullStatistics</Value>
     </Setting>
+    <Setting Name="CapiService" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WCF/SupervisorService.svc/SupervisorService</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,44 +9,10 @@ using Newtonsoft.Json;
 using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Events;
 
 namespace Synchronization.Core.Registration
 {
-    public class RegistrationCallbackEventArgs : EventArgs
-    {
-        public Exception Error { get; private set; }
-        public string Message { get; private set; }
-        public RegisterData Data { get; private set; }
-
-        public RegistrationCallbackEventArgs(Exception error, string message, RegisterData data)
-            : base()
-        {
-            Error = error;
-            Message = message;
-            Data = data;
-        }
-
-        public bool IsPassed { get { return this.Error == null; } }
-
-        public void AppendMessage(string message)
-        {
-            if (string.IsNullOrEmpty(Message))
-                Message = message;
-            else
-                Message = Message + message;
-        }
-    }
-
-    /*public class RegistrationFirstPhaseAccomplished : RegistrationCallbackEventArgs
-    {
-    }
-
-    public class RegistrationSecondPhaseAccomplished : RegistrationCallbackEventArgs
-    {
-    }*/
-
-    public delegate void RegistrationCallback(RegistrationManager manager, RegistrationCallbackEventArgs args);
-
     /// <summary>
     /// Base class responsible for registraction of CAPI device on Supervisor
     /// </summary>
@@ -58,16 +25,20 @@ namespace Synchronization.Core.Registration
         private IRequesProcessor requestProcessor;
         private IUrlUtils urlUtils;
         private IUsbProvider usbProvider;
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private string registrationName = null;
         private Guid? registrationId = null;
+
+        private SupervisorServiceClient registrationService;
 
         #endregion
 
         #region Events
 
-        public event RegistrationCallback FirstPhaseAccomplished;
-        public event RegistrationCallback SecondPhaseAccomplished;
+        public event EventHandler<RegistrationEventArgs> RegistrationPhaseStarted;
+        public event EventHandler<RegistrationEventArgs> FirstPhaseAccomplished;
+        public event EventHandler<RegistrationEventArgs> SecondPhaseAccomplished;
 
         #endregion
 
@@ -81,6 +52,9 @@ namespace Synchronization.Core.Registration
             this.requestProcessor = requestProcessor;
             this.urlUtils = urlUtils;
             this.usbProvider = usbProvider;
+
+            this.registrationService = new SupervisorServiceClient(urlUtils);
+            this.registrationService.NewPacketsAvailable += new AuthorizationPacketsAlarm(registrationService_NewPacketAvailable);
         }
 
         #endregion
@@ -97,8 +71,24 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<T>(data, settings);
         }
 
-
         #region Helpers
+
+        private void CheckPrerequisites(bool firstPhase)
+        {
+            OnCheckPrerequisites(firstPhase);
+        }
+
+        void registrationService_NewPacketAvailable(IList<IServiceAuthorizationPacket> packets)
+        {
+            try
+            {
+                OnNewAuthorizationPacketsAvailable(packets);
+            }
+            catch(Exception e)
+            {
+                Logger.Error(e.Message);
+            }
+        }
 
         private Guid AcceptRegistrationId()
         {
@@ -111,8 +101,9 @@ namespace Synchronization.Core.Registration
 
                 return this.registrationId.Value;
             }
-            catch // todo: log
+            catch (Exception e)
             {
+                Logger.Error(e.Message);
                 throw;
             }
         }
@@ -128,8 +119,9 @@ namespace Synchronization.Core.Registration
 
                 return this.registrationName;
             }
-            catch // todo: log
+            catch (Exception e)
             {
+                Logger.Error(e.Message);
                 throw;
             }
         }
@@ -146,7 +138,7 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        private byte[] SendRegistrationRequest(byte[] requestParams)
+        private byte[] SendLocalRegistrationRequest(byte[] requestParams)
         {
             string url = RegistrationService;
 
@@ -184,7 +176,7 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        private void CreateRegistrationFile(RegisterData registeredData, string filePath)
+        private void WriteRegistrationFile(RegisterData registeredData, string filePath)
         {
             var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
 
@@ -201,9 +193,7 @@ namespace Synchronization.Core.Registration
             }
             catch (Exception ex)
             {
-                // Error
-                Console.WriteLine("Exception caught: {0}", ex);
-
+                Logger.Error(ex.Message);
                 throw ex;
             }
             finally
@@ -214,7 +204,7 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        private byte[] GetFromRegistrationFile(string filePath)
+        private RegisterData ReadRegistrationFile(string filePath)
         {
             if (!File.Exists(filePath))
                 throw new Exception("Registration file is not found");
@@ -223,10 +213,10 @@ namespace Synchronization.Core.Registration
             try
             {
                 fileStream = File.OpenRead(filePath);
-                byte[] bytes = new byte[fileStream.Length];
-                fileStream.Read(bytes, 0, Convert.ToInt32(fileStream.Length));
+                byte[] data = new byte[fileStream.Length];
+                fileStream.Read(data, 0, Convert.ToInt32(fileStream.Length));
 
-                return bytes;
+                return DeserializeRegisterData(Encoding.UTF8.GetString(data));
             }
             finally
             {
@@ -235,7 +225,86 @@ namespace Synchronization.Core.Registration
             }
         }
 
+        private string Register(bool firstPhase, IList<IServiceAuthorizationPacket> packets)
+        {
+            IList<Exception> errorList = new List<Exception>();
+
+            foreach (var packet in packets)
+            {
+                try
+                {
+                    if (firstPhase)
+                        StartRegistration(packet);
+                    else
+                        FinalizeRegistration(packet);
+                }
+                catch (CancelledServiceException e)
+                {
+                    Logger.Info(e.Message);
+                    throw; // cancel all at once
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e.Message);
+                    errorList.Add(e);
+                }
+            }
+
+            var result = new StringBuilder();
+            foreach (var regException in errorList)
+                result.AppendLine(regException.Message);
+
+            return result.ToString();
+        }
+
+        private IList<IServiceAuthorizationPacket> PrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        {
+            return OnPrepareAuthorizationPackets(firstPhase, webServicePackets);
+        }
+
+        private void StartRegistration(IServiceAuthorizationPacket packet)
+        {
+            try
+            {
+                OnStartRegistration(packet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+            }
+        }
+
+        private void FinalizeRegistration(IServiceAuthorizationPacket packet)
+        {
+            try
+            {
+                OnFinalizeRegistration(packet);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+            }
+        }
+
         #endregion
+
+        protected IServiceAuthorizationPacket PreparePacket(bool request, Guid registrationId, bool viaUsb, RegisterData data = null)
+        {
+            var keyContainerName = ContainerName;
+
+            var registeredData = data ?? new RegisterData
+            {
+                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
+                RegistrationId = RegistrationId,
+                Description = RegistrationName,
+                RegisterDate = DateTime.Now,
+                Registrator = CurrentUser, // makes not much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
+            };
+
+            return request ?
+                new AuthorizationRequest(registeredData, viaUsb) as IServiceAuthorizationPacket:
+                new AuthorizationResponce(registeredData, viaUsb);
+        }
 
         #region Properties
 
@@ -269,29 +338,42 @@ namespace Synchronization.Core.Registration
 
         #region Abstract and Virtual Methods
 
+        protected abstract void OnCheckPrerequisites(bool firstPhase);
+
+        protected abstract IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets);
+
         protected abstract Guid OnAcceptRegistrationId();
 
         protected abstract string OnAcceptRegistrationName();
 
-        protected virtual RegisterData OnStartRegistration(string folderPath)
+        protected abstract void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets);
+
+        protected virtual void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
+            if (!packet.IsUsbChannel)
+                return;
+
+            var usb = this.usbProvider.ActiveUsb;
+            if (usb == null)
+                throw new UsbNotChoozenException();
+
             var keyContainerName = ContainerName;
 
             var registeredData = new RegisterData
             {
                 SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
-                RegistrationId = RegistrationId,
+                RegistrationId = packet.Data.RegistrationId,
                 Description = RegistrationName,
                 RegisterDate = DateTime.Now,
-                Registrator = CurrentUser, // makes no much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
+                Registrator = CurrentUser, // makes not much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
             };
 
-            CreateRegistrationFile(registeredData, folderPath + OutFile);
+            WriteRegistrationFile(registeredData, usb.Name + OutFile);
 
-            return registeredData;
+            packet.IsAuthorized = true;
         }
 
-        protected virtual RegisterData OnFinalizeRegistration(string folderPath)
+        protected virtual void OnFinalizeRegistration(IServiceAuthorizationPacket packet)
         {
             throw new NotImplementedException();
         }
@@ -300,33 +382,34 @@ namespace Synchronization.Core.Registration
 
         #region Protected Operations
 
-        protected RegisterData AuthorizeAccepetedData(string folderPath)
+        protected void AuthorizeAcceptedData(IServiceAuthorizationPacket packet)
         {
             try
             {
-                var data = GetFromRegistrationFile(folderPath + InFile);
+                var registerData = packet.Data;
 
-                // assign current user who made registration
-                var registerData = DeserializeRegisterData(Encoding.UTF8.GetString(data));
+                // assign registrator id to save in local db
                 registerData.Registrator = CurrentUser;
 
-                data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
+                var data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
+                var response = SendLocalRegistrationRequest(data);
 
-                var response = SendRegistrationRequest(data);
                 var result = Encoding.UTF8.GetString(response, 0, response.Length);
 
-                if (string.Compare(result, "True", true) == 0)
-                    return registerData;
-                else
-                    throw new RegistrationException();
+                if (string.Compare(result, "True", true) != 0)
+                    throw new RegistrationFaultException(packet);
+
+                packet.IsAuthorized = true;
             }
-            catch (RegistrationException)
+            catch (RegistrationException ex)
             {
+                Logger.Error(ex.Message);
                 throw;
             }
             catch (Exception ex)
             {
-                throw new RegistrationException(ex);
+                Logger.Error(ex.Message);
+                throw new RegistrationFaultException(packet, ex);
             }
         }
 
@@ -334,62 +417,53 @@ namespace Synchronization.Core.Registration
 
         #region Public Methods
 
-        public void StartRegistration()
+        public void DoRegistration(bool firstPhase)
         {
-            Exception error = null;
-            RegisterData registeredData = null;
+            RegistrationException error = null;
+            string log = null;
+            IList<IServiceAuthorizationPacket> packets = null;
 
             try
             {
-                var driver = this.usbProvider.ActiveUsb;
-                if (driver == null)
-                    throw new UsbNotChoozenException();
+                packets = PrepareAuthorizationPackets(firstPhase, this.registrationService.ServicePackets);
+                if (packets == null || packets.Count == 0)
+                    return;
 
-                registeredData = OnStartRegistration(driver.Name);
+                if (RegistrationPhaseStarted != null)
+                    RegistrationPhaseStarted(this, new RegistrationEventArgs(packets, firstPhase, error));
+
+                CheckPrerequisites(firstPhase);
+
+                log = Register(firstPhase, packets);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                error = e;
+                error = new RegistrationFaultException(packets, ex);
+                log = ex.Message;
             }
             finally
             {
-                if (FirstPhaseAccomplished != null)
-                    FirstPhaseAccomplished(this, new RegistrationCallbackEventArgs(error, string.Empty, registeredData));
+                if (firstPhase)
+                {
+                    if (FirstPhaseAccomplished != null)
+                        FirstPhaseAccomplished(this, new RegistrationEventArgs(packets, firstPhase, error));
+                }
+                else
+                {
+                    if (SecondPhaseAccomplished != null)
+                        SecondPhaseAccomplished(this, new RegistrationEventArgs(packets, firstPhase, error));
+                }
             }
         }
 
-        public void FinalizeRegistration()
+        public IList<Errors.ServiceException> CheckRegIssues()
         {
-            Exception error = null;
-            RegisterData registeredData = null;
-
-            try
-            {
-                var driver = this.usbProvider.ActiveUsb;
-                if (driver == null)
-                    throw new UsbNotChoozenException();
-
-                registeredData = OnFinalizeRegistration(driver.Name);
-            }
-            catch (Exception e)
-            {
-                error = e;
-            }
-            finally
-            {
-                if (SecondPhaseAccomplished != null)
-                    SecondPhaseAccomplished(this, new RegistrationCallbackEventArgs(error, string.Empty, registeredData));
-            }
-        }
-
-        public IList<Errors.SynchronizationException> CheckIssues()
-        {
-            IList<SynchronizationException> errors = null;
+            IList<ServiceException> errors = null;
 
             var drive = this.usbProvider.ActiveUsb;
             if (drive == null)
             {
-                errors = new List<SynchronizationException>();
+                errors = new List<ServiceException>();
 
                 if (this.usbProvider.IsAnyAvailable)
                     errors.Add(new UsbNotChoozenException());
@@ -411,7 +485,7 @@ namespace Synchronization.Core.Registration
             catch (Exception ex)
             {
                 if (errors == null)
-                    errors = new List<SynchronizationException>();
+                    errors = new List<ServiceException>();
 
                 errors.Add(new NetUnreachableException(ex.Message));
             }
@@ -420,5 +494,53 @@ namespace Synchronization.Core.Registration
         }
 
         #endregion
+
+        // check web part and usb for registration requests/responces
+        public void CollectAuthorizationPackets()
+        {
+            var usbPackets = ReadUsbPackets();
+
+            this.registrationService.CollectAuthorizationPackets(usbPackets);
+        }
+
+        protected virtual IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        {
+            // read only single request for now
+            // todo: change data file name and read all requests
+
+            var usbPackets = new List<IServiceAuthorizationPacket>();
+
+            var drive = this.usbProvider.ActiveUsb;
+
+            if (drive != null)
+            {
+                ///// read from usb
+                var usbData = ReadRegistrationFile(drive.Name + InFile);
+
+                IServiceAuthorizationPacket packet = PreparePacket(authorizationRequest, Guid.Empty, true, usbData);
+
+                System.Diagnostics.Debug.Assert(packet != null);
+
+                usbPackets.Add(packet);
+            }
+
+            return usbPackets;
+        }
+
+        private IList<IServiceAuthorizationPacket> ReadUsbPackets()
+        {
+            IList<IServiceAuthorizationPacket> exrtraPackets = null;
+
+            try
+            {
+                exrtraPackets = OnReadUsbPackets(false);
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+            }
+
+            return exrtraPackets;
+        }
     }
 }

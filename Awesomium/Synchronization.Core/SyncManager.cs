@@ -47,7 +47,7 @@ namespace Synchronization.Core
             SyncProgressChanged += (s, e) => progressObserver.SetProgress(e.Status);
             BgnOfSync += (s, e) => progressObserver.SetBeginning(e.Status);
             EndOfSync += (s, e) => progressObserver.SetCompleted(e.Status);
-            GetStats += (s, e) => progressObserver.SetStatistics(e.Info);
+            StatisticAccepted += (s, e) => progressObserver.SetStatistics(e.Info);
 
             AddSynchronizers();
         }
@@ -57,6 +57,9 @@ namespace Synchronization.Core
         protected IUsbProvider UsbProvider { get; private set; }
 
         #endregion
+
+        protected abstract void CheckPushPrerequisites(SyncDirection direction);
+        protected abstract void CheckPullPrerequisites(SyncDirection direction);
 
         #region Helpers
 
@@ -77,9 +80,6 @@ namespace Synchronization.Core
             {
             }
         }
-
-        protected abstract void CheckPushPrerequisites(SyncDirection direction);
-        protected abstract void CheckPullPrerequisites(SyncDirection direction);
 
         private void CheckPrerequisites(SyncType typeSync, SyncDirection direction)
         {
@@ -105,11 +105,11 @@ namespace Synchronization.Core
 
                     return synchronizer;
                 }
-                catch (CancelledSynchronizationException)
+                catch (CancelledServiceException)
                 {
                     throw; // cancel all in the chain at once
                 }
-                catch (SynchronizationException e)
+                catch (Exception e)
                 {
                     errorList.Add(e);
                 }
@@ -123,16 +123,16 @@ namespace Synchronization.Core
             if (!this.syncIsAvailable.WaitOne(0))
                 return;
 
-            SynchronizationException error = null;
+            ServiceException error = null;
             string log = null;
 
             try
             {
-                BgnOfSync(this, new SynchronizationEvent(new SyncStatus(syncType, direction, 0, null)));
+                BgnOfSync(this, new SynchronizationEventArgs(new SyncStatus(syncType, direction, 0, null)));
                 CheckPrerequisites(syncType, direction);
-                log = OnDoSynchronizationAction(syncType, direction);
+                log = Sync(syncType, direction);
             }
-            catch (CancelledSynchronizationException ex)
+            catch (CancelledServiceException ex)
             {
                 error = ex;
                 log = error.Message;
@@ -153,27 +153,52 @@ namespace Synchronization.Core
 
                 Logger.Info(log);
 
-                EndOfSync(this, new SynchronizationCompletedEvent(new SyncStatus(syncType, direction, 100, error), log));
+                EndOfSync(this, new SynchronizationCompletedEventArgs(new SyncStatus(syncType, direction, 100, error), log));
                 if (error == null)
                 {
                     var statEvent = OnGetStatisticsAfterSyncronization(syncType);
-                    if (statEvent!=null)GetStats(this, statEvent);
-                    
-
+                    if (statEvent != null)
+                        StatisticAccepted(this, statEvent);
                 }
-                
-            
             }
         }
+
+        private string Sync(SyncType action, SyncDirection direction)
+        {
+            IList<Exception> errorList = new List<Exception>();
+            var succesSynchronizer = ExecuteAction(
+                    s =>
+                    {
+                        if (action == SyncType.Pull)
+                            s.Pull(direction);
+                        else
+                        {
+                            s.Push(direction);
+                        }
+                    },
+                    errorList
+                );
+
+            var result = new StringBuilder();
+            foreach (Exception synchronizationException in errorList)
+                result.AppendLine(synchronizationException.Message);
+            if (succesSynchronizer != null)
+                result.AppendLine(succesSynchronizer.GetSuccessMessage(action, direction));
+            else
+                throw new SynchronizationException(result.ToString());
+
+            return result.ToString();
+        }
+
 
         #endregion
 
         #region Implementation of ISyncManager
 
-        public event EventHandler<SynchronizationEvent> SyncProgressChanged;
-        public event EventHandler<SynchronizationEvent> BgnOfSync;
-        public event EventHandler<SynchronizationCompletedEvent> EndOfSync;
-        public event EventHandler<SynchronizationStatisticEvent> GetStats;
+        public event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
+        public event EventHandler<SynchronizationEventArgs> BgnOfSync;
+        public event EventHandler<SynchronizationCompletedEventArgs> EndOfSync;
+        public event EventHandler<SynchronizationStatisticEventArgs> StatisticAccepted;
 
         public void Push(SyncDirection direction)
         {
@@ -197,13 +222,13 @@ namespace Synchronization.Core
                 synchronizer.UpdateStatus();
         }
 
-        public IList<SynchronizationException> CheckSyncIssues(SyncType syncType, SyncDirection direction)
+        public IList<ServiceException> CheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
             if (this.RequestProcessor.Process<string>(this.UrlUtils.GetDefaultUrl(), "False") == "False")
-                return new List<SynchronizationException>() { new LocalHosUnreachableException() }; // there is no connection to local host
+                return new List<ServiceException>() { new LocalHosUnreachableException() }; // there is no connection to local host
 
 
-            IList<SynchronizationException> errors = new List<SynchronizationException>();
+            IList<ServiceException> errors = new List<ServiceException>();
 
             try
             {
@@ -216,7 +241,7 @@ namespace Synchronization.Core
 
             foreach (var synchronizer in this.synchronizerChain)
             {
-                IList<SynchronizationException> sErrors = synchronizer.CheckSyncIssues(syncType, direction);
+                IList<ServiceException> sErrors = synchronizer.CheckSyncIssues(syncType, direction);
                 if (sErrors == null || sErrors.Count == 0)
                     continue;
 
@@ -232,34 +257,7 @@ namespace Synchronization.Core
 
         protected abstract void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider);
 
-        protected abstract SynchronizationStatisticEvent OnGetStatisticsAfterSyncronization(SyncType action);
-
-        protected virtual string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
-        {
-            IList<Exception> errorList = new List<Exception>();
-            var succesSynchronizer = ExecuteAction(
-                    s =>
-                    {
-                        if (action == SyncType.Pull)
-                            s.Pull(direction);
-                        else
-                        {
-                            s.Push(direction);
-                        }
-                    },
-                    errorList
-                );
-
-            var result = new StringBuilder();
-            foreach (SynchronizationException synchronizationException in errorList)
-                result.AppendLine(synchronizationException.Message);
-            if (succesSynchronizer != null)
-                result.AppendLine(succesSynchronizer.GetSuccessMessage(action, direction));
-            else
-                throw new SynchronizationException(result.ToString());
-
-            return result.ToString();
-        }
+        protected abstract SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action);
 
         #endregion
     }

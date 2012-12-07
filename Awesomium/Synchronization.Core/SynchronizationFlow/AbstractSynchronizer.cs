@@ -17,7 +17,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Helpers
 
-        private IList<SynchronizationException> GetInactiveErrors()
+        private IList<ServiceException> GetInactiveErrors()
         {
             return OnGetInactiveErrors();
         }
@@ -29,15 +29,15 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract void OnPush(SyncDirection direction);
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
-        protected abstract IList<SynchronizationException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
+        protected abstract IList<ServiceException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
         
         // The event-invoking method that derived classes can override.
-        protected virtual void OnSyncProgressChanged(SynchronizationEvent e)
+        protected virtual void OnSyncProgressChanged(SynchronizationEventArgs e)
         {
             // Make a temporary copy of the event to avoid possibility of
             // a race condition if the last subscriber unsubscribes
             // immediately after the null check and before the event is raised.
-            EventHandler<SynchronizationEvent> handler = SyncProgressChanged;
+            EventHandler<SynchronizationEventArgs> handler = SyncProgressChanged;
             if (handler != null)
             {
                 handler(this, e);
@@ -46,16 +46,16 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected abstract bool OnUpdateStatus();
 
-        protected virtual IList<SynchronizationException> OnGetInactiveErrors()
+        protected virtual IList<ServiceException> OnGetInactiveErrors()
         {
-            return new List<SynchronizationException>();
+            return new List<ServiceException>();
         }
 
         #endregion
 
         #region Implementation of ISynchronizer
 
-        public event EventHandler<SynchronizationEvent> SyncProgressChanged;
+        public event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
 
         public void Push(SyncDirection direction)
         {
@@ -102,7 +102,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public abstract string GetSuccessMessage(SyncType syncAction, SyncDirection direction);
 
-        public IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction)
+        public IList<ServiceException> CheckSyncIssues(SyncType syncAction, SyncDirection direction)
         {
             if (!IsActive)
                 return GetInactiveErrors();

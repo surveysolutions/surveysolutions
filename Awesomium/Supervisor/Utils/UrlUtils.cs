@@ -92,9 +92,9 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}?Registrator={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
         }
 
-        public string GetSupervisorDiscoveryService()
+        public string GetSupervisorService()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.DiscoveryService);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.SupervisorService);
         }
     }
 }

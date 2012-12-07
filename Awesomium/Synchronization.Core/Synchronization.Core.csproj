@@ -50,11 +50,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
-    <Compile Include="Errors\CancelledSynchronizationException.cs" />
+    <Compile Include="Errors\CancelledServiceException.cs" />
     <Compile Include="Errors\CheckPrerequisitesException.cs" />
     <Compile Include="Errors\RegistrationException.cs" />
+    <Compile Include="Errors\ServiceException.cs" />
+    <Compile Include="Events\RegistrationEvent.cs" />
     <Compile Include="Events\SynchronizationCompletedEvent.cs" />
     <Compile Include="Events\SynchronizationStatisticEvent.cs" />
+    <Compile Include="Interface\IServiceAuthorizationPacket.cs" />
+    <Compile Include="Interface\IServiceWatcher.cs" />
     <Compile Include="Interface\ISupervisorService.cs" />
     <Compile Include="Interface\IUsbProvider.cs" />
     <Compile Include="Interface\ISettingsProvider.cs" />
@@ -63,7 +67,11 @@
     <Compile Include="Interface\ISyncProgressObserver.cs" />
     <Compile Include="Interface\ISyncProgressStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Registration\DiscoveryService.cs" />
+    <Compile Include="Registration\AbstractRegistrar.cs" />
+    <Compile Include="Registration\AuthorizationRequest.cs" />
+    <Compile Include="Registration\AuthorizationResponce.cs" />
+    <Compile Include="Registration\AuthorizationPacket.cs" />
+    <Compile Include="Registration\WcfService.cs" />
     <Compile Include="Registration\RegisterData.cs" />
     <Compile Include="Registration\RegistrationManager.cs" />
     <Compile Include="Registration\RSACryptoService.cs" />

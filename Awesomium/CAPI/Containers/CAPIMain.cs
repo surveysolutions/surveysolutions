@@ -56,7 +56,7 @@ namespace Browsing.CAPI.Containers
                 var factory = new ChannelFactory<ISupervisorService>(endpoints[0].Binding, endpoints[0].Address);
                 channelService = factory.CreateChannel();
 
-                var channelResponce = channelService.GetDiscoveryServicePath();
+                var channelResponce = channelService.GetPath();
                 
                 supervisorHost = endpoints[0].Address.ToString();
                 supervisorHost = supervisorHost.Replace(channelResponce, "");

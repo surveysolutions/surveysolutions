@@ -12,6 +12,6 @@ namespace Synchronization.Core.Interface
         SyncType ActionType { get; }
         SyncDirection Direction { get; }
         int ProgressPercents { get; }
-        SynchronizationException Error { get; }
+        ServiceException Error { get; }
     }
 }

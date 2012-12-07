@@ -155,13 +155,19 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnUpdateConfigDependencies() { }
 
-        protected virtual void OnValidateContent() { }
+        protected virtual void OnLeaveScreen() { }
+        protected virtual void OnEnterScreen() { }
 
         #endregion
 
-        internal void ValidateContent()
+        internal void EnterScreen()
         {
-            OnValidateContent();
+            OnEnterScreen();
+        }
+
+        internal void LeaveScreen()
+        {
+            OnLeaveScreen();
         }
 
         protected void EnableHomeButton(bool enable)

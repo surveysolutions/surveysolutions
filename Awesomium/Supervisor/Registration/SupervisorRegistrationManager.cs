@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Common.Utils;
 using Synchronization.Core.Registration;
@@ -14,12 +15,11 @@ namespace Browsing.Supervisor.Registration
         {
         }
 
-
         #region Override Methods
 
         protected override string ContainerName
         {
-            get { return CurrentUser.ToString(); } // bind to supervisr id
+            get { return CurrentUser.ToString(); } // bind to supervisor id
         }
 
         protected override Guid OnAcceptRegistrationId()
@@ -32,17 +32,35 @@ namespace Browsing.Supervisor.Registration
             return string.Format("supervisor #'{0}'", RegistrationId); // todo: replace with true name
         }
 
-        protected override RegisterData OnStartRegistration(string folderPath)
+        protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
-            var data = AuthorizeAccepetedData(folderPath);
+            System.Diagnostics.Debug.Assert(packet.Type == ServicePackectType.Request);
 
-            //CreateRegistrationFile(data, folderPath + OutFile);
+            AuthorizeAcceptedData(packet);
 
-            base.OnStartRegistration(folderPath);
-
-            return data;
+            base.OnStartRegistration(packet);
         }
 
         #endregion
+
+        protected override void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets)
+        {
+            // uncomment to have automatic registration
+            // DoRegistration(true);
+        }
+
+        protected override IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        {
+            return base.OnReadUsbPackets(true);
+        }
+
+        protected override void OnCheckPrerequisites(bool firstPhase)
+        {
+        }
+
+        protected override IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        {
+            return webServicePackets;
+        }
     }
 }

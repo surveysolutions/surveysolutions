@@ -9,16 +9,12 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorMain : Main
     {
-        private IUrlUtils urlUtils;
-
         #region Constructor
 
         public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
-
-            this.urlUtils = urlUtils;
         }
 
         #endregion
@@ -47,10 +43,8 @@ namespace Browsing.Supervisor.Containers
         {
             try
             {
-                var serviceAddress = this.urlUtils.GetSupervisorDiscoveryService();
-
-                SupervisorServiceClient client = new SupervisorServiceClient("mexHttpBinding_ISupervisorService", serviceAddress);
-                var host = client.GetDiscoveryServicePath(); // do nothing with result; just push the service to run
+                // just push the service to run
+                var host = new SupervisorServiceClient(UrlUtils).GetPath(); 
             }
             catch
             { }

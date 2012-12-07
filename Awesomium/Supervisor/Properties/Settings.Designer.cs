@@ -206,12 +206,12 @@ namespace Browsing.Supervisor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("WCF/SupervisorService.svc/SupervisorService")]
-        public string DiscoveryService {
+        public string SupervisorService {
             get {
-                return ((string)(this["DiscoveryService"]));
+                return ((string)(this["SupervisorService"]));
             }
             set {
-                this["DiscoveryService"] = value;
+                this["SupervisorService"] = value;
             }
         }
     }

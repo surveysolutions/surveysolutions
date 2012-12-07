@@ -46,7 +46,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 {
                     using (var webClient = new WebClient())
                     {
-                        SynchronizationException error = null;
+                        ServiceException error = null;
 
                         webClient.DownloadProgressChanged +=
                             (s, e) =>
@@ -56,7 +56,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                 var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
 
-                                OnSyncProgressChanged(new SynchronizationEvent(status));
+                                OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
 
                         webClient.DownloadDataCompleted +=
@@ -71,7 +71,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                     this.lastUsbArchiveName = string.Empty;
 
                                     if (cancelled)
-                                        error = new CancelledSynchronizationException("Push to usb is cancelled", error);
+                                        error = new CancelledServiceException("Push to usb is cancelled", error);
                                     else if (errornous)
                                         error = new SynchronizationException("Push to usb is failed", e.Error);
                                     else
@@ -82,7 +82,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                     var status = new SyncStatus(SyncType.Push, direction, percents, error);
 
-                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                    OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
                                 finally
                                 {
@@ -110,7 +110,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     }
                 }
             }
-            catch (SynchronizationException)
+            catch (ServiceException)
             {
                 throw;
             }
@@ -140,7 +140,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 {
                     using (var webClient = new WebClient())
                     {
-                        SynchronizationException error = null;
+                        ServiceException error = null;
 
                         webClient.UploadProgressChanged +=
                             (s, e) =>
@@ -150,7 +150,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                 var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null);
 
-                                OnSyncProgressChanged(new SynchronizationEvent(status));
+                                OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
 
                         webClient.UploadFileCompleted +=
@@ -165,7 +165,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                     this.lastUsbArchiveName = string.Empty;
 
                                     if (cancelled)
-                                        error = new CancelledSynchronizationException("Pull from usb is cancelled", error);
+                                        error = new CancelledServiceException("Pull from usb is cancelled", error);
                                     else if (errornous)
                                         error = new SynchronizationException("Pull from usb is failed", e.Error);
                                     else
@@ -173,7 +173,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                     var status = new SyncStatus(SyncType.Push, direction, percents, error);
 
-                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                    OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
                                 finally
                                 {
@@ -203,7 +203,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 }
 
             }
-            catch (SynchronizationException)
+            catch (ServiceException)
             {
                 throw;
             }
@@ -226,7 +226,7 @@ namespace Synchronization.Core.SynchronizationFlow
             return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
         }
 
-        protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
+        protected override IList<ServiceException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
             try
             {
@@ -235,7 +235,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception ex)
             {
-                return new List<SynchronizationException>() { new UsbUnacceptableException(ex.Message) };
+                return new List<ServiceException>() { new UsbNotAccessableException(ex.Message) };
             }
         }
 
