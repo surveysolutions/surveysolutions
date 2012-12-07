@@ -1,0 +1,78 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="ServiceError.cs" company="">
+// TODO: Update copyright text.
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace Synchronization.Core.Errors
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
+    /// <summary>
+    /// TODO: Update summary.
+    /// </summary>
+    public abstract class ServiceException : Exception
+    {
+        protected ServiceException(string message, Exception e)
+            : base(message, e)
+        {
+        }
+
+        protected ServiceException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    public class NetUnreachableException : ServiceException
+    {
+        public NetUnreachableException(string url)
+            : base(string.Format("Local center {0} is not available", url))
+        {
+        }
+    }
+
+    public class UsbNotAccessableException : ServiceException
+    {
+        public UsbNotAccessableException(string message)
+            : base(message)
+        {
+        }
+    }
+
+    public class UsbNotChoozenException : UsbNotAccessableException
+    {
+        public UsbNotChoozenException()
+            : base("Usb flash memory device has not been choosen")
+        {
+        }
+    }
+
+    public class UsbNotPluggedException : UsbNotAccessableException
+    {
+        public UsbNotPluggedException()
+            : base("Usb flash memory device has not been plugged")
+        {
+        }
+    }
+
+    public class LocalHosUnreachableException : ServiceException
+    {
+        public LocalHosUnreachableException()
+            : base("There is no connection to local host")
+        {
+        }
+    }
+
+    public class InactiveNetServiceException : ServiceException
+    {
+        public InactiveNetServiceException()
+            : base("Network synchronization endpoint is not set")
+        {
+        }
+    }
+
+}

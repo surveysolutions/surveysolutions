@@ -95,9 +95,9 @@ namespace Browsing.CAPI.Utils
             return string.Empty;
         }
 
-        public string GetSupervisorDiscoveryService()
+        public string GetSupervisorService()
         {
-            throw new NotImplementedException();
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CapiService);
         }
     }
 }

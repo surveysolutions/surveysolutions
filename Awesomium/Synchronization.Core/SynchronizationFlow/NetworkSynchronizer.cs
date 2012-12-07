@@ -80,9 +80,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
         }
 
-        protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
+        protected override IList<ServiceException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
-            SynchronizationException e = null;
+            ServiceException e = null;
             try
             {
                 var netEndPoint = this._urlUtils.GetEnpointUrl();
@@ -96,7 +96,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 e = new NetUnreachableException(ex.Message);
             }
 
-            return e == null ? null : new List<SynchronizationException>() { e };
+            return e == null ? null : new List<ServiceException>() { e };
         }
 
         protected override bool OnUpdateStatus()
@@ -104,10 +104,10 @@ namespace Synchronization.Core.SynchronizationFlow
             return !string.IsNullOrEmpty(this._urlUtils.GetEnpointUrl());
         }
 
-        protected override IList<SynchronizationException> OnGetInactiveErrors()
+        protected override IList<ServiceException> OnGetInactiveErrors()
         {
             var errors = base.OnGetInactiveErrors();
-            errors.Add(new InactiveNetSynchronizerException());
+            errors.Add(new InactiveNetServiceException());
 
             return errors;
         }
@@ -121,7 +121,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region utility methods
 
-        protected void WaitForEndProcess(Action<SynchronizationEvent> eventRiser, SyncType syncType, SyncDirection direction)
+        protected void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
 
@@ -130,16 +130,15 @@ namespace Synchronization.Core.SynchronizationFlow
                 Thread.Sleep(1000);
 
                 if (this.stopRequested.WaitOne(100))
-                    throw new SynchronizationException("network synchronization is canceled");
+                    throw new CancelledServiceException("Network synchronization is cancelled");
 
                 percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(this.processId), -1);
                 if (percentage < 0)
-                    throw new SynchronizationException("network synchronization is failed");
+                    throw new SynchronizationException("Network synchronization is failed");
 
-                eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
-
-
+                eventRiser(new SynchronizationEventArgs(new SyncStatus(syncType, direction, percentage, null)));
             }
+
             this.processId = Guid.Empty;
         }
 

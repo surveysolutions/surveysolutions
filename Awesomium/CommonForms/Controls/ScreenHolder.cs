@@ -23,6 +23,13 @@ namespace Browsing.Common.Controls
             if (!this.LoadedScreens.Contains(screen))
                 throw new ArgumentException("screen wasn't loaded in holder");
 
+            if (this.Controls.Count > 0)
+            {
+                var prevScreen = this.Controls[0] as Containers.Screen;
+                if (prevScreen != null)
+                    prevScreen.LeaveScreen();
+            }
+
             this.Controls.Clear();
 
             screen.AutoSize = true;
@@ -31,7 +38,7 @@ namespace Browsing.Common.Controls
 
             this.Controls.Add(screen);
 
-            screen.ValidateContent();
+            screen.EnterScreen();
         }
 
         private IList<Containers.Screen> loadedScreens;

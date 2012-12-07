@@ -23,7 +23,7 @@ namespace Browsing.Common.Containers
             InitializeComponent();
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
-            this.urlUtils = urlUtils;
+            this.UrlUtils = urlUtils;
 
             IntitLogControls(false, false);
 
@@ -61,7 +61,6 @@ namespace Browsing.Common.Containers
 
         #endregion
         
-
         #region Helpers
 
         /// <summary>
@@ -188,7 +187,6 @@ namespace Browsing.Common.Containers
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
         private Guid? currentUser;
-        protected IUrlUtils urlUtils;
 
         #endregion
 
@@ -201,7 +199,7 @@ namespace Browsing.Common.Containers
                 if (this.isUserLoggedIn.HasValue)
                     return this.isUserLoggedIn.Value;
 
-                this.isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
+                this.isUserLoggedIn = this.requestProcessor.Process<bool>(UrlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
                 return isUserLoggedIn.Value;
             }
         }
@@ -213,7 +211,7 @@ namespace Browsing.Common.Containers
                 if (this.isDatabaseContainsUsers.HasValue)
                     return this.isDatabaseContainsUsers.Value;
 
-                this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+                this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(UrlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
                 return this.isDatabaseContainsUsers.Value;
             }
         }
@@ -225,11 +223,17 @@ namespace Browsing.Common.Containers
                 if (this.currentUser.HasValue)
                     return this.currentUser.Value;
 
-                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                this.currentUser = this.requestProcessor.Process<Guid>(UrlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
                 
                 return this.currentUser.Value;
             }
         }
+
+        #endregion
+
+        #region Properties
+
+        protected IUrlUtils UrlUtils { get; private set; }
 
         #endregion
 
@@ -283,7 +287,7 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnLoginClicked(object sender, System.EventArgs e)
         {
-            this.Holder.NavigateBrowser(true, urlUtils.GetLoginUrl());
+            this.Holder.NavigateBrowser(true, UrlUtils.GetLoginUrl());
         }
 
         protected virtual void OnLogoutClicked(object sender, System.EventArgs e)
@@ -294,7 +298,7 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnDashboardClicked(object sender, System.EventArgs e)
         {
-            this.Holder.NavigateBrowser(false, urlUtils.GetDefaultUrl());
+            this.Holder.NavigateBrowser(false, UrlUtils.GetDefaultUrl());
         }
 
         protected virtual void OnSettingsClicked(object sender, System.EventArgs e)
@@ -318,9 +322,9 @@ namespace Browsing.Common.Containers
 
         #region Overloading
 
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             RefreshAuthentificationInfo();
         }

@@ -1,27 +1,20 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="ISupervisorService.cs" company="">
+// <copyright file="AbstractRegistrar.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Synchronization.Core.Interface
+namespace Synchronization.Core.Registration
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using System.ServiceModel;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    [ServiceContract]
-    public interface ISupervisorService
+    public class AbstractRegistrar
     {
-        [OperationContract]
-        string GetPath();
-
-        [OperationContract]
-        string RegisterDevice(string data);
     }
 }

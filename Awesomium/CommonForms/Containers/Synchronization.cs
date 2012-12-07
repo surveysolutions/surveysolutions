@@ -39,8 +39,8 @@ namespace Browsing.Common.Containers
 
             System.Diagnostics.Debug.Assert(this.SyncManager != null);
 
-            this.SyncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
-            this.SyncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
+            this.SyncManager.EndOfSync += new EventHandler<SynchronizationCompletedEventArgs>(sync_EndOfSync);
+            this.SyncManager.BgnOfSync += new EventHandler<SynchronizationEventArgs>(sync_BgnOfSync);
         }
 
 
@@ -88,11 +88,11 @@ namespace Browsing.Common.Containers
 
                 //return;
 
-                IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
+                IList<ServiceException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
                 if (issues == null || issues.Count == 0)
                     return;
 
-                SynchronizationException ex = issues.FirstOrDefault<SynchronizationException>(x => x is LocalHosUnreachableException);
+                ServiceException ex = issues.FirstOrDefault<ServiceException>(x => x is LocalHosUnreachableException);
                 if (ex != null)
                 {
                     this.isPullPossible = false;
@@ -103,12 +103,12 @@ namespace Browsing.Common.Containers
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException || x is InactiveNetSynchronizerException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is InactiveNetServiceException);
                 if (ex != null)
                 {
                     status = ex.Message;
 
-                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnacceptableException);
+                    ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
                     if (ex != null)
                     {
                         this.isPullPossible = false;
@@ -120,7 +120,7 @@ namespace Browsing.Common.Containers
                     }
                 }
 
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is CheckPrerequisitesException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is CheckPrerequisitesException);
                 if (ex != null)
                 {
                     this.isPullPossible = true;
@@ -142,7 +142,7 @@ namespace Browsing.Common.Containers
 
         #region Event Handlers
 
-        private void sync_BgnOfSync(object sender, SynchronizationEvent e)
+        private void sync_BgnOfSync(object sender, SynchronizationEventArgs e)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
@@ -155,7 +155,7 @@ namespace Browsing.Common.Containers
                 }));
         }
 
-        private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
+        private void sync_EndOfSync(object sender, SynchronizationCompletedEventArgs e)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
@@ -243,9 +243,9 @@ namespace Browsing.Common.Containers
 
         }
 
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             CheckSyncPossibilities();
         }

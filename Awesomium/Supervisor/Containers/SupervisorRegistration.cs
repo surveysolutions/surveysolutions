@@ -12,6 +12,7 @@ using Browsing.Supervisor.Registration;
 using Common.Utils;
 using Synchronization.Core.Registration;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Events;
 
 namespace Browsing.Supervisor.Containers
 {
@@ -109,24 +110,27 @@ namespace Browsing.Supervisor.Containers
             base.OnEnableSecondPhaseRegistration(false);
         }
 
-        protected override void OnFirstRegistrationPhaseAccomplished(RegistrationManager manager, RegistrationCallbackEventArgs args)
+        protected override void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)
         {
             if (args.IsPassed)
-                args.AppendMessage(string.Format("CAPI device {0} has been authorized", args.Data.Description));
+            {
+                foreach(var packet in args.Packets)
+                    args.AppendResultMessage(string.Format("CAPI device {0} has been authorized", packet.Data.Description));
+            }
 
-            base.OnFirstRegistrationPhaseAccomplished(manager, args);
+            base.OnFirstRegistrationPhaseAccomplished(args);
 
             if (args.IsPassed)
                 UpdateAdministrativeContent();
         }
 
-
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             UpdateAdministrativeContent();
         }
+
         #endregion
     }
 }

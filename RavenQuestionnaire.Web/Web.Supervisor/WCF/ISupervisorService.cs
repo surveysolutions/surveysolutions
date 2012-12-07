@@ -12,6 +12,9 @@ namespace Web.Supervisor.WCF
     public interface ISupervisorService
     {
         [OperationContract]
-        string GetDiscoveryServicePath();
+        string GetPath();
+
+        [OperationContract]
+        string AuthorizeDevice(string data);
     }
 }

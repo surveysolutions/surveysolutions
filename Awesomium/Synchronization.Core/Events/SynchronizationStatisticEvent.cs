@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Synchronization.Core.Events
 {
-    public class SynchronizationStatisticEvent : EventArgs
+    public class SynchronizationStatisticEventArgs : EventArgs
     {
-        public SynchronizationStatisticEvent(List<string> info)
+        public SynchronizationStatisticEventArgs(List<string> info)
         {
             Info = info;
         }

@@ -32,9 +32,9 @@ namespace Browsing.CAPI.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
-        protected override SynchronizationStatisticEvent OnGetStatisticsAfterSyncronization(SyncType action)
+        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action)
         {
-            return action==SyncType.Push ? new SynchronizationStatisticEvent(GetPushStatistics()) : new SynchronizationStatisticEvent(GetPullStatistics());
+            return action==SyncType.Push ? new SynchronizationStatisticEventArgs(GetPushStatistics()) : new SynchronizationStatisticEventArgs(GetPullStatistics());
         }
 
         #region Helpers
@@ -129,27 +129,6 @@ namespace Browsing.CAPI.Synchronization
         protected override void CheckPullPrerequisites(SyncDirection direction)
         {
             // Prerequisites empty at this moment
-        }
-
-        protected override string OnDoSynchronizationAction(SyncType action, SyncDirection direction)
-        {
-            string syncResult = null;
-            try
-            {
-                syncResult = base.OnDoSynchronizationAction(action, direction);
-            }
-            catch (Exception e)
-            {
-                //syncResult = e.Message;
-                throw e;
-            }
-            /*finally
-            {
-                if (!string.IsNullOrEmpty(syncResult))
-                    MessageBox.Show(syncResult);
-            }*/
-
-            return syncResult;
         }
 
         #endregion

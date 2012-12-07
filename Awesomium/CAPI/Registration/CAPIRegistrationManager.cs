@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,9 +41,54 @@ namespace Browsing.CAPI.Registration
             return Environment.MachineName;
         }
 
-        protected override RegisterData OnFinalizeRegistration(string folderPath)
+        protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
-            return AuthorizeAccepetedData(folderPath);
+            // todo: 1. Try to send packet via network firstly. If no luck, try to save to usb
+
+            base.OnStartRegistration(packet);
+        }
+
+        protected override void OnFinalizeRegistration(IServiceAuthorizationPacket packet)
+        {
+            System.Diagnostics.Debug.Assert(packet.Type == ServicePackectType.Responce);
+
+            AuthorizeAcceptedData(packet);
+        }
+
+        protected override void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets)
+        {
+            // process automatically
+            DoRegistration(false);
+        }
+
+        protected override IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        {
+            // read responces
+            var packets = base.OnReadUsbPackets(false).Where((p) => p.Data.RegistrationId == RegistrationId); 
+
+            return packets.ToList();
+        }
+
+        protected override void OnCheckPrerequisites(bool firstPhase)
+        {
+        }
+
+        protected override IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        {
+            if (firstPhase) // create authorization request
+            {
+                webServicePackets = new List<IServiceAuthorizationPacket>() { PreparePacket(true, RegistrationId, true) };
+            }
+            else // treat authorization responce
+            {
+                // todo: clean the list here
+                System.Diagnostics.Debug.Assert(webServicePackets.Count <= 1);
+
+                if (webServicePackets.Count == 0)
+                    throw new RegistrationException("There is no authorization response from supervisor", null);
+            }
+
+            return webServicePackets;
         }
 
         #endregion

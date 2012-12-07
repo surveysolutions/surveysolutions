@@ -47,7 +47,7 @@
     <Setting Name="GetAuthorizedIDs" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/GetRegisteredDevices</Value>
     </Setting>
-    <Setting Name="DiscoveryService" Type="System.String" Scope="User">
+    <Setting Name="SupervisorService" Type="System.String" Scope="User">
       <Value Profile="(Default)">WCF/SupervisorService.svc/SupervisorService</Value>
     </Setting>
   </Settings>
