@@ -85,7 +85,7 @@
     <Compile Include="CompleteQuestionnaire\WirelessSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\UsbSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
+    <Compile Include="CompleteQuestionnaire\ISyncProcess.cs" />
     <Compile Include="ExportStatisticsCalculator.cs" />
     <Compile Include="SycProcess\ISyncProcessRepository.cs" />
     <Compile Include="SycProcess\SyncProcess.cs" />
