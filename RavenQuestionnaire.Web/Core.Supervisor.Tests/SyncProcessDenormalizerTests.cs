@@ -74,7 +74,7 @@ namespace Main.Core.Tests.EventHandlers
         [Test]
         public void HandleProcessEnded_EventIsCome_IsEndedSetInTrue()
         {
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
@@ -115,7 +115,7 @@ namespace Main.Core.Tests.EventHandlers
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
@@ -160,7 +160,7 @@ namespace Main.Core.Tests.EventHandlers
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
@@ -205,7 +205,7 @@ namespace Main.Core.Tests.EventHandlers
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
@@ -257,7 +257,7 @@ namespace Main.Core.Tests.EventHandlers
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };
@@ -298,7 +298,7 @@ namespace Main.Core.Tests.EventHandlers
         [Test]
         public void HandleNewQuestionnaireCreated_EventIsCome_OneRowInStatisticsAdded()
         {
-            var statistics = new SyncProcessStatisticsDocument
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
                 {
                    CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
                 };

@@ -14,6 +14,7 @@ namespace Main.Core.Domain
 
     using Main.Core.Documents;
     using Main.Core.Events.Synchronization;
+    using Main.Core.View.SyncProcess;
 
     using Ncqrs.Domain;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -109,7 +110,23 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("process is already finished");
             }
 
-            this.ApplyEvent(new ProcessEnded { Status = status });
+            this.ApplyEvent(new ProcessEnded { ProcessKey = this.innerDocument.PublicKey, Status = status });
+        }
+
+        /// <summary>
+        /// Push statistics
+        /// </summary>
+        /// <param name="statistics">
+        /// The statistics.
+        /// </param>
+        public void PushStatistics(List<UserSyncProcessStatistics> statistics)
+        {
+            if (this.innerDocument.EndDate.HasValue)
+            {
+                throw new InvalidOperationException("process is already finished");
+            }
+
+            this.ApplyEvent(new ProcessStatisticsCalculated { ProcessKey = this.innerDocument.PublicKey, Statistics = statistics });
         }
 
         /// <summary>

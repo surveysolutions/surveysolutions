@@ -21,10 +21,13 @@ namespace Main.Core.Documents
         /// <summary>
         /// Initializes a new instance of the <see cref="SyncProcessStatisticsDocument"/> class.
         /// </summary>
-        public SyncProcessStatisticsDocument()
+        /// <param name="syncKey">
+        /// The sync Key.
+        /// </param>
+        public SyncProcessStatisticsDocument(Guid syncKey)
         {
+            this.PublicKey = syncKey;
             this.CreationDate = DateTime.Now;
-            this.PublicKey = Guid.Empty;
             this.IsEnded = false;
             this.Statistics = new List<UserSyncProcessStatistics>();
         }
@@ -57,11 +60,6 @@ namespace Main.Core.Documents
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
-        public Guid SyncKey { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
