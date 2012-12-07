@@ -18,7 +18,6 @@ namespace Main.Core.EventHandlers
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Question;
-    using Main.Core.View.SyncProcess;
     using Main.DenormalizerStorage;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Restoring.EventStapshoot;
@@ -40,11 +39,6 @@ namespace Main.Core.EventHandlers
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore;
 
-        /// <summary>
-        /// The statistics item store.
-        /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> statistics;
-
         #endregion
 
         #region Constructors and Destructors
@@ -55,15 +49,9 @@ namespace Main.Core.EventHandlers
         /// <param name="documentItemStore">
         /// The document item store.
         /// </param>
-        /// <param name="statistics">
-        /// The statistics item store.
-        /// </param>
-        public CompleteQuestionnaireBrowseItemDenormalizer(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore, 
-            IDenormalizerStorage<SyncProcessStatisticsDocument> statistics)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
         {
             this.documentItemStore = documentItemStore;
-            this.statistics = statistics;
         }
 
         #endregion
@@ -211,9 +199,6 @@ namespace Main.Core.EventHandlers
         /// </param>
         protected void HandleNewSurvey(CompleteQuestionnaireDocument document)
         {
-            CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(document.PublicKey);
-            MeasureDifference(item, document);
-
             var browseItem = new CompleteQuestionnaireBrowseItem(document);
             IEnumerable<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
 
@@ -228,67 +213,6 @@ namespace Main.Core.EventHandlers
                     }).ToArray();
 
             this.documentItemStore.Store(browseItem, document.PublicKey);
-        }
-
-        /// <summary>
-        /// Get difference between already stored item and new-come CQ document and generates statistics
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <param name="cq">
-        /// The cq.
-        /// </param>
-        private void MeasureDifference(CompleteQuestionnaireBrowseItem item, CompleteQuestionnaireDocument cq)
-        {
-            SyncProcessStatisticsDocument stat = this.statistics.GetByGuid(Guid.Empty);
-            if (stat == null || stat.IsEnded)
-            {
-                return;
-            }
-
-            Func<CompleteQuestionnaireDocument, UserSyncProcessStatistics> newStatItem = document => new UserSyncProcessStatistics
-            {
-                Type = SynchronizationStatisticType.NewSurvey,
-                User = document.Responsible,
-                TemplateId = document.TemplateId,
-                Title = document.Title,
-                SurveyId = document.PublicKey,
-                Status = document.Status
-            };
-
-            if (item == null)
-            {
-                var statItem = newStatItem(cq);
-                statItem.Type = SynchronizationStatisticType.NewSurvey;
-                stat.Statistics.Add(statItem);
-                return;
-            }
-
-            if (cq.Responsible != null)
-            {
-                if (item.Responsible == null)
-                {
-                    var statItem = newStatItem(cq);
-                    statItem.Type = SynchronizationStatisticType.NewAssignment;
-                    stat.Statistics.Add(statItem);
-                }
-                else if (item.Responsible != null && item.Responsible.Id != cq.Responsible.Id)
-                {
-                    var statItem = newStatItem(cq);
-                    statItem.Type = SynchronizationStatisticType.AssignmentChanged;
-                    statItem.PrevUser = item.Responsible;
-                    stat.Statistics.Add(statItem);
-                }
-            }
-
-            if (item.Status.PublicId != cq.Status.PublicId)
-            {
-                var statItem = newStatItem(cq);
-                statItem.Type = SynchronizationStatisticType.StatusChanged;
-                statItem.PrevStatus = item.Status;
-                stat.Statistics.Add(statItem);
-            }
         }
 
         /// <summary>

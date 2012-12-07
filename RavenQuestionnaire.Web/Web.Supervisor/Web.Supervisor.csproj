@@ -138,6 +138,7 @@
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.Services" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
@@ -151,6 +152,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
@@ -177,6 +179,7 @@
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />

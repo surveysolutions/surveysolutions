@@ -1,11 +1,12 @@
 ﻿@using System.Web.Script.Serialization
 @using Core.Supervisor.Views.Index
+@using Web.Supervisor.Models
 @model IndexView
 @{
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Items.Select(t => t.Title).ToArray());
     var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
-
+    var chartData = ViewBag.GraphData as InterviewerChartModel;
 }
 <p>
     <div id="switcher" class="btn-group">
@@ -43,77 +44,16 @@
         $("#column").click();
     };
     xTitles = @Html.Raw(xTitles);
-    barData = [
-        {
-            name: 'Total',
-            data: @Json.Encode(@Model.Items.Select(t => t.Total).ToArray()) ,
-            stack: 'total'
-        },
-        {
-            name: 'Approved',
-            data: @Json.Encode(@Model.Items.Select(t => t.Approve).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Unassign',
-            data: @Json.Encode(@Model.Items.Select(t => t.Unassign).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Initial',
-            data: @Json.Encode(@Model.Items.Select(t => t.Initial).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Redo',
-            data: @Json.Encode(@Model.Items.Select(t => t.Redo).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Complete',
-            data: @Json.Encode(@Model.Items.Select(t => t.Complete).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Error',
-            data: @Json.Encode(@Model.Items.Select(t => t.Error).ToArray()) ,
-            stack: 'parts'
-        }
-    ];
+    barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
+    scatterData = @Html.Raw(Json.Encode(chartData.ScatterData)) ;
+    
     data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new { y = t.Total, color = colors[index], drilldown = new { name = t.Title, title = string.Join(string.Empty, t.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])), categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" }, data = new[] { t.Unassign, t.Initial, t.Redo, t.Complete, t.Approve, t.Error }, color = colors[index] } }).ToArray())) ;
-
-    // Build the data arrays
-    browserData = [];
-    versionsData = [];
-    for (var i = 0; i < data.length; i++) {
-
-        // add browser data
-        browserData.push({
-                category: xTitles[i],
-                name: data[i].drilldown.name,
-                title: data[i].drilldown.title,
-                y: data[i].y,
-                color: data[i].color
-            });
-
-        // add version data
-        for (var j = 0; j < data[i].drilldown.data.length; j++) {
-            var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
-            versionsData.push({
-                    category: xTitles[i],
-                    name: data[i].drilldown.categories[j],
-                    y: data[i].drilldown.data[j],
-                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
-                });
-        }
-    }
-
     
     pieData = [
         {
             type: 'pie',
             name: 'Totals',
-            data: browserData,
+            data: @Html.Raw(Json.Encode(chartData.BrowserData)),
             size: '60%',
             dataLabels: {
                 formatter: function() {
@@ -126,7 +66,7 @@
         {
             type: 'pie',
             name: 'Statuses',
-            data: versionsData,
+            data: @Html.Raw(Json.Encode(chartData.VersionsData)),
             showInLegend: false,
             innerSize: '60%',
             dataLabels: {
@@ -137,13 +77,7 @@
             }
         }
     ];
-    var scatterData = @Html.Raw(Json.Encode(@Model.Items.Select(
-    (t, index) => new
-        {
-            name = t.Title,
-            color = colors[index],
-            data = new[] { new[] { t.Initial + t.Redo, t.Complete + t.Approve } }
-        }).ToArray())) ;
+
         
     plotSettings = {
         column: {

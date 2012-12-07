@@ -26,9 +26,8 @@ namespace Core.CAPI.Denormalizer
     /// TODO: Update summary.
     /// </summary>
     public class SyncProcessDenormalizer : IEventHandler<NewSynchronizationProcessCreated>, 
-                                           IEventHandler<ProcessEnded>, 
-                                           IEventHandler<SnapshootLoaded>, 
-                                           IEventHandler<NewUserCreated>
+                                           IEventHandler<ProcessEnded>,
+                                           IEventHandler<ProcessStatisticsCalculated>
     {
         #region Constants and Fields
 
@@ -68,28 +67,6 @@ namespace Core.CAPI.Denormalizer
         #region Public Methods and Operators
 
         /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<NewUserCreated> evnt)
-        {
-            SyncProcessStatisticsDocument item = this.docs.GetByGuid(Guid.Empty);
-            if (item == null)
-            {
-                return;
-            }
-
-            var stat = new UserSyncProcessStatistics
-                {
-                    Type = SynchronizationStatisticType.NewUser, 
-                    User = new UserLight(evnt.Payload.PublicKey, evnt.Payload.Name), 
-                };
-            item.Statistics.Add(stat);
-        }
-
-        /// <summary>
         /// Start of sync process
         /// </summary>
         /// <param name="evnt">
@@ -97,12 +74,8 @@ namespace Core.CAPI.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<NewSynchronizationProcessCreated> evnt)
         {
-            this.docs.Store(
-                new SyncProcessStatisticsDocument
-                    {
-                       SyncKey = evnt.Payload.ProcessGuid, SyncType = evnt.Payload.SynckType 
-                    }, 
-                Guid.Empty);
+            var stat = new SyncProcessStatisticsDocument(evnt.Payload.ProcessGuid) { SyncType = evnt.Payload.SynckType };
+            this.docs.Store(stat, stat.PublicKey);
         }
 
         /// <summary>
@@ -113,7 +86,7 @@ namespace Core.CAPI.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<ProcessEnded> evnt)
         {
-            SyncProcessStatisticsDocument item = this.docs.GetByGuid(Guid.Empty);
+            SyncProcessStatisticsDocument item = this.docs.GetByGuid(evnt.Payload.ProcessKey);
             if (item == null)
             {
                 return;
@@ -129,69 +102,16 @@ namespace Core.CAPI.Denormalizer
         /// <param name="evnt">
         /// The evnt.
         /// </param>
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<ProcessStatisticsCalculated> evnt)
         {
-            /*
-            SyncProcessStatisticsDocument item = this.docs.GetByGuid(Guid.Empty);
+            /*SyncProcessStatisticsDocument item = this.docs.GetByGuid(evnt.Payload.ProcessKey);
+
             if (item == null || item.IsEnded)
             {
                 return;
             }
 
-            var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
-            if (document != null)
-            {
-                var stat = new UserSyncProcessStatistics
-                {
-                    Type = SynchronizationStatisticType.NewQuestionnaire,
-                    TemplateId = document.PublicKey,
-                    Title = document.Title
-                };
-                item.Statistics.Add(stat);
-                return;
-            }
-
-            var cq = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (cq == null)
-            {
-                return;
-            }
-
-            {
-                var doc = this.documentItemStore.GetByGuid(cq.PublicKey);
-
-                var stat = new UserSyncProcessStatistics
-                    {
-                        Type = SynchronizationStatisticType.NewSurvey,
-                        User = cq.Responsible,
-                        TemplateId = cq.TemplateId,
-                        Title = cq.Title,
-                        SurveyId = cq.PublicKey,
-                        Status = cq.Status
-                    };
-
-                if (doc == null)
-                {
-                    stat.Type = SynchronizationStatisticType.NewSurvey;
-                }
-                else if (cq.Status.PublicId != doc.Status.PublicId)
-                {
-                    stat.Type = SynchronizationStatisticType.StatusChanged;
-                }
-                else
-                {
-                    if (doc.Responsible == null)
-                    {
-                        stat.Type = SynchronizationStatisticType.NewAssignment;
-                    }
-                    else if (cq.Responsible.Id != doc.Responsible.Id)
-                    {
-                        stat.Type = SynchronizationStatisticType.AssignmentChanged;
-                    }
-                }
-
-                item.Statistics.Add(stat);
-            }
+            item.Statistics.AddRange(evnt.Payload.Statistics);
              */
         }
 

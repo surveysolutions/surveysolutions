@@ -72,7 +72,7 @@ namespace Main.Core.View.SyncProcess
             }
 
             this.Messages.AddRange(statistics.Values);
-            this.PublicKey = process.SyncKey;
+            this.PublicKey = process.PublicKey;
             this.SyncType = process.SyncType;
             this.IsEnded = process.IsEnded;
             this.CreationDate = process.CreationDate;

@@ -346,7 +346,7 @@ namespace Web.CAPI.Controllers
                     {
                         var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
 
-                        process.Import(syncKey);
+                        process.Import(syncProcess);
                     }
                     catch (Exception e)
                     {
@@ -446,11 +446,11 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult PullStatistics()
+        public JsonResult PullStatistics(Guid syncKey)
         {
             var user = this._globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
-                    new SyncProcessInputModel(user == null ? Guid.Empty : user.Id));
+                    new SyncProcessInputModel( syncKey, user == null ? Guid.Empty : user.Id));
             return this.Json(model.Messages, JsonRequestBehavior.AllowGet);
         }
 
