@@ -85,7 +85,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);
 
-            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
+            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, input.Scope);
 
             return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, input.Scope);
         }

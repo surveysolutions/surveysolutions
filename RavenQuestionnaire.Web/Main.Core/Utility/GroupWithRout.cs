@@ -50,8 +50,9 @@ namespace Main.Core.Utility
         /// <param name="propagationKey">
         /// The propagation key.
         /// </param>
-        public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey)
+        public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
         {
+            this.Scope = scope;
             var rout = new List<NodeWithLevel>();
 
             ICompleteGroup group = null;

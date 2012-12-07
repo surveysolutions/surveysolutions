@@ -29,7 +29,7 @@ namespace Main.Core.Tests
             CompleteGroup doc = new CompleteGroup("test");
             doc.Children.Add(new CompleteGroup("sub1"));
             doc.Children.Add(new CompleteGroup("sub2"));
-            GroupWithRout target = new GroupWithRout(doc, null, null);
+            GroupWithRout target = new GroupWithRout(doc, null, null, QuestionScope.Interviewer);
             Assert.IsTrue(target.Group == doc.Children[0]);
             var rout = target.CurrentRout.ToList();
             Assert.IsTrue(rout[0].Group.PublicKey == doc.PublicKey);
@@ -45,7 +45,7 @@ namespace Main.Core.Tests
             CompleteGroup doc = new CompleteGroup("test");
             doc.Children.Add(new CompleteGroup("sub1"));
             doc.Children.Add(new CompleteGroup("sub2"));
-            GroupWithRout target = new GroupWithRout(doc, Guid.NewGuid(), Guid.NewGuid());
+            GroupWithRout target = new GroupWithRout(doc, Guid.NewGuid(), Guid.NewGuid(), QuestionScope.Interviewer);
             Assert.IsTrue(target.Group == doc.Children[0]);
         }
 
@@ -55,7 +55,7 @@ namespace Main.Core.Tests
             CompleteGroup doc = new CompleteGroup("test");
             doc.Children.Add(new CompleteGroup("sub1"));
             doc.Children.Add(new CompleteGroup("sub2"));
-            GroupWithRout target = new GroupWithRout(doc, doc.Children[1].PublicKey, null);
+            GroupWithRout target = new GroupWithRout(doc, doc.Children[1].PublicKey, null, QuestionScope.Interviewer);
             Assert.IsTrue(target.Group == doc.Children[1]);
 
             var rout = target.CurrentRout.ToList();
@@ -72,7 +72,7 @@ namespace Main.Core.Tests
             doc.Children.Add(new CompleteGroup("sub1"));
             var groupForReturn = new CompleteGroup("sub2") {PropagationPublicKey = Guid.NewGuid()};
             doc.Children.Add(groupForReturn);
-            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, groupForReturn.PropagationPublicKey);
+            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, groupForReturn.PropagationPublicKey, QuestionScope.Interviewer);
             Assert.IsTrue(target.Group == groupForReturn);
         }
 
@@ -83,7 +83,7 @@ namespace Main.Core.Tests
             doc.Children.Add(new CompleteGroup("sub1"));
             var groupForReturn = new CompleteGroup("sub2") {PropagationPublicKey = Guid.NewGuid()};
             doc.Children.Add(groupForReturn);
-            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, Guid.NewGuid());
+            GroupWithRout target = new GroupWithRout(doc, groupForReturn.PublicKey, Guid.NewGuid(), QuestionScope.Interviewer);
             Assert.IsTrue(target.Group == doc.Children[0]);
         }
 
