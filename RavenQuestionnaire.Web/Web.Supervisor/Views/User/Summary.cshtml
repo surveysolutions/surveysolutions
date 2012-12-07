@@ -30,7 +30,8 @@
 
     function onPagingClick() {
         $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
-            getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
+             var page = getParameterByName($(this).attr('href'), "page");
+            getTablePage(sortData, page === "" ? 1 : page * 1);
             return false;
         });
     }

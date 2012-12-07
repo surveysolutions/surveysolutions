@@ -14,7 +14,7 @@
             var makePagesClickable = function (config) {
                 
                 $(".pagination li:not(.disabled):not(.active) a").click(function (e) {
-                    var page = getParameterByName($(this).attr('href'), "pager.page");
+                    var page = getParameterByName($(this).attr('href'), "page");
                     getTablePage(
                         config,
                         config.url, {

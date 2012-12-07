@@ -164,6 +164,17 @@ namespace Main.Core.Domain
         #region Methods
 
         /// <summary>
+        /// The on process ended.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnPushStatistics(ProcessStatisticsCalculated e)
+        {
+            this.innerDocument.Statistics = e.Statistics;
+        }
+
+        /// <summary>
         /// The on change aggregate root status.
         /// </summary>
         /// <param name="e">

@@ -77,7 +77,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// The client key.
         /// </param>
         /// <returns>
-        /// The System.Nullable`1[T -&gt; System.Guid].
+        /// The Guid or null.
         /// </returns>
         public Guid? GetLastSyncEventGuid(Guid clientKey)
         {

@@ -116,20 +116,70 @@ namespace DataEntryClient.SycProcess
         /// </returns>
         public List<UserSyncProcessStatistics> CalculateStatistics()
         {
-            foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
+            foreach (var uncommittedEvent in this.IncomeEvents.SelectMany(uncommittedEventStream => uncommittedEventStream))
             {
-                if (!uncommittedEventStream.Any())
-                {
-                    continue;
-                }
-
-                foreach (var uncommittedEvent in uncommittedEventStream)
-                {
-                    this.ProcessEvent(uncommittedEvent);
-                }
+                this.ProcessEvent(uncommittedEvent);
             }
 
             return this.statistics.Statistics;
+        }
+
+        /// <summary>
+        /// The commit.
+        /// </summary>
+        public void Commit()
+        {
+            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (myEventBus == null)
+            {
+                throw new Exception("IEventBus is not properly initialized.");
+            }
+
+            foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
+            {
+                this.eventStore.Store(uncommittedEventStream);
+                myEventBus.Publish(uncommittedEventStream);
+            }
+        }
+
+        /// <summary>
+        /// The merge events.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        public void Merge(IEnumerable<AggregateRootEvent> stream)
+        {
+            IEnumerable<UncommittedEventStream> uncommitedStreams = this.BuildEventStreams(stream);
+
+            var events = uncommitedStreams as UncommittedEventStream[] ?? uncommitedStreams.ToArray();
+
+            this.IncomeEvents = events.Where(s => s.Any()).ToArray();
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The build event streams.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        /// <returns>
+        /// List of UncommittedEventStream
+        /// </returns>
+        protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
+        {
+            return stream
+                    .GroupBy(x => x.EventSourceId)
+                    .Select(g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+
+            // foreach (IGrouping<Guid, AggregateRootEvent> g in stream.GroupBy(x => x.EventSourceId))
+            // {
+            // yield return g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
+            // }
         }
 
         /// <summary>
@@ -165,67 +215,6 @@ namespace DataEntryClient.SycProcess
                 };
                 this.statistics.Statistics.Add(stat);
             }
-        }
-
-        /// <summary>
-        /// The commit.
-        /// </summary>
-        public void Commit()
-        {
-            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-            if (myEventBus == null)
-            {
-                throw new Exception("IEventBus is not properly initialized.");
-            }
-
-            foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
-            {
-                if (!uncommittedEventStream.Any())
-                {
-                    continue;
-                }
-
-                this.eventStore.Store(uncommittedEventStream);
-                myEventBus.Publish(uncommittedEventStream);
-            }
-        }
-
-        /// <summary>
-        /// The merge events.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        public void Merge(IEnumerable<AggregateRootEvent> stream)
-        {
-            IEnumerable<UncommittedEventStream> uncommitedStreams = this.BuildEventStreams(stream);
-
-            this.IncomeEvents = uncommitedStreams as UncommittedEventStream[] ?? uncommitedStreams.ToArray();
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The build event streams.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        /// <returns>
-        /// List of UncommittedEventStream
-        /// </returns>
-        protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
-        {
-            return
-                stream.GroupBy(x => x.EventSourceId).Select(
-                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
-
-            // foreach (IGrouping<Guid, AggregateRootEvent> g in stream.GroupBy(x => x.EventSourceId))
-            // {
-            // yield return g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
-            // }
         }
 
         /// <summary>

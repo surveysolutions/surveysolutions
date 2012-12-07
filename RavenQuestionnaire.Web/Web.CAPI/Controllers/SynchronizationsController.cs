@@ -19,7 +19,6 @@ namespace Web.CAPI.Controllers
     using Core.CAPI.Views.ExporStatistics;
     using Core.CAPI.Views.Synchronization;
 
-    using DataEntryClient;
     using DataEntryClient.CompleteQuestionnaire;
 
     using Ionic.Zip;
@@ -30,14 +29,12 @@ namespace Web.CAPI.Controllers
     using Main.Core.Events;
     using Main.Core.View;
     using Main.Core.View.SyncProcess;
-    using Main.Core.View.User;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
     using NLog;
 
-    using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
     using Questionnaire.Core.Web.WCF;

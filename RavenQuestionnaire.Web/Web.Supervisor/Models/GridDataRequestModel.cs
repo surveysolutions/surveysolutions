@@ -67,6 +67,14 @@ namespace Web.Supervisor.Models
     public class PagerData
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="PagerData"/> class.
+        /// </summary>
+        public PagerData()
+        {
+            this.Page = 1;
+            this.PageSize = 20;
+        }
+        /// <summary>
         /// Gets or sets Page.
         /// </summary>
         public int Page { get; set; }

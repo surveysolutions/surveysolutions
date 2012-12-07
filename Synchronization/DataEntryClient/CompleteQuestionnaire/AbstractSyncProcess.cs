@@ -34,7 +34,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
-    public abstract class AbstractSyncProcess : ICompleteQuestionnaireSync
+    public abstract class AbstractSyncProcess : ISyncProcess
     {
         #region Constants and Fields
 
@@ -109,7 +109,7 @@ namespace DataEntryClient.CompleteQuestionnaire
 
                 var statistics = syncProcess.CalculateStatistics();
 
-                //this.Invoker.Execute(new PushStatisticsCommand(syncKey, statistics));
+                this.Invoker.Execute(new PushStatisticsCommand(this.ProcessGuid, statistics));
 
                 syncProcess.Commit();
 
@@ -188,7 +188,5 @@ namespace DataEntryClient.CompleteQuestionnaire
         }
 
         #endregion
-
-        
     }
 }
