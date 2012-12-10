@@ -155,7 +155,10 @@ namespace RavenQuestionnaire.Web.Controllers
                 case QuestionType.MultyOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
                 case QuestionType.SingleOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
                 case QuestionType.YesNo: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
-                case QuestionType.AutoPropagate: return this.PartialView("_EditAutoPropagates", new AutoPropagateQuestionView(view));
+                case QuestionType.AutoPropagate:
+                    this.ViewBag.Group = view.Groups;
+                    this.ViewBag.CurrentGroup = view.Parent;
+                    return this.PartialView("_EditAutoPropagates", new AutoPropagateQuestionView(view));
                 default:
                     return Content("<div id=\"additionalInfo\"></div>");
             }
