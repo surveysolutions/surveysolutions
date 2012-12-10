@@ -97,5 +97,16 @@ namespace Main.Core.Entities
                 return (this.TemplateId.GetHashCode() * 397) ^ (this.Title != null ? this.Title.GetHashCode() : 0);
             }
         }
+
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>
+        /// The string
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}]", this.Title, this.TemplateId);
+        }
     }
 }

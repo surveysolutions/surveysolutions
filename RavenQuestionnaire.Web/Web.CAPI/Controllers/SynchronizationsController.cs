@@ -365,7 +365,7 @@ namespace Web.CAPI.Controllers
         /// The import async.
         /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public Guid? ImportAsync(HttpPostedFileBase uploadFile)
+        public Guid? Import(HttpPostedFileBase uploadFile)
         {
             if (uploadFile == null && this.Request.Files.Count > 0)
             {
@@ -387,6 +387,23 @@ namespace Web.CAPI.Controllers
             var zip = ZipFile.Read(uploadFile.InputStream);
 
             Guid syncProcess = Guid.NewGuid();
+
+            WaitCallback callback = (state) =>
+            {
+                try
+                {
+                    var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+
+                    process.Import(new Guid(), zip);
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal("Error on import ", e);
+                }
+            };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            /*
             AsyncQuestionnaireUpdater.Update(AsyncManager,
                 () =>
                 {
@@ -401,6 +418,7 @@ namespace Web.CAPI.Controllers
                         logger.Fatal("Error on import ", e);
                     }
                 });
+             */
             return syncProcess;
         }
 

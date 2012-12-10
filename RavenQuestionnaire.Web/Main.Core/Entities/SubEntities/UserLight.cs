@@ -116,6 +116,17 @@ namespace Main.Core.Entities.SubEntities
             }
         }
 
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>
+        /// The string
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}]", this.Name, this.Id);
+        }
+
         #endregion
     }
 }

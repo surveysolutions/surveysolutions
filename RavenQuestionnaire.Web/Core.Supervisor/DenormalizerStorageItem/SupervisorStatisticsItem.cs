@@ -34,12 +34,12 @@ namespace Core.Supervisor.DenormalizerStorageItem
         /// <param name="document">
         /// The document.
         /// </param>
-        public SupervisorStatisticsItem(CompleteQuestionnaireDocument document) :this()
+        public SupervisorStatisticsItem(CompleteQuestionnaireDocument document)
+            : this()
         {
             this.User = document.Responsible ?? new UserLight(Guid.Empty, string.Empty);
             this.Template = new TemplateLight(document.TemplateId, document.Title);
             this.Status = document.Status;
-            this.Surveys.Add(document.PublicKey);
         }
 
         /// <summary>

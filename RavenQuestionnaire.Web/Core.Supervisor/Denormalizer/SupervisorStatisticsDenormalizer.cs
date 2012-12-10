@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireBrowseItemDenormalizer.cs" company="">
-//   
+// <copyright file="SupervisorStatisticsDenormalizer.cs" company="The World Bank">
+//   Complete Questionnaire Browse Item Denormalizer
 // </copyright>
 // <summary>
 //   The complete questionnaire browse item denormalizer.
@@ -37,7 +37,12 @@ namespace Core.Supervisor.Denormalizer
         /// <summary>
         /// The document item store.
         /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> documentItemStore;
+        private readonly IDenormalizerStorage<SupervisorStatisticsItem> statistics;
+
+        /// <summary>
+        /// Hash of statistics key to easier find previous CQ state
+        /// </summary>
+        private readonly IDenormalizerStorage<StatisticsItemKeysHash> keysHash;
 
         /// <summary>
         /// The document item store.
@@ -51,18 +56,23 @@ namespace Core.Supervisor.Denormalizer
         /// <summary>
         /// Initializes a new instance of the <see cref="SupervisorStatisticsDenormalizer"/> class. 
         /// </summary>
-        /// <param name="documentItemStore">
+        /// <param name="statistics">
         /// The document item store.
         /// </param>
         /// <param name="surveys">
         /// The surveys.
         /// </param>
+        /// <param name="keysHash">
+        /// Statistics storage hash
+        /// </param>
         public SupervisorStatisticsDenormalizer(
-            IDenormalizerStorage<SupervisorStatisticsItem> documentItemStore, 
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys)
+            IDenormalizerStorage<SupervisorStatisticsItem> statistics, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
+            IDenormalizerStorage<StatisticsItemKeysHash> keysHash)
         {
-            this.documentItemStore = documentItemStore;
+            this.statistics = statistics;
             this.surveys = surveys;
+            this.keysHash = keysHash;
         }
 
         #endregion
@@ -110,18 +120,13 @@ namespace Core.Supervisor.Denormalizer
             {
                 return;
             }
+
             var userId = doc.Responsible == null ? Guid.Empty : doc.Responsible.Id;
 
-            Guid oldKey = this.GetKey(doc.TemplateId, evnt.Payload.PreviousStatus.PublicId, userId);
-            SupervisorStatisticsItem old = this.documentItemStore.GetByGuid(oldKey);
-            if (old != null)
-            {
-                old.Surveys.Remove(evnt.Payload.CompletedQuestionnaireId);
-                this.documentItemStore.Store(old, oldKey);
-            }
+            this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
             Guid key = this.GetKey(doc.TemplateId, evnt.Payload.Status.PublicId, userId);
-            SupervisorStatisticsItem item = this.documentItemStore.GetByGuid(key)
+            SupervisorStatisticsItem item = this.statistics.GetByGuid(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
@@ -130,7 +135,9 @@ namespace Core.Supervisor.Denormalizer
                                                     Status = evnt.Payload.Status
                                                 };
             item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
-            this.documentItemStore.Store(item, key);
+           
+            this.statistics.Store(item, key);
+            this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
         }
 
         /// <summary>
@@ -147,19 +154,10 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            Guid oldKey = this.GetKey(
-                doc.TemplateId,
-                doc.Status.PublicId,
-                evnt.Payload.PreviousResponsible == null ? Guid.Empty : evnt.Payload.PreviousResponsible.Id);
-            SupervisorStatisticsItem old = this.documentItemStore.GetByGuid(oldKey);
-            if (old != null)
-            {
-                old.Surveys.Remove(evnt.Payload.CompletedQuestionnaireId);
-                this.documentItemStore.Store(old, oldKey);
-            }
+            this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
             Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, evnt.Payload.Responsible.Id);
-            SupervisorStatisticsItem item = this.documentItemStore.GetByGuid(key)
+            SupervisorStatisticsItem item = this.statistics.GetByGuid(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
@@ -167,8 +165,10 @@ namespace Core.Supervisor.Denormalizer
                                                     User = evnt.Payload.Responsible, 
                                                     Status = doc.Status
                                                 };
+
             item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
-            this.documentItemStore.Store(item, key);
+            this.statistics.Store(item, key);
+            this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, doc.CompleteQuestionnaireId);
         }
 
         #endregion
@@ -183,14 +183,17 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
         {
-            var browseItem = new SupervisorStatisticsItem(document);
+            this.RemoveOldStatistics(document.PublicKey);
 
             Guid key = this.GetKey(
                 document.TemplateId, 
                 document.Status.PublicId, 
                 document.Responsible == null ? Guid.Empty : document.Responsible.Id);
 
-            this.documentItemStore.Store(browseItem, key);
+            SupervisorStatisticsItem item = this.statistics.GetByGuid(key) ?? new SupervisorStatisticsItem(document);
+            item.Surveys.Add(document.PublicKey);
+            this.statistics.Store(item, key);
+            this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, document.PublicKey);
         }
 
         /// <summary>
@@ -216,6 +219,25 @@ namespace Core.Supervisor.Denormalizer
             return new Guid(data);
         }
 
+        /// <summary>
+        /// Removes CQ guid from previous statistics item
+        /// </summary>
+        /// <param name="completedQuestionnaireId">
+        /// The completed questionnaire id.
+        /// </param>
+        private void RemoveOldStatistics(Guid completedQuestionnaireId)
+        {
+            var oldKey = this.keysHash.GetByGuid(completedQuestionnaireId);
+
+            if (oldKey == null)
+            {
+                return;
+            }
+
+            var old = this.statistics.GetByGuid(oldKey.StorageKey);
+            old.Surveys.Remove(completedQuestionnaireId);
+            this.statistics.Store(old, oldKey.StorageKey);
+        }
         #endregion
     }
 }
