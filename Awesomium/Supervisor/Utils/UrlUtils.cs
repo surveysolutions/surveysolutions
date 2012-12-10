@@ -77,12 +77,12 @@ namespace Browsing.Supervisor.Utils
             return String.Empty;
         }
 
-        public string GetPushStatisticUrl()
+        public string GetPushStatisticUrl(Guid syncProcessId)
         {
             return String.Empty;
         }
 
-        public string GetPullStatisticUrl()
+        public string GetPullStatisticUrl(Guid syncProcessId)
         {
             return String.Empty;
         }

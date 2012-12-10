@@ -18,7 +18,6 @@ namespace Synchronization.Core.SynchronizationFlow
         private readonly IRequesProcessor _requestProcessor;
         private readonly IUrlUtils _urlUtils;
         private AutoResetEvent stopRequested = new AutoResetEvent(false);
-        private Guid processId = Guid.Empty;
 
         #endregion
 
@@ -37,7 +36,7 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 this.stopRequested.Reset();
 
-                this.processId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+                SyncProcessId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPushUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
 
                 WaitForEndProcess(OnSyncProgressChanged, SyncType.Push, direction);
             }
@@ -54,7 +53,7 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 this.stopRequested.Reset();
 
-                this.processId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
+                SyncProcessId = this._requestProcessor.Process<Guid>(this._urlUtils.GetPullUrl(this.SettingsProvider.Settings.ClientId), default(Guid));
 
                 WaitForEndProcess(OnSyncProgressChanged, SyncType.Pull, direction);
             }
@@ -67,17 +66,12 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnStop()
         {
-            if (this.processId != Guid.Empty && !this.stopRequested.WaitOne(100))
-            {
-                var endProcess = this._requestProcessor.Process<bool>(this._urlUtils.GetEndProcessUrl(this.processId),
-                                                                      false);
-                if (endProcess)
-                {
-                    this.processId = Guid.Empty;
-                    this.stopRequested.Set();
-                }
-            }
+            if (SyncProcessId == Guid.Empty || !this.stopRequested.WaitOne(100))
+                return;
 
+            var endProcess = this._requestProcessor.Process<bool>(this._urlUtils.GetEndProcessUrl(SyncProcessId), false);
+            if (endProcess)
+                this.stopRequested.Set();
         }
 
         protected override IList<ServiceException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
@@ -121,7 +115,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region utility methods
 
-        protected void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        private void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
 
@@ -132,14 +126,12 @@ namespace Synchronization.Core.SynchronizationFlow
                 if (this.stopRequested.WaitOne(100))
                     throw new CancelledServiceException("Network synchronization is cancelled");
 
-                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(this.processId), -1);
+                percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(SyncProcessId), -1);
                 if (percentage < 0)
                     throw new SynchronizationException("Network synchronization is failed");
 
                 eventRiser(new SynchronizationEventArgs(new SyncStatus(syncType, direction, percentage, null)));
             }
-
-            this.processId = Guid.Empty;
         }
 
         #endregion

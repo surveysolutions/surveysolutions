@@ -32,9 +32,11 @@ namespace Browsing.CAPI.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
-        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action)
+        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action, Guid syncProcessId)
         {
-            return action==SyncType.Push ? new SynchronizationStatisticEventArgs(GetPushStatistics()) : new SynchronizationStatisticEventArgs(GetPullStatistics());
+            return action==SyncType.Push ? 
+                new SynchronizationStatisticEventArgs(GetPushStatistics(syncProcessId)) : 
+                new SynchronizationStatisticEventArgs(GetPullStatistics(syncProcessId));
         }
 
         #region Helpers
@@ -46,12 +48,12 @@ namespace Browsing.CAPI.Synchronization
             return  JsonConvert.DeserializeObject<List<SyncStatisticInfo>>(result, settings);
         }
 
-        private List<string> GetPushStatistics()
+        private List<string> GetPushStatistics(Guid syncProcessId)
         {
             var ret = new List<string>();
             try
             {
-                var items = GetStatItems(UrlUtils.GetPushStatisticUrl());
+                var items = GetStatItems(UrlUtils.GetPushStatisticUrl(syncProcessId));
                 if (items.Count > 0)
                     foreach (var syncStatisticInfo in items)
                     {
@@ -71,12 +73,12 @@ namespace Browsing.CAPI.Synchronization
             
         }
 
-        private List<string> GetPullStatistics()
+        private List<string> GetPullStatistics(Guid syncProcessId)
         {
             var ret = new List<string>();
             try
             {
-                var items = GetStatItems(UrlUtils.GetPullStatisticUrl());
+                var items = GetStatItems(UrlUtils.GetPullStatisticUrl(syncProcessId));
                 var line = items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Aggregate("New interviewers were received: ", (current, syncStatisticInfo) => current + syncStatisticInfo.UserName+", ");
 
                 if (items.Where(syncStatisticInfo => syncStatisticInfo.IsNew).Count() > 0) ret.Add(line.Substring(0, line.Length - 2));

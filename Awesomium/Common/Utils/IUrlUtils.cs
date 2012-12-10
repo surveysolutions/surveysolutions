@@ -17,9 +17,9 @@ namespace Common.Utils
         string GetCheckPushPrerequisitesUrl();
         string GetCurrentUserGetUrl();
         string GetRegistrationCapiPath();
-        string GetEndProcessUrl(Guid id);
-        string GetPushStatisticUrl();
-        string GetPullStatisticUrl();
+        string GetEndProcessUrl(Guid syncProcessId);
+        string GetPushStatisticUrl(Guid syncProcessId);
+        string GetPullStatisticUrl(Guid syncProcessId);
         string GetAuthorizedIDsUrl(Guid registratorId);
         string GetSupervisorService();
     }
