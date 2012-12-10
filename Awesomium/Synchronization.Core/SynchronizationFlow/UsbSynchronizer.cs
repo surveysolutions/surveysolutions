@@ -8,6 +8,7 @@ using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using System.ComponentModel;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -65,6 +66,8 @@ namespace Synchronization.Core.SynchronizationFlow
                                 bool errornous = e.Error != null;
                                 bool cancelled = e.Cancelled;
                                 int percents = errornous || cancelled ? 0 : 100;
+
+                                //SyncProcessId = new Guid(e.Result);
 
                                 try
                                 {
@@ -127,7 +130,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override void OnPull(SyncDirection direction)
         {
             var drive = GetDrive(); // accept driver to flash on
-
+  
             try
             {
                 var usbArchive = new UsbFileArchive(drive, direction == SyncDirection.Down);
@@ -159,6 +162,14 @@ namespace Synchronization.Core.SynchronizationFlow
                                 bool errornous = e.Error != null;
                                 bool cancelled = e.Cancelled;
                                 int percents = errornous || cancelled ? 0 : 100;
+
+                                try
+                                {
+                                    SyncProcessId = new Guid(System.Text.Encoding.UTF8.GetString(e.Result));
+                                }
+                                catch
+                                {
+                                }
 
                                 try
                                 {

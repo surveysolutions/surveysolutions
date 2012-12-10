@@ -45,7 +45,7 @@ namespace Browsing.Supervisor.Synchronization
             syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
         }
 
-        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action)
+        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action, Guid syncProcessId)
         {
             return null;
         }

@@ -8,12 +8,25 @@ namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
-        protected readonly ISettingsProvider SettingsProvider;
+        #region C-tor
 
-        public AbstractSynchronizer(ISettingsProvider clientSettingsprovider)
+        protected AbstractSynchronizer(ISettingsProvider clientSettingsprovider)
         {
             this.SettingsProvider = clientSettingsprovider;
         }
+
+        #endregion
+
+        #region Properties
+
+        protected ISettingsProvider SettingsProvider { get; private set; }
+
+        /// <summary>
+        /// Synchronization process identifier
+        /// </summary>
+        protected Guid SyncProcessId { get; set; }
+
+        #endregion
 
         #region Helpers
 
@@ -30,7 +43,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract void OnPull(SyncDirection direction);
         protected abstract void OnStop();
         protected abstract IList<ServiceException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
-        
+
         // The event-invoking method that derived classes can override.
         protected virtual void OnSyncProgressChanged(SynchronizationEventArgs e)
         {
@@ -57,26 +70,38 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
 
-        public void Push(SyncDirection direction)
+        public bool IsActive { get; private set; }
+
+        public Guid Push(SyncDirection direction)
         {
             try
             {
+                SyncProcessId = Guid.Empty;
+                
                 OnPush(direction);
+
+                return SyncProcessId;
             }
             catch
             {
+                SyncProcessId = Guid.Empty;
                 throw;
             }
         }
 
-        public void Pull(SyncDirection direction)
+        public Guid Pull(SyncDirection direction)
         {
             try
             {
+                SyncProcessId = Guid.Empty;
+                
                 OnPull(direction);
+
+                return SyncProcessId;
             }
             catch
             {
+                SyncProcessId = Guid.Empty;
                 throw;
             }
         }
@@ -91,14 +116,16 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 throw;
             }
+            finally
+            {
+                SyncProcessId = Guid.Empty;
+            }
         }
 
         public void UpdateStatus()
         {
             IsActive = OnUpdateStatus();
         }
-
-        public bool IsActive { get; private set; }
 
         public abstract string GetSuccessMessage(SyncType syncAction, SyncDirection direction);
 

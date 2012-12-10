@@ -75,19 +75,19 @@ namespace Browsing.CAPI.Utils
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetRegistrationCapiPath);
         }
 
-        public string GetEndProcessUrl(Guid id)
+        public string GetEndProcessUrl(Guid syncProcessId)
         {
-            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetEndProcessCapiPath, id);
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetEndProcessCapiPath, syncProcessId);
         }
 
-        public string GetPushStatisticUrl()
+        public string GetPushStatisticUrl(Guid syncProcessId)
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetPushStatisticCapiPath);
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetPushStatisticCapiPath, syncProcessId);
         }
 
-        public string GetPullStatisticUrl()
+        public string GetPullStatisticUrl(Guid syncProcessId)
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetPullStatisticCapiPath);
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.GetPullStatisticCapiPath, syncProcessId);
         }
      
         public string GetAuthorizedIDsUrl(Guid registratorId)

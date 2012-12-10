@@ -125,12 +125,13 @@ namespace Synchronization.Core
 
             ServiceException error = null;
             string log = null;
+            Guid syncProcessId = Guid.Empty;
 
             try
             {
                 BgnOfSync(this, new SynchronizationEventArgs(new SyncStatus(syncType, direction, 0, null)));
                 CheckPrerequisites(syncType, direction);
-                log = Sync(syncType, direction);
+                log = Sync(syncType, direction, out syncProcessId);
             }
             catch (CancelledServiceException ex)
             {
@@ -156,28 +157,28 @@ namespace Synchronization.Core
                 EndOfSync(this, new SynchronizationCompletedEventArgs(new SyncStatus(syncType, direction, 100, error), log));
                 if (error == null)
                 {
-                    var statEvent = OnGetStatisticsAfterSyncronization(syncType);
+                    var statEvent = OnGetStatisticsAfterSyncronization(syncType, syncProcessId);
                     if (statEvent != null)
                         StatisticAccepted(this, statEvent);
                 }
             }
         }
 
-        private string Sync(SyncType action, SyncDirection direction)
+        private string Sync(SyncType action, SyncDirection direction, out Guid syncProcessId)
         {
             IList<Exception> errorList = new List<Exception>();
+
+            Guid processId = Guid.Empty;
+
             var succesSynchronizer = ExecuteAction(
                     s =>
                     {
-                        if (action == SyncType.Pull)
-                            s.Pull(direction);
-                        else
-                        {
-                            s.Push(direction);
-                        }
+                        processId = action == SyncType.Pull ? s.Pull(direction) : s.Push(direction);
                     },
                     errorList
                 );
+
+            syncProcessId = processId;
 
             var result = new StringBuilder();
             foreach (Exception synchronizationException in errorList)
@@ -189,7 +190,6 @@ namespace Synchronization.Core
 
             return result.ToString();
         }
-
 
         #endregion
 
@@ -257,7 +257,7 @@ namespace Synchronization.Core
 
         protected abstract void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider);
 
-        protected abstract SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action);
+        protected abstract SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action, Guid syncProcessId);
 
         #endregion
     }
