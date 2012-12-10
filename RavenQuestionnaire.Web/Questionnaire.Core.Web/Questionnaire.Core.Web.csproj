@@ -117,7 +117,6 @@
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\DataExport.cs" />
     <Compile Include="Export\ExportImportEvent.cs" />
-    <Compile Include="Export\IDataExport.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />

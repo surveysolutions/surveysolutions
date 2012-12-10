@@ -93,10 +93,10 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 input.CurrentGroupPublicKey = firstGroup.PublicKey;
             }
 
-            var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);
+            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc);*/
 
-            var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
+            var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, QuestionScope.Supervisor);
 
             var result = this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, QuestionScope.Supervisor);
             result.Title = doc.Title;

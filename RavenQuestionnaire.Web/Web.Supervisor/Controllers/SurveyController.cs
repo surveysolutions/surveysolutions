@@ -93,6 +93,7 @@ namespace Web.Supervisor.Controllers
         {
             ViewBag.ActivePage = MenuItem.Surveys;
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
+            ViewBag.GraphData = new InterviewerChartModel(model);
             return this.View(model);
         }
 
@@ -199,7 +200,7 @@ namespace Web.Supervisor.Controllers
         {
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-         new CompleteQuestionnaireStatisticViewInputModel(id));
+         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
@@ -207,7 +208,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult StatusHistory(Guid id)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-         new CompleteQuestionnaireStatisticViewInputModel(id));
+         new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.PartialView("_StatusHistory", stat.StatusHistory);
         }
         /// <summary>
@@ -242,7 +243,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
             }
             else
@@ -257,7 +258,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
                 return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
             }
         }
@@ -306,7 +307,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Approve(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id));
+                    new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
@@ -332,7 +333,7 @@ namespace Web.Supervisor.Controllers
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
@@ -416,10 +417,9 @@ namespace Web.Supervisor.Controllers
             CompleteQuestionnaireStatisticView stat = null;
 
             var user = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(value));
-            stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(new CompleteQuestionnaireStatisticViewInputModel(cqId));
+            stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(new CompleteQuestionnaireStatisticViewInputModel(cqId) { Scope = QuestionScope.Supervisor });
             responsible = (user != null) ? new UserLight(user.PublicKey, user.UserName) : new UserLight();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
             if (stat.Status.PublicId == SurveyStatus.Unassign.PublicId)
             {
                 stat.Status = SurveyStatus.Initial;
@@ -432,6 +432,7 @@ namespace Web.Supervisor.Controllers
                         });
             }
 
+            commandService.Execute(new ChangeAssignmentCommand(cqId, responsible));
 
             if (Request.IsAjaxRequest())
             {
@@ -533,6 +534,7 @@ namespace Web.Supervisor.Controllers
                                 UserId = data.UserId
                             };
             var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
+            ViewBag.GraphData = new InterviewerChartModel(model);
             return this.PartialView("_Table", model);
         }
 
@@ -621,7 +623,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Redo(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id));
+                    new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = id, TemplateId = template, Statistic = stat, StatusId = SurveyStatus.Redo.PublicId });
         }
 
@@ -655,7 +657,7 @@ namespace Web.Supervisor.Controllers
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 

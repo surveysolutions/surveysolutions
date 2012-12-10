@@ -91,6 +91,7 @@ namespace Main.Core
             if(embStorage==null ||embStorage.WasDisposed)
             {
                 embStorage = new EmbeddableDocumentStore() { DataDirectory = this.storage, UseEmbeddedHttpServer = false };
+                embStorage.ResourceManagerId = Guid.NewGuid();
             }
             return embStorage;
         }

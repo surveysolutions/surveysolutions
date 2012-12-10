@@ -15,39 +15,30 @@
         <button id="pie" class="btn">Pie</button>
     </div>
 </p>
-
 <script type="text/javascript">
 
     init = function() {
+        var containerSettings = {
+            column: { 'height': '400px' },
+            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
+            pie: { 'height': '600px' }
+        };
+
         var active = "btn-primary";
-        $("#column").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', '400px');
-            drawPlot('column');
+
+        $('#switcher button').each(function(i, el) {
+            var self = this;
+            $(self).click(function() {
+                var id = $(self).attr('id');
+                if (!$(self).hasClass(active)) {
+                    $("#switcher .btn").removeClass(active);
+                    $(self).addClass(active);
+                }
+                $('#container').css(containerSettings[id]);
+                drawPlot(id);
+            });
         });
-
-        $("#bar").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', 80*@(@Model.Items.Count) + 'px');
-            drawPlot('bar');
-        });
-
-        $("#pie").click(function() {
-            if (!$(this).hasClass(active)) {
-                $("#switcher .btn").removeClass(active);
-                $(this).addClass(active);
-            }
-            $('#container').css('height', '600px');
-            drawPlot('pie');
-        });
-
-
+       
         $("#column").click();
     };
     xTitles = @Html.Raw(xTitles);
@@ -203,6 +194,6 @@
             });
     };
 </script>
-
-<div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px; margin: 0 auto">
+<div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px;
+    margin: 0 auto">
 </div>

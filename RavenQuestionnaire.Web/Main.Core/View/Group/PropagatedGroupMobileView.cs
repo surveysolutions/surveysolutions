@@ -33,7 +33,7 @@ namespace Main.Core.View.Group
         /// <param name="group">
         /// The group.
         /// </param>
-        public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group)
+        public PropagatedGroupMobileView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, QuestionScope scope)
         {
             /* if (!group.PropogationPublicKey.HasValue)
                  throw new ArgumentException("Group is not propagated");*/
@@ -46,14 +46,12 @@ namespace Main.Core.View.Group
                                            <ICompleteQuestion>().Where(q => q.Capital).Select(
                                                q => q.GetAnswerString() + " ")) + " " + group.Title;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
-            
+
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             this.Description = group.Description;
             this.Children =
-                group.Children.OfType<ICompleteQuestion>().Select(
+                group.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= scope).Select(
                     q => new CompleteQuestionView(doc, q) as ICompositeView).ToList();
-
-                
         }
         #endregion
 

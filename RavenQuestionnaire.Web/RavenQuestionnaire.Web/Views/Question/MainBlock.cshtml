@@ -3,7 +3,10 @@
 @using Main.Core.Entities.SubEntities
 
 @model Main.Core.View.Question.QuestionView
-
+@{
+    var groups = ViewBag.Group as Dictionary<string, Guid>;
+    ViewBag.Group = groups;
+}
 
 @using (Html.BeginForm("Save", "Question"))
 {

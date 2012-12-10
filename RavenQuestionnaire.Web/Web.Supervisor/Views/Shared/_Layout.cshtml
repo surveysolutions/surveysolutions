@@ -31,30 +31,29 @@
         //Html.RequiresJs("bootstrap-editable-inline.js", "Scripts", 32);
         Html.RequiresJs("highcharts.js", "Scripts", 40);
         Html.RequiresJs("sorter.js", "Scripts", 50);
+        Html.RequiresJs("shorten.js", "Scripts", 60);
+        var page = ViewBag.ActivePage ?? MenuItem.Logon;
     }
+    
 </head>
 <body>
     <div class="navbar  navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="brand" href="@Url.Action("GotoBrowser","Survey")">Home</a>
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
-                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                </a>
+                <a class="brand" href="@Url.Action("GotoBrowser", "Survey")">Home</a> <a class="btn btn-navbar"
+                    data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
+                    <span class="icon-bar"></span><span class="icon-bar"></span></a>
                 <div class="nav-collapse ">
                     @if (Request.IsAuthenticated)
                     {
                         <ul id="menu" class="nav" role="menu">
-                            <li class="@(ViewBag.ActivePage == MenuItem.Surveys ? "active" : "")" >
-                                <a href="@Url.Action("Index", "Survey")"><i class="icon-filter"></i> by Interviewers</a>
-                            </li>
-                            <li class="@(ViewBag.ActivePage == MenuItem.Interviewers ? "active" : "")">
-                                <a href="@Url.Action("Summary", "User")"><i class="icon-filter"></i> by Surveys</a>
-                            </li>
-                            <li class="@(ViewBag.ActivePage == MenuItem.Statuses ? "active" : "")">
-                                <a href="@Url.Action("Status", "Survey")"><i class="icon-filter"></i> by Statuses</a>
-                            </li>
-                            <li class="@(ViewBag.ActivePage == MenuItem.Docs ? "active" : "")">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
+                                <i class="icon-filter"></i>by Interviewers</a> </li>
+                            <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "User")">
+                                <i class="icon-filter"></i>by Surveys</a> </li>
+                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
+                                <i class="icon-filter"></i>by Statuses</a> </li>
+                            <li class="@(page == MenuItem.Docs ? "active" : "")">
                                 @Html.ActionLink("Documents", "Documents", "Survey")
                             </li>
                         </ul>
@@ -65,14 +64,13 @@
                             <ul class="nav pull-right" role="menu">
                                 <li class="navbar-text">@User.Identity.Name</li>
                                 <li class="divider-vertical"></li>
-                                <li class="@(ViewBag.ActivePage == MenuItem.Administration ? "active" : "")" class="dropdown">
+                                <li class="@(page == MenuItem.Administration ? "active" : "")" class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
                                     </b></a>
                                     <ul class="dropdown-menu">
                                         <li>@Html.ActionLink("Users", "Index", "User")</li>
                                     </ul>
                                 </li>
-                                
                             </ul>
                         </div>
                     }
@@ -86,14 +84,20 @@
         </div>
     </div>
     <script type="text/javascript">
-        $('[rel=tooltip]').tooltip();
-        $('.dropdown-toggle').dropdown();
-        $("a[rel=popover]")
+        $(document).ready(function () {
+            $('[rel=tooltip]').tooltip();
+            $('.dropdown-toggle').dropdown();
+            $("a[rel=popover]")
             .popover()
             .click(function (e) {
                 e.preventDefault();
             });
-
+        });
+        $.expander.defaults.slicePoint = 150;
+        $.expander.defaults.expandEffect = 'show';
+        $.expander.defaults.collapseEffect = 'hide';
+        $.expander.defaults.collapseSpeed = 0;
+        $.expander.defaults.expandSpeed = 0;
     </script>
 </body>
 </html>

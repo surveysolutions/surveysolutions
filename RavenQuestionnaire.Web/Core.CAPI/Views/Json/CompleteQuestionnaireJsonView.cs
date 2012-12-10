@@ -36,13 +36,13 @@ namespace Core.CAPI.Views.Json
         /// <param name="currentGroup">
         /// The current group.
         /// </param>
-        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
+        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, QuestionScope scope)
             : this()
         {
             this.PublicKey = doc.PublicKey;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            this.CollectAll(doc, currentGroup as CompleteGroup);
+            this.CollectAll(doc, currentGroup as CompleteGroup, scope);
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace Core.CAPI.Views.Json
         /// <param name="doc">
         /// The doc.
         /// </param>
-        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc)
+        public CompleteQuestionnaireJsonView(CompleteQuestionnaireStoreDocument doc, QuestionScope scope)
             : this()
         {
             this.PublicKey = doc.PublicKey;
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
             var group = new CompleteGroup { Children = doc.Children.Where(c => c is ICompleteQuestion).ToList() };
-            this.CollectAll(doc, group);
+            this.CollectAll(doc, group, scope);
         }
 
         /// <summary>
@@ -137,7 +137,7 @@ namespace Core.CAPI.Views.Json
         /// <param name="group">
         /// The group.
         /// </param>
-        private void CollectAll(CompleteQuestionnaireStoreDocument doc, CompleteGroup group)
+        private void CollectAll(CompleteQuestionnaireStoreDocument doc, CompleteGroup group, QuestionScope scope)
         {
             var queue = new Queue<ICompleteGroup>();
             queue.Enqueue(group);
@@ -167,7 +167,7 @@ namespace Core.CAPI.Views.Json
                 foreach (CompleteGroup g in innerGroups)
                 {
                     queue.Enqueue(g);
-                    this.InnerGroups.Add(new CompleteGroupMobileView(doc, g));
+                    this.InnerGroups.Add(new CompleteGroupMobileView(doc, g, scope));
                 }
             }
 

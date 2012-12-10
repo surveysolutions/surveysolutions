@@ -33,7 +33,7 @@ namespace Main.Core
                     result = context.Kernel.Get<PersistentDenormalizer<T>>();
                 else
                 {
-                    result = context.Kernel.Get<SolidPersistentDenormalizer<T>>();
+                    result = context.Kernel.Get<InMemoryDenormalizer<T>>();
                 }
             }
             catch (Exception ex)

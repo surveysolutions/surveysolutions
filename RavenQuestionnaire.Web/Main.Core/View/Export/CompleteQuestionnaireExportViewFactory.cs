@@ -118,7 +118,8 @@ namespace Main.Core.View.Export
             var subObjects = new List<Guid>();
             var autoQuestions = new List<AutoQuestionWithTriggers>();
             var header = BuildHeader(template, subObjects, autoQuestions);
-            var headerKey = header.Select(h => h.Key);
+         //   var headerKey = header.Select(h => h.Key);
+            
             foreach (var key in questionnairies)
             {
                 var document = this.documentSession.GetByGuid(key);
@@ -128,7 +129,7 @@ namespace Main.Core.View.Export
                 {
                     documents.Add(
                         new CompleteQuestionnaireExportItem(
-                            document, headerKey, null));
+                            document, header.Keys, null));
                 }
                 else
                 {
@@ -140,17 +141,17 @@ namespace Main.Core.View.Export
                     {
                         documents.Add(
                             new CompleteQuestionnaireExportItem(
-                                completeGroup, headerKey, document.PublicKey));
+                                completeGroup, header.Keys, document.PublicKey));
                     }
                 }
             }
-            return new CompleteQuestionnaireExportView(template.Title, documents, subObjects,
+            return new CompleteQuestionnaireExportView(template.PublicKey,/*propagatableGroupPublicKey,*/ template.Title, documents, subObjects,
                                                        autoQuestions.Select(q => q.PublicKey), header);
         }
 
-        protected Dictionary<Guid, HeaderItem> BuildHeader(IGroup template, List<Guid> subObjects, List<AutoQuestionWithTriggers> autoQuestions)
+        protected HeaderCollection BuildHeader(IGroup template, List<Guid> subObjects, List<AutoQuestionWithTriggers> autoQuestions)
         {
-            var result = new Dictionary<Guid, HeaderItem>();
+            var result = new HeaderCollection();
             Queue<IComposite> queue=new Queue<IComposite>();
             foreach (IComposite composite in template.Children)
             {
@@ -162,7 +163,7 @@ namespace Main.Core.View.Export
                 var question = item as IQuestion;
                 if (question != null)
                 {
-                    result.Add(question.PublicKey, new HeaderItem(question));
+                    result.Add(question);
                     var autoQuestion = question as AutoPropagateQuestion;
                     if (autoQuestion != null)
                     {

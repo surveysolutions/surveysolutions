@@ -25,9 +25,9 @@ namespace Main.Core.Entities.Composite
         List<IComposite> Children { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        IComposite Parent { get; }
+        IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets the public key.
@@ -95,14 +95,22 @@ namespace Main.Core.Entities.Composite
         /// The c.
         /// </param>
         void Remove(IComposite c);
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        void Remove(Guid publicKey);
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        void Remove(Guid publicKey, Guid? propagationKey);
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        void ConnectChildsWithParent();
 
         #endregion
     }

@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorEventSyncTests.cs" />
+    <Compile Include="SyncProcessDenormalizerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

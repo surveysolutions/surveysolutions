@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropagatableGroupDeleted.cs" company="">
-//   
+// <copyright file="PropagatableGroupDeleted.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The propagatable group deleted.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
@@ -35,6 +36,11 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question propagation key.
+        /// </summary>
+        public Guid? QuestionPropagationKey { get; set; }
 
         #endregion
     }

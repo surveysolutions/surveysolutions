@@ -46,9 +46,14 @@ namespace Web.Supervisor
 
         protected void Application_Error()
         {
-            Exception lastException = Server.GetLastError();
+           // Exception lastException = Server.GetLastError();
             Logger logger = LogManager.GetCurrentClassLogger();
-            logger.Fatal(lastException);
+        //    logger.Fatal(lastException);
+
+            var lastError = this.Server.GetLastError();
+            logger.Fatal(lastError);
+            if (lastError.InnerException != null)
+                logger.Fatal(lastError.InnerException);
         }
     }
 }

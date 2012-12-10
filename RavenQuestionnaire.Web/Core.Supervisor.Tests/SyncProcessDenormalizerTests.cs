@@ -1,8 +1,11 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SyncProcessDenormalizerTests.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.Tests.EventHandlers
 {
@@ -27,12 +30,12 @@ namespace Main.Core.Tests.EventHandlers
 
     using Moq;
 
-    using NUnit.Framework;
-
     using Ncqrs.Eventing;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Restoring.EventStapshoot;
+
+    using NUnit.Framework;
 
     /// <summary>
     /// TODO: Update summary.
@@ -40,6 +43,9 @@ namespace Main.Core.Tests.EventHandlers
     [TestFixture]
     public class SyncProcessDenormalizerTests
     {
+        /// <summary>
+        /// The handle new synchronization process created_ event is come_ one new item is added to storage.
+        /// </summary>
         [Test]
         public void HandleNewSynchronizationProcessCreated_EventIsCome_OneNewItemIsAddedToStorage()
         {
@@ -50,34 +56,28 @@ namespace Main.Core.Tests.EventHandlers
 
             var evnt = new NewSynchronizationProcessCreated
                 {
-                    ProcessGuid = Guid.NewGuid(),
-                    SynckType = SynchronizationType.Push
+                   ProcessGuid = Guid.NewGuid(), SynckType = SynchronizationType.Push 
                 };
 
             IPublishedEvent<NewSynchronizationProcessCreated> e =
                 new PublishedEvent<NewSynchronizationProcessCreated>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        evnt.ProcessGuid,
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), evnt.ProcessGuid, 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
             storage.Verify(x => x.Store(It.IsAny<SyncProcessStatisticsDocument>(), Guid.Empty), Times.Once());
         }
 
+        /// <summary>
+        /// The handle process ended_ event is come_ is ended set in true.
+        /// </summary>
         [Test]
         public void HandleProcessEnded_EventIsCome_IsEndedSetInTrue()
         {
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -86,35 +86,28 @@ namespace Main.Core.Tests.EventHandlers
 
             var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
 
-            var evnt = new ProcessEnded
-            {
-                Status = EventState.Completed
-            };
+            var evnt = new ProcessEnded { Status = EventState.Completed };
 
             IPublishedEvent<ProcessEnded> e =
                 new PublishedEvent<ProcessEnded>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
             Assert.IsTrue(statistics.IsEnded);
         }
 
+        /// <summary>
+        /// The handle new complete questionnaire created_ complete questionnaire is come_ one row in statistics added.
+        /// </summary>
         [Test]
         public void HandleNewCompleteQuestionnaireCreated_CompleteQuestionnaireIsCome_OneRowInStatisticsAdded()
         {
             var doc = new CompleteQuestionnaireDocument
                 {
-                    PublicKey = Guid.NewGuid(),
-                    TemplateId = Guid.NewGuid(),
-                    Title = "Title",
+                    PublicKey = Guid.NewGuid(), 
+                    TemplateId = Guid.NewGuid(), 
+                    Title = "Title", 
                     Responsible = new UserLight(Guid.NewGuid(), "Vasya")
                 };
             var question = new SingleCompleteQuestion(string.Empty);
@@ -122,11 +115,10 @@ namespace Main.Core.Tests.EventHandlers
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -135,22 +127,11 @@ namespace Main.Core.Tests.EventHandlers
 
             var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
 
-            var evnt = new NewCompleteQuestionnaireCreated
-            {
-                CreationDate = DateTime.Now,
-                Questionnaire = doc
-            };
+            var evnt = new NewCompleteQuestionnaireCreated { CreationDate = DateTime.Now, Questionnaire = doc };
 
             IPublishedEvent<NewCompleteQuestionnaireCreated> e =
                 new PublishedEvent<NewCompleteQuestionnaireCreated>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
@@ -161,26 +142,28 @@ namespace Main.Core.Tests.EventHandlers
             Assert.AreEqual(doc.Responsible, statistics.Statistics[0].User);
         }
 
+        /// <summary>
+        /// The handle snapshoot loaded_ complete questionnaire event is come_ one row in statistics added.
+        /// </summary>
         [Test]
         public void HandleSnapshootLoaded_CompleteQuestionnaireEventIsCome_OneRowInStatisticsAdded()
         {
             var doc = new CompleteQuestionnaireDocument
-            {
-                PublicKey = Guid.NewGuid(),
-                TemplateId = Guid.NewGuid(),
-                Title = "Title",
-                Responsible = new UserLight(Guid.NewGuid(), "Vasya")
-            };
+                {
+                    PublicKey = Guid.NewGuid(), 
+                    TemplateId = Guid.NewGuid(), 
+                    Title = "Title", 
+                    Responsible = new UserLight(Guid.NewGuid(), "Vasya")
+                };
             var question = new SingleCompleteQuestion(string.Empty);
             var answer = new CompleteAnswer(new Answer()) { AnswerValue = "invalid value" };
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -193,14 +176,7 @@ namespace Main.Core.Tests.EventHandlers
 
             IPublishedEvent<SnapshootLoaded> e =
                 new PublishedEvent<SnapshootLoaded>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
@@ -211,26 +187,28 @@ namespace Main.Core.Tests.EventHandlers
             Assert.AreEqual(doc.Responsible, statistics.Statistics[0].User);
         }
 
+        /// <summary>
+        /// The handle questionnaire assignment changed_ event is come_ one row in statistics added.
+        /// </summary>
         [Test]
         public void HandleQuestionnaireAssignmentChanged_EventIsCome_OneRowInStatisticsAdded()
         {
             var doc = new CompleteQuestionnaireDocument
-            {
-                PublicKey = Guid.NewGuid(),
-                TemplateId = Guid.NewGuid(),
-                Title = "Title",
-                Responsible = new UserLight(Guid.NewGuid(), "Vasya")
-            };
+                {
+                    PublicKey = Guid.NewGuid(), 
+                    TemplateId = Guid.NewGuid(), 
+                    Title = "Title", 
+                    Responsible = new UserLight(Guid.NewGuid(), "Vasya")
+                };
             var question = new SingleCompleteQuestion(string.Empty);
             var answer = new CompleteAnswer(new Answer()) { AnswerValue = "invalid value" };
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -242,21 +220,14 @@ namespace Main.Core.Tests.EventHandlers
 
             var evnt = new QuestionnaireAssignmentChanged
                 {
-                    CompletedQuestionnaireId = doc.PublicKey,
-                    PreviousResponsible = new UserLight(new Guid(), "PrevUser"),
+                    CompletedQuestionnaireId = doc.PublicKey, 
+                    PreviousResponsible = new UserLight(new Guid(), "PrevUser"), 
                     Responsible = new UserLight(new Guid(), "User")
                 };
 
             IPublishedEvent<QuestionnaireAssignmentChanged> e =
                 new PublishedEvent<QuestionnaireAssignmentChanged>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
@@ -268,26 +239,28 @@ namespace Main.Core.Tests.EventHandlers
             Assert.AreEqual(evnt.PreviousResponsible, statistics.Statistics[0].PrevUser);
         }
 
+        /// <summary>
+        /// The handle questionnaire status changed_ event is come_ one row in statistics added.
+        /// </summary>
         [Test]
         public void HandleQuestionnaireStatusChanged_EventIsCome_OneRowInStatisticsAdded()
         {
             var doc = new CompleteQuestionnaireDocument
-            {
-                PublicKey = Guid.NewGuid(),
-                TemplateId = Guid.NewGuid(),
-                Title = "Title",
-                Responsible = new UserLight(Guid.NewGuid(), "Vasya")
-            };
+                {
+                    PublicKey = Guid.NewGuid(), 
+                    TemplateId = Guid.NewGuid(), 
+                    Title = "Title", 
+                    Responsible = new UserLight(Guid.NewGuid(), "Vasya")
+                };
             var question = new SingleCompleteQuestion(string.Empty);
             var answer = new CompleteAnswer(new Answer()) { AnswerValue = "invalid value" };
             question.AddAnswer(answer);
             doc.Children.Add(question);
 
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -298,23 +271,16 @@ namespace Main.Core.Tests.EventHandlers
             var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
 
             var evnt = new QuestionnaireStatusChanged
-            {
-                CompletedQuestionnaireId = doc.PublicKey,
-                Status = SurveyStatus.Complete,
-                PreviousStatus = SurveyStatus.Initial,
-                Responsible = new UserLight(new Guid(), "User")
-            };
+                {
+                    CompletedQuestionnaireId = doc.PublicKey, 
+                    Status = SurveyStatus.Complete, 
+                    PreviousStatus = SurveyStatus.Initial, 
+                    Responsible = new UserLight(new Guid(), "User")
+                };
 
             IPublishedEvent<QuestionnaireStatusChanged> e =
                 new PublishedEvent<QuestionnaireStatusChanged>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 
@@ -326,14 +292,16 @@ namespace Main.Core.Tests.EventHandlers
             Assert.AreEqual(evnt.PreviousStatus, statistics.Statistics[0].PrevStatus);
         }
 
+        /// <summary>
+        /// The handle new questionnaire created_ event is come_ one row in statistics added.
+        /// </summary>
         [Test]
         public void HandleNewQuestionnaireCreated_EventIsCome_OneRowInStatisticsAdded()
         {
-            var statistics = new SyncProcessStatisticsDocument
-            {
-                CreationDate = DateTime.Now,
-                SyncType = SynchronizationType.Push
-            };
+            var statistics = new SyncProcessStatisticsDocument(Guid.NewGuid())
+                {
+                   CreationDate = DateTime.Now, SyncType = SynchronizationType.Push 
+                };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
@@ -343,22 +311,13 @@ namespace Main.Core.Tests.EventHandlers
             var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
 
             var evnt = new NewQuestionnaireCreated
-            {
-                CreationDate = DateTime.Now,
-                PublicKey = Guid.NewGuid(),
-                Title = "Some new title",
-            };
+                {
+                   CreationDate = DateTime.Now, PublicKey = Guid.NewGuid(), Title = "Some new title", 
+                };
 
             IPublishedEvent<NewQuestionnaireCreated> e =
                 new PublishedEvent<NewQuestionnaireCreated>(
-                    new UncommittedEvent(
-                        Guid.NewGuid(),
-                        Guid.NewGuid(),
-                        1,
-                        1,
-                        DateTime.Now,
-                        evnt,
-                        new Version(1, 0)));
+                    new UncommittedEvent(Guid.NewGuid(), Guid.NewGuid(), 1, 1, DateTime.Now, evnt, new Version(1, 0)));
 
             denormalizer.Handle(e);
 

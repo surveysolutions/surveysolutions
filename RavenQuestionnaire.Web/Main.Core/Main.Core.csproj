@@ -137,6 +137,7 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
+    <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
     <Compile Include="Commands\Synchronization\PushEventsCommand.cs" />
@@ -259,7 +260,6 @@
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventSync.cs" />
     <Compile Include="Events\AbstractSnapshotableEventSync.cs" />
@@ -278,12 +278,15 @@
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupDeleted.cs" />
+    <Compile Include="Events\Questionnaire\Completed\PropagateGroupCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs" />
+    <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
     <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
     <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
@@ -298,6 +301,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
+    <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs" />
     <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
@@ -307,9 +311,14 @@
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="Export\ExportManager.cs" />
+    <Compile Include="Export\IDataExport.cs" />
+    <Compile Include="Export\IEnvironmentSupplier.cs" />
     <Compile Include="Export\IExportProvider.cs" />
+    <Compile Include="Export\StataSuplier.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutor.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutor.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollector.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionDependencyBuilder.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctions.cs" />
     <Compile Include="ExpressionExecutors\IExpressionExecutor.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParser.cs" />
@@ -361,7 +370,9 @@
     <Compile Include="View\Export\CompleteQuestionnaireExportItem.cs" />
     <Compile Include="View\Export\CompleteQuestionnaireExportView.cs" />
     <Compile Include="View\Export\CompleteQuestionnaireExportViewFactory.cs" />
+    <Compile Include="View\Export\HeaderCollection.cs" />
     <Compile Include="View\Export\HeaderItem.cs" />
+    <Compile Include="View\Export\ValueCollection.cs" />
     <Compile Include="View\Group\AbstractGroupMobileView.cs" />
     <Compile Include="View\Group\CompleteGroupHeaders.cs" />
     <Compile Include="View\Group\CompleteGroupMobileView.cs" />

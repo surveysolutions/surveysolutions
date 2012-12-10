@@ -130,53 +130,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return answer == null ? string.Empty : answer.AnswerText;
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }*/
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (this.PublicKey == publicKey)
-            {
-                foreach (CompleteAnswer answer in this.Answers)
-                {
-                    answer.Remove(answer);
-                }
-
-                return;
-            }
-
-            foreach (CompleteAnswer completeAnswer in this.Answers)
-            {
-                try
-                {
-                    completeAnswer.Remove(publicKey);
-
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException("answer wasn't found");
-        }*/
-
+        
         /// <summary>
         /// The set answer.
         /// </summary>

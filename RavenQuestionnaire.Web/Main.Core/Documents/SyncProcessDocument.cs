@@ -11,6 +11,8 @@ namespace Main.Core.Documents
     using System;
     using System.Collections.Generic;
 
+    using Main.Core.View.SyncProcess;
+
     /// <summary>
     /// The sync process document.
     /// </summary>
@@ -33,6 +35,7 @@ namespace Main.Core.Documents
         public SyncProcessDocument()
         {
             this.Chunks = new List<ProcessedEventChunk>();
+            this.Statistics = new List<UserSyncProcessStatistics>();
         }
 
         #endregion
@@ -85,6 +88,11 @@ namespace Main.Core.Documents
         /// Gets or sets the synck type.
         /// </summary>
         public SynchronizationType SynckType { get; set; }
+
+        /// <summary>
+        /// Gets or sets Statistics.
+        /// </summary>
+        public List<UserSyncProcessStatistics> Statistics { get; set; }
 
         #endregion
     }
