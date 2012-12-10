@@ -63,9 +63,9 @@ namespace DataEntryClient.SycProcess
         /// <returns>
         /// Syncronization process item
         /// </returns>
-        public SyncProcess GetProcess(Guid synkProcessKey)
+        public ISyncProcessor GetProcess(Guid synkProcessKey)
         {
-            return new SyncProcess(this.processes.GetByGuid(synkProcessKey), this.surveys, this.users);
+            return new SyncProcessor(this.processes.GetByGuid(synkProcessKey), this.surveys, this.users);
         }
     }
 }

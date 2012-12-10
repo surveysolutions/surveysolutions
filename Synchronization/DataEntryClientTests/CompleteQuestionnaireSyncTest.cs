@@ -14,6 +14,7 @@ namespace DataEntryClientTests
     using System.Linq;
 
     using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
     using DataEntryClient.WcfInfrastructure;
 
     using DataEntryClientTests.Stubs;
@@ -57,6 +58,11 @@ namespace DataEntryClientTests
         /// </summary>
         protected IKernel Kernel;
 
+        /// <summary>
+        /// Sync repository
+        /// </summary>
+        private Mock<ISyncProcessRepository> SyncProcessRepository;
+
         #endregion
 
         // protected Mock<IClientSettingsProvider> clientSettingsMock;
@@ -70,8 +76,12 @@ namespace DataEntryClientTests
         {
             this.CommandService = new Mock<ICommandService>();
             this.Kernel = new StandardKernel();
+
             this.EventStore = new Mock<IEventSync>();
             this.Kernel.Bind<IEventSync>().ToConstant(this.EventStore.Object);
+
+            this.SyncProcessRepository = new Mock<ISyncProcessRepository>();
+            this.Kernel.Bind<ISyncProcessRepository>().ToConstant(this.SyncProcessRepository.Object);
 
             /*  clientSettingsMock = new Mock<IClientSettingsProvider>();
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
@@ -94,7 +104,6 @@ namespace DataEntryClientTests
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
             var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
-
             Guid? result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
         }
@@ -133,6 +142,7 @@ namespace DataEntryClientTests
 
             Guid clientGuid = Guid.NewGuid();
             Guid? eventGuid = Guid.NewGuid();
+            var syncProcessGiud = Guid.NewGuid();
             var serviceResult = new ListOfAggregateRootsForImportMessage
                 {
                     Roots =
@@ -146,20 +156,21 @@ namespace DataEntryClientTests
                             }
                 };
 
+            this.SyncProcessRepository.Setup(x => x.GetProcess(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
             eventServiceMock.Setup(
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
                 Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
             var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
 
-            target.Import(Guid.NewGuid());
+            target.Import(syncProcessGiud);
 
             serviceMock.Verify(x => x.Process(), Times.Exactly(1));
             eventServiceMock.Verify(
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count), 
                 Times.Exactly(1));
 
-            this.EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
+            this.SyncProcessRepository.Verify(x => x.GetProcess(It.IsAny<Guid>()), Times.Exactly(1));
         }
 
         #endregion

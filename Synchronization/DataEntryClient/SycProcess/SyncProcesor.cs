@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcess.cs" company="">
+// <copyright file="SyncProcesor.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -12,6 +12,8 @@ namespace DataEntryClient.SycProcess
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using DataEntryClient.CompleteQuestionnaire;
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
@@ -29,9 +31,41 @@ namespace DataEntryClient.SycProcess
     using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
+    /// Sync Procesor Interface
+    /// </summary>
+    public interface ISyncProcessor
+    {
+        /// <summary>
+        /// Gets or sets IncomeEvents.
+        /// </summary>
+        UncommittedEventStream[] IncomeEvents { get; set; }
+
+        /// <summary>
+        /// Calculate statistics
+        /// </summary>
+        /// <returns>
+        /// List of UserSyncProcessStatistics
+        /// </returns>
+        List<UserSyncProcessStatistics> CalculateStatistics();
+
+        /// <summary>
+        /// The commit.
+        /// </summary>
+        void Commit();
+
+        /// <summary>
+        /// The merge events.
+        /// </summary>
+        /// <param name="stream">
+        /// The stream.
+        /// </param>
+        void Merge(IEnumerable<AggregateRootEvent> stream);
+    }
+
+    /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class SyncProcess
+    public class SyncProcessor : ISyncProcessor
     {
         #region Constants and Fields
 
@@ -60,7 +94,7 @@ namespace DataEntryClient.SycProcess
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SyncProcess"/> class.
+        /// Initializes a new instance of the <see cref="SyncProcessor"/> class.
         /// </summary>
         /// <param name="statistics">
         /// The statistics.
@@ -74,7 +108,7 @@ namespace DataEntryClient.SycProcess
         /// <exception cref="Exception">
         /// Some exception
         /// </exception>
-        public SyncProcess(
+        public SyncProcessor(
             SyncProcessStatisticsDocument statistics,
             IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
             IDenormalizerStorage<UserDocument> users)
