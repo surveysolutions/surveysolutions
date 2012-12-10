@@ -17,6 +17,7 @@ namespace Core.Supervisor.Denormalizer
 
     using Main.Core.Documents;
     using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.DenormalizerStorage;
@@ -131,7 +132,7 @@ namespace Core.Supervisor.Denormalizer
                                             new SupervisorStatisticsItem
                                                 {
                                                     Template = new TemplateLight(doc.TemplateId, doc.QuestionnaireTitle), 
-                                                    User = doc.Responsible, 
+                                                    User = doc.Responsible ?? new UserLight(Guid.Empty, string.Empty), 
                                                     Status = evnt.Payload.Status
                                                 };
             item.Surveys.Add(evnt.Payload.CompletedQuestionnaireId);
@@ -161,7 +162,7 @@ namespace Core.Supervisor.Denormalizer
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
-                                                    Template = new TemplateLight(doc.TemplateId, doc.QuestionnaireTitle), 
+                                                    Template = new TemplateLight(doc.TemplateId, doc.QuestionnaireTitle),
                                                     User = evnt.Payload.Responsible, 
                                                     Status = doc.Status
                                                 };

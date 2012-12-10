@@ -94,11 +94,12 @@ namespace Core.Supervisor.Views.Index
                 user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
             }
 
-            var all = input.UserId == Guid.Empty
-                          ? this.stat.Query()
-                          : this.stat.Query().Where(x => x.User.Id == input.UserId);
+            var all = this.stat.Query()
+                .Where(s => s.Surveys.Count > 0)
+                .Where(x => input.UserId == Guid.Empty ? true : (x.User.Id == input.UserId))
+                .GroupBy(s => s.Template).ToDictionary(s => s.Key, s => s.ToList());
 
-            var items = this.BuildStatItems(all.GroupBy(s => s.Template).ToDictionary(s => s.Key, s => s.ToList())).AsQueryable();
+            var items = this.BuildStatItems(all).AsQueryable();
 
             /* var items = this.BuildItems((input.UserId == Guid.Empty
                      ? this.surveys.Query()
@@ -133,6 +134,15 @@ namespace Core.Supervisor.Views.Index
             return retval;
         }
 
+        /// <summary>
+        /// Builds items
+        /// </summary>
+        /// <param name="dictionary">
+        /// The dictionary.
+        /// </param>
+        /// <returns>
+        /// List of survey browse items
+        /// </returns>
         private IEnumerable<IndexViewItem> BuildStatItems(Dictionary<TemplateLight, List<SupervisorStatisticsItem>> dictionary)
         {
             foreach (var kvp in dictionary)
