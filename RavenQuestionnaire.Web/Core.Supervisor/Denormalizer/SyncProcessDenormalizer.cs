@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.EventHandlers
+namespace Core.Supervisor.Denormalizer
 {
     using System;
 

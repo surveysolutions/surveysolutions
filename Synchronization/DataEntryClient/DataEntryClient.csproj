@@ -88,7 +88,7 @@
     <Compile Include="CompleteQuestionnaire\ISyncProcess.cs" />
     <Compile Include="ExportStatisticsCalculator.cs" />
     <Compile Include="SycProcess\ISyncProcessRepository.cs" />
-    <Compile Include="SycProcess\SyncProcess.cs" />
+    <Compile Include="SycProcess\SyncProcesor.cs" />
     <Compile Include="SycProcess\SyncProcessRepository.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />

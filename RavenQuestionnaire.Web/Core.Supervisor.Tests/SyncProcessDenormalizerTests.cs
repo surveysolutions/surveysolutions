@@ -7,21 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.Tests.EventHandlers
+namespace Core.Supervisor.Tests
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
-    using System.Text;
 
-    using Main.Core.AbstractFactories;
+    using Core.Supervisor.Denormalizer;
+
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
-    using Main.Core.Entities.SubEntities.Question;
-    using Main.Core.EventHandlers;
     using Main.Core.Events.Questionnaire;
     using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.Events.Synchronization;
@@ -80,7 +75,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
@@ -121,7 +116,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
@@ -166,7 +161,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
@@ -211,7 +206,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             survey.Setup(s => s.GetByGuid(doc.PublicKey)).Returns(new CompleteQuestionnaireBrowseItem(doc));
@@ -263,7 +258,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             survey.Setup(s => s.GetByGuid(doc.PublicKey)).Returns(new CompleteQuestionnaireBrowseItem(doc));
@@ -304,7 +299,7 @@ namespace Main.Core.Tests.EventHandlers
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(statistics.PublicKey)).Returns(statistics);
+            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
             var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
