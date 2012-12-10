@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestionnaireSync.cs" company="">
+// <copyright file="ISyncProcess.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -14,7 +14,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     /// <summary>
     /// The WirelessSyncProcess interface.
     /// </summary>
-    public interface ICompleteQuestionnaireSync
+    public interface ISyncProcess
     {
         #region Public Methods and Operators
 

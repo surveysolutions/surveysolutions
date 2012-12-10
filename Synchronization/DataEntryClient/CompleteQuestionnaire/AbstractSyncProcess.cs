@@ -13,9 +13,12 @@ namespace DataEntryClient.CompleteQuestionnaire
     using System.Collections.Generic;
     using System.Linq;
 
+    using DataEntryClient.SycProcess;
+
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
+    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
@@ -31,7 +34,7 @@ namespace DataEntryClient.CompleteQuestionnaire
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
-    public abstract class AbstractSyncProcess : ICompleteQuestionnaireSync
+    public abstract class AbstractSyncProcess : ISyncProcess
     {
         #region Constants and Fields
 
@@ -49,6 +52,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// The event store.
         /// </summary>
         protected readonly IEventSync EventStore;
+
+        /// <summary>
+        /// sync process repository
+        /// </summary>
+        protected readonly ISyncProcessRepository SyncProcessRepository;
         
         #endregion
 
@@ -68,6 +76,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.EventStore = kernel.Get<IEventSync>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
+            this.SyncProcessRepository = kernel.Get<ISyncProcessRepository>();
         }
 
         #endregion
@@ -94,7 +103,18 @@ namespace DataEntryClient.CompleteQuestionnaire
                     return;
                 }
 
-                this.EventStore.WriteEvents(events);
+                var syncProcess = this.SyncProcessRepository.GetProcess(syncKey);
+
+                syncProcess.Merge(events);
+
+                var statistics = syncProcess.CalculateStatistics();
+
+                this.Invoker.Execute(new PushStatisticsCommand(this.ProcessGuid, statistics));
+
+                syncProcess.Commit();
+
+                //this.EventStore.WriteEvents(events);
+
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed));
             }
             catch (Exception ex)
