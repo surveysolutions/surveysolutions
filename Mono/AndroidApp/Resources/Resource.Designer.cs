@@ -66,6 +66,9 @@ namespace AndroidApp
 			// aapt resource value: 0x7f050002
 			public const int navList = 2131034114;
 			
+			// aapt resource value: 0x7f050003
+			public const int scveenView = 2131034115;
+			
 			private Id()
 			{
 			}
@@ -82,6 +85,9 @@ namespace AndroidApp
 			
 			// aapt resource value: 0x7f030002
 			public const int Main = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int ScreenGroupView = 2130903043;
 			
 			private Layout()
 			{

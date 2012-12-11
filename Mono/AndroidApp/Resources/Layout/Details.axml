@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/MyLayout"
-              android:orientation="vertical"
+              android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+              android:layout_weight="1"   
     >
   <!--android:columnWidth="90dp"-->
   <!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,7 +15,14 @@
 
   <androidapp.controls.questionnairedetails.QuestionnaireNavigationView
    android:id="@+id/navList"
-   android:layout_width="fill_parent"
+   android:gravity=    "center_horizontal"
+   android:layout_width="10dip"
    android:layout_height="fill_parent"
-   android:cacheColorHint="#FFDAFF7F"/>
+   android:cacheColorHint="#FFDAFF7F" android:layout_weight=    "1" />
+  <androidapp.controls.questionnairedetails.ScreenContentView
+     android:id="@+id/scveenView"
+     android:gravity=    "center_horizontal"
+     android:layout_width="wrap_content"
+     android:layout_height="fill_parent"
+     android:layout_weight=    "4" />
 </LinearLayout>
