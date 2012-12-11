@@ -45,6 +45,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
             tvITem.Text = item.Title;
+            var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
+            tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
             view.SetTag(Resource.Id.ScreenId, item.ScreenPublicKey.ToString());
             return view;
         }
