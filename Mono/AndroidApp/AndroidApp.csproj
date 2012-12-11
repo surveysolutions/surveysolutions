@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Activity1.cs" />
     <Compile Include="CapiApplication.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentView.cs" />
     <Compile Include="DetailsActivity.cs" />
@@ -152,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
+    <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

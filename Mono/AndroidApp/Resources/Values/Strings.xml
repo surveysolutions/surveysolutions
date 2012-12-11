@@ -3,4 +3,5 @@
     <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">AndroidApp</string>
     <item  type="id"  name="QuestionnaireId" />
+  <item  type="id"  name="ScreenId" />
 </resources>

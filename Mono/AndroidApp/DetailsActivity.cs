@@ -33,13 +33,24 @@ namespace AndroidApp
             LinearLayout layout = FindViewById<LinearLayout>(Resource.Id.MyLayout);
             layout.AddView(tvId);*/
             QuestionnaireNavigationView navList = FindViewById<QuestionnaireNavigationView>(Resource.Id.navList);
+            navList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
             navList.QuestionnaireId = QuestionnaireId;
+            
 
-            ScreenContentView scveenView = FindViewById<ScreenContentView>(Resource.Id.scveenView);
-            scveenView.QuestionnaireId = QuestionnaireId;
+            
+            ScreenContent.QuestionnaireId = QuestionnaireId;
             // Create your application here
         }
 
-     
+        void navList_ItemClick(object sender, ScreenChangedEventArgs e)
+        {
+            ScreenContent.ScreenId = e.ScreenId;
+        }
+
+        protected ScreenContentView ScreenContent
+        {
+            get { return FindViewById<ScreenContentView>(Resource.Id.scveenView); }
+        }
+
     }
 }

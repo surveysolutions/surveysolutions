@@ -18,7 +18,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public ScreenContentView(Context context, IAttributeSet attrs) :
             base(context, attrs)
         {
-            
+
             Initialize(context);
         }
 
@@ -31,19 +31,24 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private void Initialize(Context context)
         {
 
-            LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
             layoutInflater.Inflate(Resource.Layout.ScreenGroupView, this);
         }
 
-        private Guid questionnaireId;
-        public Guid QuestionnaireId
+
+        public Guid QuestionnaireId { get; set; }
+
+        public Guid? ScreenId
         {
-            get { return questionnaireId; }
-            set { questionnaireId = value;
-            TextView qGuid = FindViewById<TextView>(Resource.Id.qGuid);
-            qGuid.Text = value.ToString();
+            get { return screenId; }
+            set
+            {
+                screenId = value;
+                TextView qGuid = FindViewById<TextView>(Resource.Id.qGuid);
+                qGuid.Text = value.ToString();
             }
         }
-        
+
+        private Guid? screenId;
     }
 }
