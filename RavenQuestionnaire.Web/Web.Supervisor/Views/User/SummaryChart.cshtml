@@ -1,11 +1,12 @@
 ﻿@using System.Web.Script.Serialization
 @using Core.Supervisor.Views.Index
 @using Core.Supervisor.Views.Summary
+@using Web.Supervisor.Models
 @model SummaryView
 @{
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Items.Select(t => t.User.Name).ToArray());
-    var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
+    var chartData = ViewBag.GraphData as SurveyChartModel;
 
 }
 <p>
@@ -18,6 +19,36 @@
 </p>
 
 <script type="text/javascript">
+barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
+    scatterData = @Html.Raw(Json.Encode(chartData.ScatterData)) ;
+    pieData = [
+        {
+            type: 'pie',
+            name: 'Totals',
+            data: @Html.Raw(Json.Encode(chartData.BrowserData)),
+            size: '60%',
+            dataLabels: {
+                formatter: function() {
+                    return this.y > 0 ? this.point.title : null;
+                },
+                color: 'white',
+                distance: -40
+            }
+        },
+        {
+            type: 'pie',
+            name: 'Statuses',
+            data: @Html.Raw(Json.Encode(chartData.VersionsData)),
+            showInLegend: false,
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function() {
+                    // display only if larger than 1
+                    return this.y > 0 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
+                }
+            }
+        }
+    ];
 
     init = function() {
         var containerSettings = {
@@ -25,6 +56,15 @@
             bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
             pie: { 'height': '600px' },
             scatter: { 'height': '500px' }
+        };
+        
+        var containerMethods = {
+            column: function() { 
+                chart.xAxis[0].setCategories( @Html.Raw(xTitles) );
+            },
+            bar: function() {chart.xAxis[0].setCategories(@Html.Raw(xTitles))},
+            pie: function() {},
+            scatter: function() {}
         };
 
         var active = "btn-primary";
@@ -39,106 +79,12 @@
                 }
                 $('#container').css(containerSettings[id]);
                 drawPlot(id);
+                containerMethods[id]();
             });
         });
        
         $("#column").click();
     };
-
-    barData = [
-        {
-            name: 'Total',
-            data: @Json.Encode(@Model.Items.Select(t => t.Total).ToArray()) ,
-            stack: 'total'
-        },
-        {
-            name: 'Approved',
-            data: @Json.Encode(@Model.Items.Select(t => t.Approve).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Initial',
-            data: @Json.Encode(@Model.Items.Select(t => t.Initial).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Redo',
-            data: @Json.Encode(@Model.Items.Select(t => t.Redo).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Complete',
-            data: @Json.Encode(@Model.Items.Select(t => t.Complete).ToArray()) ,
-            stack: 'parts'
-        },
-        {
-            name: 'Error',
-            data: @Json.Encode(@Model.Items.Select(t => t.Error).ToArray()) ,
-            stack: 'parts'
-        }
-    ];
-    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new { y = t.Total, color = colors[index], drilldown = new { name = t.User.Name, categories = new[] {"Initial", "Redo", "Complete", "Approve", "Error" }, data = new[] {t.Initial, t.Redo, t.Complete, t.Approve, t.Error }, color = colors[index] } }).ToArray())) ;
-    xTitles = @Html.Raw(xTitles);
-    // Build the data arrays
-    browserData = [];
-    versionsData = [];
-    for (var i = 0; i < data.length; i++) {
-
-        // add browser data
-        browserData.push({
-                category: xTitles[i],
-                name: data[i].drilldown.name,
-                y: data[i].y * 1,
-                color: data[i].color
-            });
-
-        // add version data
-        for (var j = 0; j < data[i].drilldown.data.length; j++) {
-            var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
-            versionsData.push({
-                    category: xTitles[i],
-                    name: data[i].drilldown.categories[j],
-                    y: data[i].drilldown.data[j] * 1,
-                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
-                });
-        }
-    }
-
-    pieData = [
-        {
-            type: 'pie',
-            name: 'Totals',
-            data: browserData,
-            size: '60%',
-            dataLabels: {
-                formatter: function() {
-                    return this.y > 0 ? this.point.name : null;
-                },
-                color: 'white',
-                distance: -40
-            }
-        },
-        {
-            type: 'pie',
-            name: 'Statuses',
-            data: versionsData,
-            showInLegend: false,
-            innerSize: '60%',
-            dataLabels: {
-                formatter: function() {
-                    // display only if larger than 1
-                    return this.y > 0 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
-                }
-            }
-        }
-    ];
-    var scatterData = @Html.Raw(Json.Encode(@Model.Items.Select(
-    (t, index) => new
-        {
-            name = t.User.Name,
-            color = colors[index], 
-            data = new []{ new[] {t.Initial + t.Redo, t.Complete + t.Approve } }
-        }).ToArray())) ;
 
     plotSettings = {
         column: {
@@ -150,7 +96,7 @@
                 marginTop: 30
             },
             xAxis: {
-                categories: @Html.Raw(xTitles)
+                
             },
             yAxis: {
                 title: {
@@ -205,7 +151,6 @@
                 marginTop: 30
             },
             xAxis: {
-                categories: @Html.Raw(xTitles)
             },
             yAxis: {
                 title: {
@@ -285,25 +230,28 @@
                 type: 'scatter',
                 marginBottom: 70,
                 marginRight: 5,
-                marginTop: 30,
+                marginTop: 75,
                 zoomType: 'xy'
             },
             xAxis: {
                 title: {
                     text: 'In progress'
                 },
-                allowDecimals: false
+                allowDecimals: false,
+                min: 0,
+                gridLineWidth: 1
             },
             yAxis: {
                 title: {
-                    text: 'Complete'
+                    text: 'Done'
                 },
                 plotLines: [{
                     value: 0,
                     width: 1,
                     color: '#808080'
                 }],
-                allowDecimals: false
+                allowDecimals: false,
+                min: 0
             },
             title: {
                 text: ""
@@ -343,10 +291,9 @@
             series: scatterData
         }
     };
-    
+    chart = null;
     drawPlot = function(type) {
         $("#container").html('');
-        var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors)) });
         chart = new Highcharts.Chart(plotSettings[type]);
     };
 </script>

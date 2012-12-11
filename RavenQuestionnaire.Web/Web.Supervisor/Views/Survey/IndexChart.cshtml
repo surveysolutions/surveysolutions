@@ -5,7 +5,6 @@
 @{
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Items.Select(t => t.Title).ToArray());
-    var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
     var chartData = ViewBag.GraphData as InterviewerChartModel;
 }
 <p>
@@ -17,38 +16,8 @@
     </div>
 </p>
 <script type="text/javascript">
-
-    init = function() {
-        var containerSettings = {
-            column: { 'height': '400px' },
-            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
-            pie: { 'height': '600px' },
-            scatter: { 'height': '500px' }
-        };
-
-        var active = "btn-primary";
-
-        $('#switcher button').each(function(i, el) {
-            var self = this;
-            $(self).click(function() {
-                var id = $(self).attr('id');
-                if (!$(self).hasClass(active)) {
-                    $("#switcher .btn").removeClass(active);
-                    $(self).addClass(active);
-                }
-                $('#container').css(containerSettings[id]);
-                drawPlot(id);
-            });
-        });
-       
-        $("#column").click();
-    };
-    xTitles = @Html.Raw(xTitles);
     barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
     scatterData = @Html.Raw(Json.Encode(chartData.ScatterData)) ;
-    
-    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) => new { y = t.Total, color = colors[index], drilldown = new { name = t.Title, title = string.Join(string.Empty, t.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])), categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" }, data = new[] { t.Unassign, t.Initial, t.Redo, t.Complete, t.Approve, t.Error }, color = colors[index] } }).ToArray())) ;
-    
     pieData = [
         {
             type: 'pie',
@@ -77,6 +46,43 @@
             }
         }
     ];
+    
+    init = function() {
+        var containerSettings = {
+            column: { 'height': '400px' },
+            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
+            pie: { 'height': '600px' },
+            scatter: { 'height': '500px' }
+        };
+        
+        var containerMethods = {
+            column: function() { 
+                chart.xAxis[0].setCategories( @Html.Raw(xTitles) );
+            },
+            bar: function() {chart.xAxis[0].setCategories(@Html.Raw(xTitles))},
+            pie: function() {},
+            scatter: function() {}
+        };
+
+        var active = "btn-primary";
+
+        $('#switcher button').each(function(i, el) {
+            var self = this;
+            $(self).click(function() {
+                var id = $(self).attr('id');
+                if (!$(self).hasClass(active)) {
+                    $("#switcher .btn").removeClass(active);
+                    $(self).addClass(active);
+                }
+                $('#container').css(containerSettings[id]);
+                drawPlot(id);
+                containerMethods[id]();
+            });
+        });
+       
+        $("#column").click();
+    };
+
 
         
     plotSettings = {
@@ -89,7 +95,7 @@
                 marginTop: 30
             },
             xAxis: {
-                categories: @Html.Raw(xTitles)
+                
             },
             yAxis: {
                 title: {
@@ -144,7 +150,6 @@
                 marginTop: 30
             },
             xAxis: {
-                categories: @Html.Raw(xTitles)
             },
             yAxis: {
                 title: {
@@ -224,25 +229,28 @@
                 type: 'scatter',
                 marginBottom: 70,
                 marginRight: 5,
-                marginTop: 50,
+                marginTop: 75,
                 zoomType: 'xy'
             },
             xAxis: {
                 title: {
                     text: 'In progress'
                 },
-                allowDecimals: false
+                allowDecimals: false,
+                min: 0,
+                gridLineWidth: 1
             },
             yAxis: {
                 title: {
-                    text: 'Complete'
+                    text: 'Done'
                 },
                 plotLines: [{
                     value: 0,
                     width: 1,
                     color: '#808080'
                 }],
-                allowDecimals: false
+                allowDecimals: false,
+                min: 0
             },
             title: {
                 text: ""
@@ -282,10 +290,9 @@
             series: scatterData
         }
     };
-    chart;
+    chart = null;
     drawPlot = function(type) {
         $("#container").html('');
-        var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors)) });
         chart = new Highcharts.Chart(plotSettings[type]);
     };
 </script>
