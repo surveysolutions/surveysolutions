@@ -28,6 +28,11 @@ namespace Main.Core.Events.Synchronization
         /// </summary>
         public EventState Status { get; set; }
 
+        /// <summary>
+        /// Gets or sets ProcessKey.
+        /// </summary>
+        public Guid ProcessKey { get; set; }
+        
         #endregion
     }
 }

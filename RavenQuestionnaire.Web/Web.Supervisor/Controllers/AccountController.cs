@@ -78,6 +78,7 @@ namespace Web.Supervisor.Controllers
         [HttpGet]
         public ActionResult LogOn()
         {
+            ViewBag.ActivePage = MenuItem.Logon;
             return this.View();
         }
 
@@ -96,6 +97,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult LogOn(LogOnModel model, string returnUrl)
         {
+            ViewBag.ActivePage = MenuItem.Logon;
             if (ModelState.IsValid)
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))

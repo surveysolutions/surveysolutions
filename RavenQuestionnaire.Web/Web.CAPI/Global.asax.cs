@@ -81,7 +81,10 @@ namespace Web.CAPI
         /// </summary>
         protected void Application_Error()
         {
-            this.logger.Fatal(this.Server.GetLastError());
+            var lastError = this.Server.GetLastError();
+            this.logger.Fatal(lastError);
+            if (lastError.InnerException != null)
+                this.logger.Fatal(lastError.InnerException);
         }
 
         /// <summary>

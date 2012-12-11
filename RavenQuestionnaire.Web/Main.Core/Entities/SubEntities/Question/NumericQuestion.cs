@@ -150,32 +150,6 @@ namespace Main.Core.Entities.SubEntities.Question
             return null;
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }*/
-
         #endregion
     }
 }

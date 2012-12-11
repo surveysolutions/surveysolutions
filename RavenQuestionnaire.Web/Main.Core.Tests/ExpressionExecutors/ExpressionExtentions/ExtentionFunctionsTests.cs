@@ -63,7 +63,7 @@ namespace Main.Core.Tests.ExpressionExecutors.ExpressionExtentions
             bool? result = executorC.Execute(question);
             Assert.AreEqual(result, false);
 
-            var executorE = new CompleteQuestionnaireValidationExecutor(doc);
+            var executorE = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
             bool? result1 = executorE.Execute(question);
             Assert.AreEqual(result1, true);
         }

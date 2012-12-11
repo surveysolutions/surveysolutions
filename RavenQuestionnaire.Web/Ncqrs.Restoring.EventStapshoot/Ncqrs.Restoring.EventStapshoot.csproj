@@ -63,7 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EventStores\RavenDB\SnapsotableRavenDBEventStore.cs" />
+    <Compile Include="EventStores\RavenDB\SnapshotableRavenDBEventStoreExtension.cs" />
     <Compile Include="EventStores\RavenDB\UniqueEventsIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapshootableAggregateRoot.cs" />

@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-  
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
@@ -103,11 +102,16 @@
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
-    <Compile Include="EventHandlers\SyncProcessDenormalizerTests.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
+    <Compile Include="Export\HeaderCollectionTests.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
+    <Compile Include="Export\HeaderItemTests.cs" />
+    <Compile Include="Export\StataSuplierTests.cs" />
+    <Compile Include="Export\ValueCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionDependencyBuilderTest.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
     <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />

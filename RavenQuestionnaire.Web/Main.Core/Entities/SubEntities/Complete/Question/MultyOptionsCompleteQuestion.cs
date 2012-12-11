@@ -128,63 +128,20 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-            var items = this.GetAnswerObject() as IEnumerable<object>;
+
+            var items = this.Answers.Where(a => ((ICompleteAnswer)a).Selected).ToArray();
+        //    return answer == null ? string.Empty : answer.AnswerText;
+
+         //   var items = this.GetAnswerObject() as IEnumerable<object>;
             
-            if (items != null && items.ToArray().Any())
+            if (items.Any())
             {
-                return string.Join(", ", items.Select(a => a.ToString()));
+                return string.Join(", ", items.Select(a => a.AnswerText.ToString()));
             }
             
             return string.Empty;
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (publicKey == this.PublicKey)
-            {
-                foreach (ICompleteAnswer composite in this.Answers)
-                {
-                    composite.Remove(composite.PublicKey);
-                }
-
-                return;
-            }
-
-            foreach (ICompleteAnswer composite in this.Answers)
-            {
-                try
-                {
-                    composite.Remove(publicKey);
-
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException();
-        }*/
-
+        
         /// <summary>
         /// The set answer.
         /// </summary>

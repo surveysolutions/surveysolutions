@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Group.cs" company="">
-//   
+// <copyright file="Group.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The propagate.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -73,18 +74,10 @@ namespace Main.Core.Entities.SubEntities
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the parent group.
@@ -130,25 +123,21 @@ namespace Main.Core.Entities.SubEntities
         /// </exception>
         public void Add(IComposite c, Guid? parent)
         {
-            if ((parent.HasValue && parent.Value == this.PublicKey) || !parent.HasValue)
+            if (!parent.HasValue || this.PublicKey == parent)
             {
+                c.Parent = this;
                 this.Children.Add(c);
-                return;
             }
-
-            foreach (IComposite child in this.Children)
+            else
             {
-                try
+                var group = this.Find<Group>(parent.Value);
+                if (group != null)
                 {
-                    child.Add(c, parent);
-                    return;
+                    group.Add(c, null);
                 }
-                catch (CompositeException)
-                {
-                }
+                //// leave legacy for awhile
+                throw new CompositeException();
             }
-
-            throw new CompositeException();
         }
 
         /// <summary>
@@ -237,11 +226,9 @@ namespace Main.Core.Entities.SubEntities
                     this.Children.Insert(index + 1, c);
                     return;
                 }
-                else
-                {
-                    this.Children.Insert(0, c);
-                    return;
-                }
+                
+                this.Children.Insert(0, c);
+                return;
             }
             catch (CompositeException)
             {
@@ -258,18 +245,19 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
+            this.Remove(c.PublicKey, null);
         }
-
+        
         /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (group != null)
@@ -282,7 +270,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 try
                 {
-                    child.Remove(publicKey);
+                    child.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -291,6 +279,18 @@ namespace Main.Core.Entities.SubEntities
             }
 
             throw new CompositeException();
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
         }
 
         /// <summary>

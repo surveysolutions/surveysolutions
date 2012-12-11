@@ -679,11 +679,11 @@ Global
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main|Mixed Platforms.ActiveCfg = Debug|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main|Mixed Platforms.Build.0 = Debug|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main|x86.ActiveCfg = Debug|Any CPU
-		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
-		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
-		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Mixed Platforms.ActiveCfg = Deploy-Main-Debug|Any CPU
-		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Mixed Platforms.Build.0 = Deploy-Main-Debug|Any CPU
-		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|x86.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Mixed Platforms.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Mixed Platforms.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|x86.ActiveCfg = Deploy-devKh|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU

@@ -41,6 +41,7 @@ namespace RavenQuestionnaire.Web.Injections
             this.Bind<IExportImport>().To<TemplateExporter>();
             this.Bind<ITemplateExporter>().To<TemplateExporter>();
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
+            this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
         }
 
     }

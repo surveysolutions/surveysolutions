@@ -56,8 +56,6 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
         #endregion
 
-       
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -85,9 +83,9 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 
             this.UpdateInputData(doc, input);
             var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);
+            executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);
 
-            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
+            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, input.Scope);
 
             return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, input.Scope);
         }

@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateQuestion.cs" company="">
-//   
+// <copyright file="AutoPropagateQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The auto propagate question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
@@ -103,7 +104,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             throw new NotImplementedException();
         }
-
+        
 
         /*/// <summary>
         /// The add.
@@ -168,6 +169,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
+        
 
         /*/// <summary>
         /// The remove.
@@ -195,7 +197,6 @@ namespace Main.Core.Entities.SubEntities.Question
             throw new CompositeException();
         }*/
 
-        #endregion
-
+        #endregion 
     }
 }

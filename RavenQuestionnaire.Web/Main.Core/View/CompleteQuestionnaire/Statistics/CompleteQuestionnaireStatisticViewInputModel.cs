@@ -37,6 +37,8 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </summary>
         public Guid Id { get; private set; }
 
+        public Entities.SubEntities.QuestionScope Scope { get; set; }
+
         #endregion
     }
 }

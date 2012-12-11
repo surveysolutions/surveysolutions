@@ -24,22 +24,22 @@ namespace Questionnaire.Core.Web.Helpers
         private static readonly string successMarker = "success.marker";
 
         public static void Stop()
-        {
+        {/*
             File.CreateText(SuccessMarker.SuccessFilePath);
             // Get file info
             FileInfo myFile = new FileInfo(SuccessMarker.SuccessFilePath);
 
             // Remove the hidden attribute of the file
-            myFile.Attributes |= FileAttributes.Hidden;
+            myFile.Attributes |= FileAttributes.Hidden;*/
         }
         public static void Start(IKernel kernel)
         {
-            if (!File.Exists(SuccessMarker.SuccessFilePath))
-            {
+           /* if (!File.Exists(SuccessMarker.SuccessFilePath))
+            {*/
                 NCQRSInit.RebuildReadLayer(kernel);
-            }
+         /*   }
             else
-                File.Delete(SuccessMarker.SuccessFilePath);
+                File.Delete(SuccessMarker.SuccessFilePath);*/
         }
     }
 }

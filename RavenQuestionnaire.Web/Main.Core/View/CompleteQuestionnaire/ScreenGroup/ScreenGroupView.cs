@@ -22,7 +22,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     /// </summary>
     public class ScreenGroupView
     {
-       #region Constructors and Destructors
+        #region Constructors and Destructors
         /// <summary>
         /// Initializes a new instance of the <see cref="ScreenGroupView"/> class. 
         /// </summary>
@@ -41,12 +41,17 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 doc,
                 currentGroup,
                 new ScreenNavigationView(
-                    doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
+                    doc.Children.OfType<ICompleteGroup>().Where(
+                        g =>
+                        (g.Children.OfType<ICompleteGroup>().Count()
+                         + g.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= scope).Count()) != 0
+                        || g.Children.Count() == 0).Select(g => new CompleteGroupHeaders(g)),
+                    navigation))
         {
             /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
             executor.ExecuteAndChangeStateRecursive(doc);*/
 
-            var validator = new CompleteQuestionnaireValidationExecutor(doc);
+            var validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
             validator.Execute(currentGroup);
 
             this.BuildScreenContent(doc, currentGroup, scope);
@@ -132,7 +137,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         {
             if (currentGroup.PropagationPublicKey.HasValue)
             {
-                this.Group = new PropagatedGroupMobileView(doc, currentGroup);
+                this.Group = new PropagatedGroupMobileView(doc, currentGroup, scope);
                 return;
             }
 
@@ -162,11 +167,11 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     var g = composite as CompleteGroup;
                     if (g.Propagated == Propagate.None)
                     {
-                        this.Group.Children.Add(new CompleteGroupMobileView(doc, g));
+                        this.Group.Children.Add(new CompleteGroupMobileView(doc, g, scope));
                     }
                     else if (!g.PropagationPublicKey.HasValue)
                     {
-                        var propagatedGroup = new CompleteGroupMobileView(doc, g);
+                        var propagatedGroup = new CompleteGroupMobileView(doc, g, scope);
                         this.Group.Children.Add(propagatedGroup);
                         var subGroups = currentGroup.Children.OfType<ICompleteGroup>().Where(
                             p =>
@@ -174,7 +179,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                         foreach (
                             ICompleteGroup completeGroup in subGroups)
                         {
-                            propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup));
+                            propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup, scope));
                         }
                     }
                 }

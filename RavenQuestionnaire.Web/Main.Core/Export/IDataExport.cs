@@ -1,6 +1,6 @@
 using System;
 
-namespace Questionnaire.Core.Web.Export
+namespace Main.Core.Export
 {
     /// <summary>
     /// TODO: Update summary.

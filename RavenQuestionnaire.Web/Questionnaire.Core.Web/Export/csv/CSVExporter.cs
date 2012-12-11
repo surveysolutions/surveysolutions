@@ -101,7 +101,7 @@ namespace Questionnaire.Core.Web.Export.csv
                 writer.WriteField("PublicKey"); // templated column for ID
 
                 // build up header
-                foreach (var question in records.Header.Values)
+                foreach (var question in records.Header)
                 {
                     writer.WriteField(question.Caption);
                 }
@@ -116,10 +116,11 @@ namespace Questionnaire.Core.Web.Export.csv
                     {
                         /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
                         // var firstOrDefault = item.CompleteQuestions.FirstOrDefault(a => a.PublicKey == guid);
-                        if (item.Values.ContainsKey(guid))
+                        foreach (var itemValue in item.Values[guid])
                         {
-                            writer.WriteField(item.Values[guid]);
+                            writer.WriteField(itemValue);
                         }
+
                     }
                     writer.WriteField(item.Parent);
                     writer.NextRecord();

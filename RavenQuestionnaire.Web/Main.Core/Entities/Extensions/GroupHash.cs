@@ -159,6 +159,20 @@ namespace Main.Core.Entities.Extensions
             return this.hash[this.GetQuestionKey(publicKey, propagationKey)];
         }
 
+        /// <summary>
+        /// The get question by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        public CompleteQuestionWrapper GetQuestionByKey(string key)
+        {
+            return this.hash.ContainsKey(key) ? this.hash[key] : null;
+        }
+
         /*/// <summary>
         /// The get question screen.
         /// </summary>
@@ -190,7 +204,6 @@ namespace Main.Core.Entities.Extensions
             {
                 return;
             }
-
 
             if (!group.PropagationPublicKey.HasValue)
             {

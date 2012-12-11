@@ -22,18 +22,7 @@ namespace Main.Core.View.Export
 
         #region Constructors and Destructors
 
-        /*/// <summary>
-        /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportItem"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
-        /// </param>
-        public CompleteQuestionnaireExportItem(CompleteQuestionnaireDocument doc)
-        {
-            this.CompleteQuestionnaireKey = doc.PublicKey;
-            this.CompleteAnswers = doc.Find<ICompleteAnswer>(a => a.Selected).ToArray();
-        }
-        */
+      
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireExportItem"/> class.
         /// </summary>
@@ -42,50 +31,14 @@ namespace Main.Core.View.Export
         /// </param>
         public CompleteQuestionnaireExportItem(ICompleteGroup document, IEnumerable<Guid> headerKey, Guid? parent)
         {
-        /*    var wholeQuestionnaire = document as CompleteQuestionnaireStoreDocument;
-            Guid templateId = document.PublicKey;
-            if (wholeQuestionnaire != null)
-                templateId = wholeQuestionnaire.TemplateId;*/
             this.PublicKey = document.Propagated == Propagate.None ? document.PublicKey : document.PropagationPublicKey.Value;
             this.Parent = parent;
-            this.Values = new Dictionary<Guid, string>();
+            this.Values = new ValueCollection();
 
             foreach (Guid key in headerKey)
             {
-                /* if (key == Guid.Empty)
-                 {
-                     this.Values.Add(key, parent.ToString());
-                 }
-                 else if (templateId==key)
-                 {
-                     this.Values.Add(key, this.PublicKey.ToString());
-                 }
-                 else
-                 {*/
                 var question = document.FirstOrDefault<ICompleteQuestion>(c => c.PublicKey == key);
-                if (question == null)
-                {
-                    this.Values.Add(key, "");
-                    continue;
-
-                }
-                var answer = question.GetAnswerObject();
-
-                if (question.QuestionType == QuestionType.MultyOption)
-                {
-                    var answers = answer as ICompleteAnswer[];
-                    if (answers != null && answers.Length > 0)
-                        this.Values.Add(key, answers[0].AnswerValue.ToString());
-                    else
-                        this.Values.Add(key, "");
-                }
-                else
-                {
-
-
-                    this.Values.Add(key, answer == null ? "" : answer.ToString());
-                }
-                /*   }*/
+                this.Values.Add(key, question);
             }
         }
 
@@ -93,12 +46,9 @@ namespace Main.Core.View.Export
 
         #region Public Properties
 
-        public Dictionary<Guid,string> Values { get; set; }
+        public ValueCollection Values { get; set; }
 
-   /*     /// <summary>
-        /// Gets or sets the complete answers.
-        /// </summary>
-        public ICompleteAnswer[] CompleteAnswers { get; set; }*/
+  
 
         /// <summary>
         /// Gets the complete questionnaire key.

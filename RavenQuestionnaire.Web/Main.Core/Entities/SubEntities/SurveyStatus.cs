@@ -151,6 +151,16 @@ namespace Main.Core.Entities.SubEntities
         #endregion
 
         #region Public Methods and Operators
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>
+        /// The string
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}]", this.Name, this.PublicId);
+        }
 
         /// <summary>
         /// The get all statuses.
@@ -232,6 +242,59 @@ namespace Main.Core.Entities.SubEntities
 
             return null;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != typeof(SurveyStatus))
+            {
+                return false;
+            }
+
+            return Equals((SurveyStatus)obj);
+        }
         #endregion
+
+        public bool Equals(SurveyStatus other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return Equals(other.Name, this.Name) && other.PublicId.Equals(this.PublicId);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return ((this.Name != null ? this.Name.GetHashCode() : 0) * 947) ^ this.PublicId.GetHashCode();
+            }
+        }
+
+        public static bool operator ==(SurveyStatus left, SurveyStatus right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(SurveyStatus left, SurveyStatus right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

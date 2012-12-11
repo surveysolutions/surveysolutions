@@ -2,21 +2,20 @@
 // <copyright file="UserDenormalizer.cs" company="The World Bank">
 //   2012
 // </copyright>
-// <summary>
-//   The user denormalizer.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events.User;
-using Main.DenormalizerStorage;
-using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Main.Core.EventHandlers
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events.User;
+    using Main.DenormalizerStorage;
+
+    using Ncqrs.Eventing.ServiceModel.Bus;
+
     /// <summary>
     /// The user denormalizer.
     /// </summary>
@@ -24,7 +23,7 @@ namespace Main.Core.EventHandlers
                                     IEventHandler<UserChanged>, 
                                     IEventHandler<UserStatusChanged>
     {
-        #region Fields
+        #region Constants and Fields
 
         /// <summary>
         /// The users.

@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.EventHandlers
+namespace Core.Supervisor.Denormalizer
 {
     using System;
 
@@ -100,9 +100,8 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<NewSynchronizationProcessCreated> evnt)
         {
             this.docs.Store(
-                new SyncProcessStatisticsDocument
+                new SyncProcessStatisticsDocument(evnt.Payload.ProcessGuid)
                     {
-                        SyncKey = evnt.Payload.ProcessGuid,
                         SyncType = evnt.Payload.SynckType
                     },
                 Guid.Empty);

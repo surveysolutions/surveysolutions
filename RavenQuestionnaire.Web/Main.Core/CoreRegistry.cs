@@ -106,7 +106,7 @@ namespace Main.Core
             this.Bind<ICommandListSupplier>().ToConstant(commands);
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface()));
+                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
 
         }
 

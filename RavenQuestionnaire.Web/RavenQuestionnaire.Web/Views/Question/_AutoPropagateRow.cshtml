@@ -4,7 +4,7 @@
 @{
     var currentRowId = string.Format("divEditAutoPropagatable{0}", Guid.NewGuid().ToString());
     var list = new SelectList(new List<Guid>(), string.Empty);
-    var current = Guid.Empty;
+    var current = Model;
     if (ViewBag.Group != null)
     {
         var groups = ViewBag.Group as Dictionary<string, Guid>;
