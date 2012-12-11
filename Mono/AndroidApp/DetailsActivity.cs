@@ -9,6 +9,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Controls.QuestionnaireDetails;
+using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp
 {
@@ -26,11 +28,15 @@ namespace AndroidApp
             base.OnCreate(bundle);
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Details);
-            TextView tvId = new TextView(this);
-            tvId.Text = this.QuestionnaireId.ToString();
+            
+          /*QuestionnaireNavigationView navigationView=new QuestionnaireNavigationView(this,new XmlReaderResourceParser() );
             LinearLayout layout = FindViewById<LinearLayout>(Resource.Id.MyLayout);
-            layout.AddView(tvId);
+            layout.AddView(tvId);*/
+            QuestionnaireNavigationView navList = FindViewById<QuestionnaireNavigationView>(Resource.Id.navList);
+            navList.QuestionnaireId = QuestionnaireId;
             // Create your application here
         }
+
+     
     }
 }

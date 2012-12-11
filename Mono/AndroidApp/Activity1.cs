@@ -67,8 +67,7 @@ namespace AndroidApp
             main.RemoveAllViews();
           
             var dashboardData =
-            CapiApplication.Kernel.Get<IViewRepository>().Load<DashboardInput, DashboardModel>(
-                    new DashboardInput());
+            CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput());
             LinearLayout llContainer = new LinearLayout(this);
             llContainer.Orientation=Orientation.Vertical;
             llContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);

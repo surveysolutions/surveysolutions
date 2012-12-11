@@ -16,9 +16,10 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <AndroidSupportedAbis>armeabi%3bx86</AndroidSupportedAbis>
+    <AndroidSupportedAbis>armeabi%3barmeabi-v7a%3bx86</AndroidSupportedAbis>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
+    <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,7 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkSkip />
+    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -55,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Activity1.cs" />
     <Compile Include="CapiApplication.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -64,6 +68,10 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsInput.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsViewFactory.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -85,13 +93,25 @@
       <Project>{ED790AED-465E-4787-A9A3-8380229E0470}</Project>
       <Name>AndroidCore.Capi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+      <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
+      <Name>AndroidLogger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
       <Name>AndroidMain.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
+      <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
+      <Name>AndroidNCalc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
+      <Project>{30BE60C9-980F-40E1-A8FD-C2A5959827D3}</Project>
+      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
@@ -107,7 +127,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Layout\Details.axml" />
+    <AndroidResource Include="Resources\Layout\Details.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\cell_shape.xml" />
@@ -120,6 +142,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\SurveyTableHeader.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Layout\list_navigation_item.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

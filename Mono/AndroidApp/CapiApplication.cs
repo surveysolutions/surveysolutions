@@ -13,6 +13,7 @@ using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
 using Main.Core.Events.Questionnaire.Completed;
+using Main.Core.View;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -25,6 +26,11 @@ namespace AndroidApp
     public class CapiApplication : Application
     {
         public static IKernel Kernel { get;private set; }
+        public static TOutput LoadView<TInput, TOutput>(TInput input)
+        {
+            return Kernel.Get<IViewRepository>().Load<TInput, TOutput>(input);
+        }
+
         public static Context CurrentContext { get; set; }
         public CapiApplication()
 		{
