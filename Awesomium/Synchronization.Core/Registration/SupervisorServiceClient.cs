@@ -16,30 +16,19 @@ using Synchronization.Core.Interface;
 
 namespace Synchronization.Core.Registration
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName = "ISupervisorService")]
-    public interface ISupervisorService
-    {
-
-        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/GetPath", ReplyAction = "http://tempuri.org/ISupervisorService/GetPathResponse")]
-        string GetPath();
-
-        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/AuthorizeDevice", ReplyAction = "http://tempuri.org/ISupervisorService/AuthorizeDeviceResponse")]
-        string AuthorizeDevice(string data);
-    }
-
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface ISupervisorServiceChannel : ISupervisorService, System.ServiceModel.IClientChannel
-    {
-    }
-
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class SupervisorServiceClient : System.ServiceModel.ClientBase<ISupervisorService>, 
-        ISupervisorService, 
+    public partial class SupervisorServiceClient : System.ServiceModel.ClientBase<ISupervisorService>,
+        ISupervisorService,
         IServiceWatcher,
         IEqualityComparer<IServiceAuthorizationPacket>
     {
+        public enum ChannelType
+        {
+            Usb,
+            Net
+        }
+
         #region Members
 
         IList<IServiceAuthorizationPacket> requests = new List<IServiceAuthorizationPacket>();
@@ -48,22 +37,22 @@ namespace Synchronization.Core.Registration
 
         #region C-tors
 
-        public SupervisorServiceClient(Common.Utils.IUrlUtils urlUtils) : 
+        public SupervisorServiceClient(Common.Utils.IUrlUtils urlUtils) :
             this("mexHttpBinding_ISupervisorService", urlUtils.GetSupervisorService())
         {
         }
 
-        private SupervisorServiceClient(string endpointConfigurationName) :
+        /*private SupervisorServiceClient(string endpointConfigurationName) :
             base(endpointConfigurationName)
         {
-        }
+        }*/
 
         private SupervisorServiceClient(string endpointConfigurationName, string remoteAddress) :
             base(endpointConfigurationName, remoteAddress)
         {
         }
 
-        private SupervisorServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
+        /*private SupervisorServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) :
             base(endpointConfigurationName, remoteAddress)
         {
         }
@@ -71,7 +60,7 @@ namespace Synchronization.Core.Registration
         private SupervisorServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) :
             base(binding, remoteAddress)
         {
-        }
+        }*/
 
         #endregion
 
@@ -82,9 +71,14 @@ namespace Synchronization.Core.Registration
             return base.Channel.GetPath();
         }
 
-        public string AuthorizeDevice(string data)
+        public bool AuthorizeDevice(byte[] registerData)
         {
-            return base.Channel.AuthorizeDevice(data);
+            return base.Channel.AuthorizeDevice(registerData);
+        }
+
+        public object[] GetAuthorizationRequests()
+        {
+            return base.Channel.GetAuthorizationRequests();
         }
 
         #endregion
@@ -100,6 +94,8 @@ namespace Synchronization.Core.Registration
 
             lock (this)
             {
+                object[] requests = GetAuthorizationRequests();
+
                 var oldCount = this.requests.Count;
 
                 this.requests = this.requests.Union(extraPackets, this).ToList();
@@ -121,6 +117,14 @@ namespace Synchronization.Core.Registration
         public int GetHashCode(IServiceAuthorizationPacket x)
         {
             return (x as AuthorizationPacket).GetHashCode();
+        }
+
+        internal void Clean(ServicePacketChannel channelType)
+        {
+            lock (this)
+            {
+                this.requests = this.requests.Where(p => p.Channel != channelType).ToList();
+            }
         }
     }
 }

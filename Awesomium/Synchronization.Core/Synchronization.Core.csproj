@@ -71,7 +71,7 @@
     <Compile Include="Registration\AuthorizationRequest.cs" />
     <Compile Include="Registration\AuthorizationResponce.cs" />
     <Compile Include="Registration\AuthorizationPacket.cs" />
-    <Compile Include="Registration\WcfService.cs" />
+    <Compile Include="Registration\SupervisorServiceClient.cs" />
     <Compile Include="Registration\RegisterData.cs" />
     <Compile Include="Registration\RegistrationManager.cs" />
     <Compile Include="Registration\RSACryptoService.cs" />

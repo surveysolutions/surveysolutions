@@ -52,7 +52,7 @@ namespace Browsing.CAPI.Containers
             _firstStepRegisteredMessageUSB = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
             _firstStepRegisteredMessageNET = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step via net.\nPlease, wait to accept authorization.";
             //_firstStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
-            _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + Register1ButtonText + " button to prepare authorization request on USB flash memory.";
+            _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + Register1ButtonText + " button to send authorization request.";
             _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' has been authorized by '{0}'.\nIf necessary you may repeat registration process.";
 
             InitializeComponent();
@@ -110,9 +110,9 @@ namespace Browsing.CAPI.Containers
                 System.Diagnostics.Debug.Assert(args.IsFirstPhase);
                 System.Diagnostics.Debug.Assert(args.Packets.Count == 1);
 
-                RegistrationStatus = args.Packets.First().IsUsbChannel ? Phaze.PublicKeySharedUSB : Phaze.PublicKeySharedNET;
+                RegistrationStatus = args.Packets.First().Channel == ServicePacketChannel.Usb ? Phaze.PublicKeySharedUSB : Phaze.PublicKeySharedNET;
 
-                args.AppendResultMessage(args.Packets.First().IsUsbChannel ? FirstStepRegisteredMessageUSB : FirstStepRegisteredMessageNET);
+                args.AppendResultMessage(args.Packets.First().Channel == ServicePacketChannel.Usb ? FirstStepRegisteredMessageUSB : FirstStepRegisteredMessageNET);
             }
 
             base.OnFirstRegistrationPhaseAccomplished(args);

@@ -173,8 +173,7 @@ namespace Browsing.Common.Containers
                 ShowError("Checking registration status ...");
 
                 // assume sync possibility by default
-                this.isFirstPhaseRegistrationPossible = true;
-                this.isSecondPhaseRegistrationPossible = true;
+                this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = true;
 
                 IList<ServiceException> issues = this.RegistrationManager.CheckRegIssues();
                 if (issues == null || issues.Count == 0)
@@ -183,25 +182,28 @@ namespace Browsing.Common.Containers
                 ServiceException ex = issues.FirstOrDefault<ServiceException>(x => x is LocalHosUnreachableException);
                 if (ex != null)
                 {
-                    this.isFirstPhaseRegistrationPossible = false;
-                    this.isSecondPhaseRegistrationPossible = false;
+                    this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = false;
 
                     status += "\n" + ex.Message;
 
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is InactiveNetServiceException);
                 if (ex != null)
                 {
-                    this.isFirstPhaseRegistrationPossible = false;
-                    this.isSecondPhaseRegistrationPossible = false;
+                    status = ex.Message;
 
-                    status += "\n" + ex.Message;
+                    ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
+                    if (ex != null)
+                    {
+                        this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = false;
 
-                    return;
+                        status += "\n" + ex.Message;
+
+                        return; // fatal
+                    }
                 }
-
             }
             finally
             {
@@ -314,9 +316,12 @@ namespace Browsing.Common.Containers
 
         #region IUsbWatcher
 
-        public void UpdateUsbList()
+        public void UpdateUsbList(bool driverAvailable)
         {
             this.regPanel.UpdateUsbStatus();
+
+            if(!driverAvailable)
+                RegistrationManager.RemoveUsbChannelPackets();
 
             CheckRegistractionPossibilities();
         }

@@ -16,6 +16,6 @@ namespace Browsing.Common.Interfaces
     /// </summary>
     public interface IUsbWatcher
     {
-        void UpdateUsbList();
+        void UpdateUsbList(bool driverAvailable);
     }
 }

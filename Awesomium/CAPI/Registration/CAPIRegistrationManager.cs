@@ -43,14 +43,14 @@ namespace Browsing.CAPI.Registration
 
         protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
-            // todo: 1. Try to send packet via network firstly. If no luck, try to save to usb
+            // todo: 1. Try to send packet via web firstly. If no luck, try to save to usb
 
             base.OnStartRegistration(packet);
         }
 
         protected override void OnFinalizeRegistration(IServiceAuthorizationPacket packet)
         {
-            System.Diagnostics.Debug.Assert(packet.Type == ServicePackectType.Responce);
+            System.Diagnostics.Debug.Assert(packet.Type == ServicePacketType.Responce);
 
             AuthorizeAcceptedData(packet);
         }
@@ -64,7 +64,7 @@ namespace Browsing.CAPI.Registration
         protected override IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
         {
             // read responces
-            var packets = base.OnReadUsbPackets(false).Where((p) => p.Data.RegistrationId == RegistrationId); 
+            var packets = base.OnReadUsbPackets(false).Where(p => p.Data.RegistrationId == RegistrationId);
 
             return packets.ToList();
         }
@@ -77,7 +77,7 @@ namespace Browsing.CAPI.Registration
         {
             if (firstPhase) // create authorization request
             {
-                webServicePackets = new List<IServiceAuthorizationPacket>() { PreparePacket(true, RegistrationId, true) };
+                webServicePackets = new List<IServiceAuthorizationPacket>() { PreparePacket(true, RegistrationId, ServicePacketChannel.Usb) };
             }
             else // treat authorization responce
             {
@@ -112,16 +112,16 @@ namespace Browsing.CAPI.Registration
             if (cpuInfo == null)
                 return DefaultDevice;
 
-           
-            
+
+
             foreach (DriveInfo drive in DriveInfo.GetDrives())
             {
                 if (!drive.IsReady) continue;
                 selectedDrive = drive.RootDirectory.ToString();
                 break;
             }
-            
-            var disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + selectedDrive.Substring(0,1) + @":""");
+
+            var disk = new ManagementObject(@"win32_logicaldisk.deviceid=""" + selectedDrive.Substring(0, 1) + @":""");
             disk.Get();
             selectedDrive = disk["VolumeSerialNumber"].ToString();
 

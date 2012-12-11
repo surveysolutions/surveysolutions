@@ -17,11 +17,11 @@ namespace Synchronization.Core.Registration
     /// </summary>
     public class AuthorizationRequest : AuthorizationPacket, IRequestPacket
     {
-        public AuthorizationRequest(RegisterData data, bool viaUsbChannel)
-            : base(data, viaUsbChannel)
+        public AuthorizationRequest(RegisterData data, ServicePacketChannel channel)
+            : base(data, channel)
         {
         }
 
-        public override Interface.ServicePackectType Type { get { return Interface.ServicePackectType.Request; } }
+        public override Interface.ServicePacketType Type { get { return Interface.ServicePacketType.Request; } }
     }
 }

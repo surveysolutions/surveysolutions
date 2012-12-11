@@ -83,8 +83,7 @@ namespace Browsing.Common.Containers
                 this.syncPanel.ShowError("Looking for available data points ...");
 
                 // assume sync possibility by default
-                this.isPullPossible = true;
-                this.isPushPossible = true;
+                this.isPullPossible = this.isPushPossible = true;
 
                 //return;
 
@@ -95,8 +94,7 @@ namespace Browsing.Common.Containers
                 ServiceException ex = issues.FirstOrDefault<ServiceException>(x => x is LocalHosUnreachableException);
                 if (ex != null)
                 {
-                    this.isPullPossible = false;
-                    this.isPushPossible = false;
+                    this.isPullPossible = this.isPushPossible = false;
 
                     status = ex.Message;
 
@@ -111,8 +109,7 @@ namespace Browsing.Common.Containers
                     ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
                     if (ex != null)
                     {
-                        this.isPullPossible = false;
-                        this.isPushPossible = false;
+                        this.isPullPossible = this.isPushPossible = false;
 
                         status += "\n" + ex.Message;
 
@@ -269,7 +266,7 @@ namespace Browsing.Common.Containers
             this.syncPanel.usbStatusPanel.MakeStatisticListVisible(value);
         }
 
-        public void UpdateUsbList()
+        public void UpdateUsbList(bool driverAvailable)
         {
             this.syncPanel.UpdateUsbStatus();
 

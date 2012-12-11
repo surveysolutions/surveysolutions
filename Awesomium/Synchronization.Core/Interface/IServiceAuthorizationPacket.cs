@@ -12,20 +12,27 @@ namespace Synchronization.Core.Interface
     using System.Text;
     using Synchronization.Core.Registration;
 
-    public enum ServicePackectType
+    public enum ServicePacketType
     {
         Request,
         Responce,
     }
+
+    public enum ServicePacketChannel
+    {
+        Usb,
+        Net,
+    }
+
 
     /// <summary>
     /// Service request basic interface
     /// </summary>
     public interface IServiceAuthorizationPacket
     {
-        ServicePackectType Type { get; }
+        ServicePacketType Type { get; }
         RegisterData Data { get; }
-        bool IsUsbChannel { get; }
+        ServicePacketChannel Channel { get; }
         bool IsAuthorized { get; set; }
     }
 
