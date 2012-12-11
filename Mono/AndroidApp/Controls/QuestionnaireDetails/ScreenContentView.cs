@@ -35,6 +35,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             layoutInflater.Inflate(Resource.Layout.ScreenGroupView, this);
         }
 
-        public Guid QuestionnaireId { get; set; }
+        private Guid questionnaireId;
+        public Guid QuestionnaireId
+        {
+            get { return questionnaireId; }
+            set { questionnaireId = value;
+            TextView qGuid = FindViewById<TextView>(Resource.Id.qGuid);
+            qGuid.Text = value.ToString();
+            }
+        }
+        
     }
 }

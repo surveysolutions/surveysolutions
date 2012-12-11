@@ -35,8 +35,8 @@ namespace AndroidApp
             QuestionnaireNavigationView navList = FindViewById<QuestionnaireNavigationView>(Resource.Id.navList);
             navList.QuestionnaireId = QuestionnaireId;
 
-          /*  ScreenContentView scveenView = FindViewById<ScreenContentView>(Resource.Id.scveenView);
-            scveenView.QuestionnaireId = QuestionnaireId;*/
+            ScreenContentView scveenView = FindViewById<ScreenContentView>(Resource.Id.scveenView);
+            scveenView.QuestionnaireId = QuestionnaireId;
             // Create your application here
         }
 

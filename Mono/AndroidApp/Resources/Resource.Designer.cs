@@ -66,6 +66,9 @@ namespace AndroidApp
 			// aapt resource value: 0x7f050002
 			public const int navList = 2131034114;
 			
+			// aapt resource value: 0x7f050004
+			public const int qGuid = 2131034116;
+			
 			// aapt resource value: 0x7f050003
 			public const int scveenView = 2131034115;
 			
