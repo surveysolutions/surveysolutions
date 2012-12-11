@@ -28,7 +28,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public MultyOptionsCompleteQuestion()
         {
-            
+
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public MultyOptionsCompleteQuestion(string text)
             : base(text)
         {
-            
+
         }
 
         #endregion
@@ -52,10 +52,10 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddMultyAttr { get; set; }
 
-       /* /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children { get; set; }*/
+        /* /// <summary>
+         /// Gets or sets the children.
+         /// </summary>
+         public override List<IComposite> Children { get; set; }*/
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
             this.Answers.Add(answer);
         }
-        
+
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -128,20 +128,16 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-
             var items = this.Answers.Where(a => ((ICompleteAnswer)a).Selected).ToArray();
-        //    return answer == null ? string.Empty : answer.AnswerText;
 
-         //   var items = this.GetAnswerObject() as IEnumerable<object>;
-            
             if (items.Any())
             {
-                return string.Join(", ", items.Select(a => a.AnswerText.ToString()));
+                return string.Join(", ", items.Select(a => a.AnswerType == AnswerType.Image ? a.AnswerImage : a.AnswerText.ToString()));
             }
-            
+
             return string.Empty;
         }
-        
+
         /// <summary>
         /// The set answer.
         /// </summary>
@@ -167,7 +163,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             {
                 (item as ICompleteAnswer).Selected = answer.Contains(item.PublicKey);
             }
-            
+
         }
 
         #endregion
