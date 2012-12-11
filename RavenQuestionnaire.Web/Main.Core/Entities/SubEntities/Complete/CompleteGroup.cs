@@ -147,6 +147,22 @@ namespace Main.Core.Entities.SubEntities.Complete
         public Guid? PropagationPublicKey { get; set; }
 
         /// <summary>
+        /// False if group is empty or has hidden items, true overwise
+        /// </summary>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
+        /// <returns>
+        /// False or true
+        /// </returns>
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            var count = this.Children.OfType<ICompleteGroup>().Where(g => g.HasVisibleItemsForScope(questionScope)).Count()
+                + this.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= questionScope).Count();
+            return count != 0 || this.Children.Count == 0;
+        }
+
+        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }

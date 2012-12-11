@@ -172,6 +172,11 @@ namespace Main.Core.Documents
             }
         }
 
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            return true;
+        }
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>

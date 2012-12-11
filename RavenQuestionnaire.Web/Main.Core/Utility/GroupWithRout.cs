@@ -76,9 +76,8 @@ namespace Main.Core.Utility
                     ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
                     for (int i = subGroups.Length - 1; i >= 0; i--)
                     {
-                        var count = subGroups[i].Children.OfType<ICompleteGroup>().Count() + subGroups[i].Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= this.Scope).Count();
                         // questions exists, but they are hidden 
-                        if (count == 0 && subGroups[i].Children.Count != 0)
+                        if (!subGroups[i].HasVisibleItemsForScope(this.Scope))
                         {
                             continue;
                         }
@@ -128,8 +127,6 @@ namespace Main.Core.Utility
                 return null;
             }
 
-
-
             return node;
         }
 
@@ -177,16 +174,14 @@ namespace Main.Core.Utility
             {
                 groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>()
                     .Where(g => !g.PropagationPublicKey.HasValue)
-                    .Where(
-                        //filter all empty groups or groups with any visible question
-                        g =>
-                        (g.Children.OfType<ICompleteGroup>().Count()
-                         + g.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= this.Scope).Count())
-                        != 0 || g.Children.Count() == 0).ToList();
+
+                    // filter all empty groups or groups with any visible question
+                    .Where(g => g.HasVisibleItemsForScope(this.Scope)).ToList(); 
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
             }
+
             /*  if (indexOfTarget < 0)
                   throw new InvalidOperationException("groups wasn't founded");*/
             if (indexOfTarget > 0)

@@ -150,6 +150,20 @@ namespace Main.Core.Documents
         }
 
         /// <summary>
+        /// Has Visible Items For Scope
+        /// </summary>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
+        /// <returns>
+        /// True
+        /// </returns>
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
