@@ -226,7 +226,7 @@ namespace Browsing.Common.Forms
                         if (usbWatcherScreens != null)
                         {
                             foreach (var screen in usbWatcherScreens)
-                                (screen as Common.Interfaces.IUsbWatcher).UpdateUsbList();
+                                (screen as Common.Interfaces.IUsbWatcher).UpdateUsbList(n == DBT_DEVICEARRIVAL);
                         }
                     }
 

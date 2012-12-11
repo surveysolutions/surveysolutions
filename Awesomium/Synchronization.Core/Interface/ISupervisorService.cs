@@ -12,7 +12,7 @@ namespace Synchronization.Core.Interface
     using System.Text;
     using System.ServiceModel;
 
-    /// <summary>
+    /*/// <summary>
     /// TODO: Update summary.
     /// </summary>
     [ServiceContract]
@@ -22,6 +22,26 @@ namespace Synchronization.Core.Interface
         string GetPath();
 
         [OperationContract]
-        string RegisterDevice(string data);
+        string AuthorizeDevice(string data);
+    }*/
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName = "ISupervisorService")]
+    public interface ISupervisorService
+    {
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/GetPath", ReplyAction = "http://tempuri.org/ISupervisorService/GetPathResponse")]
+        string GetPath();
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/AuthorizeDevice", ReplyAction = "http://tempuri.org/ISupervisorService/AuthorizeDeviceResponse")]
+        bool AuthorizeDevice(byte[] registerData);
+
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/ISupervisorService/GetAuthorizationRequests", ReplyAction = "http://tempuri.org/ISupervisorService/GetAuthorizationRequestsResponse")]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(object[]))]
+        object[] GetAuthorizationRequests();
+    }
+
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    public interface ISupervisorServiceChannel : ISupervisorService, System.ServiceModel.IClientChannel
+    {
     }
 }

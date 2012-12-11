@@ -17,15 +17,15 @@ namespace Synchronization.Core.Registration
     /// </summary>
     public abstract class AuthorizationPacket : IServiceAuthorizationPacket//, IComparable<IServiceAuthorizationPacket>
     {
-        protected AuthorizationPacket(RegisterData data, bool viaUsbChannel)
+        protected AuthorizationPacket(RegisterData data, ServicePacketChannel channel)
         {
             Data = data;
-            IsUsbChannel = viaUsbChannel;
+            Channel = channel;
         }
 
-        public abstract ServicePackectType Type { get; }
+        public abstract ServicePacketType Type { get; }
         public RegisterData Data { get; private set; }
-        public bool IsUsbChannel { get; private set; }
+        public ServicePacketChannel Channel { get; private set; }
         public bool IsAuthorized { get; set; }
 
         public static bool operator !=(AuthorizationPacket x, AuthorizationPacket y)

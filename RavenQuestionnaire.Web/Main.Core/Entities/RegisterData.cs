@@ -47,12 +47,12 @@ namespace Main.Core.Entities
         public byte[] SecretKey { get; set; }
 
         /// <summary>
-        /// ID of device or supervisor
+        /// The ID of registrator who puts registration event to database
         /// </summary>
         public Guid Registrator { get; set; }
 
         /// <summary>
-        /// The id of registrator who puts registration event to database
+        /// The ID of device or another entity to be registered
         /// </summary>
         public Guid RegistrationId { get; set; }
 

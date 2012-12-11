@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Common.Utils;
 using Synchronization.Core.Registration;
@@ -34,7 +35,7 @@ namespace Browsing.Supervisor.Registration
 
         protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
-            System.Diagnostics.Debug.Assert(packet.Type == ServicePackectType.Request);
+            System.Diagnostics.Debug.Assert(packet.Type == ServicePacketType.Request);
 
             AuthorizeAcceptedData(packet);
 
@@ -60,6 +61,10 @@ namespace Browsing.Supervisor.Registration
 
         protected override IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
         {
+            IList<IServiceAuthorizationPacket> packets = webServicePackets.Where(p => !p.IsAuthorized).ToList();
+            if (packets.Count == 0)
+                throw new RegistrationException("There are no new authorization requests", null);
+
             return webServicePackets;
         }
     }

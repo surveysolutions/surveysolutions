@@ -20,9 +20,14 @@ namespace Web.Supervisor.WCF
             return path;
         }
 
-        public string AuthorizeDevice(string data)
+        public bool AuthorizeDevice(byte[] registerData)
         {
-            return "Test only";
+            return false;
+        }
+
+        public IList<IAuthorizationRequest> GetAuthorizationRequests()
+        {
+            return new List<IAuthorizationRequest>();
         }
     }
 }

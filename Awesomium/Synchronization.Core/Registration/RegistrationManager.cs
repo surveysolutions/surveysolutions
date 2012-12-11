@@ -140,7 +140,7 @@ namespace Synchronization.Core.Registration
 
         private byte[] SendLocalRegistrationRequest(byte[] requestParams)
         {
-            string url = RegistrationService;
+            string url = LocalRegistrationService;
 
             //return this.requestProcessor.Process<byte[]>(url, "POST", false, null);
 
@@ -271,6 +271,7 @@ namespace Synchronization.Core.Registration
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
+                throw;
             }
         }
 
@@ -283,12 +284,13 @@ namespace Synchronization.Core.Registration
             catch (Exception ex)
             {
                 Logger.Error(ex.Message);
+                throw;
             }
         }
 
         #endregion
 
-        protected IServiceAuthorizationPacket PreparePacket(bool request, Guid registrationId, bool viaUsb, RegisterData data = null)
+        protected IServiceAuthorizationPacket PreparePacket(bool request, Guid registrationId, ServicePacketChannel channel, RegisterData data = null)
         {
             var keyContainerName = ContainerName;
 
@@ -302,8 +304,8 @@ namespace Synchronization.Core.Registration
             };
 
             return request ?
-                new AuthorizationRequest(registeredData, viaUsb) as IServiceAuthorizationPacket:
-                new AuthorizationResponce(registeredData, viaUsb);
+                new AuthorizationRequest(registeredData, channel) as IServiceAuthorizationPacket:
+                new AuthorizationResponce(registeredData, channel);
         }
 
         #region Properties
@@ -313,7 +315,7 @@ namespace Synchronization.Core.Registration
 
         protected string InFile { get; private set; }
         protected string OutFile { get; private set; }
-        protected string RegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
+        protected string LocalRegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
 
         protected Guid CurrentUser
         {
@@ -350,7 +352,7 @@ namespace Synchronization.Core.Registration
 
         protected virtual void OnStartRegistration(IServiceAuthorizationPacket packet)
         {
-            if (!packet.IsUsbChannel)
+            if (packet.Channel != ServicePacketChannel.Usb)
                 return;
 
             var usb = this.usbProvider.ActiveUsb;
@@ -443,44 +445,47 @@ namespace Synchronization.Core.Registration
             }
             finally
             {
+                var regEvent = new RegistrationEventArgs(packets, firstPhase, error);
+                regEvent.AppendResultMessage(log);
+
                 if (firstPhase)
                 {
                     if (FirstPhaseAccomplished != null)
-                        FirstPhaseAccomplished(this, new RegistrationEventArgs(packets, firstPhase, error));
+                        FirstPhaseAccomplished(this, regEvent);
                 }
                 else
                 {
                     if (SecondPhaseAccomplished != null)
-                        SecondPhaseAccomplished(this, new RegistrationEventArgs(packets, firstPhase, error));
+                        SecondPhaseAccomplished(this, regEvent);
                 }
             }
         }
 
         public IList<Errors.ServiceException> CheckRegIssues()
         {
-            IList<ServiceException> errors = null;
+            IList<ServiceException> errors = new List<ServiceException>();
 
             var drive = this.usbProvider.ActiveUsb;
             if (drive == null)
             {
-                errors = new List<ServiceException>();
-
                 if (this.usbProvider.IsAnyAvailable)
                     errors.Add(new UsbNotChoozenException());
                 else
                     errors.Add(new UsbNotPluggedException());
             }
 
+            var netEndPoint = this.urlUtils.GetEnpointUrl();
+            if (string.IsNullOrEmpty(netEndPoint))
+                errors.Add(new InactiveNetServiceException());
+
             try
             {
                 if (this.requestProcessor.Process<string>(this.urlUtils.GetDefaultUrl(), "False") == "False")
                     throw new LocalHosUnreachableException(); // there is no connection to local host
 
-                /*var netEndPoint = this.urlUtils.GetEnpointUrl();
-
                 // test if there is connection to synchronization endpoint
                 if (this.requestProcessor.Process<string>(netEndPoint, "False") == "False")
-                    throw new NetUnreachableException(netEndPoint);*/
+                    throw new NetUnreachableException(netEndPoint);
             }
             catch (Exception ex)
             {
@@ -517,7 +522,7 @@ namespace Synchronization.Core.Registration
                 ///// read from usb
                 var usbData = ReadRegistrationFile(drive.Name + InFile);
 
-                IServiceAuthorizationPacket packet = PreparePacket(authorizationRequest, Guid.Empty, true, usbData);
+                IServiceAuthorizationPacket packet = PreparePacket(authorizationRequest, Guid.Empty, ServicePacketChannel.Usb, usbData);
 
                 System.Diagnostics.Debug.Assert(packet != null);
 
@@ -541,6 +546,11 @@ namespace Synchronization.Core.Registration
             }
 
             return exrtraPackets;
+        }
+
+        public void RemoveUsbChannelPackets()
+        {
+            this.registrationService.Clean(ServicePacketChannel.Usb);
         }
     }
 }

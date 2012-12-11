@@ -84,7 +84,6 @@ namespace Main.DenormalizerStorage
                 try
                 {
                     session.SaveChanges();
-                   
                 }
                 catch (ConcurrencyException ex)
                 {
