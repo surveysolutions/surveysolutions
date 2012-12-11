@@ -178,6 +178,8 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\StringExtension.cs" />
+    <Compile Include="Models\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />

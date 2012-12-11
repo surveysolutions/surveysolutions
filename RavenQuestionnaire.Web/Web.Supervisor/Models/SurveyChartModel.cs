@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InterviewerChartModel.cs" company="">
+// <copyright file="SurveyChartModel.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -9,19 +9,21 @@
 
 namespace Web.Supervisor.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
     using System.Windows.Forms;
 
     using Core.Supervisor.Views.Index;
+    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Entities.SubEntities;
 
     /// <summary>
     /// The interviewer chart model.
     /// </summary>
-    public class InterviewerChartModel
+    public class SurveyChartModel
     {
         #region Constructors and Destructors
 
@@ -33,7 +35,7 @@ namespace Web.Supervisor.Models
         /// <param name="model">
         /// The model.
         /// </param>
-        public InterviewerChartModel(IndexView model)
+        public SurveyChartModel(SummaryView model)
         {
             var piePreData =
                 model.Items.Select(
@@ -42,10 +44,10 @@ namespace Web.Supervisor.Models
                         {
                             y = t.Total,
                             color = this.colors[index],
-                            name = t.Title,
-                            title = t.Title.Acronim(),
-                            categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" },
-                            data = new[] { t.Unassign, t.Initial, t.Redo, t.Complete, t.Approve, t.Error },
+                            name = t.User.Name,
+                            title = t.User.Name,
+                            categories = new[] { "Initial", "Redo", "Complete", "Approve", "Error" },
+                            data = new[] { t.Initial, t.Redo, t.Complete, t.Approve, t.Error },
                         }).ToArray();
 
             this.BrowserData = new List<object>();
@@ -88,13 +90,6 @@ namespace Web.Supervisor.Models
                         },
                     new
                         {
-                            name = SurveyStatus.Unassign.Name,
-                            data = model.Items.Select(t => t.Unassign).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Unassign.Name]
-                        },
-                    new
-                        {
                             name = SurveyStatus.Initial.Name,
                             data = model.Items.Select(t => t.Initial).ToArray(),
                             stack = "parts",
@@ -134,7 +129,7 @@ namespace Web.Supervisor.Models
                     (t, index) =>
                     new
                         {
-                            name = t.Title,
+                            name = t.User.Name,
                             color = this.colors[index],
                             data = new[] { new[] { t.Initial + t.Redo, t.Complete + t.Approve } }
                         }).ToArray();
@@ -164,7 +159,7 @@ namespace Web.Supervisor.Models
                 { SurveyStatus.Unassign.Name, "#c3325f" },
                 { SurveyStatus.Initial.Name, "#049cdb" },
                 { SurveyStatus.Redo.Name, "#f89406" },
-                { SurveyStatus.Error.Name, "#c83025" /*"#6602cc" */ },
+                { SurveyStatus.Error.Name, "#c83025" },
                 { SurveyStatus.Complete.Name, "#018080" },
                 { SurveyStatus.Approve.Name, "#46a546" },
                 { "Total", "#333333" },
