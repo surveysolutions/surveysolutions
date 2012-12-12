@@ -134,7 +134,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer;
         }
 
-       
         /// <summary>
         /// The set answer.
         /// </summary>

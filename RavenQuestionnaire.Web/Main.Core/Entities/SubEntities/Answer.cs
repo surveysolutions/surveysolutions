@@ -1,19 +1,15 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Answer.cs" company="">
-//   
+// <copyright file="Answer.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The Answer interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System;
-    using System.Collections.Generic;
-
-    using Main.Core.Entities.Composite;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The answer.
@@ -52,7 +48,7 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the answer value.
         /// </summary>
-        public object AnswerValue { get; set; }
+        public string AnswerValue { get; set; }
        
         /// <summary>
         /// Gets or sets a value indicating whether mandatory.
@@ -68,6 +64,19 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
+
+        #endregion
+
+        #region Implementation of ICloneable
+
+        public IAnswer Clone()
+        {
+            var answer = this.MemberwiseClone() as Answer;
+
+            // answer.AnswerValue = this.AnswerValue;
+
+            return answer;
+        }
 
         #endregion
     }

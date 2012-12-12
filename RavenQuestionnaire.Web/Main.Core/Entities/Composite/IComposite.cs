@@ -15,7 +15,7 @@ namespace Main.Core.Entities.Composite
     /// <summary>
     /// The Composite interface.
     /// </summary>
-    public interface IComposite
+    public interface IComposite /*: ICloneable*/
     {
         #region Public Properties
 
@@ -111,6 +111,18 @@ namespace Main.Core.Entities.Composite
         /// The connect childs with parent.
         /// </summary>
         void ConnectChildsWithParent();
+
+
+        // Could be created as a separate interface
+        // but we need cast an object every time 
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        IComposite Clone();
 
         #endregion
     }

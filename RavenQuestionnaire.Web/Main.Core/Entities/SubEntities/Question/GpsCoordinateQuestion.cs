@@ -17,6 +17,7 @@ namespace Main.Core.Entities.SubEntities.Question
     /// <summary>
     /// The gps coordinate question.
     /// </summary>
+    [Obsolete]
     public class GpsCoordinateQuestion : AbstractQuestion, IGpsCoordinatesQuestion
     {
         #region Constructors and Destructors
@@ -84,7 +85,6 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             throw new NotImplementedException();
         }
-
         
         /*/// <summary>
         /// The add.

@@ -33,6 +33,8 @@ namespace Main.Core.Entities.SubEntities
             // PublicKey = Guid.NewGuid();
             this.Cards = new List<Image>();
             this.Answers = new List<IAnswer>();
+            this.ConditionalDependentGroups = new List<Guid>();
+            this.ConditionalDependentQuestions = new List<Guid>();
         }
 
         /// <summary>
@@ -264,6 +266,25 @@ namespace Main.Core.Entities.SubEntities
         public void ConnectChildsWithParent()
         {
             //// do nothing
+        }
+
+        public virtual IComposite Clone()
+        {
+            var question = this.MemberwiseClone() as IQuestion;
+
+            question.Parent = null;
+            question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+
+            question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+
+            question.Answers = new List<IAnswer>();
+            foreach (var answer in this.Answers)
+            {
+                question.Answers.Add(answer.Clone());
+            }
+
+            return question;
         }
 
         /// <summary>

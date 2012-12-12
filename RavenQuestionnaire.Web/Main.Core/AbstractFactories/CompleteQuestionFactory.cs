@@ -166,9 +166,9 @@ namespace Main.Core.AbstractFactories
         /// </param>
         public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
         {
-            //AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+            // AbstractQuestion q = this.CreateQuestion(e.QuestionType);
 
-            //q.PublicKey = question.PublicKey;
+            // q.PublicKey = question.PublicKey;
 
             this.UpdateQuestion(
                 question,

@@ -33,7 +33,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
         [Test]
         public void CheckConversion_AnswersAreConverted()
         {
-            var completeAnswer = new CompleteAnswer { AnswerValue = 5, AnswerText = "5", Selected = true };
+            var completeAnswer = new CompleteAnswer { AnswerValue = "5", AnswerText = "5", Selected = true };
             var question = new SingleCompleteQuestion
                 {
                    Answers = new List<IAnswer> { completeAnswer, new CompleteAnswer() } 

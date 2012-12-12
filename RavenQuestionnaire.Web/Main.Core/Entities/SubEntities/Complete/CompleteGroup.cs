@@ -60,7 +60,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </param>
         /// <exception cref="InvalidOperationException">
         /// </exception>
-        public CompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
+        public CompleteGroup(ICompleteGroup group, Guid? propogationPublicKey)
             : this()
         {
             this.Title = group.Title;
@@ -425,6 +425,11 @@ namespace Main.Core.Entities.SubEntities.Complete
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        public IComposite Clone()
+        {
+            return new CompleteGroup(this, this.PropagationPublicKey);
         }
 
         #endregion

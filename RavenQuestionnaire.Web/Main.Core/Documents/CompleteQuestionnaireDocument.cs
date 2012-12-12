@@ -193,6 +193,31 @@ namespace Main.Core.Documents
         }
 
         /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var doc = this.MemberwiseClone() as CompleteQuestionnaireDocument;
+
+            doc.Parent = null;
+            doc.Triggers = new List<Guid>(this.Triggers);
+            doc.Creator = new UserLight(this.Creator.Id, this.Creator.Name);
+            doc.Responsible = new UserLight(this.Responsible.Id, this.Responsible.Name);
+            doc.Status = new SurveyStatus(this.Status.PublicId, this.Status.Name);
+
+            doc.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                doc.Children.Add(composite.Clone());
+            }
+
+            return doc;
+        }
+
+        /// <summary>
         /// The get question.
         /// </summary>
         /// <param name="publicKey">

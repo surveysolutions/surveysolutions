@@ -83,7 +83,7 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            this.HandleNewSurvey(document);
+            this.HandleNewSurvey(document.Clone() as CompleteQuestionnaireDocument);
         }
 
         /// <summary>

@@ -88,7 +88,6 @@ namespace Main.Core.Events
                 return BuildEventStream(events);
             if (events.Last().Payload is SnapshootLoaded)
             {
-
                 return new List<AggregateRootEvent>()
                            {
 
@@ -122,7 +121,6 @@ namespace Main.Core.Events
             this.myEventStore.Store(uncommitedStream);
             return new List<AggregateRootEvent>()
                        {
-
                            new AggregateRootEvent(new CommittedEvent(commitId, eventId, aggregateRootId, 1,
                                                                      dateOfEvent, eventSnapshoot,
                                                                      events.Last().GetType().Assembly.GetName().Version))

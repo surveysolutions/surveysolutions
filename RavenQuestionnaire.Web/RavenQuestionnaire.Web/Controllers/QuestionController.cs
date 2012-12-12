@@ -366,7 +366,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         
-                        if (triggers == null || triggers.ToList().Count == 0)
+                        if (triggers == null || !triggers.Any())
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
@@ -571,7 +571,9 @@ namespace RavenQuestionnaire.Web.Controllers
             answer.PublicKey = a.PublicKey;
             answer.AnswerImage = a.AnswerImage;
 
-            // answer.Image=new Image(){};
+            // on designer value is not set
+            // answer.AnswerValue = a.AnswerValue;
+
             return answer;
         }
 
@@ -588,8 +590,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList =
                     new SelectList(
                         images.Items.Select(
-                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(
-                                ), 
+                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(), 
                         "Value", 
                         "Text");
                 this.ViewBag.Images = imagesList;
