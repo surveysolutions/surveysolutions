@@ -427,9 +427,25 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
         }
 
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
         public IComposite Clone()
         {
-            return new CompleteGroup(this, this.PropagationPublicKey);
+            var group = this.MemberwiseClone() as CompleteGroup;
+
+            this.Triggers = new List<Guid>(this.Triggers);
+
+            group.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                group.Children.Add(composite.Clone());
+            }
+
+            return group;
         }
 
         #endregion
