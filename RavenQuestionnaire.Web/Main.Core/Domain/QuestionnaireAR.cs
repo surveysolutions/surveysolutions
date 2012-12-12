@@ -322,7 +322,7 @@ namespace Main.Core.Domain
                     });
         }
 
-        /*/// <summary>
+        /// <summary>
         /// The create completed q.
         /// </summary>
         /// <param name="completeQuestionnaireId">
@@ -333,9 +333,9 @@ namespace Main.Core.Domain
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
-            //// TODO: check is it good to create new AR form another?
+            // TODO: check is it good to create new AR form another?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
-        }*/
+        }
 
         /// <summary>
         /// The create snapshot.
