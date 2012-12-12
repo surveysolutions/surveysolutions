@@ -59,7 +59,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
             LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
             layoutInflater.Inflate(Resource.Layout.ScreenNavigationView, this);
-            this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick    );
+            this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);
         }
 
         void Container_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -68,6 +68,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var screenId = Guid.Parse(item.GetTag(Resource.Id.ScreenId).ToString());
             OnItemClick(screenId);
         }
+
+
   /*      private void Initialize(IAttributeSet attrs)
         {
             this.ItemClick += new EventHandler<ItemClickEventArgs>(QuestionnaireNavigationView_ItemClick);

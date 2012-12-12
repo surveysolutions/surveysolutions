@@ -23,6 +23,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.context = context;
             this.items = items.ToList();
+            this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
 
 
@@ -39,14 +40,21 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             View view = convertView;
             if (view == null)
             {
-                LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+                LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
                 // no view to re-use, create new
                 view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
             tvITem.Text = item.Title;
             var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
-            tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+            if (item.ScreenPublicKey != Guid.Empty)
+            {
+                tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+            }
+            else
+            {
+                tvCount.Visibility = ViewStates.Gone;
+            }
             view.SetTag(Resource.Id.ScreenId, item.ScreenPublicKey.ToString());
             return view;
         }
@@ -62,7 +70,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public override QuestionnaireNavigationPanelItem this[int position]
         {
-            get { return this.items[position]; }
+            get
+            {
+                return this.items[position];
+            }
         }
 
         #endregion

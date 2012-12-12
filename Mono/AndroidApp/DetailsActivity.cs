@@ -44,7 +44,7 @@ namespace AndroidApp
 
         void navList_ItemClick(object sender, ScreenChangedEventArgs e)
         {
-            ScreenContent.ScreenId = e.ScreenId;
+            ScreenContent.ShowScreen(e.ScreenId);
         }
 
         protected ScreenContentView ScreenContent

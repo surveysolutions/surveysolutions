@@ -30,7 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
@@ -70,10 +70,13 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsInput.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireDetailsViewFactory.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelInput.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelViewFactory.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

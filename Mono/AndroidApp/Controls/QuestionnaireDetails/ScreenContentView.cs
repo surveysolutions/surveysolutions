@@ -30,25 +30,40 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         private void Initialize(Context context)
         {
-
-            LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.ScreenGroupView, this);
+            this.ScreensContainer=new Dictionary<Guid, View>();
+            
+           /* LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
+            layoutInflater.Inflate(Resource.Layout.ScreenGroupView, this);*/
         }
 
 
         public Guid QuestionnaireId { get; set; }
-
-        public Guid? ScreenId
+        public void ShowScreen(Guid newScreenId)
         {
-            get { return screenId; }
-            set
+           /* TextView qGuid = FindViewById<TextView>(Resource.Id.qGuid);
+            qGuid.Text = screenId.ToString();*/
+            if (ScreensContainer.ContainsKey(ScreenId))
             {
-                screenId = value;
-                TextView qGuid = FindViewById<TextView>(Resource.Id.qGuid);
-                qGuid.Text = value.ToString();
+                ScreensContainer[ScreenId].Visibility = ViewStates.Gone;
             }
+            if (ScreensContainer.ContainsKey(newScreenId))
+            {
+                ScreensContainer[newScreenId].Visibility = ViewStates.Visible;
+            }
+            else
+            {
+
+                TextView tv = new TextView(this.Context);
+                tv.Text = newScreenId.ToString();
+                ScreensContainer.Add(newScreenId, tv);
+                this.AddView(tv);
+
+            }
+            this.ScreenId = newScreenId;
         }
 
-        private Guid? screenId;
+        public Guid ScreenId { get;private set; }
+        protected IDictionary<Guid, View> ScreensContainer;
+
     }
 }
