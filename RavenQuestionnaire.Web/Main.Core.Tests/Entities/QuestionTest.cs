@@ -108,7 +108,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
                 Assert.IsTrue(answer != null);
 
 
-                Assert.IsTrue(answer.Equals(question.Answers[i])); // they are interfaces and Equals uses Reference equality
+                Assert.IsTrue(!answer.Equals(question.Answers[i])); // they are interfaces and Equals uses Reference equality
             }
         }
 
