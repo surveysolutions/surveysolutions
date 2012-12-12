@@ -49,21 +49,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public string AddDateTimeAttr { get; set; }
 
         /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the date time attr.
         /// </summary>
         public DateTime DateTimeAttr { get; set; }

@@ -50,21 +50,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public string AddGpsCoordinateAttr { get; set; }
 
         /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
         public char IntAttr { get; set; }

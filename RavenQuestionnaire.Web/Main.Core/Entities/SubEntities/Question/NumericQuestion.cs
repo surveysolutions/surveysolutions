@@ -48,22 +48,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// Gets or sets the add numeric attr.
         /// </summary>
         public string AddNumericAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets the int attr.
         /// </summary>

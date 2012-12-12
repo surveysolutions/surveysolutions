@@ -75,7 +75,17 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the children.
         /// </summary>
-        public abstract List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>(0);
+            }
+            set
+            {
+                // do nothing
+            } 
+        }
 
         /// <summary>
         /// Gets or sets the comments.

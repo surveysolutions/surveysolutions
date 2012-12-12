@@ -54,12 +54,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// Gets or sets the add single attr.
         /// </summary>
         public string AddSingleAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children { get; set; }
-
+        
         #endregion
 
         #region Public Methods and Operators
@@ -87,44 +82,6 @@ namespace Main.Core.Entities.SubEntities.Question
             this.Answers.Add(answer);
         }
         
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="DuplicateNameException">
-        /// </exception>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-            /*if (!parent.HasValue || parent.Value == this.PublicKey)
-            {
-                var answer = c as IAnswer;
-                if (answer != null)
-                {
-                    // AddAnswer(answer);
-                    if (this.Children.Any(a => a.PublicKey.Equals(answer.PublicKey)))
-                    {
-                        throw new DuplicateNameException("answer with current publick key already exist");
-                    }
-
-                    this.Children.Add(answer);
-                    return;
-                }
-            }
-
-            throw new CompositeException();#1#
-        }*/
-
-
-
         /// <summary>
         /// The find.
         /// </summary>

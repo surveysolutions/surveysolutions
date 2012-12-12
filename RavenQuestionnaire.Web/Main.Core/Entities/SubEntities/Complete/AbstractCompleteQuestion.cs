@@ -35,6 +35,8 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Cards = new List<Image>();
             this.AnswerDate = DateTime.Now;
             this.Answers = new List<IAnswer>();
+            this.ConditionalDependentQuestions = new List<Guid>();
+            this.ConditionalDependentGroups = new List<Guid>();
         }
 
         /// <summary>
@@ -52,6 +54,9 @@ namespace Main.Core.Entities.SubEntities.Complete
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the validated time.
+        /// </summary>
         public DateTime ValidatedTime { get; set; }
 
         /// <summary>
