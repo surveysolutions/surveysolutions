@@ -69,13 +69,15 @@ namespace Main.Core.Entities.SubEntities
 
         #region Implementation of ICloneable
 
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IAnswer"/>.
+        /// </returns>
         public IAnswer Clone()
         {
-            var answer = this.MemberwiseClone() as Answer;
-
-            // answer.AnswerValue = this.AnswerValue;
-
-            return answer;
+            return this.MemberwiseClone() as Answer;
         }
 
         #endregion

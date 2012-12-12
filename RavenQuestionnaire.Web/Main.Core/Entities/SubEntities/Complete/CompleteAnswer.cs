@@ -161,14 +161,9 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <returns>
         /// The <see cref="IAnswer"/>.
         /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public IAnswer Clone()
         {
-            var answer = this.MemberwiseClone() as Answer;
-
-            // answer.AnswerValue = this.AnswerValue;
-
+            var answer = this.MemberwiseClone() as CompleteAnswer;
             return answer;
         }
 

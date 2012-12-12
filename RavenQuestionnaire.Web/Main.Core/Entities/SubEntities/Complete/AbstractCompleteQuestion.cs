@@ -356,9 +356,18 @@ namespace Main.Core.Entities.SubEntities.Complete
                 question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
             }
 
-            question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
-            question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+            if (this.ConditionalDependentGroups != null)
+            {
+                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            }
 
+            if (this.ConditionalDependentQuestions != null)
+            {
+                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+            }
+
+            // handle reference part
+            question.Answers = new List<IAnswer>();
             foreach (var answer in this.Answers)
             {
                 question.Answers.Add(answer.Clone());

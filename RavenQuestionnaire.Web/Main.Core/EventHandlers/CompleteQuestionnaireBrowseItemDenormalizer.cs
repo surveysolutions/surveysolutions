@@ -200,7 +200,9 @@ namespace Main.Core.EventHandlers
         protected void HandleNewSurvey(CompleteQuestionnaireDocument document)
         {
             var browseItem = new CompleteQuestionnaireBrowseItem(document);
-            IEnumerable<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
+            
+            // IEnumerable<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
+            IEnumerable<ICompleteQuestion> featuredQuestions = document.GetFeaturedQuestions().ToList();
 
             browseItem.FeaturedQuestions =
                 featuredQuestions.Select(

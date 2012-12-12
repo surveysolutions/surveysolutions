@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         public void ClonedQeustion_TargetIsProperlySet()
         {
             // List<IGroup> groups = new List<IGroup>() { new Group("test") };
-            var answers = new List<IAnswer> { new Answer() { AnswerText = "hi" }, new Answer(), new Answer() };
+            var answers = new List<IAnswer> { new Answer() { AnswerText = "hi" }, new Answer(){AnswerText = "there"}, new Answer() };
 
             var question = new SingleQuestion(Guid.NewGuid(), "test")
                 {
