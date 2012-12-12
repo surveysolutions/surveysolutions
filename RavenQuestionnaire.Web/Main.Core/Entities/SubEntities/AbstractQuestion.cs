@@ -6,7 +6,6 @@
 //   The abstract question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -22,7 +21,6 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public abstract class AbstractQuestion : IQuestion
     {
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -43,7 +41,8 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="text">
         /// The text.
         /// </param>
-        protected AbstractQuestion(string text) : this()
+        protected AbstractQuestion(string text)
+            : this()
         {
             this.QuestionText = text;
         }
@@ -53,14 +52,14 @@ namespace Main.Core.Entities.SubEntities
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the answers.
-        /// </summary>
-        public List<IAnswer> Answers { get; set; }
-
-        /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
         public Order AnswerOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public List<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether capital.
@@ -81,10 +80,11 @@ namespace Main.Core.Entities.SubEntities
             {
                 return new List<IComposite>(0);
             }
+
             set
             {
                 // do nothing
-            } 
+            }
         }
 
         /// <summary>
@@ -96,6 +96,16 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the condition expression.
         /// </summary>
         public string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent groups.
+        /// </summary>
+        public List<Guid> ConditionalDependentGroups { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent questions.
+        /// </summary>
+        public List<Guid> ConditionalDependentQuestions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether featured.
@@ -124,6 +134,11 @@ namespace Main.Core.Entities.SubEntities
         public Guid PublicKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the question text.
         /// </summary>
         public string QuestionText { get; set; }
@@ -132,11 +147,6 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the question type.
         /// </summary>
         public QuestionType QuestionType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the question scope.
-        /// </summary>
-        public QuestionScope QuestionScope { get; set; }
 
         /// <summary>
         /// Gets or sets the stata export caption.
@@ -153,25 +163,12 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string ValidationMessage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the conditional dependent questions.
-        /// </summary>
-        public List<Guid> ConditionalDependentQuestions { get; set; }
+        #endregion
 
-        /// <summary>
-        /// Gets or sets the conditional dependent groups.
-        /// </summary>
-        public List<Guid> ConditionalDependentGroups { get; set; }
-
-        public abstract void AddAnswer(IAnswer answer);
-        
         /*/// <summary>
         /// Gets or sets Triggers.
         /// </summary>
         public List<Guid> Triggers { get; set; }*/
-
-        #endregion
-
         #region Public Methods and Operators
 
         /// <summary>
@@ -189,6 +186,14 @@ namespace Main.Core.Entities.SubEntities
         }
 
         /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        public abstract void AddAnswer(IAnswer answer);
+
+        /// <summary>
         /// The add card.
         /// </summary>
         /// <param name="card">
@@ -202,6 +207,42 @@ namespace Main.Core.Entities.SubEntities
             }
 
             this.Cards.Add(card);
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public virtual IComposite Clone()
+        {
+            var question = this.MemberwiseClone() as IQuestion;
+
+            question.Parent = null;
+            if (this.Cards != null)
+            {
+                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            }
+
+            question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+
+            question.Answers = new List<IAnswer>();
+            foreach (IAnswer answer in this.Answers)
+            {
+                question.Answers.Add(answer.Clone());
+            }
+
+            return question;
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            //// do nothing
         }
 
         /// <summary>
@@ -253,7 +294,7 @@ namespace Main.Core.Entities.SubEntities
         {
             throw new CompositeException();
         }
-        
+
         /// <summary>
         /// The remove.
         /// </summary>
@@ -268,33 +309,6 @@ namespace Main.Core.Entities.SubEntities
         public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new CompositeException();
-        }
-
-        /// <summary>
-        /// The connect childs with parent.
-        /// </summary>
-        public void ConnectChildsWithParent()
-        {
-            //// do nothing
-        }
-
-        public virtual IComposite Clone()
-        {
-            var question = this.MemberwiseClone() as IQuestion;
-
-            question.Parent = null;
-            question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
-
-            question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
-            question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
-
-            question.Answers = new List<IAnswer>();
-            foreach (var answer in this.Answers)
-            {
-                question.Answers.Add(answer.Clone());
-            }
-
-            return question;
         }
 
         /// <summary>

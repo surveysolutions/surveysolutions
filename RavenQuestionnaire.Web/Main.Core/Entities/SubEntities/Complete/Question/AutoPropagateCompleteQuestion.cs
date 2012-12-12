@@ -125,7 +125,10 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             var question = this.MemberwiseClone() as AutoPropagateCompleteQuestion;
 
             question.Parent = null;
-            question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            if (this.Cards != null)
+            {
+                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            }
 
             question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
             question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
