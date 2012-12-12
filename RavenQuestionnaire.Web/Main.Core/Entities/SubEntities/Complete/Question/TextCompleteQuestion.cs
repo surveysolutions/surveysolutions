@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TextCompleteQuestion.cs" company="">
-//   
+// <copyright file="TextCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The text complete question.
@@ -10,16 +10,14 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.Composite;
 
     /// <summary>
     /// The text complete question.
     /// </summary>
-    public sealed class TextCompleteQuestion : AbstractCompleteQuestion, ITextCompleteQuestion, ICompelteValueQuestion<string>
+    public sealed class TextCompleteQuestion : AbstractCompleteQuestion, 
+                                               ITextCompleteQuestion, 
+                                               ICompelteValueQuestion<string>
     {
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -49,52 +47,28 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddTextAttr { get; set; }
 
-        /*/// <summary>
-        /// Gets or sets the children.
+        /// <summary>
+        /// Gets or sets the answer.
         /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }*/
+        public string Answer { get; set; }
 
         #endregion
-
+        
         #region Public Methods and Operators
 
-        /*/// <summary>
-        /// The add.
+        /// <summary>
+        /// The add answer.
         /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
+        /// <param name="answer">
+        /// The answer.
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-            /*var question = c as ICompleteQuestion;
-            if (question == null || question.PublicKey != this.PublicKey)
-                throw new CompositeException();
-            this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;#1#
-        }*/
-
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -104,6 +78,17 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public override object GetAnswerObject()
         {
             return this.Answer;
+        }
+
+        /// <summary>
+        /// The get answer string.
+        /// </summary>
+        /// <returns>
+        /// The System.String.
+        /// </returns>
+        public override string GetAnswerString()
+        {
+            return this.Answer ?? string.Empty;
         }
 
         /// <summary>
@@ -118,18 +103,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         }
 
         /// <summary>
-        /// The get answer string.
-        /// </summary>
-        /// <returns>
-        /// The System.String.
-        /// </returns>
-        public override string GetAnswerString()
-        {
-            return this.Answer ?? string.Empty;
-        }
-
-        
-        /// <summary>
         /// The set answer.
         /// </summary>
         /// <param name="answer">
@@ -142,12 +115,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             this.Answer = answerValue;
         }
-
-        #endregion
-
-        #region Implementation of ICompelteValueQuestion<string>
-
-        public string Answer { get; set; }
 
         #endregion
     }

@@ -105,7 +105,7 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
-            this.HandleNewQuestionnaire(document);
+            this.HandleNewQuestionnaire(document.Clone() as CompleteQuestionnaireDocument);
         }
 
         /// <summary>

@@ -96,8 +96,11 @@ namespace Main.Core.EventHandlers
         {
             var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
             if (document == null)
+            {
                 return;
-            this.documentStorage.Store(document, document.PublicKey);
+            }
+            
+            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
 
         /// <summary>

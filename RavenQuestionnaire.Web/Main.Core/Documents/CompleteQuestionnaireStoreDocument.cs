@@ -615,6 +615,19 @@ namespace Main.Core.Documents
             }
         }
 
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public IComposite Clone()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

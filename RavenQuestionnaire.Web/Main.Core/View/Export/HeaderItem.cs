@@ -77,7 +77,7 @@ namespace Main.Core.View.Export
         public LabelItem(IAnswer answer)
         {
             PublicKey = answer.PublicKey;
-            Caption = answer.AnswerValue == null ? answer.AnswerText : answer.AnswerValue.ToString();
+            Caption = answer.AnswerValue ?? answer.AnswerText;
             Title = answer.AnswerText;
         }
 

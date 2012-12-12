@@ -38,6 +38,7 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// <summary>
         /// Gets or sets the completed questionnaire id.
         /// </summary>
+        [Obsolete]
         public Guid CompletedQuestionnaireId { get; set; }
 
         /// <summary>

@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireDocument.cs" company="">
-//   
+// <copyright file="QuestionnaireDocument.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The QuestionnaireDocument interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Main.DenormalizerStorage;
 
 namespace Main.Core.Documents
 {
@@ -17,6 +15,7 @@ namespace Main.Core.Documents
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
+    using Main.DenormalizerStorage;
 
     using Newtonsoft.Json;
 
@@ -106,8 +105,7 @@ namespace Main.Core.Documents
             {
             }
         }
-
-
+        
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
@@ -220,24 +218,6 @@ namespace Main.Core.Documents
             return
                 this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
                     this.Children.SelectMany(q => q.Find(condition)));
-
-            /*   foreach (Group child in innerDocument.Groups)
-               {
-                   if (child is T && condition(child))
-                       return child as T;
-                   T subNodes = child.Find<T>(condition);
-                   if (subNodes != null)
-                       return subNodes;
-               }
-               foreach (Question child in innerDocument.Questions)
-               {
-                   if (child is T && condition(child))
-                       return child as T;
-                   T subNodes = child.Find<T>(condition);
-                   if (subNodes != null)
-                       return subNodes;
-               }
-               return null;*/
         }
 
         /// <summary>
@@ -311,6 +291,43 @@ namespace Main.Core.Documents
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+/*
+            var doc = new QuestionnaireDocument
+                {
+                    CreationDate = this.CreationDate,
+                    LastEntryDate = this.LastEntryDate,
+                    PublicKey = this.PublicKey,
+                    ConditionExpression = this.ConditionExpression,
+                    Title = this.Title,
+                    OpenDate = this.OpenDate,
+                    Propagated = this.Propagated,
+                    Parent = this.Parent,
+                    Triggers = new List<Guid>(this.Triggers)
+                };
+*/
+
+            var doc = this.MemberwiseClone() as QuestionnaireDocument;
+
+            doc.Triggers = new List<Guid>(this.Triggers);
+            doc.Parent = null;
+
+            doc.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                doc.Children.Add(composite.Clone());
+            }
+
+            return doc;
         }
 
         #endregion

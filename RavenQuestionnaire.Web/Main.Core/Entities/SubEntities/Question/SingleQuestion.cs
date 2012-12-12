@@ -81,7 +81,7 @@ namespace Main.Core.Entities.SubEntities.Question
 
             if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
             {
-                throw new DuplicateNameException("answer with current publick key already exist");
+                throw new DuplicateNameException("answer with current public key already exist");
             }
 
             this.Answers.Add(answer);
@@ -172,7 +172,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
-
-       #endregion
+        
+        #endregion
     }
 }
