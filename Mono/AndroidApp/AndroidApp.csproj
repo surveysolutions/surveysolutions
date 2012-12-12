@@ -59,8 +59,8 @@
     <Compile Include="Activity1.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationView.cs" />
-    <Compile Include="Controls\QuestionnaireDetails\ScreenContentView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

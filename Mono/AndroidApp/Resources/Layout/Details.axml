@@ -1,28 +1,51 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/MyLayout"
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contentLayout"
               android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
               android:layout_weight="1"   
     >
-  <!--android:columnWidth="90dp"-->
-  <!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  --><!--android:columnWidth="90dp"--><!--
+  --><!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/tlDashboard"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:stretchColumns="1"></TableLayout>-->
+    android:stretchColumns="1"></TableLayout>--><!--
 
-  <androidapp.controls.questionnairedetails.QuestionnaireNavigationView
+  <fragment android:name="androidapp.controls.questionnairedetails.QuestionnaireNavigationView"
    android:id="@+id/navList"
    android:gravity=    "center_horizontal"
    android:layout_width="10dip"
-   android:layout_height="fill_parent"
-   android:cacheColorHint="#FFDAFF7F" android:layout_weight=    "1" />
+   android:layout_height="fill_parent" android:layout_weight=    "1" />
   <androidapp.controls.questionnairedetails.ScreenContentView
      android:id="@+id/scveenView"
      android:gravity=    "center_horizontal"
      android:layout_width="wrap_content"
      android:layout_height="fill_parent"
      android:layout_weight=    "4" />
+</LinearLayout>-->
+
+
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />-->
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/llContainer"
+       android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+  <fragment class="androidapp.controls.questionnairedetails.QuestionnaireNavigationFragment"
+          android:id="@+id/NavList" android:layout_weight="1"
+          android:layout_width="0px"
+          android:layout_height="match_parent" />
+
+  <FrameLayout android:id="@+id/flDetails" android:layout_weight="1"
+          android:layout_width="0px"
+          android:layout_height="match_parent" />
+
 </LinearLayout>

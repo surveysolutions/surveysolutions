@@ -50,6 +50,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             if (item.ScreenPublicKey != Guid.Empty)
             {
                 tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+                view.Selected = true;
             }
             else
             {
