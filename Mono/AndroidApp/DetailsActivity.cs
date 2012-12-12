@@ -11,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Orientation = Android.Content.Res.Orientation;
 
 namespace AndroidApp
 {
@@ -21,9 +22,19 @@ namespace AndroidApp
         {
             get { return Guid.Parse(Intent.GetStringExtra("questionnaireId")); }
         }
-        protected LinearLayout LlContainer
+        protected Guid? ScreenId
         {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+            get
+            {
+                var scrId = Intent.GetStringExtra("screenId");
+                if (string.IsNullOrEmpty(scrId))
+                    return null;
+                return Guid.Parse(scrId);
+            }
+        }
+        protected FrameLayout FlDetails
+        {
+            get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
         }
 
         protected QuestionnaireNavigationFragment NavList { get; set; }
@@ -33,29 +44,54 @@ namespace AndroidApp
         {
 
             base.OnCreate(bundle);
-            SetContentView(Resource.Layout.Details);
+            DualPanel = Resources.Configuration.Orientation
+                        == Orientation.Landscape;
+            if (DualPanel)
+            {
+                // If the screen is now in landscape mode, we can show the
+                // dialog in-line so we don't need this activity.
+                SetContentView(Resource.Layout.Details);
+            }
+            else
+            {
+                SetContentView(Resource.Layout.DetailsPortret);
+            }
+      /*      if (bundle == null)
+            {
 
-            if (LlContainer != null)
+                
+                // During initial setup, plug in the details fragment.
+                DetailsFragment details = new DetailsFragment();
+                details.setArguments(getIntent().getExtras());
+                getSupportFragmentManager().beginTransaction().add(
+                        android.R.id.content, details).commit();
+            }
+            */
+
+
+            if (FlDetails != null)
             {
                 if (bundle != null)
                 {
                     return;
                 }
-                var flDetails = FindViewById<FrameLayout>(Resource.Id.flDetails);
-                DualPanel = flDetails != null
-                && flDetails.Visibility == ViewStates.Visible;
                 NavList = this.FragmentManager.FindFragmentById<QuestionnaireNavigationFragment>(Resource.Id.NavList);
-            
+
                 NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
                 NavList.QuestionnaireId = QuestionnaireId;
-
-       /*         this.FragmentManager.BeginTransaction()
-                   .Add(Resource.Id.flContainer, NavList).Commit();*/
-
-
-                if (DualPanel)
+                if (ScreenId.HasValue)
                 {
-                    navList_ItemClick(NavList, new ScreenChangedEventArgs(Guid.Empty));
+                    // Make new fragment to show this selection.
+                    var details = ScreenContentFragment.NewInstance(this.QuestionnaireId, ScreenId.Value);
+                    
+                    FragmentManager.BeginTransaction().Add(Resource.Id.flDetails, details).Commit();
+                }
+                else
+                {
+                    if (DualPanel)
+                    {
+                        navList_ItemClick(NavList, new ScreenChangedEventArgs(Guid.Empty));
+                    }
                 }
 
             }
@@ -95,7 +131,7 @@ namespace AndroidApp
             else
             {
                 Intent intent = new Intent();
-                intent.SetClass(this, typeof (ScreenContentFragment));
+                intent.SetClass(this, typeof(DetailsActivity));
                 intent.PutExtra("questionnaireId", this.QuestionnaireId.ToString());
                 intent.PutExtra("screenId", e.ScreenId.ToString());
                 StartActivity(intent);
