@@ -217,6 +217,13 @@
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
+    <Content Include="Content\TimelineJS\css\loading.gif" />
+    <Content Include="Content\TimelineJS\css\timeline.css" />
+    <Content Include="Content\TimelineJS\css\timeline.png" />
+    <Content Include="Content\TimelineJS\js\locale\en.js" />
+    <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
+    <Content Include="Content\TimelineJS\js\timeline-min.js" />
+    <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />
