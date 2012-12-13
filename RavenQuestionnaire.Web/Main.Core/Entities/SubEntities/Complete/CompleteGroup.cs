@@ -437,7 +437,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         {
             var group = this.MemberwiseClone() as CompleteGroup;
 
-            this.Triggers = new List<Guid>(this.Triggers);
+            if (this.Triggers != null)
+            {
+                this.Triggers = new List<Guid>(this.Triggers);
+            }
 
             group.Children = new List<IComposite>();
             foreach (var composite in this.Children)

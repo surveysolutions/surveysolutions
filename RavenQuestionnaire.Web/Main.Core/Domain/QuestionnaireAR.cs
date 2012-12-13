@@ -334,6 +334,7 @@ namespace Main.Core.Domain
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
             // TODO: check is it good to create new AR form another?
+            // Do we need Saga here?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
