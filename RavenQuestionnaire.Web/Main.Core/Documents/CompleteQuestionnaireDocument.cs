@@ -203,10 +203,25 @@ namespace Main.Core.Documents
             var doc = this.MemberwiseClone() as CompleteQuestionnaireDocument;
 
             doc.Parent = null;
-            doc.Triggers = new List<Guid>(this.Triggers);
-            doc.Creator = new UserLight(this.Creator.Id, this.Creator.Name);
-            doc.Responsible = new UserLight(this.Responsible.Id, this.Responsible.Name);
-            doc.Status = new SurveyStatus(this.Status.PublicId, this.Status.Name);
+            if (this.Triggers != null)
+            {
+                doc.Triggers = new List<Guid>(this.Triggers);
+            }
+
+            if (this.Creator != null)
+            {
+                doc.Creator = new UserLight(this.Creator.Id, this.Creator.Name);
+            }
+
+            if (this.Responsible != null)
+            {
+                doc.Responsible = new UserLight(this.Responsible.Id, this.Responsible.Name);
+            }
+
+            if (this.Status != null)
+            {
+                doc.Status = new SurveyStatus(this.Status.PublicId, this.Status.Name);
+            }
 
             doc.Children = new List<IComposite>();
             foreach (var composite in this.Children)
