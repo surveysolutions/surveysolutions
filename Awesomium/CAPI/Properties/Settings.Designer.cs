@@ -146,12 +146,12 @@ namespace Browsing.CAPI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Account/IsLoggedIn")]
-        public string AuthentificationCheckPath {
+        public string LoggedStatusCheckPath {
             get {
-                return ((string)(this["AuthentificationCheckPath"]));
+                return ((string)(this["LoggedStatusCheckPath"]));
             }
             set {
-                this["AuthentificationCheckPath"] = value;
+                this["LoggedStatusCheckPath"] = value;
             }
         }
         
@@ -218,24 +218,24 @@ namespace Browsing.CAPI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Account/GetCurrentUser")]
-        public string GetCurrentUserPath {
+        public string CurrentUserPath {
             get {
-                return ((string)(this["GetCurrentUserPath"]));
+                return ((string)(this["CurrentUserPath"]));
             }
             set {
-                this["GetCurrentUserPath"] = value;
+                this["CurrentUserPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Device/RegisterSupervisor")]
-        public string GetRegistrationCapiPath {
+        public string SupervisorRegistrationLocalPath {
             get {
-                return ((string)(this["GetRegistrationCapiPath"]));
+                return ((string)(this["SupervisorRegistrationLocalPath"]));
             }
             set {
-                this["GetRegistrationCapiPath"] = value;
+                this["SupervisorRegistrationLocalPath"] = value;
             }
         }
         
@@ -254,48 +254,84 @@ namespace Browsing.CAPI.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/ProgressEnding")]
-        public string GetEndProcessCapiPath {
+        public string EndProcessCapiPath {
             get {
-                return ((string)(this["GetEndProcessCapiPath"]));
+                return ((string)(this["EndProcessCapiPath"]));
             }
             set {
-                this["GetEndProcessCapiPath"] = value;
+                this["EndProcessCapiPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/PushStatistics")]
-        public string GetPushStatisticCapiPath {
+        public string PushStatisticCapiPath {
             get {
-                return ((string)(this["GetPushStatisticCapiPath"]));
+                return ((string)(this["PushStatisticCapiPath"]));
             }
             set {
-                this["GetPushStatisticCapiPath"] = value;
+                this["PushStatisticCapiPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Synchronizations/PullStatistics")]
-        public string GetPullStatisticCapiPath {
+        public string PullStatisticCapiPath {
             get {
-                return ((string)(this["GetPullStatisticCapiPath"]));
+                return ((string)(this["PullStatisticCapiPath"]));
             }
             set {
-                this["GetPullStatisticCapiPath"] = value;
+                this["PullStatisticCapiPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WCF/SupervisorService.svc/SupervisorService")]
-        public string CapiService {
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/AuthorizeBySupervisor")]
+        public string AuthServiceLocalPath {
             get {
-                return ((string)(this["CapiService"]));
+                return ((string)(this["AuthServiceLocalPath"]));
             }
             set {
-                this["CapiService"] = value;
+                this["AuthServiceLocalPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("WCF/AuthorizationService.svc")]
+        public string SupervisorServicePath {
+            get {
+                return ((string)(this["SupervisorServicePath"]));
+            }
+            set {
+                this["SupervisorServicePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/CheckConfirmedAuthorizationStatus")]
+        public string CheckAuthConfirmedPath {
+            get {
+                return ((string)(this["CheckAuthConfirmedPath"]));
+            }
+            set {
+                this["CheckAuthConfirmedPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/GetAuthoritySupervisor")]
+        public string AuthorizedIDsPath {
+            get {
+                return ((string)(this["AuthorizedIDsPath"]));
+            }
+            set {
+                this["AuthorizedIDsPath"] = value;
             }
         }
     }

@@ -8,8 +8,6 @@ namespace Main.Core.Entities
 {
     using System;
 
-    using Main.Core.View.Register;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -22,9 +20,9 @@ namespace Main.Core.Entities
         /// </summary>
         public RegisterData()
         {
-            #if DEBUG
-                this.RegisterDate = DateTime.MinValue;
-            #endif
+#if DEBUG
+            this.RegisterDate = DateTime.MinValue;
+#endif
         }
 
         #endregion
@@ -56,10 +54,11 @@ namespace Main.Core.Entities
         /// </summary>
         public Guid RegistrationId { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets Event.
         /// </summary>
-        public RegisterView Event { get; set; }
+        [IgnoreDataMember]
+        public RegisterView Event { get; set; }*/
 
         #endregion
     }

@@ -14,6 +14,7 @@ namespace Web.Supervisor.Controllers
 
     using Main.Core.Entities;
 
+    using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Register;
 
     /// <summary>
@@ -27,7 +28,8 @@ namespace Web.Supervisor.Controllers
         /// Field of deviceRegister
         /// </summary>
         private readonly IDeviceRegistry deviceRegister;
-        
+        private readonly IGlobalInfoProvider globalInfo;
+
         #endregion
 
         #region Constructor
@@ -38,9 +40,10 @@ namespace Web.Supervisor.Controllers
         /// <param name="register">
         /// The register.
         /// </param>
-        public DeviceController(IDeviceRegistry register)
+        public DeviceController(IDeviceRegistry register, IGlobalInfoProvider globalInfo)
         {
             this.deviceRegister = register;
+            this.globalInfo = globalInfo;
         }
 
         #endregion
@@ -58,7 +61,26 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public bool RegisterCapi(RegisterData data)
         {
-            return this.deviceRegister.SaveRegistrator(data);
+            return this.deviceRegister.SaveRegistration(data);
+        }
+
+        /// <summary>
+        /// Confirms made authorization to CAPI
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <remarks>At the moment the only action is to update respective authorization request</remarks>
+        public bool ConfirmAuthorization(RegisterData data)
+        {
+            try
+            {
+                return Supervisor.WCF.AuthorizationService.ConfirmAuthorizedRequest(data);
+            }
+            catch 
+            { 
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -70,9 +92,12 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
-        public ActionResult GetRegisteredDevices(Guid registrator)
+        public ActionResult GetRegisteredDevices(Guid supervisorId)
         {
-            var model = this.deviceRegister.GetRegisterData(registrator);
+            //var currentSupervisor = this.globalInfo.GetCurrentUser();
+            //System.Diagnostics.Debug.Assert(supervisorId == currentSupervisor.Id);
+
+            var model = this.deviceRegister.GetRegisteredData(supervisorId);
             return Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 

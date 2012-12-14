@@ -61,7 +61,7 @@ namespace Browsing.Common.Containers
         #region C-tor
 
         public Registration(
-            IRequesProcessor requestProcessor,
+            IRequestProcessor requestProcessor,
             IUrlUtils urlUtils,
             ScreenHolder holder,
             bool isRegistrationListVisible,
@@ -103,7 +103,7 @@ namespace Browsing.Common.Containers
 
         #region Abstract and Virtual
 
-        protected abstract RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider);
+        protected abstract RegistrationManager DoInstantiateRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider);
 
         protected abstract string OnGetCurrentRegistrationStatus();
 

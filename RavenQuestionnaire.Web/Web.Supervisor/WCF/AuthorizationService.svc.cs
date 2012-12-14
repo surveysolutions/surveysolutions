@@ -5,29 +5,22 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Web;
+using Main.Core.Entities;
+using Main.Core.WCF;
 
 namespace Web.Supervisor.WCF
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "SupervisorService" in code, svc and config file together.
-    public class SupervisorService : ISupervisorService
+    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "AuthorizationService" in code, svc and config file together.
+    [ServiceBehaviorAttribute(IncludeExceptionDetailInFaults = true)]
+    public class AuthorizationService : BaseAuthorizationService
     {
-        public string GetPath()
+        protected override string OnGetPath()
         {
             var virtualPath = System.Web.Hosting.HostingEnvironment.ApplicationVirtualPath;
             var absolutePath = OperationContext.Current.Channel.LocalAddress.Uri.AbsolutePath;
             var path = absolutePath.Substring(virtualPath.Length);
 
             return path;
-        }
-
-        public bool AuthorizeDevice(byte[] registerData)
-        {
-            return false;
-        }
-
-        public IList<IAuthorizationRequest> GetAuthorizationRequests()
-        {
-            return new List<IAuthorizationRequest>();
         }
     }
 }

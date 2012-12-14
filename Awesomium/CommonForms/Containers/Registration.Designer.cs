@@ -35,13 +35,13 @@ namespace Browsing.Common.Containers
             this.regPanel = new Browsing.Common.Containers.RegPanel();
             this.authorizedGroupBox = new System.Windows.Forms.GroupBox();
             this.authorizationList = new System.Windows.Forms.ListView();
-            this.columnHeaderDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDevice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.regContent.SuspendLayout();
             this.authorizedGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // registrationPanel
+            // regContent
             // 
             this.regContent.ColumnCount = 5;
             this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -49,19 +49,18 @@ namespace Browsing.Common.Containers
             this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
             this.regContent.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.regContent.Controls.Add(this.regPanel, 2, 4);
+            this.regContent.Controls.Add(this.regPanel, 2, 3);
             this.regContent.Controls.Add(this.authorizedGroupBox, 2, 1);
             this.regContent.Dock = System.Windows.Forms.DockStyle.Fill;
             this.regContent.Location = new System.Drawing.Point(0, 0);
             this.regContent.Margin = new System.Windows.Forms.Padding(4);
-            this.regContent.Name = "registrationPanel";
-            this.regContent.RowCount = 6;
-            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.Name = "regContent";
+            this.regContent.RowCount = 5;
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
             this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 11F));
             this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.regContent.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.regContent.Size = new System.Drawing.Size(794, 554);
             this.regContent.TabIndex = 1;
             // 
@@ -69,10 +68,10 @@ namespace Browsing.Common.Containers
             // 
             this.regContent.SetColumnSpan(this.regPanel, 2);
             this.regPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.regPanel.Location = new System.Drawing.Point(28, 149);
+            this.regPanel.Location = new System.Drawing.Point(28, 280);
             this.regPanel.Name = "regPanel";
             this.regContent.SetRowSpan(this.regPanel, 2);
-            this.regPanel.Size = new System.Drawing.Size(738, 402);
+            this.regPanel.Size = new System.Drawing.Size(738, 271);
             this.regPanel.TabIndex = 3;
             // 
             // authorizedGroupBox
@@ -80,9 +79,9 @@ namespace Browsing.Common.Containers
             this.regContent.SetColumnSpan(this.authorizedGroupBox, 2);
             this.authorizedGroupBox.Controls.Add(this.authorizationList);
             this.authorizedGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.authorizedGroupBox.Location = new System.Drawing.Point(28, 23);
+            this.authorizedGroupBox.Location = new System.Drawing.Point(28, 21);
             this.authorizedGroupBox.Name = "authorizedGroupBox";
-            this.authorizedGroupBox.Size = new System.Drawing.Size(738, 100);
+            this.authorizedGroupBox.Size = new System.Drawing.Size(738, 242);
             this.authorizedGroupBox.TabIndex = 4;
             this.authorizedGroupBox.TabStop = false;
             this.authorizedGroupBox.Text = "Authorized devices";
@@ -94,26 +93,24 @@ namespace Browsing.Common.Containers
             this.columnHeaderDevice,
             this.columnHeaderDate});
             this.authorizationList.Dock = System.Windows.Forms.DockStyle.Fill;
-            //this.authorizationList.GridLines = true;
             this.authorizationList.Location = new System.Drawing.Point(3, 18);
             this.authorizationList.Name = "authorizationList";
-            this.authorizationList.Size = new System.Drawing.Size(732, 79);
+            this.authorizationList.Size = new System.Drawing.Size(732, 221);
             this.authorizationList.TabIndex = 0;
+            this.authorizationList.TileSize = new System.Drawing.Size(228, 36);
             this.authorizationList.UseCompatibleStateImageBehavior = false;
             this.authorizationList.View = System.Windows.Forms.View.Details;
             // 
+            // columnHeaderDevice
+            // 
+            this.columnHeaderDevice.Text = "Device";
+            this.columnHeaderDevice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // columnHeaderDate
             // 
-            this.columnHeaderDate.DisplayIndex = 1;
             this.columnHeaderDate.Text = "Authorized";
             this.columnHeaderDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeaderDate.Width = 100;
-            // 
-            // columnHeaderDevice
-            // 
-            this.columnHeaderDevice.DisplayIndex = 0;
-            this.columnHeaderDevice.Text = "Device";
-            this.columnHeaderDevice.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;            
             // 
             // Registration
             // 
@@ -126,6 +123,7 @@ namespace Browsing.Common.Containers
             this.regContent.ResumeLayout(false);
             this.authorizedGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion

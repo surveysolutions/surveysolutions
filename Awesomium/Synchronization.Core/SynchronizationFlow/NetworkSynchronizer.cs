@@ -15,13 +15,13 @@ namespace Synchronization.Core.SynchronizationFlow
     {
         #region variables
 
-        private readonly IRequesProcessor _requestProcessor;
+        private readonly IRequestProcessor _requestProcessor;
         private readonly IUrlUtils _urlUtils;
         private AutoResetEvent stopRequested = new AutoResetEvent(false);
 
         #endregion
 
-        public NetworkSynchronizer(ISettingsProvider settingsprovider, IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        public NetworkSynchronizer(ISettingsProvider settingsprovider, IRequestProcessor requestProcessor, IUrlUtils urlUtils)
             : base(settingsprovider)
         {
             this._urlUtils = urlUtils;

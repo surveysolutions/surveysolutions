@@ -17,7 +17,7 @@ namespace Browsing.Supervisor.Synchronization
     {
         #region C-tor
 
-        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base(pleaseWait, provider, requestProcessor, urlUtils, usbProvider)
         {
         }

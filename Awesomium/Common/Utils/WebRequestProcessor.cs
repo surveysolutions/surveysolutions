@@ -9,7 +9,7 @@ using Awesomium.Core;
 
 namespace Common.Utils
 {
-    public class WebRequestProcessor : IRequesProcessor
+    public class WebRequestProcessor : IRequestProcessor
     {
         #region Implementation of IRequesProcessor
 

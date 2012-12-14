@@ -41,14 +41,17 @@
     <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/GetCurrentUser</Value>
     </Setting>
-    <Setting Name="GetRegistrationSupervisorPath" Type="System.String" Scope="User">
+    <Setting Name="CapiRegistrationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/RegisterCapi</Value>
     </Setting>
-    <Setting Name="GetAuthorizedIDs" Type="System.String" Scope="User">
+    <Setting Name="AuthorizedIDsPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/GetRegisteredDevices</Value>
     </Setting>
-    <Setting Name="SupervisorService" Type="System.String" Scope="User">
-      <Value Profile="(Default)">WCF/SupervisorService.svc/SupervisorService</Value>
+    <Setting Name="SupervisorServicePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WCF/AuthorizationService.svc/AuthorizationService</Value>
+    </Setting>
+    <Setting Name="PutAuthConfirmedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/ConfirmAuthorization</Value>
     </Setting>
   </Settings>
 </SettingsFile>

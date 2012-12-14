@@ -19,7 +19,7 @@ namespace Browsing.CAPI.Synchronization
     {
         #region C-tor
 
-        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        public CapiSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base(pleaseWait, provider, requestProcessor, urlUtils, usbProvider)
         {
         }

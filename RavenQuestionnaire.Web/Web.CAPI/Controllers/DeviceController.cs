@@ -10,12 +10,11 @@
 using System;
 using System.Web.Mvc;
 
-using Questionnaire.Core.Web.Register;
-
 namespace Web.CAPI.Controllers
 {
     using System.Linq;
 
+    using Questionnaire.Core.Web.Register;
     using Main.Core.Entities;
 
     /// <summary>
@@ -60,7 +59,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public bool RegisterSupervisor(RegisterData data)
         {
-            return this.deviceRegister.SaveRegistrator(data);
+            return this.deviceRegister.SaveRegistration(data);
         }
 
         /// <summary>
@@ -72,10 +71,21 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Return SecretKey
         /// </returns>
-        public JsonResult GetRegisteredSupervisors(Guid registrator)
+        public ActionResult GetAuthoritySupervisor(Guid tabletId)
         {
-            var model = this.deviceRegister.GetRegisterData(registrator);
-            return this.Json(new { PublicKey = model.Items.FirstOrDefault().SecretKey }, JsonRequestBehavior.AllowGet);
+            var model = this.deviceRegister.GetRegisteredData(tabletId);
+            return Json(model.Items, JsonRequestBehavior.AllowGet);
+        }
+
+        public bool AuthorizeBySupervisor(string url, RegisterData data)
+        {
+            return this.deviceRegister.AuthorizeByRemoteRegistrator(url, data);
+        }
+
+        public ActionResult CheckConfirmedAuthorizationStatus(string url, Guid id)
+        {
+            var data = this.deviceRegister.CheckRemoteAuthorization(url, id);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         #endregion

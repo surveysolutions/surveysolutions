@@ -11,12 +11,17 @@ namespace Browsing.Supervisor.Registration
 {
     public class SupervisorRegistrationManager : RegistrationManager
     {
-        public SupervisorRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        public SupervisorRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base("CAPIRegistration.register", "SupervisorRegistration.register", requestProcessor, urlUtils, usbProvider)
         {
         }
 
         #region Override Methods
+
+        protected override Authorization DoInstantiateAuthService(IUrlUtils urlUtils, IRequestProcessor requestProcessor)
+        {
+            return new SupervisorAuthorization(urlUtils);
+        }
 
         protected override string ContainerName
         {
@@ -33,24 +38,37 @@ namespace Browsing.Supervisor.Registration
             return string.Format("supervisor #'{0}'", RegistrationId); // todo: replace with true name
         }
 
-        protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
+        protected override void OnStartRegistration(IAuthorizationPacket packet)
         {
-            System.Diagnostics.Debug.Assert(packet.Type == ServicePacketType.Request);
+            System.Diagnostics.Debug.Assert(packet.PacketType == ServicePacketType.Request);
+
+            // assign supervisor's id as registrar
+            packet.SetRegistrator(CurrentUser);
 
             AuthorizeAcceptedData(packet);
 
             base.OnStartRegistration(packet);
+
+            if (packet.Channel != ServicePacketChannel.Usb)
+            {
+                var responce = InstantiatePacket(false, ServicePacketChannel.Net);
+
+                // keep tablet id as registration id
+                responce.Data.RegistrationId = packet.Data.RegistrationId;
+                
+                SendAuthorizationData(responce);
+            }
         }
 
         #endregion
 
-        protected override void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets)
+        protected override void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
         {
             // uncomment to have automatic registration
             // DoRegistration(true);
         }
 
-        protected override IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        protected override IList<IAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
         {
             return base.OnReadUsbPackets(true);
         }
@@ -59,9 +77,9 @@ namespace Browsing.Supervisor.Registration
         {
         }
 
-        protected override IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        protected override IList<IAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IAuthorizationPacket> webServicePackets)
         {
-            IList<IServiceAuthorizationPacket> packets = webServicePackets.Where(p => !p.IsAuthorized).ToList();
+            IList<IAuthorizationPacket> packets = webServicePackets.Where(p => !p.IsAuthorized && p.IsMarkedToAuthorize).ToList();
             if (packets.Count == 0)
                 throw new RegistrationException("There are no new authorization requests", null);
 

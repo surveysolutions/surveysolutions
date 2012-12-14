@@ -9,13 +9,13 @@ namespace Browsing.CAPI.Containers
 {
     public partial class CAPISynchronization : Common.Containers.Synchronization
     {
-        public CAPISynchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
+        public CAPISynchronization(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, utils, holder)
         {
             InitializeComponent();
         }
 
-        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
+        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
         {
             return new CapiSyncManager(progressObserver, clientSettings, requestProcessor, utils, usbProvider);
         }

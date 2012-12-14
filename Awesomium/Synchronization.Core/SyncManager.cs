@@ -28,13 +28,13 @@ namespace Synchronization.Core
 
         #region C-tors
 
-        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        protected SyncManager(ISyncProgressObserver progressStatus, ISettingsProvider settingsProvider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : this(progressStatus, settingsProvider, requestProcessor, urlUtils, usbProvider, new List<ISynchronizer>())
         {
             //LogManager.EnableLogging();
         }
 
-        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider,
+        private SyncManager(ISyncProgressObserver progressObserver, ISettingsProvider settingsProvider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider,
                             List<ISynchronizer> subStructure)
         {
 
@@ -52,7 +52,7 @@ namespace Synchronization.Core
             AddSynchronizers();
         }
 
-        protected IRequesProcessor RequestProcessor { get; private set; }
+        protected IRequestProcessor RequestProcessor { get; private set; }
         protected IUrlUtils UrlUtils { get; private set; }
         protected IUsbProvider UsbProvider { get; private set; }
 

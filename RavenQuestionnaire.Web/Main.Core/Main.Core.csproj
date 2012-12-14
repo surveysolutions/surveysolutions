@@ -92,6 +92,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -417,6 +419,10 @@
     <Compile Include="View\User\UserViewFactory.cs" />
     <Compile Include="View\User\UserViewInputModel.cs" />
     <Compile Include="View\ViewRepository.cs" />
+    <Compile Include="WCF\AuthorizationPacket.cs" />
+    <Compile Include="WCF\BaseAuthorizationService.cs" />
+    <Compile Include="WCF\IAuthorizationPacket.cs" />
+    <Compile Include="WCF\IAuthorizationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj">

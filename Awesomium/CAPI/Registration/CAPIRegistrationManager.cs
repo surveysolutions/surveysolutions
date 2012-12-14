@@ -16,12 +16,17 @@ namespace Browsing.CAPI.Registration
     {
         private readonly Guid DefaultDevice = new Guid("00000000-0000-0000-0000-111111111111");
 
-        public CapiRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        public CapiRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base("SupervisorRegistration.register", "CAPIRegistration.register", requestProcessor, urlUtils, usbProvider)
         {
         }
 
         #region Override Methods
+
+        protected override Authorization DoInstantiateAuthService(IUrlUtils urlUtils, IRequestProcessor requestProcessor)
+        {
+            return new CAPIAuthorization(urlUtils, requestProcessor, RegistrationId);
+        }
 
         protected override string ContainerName
         {
@@ -41,27 +46,48 @@ namespace Browsing.CAPI.Registration
             return Environment.MachineName;
         }
 
-        protected override void OnStartRegistration(IServiceAuthorizationPacket packet)
+        protected override void OnStartRegistration(IAuthorizationPacket packet)
         {
-            // todo: 1. Try to send packet via web firstly. If no luck, try to save to usb
+            // Try to send packet via web firstly. If no luck, try to save to usb
+            try
+            {
+                SendAuthorizationData(packet);
+                return;
+            }
+            catch
+            {
+            }
 
-            base.OnStartRegistration(packet);
+            try
+            {
+                packet.SetChannel(ServicePacketChannel.Usb);
+                base.OnStartRegistration(packet);
+            }
+            catch(Exception e)
+            {
+                throw new RegistrationException("Registration is impossible via both, net and usb channels", e);
+            }
         }
 
-        protected override void OnFinalizeRegistration(IServiceAuthorizationPacket packet)
+        protected override void OnFinalizeRegistration(IAuthorizationPacket packet)
         {
-            System.Diagnostics.Debug.Assert(packet.Type == ServicePacketType.Responce);
+            System.Diagnostics.Debug.Assert(packet.PacketType == ServicePacketType.Responce);
+
+            // exchange registrar and registrationId
+            var supervisorId = packet.Data.Registrator;
+            packet.SetRegistrator(packet.Data.RegistrationId);
+            packet.SetRegistrationId(supervisorId);
 
             AuthorizeAcceptedData(packet);
         }
 
-        protected override void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets)
+        protected override void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
         {
             // process automatically
             DoRegistration(false);
         }
 
-        protected override IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        protected override IList<IAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
         {
             // read responces
             var packets = base.OnReadUsbPackets(false).Where(p => p.Data.RegistrationId == RegistrationId);
@@ -73,11 +99,11 @@ namespace Browsing.CAPI.Registration
         {
         }
 
-        protected override IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        protected override IList<IAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IAuthorizationPacket> webServicePackets)
         {
             if (firstPhase) // create authorization request
             {
-                webServicePackets = new List<IServiceAuthorizationPacket>() { PreparePacket(true, RegistrationId, ServicePacketChannel.Usb) };
+                webServicePackets = new List<IAuthorizationPacket>() { InstantiatePacket(true, ServicePacketChannel.Net) };
             }
             else // treat authorization responce
             {
@@ -112,8 +138,6 @@ namespace Browsing.CAPI.Registration
             if (cpuInfo == null)
                 return DefaultDevice;
 
-
-
             foreach (DriveInfo drive in DriveInfo.GetDrives())
             {
                 if (!drive.IsReady) continue;
@@ -132,9 +156,7 @@ namespace Browsing.CAPI.Registration
 
                 return result;
             }
-
         }
-
 
         #endregion
     }

@@ -194,12 +194,11 @@
     <Compile Include="WCF\GetEventStreamService.svc.cs">
       <DependentUpon>GetEventStreamService.svc</DependentUpon>
     </Compile>
-    <Compile Include="WCF\ISupervisorService.cs" />
     <Compile Include="WCF\SpotSyncService.svc.cs">
       <DependentUpon>SpotSyncService.svc</DependentUpon>
     </Compile>
-    <Compile Include="WCF\SupervisorService.svc.cs">
-      <DependentUpon>SupervisorService.svc</DependentUpon>
+    <Compile Include="WCF\AuthorizationService.svc.cs">
+      <DependentUpon>AuthorizationService.svc</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -241,7 +240,7 @@
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />
     <Content Include="WCF\SpotSyncService.svc" />
-    <Content Include="WCF\SupervisorService.svc" />
+    <Content Include="WCF\AuthorizationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
