@@ -171,6 +171,8 @@
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
     <AndroidResource Include="Resources\Drawable\questionShape.xml" />
+    <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
+    <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

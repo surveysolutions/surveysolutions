@@ -6,6 +6,8 @@ using System.Text;
 using Android.App;
 using Android.Content;
 using Android.Content.Res;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
@@ -75,9 +77,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected virtual void PostInit()
         {
             if (!Model.Enabled)
-
                 EnableDisableView(llWrapper, Model.Enabled);
-                
+            else
+            {
+                if (!Model.Valid)
+                    llRoot.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
+                else if(Model.Answered)
+                    llRoot.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
+            }
             //    EnableDisableView(this, Model.Enabled);
             if (string.IsNullOrEmpty(Model.Instructions))
                 btnInstructions.Visibility = ViewStates.Gone;
@@ -116,8 +123,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
-      
 
+        protected LinearLayout llRoot
+        {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llRoot); }
+        }
       
         protected TextView tvTitle
         {

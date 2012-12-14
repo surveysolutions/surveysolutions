@@ -39,18 +39,21 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             var questions = new QuestionView[]
                 {
                     new ValueQuestionView(Guid.NewGuid(), "numeric", QuestionType.Numeric, "10", true, string.Empty,
-                                          "comments on to question"),
+                                          "comments on to question", true),
                     new ValueQuestionView(Guid.NewGuid(), "text", QuestionType.Text, "answer", true, "hey punk",
-                                          string.Empty),
+                                          string.Empty, false),
+                    new ValueQuestionView(Guid.NewGuid(), "un answered question", QuestionType.Text, null, true,
+                                          string.Empty,
+                                          string.Empty, true),
                     new ValueQuestionView(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString(),
-                                          true, "hello world", string.Empty),
+                                          true, "hello world", string.Empty, true),
                     new SelectebleQuestionView(Guid.NewGuid(), "single choise", QuestionType.SingleOption, answers, true,
-                                               string.Empty, string.Empty),
+                                               string.Empty, string.Empty, false),
                     new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, true,
                                                " public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, QuestionnaireScreenViewModel>",
-                                               string.Empty),
+                                               string.Empty, true),
                     new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, false,
-                                               string.Empty, "comment on disabled question")
+                                               string.Empty, "comment on disabled question", true)
                 };
             return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),
                                                     input.PropagationKey, questions,screens,

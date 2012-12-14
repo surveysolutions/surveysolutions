@@ -15,10 +15,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionView:QuestionView
     {
-        public SelectebleQuestionView(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerView> answers, bool enabled, string instructions, string comments)
-            : base(publicKey, text, type,enabled,instructions,comments)
+        public SelectebleQuestionView(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerView> answers, bool enabled, string instructions, string comments, bool valid)
+            : base(publicKey, text, type,enabled,instructions,comments,valid)
         {
             Answers = answers;
+            Answered = answers.Any(a => a.Selected);
         }
 
         public IEnumerable<AnswerView> Answers { get; private set; }
