@@ -16,19 +16,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class SingleChoiseQuestionView : AbstractQuestionView
     {
-        public SingleChoiseQuestionView(Context context, QuestionView model) : base(context, model)
+        public SingleChoiseQuestionView(Context context, QuestionViewModel model) : base(context, model)
         {
         }
 
-        public SingleChoiseQuestionView(Context context, IAttributeSet attrs, QuestionView model) : base(context, attrs, model)
+        public SingleChoiseQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model) : base(context, attrs, model)
         {
         }
 
-        public SingleChoiseQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionView model) : base(context, attrs, defStyle, model)
+        public SingleChoiseQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
         {
         }
 
-        public SingleChoiseQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionView model) : base(javaReference, transfer, model)
+        public SingleChoiseQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model) : base(javaReference, transfer, model)
         {
         }
 
@@ -37,7 +37,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            SelectebleQuestionView typedMode = Model as SelectebleQuestionView;
+            SelectebleQuestionViewModel typedMode = Model as SelectebleQuestionViewModel;
             var radioButton = new RadioButton[typedMode.Answers.Count()];
             RadioGroup radioGroup = new RadioGroup(this.Context);
             radioGroup.Orientation = Orientation.Vertical;

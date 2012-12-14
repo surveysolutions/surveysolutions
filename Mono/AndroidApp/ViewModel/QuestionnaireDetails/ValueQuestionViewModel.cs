@@ -13,9 +13,9 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class ValueQuestionView : QuestionView
+    public class ValueQuestionViewModel : QuestionViewModel
     {
-        public ValueQuestionView(Guid publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
+        public ValueQuestionViewModel(Guid publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
             : base(publicKey, text, type, enabled,instructions,comments,valid, mandatory)
         {
             Answer = answer;

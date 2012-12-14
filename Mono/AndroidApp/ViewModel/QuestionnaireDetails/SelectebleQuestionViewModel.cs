@@ -13,15 +13,15 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class SelectebleQuestionView:QuestionView
+    public class SelectebleQuestionViewModel:QuestionViewModel
     {
-        public SelectebleQuestionView(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerView> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory)
+        public SelectebleQuestionViewModel(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory)
             : base(publicKey, text, type,enabled,instructions,comments,valid, mandatory)
         {
             Answers = answers;
             Answered = answers.Any(a => a.Selected);
         }
 
-        public IEnumerable<AnswerView> Answers { get; private set; }
+        public IEnumerable<AnswerViewModel> Answers { get; private set; }
     }
 }

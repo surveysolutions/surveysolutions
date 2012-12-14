@@ -19,10 +19,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public abstract class AbstractQuestionView : LinearLayout
     {
-        protected QuestionView Model { get; private set; }
+        protected QuestionViewModel Model { get; private set; }
 
 
-        public AbstractQuestionView(Context context, QuestionView model)
+        public AbstractQuestionView(Context context, QuestionViewModel model)
             : base(context)
         {
             this.Model = model;
@@ -30,7 +30,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             PostInit();
         }
 
-        public AbstractQuestionView(Context context, IAttributeSet attrs, QuestionView model)
+        public AbstractQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model)
             : base(context, attrs)
         {
             this.Model = model;
@@ -38,7 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             PostInit();
         }
 
-        public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionView model)
+        public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
             : base(context, attrs, defStyle)
         {
             this.Model = model;
@@ -46,7 +46,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             PostInit();
         }
 
-        protected AbstractQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionView model)
+        protected AbstractQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
             : base(javaReference, transfer)
         {
             this.Model = model;

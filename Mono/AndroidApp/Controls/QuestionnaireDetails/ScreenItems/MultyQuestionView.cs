@@ -16,22 +16,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class MultyQuestionView : AbstractQuestionView
     {
-        public MultyQuestionView(Context context, QuestionView model)
+        public MultyQuestionView(Context context, QuestionViewModel model)
             : base(context, model)
         {
         }
 
-        public MultyQuestionView(Context context, IAttributeSet attrs, QuestionView model)
+        public MultyQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model)
             : base(context, attrs, model)
         {
         }
 
-        public MultyQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionView model)
+        public MultyQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
             : base(context, attrs, defStyle, model)
         {
         }
 
-        public MultyQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionView model)
+        public MultyQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
             : base(javaReference, transfer, model)
         {
         }
@@ -41,7 +41,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            SelectebleQuestionView typedMode = Model as SelectebleQuestionView;
+            SelectebleQuestionViewModel typedMode = Model as SelectebleQuestionViewModel;
 
             foreach (var answer in typedMode.Answers)
             {

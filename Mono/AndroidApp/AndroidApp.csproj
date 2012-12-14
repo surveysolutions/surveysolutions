@@ -65,6 +65,7 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DateQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\GroupView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
@@ -79,14 +80,16 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\AnswerView.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\GroupViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionView.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionView.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionView.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

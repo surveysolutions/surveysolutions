@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class AnswerView
+    public class AnswerViewModel
     {
-        public AnswerView(Guid publicKey, string title, bool selected)
+        public AnswerViewModel(Guid publicKey, string title, bool selected)
         {
             PublicKey = publicKey;
             Title = title;

@@ -48,32 +48,43 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.SetPadding(0, 10, 0, 0);
             
             sv.AddView(ll);
-            foreach (var question in Model.Items)
+            foreach (var item in Model.Items)
             {
-                AbstractQuestionView questionView;
-                switch (question.QuestionType)
+                var question = item as QuestionViewModel;
+                View itemView = null;
+                if (question != null)
                 {
-                    case QuestionType.Text:
-                        questionView = new TextQuestionView(inflater.Context, question);
-                        break;
-                    case QuestionType.Numeric:
-                        questionView = new NumericQuestionView(inflater.Context, question);
-                        break;
-                    case QuestionType.DateTime:
-                        questionView = new DateQuestionView(inflater.Context, question);
-                        break;
-                    case QuestionType.SingleOption:
-                        questionView = new SingleChoiseQuestionView(inflater.Context, question);
-                        break;
-                    case QuestionType.MultyOption:
-                        questionView = new MultyQuestionView(inflater.Context, question);
-                        break;
-                    default:
-                        questionView = new TextQuestionView(inflater.Context, question);
-                        break;
+
+                    switch (question.QuestionType)
+                    {
+                        case QuestionType.Text:
+                            itemView = new TextQuestionView(inflater.Context, question);
+                            break;
+                        case QuestionType.Numeric:
+                            itemView = new NumericQuestionView(inflater.Context, question);
+                            break;
+                        case QuestionType.DateTime:
+                            itemView = new DateQuestionView(inflater.Context, question);
+                            break;
+                        case QuestionType.SingleOption:
+                            itemView = new SingleChoiseQuestionView(inflater.Context, question);
+                            break;
+                        case QuestionType.MultyOption:
+                            itemView = new MultyQuestionView(inflater.Context, question);
+                            break;
+                        default:
+                            itemView = new TextQuestionView(inflater.Context, question);
+                            break;
+                    }
+
                 }
-                
-                ll.AddView(questionView);
+                var group = item as GroupViewModel;
+                if (group != null)
+                {
+                    itemView = new GroupView(inflater.Context, group);
+                }
+                if (itemView != null)
+                    ll.AddView(itemView);
             }
             return sv;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);

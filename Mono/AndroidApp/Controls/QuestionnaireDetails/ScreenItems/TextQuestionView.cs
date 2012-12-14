@@ -15,19 +15,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class TextQuestionView : AbstractQuestionView
     {
-        public TextQuestionView(Context context, QuestionView model) : base(context, model)
+        public TextQuestionView(Context context, QuestionViewModel model) : base(context, model)
         {
         }
 
-        public TextQuestionView(Context context, IAttributeSet attrs, QuestionView model) : base(context, attrs, model)
+        public TextQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model) : base(context, attrs, model)
         {
         }
 
-        public TextQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionView model) : base(context, attrs, defStyle, model)
+        public TextQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
         {
         }
 
-        public TextQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionView model) : base(javaReference, transfer, model)
+        public TextQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model) : base(javaReference, transfer, model)
         {
         }
 
@@ -36,7 +36,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             base.Initialize();
             etAnswer=new EditText(this.Context);
            
-            etAnswer.Text = ((ValueQuestionView) Model).Answer;
+            etAnswer.Text = ((ValueQuestionViewModel) Model).Answer;
             llWrapper.AddView(etAnswer);
         }
 

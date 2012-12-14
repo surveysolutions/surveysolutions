@@ -28,31 +28,33 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello1",20,1),
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello2",30,14),
                 };
-            var answers = new AnswerView[]
+            var answers = new AnswerViewModel[]
                 {
-                    new AnswerView(Guid.NewGuid(),"a1",false), 
-                    new AnswerView(Guid.NewGuid(),"a2",false), 
-                    new AnswerView(Guid.NewGuid(),"a3",true), 
-                    new AnswerView(Guid.NewGuid(),"a4",false), 
-                    new AnswerView(Guid.NewGuid(),"a5",false), 
+                    new AnswerViewModel(Guid.NewGuid(),"a1",false), 
+                    new AnswerViewModel(Guid.NewGuid(),"a2",false), 
+                    new AnswerViewModel(Guid.NewGuid(),"a3",true), 
+                    new AnswerViewModel(Guid.NewGuid(),"a4",false), 
+                    new AnswerViewModel(Guid.NewGuid(),"a5",false), 
                 };
-            var questions = new QuestionView[]
+            var questions = new IQuestionnaireItemViewModel[]
                 {
-                    new ValueQuestionView(Guid.NewGuid(), "numeric", QuestionType.Numeric, "10", true, string.Empty,
+                    new ValueQuestionViewModel(Guid.NewGuid(), "numeric", QuestionType.Numeric, "10", true, string.Empty,
                                           "comments on to question", true, true),
-                    new ValueQuestionView(Guid.NewGuid(), "text", QuestionType.Text, "answer", true, "hey punk",
+                    new ValueQuestionViewModel(Guid.NewGuid(), "text", QuestionType.Text, "answer", true, "hey punk",
                                           string.Empty, false, false),
-                    new ValueQuestionView(Guid.NewGuid(), "un answered question", QuestionType.Text, null, true,
+                    new ValueQuestionViewModel(Guid.NewGuid(), "un answered question", QuestionType.Text, null, true,
                                           string.Empty,
                                           string.Empty, true, false),
-                    new ValueQuestionView(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString(),
+                    new GroupViewModel(Guid.NewGuid(), "middle group", true),
+                    new ValueQuestionViewModel(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString(),
                                           true, "hello world", string.Empty, true, false),
-                    new SelectebleQuestionView(Guid.NewGuid(), "single choise", QuestionType.SingleOption, answers, true,
+                    new SelectebleQuestionViewModel(Guid.NewGuid(), "single choise", QuestionType.SingleOption, answers, true,
                                                string.Empty, string.Empty, false, false),
-                    new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, true,
+                    new GroupViewModel(Guid.NewGuid(), "disabled group", false),
+                    new SelectebleQuestionViewModel(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, true,
                                                " public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, QuestionnaireScreenViewModel>",
                                                string.Empty, true, false),
-                    new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, false,
+                    new SelectebleQuestionViewModel(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, false,
                                                string.Empty, "comment on disabled question", true, false)
                 };
             return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),

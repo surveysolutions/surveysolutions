@@ -13,9 +13,11 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public abstract class QuestionView
+
+
+    public abstract class QuestionViewModel : IQuestionnaireItemViewModel
     {
-        public QuestionView(Guid publicKey, string text, QuestionType type, bool enabled, string instructions,string comments, bool valid, bool mandatory)
+        public QuestionViewModel(Guid publicKey, string text, QuestionType type, bool enabled, string instructions,string comments, bool valid, bool mandatory)
         {
             PublicKey = publicKey;
             Text = text;

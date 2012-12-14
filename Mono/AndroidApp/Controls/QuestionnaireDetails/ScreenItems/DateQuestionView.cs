@@ -16,19 +16,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class DateQuestionView : AbstractQuestionView
     {
-        public DateQuestionView(Context context, QuestionView model) : base(context, model)
+        public DateQuestionView(Context context, QuestionViewModel model) : base(context, model)
         {
         }
 
-        public DateQuestionView(Context context, IAttributeSet attrs, QuestionView model) : base(context, attrs, model)
+        public DateQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model) : base(context, attrs, model)
         {
         }
 
-        public DateQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionView model) : base(context, attrs, defStyle, model)
+        public DateQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
         {
         }
 
-        public DateQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionView model) : base(javaReference, transfer, model)
+        public DateQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model) : base(javaReference, transfer, model)
         {
         }
 
@@ -52,7 +52,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
                     dialog.Show();
                 };
-            if (!DateTime.TryParse(((ValueQuestionView) Model).Answer, out date))
+            if (!DateTime.TryParse(((ValueQuestionViewModel) Model).Answer, out date))
                 // get the current date
                 date = DateTime.Today;
 
