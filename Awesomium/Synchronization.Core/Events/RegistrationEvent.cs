@@ -20,14 +20,14 @@ namespace Synchronization.Core.Events
     {
         private string resultMessage = string.Empty;
 
-        public RegistrationEventArgs(IList<IServiceAuthorizationPacket> packets, bool isFirstPhase, RegistrationException error)
+        public RegistrationEventArgs(IList<IAuthorizationPacket> packets, bool isFirstPhase, RegistrationException error)
         {
             Packets = packets;
             Error = error;
             IsFirstPhase = isFirstPhase;
         }
 
-        public IList<IServiceAuthorizationPacket> Packets { get; private set; }
+        public IList<IAuthorizationPacket> Packets { get; private set; }
         public RegistrationException Error { get; private set; }
         public bool IsFirstPhase { get; private set; }
 

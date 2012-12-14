@@ -182,36 +182,48 @@ namespace Browsing.Supervisor.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Device/RegisterCapi")]
-        public string GetRegistrationSupervisorPath {
+        public string CapiRegistrationPath {
             get {
-                return ((string)(this["GetRegistrationSupervisorPath"]));
+                return ((string)(this["CapiRegistrationPath"]));
             }
             set {
-                this["GetRegistrationSupervisorPath"] = value;
+                this["CapiRegistrationPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Device/GetRegisteredDevices")]
-        public string GetAuthorizedIDs {
+        public string AuthorizedIDsPath {
             get {
-                return ((string)(this["GetAuthorizedIDs"]));
+                return ((string)(this["AuthorizedIDsPath"]));
             }
             set {
-                this["GetAuthorizedIDs"] = value;
+                this["AuthorizedIDsPath"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("WCF/SupervisorService.svc/SupervisorService")]
-        public string SupervisorService {
+        [global::System.Configuration.DefaultSettingValueAttribute("WCF/AuthorizationService.svc/AuthorizationService")]
+        public string SupervisorServicePath {
             get {
-                return ((string)(this["SupervisorService"]));
+                return ((string)(this["SupervisorServicePath"]));
             }
             set {
-                this["SupervisorService"] = value;
+                this["SupervisorServicePath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/ConfirmAuthorization")]
+        public string PutAuthConfirmedPath {
+            get {
+                return ((string)(this["PutAuthConfirmedPath"]));
+            }
+            set {
+                this["PutAuthConfirmedPath"] = value;
             }
         }
     }

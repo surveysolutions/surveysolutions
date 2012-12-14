@@ -18,12 +18,54 @@ namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
+        private class AuthListViewItem : ListViewItem
+        {
+            private Color defaultBackColor;
+            private Color defaultForeColor;
+            private DateTime? pastAuthorization = null;
+
+            private static string DeviceDescriptionContent(IRegisterData data)
+            {
+                return string.Format("{0} ({1})", data.Description, data.RegistrationId);
+            }
+
+            public AuthListViewItem(IRegisterData data)
+                : base(new string[] { DeviceDescriptionContent(data), data.RegisterDate.ToLocalTime().ToString() })
+            {
+                this.defaultForeColor = ForeColor;
+                this.defaultBackColor = BackColor;
+            }
+
+            public AuthListViewItem(IAuthorizationPacket packet, DateTime? pastAuthorization)
+                : this(packet.Data)
+            {
+                this.pastAuthorization = pastAuthorization;
+                Tag = packet;
+                UpdateSelection();
+            }
+
+            internal void UpdateSelection()
+            {
+                var packet = Tag as IAuthorizationPacket;
+                if (packet == null)
+                    return;
+
+                BackColor = Color.Yellow;
+                SubItems[1].Text = this.Selected ?
+                    (this.pastAuthorization.HasValue ? "Marked to repeat authorization" : "Marked to authorize") :
+                    (this.pastAuthorization.HasValue ? this.pastAuthorization.Value.ToLocalTime().ToString() : "Not yet ...");
+
+                packet.MarkToAuthorize(this.Selected);
+            }
+        }
+
         private IUrlUtils urlUtils;
-        private IRequesProcessor requestProcessor;
+        private IRequestProcessor requestProcessor;
         private readonly static string RegisterButtonText = "Authorize";
         private bool isReadingAuthorizationList = false;
+        private IList<IAuthorizationPacket> requestPackets = new List<IAuthorizationPacket>();
 
-        public SupervisorRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public SupervisorRegistration(IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(requestProcessor, urlUtils, holder, true, RegisterButtonText, string.Empty, false)
         {
             InitializeComponent();
@@ -33,31 +75,78 @@ namespace Browsing.Supervisor.Containers
             this.urlUtils = urlUtils;
             this.requestProcessor = requestProcessor;
 
-            //AuthorizationList.Location = new Point(0, 0);
-            //AuthorizationList.AutoArrange = true;
-            //AuthorizationList.Columns.Add("Device");
-            //AuthorizationList.Columns.Add("Authorization date");
-            //AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
-            //AuthorizationList.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
             AuthorizationList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            AuthorizationList.MultiSelect = true;
+            AuthorizationList.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(AuthorizationList_ItemSelectionChanged);
+
+            RegistrationManager.NewPacketsAvailable += new NewPacketsAvailableHandler(RegistrationManager_NewPacketsAvailable);
+        }
+
+        void AuthorizationList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item as AuthListViewItem;
+            item.UpdateSelection();
+        }
+
+        void RegistrationManager_NewPacketsAvailable(object sender, IList<IAuthorizationPacket> packets)
+        {
+            lock (this.requestPackets)
+            {
+                this.requestPackets = this.requestPackets.Union(packets).ToList();
+            }
+
+            UpdateAuthorizationList();
         }
 
         #region Helpers
 
+        private ListViewItem CreateListItem(IAuthorizationPacket packet, DateTime? pastAuthorization)
+        {
+            return new AuthListViewItem(packet, pastAuthorization);
+        }
+
+        private ListViewItem CreateListItem(IRegisterData data)
+        {
+            return new AuthListViewItem(data);
+        }
+
+        private void CleanAuthorizedrequests()
+        {
+            lock (this.requestPackets)
+            {
+                this.requestPackets = this.requestPackets.Where(p => !p.IsAuthorized).ToList();
+            }
+        }
+
         private void UpdateListView(IEnumerable<RegisterData> source)
         {
             AuthorizationList.Items.Clear();
-            foreach (var item in source)
-                AuthorizationList.Items.Add(new ListViewItem(new string[] { item.Description, item.RegisterDate.ToLocalTime().ToString() }));
 
-            //AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent | ColumnHeaderAutoResizeStyle.HeaderSize);
+            Dictionary<Guid, DateTime> registeredDevices = new Dictionary<Guid, DateTime>();
+
+            foreach (var item in source)
+            {
+                registeredDevices[item.RegistrationId] = item.RegisterDate;
+
+                AuthorizationList.Items.Add(CreateListItem(item));
+            }
+
+            foreach (var packet in this.requestPackets)
+            {
+                DateTime? pastAuthorization = registeredDevices.ContainsKey(packet.Data.RegistrationId) ? registeredDevices[packet.Data.RegistrationId] : (DateTime?)null;
+                AuthorizationList.Items.Add(CreateListItem(packet, pastAuthorization));
+            }
+
+            AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
             AuthorizationList.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void UpdateAuthorizedList()
+        private void UpdateAuthorizationList()
         {
             if (this.isReadingAuthorizationList)
                 return;
+
+            CleanAuthorizedrequests();
 
             lock (this)
             {
@@ -71,7 +160,6 @@ namespace Browsing.Supervisor.Containers
                     if (string.Compare(devices, "False", true) != 0)
                     {
                         var content = RegistrationManager.DeserializeContent<List<RegisterData>>(devices);
-
                         UpdateListView(content);
                     }
                 }
@@ -85,12 +173,6 @@ namespace Browsing.Supervisor.Containers
             }
         }
 
-        private void UpdateAdministrativeContent()
-        {
-            UpdateAuthorizedList();
-            //new System.Threading.Thread(UpdateAuthorizedList).Start(); // a bug to read in a secondary thread
-        }
-
         #endregion
 
         #region Override Methods
@@ -100,7 +182,7 @@ namespace Browsing.Supervisor.Containers
             return string.Empty;
         }
 
-        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
             return new SupervisorRegistrationManager(requestProcessor, urlUtils, usbProvider);
         }
@@ -121,14 +203,14 @@ namespace Browsing.Supervisor.Containers
             base.OnFirstRegistrationPhaseAccomplished(args);
 
             if (args.IsPassed)
-                UpdateAdministrativeContent();
+                UpdateAuthorizationList();
         }
 
         protected override void OnEnterScreen()
         {
             base.OnEnterScreen();
 
-            UpdateAdministrativeContent();
+            UpdateAuthorizationList();
         }
 
         #endregion

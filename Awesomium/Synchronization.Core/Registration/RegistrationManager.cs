@@ -13,6 +13,8 @@ using Synchronization.Core.Events;
 
 namespace Synchronization.Core.Registration
 {
+    public delegate void NewPacketsAvailableHandler(object sender, IList<IAuthorizationPacket> packets);
+
     /// <summary>
     /// Base class responsible for registraction of CAPI device on Supervisor
     /// </summary>
@@ -22,7 +24,7 @@ namespace Synchronization.Core.Registration
 
         private IRSACryptoService rsaCryptoService = new RSACryptoService();
         private Guid? currentUser;
-        private IRequesProcessor requestProcessor;
+        private IRequestProcessor requestProcessor;
         private IUrlUtils urlUtils;
         private IUsbProvider usbProvider;
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -30,7 +32,7 @@ namespace Synchronization.Core.Registration
         private string registrationName = null;
         private Guid? registrationId = null;
 
-        private SupervisorServiceClient registrationService;
+        private Authorization authorizationService;
 
         #endregion
 
@@ -40,11 +42,13 @@ namespace Synchronization.Core.Registration
         public event EventHandler<RegistrationEventArgs> FirstPhaseAccomplished;
         public event EventHandler<RegistrationEventArgs> SecondPhaseAccomplished;
 
+        public event NewPacketsAvailableHandler NewPacketsAvailable;
+
         #endregion
 
         #region C-tor
 
-        protected RegistrationManager(string inFile, string outFile, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        protected RegistrationManager(string inFile, string outFile, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
             InFile = inFile;
             OutFile = outFile;
@@ -53,19 +57,21 @@ namespace Synchronization.Core.Registration
             this.urlUtils = urlUtils;
             this.usbProvider = usbProvider;
 
-            this.registrationService = new SupervisorServiceClient(urlUtils);
-            this.registrationService.NewPacketsAvailable += new AuthorizationPacketsAlarm(registrationService_NewPacketAvailable);
+            this.authorizationService = DoInstantiateAuthService(urlUtils, requestProcessor);
+            this.authorizationService.NewPacketsAvailable += new AuthorizationPacketsAlarm(registrationService_NewPacketAvailable);
         }
+
+        protected abstract Authorization DoInstantiateAuthService(IUrlUtils urlUtils, IRequestProcessor requestProcessor);
 
         #endregion
 
-        public string SerializeContent<T>(T data)
+        public static string SerializeContent<T>(T data)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
             return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
         }
 
-        public T DeserializeContent<T>(string data)
+        public static T DeserializeContent<T>(string data)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.None };
             return JsonConvert.DeserializeObject<T>(data, settings);
@@ -78,11 +84,14 @@ namespace Synchronization.Core.Registration
             OnCheckPrerequisites(firstPhase);
         }
 
-        void registrationService_NewPacketAvailable(IList<IServiceAuthorizationPacket> packets)
+        void registrationService_NewPacketAvailable(IList<IAuthorizationPacket> packets)
         {
             try
             {
                 OnNewAuthorizationPacketsAvailable(packets);
+
+                if (NewPacketsAvailable != null)
+                    NewPacketsAvailable(this, packets);
             }
             catch(Exception e)
             {
@@ -138,21 +147,17 @@ namespace Synchronization.Core.Registration
             return JsonConvert.DeserializeObject<RegisterData>(data, settings);
         }
 
-        private byte[] SendLocalRegistrationRequest(byte[] requestParams)
+        private byte[] send(string url, byte[] data)
         {
-            string url = LocalRegistrationService;
-
-            //return this.requestProcessor.Process<byte[]>(url, "POST", false, null);
-
             var request = WebRequest.Create(url);
 
             request.ContentType = "application/json; charset=utf-8";
             request.Method = "POST";
-            request.ContentLength = requestParams.Length;
+            request.ContentLength = data.Length;
 
             using (Stream os = request.GetRequestStream())
             {
-                os.Write(requestParams, 0, requestParams.Length);
+                os.Write(data, 0, data.Length);
                 os.Close();
             }
 
@@ -174,6 +179,35 @@ namespace Synchronization.Core.Registration
                     return memoryStream.ToArray();
                 }
             }
+        }
+
+        private void SendPacket(string url, IAuthorizationPacket packet)
+        {
+            try
+            {
+                var registerData = packet.Data as RegisterData;
+
+                var data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
+                var response = send(url, data);
+
+                var result = Encoding.UTF8.GetString(response, 0, response.Length);
+
+                if (string.Compare(result, "True", true) != 0)
+                    throw new RegistrationFaultException(packet);
+
+                packet.IsAuthorized = true;
+            }
+            catch (RegistrationException ex)
+            {
+                Logger.Error(ex.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex.Message);
+                throw new RegistrationFaultException(packet, ex);
+            }
+
         }
 
         private void WriteRegistrationFile(RegisterData registeredData, string filePath)
@@ -225,7 +259,7 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        private string Register(bool firstPhase, IList<IServiceAuthorizationPacket> packets)
+        private string Register(bool firstPhase, IList<IAuthorizationPacket> packets)
         {
             IList<Exception> errorList = new List<Exception>();
 
@@ -257,12 +291,12 @@ namespace Synchronization.Core.Registration
             return result.ToString();
         }
 
-        private IList<IServiceAuthorizationPacket> PrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets)
+        private IList<IAuthorizationPacket> PrepareAuthorizationPackets(bool firstPhase)
         {
-            return OnPrepareAuthorizationPackets(firstPhase, webServicePackets);
+            return OnPrepareAuthorizationPackets(firstPhase, this.authorizationService.ServicePackets);
         }
 
-        private void StartRegistration(IServiceAuthorizationPacket packet)
+        private void StartRegistration(IAuthorizationPacket packet)
         {
             try
             {
@@ -275,7 +309,7 @@ namespace Synchronization.Core.Registration
             }
         }
 
-        private void FinalizeRegistration(IServiceAuthorizationPacket packet)
+        private void FinalizeRegistration(IAuthorizationPacket packet)
         {
             try
             {
@@ -290,7 +324,7 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
-        protected IServiceAuthorizationPacket PreparePacket(bool request, Guid registrationId, ServicePacketChannel channel, RegisterData data = null)
+        protected AuthorizationPacket InstantiatePacket(bool request, ServicePacketChannel channel, RegisterData data = null)
         {
             var keyContainerName = ContainerName;
 
@@ -304,8 +338,8 @@ namespace Synchronization.Core.Registration
             };
 
             return request ?
-                new AuthorizationRequest(registeredData, channel) as IServiceAuthorizationPacket:
-                new AuthorizationResponce(registeredData, channel);
+                new AuthorizationPacket(registeredData, channel, ServicePacketType.Request):
+                new AuthorizationPacket(registeredData, channel, ServicePacketType.Responce);
         }
 
         #region Properties
@@ -315,7 +349,9 @@ namespace Synchronization.Core.Registration
 
         protected string InFile { get; private set; }
         protected string OutFile { get; private set; }
-        protected string LocalRegistrationService { get { return this.urlUtils.GetRegistrationCapiPath(); } }
+        
+        private string LocalRegistrationController { get { return this.urlUtils.GetRegistrationUrl(); } }
+        private string LocalAuthorizationController { get { return this.urlUtils.GetAuthorizationUrl(); } }
 
         protected Guid CurrentUser
         {
@@ -324,7 +360,7 @@ namespace Synchronization.Core.Registration
                 if (this.currentUser.HasValue)
                     return this.currentUser.Value;
 
-                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetWhoIsCurrentUserUrl(), "GET", true, Guid.Empty);
 
                 return this.currentUser.Value;
             }
@@ -342,15 +378,15 @@ namespace Synchronization.Core.Registration
 
         protected abstract void OnCheckPrerequisites(bool firstPhase);
 
-        protected abstract IList<IServiceAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IServiceAuthorizationPacket> webServicePackets);
+        protected abstract IList<IAuthorizationPacket> OnPrepareAuthorizationPackets(bool firstPhase, IList<IAuthorizationPacket> webServicePackets);
 
         protected abstract Guid OnAcceptRegistrationId();
 
         protected abstract string OnAcceptRegistrationName();
 
-        protected abstract void OnNewAuthorizationPacketsAvailable(IList<IServiceAuthorizationPacket> packets);
+        protected abstract void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets);
 
-        protected virtual void OnStartRegistration(IServiceAuthorizationPacket packet)
+        protected virtual void OnStartRegistration(IAuthorizationPacket packet)
         {
             if (packet.Channel != ServicePacketChannel.Usb)
                 return;
@@ -359,23 +395,14 @@ namespace Synchronization.Core.Registration
             if (usb == null)
                 throw new UsbNotChoozenException();
 
-            var keyContainerName = ContainerName;
+            var responce = InstantiatePacket(false, ServicePacketChannel.Usb);
 
-            var registeredData = new RegisterData
-            {
-                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
-                RegistrationId = packet.Data.RegistrationId,
-                Description = RegistrationName,
-                RegisterDate = DateTime.Now,
-                Registrator = CurrentUser, // makes not much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
-            };
-
-            WriteRegistrationFile(registeredData, usb.Name + OutFile);
+            WriteRegistrationFile(responce.Data, usb.Name + OutFile);
 
             packet.IsAuthorized = true;
         }
 
-        protected virtual void OnFinalizeRegistration(IServiceAuthorizationPacket packet)
+        protected virtual void OnFinalizeRegistration(IAuthorizationPacket packet)
         {
             throw new NotImplementedException();
         }
@@ -384,35 +411,13 @@ namespace Synchronization.Core.Registration
 
         #region Protected Operations
 
-        protected void AuthorizeAcceptedData(IServiceAuthorizationPacket packet)
+        protected void SendAuthorizationData(IAuthorizationPacket packet)
         {
-            try
-            {
-                var registerData = packet.Data;
-
-                // assign registrator id to save in local db
-                registerData.Registrator = CurrentUser;
-
-                var data = Encoding.UTF8.GetBytes(SerializeRegisterData(registerData));
-                var response = SendLocalRegistrationRequest(data);
-
-                var result = Encoding.UTF8.GetString(response, 0, response.Length);
-
-                if (string.Compare(result, "True", true) != 0)
-                    throw new RegistrationFaultException(packet);
-
-                packet.IsAuthorized = true;
-            }
-            catch (RegistrationException ex)
-            {
-                Logger.Error(ex.Message);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex.Message);
-                throw new RegistrationFaultException(packet, ex);
-            }
+            SendPacket(LocalAuthorizationController, packet);
+        }
+        protected void AuthorizeAcceptedData(IAuthorizationPacket packet)
+        {
+            SendPacket(LocalRegistrationController, packet);
         }
 
         #endregion
@@ -423,11 +428,11 @@ namespace Synchronization.Core.Registration
         {
             RegistrationException error = null;
             string log = null;
-            IList<IServiceAuthorizationPacket> packets = null;
+            IList<IAuthorizationPacket> packets = null;
 
             try
             {
-                packets = PrepareAuthorizationPackets(firstPhase, this.registrationService.ServicePackets);
+                packets = PrepareAuthorizationPackets(firstPhase);
                 if (packets == null || packets.Count == 0)
                     return;
 
@@ -446,8 +451,9 @@ namespace Synchronization.Core.Registration
             finally
             {
                 var regEvent = new RegistrationEventArgs(packets, firstPhase, error);
-                regEvent.AppendResultMessage(log);
-
+                if(error == null)
+                    regEvent.AppendResultMessage(log);
+    
                 if (firstPhase)
                 {
                     if (FirstPhaseAccomplished != null)
@@ -500,20 +506,21 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
-        // check web part and usb for registration requests/responces
+        // checks web part and usb for registration requests/responces;
+        // it runs by timer
         public void CollectAuthorizationPackets()
         {
             var usbPackets = ReadUsbPackets();
 
-            this.registrationService.CollectAuthorizationPackets(usbPackets);
+            this.authorizationService.CollectAuthorizationPackets(usbPackets);
         }
 
-        protected virtual IList<IServiceAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
+        protected virtual IList<IAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
         {
             // read only single request for now
             // todo: change data file name and read all requests
 
-            var usbPackets = new List<IServiceAuthorizationPacket>();
+            var usbPackets = new List<IAuthorizationPacket>();
 
             var drive = this.usbProvider.ActiveUsb;
 
@@ -522,7 +529,7 @@ namespace Synchronization.Core.Registration
                 ///// read from usb
                 var usbData = ReadRegistrationFile(drive.Name + InFile);
 
-                IServiceAuthorizationPacket packet = PreparePacket(authorizationRequest, Guid.Empty, ServicePacketChannel.Usb, usbData);
+                IAuthorizationPacket packet = InstantiatePacket(authorizationRequest, ServicePacketChannel.Usb, usbData);
 
                 System.Diagnostics.Debug.Assert(packet != null);
 
@@ -532,9 +539,9 @@ namespace Synchronization.Core.Registration
             return usbPackets;
         }
 
-        private IList<IServiceAuthorizationPacket> ReadUsbPackets()
+        private IList<IAuthorizationPacket> ReadUsbPackets()
         {
-            IList<IServiceAuthorizationPacket> exrtraPackets = null;
+            IList<IAuthorizationPacket> exrtraPackets = null;
 
             try
             {
@@ -550,7 +557,7 @@ namespace Synchronization.Core.Registration
 
         public void RemoveUsbChannelPackets()
         {
-            this.registrationService.Clean(ServicePacketChannel.Usb);
+            this.authorizationService.Clean(ServicePacketChannel.Usb);
         }
     }
 }

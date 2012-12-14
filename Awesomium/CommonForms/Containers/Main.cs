@@ -17,7 +17,7 @@ namespace Browsing.Common.Containers
         
         #region C-tor
 
-        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public Main(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(holder, false)
         {
             InitializeComponent();
@@ -183,7 +183,7 @@ namespace Browsing.Common.Containers
         #region Private Members
 
         private ISettingsProvider clientSettings;
-        private IRequesProcessor requestProcessor;
+        private IRequestProcessor requestProcessor;
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
         private Guid? currentUser;
@@ -199,7 +199,7 @@ namespace Browsing.Common.Containers
                 if (this.isUserLoggedIn.HasValue)
                     return this.isUserLoggedIn.Value;
 
-                this.isUserLoggedIn = this.requestProcessor.Process<bool>(UrlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
+                this.isUserLoggedIn = this.requestProcessor.Process<bool>(UrlUtils.GetLoggedStatusCheckUrl(), "GET", true, false);
                 return isUserLoggedIn.Value;
             }
         }
@@ -223,7 +223,7 @@ namespace Browsing.Common.Containers
                 if (this.currentUser.HasValue)
                     return this.currentUser.Value;
 
-                this.currentUser = this.requestProcessor.Process<Guid>(UrlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                this.currentUser = this.requestProcessor.Process<Guid>(UrlUtils.GetWhoIsCurrentUserUrl(), "GET", true, Guid.Empty);
                 
                 return this.currentUser.Value;
             }

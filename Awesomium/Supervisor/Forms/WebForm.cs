@@ -17,9 +17,10 @@ namespace Browsing.Supervisor.Forms
         {
             InitializeComponent();
 
-#if DEBUG__
+#if DEBUG
             Properties.Settings.Default.RunClient = false;
-            Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";
+            Properties.Settings.Default.DefaultUrl = "http://localhost:8084/";
+            //Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";
             Properties.Settings.Default.Save();
 #endif
         }
@@ -28,7 +29,7 @@ namespace Browsing.Supervisor.Forms
 
         #region Overloaded
 
-        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils)
         {
             return new SupervisorRegistration(requestProcessor, urlUtils, Holder)
             {
@@ -44,7 +45,7 @@ namespace Browsing.Supervisor.Forms
             };
         }
 
-        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             new SyncChoicePage(Holder)
             {
@@ -62,7 +63,7 @@ namespace Browsing.Supervisor.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             return new SupervisorMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {

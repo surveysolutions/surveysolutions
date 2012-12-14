@@ -15,47 +15,44 @@ namespace Synchronization.Core.Registration
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public abstract class AuthorizationPacket : IServiceAuthorizationPacket//, IComparable<IServiceAuthorizationPacket>
+    public partial class AuthorizationPacket : IAuthorizationPacket//, IComparable<IServiceAuthorizationPacket>
     {
-        protected AuthorizationPacket(RegisterData data, ServicePacketChannel channel)
+        public AuthorizationPacket(RegisterData data, ServicePacketChannel channel, ServicePacketType type)
         {
             Data = data;
             Channel = channel;
+            PacketType = type;
         }
 
-        public abstract ServicePacketType Type { get; }
-        public RegisterData Data { get; private set; }
+        public AuthorizationPacket()
+            : this(null, ServicePacketChannel.Net, ServicePacketType.Request) // fix non-serializable values
+        {
+        }
+
         public ServicePacketChannel Channel { get; private set; }
-        public bool IsAuthorized { get; set; }
+        public ServicePacketType PacketType { get; private set; }
+        public bool IsMarkedToAuthorize { get; private set; }
 
-        public static bool operator !=(AuthorizationPacket x, AuthorizationPacket y)
+        IRegisterData IAuthorizationPacket.Data { get { return this.Data; } set { this.Data = value as RegisterData; } }
+
+        public void SetChannel(ServicePacketChannel channel)
         {
-            return !(x == y);
+            Channel = channel;
         }
 
-        public static bool operator ==(AuthorizationPacket x, AuthorizationPacket y)
+        public void MarkToAuthorize(bool toAuthorize)
         {
-            if (object.ReferenceEquals(x, y))
-                return true;
-
-            System.Diagnostics.Debug.Assert(x.Data != null && y.Data != null);
-
-            return x.Data.RegistrationId == y.Data.RegistrationId;
+            IsMarkedToAuthorize = !IsAuthorized && toAuthorize;
         }
 
-        public bool Equals(AuthorizationPacket x, AuthorizationPacket y)
+        public void SetRegistrator(Guid registrar)
         {
-            return x == y;
+            Data.Registrator = registrar;
         }
 
-        public override bool Equals(object obj)
+        public void SetRegistrationId(Guid registrationId)
         {
-            return Equals(this, (obj as AuthorizationPacket));
-        }
-
-        public override int GetHashCode()
-        {
-            return this.Data == null ? base.GetHashCode() : this.Data.RegistrationId.GetHashCode();
+            Data.RegistrationId = registrationId;
         }
     }
 }

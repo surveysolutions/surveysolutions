@@ -45,9 +45,15 @@ namespace Browsing.CAPI.Containers
         private readonly static string Register1ButtonText = "Request";
         private readonly static string Register2ButtonText = "Accept";
 
-        public CAPIRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        private IRequestProcessor requestProcessor;
+        private IUrlUtils urlUtils;
+
+        public CAPIRegistration(IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(requestProcessor, urlUtils, holder, false, Register1ButtonText, Register2ButtonText, true)
         {
+            this.urlUtils = urlUtils;
+            this.requestProcessor = requestProcessor;
+
             // todo: define via resources
             _firstStepRegisteredMessageUSB = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
             _firstStepRegisteredMessageNET = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step via net.\nPlease, wait to accept authorization.";
@@ -84,7 +90,7 @@ namespace Browsing.CAPI.Containers
 
         #region Override Methods
 
-        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
             return new CapiRegistrationManager(requestProcessor, urlUtils, usbProvider);
         }
@@ -92,6 +98,9 @@ namespace Browsing.CAPI.Containers
         protected override string OnGetCurrentRegistrationStatus()
         {
             var status = RegistrationStatus;
+
+            if(IsSupervisorsInfoSaved())
+                return SecondStepRegisteredMessage;
 
             if (status == Phaze.PublicKeySharedUSB)
                 return FirstStepRegisteredMessageUSB;
@@ -101,6 +110,31 @@ namespace Browsing.CAPI.Containers
                 return SecondStepRegisteredMessage;
             else
                 return ZeroStepRegisteredMessage;
+        }
+
+        private bool IsSupervisorsInfoSaved()
+        {
+            try
+            {
+                var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
+                var supervisor = this.requestProcessor.Process<string>(url, "False");
+
+                if (string.Compare(supervisor, "False", true) != 0)
+                {
+                    var content = RegistrationManager.DeserializeContent<List<RegisterData>>(supervisor);
+                    if (content == null)
+                        return false;
+
+                    var data = content.FirstOrDefault();
+
+                    return data != null && data.Registrator == RegistrationManager.RegistrationId;
+                }
+            }
+            catch
+            {
+            }
+
+            return false;
         }
 
         protected override void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)

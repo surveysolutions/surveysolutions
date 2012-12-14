@@ -11,7 +11,7 @@ namespace Browsing.Supervisor.Containers
     {
         #region Constructor
 
-        public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public SupervisorMain(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
@@ -44,7 +44,7 @@ namespace Browsing.Supervisor.Containers
             try
             {
                 // just push the service to run
-                var host = new SupervisorServiceClient(UrlUtils).GetPath(); 
+                var host = new AuthorizationServiceClient(UrlUtils.GetAuthServiceUrl()).GetPath(); 
             }
             catch
             { }

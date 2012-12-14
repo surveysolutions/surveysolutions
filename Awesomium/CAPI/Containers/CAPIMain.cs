@@ -7,12 +7,13 @@ using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 
 namespace Browsing.CAPI.Containers
 {
     public partial class CAPIMain : Main
     {
-        public CAPIMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public CAPIMain(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
@@ -34,13 +35,13 @@ namespace Browsing.CAPI.Containers
 
         private void LookupSupervisor()
         {
-            ISupervisorService channelService = null;
+            IAuthorizationService channelService = null;
             string supervisorHost = "Not found";
 
             try
             {
                 var discoveryClient = new DiscoveryClient(new UdpDiscoveryEndpoint());
-                var findCriteria = FindCriteria.CreateMetadataExchangeEndpointCriteria(typeof(ISupervisorService));
+                var findCriteria = FindCriteria.CreateMetadataExchangeEndpointCriteria(typeof(IAuthorizationService));
                 findCriteria.MaxResults = 1;
 
                 var findResponse = discoveryClient.Find(findCriteria);
@@ -48,12 +49,12 @@ namespace Browsing.CAPI.Containers
                     return;
 
                 var address = findResponse.Endpoints[0].Address;
-                var endpoints = MetadataResolver.Resolve(typeof(ISupervisorService), address);
+                var endpoints = MetadataResolver.Resolve(typeof(IAuthorizationService), address);
 
                 if (endpoints.Count < 1)
                     return;
 
-                var factory = new ChannelFactory<ISupervisorService>(endpoints[0].Binding, endpoints[0].Address);
+                var factory = new ChannelFactory<IAuthorizationService>(endpoints[0].Binding, endpoints[0].Address);
                 channelService = factory.CreateChannel();
 
                 var channelResponce = channelService.GetPath();

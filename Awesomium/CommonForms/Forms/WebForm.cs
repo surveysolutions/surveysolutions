@@ -136,12 +136,12 @@ namespace Browsing.Common.Forms
             OnAddBrowserScreen();
         }
 
-        private void AddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        private void AddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             OnAddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
         }
 
-        private void AddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        private void AddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils)
         {
             OnAddRegistrationScreen(requestProcessor, urlUtils);
         }
@@ -151,7 +151,7 @@ namespace Browsing.Common.Forms
             OnAddSettingsScreen();
         }
 
-        private void AddMainScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        private void AddMainScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             var capiMain = OnAddMainPageScreen(requestProcessor, settingsProvider, urlUtils);
 
@@ -184,10 +184,10 @@ namespace Browsing.Common.Forms
         #region Abstract
 
         protected abstract IUrlUtils InstantiateUrlProvider();
-        protected abstract Containers.Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
+        protected abstract Containers.Main OnAddMainPageScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Settings OnAddSettingsScreen();
-        protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
-        protected abstract Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils);
+        protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
+        protected abstract Containers.Registration OnAddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils);
         protected abstract Containers.Browser OnAddBrowserScreen();
 
         #endregion

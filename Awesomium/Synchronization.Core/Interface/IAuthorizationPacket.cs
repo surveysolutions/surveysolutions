@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="IServiceRequest.cs" company="">
+// <copyright file="IAuthorizationService.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
@@ -10,7 +10,6 @@ namespace Synchronization.Core.Interface
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-    using Synchronization.Core.Registration;
 
     public enum ServicePacketType
     {
@@ -24,24 +23,22 @@ namespace Synchronization.Core.Interface
         Net,
     }
 
-
     /// <summary>
-    /// Service request basic interface
+    /// TODO: Update summary.
     /// </summary>
-    public interface IServiceAuthorizationPacket
+    public interface IAuthorizationPacket
     {
-        ServicePacketType Type { get; }
-        RegisterData Data { get; }
-        ServicePacketChannel Channel { get; }
+        IRegisterData Data { get; set; }
         bool IsAuthorized { get; set; }
-    }
 
-    public interface IRequestPacket : IServiceAuthorizationPacket
-    {
-    }
+        ServicePacketType PacketType { get; }
+        ServicePacketChannel Channel { get; }
+        bool IsMarkedToAuthorize { get; }
 
-    public interface IResponcePacket : IServiceAuthorizationPacket
-    {
-    }
+        void SetChannel(ServicePacketChannel channel);
+        void SetRegistrator(Guid registrar);
+        void SetRegistrationId(Guid supervisorId);
 
+        void MarkToAuthorize(bool toAuthorize);
+    }
 }

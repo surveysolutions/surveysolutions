@@ -21,7 +21,7 @@ namespace Browsing.Common.Containers
 
         #region C-tor
 
-        public Synchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
+        public Synchronization(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(holder, true)
         {
             InitializeComponent();
@@ -48,7 +48,7 @@ namespace Browsing.Common.Containers
 
         #region Virtual and Abstract
 
-        protected abstract ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider);
+        protected abstract ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider);
         protected abstract void OnPushClicked();
         protected abstract void OnPullClicked();
 

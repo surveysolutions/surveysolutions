@@ -16,7 +16,7 @@ namespace Browsing.Supervisor.Utils
             return GetDefaultUrl() + Settings.Default.LoginPath;
         }
 
-        public string GetAuthentificationCheckUrl()
+        public string GetLoggedStatusCheckUrl()
         {
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.AuthentificationCheckPath);
         }
@@ -61,14 +61,24 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}?syncKey={2}", GetDefaultUrl(), Settings.Default.UsbImportPath, clientId);
         }
 
-        public string GetCurrentUserGetUrl()
+        public string GetWhoIsCurrentUserUrl()
         {
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
         }
 
-        public string GetRegistrationCapiPath()
+        public string GetRegistrationUrl()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetRegistrationSupervisorPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CapiRegistrationPath);
+        }
+
+        public string GetAuthorizationUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.PutAuthConfirmedPath);
+        }
+
+        public string GetCheckConfirmedAuthorizationUrl(Guid registrationId)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetEndProcessUrl(Guid id)
@@ -87,14 +97,14 @@ namespace Browsing.Supervisor.Utils
             return String.Empty;
         }
 
-        public string GetAuthorizedIDsUrl(Guid registratorId)
+        public string GetAuthorizedIDsUrl(Guid supervisorId)
         {
-            return string.Format("{0}{1}?Registrator={2}", GetDefaultUrl(), Settings.Default.GetAuthorizedIDs, registratorId);
+            return string.Format("{0}{1}?supervisorId={2}", GetDefaultUrl(), Settings.Default.AuthorizedIDsPath, supervisorId);
         }
 
-        public string GetSupervisorService()
+        public string GetAuthServiceUrl()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.SupervisorService);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.SupervisorServicePath);
         }
     }
 }

@@ -32,7 +32,7 @@
     <Setting Name="RunClient" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="AuthentificationCheckPath" Type="System.String" Scope="User">
+    <Setting Name="LoggedStatusCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsLoggedIn</Value>
     </Setting>
     <Setting Name="LoginPath" Type="System.String" Scope="User">
@@ -50,26 +50,35 @@
     <Setting Name="LoginCapabilitiesCheckPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/IsUserInBase</Value>
     </Setting>
-    <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
+    <Setting Name="CurrentUserPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/GetCurrentUser</Value>
     </Setting>
-    <Setting Name="GetRegistrationCapiPath" Type="System.String" Scope="User">
+    <Setting Name="SupervisorRegistrationLocalPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/RegisterSupervisor</Value>
     </Setting>
     <Setting Name="RegistrationPhaze" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="GetEndProcessCapiPath" Type="System.String" Scope="User">
+    <Setting Name="EndProcessCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/ProgressEnding</Value>
     </Setting>
-    <Setting Name="GetPushStatisticCapiPath" Type="System.String" Scope="User">
+    <Setting Name="PushStatisticCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/PushStatistics</Value>
     </Setting>
-    <Setting Name="GetPullStatisticCapiPath" Type="System.String" Scope="User">
+    <Setting Name="PullStatisticCapiPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Synchronizations/PullStatistics</Value>
     </Setting>
-    <Setting Name="CapiService" Type="System.String" Scope="User">
-      <Value Profile="(Default)">WCF/SupervisorService.svc/SupervisorService</Value>
+    <Setting Name="AuthServiceLocalPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/AuthorizeBySupervisor</Value>
+    </Setting>
+    <Setting Name="SupervisorServicePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WCF/AuthorizationService.svc</Value>
+    </Setting>
+    <Setting Name="CheckAuthConfirmedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/CheckConfirmedAuthorizationStatus</Value>
+    </Setting>
+    <Setting Name="AuthorizedIDsPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/GetAuthoritySupervisor</Value>
     </Setting>
   </Settings>
 </SettingsFile>

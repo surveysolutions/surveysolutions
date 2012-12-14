@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -57,9 +59,9 @@
     <Compile Include="Events\RegistrationEvent.cs" />
     <Compile Include="Events\SynchronizationCompletedEvent.cs" />
     <Compile Include="Events\SynchronizationStatisticEvent.cs" />
-    <Compile Include="Interface\IServiceAuthorizationPacket.cs" />
-    <Compile Include="Interface\IServiceWatcher.cs" />
-    <Compile Include="Interface\ISupervisorService.cs" />
+    <Compile Include="Interface\IAuthorizationPacket.cs" />
+    <Compile Include="Interface\IAuthorizationServiceWatcher.cs" />
+    <Compile Include="Interface\IRegisterData.cs" />
     <Compile Include="Interface\IUsbProvider.cs" />
     <Compile Include="Interface\ISettingsProvider.cs" />
     <Compile Include="Interface\ISettings.cs" />
@@ -67,11 +69,9 @@
     <Compile Include="Interface\ISyncProgressObserver.cs" />
     <Compile Include="Interface\ISyncProgressStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Registration\AbstractRegistrar.cs" />
-    <Compile Include="Registration\AuthorizationRequest.cs" />
-    <Compile Include="Registration\AuthorizationResponce.cs" />
+    <Compile Include="Registration\Authorization.cs" />
     <Compile Include="Registration\AuthorizationPacket.cs" />
-    <Compile Include="Registration\SupervisorServiceClient.cs" />
+    <Compile Include="Registration\AuthorizationServiceClient.cs" />
     <Compile Include="Registration\RegisterData.cs" />
     <Compile Include="Registration\RegistrationManager.cs" />
     <Compile Include="Registration\RSACryptoService.cs" />

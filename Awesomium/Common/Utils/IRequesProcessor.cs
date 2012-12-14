@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Common.Utils
 {
-    public interface IRequesProcessor
+    public interface IRequestProcessor
     {
         T Process<T>(string url, T defaultValue);// where T : struct;
         T Process<T>(string url, string method, T defaultValue);// where T : struct;
