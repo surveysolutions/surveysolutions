@@ -66,77 +66,16 @@ namespace AndroidApp
 
             Adapter = new ContentFrameAdapter(SupportFragmentManager,firstScreen);
             VpContent.Adapter = Adapter;
-        
-            /*  if (ScreenId.HasValue)
-              {
-                  // Make new fragment to show this selection.
-                  var details = ScreenContentFragment.NewInstance(this.QuestionnaireId, ScreenId.Value);
-                    
-                  Android.App.FragmentManager.BeginTransaction().Add(Resource.Id.flDetails, details).Commit();
-              }
-              else
-              {
-                  if (DualPanel)
-                  {
-                      navList_ItemClick(NavList, new ScreenChangedEventArgs(Guid.Empty));
-                  }
-              }*/
-
-
-
 
         }
         
         private void navList_ItemClick(object sender, ScreenChangedEventArgs e)
         {
-            if (!e.ScreenId.HasValue)
-            {
-                VpContent.CurrentItem = VpContent.Adapter.Count - 1;
-            }
-        //    VpContent.CurrentItem = 1;
-            /*   if (DualPanel)
-            {
-                ScreenContentFragment details =
-                    this.FragmentManager.FindFragmentById<ScreenContentFragment>(Resource.Id.flDetails);
-                if (details == null || details.ScreenId != e.ScreenId)
-                {
-                    // Make new fragment to show this selection.
-                    details = ScreenContentFragment.NewInstance(this.QuestionnaireId, e.ScreenId);
 
-                    // Execute a transaction, replacing any existing
-                    // fragment with this one inside the frame.
-                    FragmentTransaction ft
-                            = this.FragmentManager.BeginTransaction();
-                    ft.Replace(Resource.Id.flDetails, details);
-                    ft.SetTransition(
-                            FragmentTransit.FragmentFade);
-                    ft.Commit();
-                }
-            }
-            else
-            {
-                Intent intent = new Intent();
-                intent.SetClass(this, typeof(DetailsActivity));
-                intent.PutExtra("questionnaireId", this.QuestionnaireId.ToString());
-                intent.PutExtra("screenId", e.ScreenId.ToString());
-                StartActivity(intent);
-            }*/
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
         
         protected Guid CurrentScreen { get; set; }
-
-       /* protected ScreenContentView ScreenContent
-        {
-            get { return FindViewById<ScreenContentView>(Resource.Id.scveenView); }
-        }*/
-
-    /*    protected LinearLayout ContentLayout
-        {
-            get { return FindViewById<LinearLayout>(Resource.Id.contentLayout); }
-        }*/
-     //   protected IDictionary<Guid, ScreenContentFragment> ScreensContainer;
-
-
 
     }
 }

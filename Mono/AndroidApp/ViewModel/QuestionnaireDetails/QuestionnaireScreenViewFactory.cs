@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -27,8 +28,25 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello1",20,1),
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello2",30,14),
                 };
+            var answers = new AnswerView[]
+                {
+                    new AnswerView(Guid.NewGuid(),"a1",false), 
+                    new AnswerView(Guid.NewGuid(),"a2",false), 
+                    new AnswerView(Guid.NewGuid(),"a3",true), 
+                    new AnswerView(Guid.NewGuid(),"a4",false), 
+                    new AnswerView(Guid.NewGuid(),"a5",false), 
+                };
+            var questions = new QuestionView[]
+                {
+                    new ValueQuestionView(Guid.NewGuid(), "numeric", QuestionType.Numeric,"10"),
+                    new ValueQuestionView(Guid.NewGuid(), "text", QuestionType.Text, "answer"),
+                    new ValueQuestionView(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString()),
+                    new SelectebleQuestionView(Guid.NewGuid(), "single choise", QuestionType.SingleOption,answers), 
+                      new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption,answers), 
+                       new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption,answers)
+                };
             return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),
-                                                    input.PropagationKey, screens,
+                                                    input.PropagationKey, questions,screens,
                                                     Enumerable.Empty<QuestionnaireNavigationPanelItem>(), screens);
         }
 

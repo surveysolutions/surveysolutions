@@ -16,11 +16,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     {
         public QuestionnaireScreenViewModel(Guid questionnaireId, 
             Guid screenId, 
-            Guid? propagationKey, 
+            Guid? propagationKey, IEnumerable<QuestionView> items,
             IList<QuestionnaireNavigationPanelItem> siblings,
             IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, IEnumerable<QuestionnaireNavigationPanelItem> chapters)
         {
+
             QuestionnaireId = questionnaireId;
+            Items = items;
             ScreenId = screenId;
             PropagationKey = propagationKey;
             Siblings = siblings;
@@ -34,5 +36,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Breadcrumbs { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
+
+        public IEnumerable<QuestionView> Items { get; private set; }
     }
 }

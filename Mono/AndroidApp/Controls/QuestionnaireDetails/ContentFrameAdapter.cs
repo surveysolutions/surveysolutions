@@ -52,6 +52,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, null));
             return ScreenContentFragment.NewInstance(model);
         }
+        public int GetScreenIndex(Guid? screenId)
+        {
+
+            if (!screenId.HasValue)
+                return Count - 1;
+            int result = 0;
+            for (int i = 0; i < Count - 1; i++)
+            {
+                if (screensHolder[i].ScreenPublicKey == screenId.Value)
+                    return result;
+                result++;
+            }
+            throw new ArgumentException("screen cant be found");
+        }
 
     }
 }

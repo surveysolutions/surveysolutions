@@ -10,7 +10,9 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
@@ -36,10 +38,42 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-
-            TextView tv = new TextView(inflater.Context);
-            tv.Text = Model.ScreenId.ToString();
-            return tv;
+            ScrollView sv=new ScrollView(inflater.Context);
+            sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+            LinearLayout ll=new LinearLayout(inflater.Context);
+            ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+            ll.Orientation = Orientation.Vertical;
+            
+            sv.AddView(ll);
+            foreach (var question in Model.Items)
+            {
+                AbstractQuestionView questionView;
+                switch (question.QuestionType)
+                {
+                    case QuestionType.Text:
+                        questionView = new TextQuestionView(inflater.Context, question);
+                        break;
+                    case QuestionType.Numeric:
+                        questionView = new NumericQuestionView(inflater.Context, question);
+                        break;
+                    case QuestionType.DateTime:
+                        questionView = new DateQuestionView(inflater.Context, question);
+                        break;
+                    case QuestionType.SingleOption:
+                        questionView = new SingleChoiseQuestionView(inflater.Context, question);
+                        break;
+                    case QuestionType.MultyOption:
+                        questionView = new MultyQuestionView(inflater.Context, question);
+                        break;
+                    default:
+                        questionView = new TextQuestionView(inflater.Context, question);
+                        break;
+                }
+                ll.AddView(questionView);
+            }
+            return sv;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;

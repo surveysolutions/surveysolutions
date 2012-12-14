@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 using Android.Content;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
@@ -46,17 +48,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
 
             base.OnActivityCreated(savedInstanceState);
-
-
+            
+            this.ListView.ChoiceMode = ChoiceMode.Single;
+            this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
-            this.SetSelection(0);
+           
         }
 
 
 
         public override void OnListItemClick(ListView l, View v, int pos, long id)
         {
-            ListView.SetItemChecked(pos, true);
+          //  ListView.SetItemChecked(pos, true);
+            v.Selected = true;
             var tag = v.GetTag(Resource.Id.ScreenId);
             Guid? screenId = null;
             if (tag != null)

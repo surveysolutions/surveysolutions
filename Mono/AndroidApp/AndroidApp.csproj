@@ -63,6 +63,12 @@
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DateQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\MultyQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\NumericQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
@@ -73,16 +79,24 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\AnswerView.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionView.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionView.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionView.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml" />
     <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
+    <AndroidResource Include="Resources\Layout\QuestionView_Text.axml" />
+    <AndroidResource Include="Resources\Layout\QuestionView_Numeric.axml" />
+    <AndroidResource Include="Resources\Layout\QuestionView_SingleChoise.axml" />
+    <AndroidResource Include="Resources\Layout\QuestionView_MultyChoise.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -158,6 +172,8 @@
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
+    <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
+    <AndroidResource Include="Resources\Layout\QuestionView_Date.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
