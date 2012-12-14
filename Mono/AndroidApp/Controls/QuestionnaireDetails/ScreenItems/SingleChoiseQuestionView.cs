@@ -36,11 +36,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Initialize()
         {
-            LayoutInflater layoutInflater =
-                (LayoutInflater) this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.QuestionView_SingleChoise, this);
+            base.Initialize();
             SelectebleQuestionView typedMode = Model as SelectebleQuestionView;
-            tvTitle.Text = Model.Text;
             var radioButton = new RadioButton[typedMode.Answers.Count()];
             RadioGroup radioGroup = new RadioGroup(this.Context);
             radioGroup.Orientation = Orientation.Vertical;
@@ -55,14 +52,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.AddView(radioGroup);
         }
 
-        protected TextView tvTitle
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.tvTitle); }
-        }
-        protected LinearLayout llWrapper
-        {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llWrapper); }
-        }
+   
+     
         #endregion
     }
 }

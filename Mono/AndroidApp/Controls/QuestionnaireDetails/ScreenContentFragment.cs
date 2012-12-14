@@ -45,6 +45,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
+            ll.SetPadding(0, 10, 0, 0);
             
             sv.AddView(ll);
             foreach (var question in Model.Items)
@@ -71,6 +72,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                         questionView = new TextQuestionView(inflater.Context, question);
                         break;
                 }
+                
                 ll.AddView(questionView);
             }
             return sv;

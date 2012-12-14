@@ -33,20 +33,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Initialize()
         {
-            LayoutInflater layoutInflater = (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.QuestionView_Text, this);
-
-            tvTitle.Text = Model.Text;
+            base.Initialize();
+            etAnswer=new EditText(this.Context);
+           
             etAnswer.Text = ((ValueQuestionView) Model).Answer;
+            llWrapper.AddView(etAnswer);
         }
 
-        protected TextView tvTitle
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.tvTitle); }
-        }
-        protected EditText etAnswer
-        {
-            get { return this.FindViewById<EditText>(Resource.Id.etAnswer); }
-        }
+
+        protected EditText etAnswer { get; set; }
     }
 }

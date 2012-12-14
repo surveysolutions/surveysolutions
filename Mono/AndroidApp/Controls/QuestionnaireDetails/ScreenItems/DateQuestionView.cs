@@ -36,16 +36,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Initialize()
         {
-            LayoutInflater layoutInflater =
-                (LayoutInflater) this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.QuestionView_Date, this);
-
+            base.Initialize();
             // capture our View elements
-            dateDisplay = FindViewById<TextView>(Resource.Id.dateDisplay);
-            pickDate = FindViewById<Button>(Resource.Id.pickDate);
-            tvTitle = this.FindViewById<TextView>(Resource.Id.tvTitle);
+            dateDisplay = new TextView(this.Context);
+            llWrapper.AddView(dateDisplay);
+            pickDate =new Button(this.Context);
+            pickDate.Text = "Change the date";
+            llWrapper.AddView(pickDate);
             dialog = new DatePickerDialog(this.Context, OnDateSet, date.Year, date.Month - 1, date.Day);
-            tvTitle.Text = Model.Text;
+           
             // add a click event handler to the button
 
             pickDate.Click += delegate
@@ -87,7 +86,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         private Button pickDate;
         private DateTime date;
         private DatePickerDialog dialog;
-        private TextView tvTitle;
         // const int DATE_DIALOG_ID = 0;
     }
 }

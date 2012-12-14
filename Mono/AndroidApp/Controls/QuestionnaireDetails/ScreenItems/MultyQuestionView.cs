@@ -40,11 +40,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected override void Initialize()
         {
-            LayoutInflater layoutInflater =
-                (LayoutInflater) this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.QuestionView_MultyChoise, this);
+            base.Initialize();
             SelectebleQuestionView typedMode = Model as SelectebleQuestionView;
-            tvTitle.Text = Model.Text;
 
             foreach (var answer in typedMode.Answers)
             {
@@ -53,28 +50,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
                 cb.Checked = answer.Selected;
                 llWrapper.AddView(cb);
             }
-            /* var radioButton = new RadioButton[typedMode.Answers.Count()];
-            RadioGroup radioGroup = new RadioGroup(this.Context);
-            radioGroup.Orientation = Orientation.Vertical;
-            int i = 0;
-            foreach (var answer in typedMode.Answers)
-            {
-                radioButton[i] = new RadioButton(this.Context);
-                radioGroup.AddView(radioButton[i]);
-                radioButton[i].Text = answer.Title;
-                radioButton[i].Checked = answer.Selected;
-            }*/
            
-        }
-
-        protected TextView tvTitle
-        {
-            get { return this.FindViewById<TextView>(Resource.Id.tvTitle); }
-        }
-
-        protected LinearLayout llWrapper
-        {
-            get { return this.FindViewById<LinearLayout>(Resource.Id.llWrapper); }
         }
 
         #endregion

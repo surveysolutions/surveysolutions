@@ -15,15 +15,19 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public abstract class QuestionView
     {
-        public QuestionView(Guid publicKey, string text, QuestionType type)
+        public QuestionView(Guid publicKey, string text, QuestionType type, bool enabled, string instructions)
         {
             PublicKey = publicKey;
             Text = text;
             QuestionType = type;
+            Enabled = enabled;
+            Instructions = instructions;
         }
 
         public Guid PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
+        public bool Enabled { get; private set; }
+        public string Instructions { get; private set; }
     }
 }

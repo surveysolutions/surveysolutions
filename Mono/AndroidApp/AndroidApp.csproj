@@ -93,10 +93,7 @@
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\Layout\list_navigation_item.axml" />
     <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
-    <AndroidResource Include="Resources\Layout\QuestionView_Text.axml" />
-    <AndroidResource Include="Resources\Layout\QuestionView_Numeric.axml" />
-    <AndroidResource Include="Resources\Layout\QuestionView_SingleChoise.axml" />
-    <AndroidResource Include="Resources\Layout\QuestionView_MultyChoise.axml" />
+    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -173,7 +170,7 @@
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />
     <AndroidResource Include="Resources\Drawable\navigation_Selector.xml" />
-    <AndroidResource Include="Resources\Layout\QuestionView_Date.axml" />
+    <AndroidResource Include="Resources\Drawable\questionShape.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
