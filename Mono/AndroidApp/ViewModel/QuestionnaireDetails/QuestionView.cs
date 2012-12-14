@@ -15,7 +15,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public abstract class QuestionView
     {
-        public QuestionView(Guid publicKey, string text, QuestionType type, bool enabled, string instructions,string comments, bool valid)
+        public QuestionView(Guid publicKey, string text, QuestionType type, bool enabled, string instructions,string comments, bool valid, bool mandatory)
         {
             PublicKey = publicKey;
             Text = text;
@@ -24,6 +24,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             Instructions = instructions;
             Comments = comments;
             Valid = valid;
+            Mandatory = mandatory;
         }
 
         public Guid PublicKey { get; private set; }
@@ -34,5 +35,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public string Instructions { get; private set; }
         public string Comments { get; private set; }
         public bool Answered { get; protected set; }
+        public bool Mandatory { get; private set; }
     }
 }

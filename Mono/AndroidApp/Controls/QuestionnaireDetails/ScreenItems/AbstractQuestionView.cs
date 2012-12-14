@@ -59,7 +59,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             LayoutInflater layoutInflater =
                 (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
             layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);
-            tvTitle.Text = Model.Text;
+            tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
             etComments.Text = tvComments.Text = Model.Comments;
             this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
             etComments.FocusChange += new EventHandler<FocusChangeEventArgs>(etComments_FocusChange);

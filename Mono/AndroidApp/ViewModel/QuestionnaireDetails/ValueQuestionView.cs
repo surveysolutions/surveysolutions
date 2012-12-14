@@ -15,8 +15,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class ValueQuestionView : QuestionView
     {
-        public ValueQuestionView(Guid publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid)
-            : base(publicKey, text, type, enabled,instructions,comments,valid)
+        public ValueQuestionView(Guid publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
+            : base(publicKey, text, type, enabled,instructions,comments,valid, mandatory)
         {
             Answer = answer;
             Answered = !string.IsNullOrEmpty(answer);
