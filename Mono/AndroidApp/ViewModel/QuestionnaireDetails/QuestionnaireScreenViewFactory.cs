@@ -38,12 +38,19 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 };
             var questions = new QuestionView[]
                 {
-                    new ValueQuestionView(Guid.NewGuid(), "numeric", QuestionType.Numeric,"10",true, string.Empty),
-                    new ValueQuestionView(Guid.NewGuid(), "text", QuestionType.Text, "answer",true,"hey punk"),
-                    new ValueQuestionView(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString(),true,"hello world"),
-                    new SelectebleQuestionView(Guid.NewGuid(), "single choise", QuestionType.SingleOption,answers,true,string.Empty), 
-                      new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption,answers,true," public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, QuestionnaireScreenViewModel>"), 
-                       new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption,answers,false, string.Empty)
+                    new ValueQuestionView(Guid.NewGuid(), "numeric", QuestionType.Numeric, "10", true, string.Empty,
+                                          "comments on to question"),
+                    new ValueQuestionView(Guid.NewGuid(), "text", QuestionType.Text, "answer", true, "hey punk",
+                                          string.Empty),
+                    new ValueQuestionView(Guid.NewGuid(), "current date", QuestionType.DateTime, DateTime.Now.ToString(),
+                                          true, "hello world", string.Empty),
+                    new SelectebleQuestionView(Guid.NewGuid(), "single choise", QuestionType.SingleOption, answers, true,
+                                               string.Empty, string.Empty),
+                    new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, true,
+                                               " public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, QuestionnaireScreenViewModel>",
+                                               string.Empty),
+                    new SelectebleQuestionView(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, false,
+                                               string.Empty, "comment on disabled question")
                 };
             return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),
                                                     input.PropagationKey, questions,screens,

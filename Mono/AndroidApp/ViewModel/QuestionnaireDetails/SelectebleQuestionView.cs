@@ -15,8 +15,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionView:QuestionView
     {
-        public SelectebleQuestionView(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerView> answers, bool enabled, string instructions)
-            : base(publicKey, text, type,enabled,instructions)
+        public SelectebleQuestionView(Guid publicKey, string text, QuestionType type, IEnumerable<AnswerView> answers, bool enabled, string instructions, string comments)
+            : base(publicKey, text, type,enabled,instructions,comments)
         {
             Answers = answers;
         }

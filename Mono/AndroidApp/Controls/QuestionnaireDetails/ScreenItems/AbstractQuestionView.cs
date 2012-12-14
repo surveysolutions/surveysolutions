@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
@@ -51,12 +52,34 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             PostInit();
 
         }
+        protected virtual void Initialize()
+        {
+            LayoutInflater layoutInflater =
+                (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
+            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);
+            tvTitle.Text = Model.Text;
+            etComments.Text = tvComments.Text = Model.Comments;
+            this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            etComments.FocusChange += new EventHandler<FocusChangeEventArgs>(etComments_FocusChange);
+            
+        }
 
+        void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if(!e.HasFocus)
+            {
+                etComments.Visibility = ViewStates.Gone;
+                tvComments.Visibility = ViewStates.Visible;
+            }
+        }
         protected virtual void PostInit()
         {
             if (!Model.Enabled)
-                EnableDisableView(this, Model.Enabled);
-            if(string.IsNullOrEmpty(Model.Instructions))
+
+                EnableDisableView(llWrapper, Model.Enabled);
+                
+            //    EnableDisableView(this, Model.Enabled);
+            if (string.IsNullOrEmpty(Model.Instructions))
                 btnInstructions.Visibility = ViewStates.Gone;
             else
             {
@@ -70,6 +93,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             var instructionsBuilder = new AlertDialog.Builder(this.Context);
             instructionsBuilder.SetMessage(Model.Instructions);
             instructionsBuilder.Show();
+        }
+        void AbstractQuestionView_LongClick(object sender, View.LongClickEventArgs e)
+        {
+            etComments.Visibility = ViewStates.Visible;
+            tvComments.Visibility = ViewStates.Gone;
+           
         }
 
         private void EnableDisableView(View view, bool enabled)
@@ -87,14 +116,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
-        protected virtual void Initialize()
-        {
-            LayoutInflater layoutInflater =
-                (LayoutInflater) this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);
-            tvTitle.Text = Model.Text;
-        }
+      
 
+      
         protected TextView tvTitle
         {
             get { return this.FindViewById<TextView>(Resource.Id.tvTitle); }
@@ -106,6 +130,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected LinearLayout llWrapper
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llWrapper); }
+        }
+        protected TextView tvComments
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvComments); }
+        }
+        protected EditText etComments
+        {
+            get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
     }
 }
