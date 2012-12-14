@@ -49,6 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Support.v4" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,9 +59,11 @@
   <ItemGroup>
     <Compile Include="Activity1.cs" />
     <Compile Include="CapiApplication.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -70,9 +73,6 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelInput.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelViewFactory.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />

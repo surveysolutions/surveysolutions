@@ -23,7 +23,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.context = context;
             this.items = items.ToList();
-            this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
+          //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
 
 
@@ -36,7 +36,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            var item = items[position];
+           
             View view = convertView;
             if (view == null)
             {
@@ -45,24 +45,28 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
-            tvITem.Text = item.Title;
+            
             var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
-            if (item.ScreenPublicKey != Guid.Empty)
+            if (position < Count-1)
             {
+                var item = items[position];
+                tvITem.Text = item.Title;
+
                 tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
-                view.Selected = true;
+                view.SetTag(Resource.Id.ScreenId, item.ScreenPublicKey.ToString());
             }
             else
             {
+                tvITem.Text = "Complete";
                 tvCount.Visibility = ViewStates.Gone;
             }
-            view.SetTag(Resource.Id.ScreenId, item.ScreenPublicKey.ToString());
+
             return view;
         }
 
         public override int Count
         {
-            get { return items.Count; }
+            get { return items.Count+1; }
         }
 
         #endregion

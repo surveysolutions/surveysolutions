@@ -10,22 +10,26 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class ScreenContentFragment : Fragment
+    public class StatisticsContentFragment : Fragment
     {
-        public static ScreenContentFragment NewInstance(QuestionnaireScreenViewModel model)
+
+        public static StatisticsContentFragment NewInstance(Guid questionnaireKey)
         {
-            ScreenContentFragment f = new ScreenContentFragment(model);
+            StatisticsContentFragment f = new StatisticsContentFragment(questionnaireKey);
 
 
             return f;
         }
-        public ScreenContentFragment(QuestionnaireScreenViewModel model):base()
+
+        public Guid QuestionnaireKey { get; private set; }
+
+        public StatisticsContentFragment(Guid questionnaireKey)
+            : base()
         {
-            this.Model = model;
+            this.QuestionnaireKey = questionnaireKey;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -38,16 +42,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
 
             TextView tv = new TextView(inflater.Context);
-            tv.Text = Model.ScreenId.ToString();
+            tv.Text = "Statistics";
             return tv;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-
-
-        public QuestionnaireScreenViewModel Model { get; private set; }
-
-
     }
 }

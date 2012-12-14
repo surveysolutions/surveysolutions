@@ -22,9 +22,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         public QuestionnaireScreenViewModel Load(QuestionnaireScreenInput input)
         {
+            var screens =  new QuestionnaireNavigationPanelItem[]
+                {
+                    new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello1",20,1),
+                    new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello2",30,14),
+                };
             return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),
-                                                    input.PropagationKey, null, null,
-                                                    Enumerable.Empty<QuestionnaireNavigationPanelItem>());
+                                                    input.PropagationKey, screens,
+                                                    Enumerable.Empty<QuestionnaireNavigationPanelItem>(), screens);
         }
 
         #endregion

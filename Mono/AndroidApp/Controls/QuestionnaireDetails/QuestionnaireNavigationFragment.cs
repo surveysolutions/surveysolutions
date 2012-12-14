@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -22,14 +22,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         #region public fields
 
         public event EventHandler<ScreenChangedEventArgs> ItemClick;
-        public Guid QuestionnaireId { get; set; }
-
+        public IEnumerable<QuestionnaireNavigationPanelItem> DataItems { get; set; }
 
         #endregion
 
 
 
-        protected void OnItemClick(Guid groupKey)
+        protected void OnItemClick(Guid? groupKey)
         {
             var handler = ItemClick;
             if (handler != null)
@@ -38,6 +37,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             var result=  base.OnCreateView(inflater, container, savedInstanceState);
+           
+            
          //   result.LayoutParameters = new ViewGroup.LayoutParams(10, ViewGroup.LayoutParams.FillParent);
             return result;
         }
@@ -46,20 +47,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
             base.OnActivityCreated(savedInstanceState);
 
-            var questionnaireData =
-                CapiApplication.LoadView<QuestionnaireNavigationPanelInput, QuestionnaireNavigationPanelModel>(
-                    new QuestionnaireNavigationPanelInput(this.QuestionnaireId));
 
-            this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, questionnaireData.Items);
-          
+            this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
+            this.SetSelection(0);
         }
 
 
-       
+
         public override void OnListItemClick(ListView l, View v, int pos, long id)
         {
             ListView.SetItemChecked(pos, true);
-            var screenId = Guid.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
+            var tag = v.GetTag(Resource.Id.ScreenId);
+            Guid? screenId = null;
+            if (tag != null)
+            {
+                screenId = Guid.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
+            }
             OnItemClick(screenId);
         }
 
@@ -67,12 +70,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
     public class ScreenChangedEventArgs : EventArgs
     {
-        public ScreenChangedEventArgs(Guid screenId)
+        public ScreenChangedEventArgs(Guid? screenId)
         {
             ScreenId = screenId;
         }
 
-        public Guid ScreenId { get; private set; }
+        public Guid? ScreenId { get; private set; }
     }
 
 }

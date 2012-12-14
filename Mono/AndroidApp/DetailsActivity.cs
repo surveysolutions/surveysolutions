@@ -7,16 +7,19 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Support.V4.App;
+using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using FragmentTransaction = Android.App.FragmentTransaction;
 using Orientation = Android.Content.Res.Orientation;
 
 namespace AndroidApp
 {
     [Activity(Label = "My Activity")]
-    public class DetailsActivity : Activity 
+    public class DetailsActivity : FragmentActivity 
     {
         protected Guid QuestionnaireId
         {
@@ -36,80 +39,62 @@ namespace AndroidApp
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
         }
-
+        protected ViewPager VpContent
+        {
+            get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
+        }
         protected QuestionnaireNavigationFragment NavList { get; set; }
         protected bool DualPanel { get; set; }
-
+        protected ContentFrameAdapter Adapter { get; set; }
+       
         protected override void OnCreate(Bundle bundle)
         {
 
             base.OnCreate(bundle);
             DualPanel = Resources.Configuration.Orientation
                         == Orientation.Landscape;
-            if (DualPanel)
-            {
-                // If the screen is now in landscape mode, we can show the
-                // dialog in-line so we don't need this activity.
-                SetContentView(Resource.Layout.Details);
-            }
-            else
-            {
-                SetContentView(Resource.Layout.DetailsPortret);
-            }
-      /*      if (bundle == null)
-            {
-
-                
-                // During initial setup, plug in the details fragment.
-                DetailsFragment details = new DetailsFragment();
-                details.setArguments(getIntent().getExtras());
-                getSupportFragmentManager().beginTransaction().add(
-                        android.R.id.content, details).commit();
-            }
-            */
+            SetContentView(Resource.Layout.Details);
 
 
-            if (FlDetails != null)
-            {
-                if (bundle != null)
-                {
-                    return;
-                }
-                NavList = this.FragmentManager.FindFragmentById<QuestionnaireNavigationFragment>(Resource.Id.NavList);
 
-                NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
-                NavList.QuestionnaireId = QuestionnaireId;
-                if (ScreenId.HasValue)
-                {
-                    // Make new fragment to show this selection.
-                    var details = ScreenContentFragment.NewInstance(this.QuestionnaireId, ScreenId.Value);
+            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
+                new QuestionnaireScreenInput(QuestionnaireId, null, null));
+            NavList = this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
+            NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
+            NavList.DataItems = firstScreen.Chapters;
+
+
+            Adapter = new ContentFrameAdapter(SupportFragmentManager,firstScreen);
+            VpContent.Adapter = Adapter;
+        
+            /*  if (ScreenId.HasValue)
+              {
+                  // Make new fragment to show this selection.
+                  var details = ScreenContentFragment.NewInstance(this.QuestionnaireId, ScreenId.Value);
                     
-                    FragmentManager.BeginTransaction().Add(Resource.Id.flDetails, details).Commit();
-                }
-                else
-                {
-                    if (DualPanel)
-                    {
-                        navList_ItemClick(NavList, new ScreenChangedEventArgs(Guid.Empty));
-                    }
-                }
+                  Android.App.FragmentManager.BeginTransaction().Add(Resource.Id.flDetails, details).Commit();
+              }
+              else
+              {
+                  if (DualPanel)
+                  {
+                      navList_ItemClick(NavList, new ScreenChangedEventArgs(Guid.Empty));
+                  }
+              }*/
 
-            }
 
-            //      this.ScreensContainer = new Dictionary<Guid, ScreenContentFragment>();
-            // Set our view from the "main" layout resource
 
-            /*     QuestionnaireNavigationView navList = FindViewById<QuestionnaireNavigationView>(Resource.Id.navList);
-            navList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
-            navList.QuestionnaireId = QuestionnaireId;
-            ScreenContent.QuestionnaireId = QuestionnaireId;
-            navList_ItemClick(navList,new ScreenChangedEventArgs(navList.SelectedItem));
-            // Create your application here*/
+
         }
-
+        
         private void navList_ItemClick(object sender, ScreenChangedEventArgs e)
         {
-            if (DualPanel)
+            if (!e.ScreenId.HasValue)
+            {
+                VpContent.CurrentItem = VpContent.Adapter.Count - 1;
+            }
+        //    VpContent.CurrentItem = 1;
+            /*   if (DualPanel)
             {
                 ScreenContentFragment details =
                     this.FragmentManager.FindFragmentById<ScreenContentFragment>(Resource.Id.flDetails);
@@ -135,32 +120,9 @@ namespace AndroidApp
                 intent.PutExtra("questionnaireId", this.QuestionnaireId.ToString());
                 intent.PutExtra("screenId", e.ScreenId.ToString());
                 StartActivity(intent);
-            }
-            /*  if (ScreensContainer.ContainsKey(CurrentScreen))
-            {
-                ScreensContainer[CurrentScreen].Visibility = ViewStates.Gone;
-            }
-            if (ScreensContainer.ContainsKey(e.ScreenId))
-            {
-                ScreensContainer[e.ScreenId].Visibility = ViewStates.Visible;
-            }
-            else
-            {
-
-                ScreenContentFragment screenFragment = new ScreenContentFragment();
-                screenFragment.ScreenId = e.ScreenId;
-
-                Bundle args = new Bundle();
-                args.PutInt(ScreenContentFragment.ARG_POSITION, position);
-                screenFragment.SetArguments(args);
-
-                ScreensContainer.Add(e.ScreenId, screenFragment);
-              this.FragmentManager.PutFragment();
-
-            }
-            this.CurrentScreen = e.ScreenId;*/
+            }*/
         }
-
+        
         protected Guid CurrentScreen { get; set; }
 
        /* protected ScreenContentView ScreenContent
