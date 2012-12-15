@@ -73,6 +73,8 @@ namespace Questionnaire.Core.Web.Export
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
                     (input);
+            if(records==null)
+                return;
             var fileName = GetName(records.GroupName, container, 0);
             container.Add(fileName, manager.ExportToStream(records));
             var currentName = this.supplier.BuildContent(records, parentName, fileName, type);

@@ -67,7 +67,7 @@ namespace Main.Core.View.Export
             var template = this.templateSession.GetByGuid(input.TemplateId);
             if (template == null)
             {
-                return new CompleteQuestionnaireExportView();
+                return null;
             }
             if (input.PropagatableGroupPublicKey.HasValue)
             {
@@ -76,7 +76,7 @@ namespace Main.Core.View.Export
 
                 if (groupTemplate == null)
                 {
-                    return new CompleteQuestionnaireExportView();
+                    return null;
                 }
                 return CreateVew(groupTemplate, input.TemplateId, input.PropagatableGroupPublicKey,
                                  input.QuestionnairiesForImport);
@@ -107,8 +107,7 @@ namespace Main.Core.View.Export
                 else
                     result = CreateVew(groupTemplate, template.PublicKey, trigger, questionnairies);
             }
-            if (result == null)
-                result = new CompleteQuestionnaireExportView();
+            
             return result;
         }
 

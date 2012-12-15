@@ -58,7 +58,7 @@ namespace Main.Core.View.Export
         {
             this.PublicKey = publicKey;
             //this.Parent = parent;
-            this.GroupName = title;
+            this.GroupName = string.IsNullOrEmpty(title) ? publicKey.ToString() : title;
             this.Items = items;
             this.Header = header;
             this.SubPropagatebleGroups = subPropagatebleGroups;
