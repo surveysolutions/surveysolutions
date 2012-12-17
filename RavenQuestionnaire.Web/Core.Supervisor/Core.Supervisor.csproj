@@ -114,6 +114,10 @@
     <Compile Include="Views\Summary\SummaryInputModel.cs" />
     <Compile Include="Views\Summary\SummaryView.cs" />
     <Compile Include="Views\Summary\SummaryViewItem.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

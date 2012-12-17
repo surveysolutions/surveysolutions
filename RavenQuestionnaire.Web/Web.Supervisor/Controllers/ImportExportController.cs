@@ -16,14 +16,19 @@ namespace Web.Supervisor.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using Core.Supervisor.Views.Summary;
+    using Core.Supervisor.Views.SyncProcess;
+
     using DataEntryClient.CompleteQuestionnaire;
 
-    using Ionic.Zip;
+    using Main.Core.View;
 
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
+
+    using Web.Supervisor.Models;
 
     /// <summary>
     /// The import export controller.
@@ -38,6 +43,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IDataExport exporter;
 
+        /// <summary>
+        /// View repository
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
         #endregion
 
         #region Constructors and Destructors
@@ -48,14 +58,26 @@ namespace Web.Supervisor.Controllers
         /// <param name="exporter">
         /// The exporter.
         /// </param>
-        public ImportExportController(IDataExport exporter)
+        /// <param name="viewRepository">
+        /// The view repository
+        /// </param>
+        public ImportExportController(IDataExport exporter, IViewRepository viewRepository)
         {
             this.exporter = exporter;
+            this.viewRepository = viewRepository;
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        public ActionResult Index()
+        {
+            ViewBag.ActivePage = MenuItem.Administration;
+            var model = this.viewRepository.Load<SyncProcessLogInputModel, SyncProcessLogView>(new SyncProcessLogInputModel());
+            return this.View(model);
+        }
+
 
         /// <summary>
         /// The export async.

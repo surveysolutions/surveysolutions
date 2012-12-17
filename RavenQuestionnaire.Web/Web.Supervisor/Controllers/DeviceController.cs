@@ -74,7 +74,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Index()
         {
             var user = this.globalInfo.GetCurrentUser();
-            ViewBag.ActivePage = MenuItem.Devices;
+            ViewBag.ActivePage = MenuItem.Administration;
             var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(user.Id));
             return this.View(model);
         }

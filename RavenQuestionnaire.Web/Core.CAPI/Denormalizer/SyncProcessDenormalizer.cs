@@ -78,7 +78,8 @@ namespace Core.CAPI.Denormalizer
                 {
                     SyncType = evnt.Payload.SynckType,
                     ParentProcessKey = evnt.Payload.ParentProcessKey,
-                    Description = evnt.Payload.Description
+                    Description = evnt.Payload.Description,
+                    CreationDate = evnt.EventTimeStamp
                 };
             
             this.docs.Store(stat, stat.PublicKey);
@@ -100,7 +101,7 @@ namespace Core.CAPI.Denormalizer
 
             item.IsEnded = true;
             item.ExitDescription = evnt.Payload.Description;
-            item.EndDate = DateTime.Now;
+            item.EndDate = evnt.EventTimeStamp;
         }
 
         /// <summary>

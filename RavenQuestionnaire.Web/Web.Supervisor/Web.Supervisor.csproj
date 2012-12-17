@@ -445,6 +445,7 @@
     <Content Include="Views\Survey\_StatusTable.cshtml" />
     <Content Include="Views\User\SummaryChart.cshtml" />
     <Content Include="Views\Survey\StatusChart.cshtml" />
+    <Content Include="Views\ImportExport\Index.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

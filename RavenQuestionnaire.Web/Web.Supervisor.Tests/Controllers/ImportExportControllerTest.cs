@@ -15,6 +15,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using System.Web.Mvc;
 
     using Main.Core.Export;
+    using Main.Core.View;
 
     using Moq;
 
@@ -51,7 +52,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void CreateObjects()
         {
             this.DataExportMock = new Mock<IDataExport>();
-            this.Controller = new ImportExportController(this.DataExportMock.Object);
+            this.Controller = new ImportExportController(this.DataExportMock.Object, (new Mock<IViewRepository>()).Object);
         }
 
         /// <summary>
