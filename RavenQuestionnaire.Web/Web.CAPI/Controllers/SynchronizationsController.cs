@@ -353,9 +353,9 @@ namespace Web.CAPI.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public Guid? Import(HttpPostedFileBase uploadFile)
         {
-            var zip = ZipHelper.ZipFileCheck(this.Request, uploadFile);
+            var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
 
-            if (zip == null)
+            if (zipData.Count == 0)
             {
                 return null;
             }
@@ -367,8 +367,7 @@ namespace Web.CAPI.Controllers
                 try
                 {
                     var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
-
-                    process.Import(zip, "Usb syncronization");
+                    process.Import(zipData, "Usb syncronization");
                 }
                 catch (Exception e)
                 {

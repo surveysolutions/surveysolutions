@@ -146,12 +146,15 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="uploadFile">
         /// The upload File.
         /// </param>
+        /// <returns>
+        /// The import async.
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
         public Guid? ImportAsync(HttpPostedFileBase uploadFile)
         {
-            ZipFile zip = ZipHelper.ZipFileCheck(this.Request, uploadFile);
+            var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
 
-            if (zip == null)
+            if (zipData == null)
             {
                 return null;
             }
@@ -165,8 +168,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         try
                         {
                             var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
-
-                            process.Import(zip, "Usb syncronization");
+                            process.Import(zipData, "Usb syncronization");
                         }
                         catch (Exception e)
                         {

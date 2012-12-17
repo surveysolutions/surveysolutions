@@ -130,9 +130,7 @@
     <Compile Include="Helpers\SelectExtensions.cs" />
     <Compile Include="Helpers\SuccessMarker.cs" />
     <Compile Include="RegistrationController.cs" />
-     <Compile Include="Helpers\ZipHelper.cs" />
-
-    <Compile Include="Register\DeviceRegistry.cs" />
+    <Compile Include="Helpers\ZipHelper.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />
@@ -173,7 +171,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Register\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

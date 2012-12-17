@@ -6,6 +6,9 @@
 
 namespace Questionnaire.Core.Web.Helpers
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
     using System.Web;
 
     using Ionic.Zip;
@@ -24,9 +27,9 @@ namespace Questionnaire.Core.Web.Helpers
         /// The upload file.
         /// </param>
         /// <returns>
-        /// Zipped file or null
+        /// List of serialized file contents
         /// </returns>
-        public static ZipFile ZipFileCheck(HttpRequestBase request, HttpPostedFileBase uploadFile)
+        public static List<string> ZipFileReader(HttpRequestBase request, HttpPostedFileBase uploadFile)
         {
             if (uploadFile == null && request.Files.Count > 0)
             {
@@ -45,8 +48,22 @@ namespace Questionnaire.Core.Web.Helpers
 
             uploadFile.InputStream.Position = 0;
 
-            var zip = ZipFile.Read(uploadFile.InputStream);
-            return zip;
+            var list = new List<string>();
+
+            using (ZipFile zip = ZipFile.Read(uploadFile.InputStream))
+            {
+                using (var stream = new MemoryStream())
+                {
+                    foreach (ZipEntry e in zip)
+                    {
+                        e.Extract(stream);
+                    }
+
+                    list.Add(Encoding.Default.GetString(stream.ToArray()));
+                }
+            }
+
+            return list;
         }
     }
 }
