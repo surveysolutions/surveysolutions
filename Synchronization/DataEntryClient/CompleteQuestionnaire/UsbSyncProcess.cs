@@ -37,6 +37,8 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </summary>
         private ZipFile zip;
 
+        private List<string> zipData;
+
         #endregion
 
         #region Constructors and Destructors
@@ -92,8 +94,8 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// The import.
         /// </summary>
-        /// <param name="uploadFile">
-        /// The upload File.
+        /// <param name="fileData">
+        /// The file Data.
         /// </param>
         /// <param name="description">
         /// The description.
@@ -101,9 +103,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <exception cref="Exception">
         /// Some exception
         /// </exception>
-        public void Import(ZipFile uploadFile, string description)
+        public void Import(List<string> fileData, string description)
         {
-            this.zip = uploadFile;
+            this.zipData = fileData;
             base.Import(description);
         }
 
@@ -138,18 +140,15 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </returns>
         protected override IEnumerable<AggregateRootEvent> GetEventStream()
         {
-            using (var stream = new MemoryStream())
+            var events = new List<AggregateRootEvent>();
+            foreach (var file in this.zipData)
             {
-                foreach (ZipEntry e in this.zip)
-                {
-                    e.Extract(stream);
-                }
-
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                var data = Encoding.Default.GetString(stream.ToArray());
-                var result = JsonConvert.DeserializeObject<ZipFileData>(data, settings);
-                return result.Events;
+                var result = JsonConvert.DeserializeObject<ZipFileData>(file, settings);
+                events.AddRange(result.Events);
             }
+
+            return events;
         }
 
         #endregion
