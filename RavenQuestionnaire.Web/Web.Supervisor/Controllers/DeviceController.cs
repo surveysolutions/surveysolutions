@@ -18,7 +18,6 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web;
-    using Main.Core.View;
 
     using Web.Supervisor.Models;
 
@@ -56,6 +55,7 @@ namespace Web.Supervisor.Controllers
         /// The global Info.
         /// </param>
         public DeviceController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
+            : base(viewRepository)
         {
             this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
