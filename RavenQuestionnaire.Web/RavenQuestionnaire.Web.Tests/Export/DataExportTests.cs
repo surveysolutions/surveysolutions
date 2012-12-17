@@ -1,26 +1,30 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DataExportTests.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
-using System.IO;
-using Main.Core.Events;
-using Main.Core.Export;
-using Main.Core.View;
-using Main.Core.View.Export;
-using Moq;
-using NUnit.Framework;
-using Ninject;
-using Questionnaire.Core.Web.Export;
-using RavenQuestionnaire.Web.Export;
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Tests.Export
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using Main.Core.Events;
+    using Main.Core.Export;
+    using Main.Core.View;
+    using Main.Core.View.Export;
+
+    using Moq;
+
+    using Ninject;
+
+    using NUnit.Framework;
+
+    using Questionnaire.Core.Web.Export;
 
     /// <summary>
     /// TODO: Update summary.
@@ -28,107 +32,182 @@ namespace RavenQuestionnaire.Web.Tests.Export
     [TestFixture]
     public class DataExportTests
     {
-         /// <summary>
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Kernel.
+        /// </summary>
+        public IKernel Kernel { get; set; }
+
+        /// <summary>
+        /// Gets or sets Supplier.
+        /// </summary>
+        public Mock<IEnvironmentSupplier<CompleteQuestionnaireExportView>> Supplier { get; set; }
+
+        /// <summary>
         /// Gets or sets the command service mock.
         /// </summary>
-        public Mock<IEventSync> SynchronizerMock { get; set; }
-        public Mock<IEnvironmentSupplier<CompleteQuestionnaireExportView>> Supplier { get; set; }
-        public IKernel Kernel { get; set; }
-        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+        public Mock<IEventStreamReader> SynchronizerMock { get; set; }
+
+        /// <summary>
+        /// Gets or sets Target.
+        /// </summary>
         public DataExportServiceTest Target { get; set; }
+
+        /// <summary>
+        /// Gets or sets ViewRepositoryMock.
+        /// </summary>
+        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The collect l evels_2 l evels_ all l evels are collected.
+        /// </summary>
+        [Test]
+        public void CollectLEvels_2LEvels_AllLEvelsAreCollected()
+        {
+            var allLevels = new Dictionary<string, byte[]>();
+            Guid guid1 = Guid.NewGuid();
+            Guid guid2 = Guid.NewGuid();
+            var provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
+            var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
+
+            var topResult = new CompleteQuestionnaireExportView(
+                Guid.NewGuid(), 
+                "top group", 
+                new CompleteQuestionnaireExportItem[0], 
+                new[] { guid1, guid2 }, 
+                Enumerable.Empty<Guid>(), 
+                new HeaderCollection());
+            var subResult = new CompleteQuestionnaireExportView();
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
+                    It.Is<CompleteQuestionnaireExportInputModel>(i => !i.PropagatableGroupPublicKey.HasValue))).Returns(
+                        topResult);
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
+                    It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey.HasValue))).Returns(
+                        subResult);
+            this.Target.ProtectedCollectLEvels(
+                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), 
+                allLevels, 
+                manager);
+
+            Assert.IsTrue(allLevels.Count == 3);
+            provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
+            provider.Verify(x => x.DoExportToStream(subResult), Times.Exactly(2));
+            this.Supplier.Verify(
+                x =>
+                x.BuildContent(
+                    It.IsAny<CompleteQuestionnaireExportView>(), 
+                    It.IsAny<string>(), 
+                    It.IsAny<string>(), 
+                    It.IsAny<FileType>()), 
+                Times.Exactly(3));
+        }
+
+        /// <summary>
+        /// The collect l evels_ only o ne l evel_ one l evel file is created.
+        /// </summary>
+        [Test]
+        public void CollectLEvels_OnlyONeLEvel_OneLEvelFileIsCreated()
+        {
+            var allLevels = new Dictionary<string, byte[]>();
+            var provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
+            var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
+
+            var result = new CompleteQuestionnaireExportView();
+            this.ViewRepositoryMock.Setup(
+                x =>
+                x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
+                    It.IsAny<CompleteQuestionnaireExportInputModel>())).Returns(result);
+
+            this.Target.ProtectedCollectLEvels(
+                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), 
+                allLevels, 
+                manager);
+            Assert.IsTrue(allLevels.Count == 1);
+            this.Supplier.Verify(
+                x => x.BuildContent(result, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<FileType>()), Times.Once());
+            provider.Verify(x => x.DoExportToStream(result), Times.Once());
+        }
+
         /// <summary>
         /// The create objects.
         /// </summary>
         [SetUp]
         public void CreateObjects()
         {
-            this.Kernel=new StandardKernel();
+            this.Kernel = new StandardKernel();
             this.ViewRepositoryMock = new Mock<IViewRepository>();
-            this.Supplier=new Mock<IEnvironmentSupplier<CompleteQuestionnaireExportView>>();
-            this.SynchronizerMock = new Mock<IEventSync>();
+            this.Supplier = new Mock<IEnvironmentSupplier<CompleteQuestionnaireExportView>>();
+            this.SynchronizerMock = new Mock<IEventStreamReader>();
             this.Kernel.Bind<IViewRepository>().ToConstant(this.ViewRepositoryMock.Object);
-            this.Kernel.Bind<IEventSync>().ToConstant(this.SynchronizerMock.Object);
+            this.Kernel.Bind<IEventStreamReader>().ToConstant(this.SynchronizerMock.Object);
             this.Kernel.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().ToConstant(this.Supplier.Object);
             this.Target = new DataExportServiceTest(this.Kernel);
         }
-         [Test]
+
+        /// <summary>
+        /// The export data_ invalid format_ null is returned.
+        /// </summary>
+        [Test]
         public void ExportData_InvalidFormat_NullIsReturned()
         {
-            var result = Target.ExportData(Guid.NewGuid(), "invalid");
+            byte[] result = this.Target.ExportData(Guid.NewGuid(), "invalid");
             Assert.IsNull(result);
         }
-        [Test]
-        public void CollectLEvels_OnlyONeLEvel_OneLEvelFileIsCreated()
-        {
-            var allLevels = new Dictionary<string, byte[]>();
-            Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
-            var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
 
-
-            CompleteQuestionnaireExportView result =
-                new CompleteQuestionnaireExportView();
-            this.ViewRepositoryMock.Setup(
-                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.IsAny<CompleteQuestionnaireExportInputModel>())).Returns(
-                    result);
-
-           Target.ProtectedCollectLEvels(
-                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels, manager);
-            Assert.IsTrue(allLevels.Count == 1);
-            Supplier.Verify(x => x.BuildContent(result, It.IsAny<string>(), It.IsAny<string>(), It.IsAny<FileType>()), Times.Once());
-            provider.Verify(x => x.DoExportToStream(result), Times.Once());
-        }
-        [Test]
-        public void CollectLEvels_2LEvels_AllLEvelsAreCollected()
-        {
-            var allLevels = new Dictionary<string, byte[]>();
-            var guid1 = Guid.NewGuid();
-            var guid2 = Guid.NewGuid();
-            Mock<IExportProvider<CompleteQuestionnaireExportView>> provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
-            var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
-
-
-            CompleteQuestionnaireExportView topResult =
-                new CompleteQuestionnaireExportView(Guid.NewGuid(), "top group", new CompleteQuestionnaireExportItem[0], new[] { guid1, guid2 }, Enumerable.Empty<Guid>(), new HeaderCollection());
-            CompleteQuestionnaireExportView subResult =
-               new CompleteQuestionnaireExportView();
-            this.ViewRepositoryMock.Setup(
-                x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i=>!i.PropagatableGroupPublicKey.HasValue))).Returns(
-                    topResult);
-            this.ViewRepositoryMock.Setup(
-               x => x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(It.Is<CompleteQuestionnaireExportInputModel>(i => i.PropagatableGroupPublicKey.HasValue))).Returns(
-                   subResult);
-           Target.ProtectedCollectLEvels(
-                new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(), Guid.NewGuid(), null), allLevels,
-                manager);
-           
-            Assert.IsTrue(allLevels.Count == 3);
-            provider.Verify(x => x.DoExportToStream(topResult), Times.Once());
-            provider.Verify(x => x.DoExportToStream(subResult), Times.Exactly(2));
-            Supplier.Verify(x => x.BuildContent(It.IsAny<CompleteQuestionnaireExportView>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<FileType>()), Times.Exactly(3));
-        }
+        #endregion
 
         /// <summary>
         /// Class-helper for testing protected and private methods
         /// </summary>
         public class DataExportServiceTest : DataExport
         {
+            #region Constructors and Destructors
+
             /// <summary>
-            /// Initializes a new instance of the <see cref="TemplateExporterServiceTest"/> class.
+            /// Initializes a new instance of the <see cref="DataExportServiceTest"/> class. 
             /// </summary>
-            /// <param name="synchronizer">
-            /// The synchronizer.
+            /// <param name="kernel">
+            /// The kernel.
             /// </param>
             public DataExportServiceTest(IKernel kernel)
                 : base(kernel)
             {
             }
 
+            #endregion
 
-            public void ProtectedCollectLEvels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager)
+            #region Public Methods and Operators
+
+            /// <summary>
+            /// The protected collect l evels.
+            /// </summary>
+            /// <param name="input">
+            /// The input.
+            /// </param>
+            /// <param name="container">
+            /// The container.
+            /// </param>
+            /// <param name="manager">
+            /// The manager.
+            /// </param>
+            public void ProtectedCollectLEvels(
+                CompleteQuestionnaireExportInputModel input, 
+                Dictionary<string, byte[]> container, 
+                ExportManager<CompleteQuestionnaireExportView> manager)
             {
-                CollectLevels(input, container, manager, "", FileType.Csv);
+                this.CollectLevels(input, container, manager, string.Empty, FileType.Csv);
             }
+
+            #endregion
         }
     }
-
 }

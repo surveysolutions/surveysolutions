@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IEventSync.cs" company="">
+// <copyright file="IEventStreamReader.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -14,7 +14,7 @@ namespace Main.Core.Events
     /// <summary>
     /// The EventSync interface.
     /// </summary>
-    public interface IEventSync
+    public interface IEventStreamReader
     {
         #region Public Methods and Operators
 
@@ -26,13 +26,13 @@ namespace Main.Core.Events
         /// </returns>
         IEnumerable<AggregateRootEvent> ReadEvents();
 
-        /// <summary>
-        /// The write events.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        void WriteEvents(IEnumerable<AggregateRootEvent> stream);
+        ///// <summary>
+        ///// The write events.
+        ///// </summary>
+        ///// <param name="stream">
+        ///// The stream.
+        ///// </param>
+        //void WriteEvents(IEnumerable<AggregateRootEvent> stream);
 
         #endregion
 

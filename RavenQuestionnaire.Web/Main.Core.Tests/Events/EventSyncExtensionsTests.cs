@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         [Test]
         public void ReadEventsByChunks_3Dubl1Unique3Dubl1Uniq_3Chuncks()
         {
-            var eventSource = new Mock<IEventSync>();
+            var eventSource = new Mock<IEventStreamReader>();
             Guid guid1 = Guid.NewGuid();
             Guid guid2 = Guid.NewGuid();
             Guid guid3 = Guid.NewGuid();
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         [Test]
         public void ReadEventsByChunks_WhenE2ItemsEventListChunckSizeIs2_OneChunckWith2EventsReturned()
         {
-            var eventSource = new Mock<IEventSync>();
+            var eventSource = new Mock<IEventStreamReader>();
             var result = new[] { new AggregateRootEvent(), new AggregateRootEvent() };
             eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(2).ToList();
@@ -86,7 +86,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         public void
             ReadEventsByChunks_WhenE2ItemsEventListDifferentCommitIdsChunckSizeIs1_TwoChuncksWith1EventIsReturned()
         {
-            var eventSource = new Mock<IEventSync>();
+            var eventSource = new Mock<IEventStreamReader>();
             var result = new[]
                 {
                     new AggregateRootEvent { CommitId = Guid.NewGuid() }, 
@@ -105,7 +105,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         [Test]
         public void ReadEventsByChunks_WhenE2ItemsEventListSameCommitIdChunckSizeIs1_OneChunckWith2EventsReturned()
         {
-            var eventSource = new Mock<IEventSync>();
+            var eventSource = new Mock<IEventStreamReader>();
             var result = new[] { new AggregateRootEvent(), new AggregateRootEvent() };
             eventSource.Setup(x => x.ReadEvents()).Returns(result);
             var chunckedList = eventSource.Object.ReadEventsByChunks(1).ToList();
@@ -120,7 +120,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         [Test]
         public void ReadEventsByChunks_WhenEmptyEventList_OneEmptyChunckReturned()
         {
-            var eventSource = new Mock<IEventSync>();
+            var eventSource = new Mock<IEventStreamReader>();
             eventSource.Setup(x => x.ReadEvents()).Returns(new AggregateRootEvent[0]);
             var chunckedList = eventSource.Object.ReadEventsByChunks();
             Assert.AreEqual(chunckedList.Count(), 0);

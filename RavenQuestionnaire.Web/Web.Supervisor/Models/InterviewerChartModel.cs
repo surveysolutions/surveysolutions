@@ -41,7 +41,7 @@ namespace Web.Supervisor.Models
                     new
                         {
                             y = t.Total,
-                            color = this.colors[index],
+                            color = GetColor(index),
                             name = t.Title,
                             title = t.Title.Acronim(),
                             categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" },
@@ -135,7 +135,7 @@ namespace Web.Supervisor.Models
                     new
                         {
                             name = t.Title,
-                            color = this.colors[index],
+                            color = GetColor(index),
                             data = new[] { new[] { t.Initial + t.Redo, t.Complete + t.Approve } }
                         }).ToArray();
         }
@@ -155,6 +155,11 @@ namespace Web.Supervisor.Models
         /// Gets or sets ScatterData.
         /// </summary>
         public object[] ScatterData { get; set; }
+
+        private string GetColor(int index)
+        {
+            return this.colors[index % this.colors.Count()];
+        }
 
         /// <summary>
         /// The status colors

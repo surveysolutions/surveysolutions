@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Web.Tests
         /// <summary>
         /// Gets or sets Synchronizer.
         /// </summary>
-        public Mock<IEventSync> Synchronizer { get; set; }
+        public Mock<IEventStreamReader> Synchronizer { get; set; }
 
         /// <summary>
         /// Gets or sets ViewRepository.
@@ -70,7 +70,7 @@ namespace RavenQuestionnaire.Web.Tests
         public void CreateObjects()
         {
             this.GlobalProvider = new Mock<IGlobalInfoProvider>();
-            this.Synchronizer = new Mock<IEventSync>();
+            this.Synchronizer = new Mock<IEventStreamReader>();
             this.ViewRepository = new Mock<IViewRepository>();
         }
 

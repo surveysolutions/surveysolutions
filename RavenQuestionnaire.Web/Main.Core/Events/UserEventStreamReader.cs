@@ -24,7 +24,7 @@ namespace Main.Core.Events
         IEnumerable<AggregateRootEvent> GetUsers(UserRoles? role);
     }
 
-    public class UserEventSync : AbstractSnapshotableEventSync, IUserEventSync
+    public class UserEventStreamReader : AbstractSnapshotableEventStreamReader, IUserEventSync
     {
         #region Fields
 
@@ -42,7 +42,7 @@ namespace Main.Core.Events
 
         #region Constructor
 
-        public UserEventSync(IDenormalizer denormalizer)
+        public UserEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();

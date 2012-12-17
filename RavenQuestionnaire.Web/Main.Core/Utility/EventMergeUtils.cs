@@ -147,7 +147,6 @@ namespace Main.Core.Utility
 
                 // make base stream and remote stream starting from same event
                 croppedBase = baseStream.SkipWhile(e => e.EventIdentifier != stream.First().EventIdentifier);
-
             }
 
             long startPoint = Math.Min(croppedBase.Count(), croppedNewStream.Count());

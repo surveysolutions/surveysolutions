@@ -80,6 +80,11 @@ namespace Main.Core.Documents
         }
 
         /// <summary>
+        /// Gets or sets ParentProcessKey.
+        /// </summary>
+        public Guid? ParentProcessKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the start date.
         /// </summary>
         public DateTime StartDate { get; set; }
@@ -94,6 +99,18 @@ namespace Main.Core.Documents
         /// </summary>
         public List<UserSyncProcessStatistics> Statistics { get; set; }
 
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets ExitDescription.
+        /// </summary>
+        public string ExitDescription { get; set; }
+
         #endregion
+
+        
     }
 }

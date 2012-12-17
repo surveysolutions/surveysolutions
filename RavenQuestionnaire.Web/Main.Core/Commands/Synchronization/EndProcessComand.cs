@@ -34,10 +34,14 @@ namespace Main.Core.Commands.Synchronization
         /// <param name="status">
         /// The status.
         /// </param>
-        public EndProcessComand(Guid processGuid, EventState status)
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        public EndProcessComand(Guid processGuid, EventState status, string description)
         {
             this.ProcessGuid = processGuid;
             this.Status = status;
+            this.Description = description;
         }
 
         #endregion
@@ -54,6 +58,11 @@ namespace Main.Core.Commands.Synchronization
         /// Gets or sets the status.
         /// </summary>
         public EventState Status { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }

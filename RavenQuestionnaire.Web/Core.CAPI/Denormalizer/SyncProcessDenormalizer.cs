@@ -74,7 +74,13 @@ namespace Core.CAPI.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<NewSynchronizationProcessCreated> evnt)
         {
-            var stat = new SyncProcessStatisticsDocument(evnt.Payload.ProcessGuid) { SyncType = evnt.Payload.SynckType };
+            var stat = new SyncProcessStatisticsDocument(evnt.Payload.ProcessGuid)
+                {
+                    SyncType = evnt.Payload.SynckType,
+                    ParentProcessKey = evnt.Payload.ParentProcessKey,
+                    Description = evnt.Payload.Description
+                };
+            
             this.docs.Store(stat, stat.PublicKey);
         }
 
@@ -93,6 +99,7 @@ namespace Core.CAPI.Denormalizer
             }
 
             item.IsEnded = true;
+            item.ExitDescription = evnt.Payload.Description;
             item.EndDate = DateTime.Now;
         }
 
@@ -104,15 +111,6 @@ namespace Core.CAPI.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<ProcessStatisticsCalculated> evnt)
         {
-            /*SyncProcessStatisticsDocument item = this.docs.GetByGuid(evnt.Payload.ProcessKey);
-
-            if (item == null || item.IsEnded)
-            {
-                return;
-            }
-
-            item.Statistics.AddRange(evnt.Payload.Statistics);
-             */
         }
 
         #endregion
