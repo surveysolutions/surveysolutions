@@ -90,33 +90,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Assert.AreEqual(response.GetType(), typeof(byte[]));
         }
 
-        /// <summary>
-        /// The when_ file is import.
-        /// </summary>
-        [Test]
-        public void When_FileIsImport()
-        {
-            var trigger = new AutoResetEvent(false);
-            var request = new Mock<HttpRequestBase>();
-            var context = new Mock<HttpContextBase>();
-            var postedfile = new Mock<HttpPostedFileBase>();
-            context.Setup(ctx => ctx.Request).Returns(request.Object);
-            request.Setup(req => req.Files.Count).Returns(1);
-            request.Setup(req => req.Files[0]).Returns(postedfile.Object);
-            postedfile.Setup(f => f.InputStream).Returns(new MemoryStream(new byte[8192])).Verifiable();
-            postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
-            postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
-            postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
-            this.Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
-            this.Controller.Import(postedfile.Object);
-            trigger.WaitOne();
-            Assert.AreEqual(request.Object.Files.Count, 1);
-            Assert.AreEqual(request.Object.Files[0], postedfile.Object);
-            Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);
-            Assert.AreEqual(request.Object.Files[0].ContentType, "application/zip");
-            Assert.AreEqual(request.Object.Files[0].FileName, "event.zip");
-        }
-
         #endregion
     }
 }

@@ -53,7 +53,7 @@ namespace Core.Supervisor.Tests
 
             denormalizer.Handle(e);
 
-            storage.Verify(x => x.Store(It.IsAny<SyncProcessStatisticsDocument>(), Guid.Empty), Times.Once());
+            storage.Verify(x => x.Store(It.IsAny<SyncProcessStatisticsDocument>(), evnt.ProcessGuid), Times.Once());
         }
 
         /// <summary>

@@ -44,7 +44,11 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             var eventSync = new Mock<IEventStreamReader>();
             kernel.Bind<IEventStreamReader>().ToConstant(eventSync.Object);
             var factory = new Mock<ISyncProcessFactory>();
-            factory.Setup(f => f.GetProcess(SyncProcessType.Event, Guid.NewGuid(), null));
+            var syncProcessMock = new Mock<IEventSyncProcess>();
+
+            factory.Setup(f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
+                  syncProcessMock.Object);
+
             var target = new EventPipeService(kernel, factory.Object);
 
             // TODO: insert some assertion here
