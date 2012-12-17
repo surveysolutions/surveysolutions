@@ -60,7 +60,7 @@ namespace Core.CAPI.Tests.Synchronization
                                 })
                     }.AsQueryable();
             repositoryMock.Setup(x => x.Query()).Returns(questionnaireList);
-            var target = new ClientEventSync(repositoryMock.Object, users.Object);
+            var target = new ClientEventStreamReader(repositoryMock.Object, users.Object);
             Assert.AreEqual(target.ReadEvents().Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
@@ -88,7 +88,7 @@ namespace Core.CAPI.Tests.Synchronization
                             new CompleteQuestionnaireDocument { PublicKey = eventSourceId, Status = SurveyStatus.Error })
                     }.AsQueryable();
             repositoryMock.Setup(x => x.Query()).Returns(questionnaireList);
-            var target = new ClientEventSync(repositoryMock.Object, users.Object);
+            var target = new ClientEventStreamReader(repositoryMock.Object, users.Object);
             Assert.AreEqual(target.ReadEvents().Count(), 1);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
@@ -119,7 +119,7 @@ namespace Core.CAPI.Tests.Synchronization
                                 })
                     }.AsQueryable();
             repositoryMock.Setup(x => x.Query()).Returns(questionnaireList);
-            var target = new ClientEventSync(repositoryMock.Object, users.Object);
+            var target = new ClientEventStreamReader(repositoryMock.Object, users.Object);
             Assert.AreEqual(target.ReadEvents().Count(), 0);
             repositoryMock.Verify(x => x.Query(), Times.Once());
         }
@@ -132,7 +132,7 @@ namespace Core.CAPI.Tests.Synchronization
         {
             var repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             var users = new Mock<IDenormalizerStorage<UserDocument>>();
-            var target = new ClientEventSync(repositoryMock.Object, users.Object);
+            var target = new ClientEventStreamReader(repositoryMock.Object, users.Object);
 
             Assert.AreEqual(target.ReadEvents().Count(), 0);
         }

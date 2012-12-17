@@ -1,47 +1,79 @@
-﻿using System;
-using System.Web.Mvc;
-using Main.Core.Export;
-using Moq;
-using System.Web;
-using NUnit.Framework;
-using System.Threading;
-using Questionnaire.Core.Web.Export;
-using Web.Supervisor.Controllers;
-using Questionnaire.Core.Web.Register;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ImportExportControllerTest.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The import export controller test.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
+    using System;
+    using System.Threading;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Main.Core.Export;
+
+    using Moq;
+
+    using NUnit.Framework;
+
+    using global::Web.Supervisor.Controllers;
+
+    /// <summary>
+    /// The import export controller test.
+    /// </summary>
     [TestFixture]
     public class ImportExportControllerTest
     {
-        public Mock<IExportImport> ExportImportMock { get; set; }
-        public Mock<IDataExport> DataExportMock { get; set; }
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Controller.
+        /// </summary>
         public ImportExportController Controller { get; set; }
 
+        /// <summary>
+        /// Gets or sets DataExportMock.
+        /// </summary>
+        public Mock<IDataExport> DataExportMock { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The create objects.
+        /// </summary>
         [SetUp]
         public void CreateObjects()
         {
-            ExportImportMock = new Mock<IExportImport>();
-            DataExportMock = new Mock<IDataExport>();
-            Controller = new ImportExportController(ExportImportMock.Object, DataExportMock.Object);
+            this.DataExportMock = new Mock<IDataExport>();
+            this.Controller = new ImportExportController(this.DataExportMock.Object);
         }
 
+        /// <summary>
+        /// The when_ export data.
+        /// </summary>
         [Test]
         public void When_ExportData()
         {
             var trigger = new AutoResetEvent(false);
-            Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
-            var clientGuid = Guid.NewGuid();
-            Controller.ExportAsync(clientGuid);
+            this.Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
+            Guid clientGuid = Guid.NewGuid();
+            this.Controller.ExportAsync(clientGuid);
             trigger.WaitOne();
-            ExportImportMock.Verify(x => x.Export(clientGuid), Times.Once());
-            var response = Controller.AsyncManager.Parameters["result"];
-            var r = Controller.ExportCompleted(response as byte[]);
+            object response = this.Controller.AsyncManager.Parameters["result"];
+            ActionResult r = this.Controller.ExportCompleted(response as byte[]);
             Assert.AreEqual(r.GetType(), typeof(FileContentResult));
             Assert.AreEqual(response.GetType(), typeof(byte[]));
         }
 
+        /// <summary>
+        /// The when_ file is import.
+        /// </summary>
         [Test]
         public void When_FileIsImport()
         {
@@ -55,16 +87,16 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();
-            Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
-            Controller.ImportAsync(postedfile.Object);
+            this.Controller.AsyncManager.Finished += (sender, ev) => trigger.Set();
+            this.Controller.Import(postedfile.Object);
             trigger.WaitOne();
-            ExportImportMock.Verify(x => x.Import(postedfile.Object), Times.Once());
             Assert.AreEqual(request.Object.Files.Count, 1);
             Assert.AreEqual(request.Object.Files[0], postedfile.Object);
             Assert.AreEqual(request.Object.Files[0].ContentLength, 8192);
             Assert.AreEqual(request.Object.Files[0].ContentType, "application/zip");
             Assert.AreEqual(request.Object.Files[0].FileName, "event.zip");
-           
         }
+
+        #endregion
     }
 }

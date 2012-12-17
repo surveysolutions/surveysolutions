@@ -36,7 +36,7 @@ namespace Core.Supervisor.Tests
         [Test]
         public void GetEventStreamById_EventStoreIsEmpty_EmptyListIsReturned()
         {
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             Guid eventSourceId = Guid.NewGuid();
             var result = target.GetEventStreamById(eventSourceId, typeof(object));
             Assert.IsTrue(result.Count == 0);
@@ -58,7 +58,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new object(),
                                                                                                  new Version())));
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, typeof(object));
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
@@ -80,7 +80,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new object(),
                                                                                                  new Version())));
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRootMock.Object.GetType());
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
@@ -109,7 +109,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new SnapshootLoaded(),
                                                                                                  new Version())));
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
@@ -138,7 +138,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
             
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             unitOfWorckFactory.Verify(x => x.CreateUnitOfWork(It.IsAny<Guid>()), Times.Once());
 
@@ -168,7 +168,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             unitOfworkMock.Verify(x => x.GetById(typeof (DummyAR), aggregateRootId, null), Times.Once());
 
@@ -200,7 +200,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             Assert.IsTrue(aggreagateRoot.IsSnapshootCreatedCalled);
 
@@ -233,7 +233,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             eventStoreMock.Verify(x => x.Store(
                 It.Is<UncommittedEventStream>((stream) => stream.Count() == 1 && stream.First().Payload is SnapshootLoaded
@@ -267,7 +267,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             Assert.IsTrue(result.Count==1);
             Assert.IsTrue(result[0].Payload is SnapshootLoaded);
@@ -296,7 +296,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new object(),
                                                                                                  new Version())));
 
-            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             var result = target.GetEventStreamById(aggregateRootId, typeof(DummyAR));
             Assert.IsTrue(result.Count == 1);
             var offset = TimeZoneInfo.Utc.GetUtcOffset(result[0].EventTimeStamp);

@@ -12,9 +12,13 @@ namespace Web.Supervisor.WCF
     using System;
     using System.ServiceModel.Activation;
 
+    using DataEntryClient.CompleteQuestionnaire;
+
     using Main.Core.Events;
 
     using Ninject;
+
+    using Questionnaire.Core.Web.Helpers;
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
@@ -61,11 +65,13 @@ namespace Web.Supervisor.WCF
         /// </returns>
         public ErrorCodes Process(EventSyncMessage request)
         {
+            Guid syncProcess = Guid.NewGuid();
             try
             {
-                // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
-                var eventStore = this.kernel.Get<IEventSync>();
-                eventStore.WriteEvents(request.Command);
+                var process = new EventSyncProcess(KernelLocator.Kernel, syncProcess, request.SynchronizationKey);
+
+                process.Import("WCF syncronization", request.Command);
+
                 return ErrorCodes.None;
             }
             catch (Exception)

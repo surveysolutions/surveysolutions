@@ -12,7 +12,7 @@ namespace Core.HQ.Synchronization
     using Ncqrs;
     using Ncqrs.Eventing.Storage;
 
-    public class HQEventSync : AbstractSnapshotableEventSync
+    public class HqEventStreamReader : AbstractSnapshotableEventStreamReader
     {
 
         #region Fields
@@ -31,7 +31,7 @@ namespace Core.HQ.Synchronization
 
         #region Constructor
 
-        public HQEventSync(IDenormalizer denormalizer)
+        public HqEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();

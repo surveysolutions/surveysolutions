@@ -1,37 +1,60 @@
-// -----------------------------------------------------------------------
-// <copyright file="IDataExport.cs" company="">
-// TODO: Update copyright text.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DataExport.cs" company="">
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Events;
-using Main.Core.Export;
-using Main.Core.View;
-using Main.Core.View.Export;
-using Main.Core.View.StatusReport;
-using Ninject;
-using Ninject.Parameters;
+// <summary>
+//   The data export.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Questionnaire.Core.Web.Export
 {
-    public class DataExport : ZipExportImport,IDataExport
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Export;
+    using Main.Core.View;
+    using Main.Core.View.Export;
+    using Main.Core.View.StatusReport;
+
+    using Ninject;
+    using Ninject.Parameters;
+
+    /// <summary>
+    /// The data export.
+    /// </summary>
+    public class DataExport : IDataExport
     {
-        #region Constructor
+        #region Constants and Fields
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TemplateExporter"/> class.
+        /// The kernel.
         /// </summary>
-        /// <param name="synchronizer">
-        /// The synchronizer.
+        private readonly IKernel kernel;
+
+        /// <summary>
+        /// The supplier.
+        /// </summary>
+        private readonly IEnvironmentSupplier<CompleteQuestionnaireExportView> supplier;
+
+        /// <summary>
+        /// The view repository.
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataExport"/> class. 
+        /// </summary>
+        /// <param name="kernel">
+        /// The kernel.
         /// </param>
         public DataExport(IKernel kernel)
-            : base(kernel.Get<IEventSync>())
         {
             this.kernel = kernel;
             this.viewRepository = kernel.Get<IViewRepository>();
@@ -39,73 +62,147 @@ namespace Questionnaire.Core.Web.Export
         }
 
         #endregion
-        #region Fields
 
-        private readonly IViewRepository viewRepository;
-        private readonly IKernel kernel;
-        private readonly IEnvironmentSupplier<CompleteQuestionnaireExportView> supplier;
-        #endregion
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The export data.
+        /// </summary>
+        /// <param name="templateGuid">
+        /// The template guid.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <returns>
+        /// </returns>
         public byte[] ExportData(Guid templateGuid, string type)
         {
             if (type == "csv" || type == "tab")
             {
                 string fileName = string.Format("exported{0}.zip", DateTime.Now.ToLongTimeString());
-                var provider = kernel.Get<IExportProvider<CompleteQuestionnaireExportView>>(new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));// new CSVExporter(type == "csv" ? ',' : '\t');
+                var provider =
+                    this.kernel.Get<IExportProvider<CompleteQuestionnaireExportView>>(
+                        new ConstructorArgument("delimeter", type == "csv" ? ',' : '\t'));
+
+                // new CSVExporter(type == "csv" ? ',' : '\t');
                 var manager = new ExportManager<CompleteQuestionnaireExportView>(provider);
                 var allLevels = new Dictionary<string, byte[]>();
-                var questionnairies =
+                CQStatusReportView questionnairies =
                     this.viewRepository.Load<CQStatusReportViewInputModel, CQStatusReportView>(
                         new CQStatusReportViewInputModel(templateGuid, SurveyStatus.Approve.PublicId));
-                CollectLevels(
-                    new CompleteQuestionnaireExportInputModel(questionnairies.Items.Select(q => q.PublicKey),
-                                                              templateGuid, null), allLevels, manager, null,
+                this.CollectLevels(
+                    new CompleteQuestionnaireExportInputModel(
+                        questionnairies.Items.Select(q => q.PublicKey), templateGuid, null), 
+                    allLevels, 
+                    manager, 
+                    null, 
                     type == "csv" ? FileType.Csv : FileType.Tab);
                 this.supplier.AddCompledResults(allLevels);
-                return this.ExportInternal(allLevels,
-                                           fileName);
+                return ZipFileData.ExportInternal(allLevels, fileName);
             }
+
             return null;
         }
 
+        #endregion
 
-        protected void CollectLevels(CompleteQuestionnaireExportInputModel input, Dictionary<string, byte[]> container, ExportManager<CompleteQuestionnaireExportView> manager, string parentName,FileType type)
+        #region Methods
+
+        /// <summary>
+        /// The collect levels.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="manager">
+        /// The manager.
+        /// </param>
+        /// <param name="parentName">
+        /// The parent name.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        protected void CollectLevels(
+            CompleteQuestionnaireExportInputModel input, 
+            Dictionary<string, byte[]> container, 
+            ExportManager<CompleteQuestionnaireExportView> manager, 
+            string parentName, 
+            FileType type)
         {
             CompleteQuestionnaireExportView records =
-                this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>
-                    (input);
-            var fileName = GetName(records.GroupName, container, 0);
+                this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(input);
+            string fileName = this.GetName(records.GroupName, container, 0);
             container.Add(fileName, manager.ExportToStream(records));
-            var currentName = this.supplier.BuildContent(records, parentName, fileName, type);
+            string currentName = this.supplier.BuildContent(records, parentName, fileName, type);
             foreach (Guid autoPropagatebleQuestionPublicKey in records.AutoPropagatebleQuestionsPublicKeys)
             {
-
-                CollectLevels(
+                this.CollectLevels(
                     new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId)
-                        {AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey}, container,
-                    manager, currentName, type);
+                        {
+                           AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey 
+                        }, 
+                    container, 
+                    manager, 
+                    currentName, 
+                    type);
             }
+
             foreach (Guid subPropagatebleGroup in records.SubPropagatebleGroups)
             {
-                CollectLevels(
-                    new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId,
-                                                              subPropagatebleGroup), container, manager, currentName, type);
+                this.CollectLevels(
+                    new CompleteQuestionnaireExportInputModel(
+                        input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup), 
+                    container, 
+                    manager, 
+                    currentName, 
+                    type);
             }
-
         }
 
+        /// <summary>
+        /// The get name.
+        /// </summary>
+        /// <param name="name">
+        /// The name.
+        /// </param>
+        /// <param name="container">
+        /// The container.
+        /// </param>
+        /// <param name="i">
+        /// The i.
+        /// </param>
+        /// <returns>
+        /// The get name.
+        /// </returns>
         protected string GetName(string name, Dictionary<string, byte[]> container, int i)
         {
             if (i == 0)
             {
                 if (!container.ContainsKey(name + ".csv"))
+                {
                     return name + ".csv";
+                }
                 else
-                    return GetName(name, container, i + 1);
+                {
+                    return this.GetName(name, container, i + 1);
+                }
             }
+
             if (!container.ContainsKey(name + i + ".csv"))
+            {
                 return name + i + ".csv";
+            }
             else
-                return GetName(name, container, i + 1);
+            {
+                return this.GetName(name, container, i + 1);
+            }
         }
+
+        #endregion
     }
 }

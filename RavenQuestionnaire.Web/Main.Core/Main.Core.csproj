@@ -261,8 +261,8 @@
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
-    <Compile Include="Events\AbstractEventSync.cs" />
-    <Compile Include="Events\AbstractSnapshotableEventSync.cs" />
+    <Compile Include="Events\AbstractEventStreamReader.cs" />
+    <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
     <Compile Include="Events\AggregateRootEvent.cs" />
     <Compile Include="Events\AggregateRootEventStream.cs" />
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
@@ -272,7 +272,7 @@
     <Compile Include="Events\File\FileDeleted.cs" />
     <Compile Include="Events\File\FileMetaUpdated.cs" />
     <Compile Include="Events\File\FileUploaded.cs" />
-    <Compile Include="Events\IEventSync.cs" />
+    <Compile Include="Events\IEventStreamReader.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
@@ -305,7 +305,7 @@
     <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
-    <Compile Include="Events\UserEventSync.cs" />
+    <Compile Include="Events\UserEventStreamReader.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />

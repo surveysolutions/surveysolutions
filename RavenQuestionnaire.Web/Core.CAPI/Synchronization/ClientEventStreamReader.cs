@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ClientEventSync.cs" company="">
+// <copyright file="ClientEventStreamReader.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -28,7 +28,7 @@ namespace Core.CAPI.Synchronization
     /// <summary>
     /// The client event sync.
     /// </summary>
-    public class ClientEventSync : AbstractEventSync
+    public class ClientEventStreamReader : AbstractEventStreamReader
     {
         #region Constants and Fields
 
@@ -52,7 +52,7 @@ namespace Core.CAPI.Synchronization
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ClientEventSync"/> class.
+        /// Initializes a new instance of the <see cref="ClientEventStreamReader"/> class.
         /// </summary>
         /// <param name="storage">
         /// The storage.
@@ -60,7 +60,7 @@ namespace Core.CAPI.Synchronization
         /// <param name="users">
         /// The users.
         /// </param>
-        public ClientEventSync(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage, IDenormalizerStorage<UserDocument> users)
+        public ClientEventStreamReader(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage, IDenormalizerStorage<UserDocument> users)
         {
             this.user = users;
             this.storage = storage;

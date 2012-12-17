@@ -62,9 +62,24 @@ namespace Main.Core.Documents
         public Guid PublicKey { get; set; }
 
         /// <summary>
+        /// Gets or sets ParentProcessKey.
+        /// </summary>
+        public Guid? ParentProcessKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public SynchronizationType SyncType { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets ExitDescription.
+        /// </summary>
+        public string ExitDescription { get; set; }
 
         #endregion
     }

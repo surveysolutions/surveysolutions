@@ -82,7 +82,7 @@ namespace Main.Core.Domain
                    RegisteredDate = registeredDate,
                    TabletId = tabletId,
                    Description = description,
-                   PublicKey = Guid.NewGuid(),
+                   PublicKey = new Guid(secretKey),
                    Registrator = guidSupervisor
                });
         }

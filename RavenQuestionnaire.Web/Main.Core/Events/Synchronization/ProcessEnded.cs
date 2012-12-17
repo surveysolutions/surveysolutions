@@ -32,6 +32,11 @@ namespace Main.Core.Events.Synchronization
         /// Gets or sets ProcessKey.
         /// </summary>
         public Guid ProcessKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
         
         #endregion
     }

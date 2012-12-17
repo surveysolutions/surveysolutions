@@ -93,14 +93,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// Event exporter
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        protected override void ExportEvents(Guid syncKey)
+        protected override void ExportEvents()
         {
-            // TODO: uncomment that string if we'll be synchronizing delta instead of everything   Guid? lastSyncEventGuid = GetLastSyncEventGuid(syncKey);
-            this.chanelFactoryWrapper.Execute<IEventPipe>(
-                this.baseAdress, (client) => this.ProcessEvents(syncKey, client));
+            this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress, (client) => this.ProcessEvents(client));
         }
 
         /// <summary>

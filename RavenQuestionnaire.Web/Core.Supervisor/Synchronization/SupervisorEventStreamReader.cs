@@ -29,7 +29,7 @@ namespace Core.Supervisor.Synchronization
     /// <summary>
     /// Responsible for supervisor synchronization
     /// </summary>
-    public class SupervisorEventSync : AbstractSnapshotableEventSync
+    public class SupervisorEventStreamReader : AbstractSnapshotableEventStreamReader
     {
         #region Constants and Fields
 
@@ -53,7 +53,7 @@ namespace Core.Supervisor.Synchronization
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorEventSync"/> class.
+        /// Initializes a new instance of the <see cref="SupervisorEventStreamReader"/> class.
         /// </summary>
         /// <param name="denormalizer">
         /// The denormalizer.
@@ -61,7 +61,7 @@ namespace Core.Supervisor.Synchronization
         /// <exception cref="Exception">
         /// added new exception
         /// </exception>
-        public SupervisorEventSync(IDenormalizer denormalizer)
+        public SupervisorEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();

@@ -18,6 +18,7 @@ namespace DataEntryClient.SycProcess
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
+    using Main.Core.Events.Questionnaire.Completed;
     using Main.Core.Events.User;
     using Main.Core.Utility;
     using Main.Core.View.CompleteQuestionnaire;
@@ -29,38 +30,6 @@ namespace DataEntryClient.SycProcess
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Eventing.Storage;
     using Ncqrs.Restoring.EventStapshoot;
-
-    /// <summary>
-    /// Sync Procesor Interface
-    /// </summary>
-    public interface ISyncProcessor
-    {
-        /// <summary>
-        /// Gets or sets IncomeEvents.
-        /// </summary>
-        UncommittedEventStream[] IncomeEvents { get; set; }
-
-        /// <summary>
-        /// Calculate statistics
-        /// </summary>
-        /// <returns>
-        /// List of UserSyncProcessStatistics
-        /// </returns>
-        List<UserSyncProcessStatistics> CalculateStatistics();
-
-        /// <summary>
-        /// The commit.
-        /// </summary>
-        void Commit();
-
-        /// <summary>
-        /// The merge events.
-        /// </summary>
-        /// <param name="stream">
-        /// The stream.
-        /// </param>
-        void Merge(IEnumerable<AggregateRootEvent> stream);
-    }
 
     /// <summary>
     /// TODO: Update summary.
@@ -247,6 +216,30 @@ namespace DataEntryClient.SycProcess
                     Type = SynchronizationStatisticType.NewUser,
                     User = new UserLight(e.PublicKey, e.Name),
                 };
+                this.statistics.Statistics.Add(stat);
+            }
+
+            if (uncommittedEvent.Payload is QuestionnaireStatusChanged)
+            {
+                var e = uncommittedEvent.Payload as QuestionnaireStatusChanged;
+                var document = this.surveys.GetByGuid(e.CompletedQuestionnaireId);
+
+                var stat = new UserSyncProcessStatistics
+                {
+                    Type = SynchronizationStatisticType.StatusChanged,
+                    User = e.Responsible,
+                   
+                    SurveyId = e.CompletedQuestionnaireId,
+                    Status = e.Status,
+                    PrevStatus = e.PreviousStatus
+                };
+
+                if (document != null)
+                {
+                    stat.TemplateId = document.TemplateId;
+                    stat.Title = document.QuestionnaireTitle;
+                }
+
                 this.statistics.Statistics.Add(stat);
             }
         }

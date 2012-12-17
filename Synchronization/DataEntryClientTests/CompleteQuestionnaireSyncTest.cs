@@ -51,7 +51,7 @@ namespace DataEntryClientTests
         /// <summary>
         /// The event store.
         /// </summary>
-        protected Mock<IEventSync> EventStore;
+        protected Mock<IEventStreamReader> EventStore;
 
         /// <summary>
         /// The kernel.
@@ -77,8 +77,8 @@ namespace DataEntryClientTests
             this.CommandService = new Mock<ICommandService>();
             this.Kernel = new StandardKernel();
 
-            this.EventStore = new Mock<IEventSync>();
-            this.Kernel.Bind<IEventSync>().ToConstant(this.EventStore.Object);
+            this.EventStore = new Mock<IEventStreamReader>();
+            this.Kernel.Bind<IEventStreamReader>().ToConstant(this.EventStore.Object);
 
             this.SyncProcessRepository = new Mock<ISyncProcessRepository>();
             this.Kernel.Bind<ISyncProcessRepository>().ToConstant(this.SyncProcessRepository.Object);
@@ -163,7 +163,7 @@ namespace DataEntryClientTests
                 Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
             var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
 
-            target.Import(syncProcessGiud);
+            target.Import(string.Empty);
 
             serviceMock.Verify(x => x.Process(), Times.Exactly(1));
             eventServiceMock.Verify(
