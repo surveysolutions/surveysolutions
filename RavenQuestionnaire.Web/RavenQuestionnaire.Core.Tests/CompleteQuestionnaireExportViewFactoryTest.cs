@@ -43,10 +43,9 @@ namespace RavenQuestionnaire.Core.Tests
         [Test]
         public void Load_TemplateIsAbsent_EmptyResultISReturned()
         {
-            var result = this.Target.Load(new CompleteQuestionnaireExportInputModel(new Guid[]{Guid.NewGuid()},Guid.NewGuid() ));
-            Assert.IsTrue(!result.Items.Any());
-            Assert.IsTrue(!result.Header.Any());
-            Assert.IsTrue(!result.SubPropagatebleGroups.Any());
+            var result =
+                this.Target.Load(new CompleteQuestionnaireExportInputModel(new Guid[] {Guid.NewGuid()}, Guid.NewGuid()));
+            Assert.IsTrue(result == null);
         }
 
         [Test]

@@ -133,7 +133,7 @@ namespace Main.Core.ExpressionExecutors
             // go through hierarchy with the scope
             while (parent != null)
             {
-                var item = parent as CompleteGroup;
+                var item = parent as ICompleteGroup;
                 if (item == null)
                 {
                     break;

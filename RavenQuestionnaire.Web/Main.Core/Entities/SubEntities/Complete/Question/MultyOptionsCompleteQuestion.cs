@@ -28,7 +28,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public MultyOptionsCompleteQuestion()
         {
-            
+
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         public MultyOptionsCompleteQuestion(string text)
             : base(text)
         {
-            
+
         }
 
         #endregion
@@ -52,31 +52,9 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </summary>
         public string AddMultyAttr { get; set; }
 
-       /* /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children { get; set; }*/
-
         #endregion
 
         #region Public Methods and Operators
-
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public override void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-        }*/
 
         public override void AddAnswer(IAnswer answer)
         {
@@ -93,7 +71,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
             this.Answers.Add(answer);
         }
-        
+
         /// <summary>
         /// The get answer object.
         /// </summary>
@@ -102,11 +80,10 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            IEnumerable<object> answers = this.Answers.Where(c => ((ICompleteAnswer)c).Selected).Select(
-                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
+            IEnumerable<object> answers = 
+                this.Answers.Where(c => ((ICompleteAnswer)c).Selected).Select(c => c.AnswerValue ?? c.AnswerText).ToArray();
 
             return answers.Any() ? answers : null;
-
         }
 
         /// <summary>
@@ -128,19 +105,16 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override string GetAnswerString()
         {
-
             var items = this.Answers.Where(a => ((ICompleteAnswer)a).Selected).ToArray();
-        //    return answer == null ? string.Empty : answer.AnswerText;
 
-         //   var items = this.GetAnswerObject() as IEnumerable<object>;
-            
             if (items.Any())
             {
-                return string.Join(", ", items.Select(a => a.AnswerText.ToString()));
+                return string.Join(", ", items.Select(a => a.AnswerType == AnswerType.Image ? a.AnswerImage : a.AnswerText.ToString()));
             }
-            
+
             return string.Empty;
         }
+
         
         /// <summary>
         /// The set answer.
@@ -163,11 +137,12 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                 throw new Exception("Parameter: answer");
             }
 
+            // iterates over all items to set on/off current state
             foreach (var item in this.Answers)
             {
                 (item as ICompleteAnswer).Selected = answer.Contains(item.PublicKey);
             }
-            
+
         }
 
         #endregion

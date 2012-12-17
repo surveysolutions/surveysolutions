@@ -29,7 +29,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public MultyOptionsQuestion()
         {
-            this.Children = new List<IComposite>();
         }
 
         /// <summary>
@@ -52,11 +51,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public string AddMultyAttr { get; set; }
 
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children { get; set; }
-
+        
         #endregion
 
         #region Public Methods and Operators
@@ -166,7 +161,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
-        
+
         #endregion
     }
 }

@@ -150,6 +150,20 @@ namespace Main.Core.Documents
         }
 
         /// <summary>
+        /// Has Visible Items For Scope
+        /// </summary>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
+        /// <returns>
+        /// True
+        /// </returns>
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
@@ -176,6 +190,46 @@ namespace Main.Core.Documents
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var doc = this.MemberwiseClone() as CompleteQuestionnaireDocument;
+
+            doc.Parent = null;
+            if (this.Triggers != null)
+            {
+                doc.Triggers = new List<Guid>(this.Triggers);
+            }
+
+            if (this.Creator != null)
+            {
+                doc.Creator = new UserLight(this.Creator.Id, this.Creator.Name);
+            }
+
+            if (this.Responsible != null)
+            {
+                doc.Responsible = new UserLight(this.Responsible.Id, this.Responsible.Name);
+            }
+
+            if (this.Status != null)
+            {
+                doc.Status = new SurveyStatus(this.Status.PublicId, this.Status.Name);
+            }
+
+            doc.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                doc.Children.Add(composite.Clone());
+            }
+
+            return doc;
         }
 
         /// <summary>

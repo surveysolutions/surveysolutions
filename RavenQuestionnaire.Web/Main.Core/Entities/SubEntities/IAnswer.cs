@@ -14,7 +14,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The Answer interface.
     /// </summary>
-    public interface IAnswer ////: IComposite
+    public interface IAnswer // : ICloneable
     {
         #region Public Properties
 
@@ -36,7 +36,7 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the answer value.
         /// </summary>
-        object AnswerValue { get; set; }
+        string AnswerValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether mandatory.
@@ -54,5 +54,13 @@ namespace Main.Core.Entities.SubEntities
         Guid PublicKey { get; }
 
         #endregion
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IAnswer"/>.
+        /// </returns>
+        IAnswer Clone();
     }
 }

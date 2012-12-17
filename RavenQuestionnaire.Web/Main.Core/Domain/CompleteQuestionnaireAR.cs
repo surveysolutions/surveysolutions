@@ -129,10 +129,6 @@ namespace Main.Core.Domain
             //// performe check before event raising
             var templateGroup = this.doc.Find<CompleteGroup>(publicKey);
 
-            // Apply a NewGroupAdded event that reflects the
-            // creation of this instance. The state of this
-            // instance will be update in the handler of 
-            // this event (the OnPropagatableGroupAdded method).
             this.ApplyEvent(
                 new PropagatableGroupAdded
                     {
@@ -307,14 +303,14 @@ namespace Main.Core.Domain
             ////to store events with guids
             if (propagatedQuestion != null)
             {
+
+                int count;
                 //// check is it true for all cases?
                 if (string.IsNullOrWhiteSpace(completeAnswerValue))
                 {
-                    completeAnswerValue = "0";
+                    count = 0;
                 }
-
-                int count;
-                if (!int.TryParse(completeAnswerValue, out count))
+                else if (!int.TryParse(completeAnswerValue, out count))
                 {
                     throw new ArgumentException("Value is not a number");
                 }
@@ -339,10 +335,9 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new AnswerSet
                     {
-                        CompletedQuestionnaireId = this.doc.PublicKey, 
                         QuestionPublicKey = questionPublicKey, 
                         PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = completeAnswers, 
+                        AnswerKeys = new List<Guid>(completeAnswers), 
                         AnswerValue = completeAnswerValue, 
                         Featured = question.Featured, 
                         ////clean up this values
@@ -429,7 +424,8 @@ namespace Main.Core.Domain
                 var triggers = autoQuestion.Triggers.Distinct().ToList();
                 if (triggers.Any())
                 {
-                    ////Create keys for propagation
+                    // Create keys for propagation
+                    // to search group just once for all keys 
                     Guid[] keysPropagate = new Guid[count - currentAnswer];
                     for (int i = 0; i < count - currentAnswer; i++)
                     {

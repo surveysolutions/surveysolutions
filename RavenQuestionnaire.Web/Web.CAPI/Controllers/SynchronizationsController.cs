@@ -461,11 +461,11 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult PullStatistics(Guid syncKey)
+        public JsonResult PullStatistics(Guid id)
         {
             var user = this._globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
-                    new SyncProcessInputModel( syncKey, user == null ? Guid.Empty : user.Id));
+                    new SyncProcessInputModel(id, user == null ? Guid.Empty : user.Id));
             return this.Json(model.Messages, JsonRequestBehavior.AllowGet);
         }
 

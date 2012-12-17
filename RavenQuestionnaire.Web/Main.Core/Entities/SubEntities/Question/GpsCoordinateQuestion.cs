@@ -17,6 +17,7 @@ namespace Main.Core.Entities.SubEntities.Question
     /// <summary>
     /// The gps coordinate question.
     /// </summary>
+    [Obsolete]
     public class GpsCoordinateQuestion : AbstractQuestion, IGpsCoordinatesQuestion
     {
         #region Constructors and Destructors
@@ -49,21 +50,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public string AddGpsCoordinateAttr { get; set; }
 
         /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
         public char IntAttr { get; set; }
@@ -84,7 +70,6 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             throw new NotImplementedException();
         }
-
         
         /*/// <summary>
         /// The add.

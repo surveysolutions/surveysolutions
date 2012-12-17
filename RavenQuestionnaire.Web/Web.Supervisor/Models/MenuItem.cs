@@ -43,5 +43,10 @@ namespace Web.Supervisor.Models
         /// The logon.
         /// </summary>
         Logon = 6,
+
+        /// <summary>
+        /// The devices
+        /// </summary>
+        Devices = 7
     }
 }

@@ -17,6 +17,8 @@ using Main.Core.View.Question;
 
 namespace Main.Core.View.Group
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The propagated group mobile view.
     /// </summary>
@@ -49,9 +51,20 @@ namespace Main.Core.View.Group
 
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             this.Description = group.Description;
-            this.Children =
-                group.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= scope).Select(
-                    q => new CompleteQuestionView(doc, q) as ICompositeView).ToList();
+            this.Children = new List<ICompositeView>();
+            foreach (var q in group.Children.OfType<ICompleteQuestion>())
+            {
+                if (q.QuestionScope <= scope)
+                {
+                    var question = new CompleteQuestionView(doc, q);
+                    if (q.QuestionScope == scope)
+                    {
+                        question.Editable = true;
+                    }
+
+                    this.Children.Add(question);
+                }
+            }
         }
         #endregion
 

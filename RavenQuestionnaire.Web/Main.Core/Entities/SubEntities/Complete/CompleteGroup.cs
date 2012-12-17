@@ -60,7 +60,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </param>
         /// <exception cref="InvalidOperationException">
         /// </exception>
-        public CompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
+        public CompleteGroup(ICompleteGroup group, Guid? propogationPublicKey)
             : this()
         {
             this.Title = group.Title;
@@ -145,6 +145,22 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the propogation public key.
         /// </summary>
         public Guid? PropagationPublicKey { get; set; }
+
+        /// <summary>
+        /// False if group is empty or has hidden items, true overwise
+        /// </summary>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
+        /// <returns>
+        /// False or true
+        /// </returns>
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            var count = this.Children.OfType<ICompleteGroup>().Where(g => g.HasVisibleItemsForScope(questionScope)).Count()
+                + this.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= questionScope).Count();
+            return count != 0 || this.Children.Count == 0;
+        }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -409,6 +425,30 @@ namespace Main.Core.Entities.SubEntities.Complete
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var group = this.MemberwiseClone() as CompleteGroup;
+
+            if (this.Triggers != null)
+            {
+                this.Triggers = new List<Guid>(this.Triggers);
+            }
+
+            group.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                group.Children.Add(composite.Clone());
+            }
+
+            return group;
         }
 
         #endregion

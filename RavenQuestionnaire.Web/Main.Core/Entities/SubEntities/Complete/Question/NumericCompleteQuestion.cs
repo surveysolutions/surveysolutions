@@ -1,18 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NumericCompleteQuestion.cs" company="">
-//   
+// <copyright file="NumericCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The numeric complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-
-    using Main.Core.Entities.Composite;
 
     /// <summary>
     /// The numeric complete question.
@@ -52,22 +50,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// Gets or sets the add numeric attr.
         /// </summary>
         public string AddNumericAttr { get; set; }
-
-        /*/// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }*/
-
+        
         /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
@@ -103,7 +86,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             throw new NotImplementedException();
         }
-
         
         /// <summary>
         /// The get answer object.
@@ -137,7 +119,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         {
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
-
         
         /// <summary>
         /// The set answer.
@@ -150,10 +131,17 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            int value;
-            if (int.TryParse((answerValue ?? string.Empty).Trim(), out value))
+            if (string.IsNullOrWhiteSpace(answerValue))
             {
-                this.Answer = value;
+                this.Answer = null;
+            }
+            else
+            {
+                int value;
+                if (int.TryParse(answerValue.Trim(), out value))
+                {
+                    this.Answer = value;
+                }
             }
         }
 

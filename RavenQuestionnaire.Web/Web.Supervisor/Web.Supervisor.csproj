@@ -161,7 +161,6 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -178,6 +177,8 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\StringExtension.cs" />
+    <Compile Include="Models\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
     <Compile Include="Models\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
@@ -424,7 +425,7 @@
     <Content Include="Views\Survey\_StatusHistory.cshtml" />
     <Content Include="Views\User\Summary.cshtml" />
     <Content Include="Views\User\_SummaryTable.cshtml" />
-    <Content Include="Views\Device\Devices.cshtml" />
+    <Content Include="Views\Device\Index.cshtml" />
     <Content Include="Views\Survey\IndexChart.cshtml" />
     <Content Include="Views\Survey\Status.cshtml" />
     <Content Include="Views\Survey\_StatusTable.cshtml" />

@@ -172,6 +172,11 @@ namespace Main.Core.Documents
             }
         }
 
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            return true;
+        }
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
@@ -613,6 +618,19 @@ namespace Main.Core.Documents
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public IComposite Clone()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -66,7 +66,12 @@ namespace Main.Core.Domain
             // instance will be update in the handler of 
             // this event (the OnNewQuestionnaireCreated method).
             this.ApplyEvent(
-                new NewQuestionnaireCreated { PublicKey = questionnaireId, Title = text, CreationDate = clock.UtcNow() });
+                new NewQuestionnaireCreated
+                    {
+                        PublicKey = questionnaireId, 
+                        Title = text, 
+                        CreationDate = clock.UtcNow()
+                    });
         }
 
         #endregion
@@ -96,13 +101,16 @@ namespace Main.Core.Domain
         /// The text.
         /// </param>
         /// <param name="propagateble">
-        /// The propagateble.
+        /// The propagate.
         /// </param>
         /// <param name="parentGroupKey">
         /// The parent group key.
         /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
+        /// </param>
+        /// <param name="description">
+        /// The description.
         /// </param>
         public void AddGroup(
             Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
@@ -325,7 +333,8 @@ namespace Main.Core.Domain
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
-            //// TODO: check is it good to create new AR form another?
+            // TODO: check is it good to create new AR form another?
+            // Do we need Saga here?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
@@ -394,7 +403,13 @@ namespace Main.Core.Domain
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(
-                new QuestionnaireItemMoved { QuestionnaireId  = this.innerDocument.PublicKey,  AfterItemKey = afterItemKey, GroupKey = groupKey, PublicKey = publicKey });
+                new QuestionnaireItemMoved
+                    {
+                        QuestionnaireId  = this.innerDocument.PublicKey,  
+                        AfterItemKey = afterItemKey, 
+                        GroupKey = groupKey, 
+                        PublicKey = publicKey
+                    });
         }
 
         /// <summary>
@@ -405,7 +420,7 @@ namespace Main.Core.Domain
         /// </param>
         public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
-            this.innerDocument = snapshot;
+            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
         }
 
         // public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
@@ -467,7 +482,7 @@ namespace Main.Core.Domain
                         GroupPublicKey = groupPublicKey, 
                         GroupText = groupText, 
                         Propagateble = propagateble, 
-                        Executor = executor, 
+                        /*Executor = executor,*/ 
                         ConditionExpression = conditionExpression,
                         Description = description
                     });

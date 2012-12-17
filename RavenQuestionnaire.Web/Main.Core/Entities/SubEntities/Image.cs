@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Image.cs" company="">
-//   
+// <copyright file="Image.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The image.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -13,7 +14,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The image.
     /// </summary>
-    public class Image
+    public struct Image
     {
         #region Public Properties
 
@@ -38,14 +39,5 @@ namespace Main.Core.Entities.SubEntities
         public string Title { get; set; }
 
         #endregion
-
-        /*   public string OriginalBase64 { get; set; }
-
-        public int Width { get; set; }
-        public int Height { get; set; }
-
-        public string ThumbnailBase { get; set; }
-        public int ThumbnailWidth { get; set; }
-        public int ThumbnailHeight { get; set; }*/
     }
 }

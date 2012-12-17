@@ -79,6 +79,9 @@
     <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
     <Compile Include="Views\Assign\AssignSurveyView.cs" />
     <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
+    <Compile Include="Views\Device\DeviceView.cs" />
+    <Compile Include="Views\Device\DeviceViewFactory.cs" />
+    <Compile Include="Views\Device\DeviceViewInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewerGroupView.cs" />
     <Compile Include="Views\Interviewer\InterviewerInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewerItemView.cs" />

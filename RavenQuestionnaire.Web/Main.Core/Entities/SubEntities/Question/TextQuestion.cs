@@ -48,22 +48,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// Gets or sets the add text attr.
         /// </summary>
         public string AddTextAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
+        
         #endregion
 
         #region Public Methods and Operators
@@ -144,7 +129,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
-        
+
         #endregion
     }
 }

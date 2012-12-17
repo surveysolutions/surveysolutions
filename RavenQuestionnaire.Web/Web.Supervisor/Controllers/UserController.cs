@@ -108,6 +108,7 @@ namespace Web.Supervisor.Controllers
             ViewBag.ActivePage = MenuItem.Interviewers;
             var user = this.globalInfo.GetCurrentUser();
             var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
+            ViewBag.GraphData = new SurveyChartModel(model);
             return this.View(model);
         }
 
@@ -131,6 +132,7 @@ namespace Web.Supervisor.Controllers
                 TemplateId = data.TemplateId
             };
             var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(input);
+            ViewBag.GraphData = new SurveyChartModel(model);
             return this.PartialView("_SummaryTable", model);
         }
 

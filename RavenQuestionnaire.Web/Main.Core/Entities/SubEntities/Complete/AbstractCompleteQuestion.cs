@@ -35,6 +35,8 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Cards = new List<Image>();
             this.AnswerDate = DateTime.Now;
             this.Answers = new List<IAnswer>();
+            this.ConditionalDependentQuestions = new List<Guid>();
+            this.ConditionalDependentGroups = new List<Guid>();
         }
 
         /// <summary>
@@ -52,6 +54,9 @@ namespace Main.Core.Entities.SubEntities.Complete
 
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the validated time.
+        /// </summary>
         public DateTime ValidatedTime { get; set; }
 
         /// <summary>
@@ -332,6 +337,43 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void ConnectChildsWithParent()
         {
             //// do nothing
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public virtual IComposite Clone()
+        {
+            var question = this.MemberwiseClone() as ICompleteQuestion;
+
+            question.Parent = null;
+
+            if (this.Cards != null)
+            {
+                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            }
+
+            if (this.ConditionalDependentGroups != null)
+            {
+                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            }
+
+            if (this.ConditionalDependentQuestions != null)
+            {
+                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+            }
+
+            // handle reference part
+            question.Answers = new List<IAnswer>();
+            foreach (var answer in this.Answers)
+            {
+                question.Answers.Add(answer.Clone());
+            }
+
+            return question;
         }
 
         /// <summary>

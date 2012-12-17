@@ -105,7 +105,5 @@ namespace Main.Core.Events.Questionnaire
         public int MaxValue { get; set; }
 
         #endregion
-
-        
     }
 }

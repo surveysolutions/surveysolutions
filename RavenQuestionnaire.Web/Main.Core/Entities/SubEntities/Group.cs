@@ -78,13 +78,7 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         [JsonIgnore]
         public IComposite Parent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the parent group.
-        /// </summary>
-        [JsonIgnore]
-        public IComposite ParentGroup { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
@@ -291,6 +285,33 @@ namespace Main.Core.Entities.SubEntities
                 item.Parent = this;
                 item.ConnectChildsWithParent();
             }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var newGroup = new Group
+                {
+                    ConditionExpression = this.ConditionExpression,
+                    Description = this.Description,
+                    Enabled = this.Enabled,
+                    Propagated = this.Propagated,
+                    PublicKey = this.PublicKey,
+                    Title = this.Title,
+                    Triggers = new List<Guid>(this.Triggers)
+                };
+
+            foreach (var composite in this.Children)
+            {
+                newGroup.Children.Add(composite.Clone());
+            }
+
+            return newGroup;
         }
 
         /// <summary>

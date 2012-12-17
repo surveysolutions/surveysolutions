@@ -13,10 +13,14 @@ namespace Web.Supervisor.Controllers
     using System.Web.Mvc;
 
     using Main.Core.Entities;
+    using Main.Core.View;
+    using Main.Core.View.Device;
 
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web;
     using Main.Core.View;
+
+    using Web.Supervisor.Models;
 
     /// <summary>
     /// The device controller.
@@ -26,10 +30,20 @@ namespace Web.Supervisor.Controllers
         #region Fields
 
         /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalInfo;
+
+        /// <summary>
         /// Field of deviceRegister
         /// </summary>
         private readonly IGlobalInfoProvider globalInfo;
 
+        /// <summary>
+        /// View repository
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+        
         #endregion
 
         #region Constructor
@@ -40,15 +54,35 @@ namespace Web.Supervisor.Controllers
         /// <param name="register">
         /// The register.
         /// </param>
-        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalInfo)
-            : base(repository)
+        /// <param name="viewRepository">
+        /// The view Repository.
+        /// </param>
+        /// <param name="globalInfo">
+        /// The global Info.
+        /// </param>
+        public DeviceController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
         {
+            this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Page with list of registred devices
+        /// </summary>
+        /// <returns>
+        /// Index page
+        /// </returns>
+        public ActionResult Index()
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            ViewBag.ActivePage = MenuItem.Devices;
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(user.Id));
+            return this.View(model);
+        }
 
         /// <summary>
         /// Register CAPI device in supervisor db

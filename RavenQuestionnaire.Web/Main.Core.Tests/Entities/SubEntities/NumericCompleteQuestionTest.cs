@@ -47,6 +47,22 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             }
         }
 
+
+        /// <summary>
+        /// The check conversion_ answers are converted.
+        /// </summary>
+        [Test]
+        public void CheckConversion_NullSupport()
+        {
+            var question = new NumericCompleteQuestion();
+            question.SetAnswer(null, "5");
+
+            Assert.AreEqual(question.GetAnswerObject(), 5);
+
+            question.SetAnswer(null, "");
+            Assert.AreEqual(question.GetAnswerObject(), null);
+        }
+
         /// <summary>
         /// The when set main settings_ is added.
         /// </summary>
