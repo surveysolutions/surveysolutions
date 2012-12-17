@@ -9,7 +9,7 @@
 
 namespace DataEntryClient.CompleteQuestionnaire
 {
-    using System;
+    using SynchronizationMessages.CompleteQuestionnaire;
 
     /// <summary>
     /// The WirelessSyncProcess interface.
@@ -21,18 +21,12 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// The export.
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        void Export(Guid syncKey);
+        ErrorCodes Export(string description);
 
         /// <summary>
         /// The import.
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        void Import(Guid syncKey);
+        ErrorCodes Import(string description);
 
         #endregion
     }
