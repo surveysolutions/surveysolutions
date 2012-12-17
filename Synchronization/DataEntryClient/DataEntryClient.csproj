@@ -83,6 +83,9 @@
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\EventPipeCollector.cs" />
     <Compile Include="CompleteQuestionnaire\EventSyncProcess.cs" />
+    <Compile Include="CompleteQuestionnaire\ISyncProcessFactory.cs" />
+    <Compile Include="CompleteQuestionnaire\SyncProcessFactory.cs" />
+    <Compile Include="CompleteQuestionnaire\SyncProcessType.cs" />
     <Compile Include="CompleteQuestionnaire\TemplateExportSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\WirelessSyncProcess.cs" />
     <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />

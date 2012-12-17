@@ -19,7 +19,6 @@ namespace DataEntryClient.CompleteQuestionnaire
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
-    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
@@ -149,6 +148,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <param name="syncProcessDescription">
         /// The sync Process Description.
         /// </param>
+        /// <returns>
+        /// The export.
+        /// </returns>
         public ErrorCodes Export(string syncProcessDescription)
         {
             this.Invoker.Execute(new CreateNewSynchronizationProcessCommand(this.ProcessGuid, this.ParentProcessGuid, SynchronizationType.Push, syncProcessDescription));

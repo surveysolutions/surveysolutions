@@ -103,7 +103,7 @@ namespace DataEntryClientTests
             Guid? eventGuid = null;
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid());
             Guid? result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
         }
@@ -122,7 +122,7 @@ namespace DataEntryClientTests
             Guid eventGuid = Guid.NewGuid();
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid());
 
             Guid? result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, eventGuid);
@@ -161,9 +161,9 @@ namespace DataEntryClientTests
             eventServiceMock.Setup(
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
                 Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
-            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid());
 
-            target.Import(string.Empty);
+            target.Import(string.Empty, string.Empty);
 
             serviceMock.Verify(x => x.Process(), Times.Exactly(1));
             eventServiceMock.Verify(

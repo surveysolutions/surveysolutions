@@ -27,16 +27,50 @@ namespace DataEntryClient.CompleteQuestionnaire
     using SynchronizationMessages.Handshake;
 
     /// <summary>
+    /// Wireless Sync Process
+    /// </summary>
+    public interface IWirelessSyncProcess : ISyncProcess
+    {
+        /// <summary>
+        /// The Import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="baseAdress">
+        /// The base adress.
+        /// </param>
+        /// <returns>
+        /// Error codes
+        /// </returns>
+        ErrorCodes Import(string syncProcessDescription, string baseAdress);
+
+        /// <summary>
+        /// The export
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="baseAdress">
+        /// The base adress.
+        /// </param>
+        /// <returns>
+        /// Error Codes
+        /// </returns>
+        ErrorCodes Export(string syncProcessDescription, string baseAdress);
+    }
+
+    /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
-    public class WirelessSyncProcess : AbstractSyncProcess
+    public class WirelessSyncProcess : AbstractSyncProcess, IWirelessSyncProcess
     {
         #region Constants and Fields
 
         /// <summary>
         /// The base adress.
         /// </summary>
-        private readonly string baseAdress;
+        private string baseAdress;
 
         /// <summary>
         /// The chanel factory wrapper.
@@ -56,19 +90,66 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <param name="syncProcess">
         /// Sync process key
         /// </param>
-        /// <param name="baseAdress">
-        /// The base adress.
-        /// </param>
-        public WirelessSyncProcess(IKernel kernel, Guid syncProcess, string baseAdress)
+        public WirelessSyncProcess(IKernel kernel, Guid syncProcess)
             : base(kernel, syncProcess)
         {
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
-            this.baseAdress = baseAdress;
         }
 
         #endregion
 
+        /// <summary>
+        /// The Import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <returns>
+        /// Error Codes
+        /// </returns>
+        [Obsolete("Import(string) is deprecated, please use Import(string, string) instead.", true)]
+        public ErrorCodes Import(string syncProcessDescription)
+        {
+            return ErrorCodes.Fail;
+        }
+
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The Import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="baseAdress">
+        /// The base adress.
+        /// </param>
+        /// <returns>
+        /// Error codes
+        /// </returns>
+        public ErrorCodes Import(string syncProcessDescription, string baseAdress)
+        {
+            this.baseAdress = baseAdress;
+            return base.Import(syncProcessDescription);
+        }
+
+        /// <summary>
+        /// The export
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="baseAdress">
+        /// The base adress.
+        /// </param>
+        /// <returns>
+        /// Error Codes
+        /// </returns>
+        public ErrorCodes Export(string syncProcessDescription, string baseAdress)
+        {
+            this.baseAdress = baseAdress;
+            return base.Export(syncProcessDescription);
+        }
 
         /// <summary>
         /// The get last sync event guid.
