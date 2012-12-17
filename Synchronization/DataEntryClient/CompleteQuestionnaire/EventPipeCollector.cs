@@ -28,6 +28,11 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </summary>
         private readonly List<AggregateRootEvent> list;
 
+        /// <summary>
+        /// Chunked list of event streams
+        /// </summary>
+        private readonly List<IEnumerable<AggregateRootEvent>> chunkList;
+
         #endregion
 
         #region Constructors and Destructors
@@ -38,6 +43,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         public EventPipeCollector()
         {
             this.list = new List<AggregateRootEvent>();
+            this.chunkList = new List<IEnumerable<AggregateRootEvent>>();
         }
 
         #endregion
@@ -57,6 +63,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         {
             try
             {
+                this.chunkList.Add(request.Command);
                 this.list.AddRange(request.Command);
                 return ErrorCodes.None;
             }
@@ -77,6 +84,17 @@ namespace DataEntryClient.CompleteQuestionnaire
         public IEnumerable<AggregateRootEvent> GetEventList()
         {
             return this.list;
+        }
+
+        /// <summary>
+        /// Gets chunked list of events
+        /// </summary>
+        /// <returns>
+        /// Return chunked list of events
+        /// </returns>
+        public IEnumerable<IEnumerable<AggregateRootEvent>> GetChunkedList()
+        {
+            return this.chunkList;
         }
     }
 }

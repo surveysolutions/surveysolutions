@@ -12,9 +12,13 @@ namespace Web.Supervisor.WCF
     using System;
     using System.ServiceModel.Activation;
 
+    using DataEntryClient.CompleteQuestionnaire;
+
     using Main.Core.Events;
 
     using Ninject;
+
+    using Questionnaire.Core.Web.Helpers;
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
@@ -31,6 +35,12 @@ namespace Web.Supervisor.WCF
         /// </summary>
         private readonly IKernel kernel;
 
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
+
         #endregion
 
         #region Constructors and Destructors
@@ -41,9 +51,13 @@ namespace Web.Supervisor.WCF
         /// <param name="kernel">
         /// The kernel.
         /// </param>
-        public EventPipeService(IKernel kernel)
+        /// <param name="syncProcessFactory">
+        /// The syncs process factory
+        /// </param>
+        public EventPipeService(IKernel kernel, ISyncProcessFactory syncProcessFactory)
         {
             this.kernel = kernel;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -61,14 +75,16 @@ namespace Web.Supervisor.WCF
         /// </returns>
         public ErrorCodes Process(EventSyncMessage request)
         {
+            Guid syncProcess = Guid.NewGuid();
             try
             {
-                // kernel.Get<ICommandInvoker>().Execute(request.Command, request.CommandKey, request.SynchronizationKey);
-                var eventStore = this.kernel.Get<IEventSync>();
-                eventStore.WriteEvents(request.Command);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, request.SynchronizationKey);
+
+                process.Import("WCF syncronization", request.Command);
+
                 return ErrorCodes.None;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return ErrorCodes.Fail;
             }

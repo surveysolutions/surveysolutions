@@ -51,10 +51,16 @@ namespace Main.Core.Domain
         /// <param name="synckType">
         /// The synck type.
         /// </param>
-        public SyncProcessAR(Guid publicKey, SynchronizationType synckType)
+        public SyncProcessAR(Guid publicKey, Guid? parentProcessKey, SynchronizationType synckType, string description)
             : base(publicKey)
         {
-            this.ApplyEvent(new NewSynchronizationProcessCreated { ProcessGuid = publicKey, SynckType = synckType });
+            this.ApplyEvent(new NewSynchronizationProcessCreated
+                {
+                    ProcessGuid = publicKey,
+                    ParentProcessKey = parentProcessKey,
+                    SynckType = synckType, 
+                    Description = description
+                });
         }
 
         #endregion
@@ -100,17 +106,25 @@ namespace Main.Core.Domain
         /// <param name="status">
         /// The status.
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         /// <exception cref="InvalidOperationException">
         /// Raises InvalidOperationException.
         /// </exception>
-        public void EndProcess(EventState status)
+        public void EndProcess(EventState status, string description)
         {
             if (this.innerDocument.EndDate.HasValue)
             {
                 throw new InvalidOperationException("process is already finished");
             }
 
-            this.ApplyEvent(new ProcessEnded { ProcessKey = this.innerDocument.PublicKey, Status = status });
+            this.ApplyEvent(new ProcessEnded
+                {
+                    ProcessKey = this.innerDocument.PublicKey, 
+                    Status = status,
+                    Description = description
+                });
         }
 
         /// <summary>
@@ -205,7 +219,11 @@ namespace Main.Core.Domain
         {
             this.innerDocument = new SyncProcessDocument
                 {
-                   PublicKey = e.ProcessGuid, StartDate = DateTime.UtcNow, Handled = EventState.Initial 
+                   PublicKey = e.ProcessGuid, 
+                   ParentProcessKey = e.ParentProcessKey,
+                   StartDate = DateTime.UtcNow, 
+                   Handled = EventState.Initial,
+                   Description = e.Description
                 };
         }
 
@@ -219,6 +237,7 @@ namespace Main.Core.Domain
         {
             this.innerDocument.EndDate = DateTime.UtcNow;
             this.innerDocument.Handled = e.Status;
+            this.innerDocument.ExitDescription = e.Description;
         }
 
         /// <summary>

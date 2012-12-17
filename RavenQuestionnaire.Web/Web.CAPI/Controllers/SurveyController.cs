@@ -7,9 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
-using Main.Core.View.Answer;
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
 
 namespace Web.CAPI.Controllers
 {
@@ -26,9 +23,10 @@ namespace Web.CAPI.Controllers
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
+    using Main.Core.View.Answer;
     using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
-    using Main.Core.View.Group;
     using Main.Core.View.Question;
 
     using Ncqrs;

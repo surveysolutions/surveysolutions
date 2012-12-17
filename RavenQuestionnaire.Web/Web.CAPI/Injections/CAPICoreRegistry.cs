@@ -15,6 +15,9 @@ namespace Web.CAPI.Injections
 
     using Core.CAPI.Synchronization;
 using Core.CAPI.Views;
+
+    using DataEntryClient.CompleteQuestionnaire;
+
     using Main.Core;
     using Main.Core.Events;
 using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
@@ -55,7 +58,7 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
         {
             return
                 base.GetAssweblysForRegister().Concat(
-                    new[] { typeof(ClientEventSync).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
+                    new[] { typeof(ClientEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
         }
 
         /// <summary>
@@ -68,8 +71,10 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
             this.Unbind<IScreenViewSupplier>();
             this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
 
-            this.Unbind<IEventSync>();
-            this.Bind<IEventSync>().To<ClientEventSync>();
+            this.Unbind<IEventStreamReader>();
+            this.Bind<IEventStreamReader>().To<ClientEventStreamReader>();
+
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
 
         #endregion

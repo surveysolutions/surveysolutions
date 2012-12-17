@@ -29,9 +29,19 @@ namespace Main.Core.Events.Synchronization
         public Guid ProcessGuid { get; set; }
 
         /// <summary>
+        /// Gets or sets ParentProcessKey.
+        /// </summary>
+        public Guid? ParentProcessKey { get; set; }
+
+        /// <summary>
         /// Gets or sets the synck type.
         /// </summary>
         public SynchronizationType SynckType { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }

@@ -20,7 +20,7 @@ namespace Main.Core.Events
     /// <summary>
     /// For load Snapshoots
     /// </summary>
-    public abstract class AbstractSnapshotableEventSync:AbstractEventSync
+    public abstract class AbstractSnapshotableEventStreamReader:AbstractEventStreamReader
     {
 
         #region Fields
@@ -40,12 +40,12 @@ namespace Main.Core.Events
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractSnapshotableEventSync"/> class.
+        /// Initializes a new instance of the <see cref="AbstractSnapshotableEventStreamReader"/> class.
         /// </summary>
         /// <exception cref="Exception">
         /// exception not found eventstore
         /// </exception>
-        protected AbstractSnapshotableEventSync()
+        protected AbstractSnapshotableEventStreamReader()
         {
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (this.myEventStore == null)

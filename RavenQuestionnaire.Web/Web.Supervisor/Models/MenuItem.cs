@@ -47,6 +47,11 @@ namespace Web.Supervisor.Models
         /// <summary>
         /// The devices
         /// </summary>
-        Devices = 7
+        Devices = 7,
+
+        /// <summary>
+        /// The SyncLog
+        /// </summary>
+        SyncLog = 8
     }
 }
