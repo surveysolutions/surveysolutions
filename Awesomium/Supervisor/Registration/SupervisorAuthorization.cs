@@ -45,21 +45,22 @@ namespace Browsing.Supervisor.Registration
             if (this.authorizationClient == null) // postponed to instantiate to make sure about correct AuthServiceUrl
                 this.authorizationClient = new AuthorizationServiceClient(this.urlUtils.GetAuthServiceUrl());
 
-            AuthPackets packets = this.authorizationClient.GetAuthorizationPackets();
+            AuthPackets packets = this.authorizationClient.PickupAuthorizationPackets(Guid.Empty);
 
-            var newList = new List<IAuthorizationPacket>();
+            var nonauthorizedPacketsList = new List<IAuthorizationPacket>();
 
             foreach (var p in packets.Packets)
             {
                 var pkt = p as IAuthorizationPacket;
-                if(pkt == null)
+                if (pkt == null || pkt.IsAuthorized)
                     continue;
 
+                // fix channel
                 pkt.SetChannel(ServicePacketChannel.Net);
-                newList.Add(pkt);
+                nonauthorizedPacketsList.Add(pkt);
             }
 
-            return availablePackets.Union(newList, this).Where(p => !p.IsAuthorized).ToList();
+            return nonauthorizedPacketsList.Union(availablePackets, this).ToList();
         }
 
         #endregion

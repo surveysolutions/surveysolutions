@@ -59,8 +59,6 @@ namespace Browsing.Supervisor.Containers
             }
         }
 
-        private IUrlUtils urlUtils;
-        private IRequestProcessor requestProcessor;
         private readonly static string RegisterButtonText = "Authorize";
         private bool isReadingAuthorizationList = false;
         private IList<IAuthorizationPacket> requestPackets = new List<IAuthorizationPacket>();
@@ -72,14 +70,11 @@ namespace Browsing.Supervisor.Containers
 
             SetUsbStatusText("CAPI device authorization status");
 
-            this.urlUtils = urlUtils;
-            this.requestProcessor = requestProcessor;
-
             AuthorizationList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
             AuthorizationList.MultiSelect = true;
             AuthorizationList.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(AuthorizationList_ItemSelectionChanged);
 
-            RegistrationManager.NewPacketsAvailable += new NewPacketsAvailableHandler(RegistrationManager_NewPacketsAvailable);
+            RegistrationManager.PacketsAvailable += new NewPacketsAvailableHandler(RegistrationManager_PacketsAvailable);
         }
 
         void AuthorizationList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -88,11 +83,11 @@ namespace Browsing.Supervisor.Containers
             item.UpdateSelection();
         }
 
-        void RegistrationManager_NewPacketsAvailable(object sender, IList<IAuthorizationPacket> packets)
+        void RegistrationManager_PacketsAvailable(object sender, IList<IAuthorizationPacket> packets)
         {
             lock (this.requestPackets)
             {
-                this.requestPackets = this.requestPackets.Union(packets).ToList();
+                this.requestPackets = packets;
             }
 
             UpdateAuthorizationList();
@@ -154,14 +149,10 @@ namespace Browsing.Supervisor.Containers
 
                 try
                 {
-                    var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
-                    var devices = this.requestProcessor.Process<string>(url, "False");
+                    var data = RegistrationManager.GetAuthorizedIds();
 
-                    if (string.Compare(devices, "False", true) != 0)
-                    {
-                        var content = RegistrationManager.DeserializeContent<List<RegisterData>>(devices);
-                        UpdateListView(content);
-                    }
+                    if (data != null)
+                        UpdateListView(data);
                 }
                 catch
                 {

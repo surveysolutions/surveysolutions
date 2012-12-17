@@ -18,7 +18,7 @@ namespace Synchronization.Core.Interface
     /// </summary>
     public interface IAuthorizationServiceWatcher
     {
-        event AuthorizationPacketsAlarm NewPacketsAvailable;
+        event AuthorizationPacketsAlarm PacketsCollected;
 
         /// <summary>
         /// Collects packets available on web-part and unites them with additional packets passed through parameter

@@ -35,24 +35,26 @@ namespace Synchronization.Core.Registration
 
         #region IAuthorizationServiceWatcher members
 
-        public event AuthorizationPacketsAlarm NewPacketsAvailable;
+        public event AuthorizationPacketsAlarm PacketsCollected;
 
-        public void CollectAuthorizationPackets(IList<IAuthorizationPacket> extraPackets)
+        public void CollectAuthorizationPackets(IList<IAuthorizationPacket> extraUsbPackets)
         {
-            System.Diagnostics.Debug.Assert(extraPackets != null);
+            System.Diagnostics.Debug.Assert(extraUsbPackets != null);
 
             try
             {
                 lock (this)
                 {
-                    var oldCount = this.requests.Count;
+                    //var oldCount = this.requests.Count;
 
-                    this.requests = OnCollectAuthorizationPackets(this.requests.Union(extraPackets, this).ToList());
+                    this.requests.Clear();
 
-                    this.requests = requests.Distinct(this).ToList();
+                    var allPackets = OnCollectAuthorizationPackets(extraUsbPackets).ToList();
 
-                    if (this.requests.Count > oldCount && NewPacketsAvailable != null)
-                        NewPacketsAvailable(this.requests);
+                    this.requests = allPackets.ToList();
+
+                    if (this.requests.Count > 0/*oldCount*/ && PacketsCollected != null)
+                        PacketsCollected(this.requests);
                 }
             }
             catch
@@ -64,7 +66,7 @@ namespace Synchronization.Core.Registration
 
         #region Properties
 
-        public IList<IAuthorizationPacket> ServicePackets { get { return this.requests; } }
+        public IList<IAuthorizationPacket> ServicePackets { get { lock (this) { return this.requests.ToList(); } } }
 
         #endregion
 
@@ -92,7 +94,7 @@ namespace Synchronization.Core.Registration
 
         #region Operations
 
-        internal void Clean(ServicePacketChannel channelType)
+        internal void CleanChannelPackets(ServicePacketChannel channelType)
         {
             lock (this)
             {

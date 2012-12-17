@@ -62,7 +62,7 @@ namespace Browsing.Supervisor.Registration
 
         #endregion
 
-        protected override void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
+        protected override void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets)
         {
             // uncomment to have automatic registration
             // DoRegistration(true);

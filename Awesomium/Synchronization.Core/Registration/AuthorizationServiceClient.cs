@@ -214,8 +214,8 @@ namespace Synchronization.Core.Registration
         [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IAuthorizationService/AuthorizeDevice", ReplyAction = "http://tempuri.org/IAuthorizationService/AuthorizeDeviceResponse")]
         bool AuthorizeDevice(AuthorizationPacket authorizationPacket);
 
-        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IAuthorizationService/GetAuthorizationPackets", ReplyAction = "http://tempuri.org/IAuthorizationService/GetAuthorizationPacketsResponse")]
-        AuthPackets GetAuthorizationPackets();
+        [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IAuthorizationService/PickupAuthorizationPackets", ReplyAction = "http://tempuri.org/IAuthorizationService/PickupAuthorizationPacketsResponse")]
+        AuthPackets PickupAuthorizationPackets(System.Guid authorizedRegistrationId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -267,9 +267,9 @@ namespace Synchronization.Core.Registration
             return base.Channel.AuthorizeDevice(authorizationPacket);
         }
 
-        public AuthPackets GetAuthorizationPackets()
+        public AuthPackets PickupAuthorizationPackets(System.Guid authorizedRegistrationId)
         {
-            return base.Channel.GetAuthorizationPackets();
+            return base.Channel.PickupAuthorizationPackets(authorizedRegistrationId);
         }
     }
 }
