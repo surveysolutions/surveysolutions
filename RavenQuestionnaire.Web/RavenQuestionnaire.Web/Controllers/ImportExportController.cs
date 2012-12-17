@@ -31,10 +31,19 @@ namespace RavenQuestionnaire.Web.Controllers
         #region Constructors and Destructors
 
         /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="ImportExportController"/> class.
         /// </summary>
-        public ImportExportController()
+        /// <param name="syncProcessFactory">
+        /// The sync Process Factory.
+        /// </param>
+        public ImportExportController(ISyncProcessFactory syncProcessFactory)
         {
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -57,7 +66,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         try
                         {
-                            var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                             this.AsyncManager.Parameters["result"] = process.Export("Export DB on HQ in zip file");
                         }
@@ -102,9 +111,9 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         try
                         {
-                            var process = new TemplateExportSyncProcess(KernelLocator.Kernel, syncProcess, id, clientGuid);
+                            var process = (ITemplateExportSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Template, syncProcess, null);
 
-                            this.AsyncManager.Parameters["result"] = process.Export("Export questionnaire template in zip file");
+                            this.AsyncManager.Parameters["result"] = process.Export("Export questionnaire template in zip file", id, clientGuid);
                         }
                         catch
                         {
@@ -167,7 +176,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     {
                         try
                         {
-                            var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
                             process.Import(zipData, "Usb syncronization");
                         }
                         catch (Exception e)

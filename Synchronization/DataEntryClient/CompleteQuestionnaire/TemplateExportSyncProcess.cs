@@ -21,10 +21,30 @@ namespace DataEntryClient.CompleteQuestionnaire
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
+    public interface ITemplateExportSyncProcess : ISyncProcess
+    {
+        /// <summary>
+        /// The export
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="templateGuid">
+        /// The template guid.
+        /// </param>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
+        /// <returns>
+        /// Zip file as byte array
+        /// </returns>
+        byte[] Export(string syncProcessDescription, Guid? templateGuid, Guid? clientGuid);
+    }
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class TemplateExportSyncProcess : UsbSyncProcess
+    public class TemplateExportSyncProcess : UsbSyncProcess, ITemplateExportSyncProcess
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateExportSyncProcess"/> class.
@@ -35,17 +55,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <param name="syncProcess">
         /// The sync process.
         /// </param>
-        /// <param name="templateGuid">
-        /// The template Guid.
-        /// </param>
-        /// <param name="clientGuid">
-        /// The client Guid.
-        /// </param>
-        public TemplateExportSyncProcess(IKernel kernel, Guid syncProcess, Guid? templateGuid, Guid? clientGuid)
+        public TemplateExportSyncProcess(IKernel kernel, Guid syncProcess)
             : base(kernel, syncProcess)
         {
-            this.TemplateGuid = templateGuid;
-            this.ClientGuid = clientGuid;
         }
 
         /// <summary>
@@ -57,6 +69,34 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// Gets or sets ClientGuid.
         /// </summary>
         public Guid? ClientGuid { get; set; }
+
+        [Obsolete("Export(string) is deprecated, please use Export(string, Guid?, Guid?) instead.", true)]
+        public new byte[] Export(string syncProcessDescription)
+        {
+            return new byte[] { };
+        }
+
+        /// <summary>
+        /// The export
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="templateGuid">
+        /// The template guid.
+        /// </param>
+        /// <param name="clientGuid">
+        /// The client guid.
+        /// </param>
+        /// <returns>
+        /// Zip file as byte array
+        /// </returns>
+        public byte[] Export(string syncProcessDescription, Guid? templateGuid, Guid? clientGuid)
+        {
+            this.TemplateGuid = templateGuid;
+            this.ClientGuid = clientGuid;
+            return base.Export(syncProcessDescription);
+        }
 
         /// <summary>
         /// Process list of events

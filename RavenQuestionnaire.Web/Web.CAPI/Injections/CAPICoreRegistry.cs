@@ -15,6 +15,9 @@ namespace Web.CAPI.Injections
 
     using Core.CAPI.Synchronization;
 using Core.CAPI.Views;
+
+    using DataEntryClient.CompleteQuestionnaire;
+
     using Main.Core;
     using Main.Core.Events;
 using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
@@ -70,6 +73,8 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
 
             this.Unbind<IEventStreamReader>();
             this.Bind<IEventStreamReader>().To<ClientEventStreamReader>();
+
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
 
         #endregion

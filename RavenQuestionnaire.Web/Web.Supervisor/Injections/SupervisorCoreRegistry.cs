@@ -15,6 +15,7 @@ namespace Web.Supervisor.Injections
 
     using Core.Supervisor.Synchronization;
 
+    using DataEntryClient.CompleteQuestionnaire;
     using DataEntryClient.SycProcess;
 
     using Main.Core;
@@ -80,6 +81,7 @@ namespace Web.Supervisor.Injections
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
 
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
 
         #endregion

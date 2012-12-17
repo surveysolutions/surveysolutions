@@ -14,6 +14,8 @@ namespace RavenQuestionnaire.Web.Tests
     using System.Collections.Generic;
     using System.Web.Mvc;
 
+    using DataEntryClient.CompleteQuestionnaire;
+
     using global::Core.CAPI.Views.ExporStatistics;
 
     using Main.Core.Events;
@@ -59,6 +61,11 @@ namespace RavenQuestionnaire.Web.Tests
         /// </summary>
         public Mock<IViewRepository> ViewRepository { get; set; }
 
+        /// <summary>
+        /// Gets or sets SyncProcessFactoryMock.
+        /// </summary>
+        public Mock<ISyncProcessFactory> SyncProcessFactoryMock { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -72,6 +79,7 @@ namespace RavenQuestionnaire.Web.Tests
             this.GlobalProvider = new Mock<IGlobalInfoProvider>();
             this.Synchronizer = new Mock<IEventStreamReader>();
             this.ViewRepository = new Mock<IViewRepository>();
+            this.SyncProcessFactoryMock = new Mock<ISyncProcessFactory>();
         }
 
         /// <summary>
@@ -97,7 +105,7 @@ namespace RavenQuestionnaire.Web.Tests
 
             this.ViewRepository.SetReturnsDefault(new ExportStatisticsView(new List<CompleteQuestionnaireBrowseItem>()));
 
-            this.Controller = new SynchronizationsController(this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object);
+            this.Controller = new SynchronizationsController(this.ViewRepository.Object, this.GlobalProvider.Object, this.Synchronizer.Object, this.SyncProcessFactoryMock.Object);
             this.Controller.PushStatistics();
 
             this.ViewRepository.Verify(x => x.Load<ExporStatisticsInputModel, ExportStatisticsView>(It.Is<ExporStatisticsInputModel>(m => m.Keys.Count==2 && m.Keys[0]==guid1 && m.Keys[1] == guid2)));

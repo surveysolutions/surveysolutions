@@ -10,9 +10,12 @@
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
+    using System.IO;
     using System.Threading;
     using System.Web;
     using System.Web.Mvc;
+
+    using DataEntryClient.CompleteQuestionnaire;
 
     using Main.Core.Export;
     using Main.Core.View;
@@ -41,6 +44,11 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         /// </summary>
         public Mock<IDataExport> DataExportMock { get; set; }
 
+        /// <summary>
+        /// Gets or sets SyncProcessFactoryMock.
+        /// </summary>
+        public Mock<ISyncProcessFactory> SyncProcessFactoryMock { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
@@ -52,7 +60,17 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void CreateObjects()
         {
             this.DataExportMock = new Mock<IDataExport>();
-            this.Controller = new ImportExportController(this.DataExportMock.Object, (new Mock<IViewRepository>()).Object);
+            this.SyncProcessFactoryMock = new Mock<ISyncProcessFactory>();
+            var syncProcessMock = new Mock<IUsbSyncProcess>();
+
+            this.SyncProcessFactoryMock.Setup(
+                f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
+                    syncProcessMock.Object);
+
+            this.Controller = new ImportExportController(
+                this.DataExportMock.Object,
+                (new Mock<IViewRepository>()).Object,
+                this.SyncProcessFactoryMock.Object);
         }
 
         /// <summary>
@@ -85,6 +103,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             context.Setup(ctx => ctx.Request).Returns(request.Object);
             request.Setup(req => req.Files.Count).Returns(1);
             request.Setup(req => req.Files[0]).Returns(postedfile.Object);
+            postedfile.Setup(f => f.InputStream).Returns(new MemoryStream(new byte[8192])).Verifiable();
             postedfile.Setup(f => f.ContentLength).Returns(8192).Verifiable();
             postedfile.Setup(f => f.ContentType).Returns("application/zip").Verifiable();
             postedfile.Setup(f => f.FileName).Returns("event.zip").Verifiable();

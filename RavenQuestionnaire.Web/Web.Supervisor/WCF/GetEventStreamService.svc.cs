@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="GetEventStreamService.svc.cs" company="The World Bank">
-//   
+//   Get Event Stream Service
 // </copyright>
 // <summary>
 //   The get event stream service.
@@ -10,7 +10,6 @@
 namespace Web.Supervisor.WCF
 {
     using System;
-    using System.Linq;
 
     using DataEntryClient.CompleteQuestionnaire;
 
@@ -34,6 +33,11 @@ namespace Web.Supervisor.WCF
         /// </summary>
         private readonly IEventStreamReader eventStore;
 
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -44,9 +48,13 @@ namespace Web.Supervisor.WCF
         /// <param name="eventStore">
         /// The event store.
         /// </param>
-        public GetEventStreamService(IEventStreamReader eventStore)
+        /// <param name="syncProcessFactory">
+        /// The sync Process Factory.
+        /// </param>
+        public GetEventStreamService(IEventStreamReader eventStore, ISyncProcessFactory syncProcessFactory)
         {
             this.eventStore = eventStore;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -70,7 +78,7 @@ namespace Web.Supervisor.WCF
             Guid syncProcess = Guid.NewGuid();
             try
             {
-                var process = new EventSyncProcess(KernelLocator.Kernel, syncProcess);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 return process.Export("Supervisor export AR events", firstEventPulicKey, length);
             }

@@ -21,11 +21,8 @@ namespace Web.CAPI.Controllers
 
     using DataEntryClient.CompleteQuestionnaire;
 
-    using Ionic.Zip;
-
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View;
     using Main.Core.View.SyncProcess;
@@ -64,6 +61,11 @@ namespace Web.CAPI.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -80,14 +82,19 @@ namespace Web.CAPI.Controllers
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
+        /// <param name="syncProcessFactory">
+        /// The syncs process factory
+        /// </param>
         public SynchronizationsController(
             IViewRepository viewRepository,
             IGlobalInfoProvider globalProvider,
-            IEventStreamReader synchronizer)
+            IEventStreamReader synchronizer,
+            ISyncProcessFactory syncProcessFactory)
         {
             this.viewRepository = viewRepository;
             this._globalProvider = globalProvider;
             this.synchronizer = synchronizer;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -186,7 +193,7 @@ namespace Web.CAPI.Controllers
                     byte[] file;
                     try
                     {
-                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                         file = process.Export("Export DB on CAPI in zip file");
                     }
@@ -327,9 +334,10 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
 
-                        process.Import("Network syncronization");
+                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
+
+                        process.Import("Network syncronization", url);
                     }
                     catch (Exception e)
                     {
@@ -366,7 +374,7 @@ namespace Web.CAPI.Controllers
             {
                 try
                 {
-                    var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
                     process.Import(zipData, "Usb syncronization");
                 }
                 catch (Exception e)
@@ -402,9 +410,9 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
+                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
 
-                        process.Export("Network export on CAPI");
+                        process.Export("Network export on CAPI", url);
                     }
                     catch (Exception e)
                     {

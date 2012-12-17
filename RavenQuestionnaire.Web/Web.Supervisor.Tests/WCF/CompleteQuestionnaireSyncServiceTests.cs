@@ -9,7 +9,10 @@
 
 namespace RavenQuestionnaire.Web.Tests.WCF
 {
+    using System;
     using System.Collections.Generic;
+
+    using DataEntryClient.CompleteQuestionnaire;
 
     using Main.Core.Events;
 
@@ -40,14 +43,17 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             IKernel kernel = new StandardKernel();
             var eventSync = new Mock<IEventStreamReader>();
             kernel.Bind<IEventStreamReader>().ToConstant(eventSync.Object);
-            var target = new EventPipeService(kernel);
+            var factory = new Mock<ISyncProcessFactory>();
+            factory.Setup(f => f.GetProcess(SyncProcessType.Event, Guid.NewGuid(), null));
+            var target = new EventPipeService(kernel, factory.Object);
 
+            // TODO: insert some assertion here
             for (int i = 0; i < 10; i++)
             {
                 ErrorCodes result = target.Process(new EventSyncMessage());
                 Assert.AreEqual(result, ErrorCodes.None);
             }
-            // TODO: insert some assertion here
+            
             //eventSync.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(10));
         }
 

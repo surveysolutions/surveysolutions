@@ -35,6 +35,12 @@ namespace Web.Supervisor.WCF
         /// </summary>
         private readonly IKernel kernel;
 
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
+
         #endregion
 
         #region Constructors and Destructors
@@ -45,9 +51,13 @@ namespace Web.Supervisor.WCF
         /// <param name="kernel">
         /// The kernel.
         /// </param>
-        public EventPipeService(IKernel kernel)
+        /// <param name="syncProcessFactory">
+        /// The syncs process factory
+        /// </param>
+        public EventPipeService(IKernel kernel, ISyncProcessFactory syncProcessFactory)
         {
             this.kernel = kernel;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -68,13 +78,13 @@ namespace Web.Supervisor.WCF
             Guid syncProcess = Guid.NewGuid();
             try
             {
-                var process = new EventSyncProcess(KernelLocator.Kernel, syncProcess, request.SynchronizationKey);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, request.SynchronizationKey);
 
                 process.Import("WCF syncronization", request.Command);
 
                 return ErrorCodes.None;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return ErrorCodes.Fail;
             }

@@ -13,6 +13,8 @@ namespace RavenQuestionnaire.Web.Injections
     using System.Linq;
     using System.Reflection;
 
+    using DataEntryClient.CompleteQuestionnaire;
+
     using global::Core.HQ.Synchronization;
 
     using DataEntryClient.SycProcess;
@@ -80,6 +82,7 @@ namespace RavenQuestionnaire.Web.Injections
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
 
         #endregion

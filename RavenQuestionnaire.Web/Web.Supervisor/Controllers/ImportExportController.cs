@@ -48,6 +48,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
         #endregion
 
         #region Constructors and Destructors
@@ -61,10 +66,14 @@ namespace Web.Supervisor.Controllers
         /// <param name="viewRepository">
         /// The view repository
         /// </param>
-        public ImportExportController(IDataExport exporter, IViewRepository viewRepository)
+        /// <param name="syncProcessFactory">
+        /// The sync Process Factory.
+        /// </param>
+        public ImportExportController(IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -98,7 +107,7 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                         this.AsyncManager.Parameters["result"] = process.Export("Export DB on Supervisor in zip file");
                     }
@@ -153,7 +162,7 @@ namespace Web.Supervisor.Controllers
         {
             var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
 
-            if (zipData.Count == 0)
+            if (zipData == null || zipData.Count == 0)
             {
                 return null;
             }
@@ -164,7 +173,7 @@ namespace Web.Supervisor.Controllers
             {
                 try
                 {
-                    var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                     process.Import(zipData, "Usb syncronization");
                 }

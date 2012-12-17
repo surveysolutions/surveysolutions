@@ -25,10 +25,40 @@ namespace DataEntryClient.CompleteQuestionnaire
 
     using Questionnaire.Core.Web.Export;
 
+    using SynchronizationMessages.CompleteQuestionnaire;
+
+    public interface IUsbSyncProcess : ISyncProcess
+    {
+        /// <summary>
+        /// Export events
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync Process Description.
+        /// </param>
+        /// <returns>
+        /// Zip file with events
+        /// </returns>
+        byte[] Export(string syncProcessDescription);
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="fileData">
+        /// The file Data.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Some exception
+        /// </exception>
+        void Import(List<string> fileData, string description);
+    }
+
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
-    public class UsbSyncProcess : AbstractSyncProcess
+    public class UsbSyncProcess : AbstractSyncProcess, IUsbSyncProcess
     {
         #region Constants and Fields
 
@@ -87,8 +117,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// The sync process description.
         /// </param>
         [Obsolete("Import(string) is deprecated, please use Import(ZipFile, string) instead.", true)]
-        public new void Import(string syncProcessDescription)
+        public new ErrorCodes Import(string syncProcessDescription)
         {
+            return ErrorCodes.Fail;
         }
 
         /// <summary>
