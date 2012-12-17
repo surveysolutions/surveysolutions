@@ -19,7 +19,8 @@ namespace Synchronization.Core.Registration
     {
         #region Members
 
-        private IList<IAuthorizationPacket> requests = new List<IAuthorizationPacket>();
+        private IList<IAuthorizationPacket> accumulatedPackets = new List<IAuthorizationPacket>();
+        private IList<IAuthorizationPacket> newPackets = new List<IAuthorizationPacket>();
 
         #endregion
 
@@ -39,22 +40,21 @@ namespace Synchronization.Core.Registration
 
         public void CollectAuthorizationPackets(IList<IAuthorizationPacket> extraUsbPackets)
         {
-            System.Diagnostics.Debug.Assert(extraUsbPackets != null);
-
             try
             {
                 lock (this)
                 {
-                    //var oldCount = this.requests.Count;
+                    var allAvailablePackets = OnCollectAuthorizationPackets(extraUsbPackets ?? new List<IAuthorizationPacket>()).ToList();
+                    if (allAvailablePackets.Count == 0)
+                        return;
 
-                    this.requests.Clear();
+                    this.accumulatedPackets = this.accumulatedPackets.Union(allAvailablePackets, this).ToList();
 
-                    var allPackets = OnCollectAuthorizationPackets(extraUsbPackets).ToList();
+                    var oldCount = this.newPackets.Where(p => !p.IsTreated).ToList().Count;
+                    this.newPackets = this.accumulatedPackets.Where(p => !p.IsTreated).ToList();
 
-                    this.requests = allPackets.ToList();
-
-                    if (this.requests.Count > 0/*oldCount*/ && PacketsCollected != null)
-                        PacketsCollected(this.requests);
+                    if (this.newPackets.Count > oldCount && PacketsCollected != null)
+                        PacketsCollected(this.newPackets);
                 }
             }
             catch
@@ -66,7 +66,7 @@ namespace Synchronization.Core.Registration
 
         #region Properties
 
-        public IList<IAuthorizationPacket> ServicePackets { get { lock (this) { return this.requests.ToList(); } } }
+        public IList<IAuthorizationPacket> NewServicePackets { get { lock (this) { return this.newPackets; } } }
 
         #endregion
 
@@ -82,7 +82,7 @@ namespace Synchronization.Core.Registration
 
             System.Diagnostics.Debug.Assert(x.Data != null && y.Data != null);
 
-            return x.Data.RegistrationId == y.Data.RegistrationId && x.IsAuthorized == y.IsAuthorized;
+            return x.Data.RegistrationId == y.Data.RegistrationId && x.Data.RegisterDate == y.Data.RegisterDate;
         }
 
         public int GetHashCode(IAuthorizationPacket x)
@@ -98,7 +98,7 @@ namespace Synchronization.Core.Registration
         {
             lock (this)
             {
-                this.requests = this.requests.Where(p => p.Channel != channelType).ToList();
+                this.accumulatedPackets = this.accumulatedPackets.Where(p => p.Channel != channelType).ToList();
             }
         }
 

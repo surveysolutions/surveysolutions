@@ -53,7 +53,7 @@ namespace Browsing.CAPI.Containers
             _firstStepRegisteredMessageNET = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step via net.\nPlease, wait to accept authorization.";
             //_firstStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
             _zeroStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' should be authorized by your supervisor.\nPlease, press " + Register1ButtonText + " button to send authorization request.";
-            _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' has been authorized by '{0}'.\nIf necessary you may repeat registration process.";
+            _secondStepRegisteredMessage = "This CAPI device \'" + Environment.MachineName + "\' authorized {0} by '{1}'.\nYou may repeat registration process.";
 
             InitializeComponent();
 
@@ -63,7 +63,11 @@ namespace Browsing.CAPI.Containers
         private string ZeroStepRegisteredMessage { get { return _zeroStepRegisteredMessage; } }
         private string FirstStepRegisteredMessageUSB { get { return _firstStepRegisteredMessageUSB; } }
         private string FirstStepRegisteredMessageNET { get { return _firstStepRegisteredMessageNET; } }
-        private string SecondStepRegisteredMessage { get { return string.Format(_secondStepRegisteredMessage, RegisteredSupervisor); } }
+        
+        private string FormatRegisteredMessage(IRegisterData data) 
+        {
+            return string.Format(_secondStepRegisteredMessage, data.RegisterDate, data.Description);
+        }
 
         #region Helpers
 
@@ -93,29 +97,31 @@ namespace Browsing.CAPI.Containers
         {
             var status = RegistrationStatus;
 
-            if (IsSupervisorsInfoSaved())
-                return SecondStepRegisteredMessage;
+            var lastReg = GetSavedSupervisor();
+            if (lastReg != null)
+                return FormatRegisteredMessage(lastReg);
 
             if (status == Phaze.PublicKeySharedUSB)
                 return FirstStepRegisteredMessageUSB;
             if (status == Phaze.PublicKeySharedNET)
                 return FirstStepRegisteredMessageNET;
-            else if (status == Phaze.Confirmed)
-                return SecondStepRegisteredMessage;
             else
                 return ZeroStepRegisteredMessage;
         }
 
-        private bool IsSupervisorsInfoSaved()
+        private RegisterData GetSavedSupervisor()
         {
             var data = RegistrationManager.GetAuthorizedIds();
             if (data == null)
-                return false;
+                return null;
 
             // todo: sort by registration date and get the latest
             var lastData = data.LastOrDefault();
 
-            return lastData != null && lastData.Registrator == RegistrationManager.RegistrationId;
+            if (lastData != null && lastData.Registrator == RegistrationManager.RegistrationId)
+                return lastData;
+
+            return null;
         }
 
         protected override void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)
@@ -140,9 +146,11 @@ namespace Browsing.CAPI.Containers
                 System.Diagnostics.Debug.Assert(!args.IsFirstPhase);
                 System.Diagnostics.Debug.Assert(args.Packets.Count == 1);
 
+                var packet = args.Packets.First();
+
                 RegistrationStatus = Phaze.Confirmed;
 
-                args.AppendResultMessage(string.Format(_secondStepRegisteredMessage, args.Packets.First().Data.Description));
+                args.AppendResultMessage(FormatRegisteredMessage(packet.Data));
             }
 
             base.OnSecondRegistrationPhaseAccomplished(args);

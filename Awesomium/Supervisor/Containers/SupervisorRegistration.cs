@@ -30,7 +30,7 @@ namespace Browsing.Supervisor.Containers
             }
 
             public AuthListViewItem(IRegisterData data)
-                : base(new string[] { DeviceDescriptionContent(data), data.RegisterDate.ToLocalTime().ToString() })
+                : base(new string[] { DeviceDescriptionContent(data), data.RegisterDate.ToLocalTime().ToString(), string.Empty })
             {
                 this.defaultForeColor = ForeColor;
                 this.defaultBackColor = BackColor;
@@ -41,6 +41,7 @@ namespace Browsing.Supervisor.Containers
             {
                 this.pastAuthorization = pastAuthorization;
                 Tag = packet;
+                Selected = packet.IsMarkedToAuthorize;
                 UpdateSelection();
             }
 
@@ -54,6 +55,8 @@ namespace Browsing.Supervisor.Containers
                 SubItems[1].Text = this.Selected ?
                     (this.pastAuthorization.HasValue ? "Marked to repeat authorization" : "Marked to authorize") :
                     (this.pastAuthorization.HasValue ? this.pastAuthorization.Value.ToLocalTime().ToString() : "Not yet ...");
+
+                SubItems[2].Text = packet.Channel.ToString();
 
                 packet.MarkToAuthorize(this.Selected);
             }
@@ -117,18 +120,18 @@ namespace Browsing.Supervisor.Containers
         {
             AuthorizationList.Items.Clear();
 
-            Dictionary<Guid, DateTime> registeredDevices = new Dictionary<Guid, DateTime>();
+            // fix actual registration date in according to old registration date for repeating reqistration
+            Dictionary<Guid, DateTime> alreadyRegisteredDevices = new Dictionary<Guid, DateTime>();
 
             foreach (var item in source)
             {
-                registeredDevices[item.RegistrationId] = item.RegisterDate;
-
+                alreadyRegisteredDevices[item.RegistrationId] = item.RegisterDate;
                 AuthorizationList.Items.Add(CreateListItem(item));
             }
 
             foreach (var packet in this.requestPackets)
             {
-                DateTime? pastAuthorization = registeredDevices.ContainsKey(packet.Data.RegistrationId) ? registeredDevices[packet.Data.RegistrationId] : (DateTime?)null;
+                DateTime? pastAuthorization = alreadyRegisteredDevices.ContainsKey(packet.Data.RegistrationId) ? alreadyRegisteredDevices[packet.Data.RegistrationId] : (DateTime?)null;
                 AuthorizationList.Items.Add(CreateListItem(packet, pastAuthorization));
             }
 
@@ -187,7 +190,7 @@ namespace Browsing.Supervisor.Containers
         {
             if (args.IsPassed)
             {
-                foreach(var packet in args.Packets)
+                foreach (var packet in args.Packets)
                     args.AppendResultMessage(string.Format("CAPI device {0} has been authorized", packet.Data.Description));
             }
 

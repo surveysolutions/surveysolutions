@@ -46,13 +46,16 @@ namespace Browsing.CAPI.Registration
             return Environment.MachineName;
         }
 
+        /// <summary>
+        /// Try to send packet via web firstly. If no luck then try to save it on usb
+        /// </summary>
+        /// <param name="packet"></param>
         protected override void OnStartRegistration(IAuthorizationPacket packet)
         {
-            // Try to send packet via web firstly. If no luck, try to save to usb
             try
             {
-                SendAuthorizationData(packet);
-                return;
+                if (SendAuthorizationData(packet))
+                    return;
             }
             catch
             {
@@ -74,19 +77,19 @@ namespace Browsing.CAPI.Registration
             System.Diagnostics.Debug.Assert(packet.PacketType == ServicePacketType.Responce);
 
             // exchange registrar and registrationId
-            var supervisorId = packet.Data.Registrator;
-            packet.SetRegistrator(packet.Data.RegistrationId);
-            packet.SetRegistrationId(supervisorId);
+            var regPacket = InstantiatePacket(packet.PacketType == ServicePacketType.Request, packet.Channel, packet.Data as RegisterData);
 
-            AuthorizeAcceptedData(packet);
+            regPacket.SetRegistrator(packet.Data.RegistrationId);
+            regPacket.SetRegistrationId(packet.Data.Registrator);
+
+            AuthorizeAcceptedData(regPacket);
         }
 
-        protected override void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets)
+        protected override void OnAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
         {
-            // check if it was already registered
-
-            // process automatically
-            DoRegistration(false);
+            // process automatically only if net channel authorization came
+            if(packets.Where(p => p.Channel == ServicePacketChannel.Net).Count() > 0)
+                DoRegistration(false);
         }
 
         protected override IList<IAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)
@@ -105,15 +108,20 @@ namespace Browsing.CAPI.Registration
         {
             if (firstPhase) // create authorization request
             {
+                // the origin packet in registration scenario is instantiated to be proceeded via net by default
                 webServicePackets = new List<IAuthorizationPacket>() { InstantiatePacket(true, ServicePacketChannel.Net) };
             }
             else // treat authorization responce
             {
-                // todo: clean the list here
-                System.Diagnostics.Debug.Assert(webServicePackets.Count <= 1);
-
                 if (webServicePackets.Count == 0)
                     throw new RegistrationException("There is no authorization response from supervisor", null);
+
+                // todo: clean the list here
+                var newList = new List<IAuthorizationPacket>();
+
+                newList.Add(webServicePackets.OrderBy(p => p.Data.RegisterDate).Last());
+
+                webServicePackets = newList;
             }
 
             return webServicePackets;

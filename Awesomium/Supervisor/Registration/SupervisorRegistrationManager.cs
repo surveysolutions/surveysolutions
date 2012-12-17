@@ -47,22 +47,23 @@ namespace Browsing.Supervisor.Registration
 
             AuthorizeAcceptedData(packet);
 
-            base.OnStartRegistration(packet);
+            // prepare responce
+            var responce = InstantiatePacket(false, packet.Channel);
 
-            if (packet.Channel != ServicePacketChannel.Usb)
-            {
-                var responce = InstantiatePacket(false, ServicePacketChannel.Net);
+            // keep tablet id as registration id
+            responce.Data.RegistrationId = packet.Data.RegistrationId;
 
-                // keep tablet id as registration id
-                responce.Data.RegistrationId = packet.Data.RegistrationId;
-                
+            if (responce.Channel != ServicePacketChannel.Usb)
                 SendAuthorizationData(responce);
-            }
+
+            base.OnStartRegistration(responce);
+
+            packet.IsAuthorized = true;
         }
 
         #endregion
 
-        protected override void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets)
+        protected override void OnAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
         {
             // uncomment to have automatic registration
             // DoRegistration(true);
@@ -83,7 +84,7 @@ namespace Browsing.Supervisor.Registration
             if (packets.Count == 0)
                 throw new RegistrationException("There are no new authorization requests", null);
 
-            return webServicePackets;
+            return packets;
         }
     }
 }
