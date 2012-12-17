@@ -52,6 +52,7 @@ namespace Browsing.Supervisor.Registration
             foreach (var p in packets.Packets)
             {
                 var pkt = p as IAuthorizationPacket;
+                // deal with non-authorized oonly
                 if (pkt == null || pkt.IsAuthorized)
                     continue;
 

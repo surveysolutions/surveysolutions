@@ -35,7 +35,7 @@ namespace Synchronization.Core.Events
             get { 
                 return 
                     Packets != null && 
-                    Packets.FirstOrDefault((p) => p.IsAuthorized) != null;
+                    Packets.FirstOrDefault((p) => p.IsTreated) != null;
             }
         }
 

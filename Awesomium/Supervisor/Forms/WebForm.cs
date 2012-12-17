@@ -17,7 +17,7 @@ namespace Browsing.Supervisor.Forms
         {
             InitializeComponent();
 
-#if DEBUG__
+#if DEBUG
             Properties.Settings.Default.RunClient = false;
             Properties.Settings.Default.DefaultUrl = "http://localhost:8084/";
             //Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-Supervisor/";

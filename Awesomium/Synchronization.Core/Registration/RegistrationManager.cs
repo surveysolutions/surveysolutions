@@ -46,6 +46,7 @@ namespace Synchronization.Core.Registration
 
         #endregion
 
+
         #region C-tor
 
         protected RegistrationManager(string inFile, string outFile, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
@@ -88,7 +89,7 @@ namespace Synchronization.Core.Registration
         {
             try
             {
-                OnAuthorizationPacketsCollected(packets);
+                OnAuthorizationPacketsAvailable(packets);
 
                 if (PacketsAvailable != null)
                     PacketsAvailable(this, packets);
@@ -194,8 +195,6 @@ namespace Synchronization.Core.Registration
 
                 if (string.Compare(result, "True", true) != 0)
                     throw new RegistrationFaultException(packet);
-
-                packet.IsAuthorized = true;
             }
             catch (RegistrationException ex)
             {
@@ -293,7 +292,7 @@ namespace Synchronization.Core.Registration
 
         private IList<IAuthorizationPacket> PrepareAuthorizationPackets(bool firstPhase)
         {
-            return OnPrepareAuthorizationPackets(firstPhase, this.authorizationService.ServicePackets);
+            return OnPrepareAuthorizationPackets(firstPhase, this.authorizationService.NewServicePackets);
         }
 
         private void StartRegistration(IAuthorizationPacket packet)
@@ -301,6 +300,8 @@ namespace Synchronization.Core.Registration
             try
             {
                 OnStartRegistration(packet);
+
+                packet.IsTreated = true;
             }
             catch (Exception ex)
             {
@@ -314,6 +315,8 @@ namespace Synchronization.Core.Registration
             try
             {
                 OnFinalizeRegistration(packet);
+
+                packet.IsTreated = true;
             }
             catch (Exception ex)
             {
@@ -328,18 +331,19 @@ namespace Synchronization.Core.Registration
         {
             var keyContainerName = ContainerName;
 
-            var registeredData = data ?? new RegisterData
-            {
-                SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
-                RegistrationId = RegistrationId,
-                Description = RegistrationName,
-                RegisterDate = DateTime.Now,
-                Registrator = CurrentUser, // makes not much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
-            };
+            var registeredData = data == null ?
+                new RegisterData()
+                {
+                    SecretKey = this.rsaCryptoService.GetPublicKey(keyContainerName).Modulus,
+                    RegistrationId = RegistrationId,
+                    Description = RegistrationName,
+                    RegisterDate = DateTime.Now,
+                    Registrator = CurrentUser, // makes not much sence for now, since we do not require CAPI user to be logged on; and on supervisor it coincides with RegistrationId
+                } 
+                :
+                new RegisterData(data);
 
-            return request ?
-                new AuthorizationPacket(registeredData, channel, ServicePacketType.Request):
-                new AuthorizationPacket(registeredData, channel, ServicePacketType.Responce);
+            return new AuthorizationPacket(registeredData, channel, request ? ServicePacketType.Request : ServicePacketType.Responce);
         }
 
         #region Properties
@@ -384,7 +388,7 @@ namespace Synchronization.Core.Registration
 
         protected abstract string OnAcceptRegistrationName();
 
-        protected abstract void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets);
+        protected abstract void OnAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets);
 
         protected virtual void OnStartRegistration(IAuthorizationPacket packet)
         {
@@ -395,11 +399,7 @@ namespace Synchronization.Core.Registration
             if (usb == null)
                 throw new UsbNotChoozenException();
 
-            var responce = InstantiatePacket(false, ServicePacketChannel.Usb);
-
-            WriteRegistrationFile(responce.Data, usb.Name + OutFile);
-
-            packet.IsAuthorized = true;
+            WriteRegistrationFile(packet.Data as RegisterData, usb.Name + OutFile);
         }
 
         protected virtual void OnFinalizeRegistration(IAuthorizationPacket packet)
@@ -411,10 +411,23 @@ namespace Synchronization.Core.Registration
 
         #region Protected Operations
 
-        protected void SendAuthorizationData(IAuthorizationPacket packet)
+        /// <summary>
+        /// Send authorization request (CAPI) / responce (Supervisor) via net
+        /// </summary>
+        /// <param name="packet"></param>
+        protected bool SendAuthorizationData(IAuthorizationPacket packet)
         {
+            if (packet.Channel == ServicePacketChannel.Usb)
+                return false;
+
             SendPacket(LocalAuthorizationController, packet);
+            return true;
         }
+
+        /// <summary>
+        /// Save registration data in local database
+        /// </summary>
+        /// <param name="packet"></param>
         protected void AuthorizeAcceptedData(IAuthorizationPacket packet)
         {
             SendPacket(LocalRegistrationController, packet);
@@ -530,6 +543,8 @@ namespace Synchronization.Core.Registration
                 var usbData = ReadRegistrationFile(drive.Name + InFile);
 
                 IAuthorizationPacket packet = InstantiatePacket(authorizationRequest, ServicePacketChannel.Usb, usbData);
+
+                packet.IsAuthorized = !authorizationRequest;
 
                 System.Diagnostics.Debug.Assert(packet != null);
 

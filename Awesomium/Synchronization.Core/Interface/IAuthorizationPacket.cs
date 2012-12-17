@@ -40,5 +40,6 @@ namespace Synchronization.Core.Interface
         void SetRegistrationId(Guid supervisorId);
 
         void MarkToAuthorize(bool toAuthorize);
+        bool IsTreated { get; set; }
     }
 }

@@ -32,6 +32,7 @@ namespace Synchronization.Core.Registration
         public ServicePacketChannel Channel { get; private set; }
         public ServicePacketType PacketType { get; private set; }
         public bool IsMarkedToAuthorize { get; private set; }
+        public bool IsTreated { get; set; }
 
         IRegisterData IAuthorizationPacket.Data { get { return this.Data; } set { this.Data = value as RegisterData; } }
 

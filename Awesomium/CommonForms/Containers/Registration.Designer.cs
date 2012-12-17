@@ -37,6 +37,7 @@ namespace Browsing.Common.Containers
             this.authorizationList = new System.Windows.Forms.ListView();
             this.columnHeaderDevice = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeaderDate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeaderChannel = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.regContent.SuspendLayout();
             this.authorizedGroupBox.SuspendLayout();
             this.SuspendLayout();
@@ -91,7 +92,8 @@ namespace Browsing.Common.Containers
             // 
             this.authorizationList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeaderDevice,
-            this.columnHeaderDate});
+            this.columnHeaderDate,
+            this.columnHeaderChannel});
             this.authorizationList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.authorizationList.Location = new System.Drawing.Point(3, 18);
             this.authorizationList.Name = "authorizationList";
@@ -111,6 +113,12 @@ namespace Browsing.Common.Containers
             this.columnHeaderDate.Text = "Authorized";
             this.columnHeaderDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeaderDate.Width = 100;
+            // 
+            // columnHeaderChannel
+            // 
+            this.columnHeaderChannel.Text = "Channel";
+            this.columnHeaderChannel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.columnHeaderChannel.Width = 100;
             // 
             // Registration
             // 
@@ -134,5 +142,6 @@ namespace Browsing.Common.Containers
         private ListView authorizationList;
         private ColumnHeader columnHeaderDevice;
         private ColumnHeader columnHeaderDate;
+        private ColumnHeader columnHeaderChannel;
     }
 }
