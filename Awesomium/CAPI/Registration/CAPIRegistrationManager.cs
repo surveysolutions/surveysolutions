@@ -81,8 +81,10 @@ namespace Browsing.CAPI.Registration
             AuthorizeAcceptedData(packet);
         }
 
-        protected override void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets)
+        protected override void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets)
         {
+            // check if it was already registered
+
             // process automatically
             DoRegistration(false);
         }

@@ -42,7 +42,7 @@ namespace Synchronization.Core.Registration
         public event EventHandler<RegistrationEventArgs> FirstPhaseAccomplished;
         public event EventHandler<RegistrationEventArgs> SecondPhaseAccomplished;
 
-        public event NewPacketsAvailableHandler NewPacketsAvailable;
+        public event NewPacketsAvailableHandler PacketsAvailable;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace Synchronization.Core.Registration
             this.usbProvider = usbProvider;
 
             this.authorizationService = DoInstantiateAuthService(urlUtils, requestProcessor);
-            this.authorizationService.NewPacketsAvailable += new AuthorizationPacketsAlarm(registrationService_NewPacketAvailable);
+            this.authorizationService.PacketsCollected += new AuthorizationPacketsAlarm(registrationService_PacketsCollected);
         }
 
         protected abstract Authorization DoInstantiateAuthService(IUrlUtils urlUtils, IRequestProcessor requestProcessor);
@@ -84,14 +84,14 @@ namespace Synchronization.Core.Registration
             OnCheckPrerequisites(firstPhase);
         }
 
-        void registrationService_NewPacketAvailable(IList<IAuthorizationPacket> packets)
+        void registrationService_PacketsCollected(IList<IAuthorizationPacket> packets)
         {
             try
             {
-                OnNewAuthorizationPacketsAvailable(packets);
+                OnAuthorizationPacketsCollected(packets);
 
-                if (NewPacketsAvailable != null)
-                    NewPacketsAvailable(this, packets);
+                if (PacketsAvailable != null)
+                    PacketsAvailable(this, packets);
             }
             catch(Exception e)
             {
@@ -384,7 +384,7 @@ namespace Synchronization.Core.Registration
 
         protected abstract string OnAcceptRegistrationName();
 
-        protected abstract void OnNewAuthorizationPacketsAvailable(IList<IAuthorizationPacket> packets);
+        protected abstract void OnAuthorizationPacketsCollected(IList<IAuthorizationPacket> packets);
 
         protected virtual void OnStartRegistration(IAuthorizationPacket packet)
         {
@@ -508,7 +508,7 @@ namespace Synchronization.Core.Registration
 
         // checks web part and usb for registration requests/responces;
         // it runs by timer
-        public void CollectAuthorizationPackets()
+        public void CollectAllAuthorizationPackets()
         {
             var usbPackets = ReadUsbPackets();
 
@@ -557,7 +557,30 @@ namespace Synchronization.Core.Registration
 
         public void RemoveUsbChannelPackets()
         {
-            this.authorizationService.Clean(ServicePacketChannel.Usb);
+            this.authorizationService.CleanChannelPackets(ServicePacketChannel.Usb);
+        }
+
+        public List<RegisterData> GetAuthorizedIds()
+        {
+            try
+            {
+                var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationId);
+                var supervisor = this.requestProcessor.Process<string>(url, "False");
+
+                if (string.Compare(supervisor, "False", true) != 0)
+                {
+                    var content = RegistrationManager.DeserializeContent<List<RegisterData>>(supervisor);
+                    if (content == null)
+                        return null;
+
+                    return content;
+                }
+            }
+            catch
+            {
+            }
+
+            return null;
         }
     }
 }

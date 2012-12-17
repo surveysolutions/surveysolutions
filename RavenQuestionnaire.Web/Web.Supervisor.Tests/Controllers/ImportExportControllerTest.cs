@@ -7,7 +7,6 @@ using NUnit.Framework;
 using System.Threading;
 using Questionnaire.Core.Web.Export;
 using Web.Supervisor.Controllers;
-using Questionnaire.Core.Web.Register;
 
 
 namespace RavenQuestionnaire.Web.Tests.Controllers

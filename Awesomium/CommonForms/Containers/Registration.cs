@@ -137,7 +137,7 @@ namespace Browsing.Common.Containers
 
         private void TreatServiceWatcherTick(object sender, EventArgs e)
         {
-            RegistrationManager.CollectAuthorizationPackets();
+            RegistrationManager.CollectAllAuthorizationPackets();
         }
 
         void FirstRegistrationPhaseAccomplished(object sender, RegistrationEventArgs args)

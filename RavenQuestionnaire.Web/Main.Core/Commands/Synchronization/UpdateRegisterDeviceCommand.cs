@@ -1,5 +1,5 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterDeviceCommand.cs" company="WorldBank">
+// <copyright file="UpdateRegisterDeviceCommand.cs" company="WorldBank">
 // 2012
 // </copyright>
 // -----------------------------------------------------------------------
@@ -16,13 +16,13 @@ namespace Main.Core.Commands.Synchronization
     /// TODO: Update summary.
     /// </summary>
     [Serializable]
-    [MapsToAggregateRootConstructor(typeof(DeviceAR))]
-    public class RegisterDeviceCommand : CommandBase
+    [MapsToAggregateRootMethod(typeof(DeviceAR), "UpdateDevice")]
+    public class UpdateRegisterDeviceCommand : CommandBase
     {
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterDeviceCommand"/> class.
+        /// Initializes a new instance of the <see cref="UpdateRegisterDeviceCommand"/> class.
         /// </summary>
         /// <param name="description">
         /// The description.
@@ -36,11 +36,10 @@ namespace Main.Core.Commands.Synchronization
         /// <param name="guidSupervisor">
         /// The guid Supervisor.
         /// </param>
-        public RegisterDeviceCommand(string description, Guid publicKey, byte[] secretKey, Guid idForRegistration, Guid registrator)
+        public UpdateRegisterDeviceCommand(string description, Guid publicKey, byte[] secretKey, Guid registrator)
         {
-            this.PublicKey =  publicKey;
+            this.PublicKey = publicKey;
             this.Registrator = registrator;
-            this.IdForRegistration = idForRegistration;
             this.Description = description;
             this.SecretKey = secretKey;
         }
@@ -49,18 +48,11 @@ namespace Main.Core.Commands.Synchronization
 
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets public Key.
-        /// </summary>
+        [AggregateRootId]
         public Guid PublicKey { get; set; }
 
         /// <summary>
-        /// Gets or sets TabletId.
-        /// </summary>
-        public Guid IdForRegistration { get; set; }
-
-        /// <summary>
-        /// Gets or sets Supervisor.
+        /// Gets or sets registrator.
         /// </summary>
         public Guid Registrator { get; set; }
 
@@ -75,5 +67,6 @@ namespace Main.Core.Commands.Synchronization
         public byte[] SecretKey { get; set; }
 
         #endregion
+
     }
 }

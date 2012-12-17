@@ -15,19 +15,19 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Entities;
 
     using Questionnaire.Core.Web.Helpers;
-    using Questionnaire.Core.Web.Register;
+    using Questionnaire.Core.Web;
+    using Main.Core.View;
 
     /// <summary>
     /// The device controller.
     /// </summary>
-    public class DeviceController : Controller
+    public class DeviceController : RegistrationController
     {
         #region Fields
 
         /// <summary>
         /// Field of deviceRegister
         /// </summary>
-        private readonly IDeviceRegistry deviceRegister;
         private readonly IGlobalInfoProvider globalInfo;
 
         #endregion
@@ -40,9 +40,9 @@ namespace Web.Supervisor.Controllers
         /// <param name="register">
         /// The register.
         /// </param>
-        public DeviceController(IDeviceRegistry register, IGlobalInfoProvider globalInfo)
+        public DeviceController(IViewRepository repository, IGlobalInfoProvider globalInfo)
+            : base(repository)
         {
-            this.deviceRegister = register;
             this.globalInfo = globalInfo;
         }
 
@@ -61,7 +61,25 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public bool RegisterCapi(RegisterData data)
         {
-            return this.deviceRegister.SaveRegistration(data);
+            return this.SaveRegistration(data);
+        }
+
+        /// <summary>
+        /// Select from database publickey of capi
+        /// </summary>
+        /// <param name="registrator">
+        /// The registrator.
+        /// </param>
+        /// <returns>
+        /// Return PublicKey of Capi
+        /// </returns>
+        public ActionResult GetRegisteredDevices(Guid supervisorId)
+        {
+            //var currentSupervisor = this.globalInfo.GetCurrentUser();
+            //System.Diagnostics.Debug.Assert(supervisorId == currentSupervisor.Id);
+
+            var model = this.GetRegisteredData(supervisorId);
+            return Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -83,22 +101,9 @@ namespace Web.Supervisor.Controllers
             return false;
         }
 
-        /// <summary>
-        /// Select from database publickey of capi
-        /// </summary>
-        /// <param name="registrator">
-        /// The registrator.
-        /// </param>
-        /// <returns>
-        /// Return PublicKey of Capi
-        /// </returns>
-        public ActionResult GetRegisteredDevices(Guid supervisorId)
+        protected override Guid GetARPublicKey(RegisterData data)
         {
-            //var currentSupervisor = this.globalInfo.GetCurrentUser();
-            //System.Diagnostics.Debug.Assert(supervisorId == currentSupervisor.Id);
-
-            var model = this.deviceRegister.GetRegisteredData(supervisorId);
-            return Json(model.Items, JsonRequestBehavior.AllowGet);
+            return data.RegistrationId;
         }
 
         #endregion

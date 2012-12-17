@@ -48,6 +48,8 @@ namespace Browsing.CAPI.Registration
             var url = urlUtils.GetCheckConfirmedAuthorizationUrl(this.tabletId);
             var regData = this.requestProcessor.Process<string>(url, "False");
 
+            var authorizedPacketsList = new List<IAuthorizationPacket>();
+
             if (string.Compare(regData, "False", true) != 0)
             {
                 try
@@ -61,7 +63,7 @@ namespace Browsing.CAPI.Registration
                             var packet = new AuthorizationPacket(lastData, ServicePacketChannel.Net, ServicePacketType.Responce);
                             packet.IsAuthorized = true;
 
-                            availablePackets.Add(packet);
+                            authorizedPacketsList.Add(packet);
                         }
                     }
                 }
@@ -70,7 +72,7 @@ namespace Browsing.CAPI.Registration
                 }
             }
 
-            return availablePackets;
+            return authorizedPacketsList.Union(availablePackets, this).ToList();
         }
 
         #endregion

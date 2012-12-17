@@ -45,15 +45,9 @@ namespace Browsing.CAPI.Containers
         private readonly static string Register1ButtonText = "Request";
         private readonly static string Register2ButtonText = "Accept";
 
-        private IRequestProcessor requestProcessor;
-        private IUrlUtils urlUtils;
-
         public CAPIRegistration(IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(requestProcessor, urlUtils, holder, false, Register1ButtonText, Register2ButtonText, true)
         {
-            this.urlUtils = urlUtils;
-            this.requestProcessor = requestProcessor;
-
             // todo: define via resources
             _firstStepRegisteredMessageUSB = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step.\nTo proceed, please, authorize your request put on USB flash memory\nby supervisor then finalize registration.";
             _firstStepRegisteredMessageNET = "This CAPI device \'" + Environment.MachineName + "\' passed first registration step via net.\nPlease, wait to accept authorization.";
@@ -99,7 +93,7 @@ namespace Browsing.CAPI.Containers
         {
             var status = RegistrationStatus;
 
-            if(IsSupervisorsInfoSaved())
+            if (IsSupervisorsInfoSaved())
                 return SecondStepRegisteredMessage;
 
             if (status == Phaze.PublicKeySharedUSB)
@@ -114,27 +108,14 @@ namespace Browsing.CAPI.Containers
 
         private bool IsSupervisorsInfoSaved()
         {
-            try
-            {
-                var url = this.urlUtils.GetAuthorizedIDsUrl(RegistrationManager.RegistrationId);
-                var supervisor = this.requestProcessor.Process<string>(url, "False");
+            var data = RegistrationManager.GetAuthorizedIds();
+            if (data == null)
+                return false;
 
-                if (string.Compare(supervisor, "False", true) != 0)
-                {
-                    var content = RegistrationManager.DeserializeContent<List<RegisterData>>(supervisor);
-                    if (content == null)
-                        return false;
+            // todo: sort by registration date and get the latest
+            var lastData = data.LastOrDefault();
 
-                    var data = content.FirstOrDefault();
-
-                    return data != null && data.Registrator == RegistrationManager.RegistrationId;
-                }
-            }
-            catch
-            {
-            }
-
-            return false;
+            return lastData != null && lastData.Registrator == RegistrationManager.RegistrationId;
         }
 
         protected override void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)
@@ -185,7 +166,7 @@ namespace Browsing.CAPI.Containers
             }
         }
 
-        public string RegisteredSupervisor 
+        public string RegisteredSupervisor
         {
             get
             {

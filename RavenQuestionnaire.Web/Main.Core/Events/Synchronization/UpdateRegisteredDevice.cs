@@ -16,15 +16,15 @@ namespace Main.Core.Events.Synchronization
     /// The new device registered
     /// </summary>
     [Serializable]
-    [EventName("RavenQuestionnaire.Core:Events:NewDeviceRegistered")]
-    public class NewDeviceRegistered
+    [EventName("RavenQuestionnaire.Core:Events:UpdateRegisteredDevice")]
+    public class UpdateRegisteredDevice
     {
         #region PublicProperties
 
         /// <summary>
         /// Gets or sets TabletId.
         /// </summary>
-        public Guid IdForRegistration { get; set; }
+        public Guid DeviceId { get; set; }
 
         /// <summary>
         /// Gets or sets Registrator.
@@ -40,11 +40,6 @@ namespace Main.Core.Events.Synchronization
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
-
-        /// <summary>
-        /// Gets or sets the creation date.
-        /// </summary>
-        public DateTime RegisteredDate { get; set; }
 
         #endregion
     }

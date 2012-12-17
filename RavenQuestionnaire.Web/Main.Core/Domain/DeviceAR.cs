@@ -25,9 +25,19 @@ namespace Main.Core.Domain
         private DateTime registeredDate;
 
         /// <summary>
+        /// Field modificationDate
+        /// </summary>
+        private DateTime modificationDate;
+
+        /// <summary>
         /// Field TabletId
         /// </summary>
-        private Guid tabletId;
+        private Guid idForRegistration = Guid.Empty;
+
+        /// <summary>
+        /// Field registrator
+        /// </summary>
+        private Guid registrator = Guid.Empty;
 
         /// <summary>
         /// Field PublicKey
@@ -38,13 +48,6 @@ namespace Main.Core.Domain
         /// Field Description
         /// </summary>
         private string description;
-
-        /// <summary>
-        /// Field PublicKey
-        /// </summary>
-        private Guid publicKey;
-
-        private Guid registrator;
 
         #endregion
 
@@ -72,24 +75,35 @@ namespace Main.Core.Domain
         /// <param name="registeredDate">
         /// The registered date.
         /// </param>
-        public DeviceAR(string description, Guid tabletId, byte[] secretKey, DateTime registeredDate, Guid guidSupervisor)
-            : base(tabletId)
+        public DeviceAR(Guid publicKey, string description, byte[] secretKey, Guid idForRegistration, Guid registrator)
+            : base(publicKey)
         {
             this.ApplyEvent(
                new NewDeviceRegistered
                {
+                   Registrator = registrator,
+                   IdForRegistration = idForRegistration,
+                   RegisteredDate = DateTime.Now,
                    SecretKey = secretKey,
-                   RegisteredDate = registeredDate,
-                   TabletId = tabletId,
-                   Description = description,
-                   PublicKey = Guid.NewGuid(),
-                   Registrator = guidSupervisor
+                   Description = description                   
                });
         }
 
         #endregion
         
         #region Methods
+
+        public void UpdateDevice(string description, byte[] secretKey, Guid registrator)
+        {
+            this.ApplyEvent(
+              new UpdateRegisteredDevice
+              {
+                  Registrator = registrator,
+                  DeviceId = idForRegistration,
+                  SecretKey = secretKey,
+                  Description = description
+              });
+        }
 
         /// <summary>
         /// Event handler for the NewDeviceRegistered event. This method
@@ -103,9 +117,23 @@ namespace Main.Core.Domain
             this.description = e.Description;
             this.secretKey = e.SecretKey;
             this.registeredDate = e.RegisteredDate;
-            this.tabletId = e.TabletId;
-            this.publicKey = e.PublicKey;
+            this.modificationDate = e.RegisteredDate;
+            this.idForRegistration = e.IdForRegistration;
             this.registrator = e.Registrator;
+        }
+
+        /// <summary>
+        /// Event handler for the UpdateRegisteredDevice event.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnUpdateRegisteredDevice(UpdateRegisteredDevice e)
+        {
+            this.description = e.Description;
+            this.secretKey = e.SecretKey;
+            this.registrator = e.Registrator;
+            this.modificationDate = DateTime.Now;
         }
 
         #endregion

@@ -28,6 +28,11 @@ namespace Main.Core.Documents
         public DateTime CreationDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the modification date.
+        /// </summary>
+        public DateTime ModificationDate { get; set; }
+
+        /// <summary>
         /// Gets or sets TabletId.
         /// </summary>
         public Guid TabletId { get; set; }

@@ -1,35 +1,22 @@
 ﻿// -----------------------------------------------------------------------
-// <copyright file="RegisterData.cs" company="WorldBank">
-// 2012
+// <copyright file="DeviceItemView.cs" company="">
+// TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Main.Core.Entities
+namespace Main.Core.View.Device
 {
     using System;
-    using System.Runtime.Serialization;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Main.Core.Documents;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class RegisterData
+    public class DeviceItemView
     {
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterData"/> class.
-        /// </summary>
-        public RegisterData()
-        {
-#if DEBUG
-            this.RegisterDate = DateTime.MinValue;
-#endif
-        }
-
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets or sets Description.
         /// </summary>
@@ -55,13 +42,19 @@ namespace Main.Core.Entities
         /// </summary>
         public Guid RegistrationId { get; set; }
 
-        /// <summary>
-        /// The ID of AR
-        /// </summary>
-        [IgnoreDataMember]
-        public Guid PublicKey { get; set; }
-        
+        public DeviceItemView()
+        {
+            this.RegistrationId = Guid.Empty;
+            this.Registrator = Guid.Empty;
+        }
 
-        #endregion
+        public DeviceItemView(SyncDeviceRegisterDocument device)
+        {
+            this.Description = device.Description;
+            this.RegisterDate = device.CreationDate;
+            this.Registrator = device.Registrator;
+            this.RegistrationId = device.TabletId;
+            this.SecretKey = device.SecretKey;
+        }
     }
 }

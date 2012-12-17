@@ -38,7 +38,13 @@ namespace Main.Core.WCF
         [OperationContract]
         bool AuthorizeDevice(AuthorizationPacket authorizationPacket);
 
+        /// <summary>
+        /// Get list of all packets if authorizedRegistrationId is empty. 
+        /// Otherwize cleans all packets with authorized status for specific registration id
+        /// </summary>
+        /// <param name="authorizedRegistrationId">registration id to filter by and clean out all authorized packets</param>
+        /// <returns></returns>
         [OperationContract]
-        AuthPackets GetAuthorizationPackets();
+        AuthPackets PickupAuthorizationPackets(Guid authorizedRegistrationId);
     }
 }

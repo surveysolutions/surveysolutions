@@ -44,12 +44,19 @@ namespace Main.Core.WCF
             return true;
         }
 
-        public AuthPackets GetAuthorizationPackets()
+        public AuthPackets PickupAuthorizationPackets(Guid authorizedRegistrationId)
         {
             lock (packets)
             {
-                var lst = packets.ToList();
-                return new AuthPackets() { Packets = lst };
+                if (authorizedRegistrationId == Guid.Empty)
+                    return new AuthPackets() { Packets = packets.ToList() };
+
+                var returnList = 
+                    packets.Where(p => p.Data.RegistrationId == authorizedRegistrationId && p.IsAuthorized).ToList();
+
+                packets = packets.Except(returnList).ToList();
+
+                return new AuthPackets() { Packets = returnList };
             }           
         }
 

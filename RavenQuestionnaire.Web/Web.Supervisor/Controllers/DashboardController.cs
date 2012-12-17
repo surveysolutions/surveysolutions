@@ -23,7 +23,6 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
 
     using Questionnaire.Core.Web.Helpers;
-    using Questionnaire.Core.Web.Register;
 
     /// <summary>
     /// Show Statistics

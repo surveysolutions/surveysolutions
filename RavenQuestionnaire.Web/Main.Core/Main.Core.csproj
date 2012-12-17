@@ -139,6 +139,7 @@
     <Compile Include="Commands\Questionnaire\UpdateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\UploadImageCommand.cs" />
     <Compile Include="Commands\Synchronization\ChangeEventStatusCommand.cs" />
+    <Compile Include="Commands\Synchronization\UpdateRegisterDeviceCommand.cs" />
     <Compile Include="Commands\Synchronization\PushStatisticsCommand.cs" />
     <Compile Include="Commands\Synchronization\CreateNewSynchronizationProcessCommand.cs" />
     <Compile Include="Commands\Synchronization\EndProcessComand.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
+    <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs" />
     <Compile Include="Events\Synchronization\ProcessStatisticsCalculated.cs" />
     <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
@@ -365,6 +367,9 @@
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewFactory.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\CompleteQuestionnaireStatisticViewInputModel.cs" />
     <Compile Include="View\CompleteQuestionnaire\Statistics\QuestionStatisticView.cs" />
+    <Compile Include="View\Device\DeviceItemView.cs" />
+    <Compile Include="View\Device\DeviceItemViewFactory.cs" />
+    <Compile Include="View\Device\DeviceItemViewInputModel.cs" />
     <Compile Include="View\Device\DeviceView.cs" />
     <Compile Include="View\Device\DeviceViewFactory.cs" />
     <Compile Include="View\Device\DeviceViewInputModel.cs" />
