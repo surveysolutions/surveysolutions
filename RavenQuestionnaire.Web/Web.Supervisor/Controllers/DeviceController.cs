@@ -30,11 +30,6 @@ namespace Web.Supervisor.Controllers
         #region Fields
 
         /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
-
-        /// <summary>
         /// Field of deviceRegister
         /// </summary>
         private readonly IGlobalInfoProvider globalInfo;
