@@ -13,7 +13,6 @@ namespace DataEntryClient.CompleteQuestionnaire
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using System.Web;
 
     using Ionic.Zip;
     using Ionic.Zlib;
@@ -26,10 +25,40 @@ namespace DataEntryClient.CompleteQuestionnaire
 
     using Questionnaire.Core.Web.Export;
 
+    using SynchronizationMessages.CompleteQuestionnaire;
+
+    public interface IUsbSyncProcess : ISyncProcess
+    {
+        /// <summary>
+        /// Export events
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync Process Description.
+        /// </param>
+        /// <returns>
+        /// Zip file with events
+        /// </returns>
+        byte[] Export(string syncProcessDescription);
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="fileData">
+        /// The file Data.
+        /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
+        /// <exception cref="Exception">
+        /// Some exception
+        /// </exception>
+        void Import(List<string> fileData, string description);
+    }
+
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
-    public class UsbSyncProcess : AbstractSyncProcess
+    public class UsbSyncProcess : AbstractSyncProcess, IUsbSyncProcess
     {
         #region Constants and Fields
 
@@ -37,6 +66,8 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// Zip file
         /// </summary>
         private ZipFile zip;
+
+        private List<string> zipData;
 
         #endregion
 
@@ -63,15 +94,15 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// Export events
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
+        /// <param name="syncProcessDescription">
+        /// The sync Process Description.
         /// </param>
         /// <returns>
         /// Zip file with events
         /// </returns>
-        public new byte[] Export(Guid syncKey)
+        public new byte[] Export(string syncProcessDescription)
         {
-            base.Export(syncKey);
+            base.Export(syncProcessDescription);
 
             var outputStream = new MemoryStream();
             this.zip.Save(outputStream);
@@ -80,21 +111,33 @@ namespace DataEntryClient.CompleteQuestionnaire
         }
 
         /// <summary>
+        /// The import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        [Obsolete("Import(string) is deprecated, please use Import(ZipFile, string) instead.", true)]
+        public new ErrorCodes Import(string syncProcessDescription)
+        {
+            return ErrorCodes.Fail;
+        }
+
+        /// <summary>
         /// The import.
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
+        /// <param name="fileData">
+        /// The file Data.
         /// </param>
-        /// <param name="uploadFile">
-        /// The upload File.
+        /// <param name="description">
+        /// The description.
         /// </param>
         /// <exception cref="Exception">
         /// Some exception
         /// </exception>
-        public void Import(Guid syncKey, ZipFile uploadFile)
+        public void Import(List<string> fileData, string description)
         {
-            this.zip = uploadFile;
-            this.Import(syncKey);
+            this.zipData = fileData;
+            base.Import(description);
         }
 
         #endregion
@@ -104,13 +147,10 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <summary>
         /// Event exporter
         /// </summary>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        protected override void ExportEvents(Guid syncKey)
+        protected override void ExportEvents()
         {
             var collector = new EventPipeCollector();
-            this.ProcessEvents(syncKey, collector);
+            this.ProcessEvents(collector);
 
             this.zip = new ZipFile();
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
@@ -118,7 +158,7 @@ namespace DataEntryClient.CompleteQuestionnaire
             this.zip.AddEntry(
                 "backup.txt", 
                 JsonConvert.SerializeObject(
-                    new ZipFileData { ClientGuid = syncKey, Events = collector.GetEventList() }, 
+                    new ZipFileData { ClientGuid = this.ProcessGuid, Events = collector.GetEventList() }, 
                     Formatting.Indented, 
                     settings));
         }
@@ -131,18 +171,15 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </returns>
         protected override IEnumerable<AggregateRootEvent> GetEventStream()
         {
-            using (var stream = new MemoryStream())
+            var events = new List<AggregateRootEvent>();
+            foreach (var file in this.zipData)
             {
-                foreach (ZipEntry e in this.zip)
-                {
-                    e.Extract(stream);
-                }
-
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                var data = Encoding.Default.GetString(stream.ToArray());
-                var result = JsonConvert.DeserializeObject<ZipFileData>(data, settings);
-                return result.Events;
+                var result = JsonConvert.DeserializeObject<ZipFileData>(file, settings);
+                events.AddRange(result.Events);
             }
+
+            return events;
         }
 
         #endregion

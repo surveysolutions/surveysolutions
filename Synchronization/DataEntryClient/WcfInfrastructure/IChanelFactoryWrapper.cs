@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="IChanelFactoryWrapper.cs" company="">
-//   
+//   Chanel Factory Wrapper
 // </copyright>
 // <summary>
 //   The ChanelFactoryWrapper interface.
@@ -10,6 +10,7 @@
 namespace DataEntryClient.WcfInfrastructure
 {
     using System;
+    using System.Linq;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
 
@@ -30,6 +31,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The handler.
         /// </param>
         /// <typeparam name="T">
+        /// Classes only
         /// </typeparam>
         void Execute<T>(string baseAdress, Action<T> handler) where T : class;
 
@@ -40,6 +42,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The base adress.
         /// </param>
         /// <typeparam name="T">
+        /// Classes only
         /// </typeparam>
         /// <returns>
         /// The T.
@@ -66,6 +69,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The handler.
         /// </param>
         /// <typeparam name="T">
+        /// Classes only
         /// </typeparam>
         public void Execute<T>(string baseAdress, Action<T> handler) where T : class
         {
@@ -94,12 +98,18 @@ namespace DataEntryClient.WcfInfrastructure
         /// The base adress.
         /// </param>
         /// <typeparam name="T">
+        /// Classes only
         /// </typeparam>
         /// <returns>
         /// The T.
         /// </returns>
         public T GetChanel<T>(string baseAdress) where T : class
         {
+            if (baseAdress.Last() == '/')
+            {
+                baseAdress = baseAdress.TrimEnd(new[] { '/' });
+            }
+
             var channelFactory = new ChannelFactory<T>(
                 new BasicHttpBinding("basicBindingDiscovery"), 
                 string.Format("{0}/WCF/{1}Service.svc", baseAdress, typeof(T).Name.Substring(1)));
