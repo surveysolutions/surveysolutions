@@ -81,7 +81,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 var group = item as GroupViewModel;
                 if (group != null)
                 {
-                    itemView = new GroupView(inflater.Context, group);
+                    var groupView = new GroupView(inflater.Context, group);
+                    groupView.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+                    itemView = groupView;
                 }
                 if (itemView != null)
                     ll.AddView(itemView);
@@ -92,9 +94,21 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             //  return retval;
         }
 
+        void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
+        {
+            OnScreenChanged(e);
+        }
+
 
         public QuestionnaireScreenViewModel Model { get; private set; }
+        protected void OnScreenChanged(ScreenChangedEventArgs evt)
+        {
+            var handler = ScreenChanged;
+            if (handler != null)
+                handler(this, evt);
+        }
 
+        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
 
     }
 }

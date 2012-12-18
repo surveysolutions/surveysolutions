@@ -19,11 +19,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     /// </summary>
     public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, QuestionnaireScreenViewModel>
     {
-        #region Implementation of IViewFactory<QuestionnaireScreenInput,QuestionnaireScreenViewModel>
-
-        public QuestionnaireScreenViewModel Load(QuestionnaireScreenInput input)
+        private static QuestionnaireScreenViewModel root;
+        static QuestionnaireScreenViewFactory()
         {
-            var screens =  new QuestionnaireNavigationPanelItem[]
+            var screens = new QuestionnaireNavigationPanelItem[]
                 {
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello1",20,1),
                     new QuestionnaireNavigationPanelItem(Guid.NewGuid(),"hello2",30,14),
@@ -57,9 +56,26 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     new SelectebleQuestionViewModel(Guid.NewGuid(), "multy choise", QuestionType.MultyOption, answers, false,
                                                string.Empty, "comment on disabled question", true, false)
                 };
-            return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey ?? Guid.NewGuid(),
-                                                    input.PropagationKey, questions,screens,
+            root = new QuestionnaireScreenViewModel(Guid.NewGuid(), screens[0].ScreenPublicKey,
+                                                    null, questions, screens,
                                                     Enumerable.Empty<QuestionnaireNavigationPanelItem>(), screens);
+        }
+
+        #region Implementation of IViewFactory<QuestionnaireScreenInput,QuestionnaireScreenViewModel>
+
+        public QuestionnaireScreenViewModel Load(QuestionnaireScreenInput input)
+        {
+            
+            if (input.ScreenPublicKey.HasValue && root.Chapters.All(s => s.ScreenPublicKey != input.ScreenPublicKey))
+            {
+                var siblings = new QuestionnaireNavigationPanelItem[] { new QuestionnaireNavigationPanelItem(input.ScreenPublicKey.Value, "sub screen", 0, 0), new QuestionnaireNavigationPanelItem(Guid.NewGuid(), "sub screen2", 0, 0) };
+
+                return new QuestionnaireScreenViewModel(input.QuestionnaireId, input.ScreenPublicKey.Value,
+                                                        input.PropagationKey, root.Items.Take(2).ToList(), siblings,
+                                                        Enumerable.Empty<QuestionnaireNavigationPanelItem>(), root.Chapters);
+            }
+            
+            return root;
         }
 
         #endregion

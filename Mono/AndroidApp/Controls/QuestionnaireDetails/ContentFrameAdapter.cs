@@ -5,6 +5,8 @@
 // -----------------------------------------------------------------------
 
 using Android.Support.V4.App;
+using Android.Support.V4.View;
+using Android.Views;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -20,37 +22,67 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class ContentFrameAdapter : FragmentPagerAdapter
     {
         private readonly Guid questionnaireId;
+        private Guid? screenId;
+        private bool isRoot;
         private IList<QuestionnaireNavigationPanelItem> screensHolder;
-
-        public ContentFrameAdapter(FragmentManager fm, Guid questionnaireId, Guid screenId, Guid? propagationKey)
-            : base(fm)
-        {
-            this.questionnaireId = questionnaireId;
-            this.screensHolder = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
-                new QuestionnaireScreenInput(questionnaireId, screenId, propagationKey)).Siblings;
-        }
+        IDictionary<int,Fragment> hash=new Dictionary<int, Fragment>();
+        private FragmentManager fm;
         public ContentFrameAdapter(FragmentManager fm, QuestionnaireScreenViewModel initScreen)
             : base(fm)
         {
             this.questionnaireId = initScreen.QuestionnaireId;
-            this.screensHolder = initScreen.Siblings;
+            this.fm = fm;
+            UpdateScreenData(initScreen);
+          
         }
         public override int Count
         {
-            get { return screensHolder.Count + 1; }
+            get { return screensHolder.Count + (isRoot ? 1 : 0); }
         }
 
         public override Fragment GetItem(int position)
         {
-            if(position==screensHolder.Count)
+            if (hash.ContainsKey(position))
+                return hash[position];
+            Fragment fragment;
+            if (position == screensHolder.Count && isRoot)
             {
-                return StatisticsContentFragment.NewInstance(questionnaireId);
+                fragment = StatisticsContentFragment.NewInstance(questionnaireId);
             }
+            else
+            {
 
-            var param = screensHolder[position];
-            var model = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
-                new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, null));
-            return ScreenContentFragment.NewInstance(model);
+                var param = screensHolder[position];
+                var model = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
+                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, null));
+                fragment = ScreenContentFragment.NewInstance(model);
+                ((ScreenContentFragment) fragment).ScreenChanged +=
+                    new EventHandler<ScreenChangedEventArgs>(fragment_ScreenChanged);
+                
+            }
+            hash.Add(position, fragment);
+            return fragment;
+        }
+
+        public override void DestroyItem(ViewGroup viewPgroup, int position, Java.Lang.Object obj)
+        {
+            //  viewPgroup.RemoveView(((Fragment)obj).View);
+            base.DestroyItem(viewPgroup, position, obj);
+            if (hash.All(h => h.Value != obj))
+                fm.BeginTransaction().Remove((Fragment) obj).Commit();
+            //    obj = GetItem(position);
+        }
+
+        public override int GetItemPosition(Java.Lang.Object p0)
+        {
+            if (hash.Any(h => h.Value == p0))
+                return PositionUnchanged;
+            return PositionNone;
+        }
+
+        void fragment_ScreenChanged(object sender, ScreenChangedEventArgs e)
+        {
+            OnScreenChanged(e);
         }
         public int GetScreenIndex(Guid? screenId)
         {
@@ -64,8 +96,31 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     return result;
                 result++;
             }
-            throw new ArgumentException("screen cant be found");
+            return -1;
+        }
+        public void UpdateScreenData(QuestionnaireScreenViewModel initScreen)
+        {
+          
+            this.screensHolder = initScreen.Siblings;
+            this.screenId = initScreen.ScreenId;
+            this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
+            this.NotifyDataSetChanged();
+            
+        }
+        public override void NotifyDataSetChanged()
+        {
+           
+            
+            hash = new Dictionary<int, Fragment>();
+            base.NotifyDataSetChanged();
+        }
+        protected void OnScreenChanged(ScreenChangedEventArgs evt)
+        {
+            var handler = ScreenChanged;
+            if (handler != null)
+                handler(this, evt);
         }
 
+        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
     }
 }

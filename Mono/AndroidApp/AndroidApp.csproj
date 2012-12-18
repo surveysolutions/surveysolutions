@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
+    <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />

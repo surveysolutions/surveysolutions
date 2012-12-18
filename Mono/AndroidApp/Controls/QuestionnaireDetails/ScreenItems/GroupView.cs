@@ -56,7 +56,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             GroupButton.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             GroupButton.Text = Model.Text;
             GroupButton.Enabled = Model.Enabled;
+            GroupButton.Click += new EventHandler(GroupButton_Click);
             this.AddView(GroupButton);
         }
+
+        void GroupButton_Click(object sender, EventArgs e)
+        {
+            OnScreenChanged(Model.PublicKey);
+        }
+
+        protected void OnScreenChanged(Guid publicKey)
+        {
+            var handler = ScreenChanged;
+            if(handler!=null)
+                handler(this, new ScreenChangedEventArgs(publicKey));
+        }
+
+        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
     }
 }
