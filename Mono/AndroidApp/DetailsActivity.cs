@@ -86,7 +86,7 @@ namespace AndroidApp
         {
             var index = Adapter.GetScreenIndex(e.ScreenId);
 
-            if (index > 0)
+            if (index >= 0)
             {
                 VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
                 return;

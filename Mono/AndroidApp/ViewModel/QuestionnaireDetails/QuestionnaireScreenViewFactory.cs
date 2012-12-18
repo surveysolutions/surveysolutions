@@ -86,7 +86,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
   @"              ""ValidationMessage"": null," +
   @"              ""Triggers"": []" +
   @"            }," +
-  @"            {" +
+   @"        {  ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteGroup, Main.Core""," +
+ @"          ""Children"": [" +
+  @"{" +
   @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.SingleCompleteQuestion, Main.Core""," +
   @"              ""AddSingleAttr"": null," +
   @"              ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
@@ -307,6 +309,18 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
   @"              ""ValidationMessage"": null," +
   @"              ""Triggers"": []" +
   @"            }" +
+  
+  
+  @"          ]," +
+  @"          ""ConditionExpression"": """"," +
+  @"          ""Enabled"": true," +
+  @"          ""Description"": null," +
+  @"          ""Propagated"": ""None""," +
+  @"          ""PropagationPublicKey"": null," +
+  @"          ""PublicKey"": ""93f98cd4-11ef-44c4-b5bd-5c5a739c691c""," +
+  @"          ""Title"": ""SubGroup""," +
+  @"          ""Triggers"": []" +
+  @"        }"+
   @"          ]," +
   @"          ""ConditionExpression"": """"," +
   @"          ""Enabled"": true," +
