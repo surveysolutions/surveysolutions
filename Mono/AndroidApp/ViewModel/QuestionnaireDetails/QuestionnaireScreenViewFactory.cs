@@ -152,7 +152,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
   @"              ""Children"": null," +
   @"              ""Comments"": null," +
   @"              ""ConditionExpression"": null," +
-  @"              ""Enabled"": true," +
+  @"              ""Enabled"": false," +
   @"              ""Featured"": true," +
   @"              ""Instructions"": null," +
   @"              ""Mandatory"": false," +
@@ -278,7 +278,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
   @"              ""QuestionText"": ""Respondent's highest level of education:""," +
   @"              ""QuestionType"": ""SingleOption""," +
   @"              ""StataExportCaption"": null," +
-  @"              ""Valid"": true," +
+  @"              ""Valid"": false," +
   @"              ""ValidationExpression"": null," +
   @"              ""ValidationMessage"": null," +
   @"              ""Triggers"": []" +
@@ -1300,7 +1300,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
   @"            {" +
   @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.AutoPropagateCompleteQuestion, Main.Core""," +
   @"              ""TargetGroupKey"": ""7995abad-41a3-45ac-bc33-40745674e998""," +
-  @"              ""Answer"": null," +
+  @"              ""Answer"": 4," +
   @"              ""MaxValue"": 0," +
   @"              ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
   @"              ""Answers"": []," +

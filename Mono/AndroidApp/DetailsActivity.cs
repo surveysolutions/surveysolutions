@@ -94,6 +94,7 @@ namespace AndroidApp
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, null));
             Adapter.UpdateScreenData(firstScreen);
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
 
         protected Guid CurrentScreen { get; set; }
