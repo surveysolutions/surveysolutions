@@ -21,7 +21,8 @@ namespace Browsing.Common.Containers
             private bool isBusy;
             private Registration parentRegistration;
 
-            internal ServiceTimer(Registration parentRegistration) : base()
+            internal ServiceTimer(Registration parentRegistration)
+                : base()
             {
                 this.parentRegistration = parentRegistration;
                 this.Interval = 5000;
@@ -29,24 +30,9 @@ namespace Browsing.Common.Containers
 
             protected override void OnTick(EventArgs e)
             {
-                lock (this)
-                {
-                    if (this.isBusy)
-                        return;
+                base.OnTick(e);
 
-                    this.isBusy = true;
-
-                    base.OnTick(e);
-
-                    try
-                    {
-                        this.parentRegistration.TreatServiceWatcherTick(this, EventArgs.Empty);
-                    }
-                    finally
-                    {
-                        this.isBusy = false;
-                    }
-                }
+                this.parentRegistration.TreatServiceWatcherTick(this, EventArgs.Empty);
             }
         }
 
@@ -137,7 +123,7 @@ namespace Browsing.Common.Containers
 
         private void TreatServiceWatcherTick(object sender, EventArgs e)
         {
-            RegistrationManager.CollectAllAuthorizationPackets();
+            new System.Threading.Thread(RegistrationManager.CollectAllAuthorizationPackets).Start();
         }
 
         void FirstRegistrationPhaseAccomplished(object sender, RegistrationEventArgs args)
@@ -189,7 +175,7 @@ namespace Browsing.Common.Containers
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is InactiveNetServiceException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is EndpointNotSetException || x is NetIssueException);
                 if (ex != null)
                 {
                     status = ex.Message;
@@ -320,7 +306,7 @@ namespace Browsing.Common.Containers
         {
             this.regPanel.UpdateUsbStatus();
 
-            if(!driverAvailable)
+            if (!driverAvailable)
                 RegistrationManager.RemoveUsbChannelPackets();
 
             CheckRegistractionPossibilities();

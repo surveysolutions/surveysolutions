@@ -33,6 +33,7 @@ namespace Synchronization.Core.Registration
         private Guid? registrationId = null;
 
         private Authorization authorizationService;
+        private bool isCollectionProcessing;
 
         #endregion
 
@@ -495,7 +496,7 @@ namespace Synchronization.Core.Registration
 
             var netEndPoint = this.urlUtils.GetEnpointUrl();
             if (string.IsNullOrEmpty(netEndPoint))
-                errors.Add(new InactiveNetServiceException());
+                errors.Add(new EndpointNotSetException());
 
             try
             {
@@ -511,7 +512,7 @@ namespace Synchronization.Core.Registration
                 if (errors == null)
                     errors = new List<ServiceException>();
 
-                errors.Add(new NetUnreachableException(ex.Message));
+                errors.Add(new NetIssueException(ex));
             }
 
             return errors;
@@ -523,9 +524,21 @@ namespace Synchronization.Core.Registration
         // it runs by timer
         public void CollectAllAuthorizationPackets()
         {
-            var usbPackets = ReadUsbPackets();
+            try
+            {
+                if (this.isCollectionProcessing)
+                    return;
 
-            this.authorizationService.CollectAuthorizationPackets(usbPackets);
+                this.isCollectionProcessing = true;
+
+                var usbPackets = ReadUsbPackets();
+
+                this.authorizationService.CollectAuthorizationPackets(usbPackets);
+            }
+            finally
+            {
+                this.isCollectionProcessing = false;
+            }
         }
 
         protected virtual IList<IAuthorizationPacket> OnReadUsbPackets(bool authorizationRequest)

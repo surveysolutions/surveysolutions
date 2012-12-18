@@ -129,10 +129,13 @@ namespace Browsing.Supervisor.Containers
                 AuthorizationList.Items.Add(CreateListItem(item));
             }
 
-            foreach (var packet in this.requestPackets)
+            lock (this.requestPackets)
             {
-                DateTime? pastAuthorization = alreadyRegisteredDevices.ContainsKey(packet.Data.RegistrationId) ? alreadyRegisteredDevices[packet.Data.RegistrationId] : (DateTime?)null;
-                AuthorizationList.Items.Add(CreateListItem(packet, pastAuthorization));
+                foreach (var packet in this.requestPackets)
+                {
+                    DateTime? pastAuthorization = alreadyRegisteredDevices.ContainsKey(packet.Data.RegistrationId) ? alreadyRegisteredDevices[packet.Data.RegistrationId] : (DateTime?)null;
+                    AuthorizationList.Items.Add(CreateListItem(packet, pastAuthorization));
+                }
             }
 
             AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
@@ -146,24 +149,29 @@ namespace Browsing.Supervisor.Containers
 
             CleanAuthorizedrequests();
 
-            lock (this)
+            try
             {
+                if (this.isReadingAuthorizationList)
+                    return;
+
                 this.isReadingAuthorizationList = true;
 
-                try
-                {
-                    var data = RegistrationManager.GetAuthorizedIds();
+                var data = RegistrationManager.GetAuthorizedIds();
 
-                    if (data != null)
+                if (data != null && !this.IsDisposed)
+                {
+                    if (this.InvokeRequired)
+                        this.Invoke(new Action<IEnumerable<RegisterData>>(UpdateListView), data);
+                    else
                         UpdateListView(data);
                 }
-                catch
-                {
-                }
-                finally
-                {
-                    this.isReadingAuthorizationList = false;
-                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                this.isReadingAuthorizationList = false;
             }
         }
 
