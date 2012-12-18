@@ -101,7 +101,7 @@ namespace Browsing.Common.Containers
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is InactiveNetServiceException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is EndpointNotSetException || x is NetIssueException);
                 if (ex != null)
                 {
                     status = ex.Message;

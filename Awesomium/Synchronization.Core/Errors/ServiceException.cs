@@ -25,6 +25,30 @@ namespace Synchronization.Core.Errors
             : base(message)
         {
         }
+
+        public override string Message
+        {
+            get
+            {
+                var mess = base.Message;
+                var ex = InnerException;
+                while (ex != null)
+                {
+                    mess += "\n" + ex.Message;
+                    ex = ex.InnerException;
+                }
+
+                return mess;
+            }
+        }
+    }
+
+    public class NetIssueException : ServiceException
+    {
+        public NetIssueException(Exception ex)
+            : base("Net access issue", ex)
+        {
+        }
     }
 
     public class NetUnreachableException : ServiceException
@@ -67,9 +91,9 @@ namespace Synchronization.Core.Errors
         }
     }
 
-    public class InactiveNetServiceException : ServiceException
+    public class EndpointNotSetException : ServiceException
     {
-        public InactiveNetServiceException()
+        public EndpointNotSetException()
             : base("Network synchronization endpoint is not set")
         {
         }

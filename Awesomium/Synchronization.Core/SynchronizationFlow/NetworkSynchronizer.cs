@@ -87,7 +87,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception ex)
             {
-                e = new NetUnreachableException(ex.Message);
+                e = new NetIssueException(ex);
             }
 
             return e == null ? null : new List<ServiceException>() { e };
@@ -101,7 +101,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override IList<ServiceException> OnGetInactiveErrors()
         {
             var errors = base.OnGetInactiveErrors();
-            errors.Add(new InactiveNetServiceException());
+            errors.Add(new EndpointNotSetException());
 
             return errors;
         }
