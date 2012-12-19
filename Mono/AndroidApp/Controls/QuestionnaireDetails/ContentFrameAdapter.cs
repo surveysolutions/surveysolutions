@@ -99,9 +99,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public int GetScreenIndex(Guid? screenId)
         {
-
             if (!screenId.HasValue)
-                return Count - 1;
+                return isRoot ? Count - 1 : -1;
          //   int result = 0;
             for (int i = 0; i < screensHolder.Count; i++)
             {

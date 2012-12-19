@@ -1761,11 +1761,20 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     if (possibleScreen != null)
                     {
                         screen = possibleScreen;
-                        siblings = new QuestionnaireNavigationPanelItem[]
-                            {
-                                new QuestionnaireNavigationPanelItem(screen.PublicKey, screen.PropagationPublicKey,
-                                                                     screen.Title, 0, 0)
-                            };
+                        if (screen.Propagated == Propagate.None || !screen.PropagationPublicKey.HasValue)
+                            siblings = new QuestionnaireNavigationPanelItem[]
+                                {
+                                    new QuestionnaireNavigationPanelItem(screen.PublicKey, screen.PropagationPublicKey,
+                                                                         screen.Title, 0, 0)
+                                };
+                        else
+                        {
+                            siblings =
+                                current.Children.OfType<ICompleteGroup>().Where(
+                                    c => c.PublicKey == input.ScreenPublicKey && c.PropagationPublicKey.HasValue).Select
+                                    (g => new QuestionnaireNavigationPanelItem(g.PublicKey, g.PropagationPublicKey,
+                                                                               g.Title, 0, 0)).ToList();
+                        }
                         break;
                     }
                     foreach (ICompleteGroup completeGroup in current.Children.OfType<ICompleteGroup>())
