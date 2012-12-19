@@ -136,9 +136,10 @@ namespace Questionnaire.Core.Web.Export
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(input);
-            string fileName = this.GetName(records.GroupName, container, 0);
+            
             if(records==null)
                 return;
+            string fileName = this.GetName(records.GroupName, container, 0);
             container.Add(fileName, manager.ExportToStream(records));
             string currentName = this.supplier.BuildContent(records, parentName, fileName, type);
             foreach (Guid autoPropagatebleQuestionPublicKey in records.AutoPropagatebleQuestionsPublicKeys)
