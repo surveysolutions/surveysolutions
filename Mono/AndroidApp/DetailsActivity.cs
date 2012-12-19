@@ -75,8 +75,9 @@ namespace AndroidApp
         {
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
+            VpContent.CurrentItem = 0;
             Adapter.UpdateScreenData(firstScreen);
-       //     VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
            /* Adapter = new ContentFrameAdapter(SupportFragmentManager, firstScreen);
             VpContent.Invalidate();*/
       //      VpContent.Adapter = Adapter;
@@ -85,17 +86,17 @@ namespace AndroidApp
 
         private void navList_ItemClick(object sender, ScreenChangedEventArgs e)
         {
-            var index = Adapter.GetScreenIndex(e.ScreenId);
+            var index = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
 
             if (index >= 0)
             {
-                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
                 return;
             }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
             Adapter.UpdateScreenData(firstScreen);
-            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
         }
 
         protected Guid CurrentScreen { get; set; }

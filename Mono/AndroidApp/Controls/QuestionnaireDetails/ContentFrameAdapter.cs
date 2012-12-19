@@ -97,16 +97,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             OnScreenChanged(e);
         }
-        public int GetScreenIndex(Guid? screenId)
+        public int GetScreenIndex(Guid? screenId, Guid? propagationKey)
         {
             if (!screenId.HasValue)
                 return isRoot ? Count - 1 : -1;
          //   int result = 0;
             for (int i = 0; i < screensHolder.Count; i++)
             {
-                if (screensHolder[i].ScreenPublicKey == screenId.Value)
+                if (screensHolder[i].ScreenPublicKey == screenId.Value &&
+
+
+                    ((!propagationKey.HasValue && !screensHolder[i].PropagationKey.HasValue) ||
+                     (propagationKey == screensHolder[i].PropagationKey)))
                     return i;
-              //  result++;
+                //  result++;
             }
             return -1;
         }
@@ -118,14 +122,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
             this.NotifyDataSetChanged();
             
+            
         }
         public override void NotifyDataSetChanged()
         {
-           
-            
             hash = new Dictionary<int, Fragment>();
             base.NotifyDataSetChanged();
         }
+
         protected void OnScreenChanged(ScreenChangedEventArgs evt)
         {
             var handler = ScreenChanged;
