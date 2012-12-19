@@ -65,7 +65,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             OnScreenChanged(Model.PublicKey);
         }
 
-        protected void OnScreenChanged(Guid publicKey)
+        protected void OnScreenChanged(ItemPublicKey publicKey)
         {
             var handler = ScreenChanged;
             if(handler!=null)

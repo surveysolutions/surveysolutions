@@ -17,7 +17,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
     public abstract class QuestionViewModel : IQuestionnaireItemViewModel
     {
-        public QuestionViewModel(Guid publicKey, string text, QuestionType type, bool enabled, string instructions,string comments, bool valid, bool mandatory)
+        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory)
         {
             PublicKey = publicKey;
             Text = text;
@@ -29,7 +29,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             Mandatory = mandatory;
         }
 
-        public Guid PublicKey { get; private set; }
+        public ItemPublicKey PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public bool Enabled { get; private set; }

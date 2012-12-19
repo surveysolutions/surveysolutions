@@ -79,7 +79,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             {
                 TableRow th = new TableRow(inflater.Context);
                 Button first = new Button(inflater.Context);
-                first.SetTag(Resource.Id.PrpagationKey, rosterItem.PropagationKey.ToString());
+                first.SetTag(Resource.Id.PrpagationKey, rosterItem.PublicKey.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.Title;
                 AssignHeaderStyles(first);
@@ -103,8 +103,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var senderButton = sender as Button;
             if(senderButton==null)
                 return;
-            var propagationKey = Guid.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
-            OnScreenChanged(new ScreenChangedEventArgs(Model.ScreenId, propagationKey));
+            var publicKey = ItemPublicKey.Parse(senderButton.GetTag(Resource.Id.PrpagationKey).ToString());
+            OnScreenChanged(new ScreenChangedEventArgs(publicKey));
             
         }
         protected void OnScreenChanged(ScreenChangedEventArgs evt)

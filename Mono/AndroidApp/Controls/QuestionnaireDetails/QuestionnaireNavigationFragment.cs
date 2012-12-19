@@ -30,7 +30,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
 
 
-        protected void OnItemClick(Guid? groupKey)
+        protected void OnItemClick(ItemPublicKey? groupKey)
         {
             var handler = ItemClick;
             if (handler != null)
@@ -62,10 +62,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
           //  ListView.SetItemChecked(pos, true);
             v.Selected = true;
             var tag = v.GetTag(Resource.Id.ScreenId);
-            Guid? screenId = null;
+            ItemPublicKey? screenId = null;
             if (tag != null)
             {
-                screenId = Guid.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
+                screenId = ItemPublicKey.Parse(v.GetTag(Resource.Id.ScreenId).ToString());
             }
             OnItemClick(screenId);
         }
@@ -74,17 +74,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
     public class ScreenChangedEventArgs : EventArgs
     {
-        public ScreenChangedEventArgs(Guid? screenId)
+        public ScreenChangedEventArgs(ItemPublicKey? screenId)
         {
             ScreenId = screenId;
         }
-        public ScreenChangedEventArgs(Guid screenId, Guid propagationKey)
-        {
-            ScreenId = screenId;
-            PropagationKey = propagationKey;
-        }
-        public Guid? ScreenId { get; private set; }
-        public Guid? PropagationKey { get; private set; }
+        public ItemPublicKey? ScreenId { get; private set; }
     }
 
 }

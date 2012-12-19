@@ -14,17 +14,15 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireNavigationPanelItem
     {
-        public QuestionnaireNavigationPanelItem(Guid screenPublicKey, Guid? propagetionKey, string title, int total, int answered)
+        public QuestionnaireNavigationPanelItem(ItemPublicKey screenPublicKey, string title, int total, int answered)
         {
             ScreenPublicKey = screenPublicKey;
-            PropagationKey = propagetionKey;
             Title = title;
             Total = total;
             Answered = answered;
         }
 
-        public Guid ScreenPublicKey { get; private set; }
-        public Guid? PropagationKey { get; private set; }
+        public ItemPublicKey ScreenPublicKey { get; private set; }
         public string Title { get; private set; }
         public int Total { get; private set; }
         public int Answered { get; private set; }

@@ -22,7 +22,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class ContentFrameAdapter : FragmentPagerAdapter
     {
         private readonly Guid questionnaireId;
-        private Guid? screenId;
+        private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<QuestionnaireNavigationPanelItem> screensHolder;
         IDictionary<int,Fragment> hash=new Dictionary<int, Fragment>();
@@ -54,7 +54,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
                 var param = screensHolder[position];
                 var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, param.PropagationKey));
+                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey));
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
@@ -97,18 +97,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             OnScreenChanged(e);
         }
-        public int GetScreenIndex(Guid? screenId, Guid? propagationKey)
+        public int GetScreenIndex(ItemPublicKey? screenId)
         {
             if (!screenId.HasValue)
                 return isRoot ? Count - 1 : -1;
          //   int result = 0;
             for (int i = 0; i < screensHolder.Count; i++)
             {
-                if (screensHolder[i].ScreenPublicKey == screenId.Value &&
-
-
-                    ((!propagationKey.HasValue && !screensHolder[i].PropagationKey.HasValue) ||
-                     (propagationKey == screensHolder[i].PropagationKey)))
+                if (screensHolder[i].ScreenPublicKey == screenId.Value)
                     return i;
                 //  result++;
             }

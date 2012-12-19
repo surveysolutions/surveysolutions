@@ -1744,7 +1744,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 screen = root.Children.OfType<ICompleteGroup>().First();
                 siblings =
                     root.Children.OfType<ICompleteGroup>().Select(
-                        g => new QuestionnaireNavigationPanelItem(g.PublicKey, null, g.Title, 0, 0)).ToList();
+                        g => new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0)).
+                        ToList();
             }
             else
             {
@@ -1755,9 +1756,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     var possibleScreen =
                         current.Children.OfType<ICompleteGroup>().FirstOrDefault(
                             g =>
-                            g.PublicKey == input.ScreenPublicKey &&
-                            ((!g.PropagationPublicKey.HasValue && !input.PropagationKey.HasValue) ||
-                             (g.PropagationPublicKey == input.PropagationKey)));
+                            g.PublicKey == input.ScreenPublicKey.Value.PublicKey &&
+                            ((!g.PropagationPublicKey.HasValue && !input.ScreenPublicKey.Value.PropagationKey.HasValue) ||
+                             (g.PropagationPublicKey == input.ScreenPublicKey.Value.PropagationKey)));
                     if (possibleScreen != null)
                     {
                         screen = possibleScreen;
@@ -1766,14 +1767,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                             if (current == root)
                                 siblings =
                                     root.Children.OfType<ICompleteGroup>().Select(
-                                        g => new QuestionnaireNavigationPanelItem(g.PublicKey, null, g.Title, 0, 0)).
+                                        g => new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0)).
                                         ToList();
                             else
 
                                 siblings = new QuestionnaireNavigationPanelItem[]
                                     {
-                                        new QuestionnaireNavigationPanelItem(screen.PublicKey,
-                                                                             screen.PropagationPublicKey,
+                                        new QuestionnaireNavigationPanelItem(new ItemPublicKey(screen.PublicKey,
+                                                                             screen.PropagationPublicKey),
                                                                              screen.Title, 0, 0)
                                     };
                         }
@@ -1781,8 +1782,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                         {
                             siblings =
                                 current.Children.OfType<ICompleteGroup>().Where(
-                                    c => c.PublicKey == input.ScreenPublicKey && c.PropagationPublicKey.HasValue).Select
-                                    (g => new QuestionnaireNavigationPanelItem(g.PublicKey, g.PropagationPublicKey,
+                                    c => c.PublicKey == input.ScreenPublicKey.Value.PublicKey && c.PropagationPublicKey.HasValue).Select
+                                    (g => new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey),
                                                                                g.Title, 0, 0)).ToList();
                         }
                         break;
@@ -1798,12 +1799,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             if (screen == null)
                 throw new ArgumentException("screen cant be found");
             if (screen.Propagated == Propagate.None || screen.PropagationPublicKey.HasValue)
-                return new QuestionnaireScreenViewModel(input.QuestionnaireId, screen.Title, screen.PublicKey,
-                                                        screen.PropagationPublicKey, BuildItems(screen), siblings,
+                return new QuestionnaireScreenViewModel(input.QuestionnaireId, screen.Title, new ItemPublicKey(screen.PublicKey,
+                                                        screen.PropagationPublicKey), BuildItems(screen), siblings,
                                                         Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                         BuildChapters(root));
 
-            return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, screen.PublicKey, siblings,
+            return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
                                                   Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                   BuildChapters(root),
                                                   screen.Children.OfType<ICompleteQuestion>().Select(
@@ -1817,7 +1818,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         {
             return
                 root.Children.OfType<ICompleteGroup>().Select(
-                    g => new QuestionnaireNavigationPanelItem(g.PublicKey,null, g.Title, 0, 0));
+                    g => new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey,null), g.Title, 0, 0));
         }
 
         protected IEnumerable<RosterItem> BuildGridRows(CompleteQuestionnaireDocument root, ICompleteGroup template)
@@ -1826,7 +1827,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
                     Select(
                         g =>
-                        new RosterItem(g.PropagationPublicKey.Value, g.PublicKey, g.Title,
+                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
                                        g.Children.OfType<ICompleteQuestion>().Select(
                                            q => CreateRowItem(q, g.PropagationPublicKey.Value))));
         }
@@ -1855,13 +1856,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             {
                 var newType = CalculateViewType(question.QuestionType);
                 if (!IsTypeSelectable(newType))
-                    return new ValueQuestionViewModel(question.PublicKey, question.QuestionText,
+                    return new ValueQuestionViewModel(new ItemPublicKey( question.PublicKey,question.PropagationPublicKey), question.QuestionText,
                                                       newType,
                                                       question.GetAnswerString(),
                                                       question.Enabled, question.Instructions, question.Comments,
                                                       question.Valid, question.Mandatory);
                 else
-                    return new SelectebleQuestionViewModel(question.PublicKey, question.QuestionText,
+                    return new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                                                            newType,
                                                            question.Answers.OfType<ICompleteAnswer>().Select(
                                                                a =>
@@ -1871,7 +1872,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)
-                return new GroupViewModel(group.PublicKey, group.Title, group.Enabled);
+                return new GroupViewModel(new ItemPublicKey(group.PublicKey, group.PropagationPublicKey), group.Title,
+                                          group.Enabled);
             return null;
         }
 

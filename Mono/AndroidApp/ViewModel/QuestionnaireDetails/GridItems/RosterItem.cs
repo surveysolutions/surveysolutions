@@ -14,16 +14,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
     public class RosterItem
     {
-        public RosterItem(Guid propagationKey, Guid publicKey, string title, IEnumerable<RowItem> rowItems)
+        public RosterItem(ItemPublicKey publicKey, string title, IEnumerable<RowItem> rowItems)
         {
-            PropagationKey = propagationKey;
             PublicKey = publicKey;
             Title = title;
             RowItems = rowItems;
         }
 
-        public Guid PublicKey { get; private set; }
-        public Guid PropagationKey { get; private set; }
+        public ItemPublicKey PublicKey { get; private set; }
         public string Title { get; private set; }
         public IEnumerable<RowItem> RowItems { get; private set; }
     }

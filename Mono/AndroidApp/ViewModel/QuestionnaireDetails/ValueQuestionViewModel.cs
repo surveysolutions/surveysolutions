@@ -15,7 +15,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class ValueQuestionViewModel : QuestionViewModel
     {
-        public ValueQuestionViewModel(Guid publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
+        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
             : base(publicKey, text, type, enabled,instructions,comments,valid, mandatory)
         {
             Answer = answer;

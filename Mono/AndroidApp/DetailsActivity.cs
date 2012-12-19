@@ -58,7 +58,7 @@ namespace AndroidApp
 
 
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, null, null));
+                new QuestionnaireScreenInput(QuestionnaireId, null));
             NavList = this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
             NavList.DataItems = firstScreen.Chapters;
@@ -74,10 +74,10 @@ namespace AndroidApp
         void Adapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
+                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
             VpContent.CurrentItem = 0;
             Adapter.UpdateScreenData(firstScreen);
-            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
            /* Adapter = new ContentFrameAdapter(SupportFragmentManager, firstScreen);
             VpContent.Invalidate();*/
       //      VpContent.Adapter = Adapter;
@@ -86,17 +86,17 @@ namespace AndroidApp
 
         private void navList_ItemClick(object sender, ScreenChangedEventArgs e)
         {
-            var index = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
+            var index = Adapter.GetScreenIndex(e.ScreenId);
 
             if (index >= 0)
             {
-                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
+                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
                 return;
             }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
+                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
             Adapter.UpdateScreenData(firstScreen);
-            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId,e.PropagationKey);
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
 
         protected Guid CurrentScreen { get; set; }

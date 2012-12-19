@@ -16,13 +16,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     {
         #region Implementation of IQuestionnaireItemView
 
-        public Guid PublicKey { get; private set; }
+        public ItemPublicKey PublicKey { get; private set; }
         public string Text { get; private set; }
         public bool Enabled { get; private set; }
 
         #endregion
 
-        public GroupViewModel(Guid publicKey, string text, bool enabled)
+        public GroupViewModel(ItemPublicKey publicKey, string text, bool enabled)
         {
             PublicKey = publicKey;
             Text = text;
