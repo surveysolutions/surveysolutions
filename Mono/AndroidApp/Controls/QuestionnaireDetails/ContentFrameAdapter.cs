@@ -27,7 +27,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private IList<QuestionnaireNavigationPanelItem> screensHolder;
         IDictionary<int,Fragment> hash=new Dictionary<int, Fragment>();
         private FragmentManager fm;
-        public ContentFrameAdapter(FragmentManager fm, QuestionnaireScreenViewModel initScreen)
+        public ContentFrameAdapter(FragmentManager fm, IQuestionnaireViewModel initScreen)
             : base(fm)
         {
             this.questionnaireId = initScreen.QuestionnaireId;
@@ -44,7 +44,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             if (hash.ContainsKey(position))
                 return hash[position];
-            Fragment fragment;
+            Fragment fragment = null;
             if (position == screensHolder.Count && isRoot)
             {
                 fragment = StatisticsContentFragment.NewInstance(questionnaireId);
@@ -53,13 +53,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             {
 
                 var param = screensHolder[position];
-                var model = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
-                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, null));
-                fragment = ScreenContentFragment.NewInstance(model);
-                ((ScreenContentFragment) fragment).ScreenChanged +=
-                    new EventHandler<ScreenChangedEventArgs>(fragment_ScreenChanged);
-                
+                var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey, param.PropagationKey));
+                var screenModel = model as QuestionnaireScreenViewModel;
+                if (screenModel != null)
+                {
+                    fragment = ScreenContentFragment.NewInstance(screenModel);
+                    ((ScreenContentFragment) fragment).ScreenChanged +=
+                        new EventHandler<ScreenChangedEventArgs>(fragment_ScreenChanged);
+                }
+                var grid = model as QuestionnaireGridViewModel;
+                if (grid != null)
+                {
+                    fragment = new GridContentFragment(grid);
+                    ((GridContentFragment)fragment).ScreenChanged +=
+                      new EventHandler<ScreenChangedEventArgs>(fragment_ScreenChanged);
+                }
+
             }
+            if (fragment == null)
+                throw new InvalidOperationException();
             hash.Add(position, fragment);
             return fragment;
         }
@@ -89,16 +102,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
             if (!screenId.HasValue)
                 return Count - 1;
-            int result = 0;
-            for (int i = 0; i < Count - 1; i++)
+         //   int result = 0;
+            for (int i = 0; i < screensHolder.Count; i++)
             {
                 if (screensHolder[i].ScreenPublicKey == screenId.Value)
-                    return result;
-                result++;
+                    return i;
+              //  result++;
             }
             return -1;
         }
-        public void UpdateScreenData(QuestionnaireScreenViewModel initScreen)
+        public void UpdateScreenData(IQuestionnaireViewModel initScreen)
         {
           
             this.screensHolder = initScreen.Siblings;

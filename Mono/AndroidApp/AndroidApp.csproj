@@ -61,6 +61,7 @@
     <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\GridContentFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
@@ -82,8 +83,13 @@
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\AbstractRowItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\RosterItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GroupViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireGridViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
@@ -177,6 +183,7 @@
     <AndroidResource Include="Resources\Drawable\questionShape.xml" />
     <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
     <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
+    <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

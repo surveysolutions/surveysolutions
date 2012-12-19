@@ -4,4 +4,5 @@
     <string name="ApplicationName">AndroidApp</string>
     <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="ScreenId" />
+  <item  type="id"  name="PrpagationKey" />
 </resources>

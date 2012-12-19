@@ -12,9 +12,9 @@ using Android.Widget;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class QuestionnaireScreenViewModel
+    public class QuestionnaireScreenViewModel : IQuestionnaireViewModel
     {
-        public QuestionnaireScreenViewModel(Guid questionnaireId, 
+        public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName, 
             Guid screenId,
             Guid? propagationKey, IEnumerable<IQuestionnaireItemViewModel> items,
             IList<QuestionnaireNavigationPanelItem> siblings,
@@ -31,6 +31,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public Guid QuestionnaireId { get; private set; }
+        public string ScreenName { get; private set; }
         public Guid ScreenId { get; private set; }
         public Guid? PropagationKey { get; private set; }
         public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }

@@ -78,8 +78,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             ScreenId = screenId;
         }
-
+        public ScreenChangedEventArgs(Guid screenId, Guid propagationKey)
+        {
+            ScreenId = screenId;
+            PropagationKey = propagationKey;
+        }
         public Guid? ScreenId { get; private set; }
+        public Guid? PropagationKey { get; private set; }
     }
 
 }

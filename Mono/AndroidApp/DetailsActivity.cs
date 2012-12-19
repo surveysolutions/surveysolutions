@@ -57,7 +57,7 @@ namespace AndroidApp
 
 
 
-            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
+            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, null, null));
             NavList = this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
@@ -73,9 +73,10 @@ namespace AndroidApp
 
         void Adapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
-            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, null));
+            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
             Adapter.UpdateScreenData(firstScreen);
+       //     VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
            /* Adapter = new ContentFrameAdapter(SupportFragmentManager, firstScreen);
             VpContent.Invalidate();*/
       //      VpContent.Adapter = Adapter;
@@ -91,8 +92,8 @@ namespace AndroidApp
                 VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
                 return;
             }
-            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, QuestionnaireScreenViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, null));
+            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId, e.PropagationKey));
             Adapter.UpdateScreenData(firstScreen);
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
