@@ -35,16 +35,16 @@ namespace AndroidApp
 		{
 			
 			// aapt resource value: 0x7f020000
-			public const int cell_shape = 2130837504;
+			public const int capi = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int CounterRoundShape = 2130837505;
+			public const int cell_shape = 2130837505;
 			
 			// aapt resource value: 0x7f020002
-			public const int grid_headerItem = 2130837506;
+			public const int CounterRoundShape = 2130837506;
 			
 			// aapt resource value: 0x7f020003
-			public const int Icon = 2130837507;
+			public const int grid_headerItem = 2130837507;
 			
 			// aapt resource value: 0x7f020004
 			public const int navigation_Selector = 2130837508;
@@ -163,11 +163,8 @@ namespace AndroidApp
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f040001
-			public const int ApplicationName = 2130968577;
-			
 			// aapt resource value: 0x7f040000
-			public const int Hello = 2130968576;
+			public const int ApplicationName = 2130968576;
 			
 			private String()
 			{

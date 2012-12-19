@@ -27,7 +27,7 @@ using Ninject;
 using Android.Graphics;
 namespace AndroidApp
 {
-	[Activity(Label = "AndroidApp", MainLauncher = true, Icon = "@drawable/icon")]
+	[Activity(Label = "CAPI", MainLauncher = true, Icon = "@drawable/capi")]
 	public class Activity1 : Activity
 	{
 		protected override void OnCreate(Bundle bundle)

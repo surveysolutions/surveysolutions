@@ -1799,12 +1799,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             if (screen == null)
                 throw new ArgumentException("screen cant be found");
             if (screen.Propagated == Propagate.None || screen.PropagationPublicKey.HasValue)
-                return new QuestionnaireScreenViewModel(input.QuestionnaireId, screen.Title, new ItemPublicKey(screen.PublicKey,
+                return new QuestionnaireScreenViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,
                                                         screen.PropagationPublicKey), BuildItems(screen), siblings,
                                                         Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                         BuildChapters(root));
 
-            return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
+            return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
                                                   Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                   BuildChapters(root),
                                                   screen.Children.OfType<ICompleteQuestion>().Select(

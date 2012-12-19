@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="Hello">Hello World, Click Me!</string>
-    <string name="ApplicationName">AndroidApp</string>
+    <string name="ApplicationName">CAPI</string>
     <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="ScreenId" />
   <item  type="id"  name="PrpagationKey" />

@@ -20,12 +20,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     {
         #region Implementation of IQuestionnaireViewModel
 
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, ItemPublicKey screenId, IList<QuestionnaireNavigationPanelItem> siblings,
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName,string title, ItemPublicKey screenId, IList<QuestionnaireNavigationPanelItem> siblings,
             IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, IEnumerable<QuestionnaireNavigationPanelItem> chapters, IEnumerable<HeaderItem> header,
             IEnumerable<RosterItem> rows)
         {
             QuestionnaireId = questionnaireId;
             ScreenName = screenName;
+            Title = title;
             ScreenId = screenId;
             Siblings = siblings;
             Breadcrumbs = breadcrumbs;
@@ -35,6 +36,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public Guid QuestionnaireId { get; private set; }
+        public string Title { get; private set; }
         public string ScreenName { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
         public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }

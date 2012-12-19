@@ -115,9 +115,6 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Drawable\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ED790AED-465E-4787-A9A3-8380229E0470}</Project>
       <Name>AndroidCore.Capi</Name>
@@ -185,6 +182,7 @@
     <AndroidResource Include="Resources\Drawable\questionInvalidShape.xml" />
     <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
     <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
+    <AndroidResource Include="Resources\Drawable\capi.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

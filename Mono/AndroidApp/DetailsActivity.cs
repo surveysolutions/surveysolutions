@@ -18,7 +18,7 @@ using Orientation = Android.Content.Res.Orientation;
 
 namespace AndroidApp
 {
-    [Activity(Label = "My Activity")]
+    [Activity(Icon = "@drawable/capi")]
     public class DetailsActivity : FragmentActivity 
     {
         protected Guid QuestionnaireId
@@ -59,6 +59,9 @@ namespace AndroidApp
 
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, null));
+            this.Title = firstScreen.Title;
+            
+
             NavList = this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
             NavList.DataItems = firstScreen.Chapters;

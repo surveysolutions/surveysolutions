@@ -14,7 +14,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireScreenViewModel : IQuestionnaireViewModel
     {
-        public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,
+        public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             IList<QuestionnaireNavigationPanelItem> siblings,
             IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, IEnumerable<QuestionnaireNavigationPanelItem> chapters)
@@ -27,9 +27,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             Breadcrumbs = breadcrumbs;
             Chapters = chapters;
             ScreenName = screenName;
+            Title = title;
         }
 
         public Guid QuestionnaireId { get; private set; }
+        public string Title { get; private set; }
         public string ScreenName { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
         public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }

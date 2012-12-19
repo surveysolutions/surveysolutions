@@ -6,6 +6,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     public interface IQuestionnaireViewModel
     {
         Guid QuestionnaireId { get; }
+        string Title { get; }
         string ScreenName { get; }
         ItemPublicKey ScreenId { get; }
         IList<QuestionnaireNavigationPanelItem> Siblings { get; }
