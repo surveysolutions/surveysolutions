@@ -50,17 +50,31 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             base.OnActivityCreated(savedInstanceState);
             
             this.ListView.ChoiceMode = ChoiceMode.Single;
-            this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
+         //   this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
-           
         }
 
+    
+        
 
+        public void SelectItem(int ind)
+        {
+            for (int idx = 0; idx < this.ListView.ChildCount; idx++)
+            {
+                if (idx == ind)
+                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.Blue);
+                else
+                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.Transparent);
+                //  EnableDisableView(group.GetChildAt(idx), enabled);
+            }
+        }
 
         public override void OnListItemClick(ListView l, View v, int pos, long id)
         {
-          //  ListView.SetItemChecked(pos, true);
-            v.Selected = true;
+            //  ListView.SetItemChecked(pos, true);
+            // v.Selected = true;
+           // v.SetBackgroundColor(Color.Green);
+            SelectItem(pos);
             var tag = v.GetTag(Resource.Id.ScreenId);
             ItemPublicKey? screenId = null;
             if (tag != null)
@@ -69,6 +83,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             OnItemClick(screenId);
         }
+
 
     }
 

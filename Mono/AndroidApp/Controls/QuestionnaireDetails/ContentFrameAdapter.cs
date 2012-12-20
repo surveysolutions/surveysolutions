@@ -19,25 +19,28 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class ContentFrameAdapter : FragmentPagerAdapter
+    public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
         private readonly Guid questionnaireId;
         private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<QuestionnaireNavigationPanelItem> screensHolder;
         IDictionary<int,Fragment> hash=new Dictionary<int, Fragment>();
-        private FragmentManager fm;
         public ContentFrameAdapter(FragmentManager fm, IQuestionnaireViewModel initScreen)
             : base(fm)
         {
             this.questionnaireId = initScreen.QuestionnaireId;
-            this.fm = fm;
             UpdateScreenData(initScreen);
           
         }
         public override int Count
         {
             get { return screensHolder.Count + (isRoot ? 1 : 0); }
+        }
+
+        public bool IsRoot
+        {
+            get { return isRoot; }
         }
 
         public override Fragment GetItem(int position)
@@ -76,23 +79,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             hash.Add(position, fragment);
             return fragment;
         }
-
-        public override void DestroyItem(ViewGroup viewPgroup, int position, Java.Lang.Object obj)
-        {
-            //  viewPgroup.RemoveView(((Fragment)obj).View);
-            base.DestroyItem(viewPgroup, position, obj);
-            if (hash.All(h => h.Value != obj))
-                fm.BeginTransaction().Remove((Fragment) obj).Commit();
-            //    obj = GetItem(position);
-        }
-
         public override int GetItemPosition(Java.Lang.Object p0)
         {
             if (hash.Any(h => h.Value == p0))
                 return PositionUnchanged;
             return PositionNone;
         }
-
         void fragment_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);
@@ -118,12 +110,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
             this.NotifyDataSetChanged();
             
-            
         }
         public override void NotifyDataSetChanged()
         {
             hash = new Dictionary<int, Fragment>();
             base.NotifyDataSetChanged();
+            
         }
 
         protected void OnScreenChanged(ScreenChangedEventArgs evt)

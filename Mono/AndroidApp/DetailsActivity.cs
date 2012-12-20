@@ -70,15 +70,21 @@ namespace AndroidApp
             Adapter = new ContentFrameAdapter(SupportFragmentManager,firstScreen);
             Adapter.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(Adapter_ScreenChanged);
             VpContent.Adapter = Adapter;
+            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
             
+        }
 
+        void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
+        {
+            if (Adapter.IsRoot)
+                NavList.SelectItem(e.P0);
         }
 
         void Adapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
-            VpContent.CurrentItem = 0;
+           // VpContent.CurrentItem = 0;
             Adapter.UpdateScreenData(firstScreen);
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
            /* Adapter = new ContentFrameAdapter(SupportFragmentManager, firstScreen);

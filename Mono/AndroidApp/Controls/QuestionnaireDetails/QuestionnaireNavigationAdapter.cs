@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -60,7 +61,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 tvITem.Text = "Complete";
                 tvCount.Visibility = ViewStates.Gone;
             }
-
+            
             return view;
         }
 
