@@ -67,6 +67,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// </summary>
         private ZipFile zip;
 
+        /// <summary>
+        /// List of text file content
+        /// </summary>
         private List<string> zipData;
 
         #endregion
