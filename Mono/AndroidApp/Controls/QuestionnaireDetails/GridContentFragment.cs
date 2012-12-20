@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
-using Android.Support.V4.App;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
@@ -12,6 +11,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
+using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
@@ -49,6 +49,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             TableLayout tl = new TableLayout(inflater.Context);
             tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
             tl.StretchAllColumns = true;
+            
 
             CreateHeader(inflater, tl);
             CreateBody(inflater, tl);
@@ -67,11 +68,29 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             {
                 TextView column = new TextView(inflater.Context);
                 column.Text = headerItem.Title;
+                if (!string.IsNullOrEmpty(headerItem.Instructions))
+                {
+
+                    var img = inflater.Context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
+                    //img.SetBounds(0, 0, 45, 45);
+                    column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+                    column.Click += new EventHandler(column_Click);
+                   
+                }
+                column.SetTag(Resource.Id.Index, Model.Header.IndexOf(headerItem));
                 AssignHeaderStyles(column);
                 th.AddView(column);
             }
 
             tl.AddView(th);
+        }
+
+        void column_Click(object sender, EventArgs e)
+        {
+            int i = int.Parse(((TextView) sender).GetTag(Resource.Id.Index).ToString());
+            var instructionsBuilder = new AlertDialog.Builder(this.Activity);
+            instructionsBuilder.SetMessage(Model.Header[i].Instructions);
+            instructionsBuilder.Show();
         }
         protected void CreateBody(LayoutInflater inflater, TableLayout tl)
         {
@@ -82,7 +101,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.PublicKey.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.Title;
-                AssignHeaderStyles(first);
+               // AssignHeaderStyles(first);
                 th.AddView(first);
 
                 foreach (RowItem abstractRowItem in rosterItem.RowItems)
@@ -118,6 +137,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         protected void AssignHeaderStyles(TextView tv)
         {
+       //     tv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
             tv.Gravity = GravityFlags.Center;
             tv.SetPadding(10,10,10,10);
             tv.TextSize = 20;

@@ -1359,7 +1359,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""ConditionExpression"": null," +
                 @"                  ""Enabled"": true," +
                 @"                  ""Featured"": false," +
-                @"                  ""Instructions"": null," +
+                @"                  ""Instructions"": ""HEllo room area""," +
                 @"                  ""Mandatory"": false," +
                 @"                  ""PropagationPublicKey"": null," +
                 @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
@@ -1808,7 +1808,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                                   Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                   BuildChapters(root),
                                                   screen.Children.OfType<ICompleteQuestion>().Select(
-                                                      c => new HeaderItem(c.PublicKey, c.QuestionText, c.Instructions)),
+                                                      c => new HeaderItem(c.PublicKey, c.QuestionText, c.Instructions)).ToList(),
                                                   BuildGridRows(root, screen));
         }
 

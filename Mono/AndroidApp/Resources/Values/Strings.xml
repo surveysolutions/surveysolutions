@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ApplicationName">CAPI</string>
-    <item  type="id"  name="QuestionnaireId" />
+  <string name="ApplicationName">CAPI</string>
+  <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="ScreenId" />
   <item  type="id"  name="PrpagationKey" />
+  <item  type="id"  name="Index" />
 </resources>

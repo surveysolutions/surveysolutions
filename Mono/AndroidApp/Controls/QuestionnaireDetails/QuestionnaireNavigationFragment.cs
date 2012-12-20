@@ -52,6 +52,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.ListView.ChoiceMode = ChoiceMode.Single;
          //   this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
+          
         }
 
     
