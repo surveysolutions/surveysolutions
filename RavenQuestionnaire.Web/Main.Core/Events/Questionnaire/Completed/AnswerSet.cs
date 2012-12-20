@@ -36,6 +36,11 @@ namespace Main.Core.Events.Questionnaire.Completed
         public string AnswerValue { get; set; }
 
         /// <summary>
+        /// Gets or sets AnswerDate.
+        /// </summary>
+        public DateTime AnswerDate { get; set; }
+
+        /// <summary>
         /// Gets or sets the completed questionnaire id.
         /// </summary>
         [Obsolete]

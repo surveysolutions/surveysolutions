@@ -63,8 +63,8 @@ namespace Core.Supervisor.Views.Summary
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
-            this.Complete = completed;
-            this.Approve = approve;
+            this.Completed = completed;
+            this.Approved = approve;
             this.Redo = redo;
         }
 
@@ -75,12 +75,12 @@ namespace Core.Supervisor.Views.Summary
         /// <summary>
         /// Gets or sets Approve.
         /// </summary>
-        public int Approve { get; set; }
+        public int Approved { get; set; }
 
         /// <summary>
         /// Gets or sets the complete.
         /// </summary>
-        public int Complete { get; set; }
+        public int Completed { get; set; }
 
         /// <summary>
         /// Gets or sets the error.

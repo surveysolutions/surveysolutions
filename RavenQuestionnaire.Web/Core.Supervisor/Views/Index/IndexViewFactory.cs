@@ -119,12 +119,12 @@ namespace Core.Supervisor.Views.Index
             retval.Summary = new IndexViewItem(
                 Guid.Empty,
                 "Summary",
-                items.Sum(x => x.Unassign),
+                items.Sum(x => x.Unassigned),
                 items.Sum(x => x.Total),
                 items.Sum(x => x.Initial),
                 items.Sum(x => x.Error),
-                items.Sum(x => x.Complete),
-                items.Sum(x => x.Approve),
+                items.Sum(x => x.Completed),
+                items.Sum(x => x.Approved),
                 items.Sum(x => x.Redo));
 
             retval.TotalCount = items.Count();
