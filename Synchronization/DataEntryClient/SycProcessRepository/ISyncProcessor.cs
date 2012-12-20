@@ -1,4 +1,4 @@
-namespace DataEntryClient.SycProcess
+namespace DataEntryClient.SycProcessRepository
 {
     using System.Collections.Generic;
 

@@ -19,7 +19,9 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Summary;
     using Core.Supervisor.Views.SyncProcess;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.View;
 

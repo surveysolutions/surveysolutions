@@ -13,7 +13,9 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Ionic.Zip;
 

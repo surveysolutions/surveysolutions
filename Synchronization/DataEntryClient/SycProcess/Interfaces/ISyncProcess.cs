@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ISyncProcess.cs" company="">
+// <copyright file="ISyncProcess.cs" company="The World Bank">
 //   
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcess.Interfaces
 {
     /// <summary>
     /// The WirelessSyncProcess interface.

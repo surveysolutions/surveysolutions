@@ -81,25 +81,27 @@
     <Reference Include="System.Web.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompleteQuestionnaire\EventPipeCollector.cs" />
-    <Compile Include="CompleteQuestionnaire\EventSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\ISyncProcessFactory.cs" />
-    <Compile Include="CompleteQuestionnaire\SyncProcessFactory.cs" />
-    <Compile Include="CompleteQuestionnaire\SyncProcessType.cs" />
-    <Compile Include="CompleteQuestionnaire\TemplateExportSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\WirelessSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\UsbSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\ISyncProcess.cs" />
-    <Compile Include="SycProcess\ISyncProcessor.cs" />
-    <Compile Include="SycProcess\ISyncProcessRepository.cs" />
-    <Compile Include="SycProcess\SyncProcesor.cs" />
-    <Compile Include="SycProcess\SyncProcessRepository.cs" />
+    <Compile Include="EventPipeCollector.cs" />
+    <Compile Include="SycProcess\EventSyncProcess.cs" />
+    <Compile Include="SycProcessFactory\ISyncProcessFactory.cs" />
+    <Compile Include="SycProcess\Interfaces\IEventSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\IWirelessSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\IUsbSyncProcess.cs" />
+    <Compile Include="SycProcessFactory\SyncProcessFactory.cs" />
+    <Compile Include="SycProcessFactory\SyncProcessType.cs" />
+    <Compile Include="SycProcess\TemplateExportSyncProcess.cs" />
+    <Compile Include="SycProcess\WirelessSyncProcess.cs" />
+    <Compile Include="SycProcess\AbstractSyncProcess.cs" />
+    <Compile Include="SycProcess\UsbSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\ISyncProcess.cs" />
+    <Compile Include="SycProcessRepository\ISyncProcessor.cs" />
+    <Compile Include="SycProcessRepository\ISyncProcessRepository.cs" />
+    <Compile Include="SycProcessRepository\SyncProcesor.cs" />
+    <Compile Include="SycProcessRepository\SyncProcessRepository.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CompleteQuestionnaire\SyncProcess.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

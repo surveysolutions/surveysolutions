@@ -19,7 +19,9 @@ namespace Web.CAPI.Controllers
     using Core.CAPI.Views.ExporStatistics;
     using Core.CAPI.Views.Synchronization;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
