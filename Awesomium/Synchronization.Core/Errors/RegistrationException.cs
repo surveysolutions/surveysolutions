@@ -7,6 +7,11 @@ namespace Synchronization.Core.Errors
 {
     public class RegistrationException : ServiceException
     {
+        public RegistrationException(string message)
+            : base(message, null)
+        {
+        }
+
         public RegistrationException(string message, Exception ex)
             : base(message, ex)
         {

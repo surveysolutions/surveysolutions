@@ -89,5 +89,17 @@ namespace Browsing.Common.Controls
         {
             this.LoadedScreens.Add(screen);
         }
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // ScreenHolder
+            // 
+            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.Size = new System.Drawing.Size(600, 400);
+            this.ResumeLayout(false);
+
+        }
     }
 }

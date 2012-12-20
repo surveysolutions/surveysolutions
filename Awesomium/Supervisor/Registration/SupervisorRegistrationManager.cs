@@ -82,7 +82,7 @@ namespace Browsing.Supervisor.Registration
         {
             IList<IAuthorizationPacket> packets = webServicePackets.Where(p => !p.IsAuthorized && p.IsMarkedToAuthorize).ToList();
             if (packets.Count == 0)
-                throw new RegistrationException("There are no new authorization requests", null);
+                throw new RegistrationException("There are no new authorization requests");
 
             return packets;
         }

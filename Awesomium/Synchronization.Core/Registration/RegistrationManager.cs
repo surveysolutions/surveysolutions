@@ -164,9 +164,8 @@ namespace Synchronization.Core.Registration
             }
 
             var response = request.GetResponse();
-
             if (response == null)
-                return null;
+                throw new RegistrationException("Data was posted, but there is no response from local host");
 
             byte[] buffer = new byte[4097];
             using (Stream responseStream = response.GetResponseStream())
@@ -212,7 +211,7 @@ namespace Synchronization.Core.Registration
 
         private void WriteRegistrationFile(RegisterData registeredData, string filePath)
         {
-            var dataToFile = Encoding.ASCII.GetBytes(SerializeRegisterData(registeredData));
+            var dataToFile = Encoding.UTF8.GetBytes(SerializeRegisterData(registeredData));
 
             FileStream fileStream = null;
 
