@@ -114,7 +114,7 @@ namespace Browsing.CAPI.Registration
             else // treat authorization responce
             {
                 if (webServicePackets.Count == 0)
-                    throw new RegistrationException("There is no authorization response from supervisor", null);
+                    throw new RegistrationException("There is no authorization response from supervisor");
 
                 // todo: clean the list here
                 var newList = new List<IAuthorizationPacket>();

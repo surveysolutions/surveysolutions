@@ -122,6 +122,7 @@ namespace Browsing.Common.Containers
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "Screen";
             this.Size = new System.Drawing.Size(1440, 628);
             this.menuPanel.ResumeLayout(false);
