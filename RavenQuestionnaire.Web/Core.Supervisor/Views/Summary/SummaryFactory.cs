@@ -103,8 +103,8 @@ namespace Core.Supervisor.Views.Summary
                 items.Sum(x => x.Total),
                 items.Sum(x => x.Initial),
                 items.Sum(x => x.Error),
-                items.Sum(x => x.Complete),
-                items.Sum(x => x.Approve),
+                items.Sum(x => x.Completed),
+                items.Sum(x => x.Approved),
                 items.Sum(x => x.Redo));
 
             retval.TotalCount = items.Count();

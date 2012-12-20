@@ -20,6 +20,7 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
     using Core.Supervisor.Views.Status;
+    using Core.Supervisor.Views.Timeline;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities;
@@ -366,6 +367,12 @@ namespace Web.Supervisor.Controllers
                 new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
+            return this.View(model);
+        }
+
+        public ActionResult Timeline(Guid id)
+        {
+            var model = this.viewRepository.Load<TimelineViewInputModel, TimelineView>(new TimelineViewInputModel(id));
             return this.View(model);
         }
 

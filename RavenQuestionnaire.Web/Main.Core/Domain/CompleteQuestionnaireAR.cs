@@ -271,11 +271,11 @@ namespace Main.Core.Domain
         /// <exception cref="InvalidOperationException">
         /// Raises InvalidOperationException.
         /// </exception>
-        public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers)
+        public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers, DateTime answerDate)
         {
             ////performe check before event raising!!
             ICompleteQuestion question = this.doc.GetQuestion(questionPublicKey, propogationPublicKey);
-
+            question.AnswerDate = answerDate;
             ////it's not a great idea to build here answer text
             string answerString;
             if (question.IsValueQuestion())
@@ -339,6 +339,7 @@ namespace Main.Core.Domain
                         PropogationPublicKey = propogationPublicKey, 
                         AnswerKeys = new List<Guid>(completeAnswers), 
                         AnswerValue = completeAnswerValue, 
+                        AnswerDate = answerDate,
                         Featured = question.Featured, 
                         ////clean up this values
                         QuestionText = question.QuestionText, 

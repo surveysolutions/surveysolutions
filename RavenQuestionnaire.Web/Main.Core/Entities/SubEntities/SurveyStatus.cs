@@ -128,7 +128,7 @@ namespace Main.Core.Entities.SubEntities
             get
             {
                 var identifier = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1");
-                string name = "Unassign";
+                string name = "Unassigned";
                 return new SurveyStatus(identifier, name);
             }
         }

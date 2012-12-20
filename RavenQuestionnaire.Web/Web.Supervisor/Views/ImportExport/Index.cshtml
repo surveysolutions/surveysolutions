@@ -8,7 +8,7 @@
     <thead>
         <tr>
             <td>
-                Publi Key
+                Public Key
             </td>
             <td>
                 Parent Key
@@ -38,9 +38,9 @@
                 </td>
                 <td>@item.ParentKey
                 </td>
-                <td>@item.StartDate
+                <td>@item.StartDate.ToLocalTime()
                 </td>
-                <td>@item.EndDate
+                <td>@item.EndDate.ToLocalTime()
                 </td>
                 <td>@item.SyncType
                 </td>
