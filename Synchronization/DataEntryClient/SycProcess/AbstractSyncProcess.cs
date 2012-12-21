@@ -7,14 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcess
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.ServiceModel;
 
-    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessRepository;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
@@ -101,6 +102,9 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// <exception cref="Exception">
         /// Some exception
         /// </exception>
+        /// <returns>
+        /// The ErrorCodes.
+        /// </returns>
         public ErrorCodes Import(string syncProcessDescription)
         {
             this.Invoker.Execute(new CreateNewSynchronizationProcessCommand(this.ProcessGuid, this.ParentProcessGuid, SynchronizationType.Pull, syncProcessDescription));
@@ -109,9 +113,10 @@ namespace DataEntryClient.CompleteQuestionnaire
                 var events = this.GetEventStream();
                 if (events == null)
                 {
-                    return ErrorCodes.None;
+                    this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, "Fail. No events"));
+                    return ErrorCodes.Fail;
                 }
-                // process is null. setup denormalizer on supervisor
+
                 var syncProcess = this.SyncProcessRepository.GetProcess(this.ProcessGuid);
 
                 syncProcess.Merge(events);
@@ -123,13 +128,6 @@ namespace DataEntryClient.CompleteQuestionnaire
                 syncProcess.Commit();
 
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
-            }
-            catch (ProtocolException ex)
-            {
-                // "/" is the last symbol in 
-                Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error: " + ex.Message, ex);
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, ex.Message));
             }
             catch (Exception ex)
             {
@@ -149,7 +147,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         /// The sync Process Description.
         /// </param>
         /// <returns>
-        /// The export.
+        /// The export
         /// </returns>
         public ErrorCodes Export(string syncProcessDescription)
         {
