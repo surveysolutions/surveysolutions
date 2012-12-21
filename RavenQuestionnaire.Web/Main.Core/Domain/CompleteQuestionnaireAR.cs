@@ -511,22 +511,21 @@ namespace Main.Core.Domain
                     //// key of first triggered group 
                     var firstKey = triggers.First();
 
-                    //// list of groups created by propagation
-                    var propagatedGroups = scopeRoot.Find<CompleteGroup>(g => g.PublicKey == firstKey && g.PropagationPublicKey.HasValue).ToArray();
+                    //// list of propagation keys created propagation created
+                    var propagatedGroups = scopeRoot.Find<CompleteGroup>(g => g.PublicKey == firstKey && g.PropagationPublicKey.HasValue).Select(i => i.PropagationPublicKey).ToArray();
 
-                    if (propagatedGroups.Length < count)
+                    if (propagatedGroups.Length != currentAnswer)
                     {
                         throw new InvalidOperationException("Mismatch between structure and answer.");
                     }
 
-                    for (int i = count; i < currentAnswer; i++)
+                    for (int i = currentAnswer; i > count; i--)
                     {
                         foreach (Guid trigger in triggers)
                         {
-                            var lastGroup = propagatedGroups[i];
+                            var lastGroup = scopeRoot.Find<CompleteGroup>(g => g.PublicKey == trigger && g.PropagationPublicKey == propagatedGroups[i - 1]).FirstOrDefault(); 
                             if (lastGroup != null)
                             {
-
                                 var parent = lastGroup.Parent as CompleteGroup;
                                 if (parent == null)
                                 {
