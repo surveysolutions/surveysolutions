@@ -132,6 +132,78 @@ namespace DataEntryClientTests.SycProcess
             syncProcessor.Verify(x => x.Commit(), Times.Exactly(1));
         }
 
+        /// <summary>
+        /// </summary>
+        [Test]
+        public void WirelessSyncProcess_ExceptionWhileEventsLoading_ImportIsFailed()
+        {
+            var processGuid = Guid.NewGuid();
+
+            var syncProcessor = new Mock<ISyncProcessor>();
+
+            var serviceMock = new Mock<IGetAggragateRootList>();
+            var eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
+            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var serviceResult = new ListOfAggregateRootsForImportMessage
+            {
+                Roots = new[] { 
+                                new ProcessedEventChunk
+                                    {
+                                        EventChunckPublicKey = Guid.NewGuid(), 
+                                        EventKeys = new List<Guid> { Guid.NewGuid() }
+                                    }
+                              }
+            };
+
+            this.syncProcessRepository.Setup(x => x.GetProcess(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
+            eventServiceMock
+                .Setup(x => x.Process(
+                    serviceResult.Roots[0].EventKeys.First(),
+                    serviceResult.Roots[0].EventKeys.Count))
+                .Throws(new Exception("Test exception"));
+
+            this.syncProcessRepository.Setup(r => r.GetProcess(processGuid)).Returns(syncProcessor.Object);
+
+            var process = new WirelessSyncProcess(this.kernel, processGuid);
+
+            var result = process.Import("Test", "http://192.162.0.0");
+
+            Assert.AreEqual(ErrorCodes.Fail, result);
+
+            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
+
+            this.syncProcessRepository.Verify(x => x.GetProcess(processGuid), Times.Never());
+
+            syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Never());
+
+            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Never());
+
+            syncProcessor.Verify(x => x.Commit(), Times.Never());
+        }
+
+        /// <summary>
+        /// </summary>
+        [Test]
+        public void WirelessSyncProcess_CheckExportScenario()
+        {
+            var processGuid = Guid.NewGuid();
+            var pipeMock = new Mock<IEventPipe>();
+
+            var eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { pipeMock, eventServiceMock });
+            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var process = new WirelessSyncProcess(this.kernel, processGuid);
+
+            var result = process.Export("Test", "http://192.162.0.0");
+
+            Assert.AreEqual(ErrorCodes.None, result);
+
+            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
+        }
 
         /// <summary>
         /// The get last event guid_ result not null_ guid is not returned.

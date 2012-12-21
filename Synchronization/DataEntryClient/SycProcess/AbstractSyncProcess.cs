@@ -113,7 +113,8 @@ namespace DataEntryClient.SycProcess
                 var events = this.GetEventStream();
                 if (events == null)
                 {
-                    return ErrorCodes.None;
+                    this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, "Fail. No events"));
+                    return ErrorCodes.Fail;
                 }
 
                 var syncProcess = this.SyncProcessRepository.GetProcess(this.ProcessGuid);

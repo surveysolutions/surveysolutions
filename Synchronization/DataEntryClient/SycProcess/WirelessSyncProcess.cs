@@ -159,6 +159,7 @@ namespace DataEntryClient.SycProcess
         {
             ListOfAggregateRootsForImportMessage result = null;
             this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress, (client) => { result = client.Process(); });
+            
             if (result == null)
             {
                 throw new Exception("aggregate roots list is empty");
@@ -179,12 +180,10 @@ namespace DataEntryClient.SycProcess
                                     continue;
                                 }
 
-                                AggregateRootEvent[] stream =
-                                    client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
+                                AggregateRootEvent[] stream = client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
                                 events.AddRange(stream);
-                                this.Invoker.Execute(
-                                    new ChangeEventStatusCommand(
-                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
+
+                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
                             }
                             catch (Exception ex)
                             {
@@ -192,9 +191,7 @@ namespace DataEntryClient.SycProcess
                                 logger.Fatal("Import error", ex);
 
                                 events = null;
-                                this.Invoker.Execute(
-                                    new ChangeEventStatusCommand(
-                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
+                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
                             }
                         }
                     });
