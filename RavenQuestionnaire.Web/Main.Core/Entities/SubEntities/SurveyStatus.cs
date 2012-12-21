@@ -126,7 +126,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 return new SurveyStatus
                     {
-                       PublicId = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1"), Name = "Unassigned" 
+                       PublicId = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1"), Name = "Unassign" 
                     };
             }
         }
@@ -172,21 +172,22 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Unassign, Initial, Error, Complete, Approve, Redo };
+            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown };
         }
 
         /// <summary>
         /// The get status by id or default.
         /// </summary>
-        /// <param name="Id">
+        /// <param name="id">
         /// The id.
         /// </param>
         /// <returns>
         /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static SurveyStatus GetStatusByIdOrDefault(Guid Id)
+        public static SurveyStatus GetStatusByIdOrDefault(Guid id)
         {
-            return SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == Id);
+            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id);
+            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
         }
 
         /// <summary>
@@ -198,14 +199,12 @@ namespace Main.Core.Entities.SubEntities
         /// <returns>
         /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static SurveyStatus GetStatusByName(string statusName)
+        public static SurveyStatus GetStatusByNameOrDefault(string statusName)
         {
-            return SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.Name == statusName);
-            
-
+            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.Name == statusName);
+            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
 
             /*
-
             if (statusName == Approve.Name)
             {
                 return Approve;
