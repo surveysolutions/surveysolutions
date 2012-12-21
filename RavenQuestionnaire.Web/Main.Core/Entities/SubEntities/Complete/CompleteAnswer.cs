@@ -163,7 +163,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </returns>
         public IAnswer Clone()
         {
-            var answer = this.MemberwiseClone() as CompleteAnswer;
+            CompleteAnswer answer = this.MemberwiseClone() as CompleteAnswer;
             return answer;
         }
 

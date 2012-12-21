@@ -93,14 +93,9 @@ namespace Core.Supervisor.Views.Assignment
 
             if (input.Statuses != null && input.Statuses.Count > 0)
             {
-                view.Status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == input.Statuses.First());
+                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
             }
-
-            if (view.Status == null)
-            {
-                view.Status = new SurveyStatus(Guid.Empty, "All");
-            }
-
+            
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == Guid.Empty
                 ? this.surveys.Query()
                 : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))

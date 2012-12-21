@@ -27,7 +27,7 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
-        public Guid ParentPublicKey { get; set; }
+        public Guid ParentKey { get; set; }
 
         /// <summary>
         /// Gets or sets the group.

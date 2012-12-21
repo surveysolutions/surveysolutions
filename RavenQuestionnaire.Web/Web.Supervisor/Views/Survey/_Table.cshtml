@@ -31,10 +31,10 @@
                     @foreach (var it in Model.Headers)
                     {
 
-                        var status = SurveyStatus.IsValidStatus(it.Value);
+                        var status = SurveyStatus.GetStatusByName(it.Value);
                         var value = Model.Headers.GetItemValue(collect, it.Key);
 
-                        if (status != null)
+                        if (status.PublicId != Guid.Empty)
                         {
                 
                         <td class="td-@it.Key.ToLower()">

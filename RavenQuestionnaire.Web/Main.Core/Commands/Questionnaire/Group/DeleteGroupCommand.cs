@@ -30,13 +30,17 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public DeleteGroupCommand(Guid groupPublicKey, Guid questionnaireId)
+        public DeleteGroupCommand(Guid groupPublicKey, Guid? parentPublicKey, Guid questionnaireId)
         {
             this.GroupPublicKey = groupPublicKey;
             this.QuestionnaireId = questionnaireId;
+            this.ParentPublicKey = parentPublicKey;
         }
 
         #endregion
@@ -44,15 +48,20 @@ namespace Main.Core.Commands.Questionnaire.Group
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the group public key.
+        /// Gets the group public key.
         /// </summary>
-        public Guid GroupPublicKey { get; set; }
+        public Guid GroupPublicKey { get; private set; }
 
         /// <summary>
-        /// Gets or sets the questionnaire id.
+        /// Gets the parent public key.
+        /// </summary>
+        public Guid? ParentPublicKey { get; private set; }
+
+        /// <summary>
+        /// Gets the questionnaire id.
         /// </summary>
         [AggregateRootId]
-        public Guid QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; private set; }
 
         #endregion
     }

@@ -104,7 +104,7 @@ namespace Main.Core.Entities.SubEntities
 
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -115,7 +115,7 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             if (!parent.HasValue || this.PublicKey == parent)
             {
@@ -127,12 +127,12 @@ namespace Main.Core.Entities.SubEntities
                 var group = this.Find<Group>(parent.Value);
                 if (group != null)
                 {
-                    group.Add(c, null);
+                    group.Add(c, null, null);
                 }
                 //// leave legacy for awhile
                 throw new CompositeException();
             }
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -231,7 +231,7 @@ namespace Main.Core.Entities.SubEntities
             throw new CompositeException();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -240,9 +240,9 @@ namespace Main.Core.Entities.SubEntities
         public void Remove(IComposite c)
         {
             this.Remove(c.PublicKey, null);
-        }
+        }*/
         
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -273,7 +273,7 @@ namespace Main.Core.Entities.SubEntities
             }
 
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The connect childs with parent.

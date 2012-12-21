@@ -218,7 +218,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         public abstract void AddAnswer(IAnswer answer);
 
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -227,10 +227,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -304,7 +304,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </returns>
         public abstract string GetAnswerString();
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -313,9 +313,9 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void Remove(IComposite c)
         {
             throw new NotImplementedException();
-        }
+        }*/
         
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -329,7 +329,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         /// <summary>
         /// The connect childs with parent.
@@ -370,6 +370,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             question.Answers = new List<IAnswer>();
             foreach (var answer in this.Answers)
             {
+                var item = answer.Clone();
                 question.Answers.Add(answer.Clone());
             }
 

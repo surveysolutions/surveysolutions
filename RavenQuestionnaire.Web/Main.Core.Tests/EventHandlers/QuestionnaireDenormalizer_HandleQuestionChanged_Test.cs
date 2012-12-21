@@ -58,7 +58,7 @@ namespace Main.DenormalizerStorage.Tests
                 ValidationExpression = string.Empty,
                 ValidationMessage = string.Empty
             };
-            group.Add(question, null);
+            group.Children.Add(question);
 
             var documentStorage = new Mock<IDenormalizerStorage<QuestionnaireDocument>>();
 
@@ -122,7 +122,7 @@ namespace Main.DenormalizerStorage.Tests
                     Triggers = new List<Guid>(), 
                     QuestionType = QuestionType.AutoPropagate 
                 };
-            group.Add(question, null);
+            group.Children.Add(question);
 
             var documentStorage = new Mock<IDenormalizerStorage<QuestionnaireDocument>>();
 

@@ -14,7 +14,7 @@
         @Html.Raw(Model.Title)</h3>
         <div class="btn-group">
             @Html.ActionLink("Edit", "Edit", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-info  btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Question", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-info btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Question", new { publicKey = Model.PublicKey, parentPublicKey= Model.Parent, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-info btn-mini" })
             @Html.ActionLink("Add cards", "AddCards", "Question", new { Model.PublicKey, Model.QuestionnaireKey }, new { @class = "btn btn-info btn-mini" })
             @Html.ActionLink("Move", "Move", "Question", new { PublicKeyQuestion = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-info btn-mini" })            
         </div>
