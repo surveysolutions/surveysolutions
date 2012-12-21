@@ -42,7 +42,7 @@ namespace Browsing.Supervisor.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
+            syncChain.Add(new UsbSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils, this.UsbProvider));
         }
 
         protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action, Guid syncProcessId)

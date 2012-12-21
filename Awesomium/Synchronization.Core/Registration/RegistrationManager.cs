@@ -240,7 +240,7 @@ namespace Synchronization.Core.Registration
         private RegisterData ReadRegistrationFile(string filePath)
         {
             if (!File.Exists(filePath))
-                throw new Exception("Registration file is not found");
+                throw new RegistrationException(string.Format("Registration file {0} is not found", filePath));
 
             FileStream fileStream = null;
             try
