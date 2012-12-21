@@ -151,7 +151,7 @@ namespace Main.Core.Documents
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             if (!parent.HasValue || this.PublicKey == parent)
             {
@@ -164,7 +164,7 @@ namespace Main.Core.Documents
             var group = this.Find<Group>(parent.Value);
             if (@group != null)
             {
-                @group.Add(c, null);
+                @group.Children.Add(c);
                 return;
             }
 
@@ -237,7 +237,7 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -245,10 +245,10 @@ namespace Main.Core.Documents
         /// </param>
         public void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey, null);
-        }
+            // this.Remove(c.PublicKey, null);
+        }*/
         
-        /// <summary>
+       /* /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -259,7 +259,18 @@ namespace Main.Core.Documents
         /// </param>
         public void Remove(Guid publicKey, Guid? propagationKey)
         {
-            IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+
+            if (this.PublicKey == publicKey)
+            {
+                IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+                if (group != null)
+                {
+                    this.Children.Remove(group);
+                    return;
+                }
+            }
+
+            var group1 = this.Find<IComposite>(g => g.PublicKey == publicKey);
             if (group != null)
             {
                 this.Children.Remove(group);
@@ -279,6 +290,22 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
+        }*/
+
+
+        public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
+        {
+
+            // we could delete group from the root of Questionnaire
+            if (parentPublicKey == null || this.PublicKey == parentPublicKey)
+            {
+                this.Children.RemoveAll(i => i.PublicKey == itemKey);
+            }
+            else
+            {
+                IGroup parent = this.Find<IGroup>(g => g.PublicKey == parentPublicKey).FirstOrDefault();
+                parent.Children.RemoveAll(i => i.PublicKey == itemKey);
+            }
         }
 
         /// <summary>
@@ -329,6 +356,18 @@ namespace Main.Core.Documents
 
             return doc;
         }
+
+        /*/// <summary>
+        /// The on deserializing.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        [OnDeserialized]
+        void OnDeserialized(StreamingContext context)
+        {
+            this.ConnectChildsWithParent();
+        }*/
 
         #endregion
     }

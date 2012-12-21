@@ -95,13 +95,13 @@ namespace Main.Core.Tests.ExpressionExecutors
                 PublicKey = this.q21PublicKey
             };
 
-            subGroup2.Add(question21, null);
-            mainGroup.Add(question1, null);
-            mainGroup.Add(question2, null);
-            mainGroup.Add(subGroup1, null);
-            mainGroup.Add(subGroup2, null);
+            subGroup2.Children.Add(question21);
+            mainGroup.Children.Add(question1);
+            mainGroup.Children.Add(question2);
+            mainGroup.Children.Add(subGroup1);
+            mainGroup.Children.Add(subGroup2);
 
-            this.doc.Add(mainGroup, null);
+            this.doc.Add(mainGroup, null, null);
         }
 
         /// <summary>
@@ -170,10 +170,10 @@ namespace Main.Core.Tests.ExpressionExecutors
                 PublicKey = Guid.NewGuid()
             };
 
-            mainGroup.Add(question1, null);
-            mainGroup.Add(question2, null);
-            mainGroup.Add(question3, null);
-            doc.Add(mainGroup, null);
+            mainGroup.Children.Add(question1);
+            mainGroup.Children.Add(question2);
+            mainGroup.Children.Add(question3);
+            doc.Add(mainGroup, null, null);
 
             var completedQ = (CompleteQuestionnaireDocument)this.doc;
 

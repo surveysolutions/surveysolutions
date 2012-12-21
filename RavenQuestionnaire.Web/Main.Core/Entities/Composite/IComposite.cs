@@ -37,18 +37,7 @@ namespace Main.Core.Entities.Composite
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        void Add(IComposite c, Guid? parent);
-
+        
         /// <summary>
         /// The find.
         /// </summary>
@@ -88,25 +77,7 @@ namespace Main.Core.Entities.Composite
         /// </returns>
         T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        void Remove(IComposite c);
         
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        void Remove(Guid publicKey, Guid? propagationKey);
-
         /// <summary>
         /// The connect childs with parent.
         /// </summary>

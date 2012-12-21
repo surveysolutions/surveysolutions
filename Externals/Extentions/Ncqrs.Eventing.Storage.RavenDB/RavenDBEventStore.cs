@@ -145,9 +145,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 using (var session = _documentStore.OpenSession())
                 {
                     var chunk =
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).
-                            Skip(page * maxPageSize).
-                            Take(maxPageSize).Where(query);
+                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * maxPageSize)
+                            .Take(maxPageSize).Where(query);
                     if (!chunk.Any())
                         break;
 

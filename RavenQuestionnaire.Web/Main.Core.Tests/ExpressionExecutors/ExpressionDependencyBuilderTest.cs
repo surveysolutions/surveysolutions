@@ -72,16 +72,16 @@ namespace Main.Core.Tests.ExpressionExecutors
                     PublicKey = Guid.NewGuid()
                 };
 
-            subGroup2.Add(question2_1, null);
+            subGroup2.Children.Add(question2_1);
 
-            mainGroup.Add(question1, null);
-            mainGroup.Add(question2, null);
+            mainGroup.Children.Add(question1);
+            mainGroup.Children.Add(question2);
 
-            mainGroup.Add(subGroup1, null);
+            mainGroup.Children.Add(subGroup1);
 
-            mainGroup.Add(subGroup2, null);
+            mainGroup.Children.Add(subGroup2);
 
-            doc.Add(mainGroup, null);
+            doc.Add(mainGroup, null, null);
 
             var dependentQuestions = new Dictionary<Guid, List<Guid>>();
             var dependentGroups = new Dictionary<Guid, List<Guid>>();
@@ -165,11 +165,11 @@ namespace Main.Core.Tests.ExpressionExecutors
 
             var group1 = new Group() { ConditionExpression = "3-2> 0 and 4" };
 
-            mainGroup.Add(question1, null);
-            mainGroup.Add(question2, null);
-            group1.Add(question3, null);
-            mainGroup.Add(group1, null);
-            doc.Add(mainGroup, null);
+            mainGroup.Children.Add(question1);
+            mainGroup.Children.Add(question2);
+            group1.Children.Add(question3);
+            mainGroup.Children.Add(group1);
+            doc.Add(mainGroup, null, null);
 
             // var completedQ = (CompleteQuestionnaireDocument)doc;
 

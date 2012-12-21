@@ -14,7 +14,7 @@ namespace Main.Core.Events.Questionnaire.Completed
     using Ncqrs.Eventing.Storage;
 
     /// <summary>
-    /// The propagatable group deleted.
+    /// The propagate group deleted.
     /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:PropagatableGroupDeleted")]
@@ -22,10 +22,11 @@ namespace Main.Core.Events.Questionnaire.Completed
     {
         #region Public Properties
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the completed questionnaire id.
         /// </summary>
-        public Guid CompletedQuestionnaireId { get; set; }
+        [Obsolete]
+        public Guid CompletedQuestionnaireId { get; set; }*/
 
         /// <summary>
         /// Gets or sets the propagation key.
@@ -36,11 +37,21 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
+        
+        /// <summary>
+        /// Gets or sets the parent key.
+        /// </summary>
+        public Guid ParentKey { get; set; }
 
         /// <summary>
+        /// Gets or sets the parent propagation key.
+        /// </summary>
+        public Guid? ParentPropagationKey { get; set; }
+        
+        /*/// <summary>
         /// Gets or sets the question propagation key.
         /// </summary>
-        public Guid? QuestionPropagationKey { get; set; }
+        public Guid? QuestionPropagationKey { get; set; }*/
 
         #endregion
     }

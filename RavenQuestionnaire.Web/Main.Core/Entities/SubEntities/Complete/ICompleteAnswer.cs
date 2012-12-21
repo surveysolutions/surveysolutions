@@ -18,10 +18,10 @@ namespace Main.Core.Entities.SubEntities.Complete
     {
         #region Public Properties
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
-        Guid? PropogationPublicKey { get; set; }
+        Guid? PropogationPublicKey { get; set; }*/
 
         /// <summary>
         /// Gets or sets a value indicating whether selected.
