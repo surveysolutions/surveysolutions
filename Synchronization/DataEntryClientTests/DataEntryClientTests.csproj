@@ -87,6 +87,7 @@
     <Compile Include="Stubs\ChanelFactoryStub.cs" />
     <Compile Include="Stubs\SyncProcesorStub.cs" />
     <Compile Include="SycProcessFactory\SyncProcessFactoryTests.cs" />
+    <Compile Include="SycProcess\EventSyncProcessTests.cs" />
     <Compile Include="SycProcess\WirelessSyncProcessTests.cs" />
   </ItemGroup>
   <ItemGroup>
