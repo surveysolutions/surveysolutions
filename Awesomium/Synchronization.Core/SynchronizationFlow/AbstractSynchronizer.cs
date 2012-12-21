@@ -1,48 +1,81 @@
 ﻿using System;
+using System.Threading;
 using System.Collections.Generic;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using Common.Utils;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
     public abstract class AbstractSynchronizer : ISynchronizer
     {
+        #region variables
+
+        private ManualResetEvent stopRequested = new ManualResetEvent(false);
+        private readonly IRequestProcessor requestProcessor;
+        
+        /// <summary>
+        /// Synchronization process identifier
+        /// </summary>
+        private Guid syncProcessId;
+
+        #endregion
+
         #region C-tor
 
-        protected AbstractSynchronizer(ISettingsProvider clientSettingsprovider)
+        protected AbstractSynchronizer(ISettingsProvider clientSettingsprovider, IRequestProcessor requestProcessor, IUrlUtils urlUtils)
         {
             this.SettingsProvider = clientSettingsprovider;
+            this.UrlUtils = urlUtils;
+
+            this.requestProcessor = requestProcessor;
         }
 
         #endregion
 
         #region Properties
 
+        protected IUrlUtils UrlUtils { get; private set; }
         protected ISettingsProvider SettingsProvider { get; private set; }
-
-        /// <summary>
-        /// Synchronization process identifier
-        /// </summary>
-        protected Guid SyncProcessId { get; set; }
 
         #endregion
 
         #region Helpers
+
+        private bool IsCancelled { get { return this.stopRequested.WaitOne(100); } }
 
         private IList<ServiceException> GetInactiveErrors()
         {
             return OnGetInactiveErrors();
         }
 
+        protected T ProcessWebRequest<T>(string url, T defaultValue)
+        {
+            return this.requestProcessor.Process<T>(url, defaultValue);
+        }
+
         #endregion
 
         #region Abstract and Virtual
 
-        protected abstract void OnPush(SyncDirection direction);
-        protected abstract void OnPull(SyncDirection direction);
-        protected abstract void OnStop();
+        protected abstract Guid OnPush(SyncDirection direction);
+        protected abstract Guid OnPull(SyncDirection direction);
         protected abstract IList<ServiceException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
+
+                
+        /// <summary>
+        /// Interrupt pending loading
+        /// </summary>
+        protected virtual void OnStop()
+        {
+            if (this.syncProcessId == Guid.Empty /*no sync process*/ || IsCancelled /*already cancelled*/)
+                return;
+
+            var endProcess = ProcessWebRequest<bool>(UrlUtils.GetEndProcessUrl(this.syncProcessId), false);
+            if (endProcess)
+                this.stopRequested.Set();
+        }
 
         // The event-invoking method that derived classes can override.
         protected virtual void OnSyncProgressChanged(SynchronizationEventArgs e)
@@ -66,6 +99,30 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #endregion
 
+        #region utility methods
+
+        protected void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        {
+            int percentage = 0;
+            var url = UrlUtils.GetPushCheckStateUrl(this.syncProcessId);
+
+            while (percentage != 100)
+            {
+                Thread.Sleep(1000);
+
+                if (IsCancelled)
+                    throw new CancelledServiceException("Synchronization is cancelled");
+
+                percentage = ProcessWebRequest<int>(url, -1);
+                if (percentage < 0)
+                    throw new SynchronizationException("Synchronization is failed");
+
+                eventRiser(new SynchronizationEventArgs(new SyncStatus(syncType, direction, percentage / 2 + 50, null)));
+            }
+        }
+
+        #endregion
+
         #region Implementation of ISynchronizer
 
         public event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
@@ -76,16 +133,21 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                SyncProcessId = Guid.Empty;
-                
-                OnPush(direction);
+                this.syncProcessId = Guid.Empty;
 
-                return SyncProcessId;
+                this.stopRequested.Reset();
+
+                this.syncProcessId = OnPush(direction);
+
+                WaitForEndProcess(OnSyncProgressChanged, SyncType.Push, direction);
+
+                return this.syncProcessId;
             }
-            catch
+            catch(Exception e)
             {
-                SyncProcessId = Guid.Empty;
-                throw;
+                this.syncProcessId = Guid.Empty;
+                throw new SynchronizationException(
+                    string.Format("Push to local center {0} is failed ", UrlUtils.GetEnpointUrl()), e);
             }
         }
 
@@ -93,16 +155,22 @@ namespace Synchronization.Core.SynchronizationFlow
         {
             try
             {
-                SyncProcessId = Guid.Empty;
-                
-                OnPull(direction);
+                this.syncProcessId = Guid.Empty;
 
-                return SyncProcessId;
+                this.stopRequested.Reset();
+
+                this.syncProcessId = OnPull(direction);
+
+                WaitForEndProcess(OnSyncProgressChanged, SyncType.Pull, direction);
+            
+                return this.syncProcessId;
             }
-            catch
+            catch (Exception e)
             {
-                SyncProcessId = Guid.Empty;
-                throw;
+                this.syncProcessId = Guid.Empty;
+
+                throw new SynchronizationException(
+                   string.Format("Pull from local center {0} is failed ", UrlUtils.GetEnpointUrl()), e);
             }
         }
 
@@ -118,7 +186,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             finally
             {
-                SyncProcessId = Guid.Empty;
+                this.syncProcessId = Guid.Empty;
             }
         }
 
