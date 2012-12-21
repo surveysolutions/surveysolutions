@@ -41,6 +41,11 @@ namespace Core.Supervisor.Denormalizer
         private readonly IDenormalizerStorage<SupervisorStatisticsItem> statistics;
 
         /// <summary>
+        /// Information, grouped by date
+        /// </summary>
+        private readonly IDenormalizerStorage<HistoryStatusStatistics> history;
+
+        /// <summary>
         /// Hash of statistics key to easier find previous CQ state
         /// </summary>
         private readonly IDenormalizerStorage<StatisticsItemKeysHash> keysHash;
@@ -66,14 +71,19 @@ namespace Core.Supervisor.Denormalizer
         /// <param name="keysHash">
         /// Statistics storage hash
         /// </param>
+        /// <param name="history">
+        /// The history.
+        /// </param>
         public SupervisorStatisticsDenormalizer(
             IDenormalizerStorage<SupervisorStatisticsItem> statistics, 
             IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
-            IDenormalizerStorage<StatisticsItemKeysHash> keysHash)
+            IDenormalizerStorage<StatisticsItemKeysHash> keysHash, 
+            IDenormalizerStorage<HistoryStatusStatistics> history)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.keysHash = keysHash;
+            this.history = history;
         }
 
         #endregion

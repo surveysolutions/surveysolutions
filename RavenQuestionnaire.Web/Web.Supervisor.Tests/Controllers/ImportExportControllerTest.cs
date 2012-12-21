@@ -15,7 +15,9 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Export;
     using Main.Core.View;

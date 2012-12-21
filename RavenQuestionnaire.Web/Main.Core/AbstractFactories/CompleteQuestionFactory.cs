@@ -298,7 +298,6 @@ namespace Main.Core.AbstractFactories
             var autoQuestion = question as IAutoPropagate;
             if (autoQuestion != null)
             {
-                autoQuestion.MaxValue = maxValue;
                 if (triggers != null)
                 {
                     autoQuestion.Triggers = new List<Guid>();

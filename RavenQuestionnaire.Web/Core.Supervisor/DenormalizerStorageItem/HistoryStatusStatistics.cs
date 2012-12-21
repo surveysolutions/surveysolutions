@@ -1,0 +1,52 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HistoryStatusStatistics.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Core.Supervisor.DenormalizerStorageItem
+{
+    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities.SubEntities;
+
+    /// <summary>
+    /// TODO: Update summary.
+    /// </summary>
+    public class HistoryStatusStatistics
+    {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HistoryStatusStatistics"/> class.
+        /// </summary>
+        public HistoryStatusStatistics()
+        {
+            this.Data = new Dictionary<SurveyStatus, List<Guid>>();
+            foreach (SurveyStatus status in SurveyStatus.GetAllStatuses())
+            {
+                this.Data.Add(status, new List<Guid>());
+            }
+        }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets Data.
+        /// </summary>
+        public Dictionary<SurveyStatus, List<Guid>> Data { get; set; }
+
+        /// <summary>
+        /// Gets or sets Date.
+        /// </summary>
+        public DateTime Date { get; set; }
+
+        #endregion
+    }
+}

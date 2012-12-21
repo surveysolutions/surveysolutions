@@ -14,7 +14,7 @@ namespace RavenQuestionnaire.Web.Tests
     using System.Collections.Generic;
     using System.Web.Mvc;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcessFactory;
 
     using global::Core.CAPI.Views.ExporStatistics;
 

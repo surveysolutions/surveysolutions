@@ -126,7 +126,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 return new SurveyStatus
                     {
-                       PublicId = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1"), Name = "Unassign" 
+                       PublicId = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1"), Name = "Unassigned" 
                     };
             }
         }

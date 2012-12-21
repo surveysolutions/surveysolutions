@@ -130,6 +130,7 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
+            question.AnswerDate = evnt.EventTimeStamp;
 
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;

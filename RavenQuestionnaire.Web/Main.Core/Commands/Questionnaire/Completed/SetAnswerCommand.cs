@@ -13,6 +13,7 @@ namespace Main.Core.Commands.Questionnaire.Completed
 
     using Main.Core.Domain;
 
+    using Ncqrs;
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
@@ -55,6 +56,8 @@ namespace Main.Core.Commands.Questionnaire.Completed
             this.QuestionPublickey = questionPublicKey;
             this.CompleteAnswers = answersList;
             this.CompleteAnswerValue = answerValue;
+            var clock = NcqrsEnvironment.Get<IClock>();
+            this.AnswerDate = clock.UtcNow();
         }
 
         #endregion
@@ -86,6 +89,11 @@ namespace Main.Core.Commands.Questionnaire.Completed
         /// Gets or sets the question publickey.
         /// </summary>
         public Guid QuestionPublickey { get; set; }
+
+        /// <summary>
+        /// Gets or sets AnswerDate.
+        /// </summary>
+        public DateTime AnswerDate { get; set; }
 
         #endregion
     }

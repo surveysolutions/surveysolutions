@@ -51,9 +51,9 @@ namespace Core.Supervisor.Views.Summary
                         {
                             { "Initial", SurveyStatus.Initial.Name },
                             { "Redo", SurveyStatus.Redo.Name },
-                            { "Complete", SurveyStatus.Complete.Name },
+                            { "Completed", SurveyStatus.Complete.Name },
                             { "Error", SurveyStatus.Error.Name },
-                            { "Approve", SurveyStatus.Approve.Name },
+                            { "Approved", SurveyStatus.Approve.Name },
                             { "Total", "Total" },
                         });
         }

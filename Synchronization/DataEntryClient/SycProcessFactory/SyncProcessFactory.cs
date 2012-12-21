@@ -7,9 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcessFactory
 {
     using System;
+
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
 
     using Ninject;
 
@@ -33,6 +36,7 @@ namespace DataEntryClient.CompleteQuestionnaire
         {
             this.kernel = kernel;
         }
+
         #region Public Methods and Operators
 
         /// <summary>

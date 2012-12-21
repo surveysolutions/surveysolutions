@@ -56,7 +56,9 @@ namespace Core.Supervisor.Views.SyncProcess
         /// </returns>
         public SyncProcessLogView Load(SyncProcessLogInputModel input)
         {
-            IQueryable<SyncProcessStatisticsDocument> processes = this.docs.Query();
+            IQueryable<SyncProcessStatisticsDocument> processes =
+                this.docs.Query().OrderByDescending(p => p.CreationDate);
+
             return new SyncProcessLogView(processes);
         }
 

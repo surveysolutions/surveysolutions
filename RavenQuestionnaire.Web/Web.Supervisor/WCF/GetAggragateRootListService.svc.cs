@@ -13,7 +13,9 @@ namespace Web.Supervisor.WCF
     using System.Collections.Generic;
     using System.Linq;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Documents;
     using Main.Core.Events;

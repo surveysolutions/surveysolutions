@@ -66,12 +66,12 @@ namespace Core.Supervisor.Views.Index
         {
             this.Id = id;
             this.Title = title;
-            this.Unassign = unassigment;
+            this.Unassigned = unassigment;
             this.Total = total;
             this.Initial = initial;
             this.Error = error;
-            this.Complete = completed;
-            this.Approve = approve;
+            this.Completed = completed;
+            this.Approved = approve;
             this.Redo = redo;
         }
 
@@ -82,12 +82,12 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Gets or sets Approve.
         /// </summary>
-        public int Approve { get; set; }
+        public int Approved { get; set; }
 
         /// <summary>
         /// Gets or sets the complete.
         /// </summary>
-        public int Complete { get; set; }
+        public int Completed { get; set; }
 
         /// <summary>
         /// Gets or sets the error.
@@ -122,7 +122,7 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Gets or sets the unassigned.
         /// </summary>
-        public int Unassign { get; set; }
+        public int Unassigned { get; set; }
 
         #endregion
     }

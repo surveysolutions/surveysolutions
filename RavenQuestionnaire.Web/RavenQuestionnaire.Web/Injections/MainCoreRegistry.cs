@@ -13,7 +13,8 @@ namespace RavenQuestionnaire.Web.Injections
     using System.Linq;
     using System.Reflection;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcessFactory;
+    using DataEntryClient.SycProcessRepository;
 
     using global::Core.HQ.Synchronization;
 
