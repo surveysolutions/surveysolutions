@@ -343,14 +343,17 @@ namespace Main.Core.Domain
             var collector = new CompleteQuestionnaireConditionExecuteCollector(this.doc);
 
             collector.ExecuteConditionAfterAnswer(question, resultQuestionsStatus, resultGroupsStatus);
-            
-            this.ApplyEvent(
-                new ConditionalStatusChanged()
-                {
-                    CompletedQuestionnaireId = this.EventSourceId,
-                    ResultGroupsStatus = resultGroupsStatus,
-                    ResultQuestionsStatus = resultQuestionsStatus
-                });
+
+            if (resultQuestionsStatus.Count > 0 || resultGroupsStatus.Count > 0)
+            {
+                this.ApplyEvent(
+                    new ConditionalStatusChanged()
+                        {
+                            CompletedQuestionnaireId = this.EventSourceId,
+                            ResultGroupsStatus = resultGroupsStatus,
+                            ResultQuestionsStatus = resultQuestionsStatus
+                        });
+            }
         }
         
         #endregion

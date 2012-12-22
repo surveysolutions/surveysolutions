@@ -1,29 +1,34 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireDocumentTest.cs" company="">
+// <copyright file="CompleteQuestionnaireARTest.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   The complete questionnaire document test.
+//   The complete questionnaire ar test.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Tests.Documents
+
+namespace Main.Core.Tests.Domain
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
+    using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Question;
+    using Main.Core.Events.Questionnaire.Completed;
+
+    using Ncqrs.Domain;
+    using Ncqrs.Eventing;
 
     using NUnit.Framework;
 
     /// <summary>
-    /// The complete questionnaire document test.
+    /// The complete questionnaire  test.
     /// </summary>
     [TestFixture]
-    public class CompleteQuestionnaireDocumentTest
+    public class CompleteQuestionnaireARTest
     {
         #region Fields
 
@@ -52,31 +57,36 @@ namespace Main.Core.Tests.Documents
         #region Public Methods and Operators
 
         /// <summary>
-        /// The check cloneable.
+        /// The event raising.
         /// </summary>
         [Test]
-        public void CheckCloneable()
+        public void AREventRaising()
         {
-            var item = (CompleteQuestionnaireDocument)this.document;
+            Guid key = Guid.NewGuid();
+            Guid commandId = Guid.NewGuid();
 
-            ICompleteQuestion questionTest01 = item.GetQuestion(this.questionKey, null);
-            questionTest01.SetAnswer(new List<Guid> { this.answer1Key }, string.Empty);
+            var completeQuestionnaire = new CompleteQuestionnaireAR(key, this.document, null);
+            var _eventStream = new UncommittedEventStream(commandId);
+            AggregateRoot.RegisterThreadStaticEventAppliedCallback(
+                (aggregateRoot, UncommittedEvent) => { _eventStream.Append(UncommittedEvent); });
 
-            var newDoc = item.Clone() as CompleteQuestionnaireDocument;
-            newDoc.ConnectChildsWithParent();
+            completeQuestionnaire.SetAnswer(
+                this.questionKey, null, null, new List<Guid> { this.answer1Key }, DateTime.UtcNow);
+            Assert.True(_eventStream.Any());
 
-            ICompleteQuestion questionTest1 = newDoc.GetQuestion(this.questionKey, null);
-            ICompleteQuestion questionTest2 =
-                newDoc.Find<ICompleteQuestion>(q => q.PublicKey == this.questionKey).First();
+            foreach (var item in _eventStream)
+            {
+                var answerSetEvent = item.Payload as AnswerSet;
+                if (answerSetEvent != null)
+                {
+                    Assert.AreEqual(answerSetEvent.QuestionPublicKey, this.questionKey);
+                    Assert.AreEqual(answerSetEvent.AnswerKeys.Count(), 1);
+                    Assert.AreEqual(answerSetEvent.AnswerKeys[0], this.answer1Key);
+                    continue;
+                }
 
-            Assert.True(ReferenceEquals(questionTest1, questionTest2));
-
-            questionTest1.SetAnswer(new List<Guid> { this.answer2Key }, string.Empty);
-
-            object questionAnswerTest1 = item.GetQuestion(this.questionKey, null).GetAnswerObject();
-            object questionAnswerTest2 = newDoc.GetQuestion(this.questionKey, null).GetAnswerObject();
-
-            Assert.AreNotEqual(questionAnswerTest1, questionAnswerTest2);
+                Assert.Fail("Unexpected event was raised.");
+            }
         }
 
         /// <summary>
@@ -99,20 +109,6 @@ namespace Main.Core.Tests.Documents
             doc.Add(mainGroup, null, null);
 
             this.document = doc;
-        }
-
-        /// <summary>
-        /// The _.
-        /// </summary>
-        [Test]
-        public void _()
-        {
-            var item = (CompleteQuestionnaireDocument)this.document;
-            ICompleteQuestion questionTest01 = item.GetQuestion(this.questionKey, null);
-            questionTest01.SetAnswer(new List<Guid> { this.answer1Key }, string.Empty);
-
-
-             
         }
 
         #endregion
