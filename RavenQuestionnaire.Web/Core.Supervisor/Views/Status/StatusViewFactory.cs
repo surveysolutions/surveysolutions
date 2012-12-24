@@ -9,9 +9,6 @@ namespace Core.Supervisor.Views.Status
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Documents;
     using Main.Core.Entities;

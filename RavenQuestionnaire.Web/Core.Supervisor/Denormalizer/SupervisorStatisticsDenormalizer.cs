@@ -115,6 +115,8 @@ namespace Core.Supervisor.Denormalizer
                 return;
             }
 
+            this.HandleStatusChanges(SurveyStatus.Unknown, document.Status, evnt.EventTimeStamp, document.PublicKey);
+            
             this.HandleNewQuestionnaire(document);
         }
 
@@ -126,6 +128,8 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
+            this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.Payload.CompletedQuestionnaireId);
+            
             CompleteQuestionnaireBrowseItem doc = this.surveys.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             if (doc == null)
             {
@@ -187,6 +191,36 @@ namespace Core.Supervisor.Denormalizer
         #region Methods
 
         /// <summary>
+        /// Handle status changes of CQ in time
+        /// </summary>
+        /// <param name="prev">
+        /// The prev.
+        /// </param>
+        /// <param name="next">
+        /// The next.
+        /// </param>
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        /// <param name="cqId">
+        /// The cq id.
+        /// </param>
+        protected void HandleStatusChanges(SurveyStatus prev, SurveyStatus next, DateTime date, Guid cqId)
+        {
+            var key = this.GetDateKey(date);
+            var historyItem = this.history.GetByGuid(key) ?? new HistoryStatusStatistics(date);
+
+            if (prev != SurveyStatus.Unknown && prev.PublicId != Guid.Empty)
+            {
+                historyItem.Remove(prev, cqId);
+            }
+
+            historyItem.Add(next,cqId);
+
+            this.history.Store(historyItem, key);
+        }
+
+        /// <summary>
         /// Handle new questionnaire
         /// </summary>
         /// <param name="document">
@@ -194,6 +228,8 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
         {
+            this.HandleStatusChanges(SurveyStatus.Unknown, document.Status, document.CreationDate, document.PublicKey);
+            
             this.RemoveOldStatistics(document.PublicKey);
 
             Guid key = this.GetKey(
@@ -205,6 +241,22 @@ namespace Core.Supervisor.Denormalizer
             item.Surveys.Add(document.PublicKey);
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, document.PublicKey);
+        }
+
+        /// <summary>
+        /// Converts string into the md5 hash and coverts bytes to Guid
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The guid
+        /// </returns>
+        private static Guid StringToGuid(string key)
+        {
+            MD5 md5Hasher = MD5.Create();
+            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(key));
+            return new Guid(data);
         }
 
         /// <summary>
@@ -225,9 +277,22 @@ namespace Core.Supervisor.Denormalizer
         private Guid GetKey(Guid templateId, Guid statusId, Guid userId)
         {
             string key = string.Format("{0}-{1}-{2}", templateId, statusId, userId);
-            MD5 md5Hasher = MD5.Create();
-            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(key));
-            return new Guid(data);
+            return StringToGuid(key);
+        }
+
+        /// <summary>
+        /// Converts date to guid
+        /// </summary>
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        /// <returns>
+        /// The guid
+        /// </returns>
+        private Guid GetDateKey(DateTime date)
+        {
+            string key = string.Format("{0}-{1}-{2}", date.Year, date.Month, date.Day);
+            return StringToGuid(key);
         }
 
         /// <summary>

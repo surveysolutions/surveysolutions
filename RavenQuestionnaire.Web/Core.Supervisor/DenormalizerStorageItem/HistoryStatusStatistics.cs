@@ -24,8 +24,12 @@ namespace Core.Supervisor.DenormalizerStorageItem
         /// <summary>
         /// Initializes a new instance of the <see cref="HistoryStatusStatistics"/> class.
         /// </summary>
-        public HistoryStatusStatistics()
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        public HistoryStatusStatistics(DateTime date)
         {
+            this.Date = date;
             this.Data = new Dictionary<SurveyStatus, List<Guid>>();
             foreach (SurveyStatus status in SurveyStatus.GetAllStatuses())
             {
@@ -48,5 +52,13 @@ namespace Core.Supervisor.DenormalizerStorageItem
         public DateTime Date { get; set; }
 
         #endregion
+
+        public void Remove(SurveyStatus status, Guid cqId)
+        {
+        }
+
+        public void Add(SurveyStatus status, Guid cqId)
+        {
+        }
     }
 }
