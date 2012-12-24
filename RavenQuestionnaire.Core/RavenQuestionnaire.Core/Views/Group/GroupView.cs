@@ -374,6 +374,8 @@ namespace RavenQuestionnaire.Core.Views.Group
         public GroupView(Guid questionnaireId, Guid? parentGroup)
             : base(questionnaireId, parentGroup)
         {
+            this.QuestionnaireKey = questionnaireId;
+            this.Parent = parentGroup;
         }
 
         /// <summary>

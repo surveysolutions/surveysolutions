@@ -7,9 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcessFactory
 {
     using System;
+
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
 
     /// <summary>
     /// The i sync process factory.

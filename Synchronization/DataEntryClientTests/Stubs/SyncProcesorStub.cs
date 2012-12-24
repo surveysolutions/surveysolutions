@@ -12,6 +12,7 @@ namespace DataEntryClientTests.Stubs
     using System.Collections.Generic;
 
     using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcessRepository;
 
     using Main.Core.Events;
     using Main.Core.View.SyncProcess;

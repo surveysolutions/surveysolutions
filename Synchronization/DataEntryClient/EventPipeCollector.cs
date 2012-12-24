@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient
 {
     using System;
     using System.Collections.Generic;
