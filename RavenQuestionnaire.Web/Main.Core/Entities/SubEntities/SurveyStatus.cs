@@ -281,7 +281,7 @@ namespace Main.Core.Entities.SubEntities
 
         public override bool Equals(object obj)
         {
-            if (ReferenceEquals(null, obj))
+         /* if (ReferenceEquals(null, obj))
             {
                 return false;
             }
@@ -289,12 +289,15 @@ namespace Main.Core.Entities.SubEntities
             if (ReferenceEquals(this, obj))
             {
                 return true;
-            }
+            }*/
+
 
             if (obj.GetType() != typeof(SurveyStatus))
             {
                 return false;
             }
+
+            SurveyStatus item = (SurveyStatus)obj;
 
             return Equals((SurveyStatus)obj);
         }
@@ -302,7 +305,7 @@ namespace Main.Core.Entities.SubEntities
 
         public bool Equals(SurveyStatus other)
         {
-            if (ReferenceEquals(null, other))
+            /*if (ReferenceEquals(null, other))
             {
                 return false;
             }
@@ -310,17 +313,20 @@ namespace Main.Core.Entities.SubEntities
             if (ReferenceEquals(this, other))
             {
                 return true;
-            }
+            }*/
 
-            return Equals(other.Name, this.Name) && other.PublicId.Equals(this.PublicId);
+            // ignoring name 
+            return /*Equals(other.Name, this.Name) && */other.PublicId.Equals(this.PublicId);
         }
 
         public override int GetHashCode()
         {
-            unchecked
+            return this.PublicId.GetHashCode();
+
+            /*unchecked
             {
                 return ((this.Name != null ? this.Name.GetHashCode() : 0) * 947) ^ this.PublicId.GetHashCode();
-            }
+            }*/
         }
 
         public static bool operator ==(SurveyStatus left, SurveyStatus right)
