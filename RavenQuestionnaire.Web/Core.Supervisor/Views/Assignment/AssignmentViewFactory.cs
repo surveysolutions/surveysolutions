@@ -90,12 +90,18 @@ namespace Core.Supervisor.Views.Assignment
             view.User = input.UserId == Guid.Empty
                             ? new UserLight(Guid.Empty, "Anyone")
                             : this.users.GetByGuid(input.UserId).GetUseLight();
-
+            
             if (input.Statuses != null && input.Statuses.Count > 0)
             {
-                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
+                var status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
+                if (status.PublicId == Guid.Empty)
+                {
+                    status.Name = "Any";
+                }
+
+                view.Status = status;
             }
-            
+           
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == Guid.Empty
                 ? this.surveys.Query()
                 : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
