@@ -119,7 +119,7 @@ namespace Main.Core.EventHandlers
             group.PublicKey = evnt.Payload.PublicKey;
             group.ConditionExpression = evnt.Payload.ConditionExpression;
             group.Description = evnt.Payload.Description;
-            item.Add(group, evnt.Payload.ParentGroupPublicKey);
+            item.Add(group, evnt.Payload.ParentGroupPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -147,7 +147,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            item.Remove(evnt.Payload.QuestionId, null);
+            item.Remove(evnt.Payload.QuestionId, null, evnt.Payload.ParentPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -166,7 +166,7 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            item.Add(result, evnt.Payload.GroupPublicKey);
+            item.Add(result, evnt.Payload.GroupPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -252,7 +252,7 @@ namespace Main.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            item.Remove(evnt.Payload.GroupPublicKey, null);
+            item.Remove(evnt.Payload.GroupPublicKey, null, evnt.Payload.ParentPublicKey, null);
             this.UpdateQuestionnaire(evnt, item);
         }
 

@@ -452,7 +452,7 @@ namespace Main.Core.View.Question
 
                 return groups;
             }
-            catch (Exception e)
+            catch 
             {
                 return null;
             }
@@ -517,8 +517,7 @@ namespace Main.Core.View.Question
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public QuestionView(string questionnaireId, Guid? groupPublicKey)
-            : base(questionnaireId, groupPublicKey)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey) : base(questionnaireId, groupPublicKey)
         {
         }
 
@@ -557,13 +556,6 @@ namespace Main.Core.View.Question
                     this.Triggers = autoQuestion.Triggers.ToList();
                 }
             }
-
-/*
-            if (doc.Triggers != null)
-            {
-                this.Triggers = doc.Triggers.ToList();
-            }
-*/
             
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }

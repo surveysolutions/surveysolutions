@@ -63,9 +63,9 @@ namespace Questionnaire.Core.Web.Helpers
         /// The System.IDisposable.
         /// </returns>
         public static IDisposable BeginCollectionItem(
-            this HtmlHelper html, string collectionName, object uniqueIdentifire)
+            this HtmlHelper html, string collectionName, object uniqueIdentifire, bool includeIndex = true)
         {
-            return BeginCollectionItem(html, collectionName, false, uniqueIdentifire);
+            return BeginCollectionItem(html, collectionName, false, uniqueIdentifire, includeIndex);
         }
 
         /// <summary>
@@ -83,22 +83,27 @@ namespace Questionnaire.Core.Web.Helpers
         /// <param name="uniqueIdentifire">
         /// The unique identifire.
         /// </param>
+        /// <param name="includeIndex">
+        /// The include index tag or not
+        /// </param>
         /// <returns>
         /// The System.IDisposable.
         /// </returns>
         public static IDisposable BeginCollectionItem(
-            this HtmlHelper html, string collectionName, bool includePreviusPrefix, object uniqueIdentifire)
+            this HtmlHelper html, string collectionName, bool includePreviusPrefix, object uniqueIdentifire, bool includeIndex = true)
         {
             Queue<string> idsToReuse = GetIdsToReuse(html.ViewContext.HttpContext, collectionName);
             string itemIndex = idsToReuse.Count > 0 ? idsToReuse.Dequeue() : uniqueIdentifire.ToString();
 
-            // autocomplete="off" is needed to work around a very annoying Chrome behaviour whereby it reuses old values after the user clicks "Back", which causes the xyz.index and xyz[...] values to get out of sync.
-            html.ViewContext.Writer.WriteLine(
-                string.Format(
-                    "<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />", 
-                    html.GetHtmlPrefix(collectionName, includePreviusPrefix), 
-                    html.Encode(itemIndex)));
-
+            if (includeIndex)
+            {
+                // autocomplete="off" is needed to work around a very annoying Chrome behaviour whereby it reuses old values after the user clicks "Back", which causes the xyz.index and xyz[...] values to get out of sync.
+                html.ViewContext.Writer.WriteLine(
+                    string.Format(
+                        "<input type=\"hidden\" name=\"{0}.index\" autocomplete=\"off\" value=\"{1}\" />",
+                        html.GetHtmlPrefix(collectionName, includePreviusPrefix),
+                        html.Encode(itemIndex)));
+            }
             return BeginHtmlFieldPrefixScope(
                 html, string.Format("{0}[{1}]", collectionName, itemIndex), includePreviusPrefix);
         }

@@ -78,10 +78,10 @@ namespace Main.Core.Entities.SubEntities.Complete
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
 
-                        foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
+                    /*foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
                     {
                         completeAnswer.PropogationPublicKey = propogationPublicKey;
-                    }
+                    }*/
 
                     newQuestion.Parent = this;
                     this.Children.Add(newQuestion);
@@ -97,7 +97,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                     continue;
                 }
 
-                throw new InvalidOperationException("Unknown children type.");
+                throw new InvalidOperationException("Unknown child type.");
             }
         }
 
@@ -231,7 +231,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 
         // private IIteratorContainer iteratorContainer;
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -242,9 +242,8 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public virtual void Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
-
             if (!parent.HasValue || parent.Value == this.PublicKey)
             {
                 var propogateGroup = c as ICompleteGroup;
@@ -269,7 +268,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -336,7 +335,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -377,11 +376,11 @@ namespace Main.Core.Entities.SubEntities.Complete
                 catch (CompositeException)
                 {
                 }
-            }*/
+            }#1#
             throw new CompositeException();
-        }
+        }*/
         
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -413,7 +412,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The connect childs with parent.
@@ -445,6 +444,8 @@ namespace Main.Core.Entities.SubEntities.Complete
             group.Children = new List<IComposite>();
             foreach (var composite in this.Children)
             {
+                var item = composite.Clone();
+                item.Parent = group;
                 group.Children.Add(composite.Clone());
             }
 

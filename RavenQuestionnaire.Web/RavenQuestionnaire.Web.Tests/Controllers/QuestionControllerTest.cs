@@ -80,7 +80,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var group = new Group("group");
             innerDocument.Children.Add(group);
             var question = new SingleQuestion(Guid.NewGuid(), "question");
-            group.Add(question, null);
+            group.Children.Add(question);
             var questionView = new QuestionView(innerDocument, question);
             
             this.ViewRepositoryMock.Setup(
@@ -139,7 +139,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var group = new Group("group");
             innerDocument.Children.Add(group);
             var question = new SingleQuestion(Guid.NewGuid(), "question");
-            group.Add(question, null);
+            group.Children.Add(question);
             var questionView = new QuestionView(innerDocument, question);
 
             var input = new QuestionViewInputModel(question.PublicKey, innerDocument.PublicKey);

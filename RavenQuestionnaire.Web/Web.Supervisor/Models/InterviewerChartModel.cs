@@ -44,8 +44,8 @@ namespace Web.Supervisor.Models
                             color = GetColor(index),
                             name = t.Title,
                             title = t.Title.Acronim(),
-                            categories = new[] { "Unassign", "Initial", "Redo", "Complete", "Approve", "Error" },
-                            data = new[] { t.Unassign, t.Initial, t.Redo, t.Complete, t.Approve, t.Error },
+                            categories = new[] { "Unassigned", "Initial", "Redo", "Completed", "Approved", "Error" },
+                            data = new[] { t.Unassigned, t.Initial, t.Redo, t.Completed, t.Approved, t.Error },
                         }).ToArray();
 
             this.BrowserData = new List<object>();
@@ -89,7 +89,7 @@ namespace Web.Supervisor.Models
                     new
                         {
                             name = SurveyStatus.Unassign.Name,
-                            data = model.Items.Select(t => t.Unassign).ToArray(),
+                            data = model.Items.Select(t => t.Unassigned).ToArray(),
                             stack = "parts",
                             color = this.statusColors[SurveyStatus.Unassign.Name]
                         },
@@ -117,14 +117,14 @@ namespace Web.Supervisor.Models
                     new
                         {
                             name = SurveyStatus.Complete.Name,
-                            data = model.Items.Select(t => t.Complete).ToArray(),
+                            data = model.Items.Select(t => t.Completed).ToArray(),
                             stack = "parts",
                             color = this.statusColors[SurveyStatus.Complete.Name]
                         },
                     new
                         {
                             name = SurveyStatus.Approve.Name,
-                            data = model.Items.Select(t => t.Approve).ToArray(),
+                            data = model.Items.Select(t => t.Approved).ToArray(),
                             stack = "parts",
                             color = this.statusColors[SurveyStatus.Approve.Name]
                         }
@@ -136,7 +136,7 @@ namespace Web.Supervisor.Models
                         {
                             name = t.Title,
                             color = GetColor(index),
-                            data = new[] { new[] { t.Initial + t.Redo, t.Complete + t.Approve } }
+                            data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
                         }).ToArray();
         }
 

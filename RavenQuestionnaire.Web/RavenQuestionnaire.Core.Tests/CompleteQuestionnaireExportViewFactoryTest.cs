@@ -69,7 +69,7 @@ namespace RavenQuestionnaire.Core.Tests
         {
             var group = new Group("some group");
             var questionKey = Guid.NewGuid();
-            group.Add(new SingleQuestion(questionKey, "questionText"), null);
+            group.Children.Add(new SingleQuestion(questionKey, "questionText"));
             var result = this.Target.BuildHeaderTestable(group);
             Assert.IsTrue(result.Count() == 1);
             Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
@@ -81,7 +81,7 @@ namespace RavenQuestionnaire.Core.Tests
             var questionKey = Guid.NewGuid();
             var subOBjects = new List<Guid>();
             var autoQuestions = new List<CompleteQuestionnaireExportViewFactory.AutoQuestionWithTriggers>();
-            group.Add(new AutoPropagateQuestion() { QuestionText = "questionText", PublicKey = questionKey }, null);
+            group.Children.Add(new AutoPropagateQuestion() { QuestionText = "questionText", PublicKey = questionKey });
             var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
             Assert.IsTrue(result.Count() == 1);
             Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
@@ -100,12 +100,11 @@ namespace RavenQuestionnaire.Core.Tests
             var groupKey = Guid.NewGuid();
             var subOBjects = new List<Guid>();
             var autoQuestions = new List<CompleteQuestionnaireExportViewFactory.AutoQuestionWithTriggers>();
-            group.Add(
-                new AutoPropagateQuestion()
-                    {QuestionText = "questionText", PublicKey = questionKey, Triggers = new List<Guid> {groupKey}}, null);
+            group.Children.Add(
+                new AutoPropagateQuestion() { QuestionText = "questionText", PublicKey = questionKey, Triggers = new List<Guid> { groupKey } });
 
             var subGroup = new Group("subgroup") { Propagated = Propagate.Propagated, PublicKey = groupKey};
-            group.Add(subGroup, null);
+            group.Children.Add(subGroup);
 
             var result = this.Target.BuildHeaderTestable(group, subOBjects, autoQuestions);
             Assert.IsTrue(result.Count() == 1);
@@ -121,9 +120,9 @@ namespace RavenQuestionnaire.Core.Tests
         {
             var group = new Group("some group");
             var subGroup = new Group("subgroup");
-            group.Add(subGroup, null);
+            group.Children.Add(subGroup);
             var questionKey = Guid.NewGuid();
-            subGroup.Add(new SingleQuestion(questionKey, "questionText"), null);
+            subGroup.Children.Add(new SingleQuestion(questionKey, "questionText"));
             var result = this.Target.BuildHeaderTestable(group);
             Assert.IsTrue(result.Count() == 1);
             Assert.IsTrue(result.First().Title == "questionText" && result.First().PublicKey == questionKey);
@@ -133,13 +132,17 @@ namespace RavenQuestionnaire.Core.Tests
         {
             var group = new Group("some group");
             var subGroup = new Group("subgroup"){ Propagated = Propagate.Propagated};
-            group.Add(subGroup, null);
+            group.Children.Add(subGroup);
             var questionKey = Guid.NewGuid();
-            subGroup.Add(new SingleQuestion(questionKey, "questionText"), null);
+            subGroup.Children.Add(new SingleQuestion(questionKey, "questionText"));
             var result = this.Target.BuildHeaderTestable(group);
             Assert.IsTrue(!result.Any());
            
         }
+
+        /// <summary>
+        /// The complete questionnaire export view factory testable.
+        /// </summary>
         protected class CompleteQuestionnaireExportViewFactoryTestable : CompleteQuestionnaireExportViewFactory
         {
             public CompleteQuestionnaireExportViewFactoryTestable(

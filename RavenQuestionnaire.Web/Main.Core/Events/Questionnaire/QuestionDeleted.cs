@@ -19,6 +19,22 @@ namespace Main.Core.Events.Questionnaire
     [EventName("RavenQuestionnaire.Core:Events:QuestionDeleted")]
     public class QuestionDeleted
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionDeleted"/> class.
+        /// </summary>
+        /// <param name="questionId">
+        /// The question id.
+        /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
+        public QuestionDeleted(Guid questionId, Guid parentPublicKey)
+        {
+            this.QuestionId = questionId;
+            this.ParentPublicKey = parentPublicKey;
+        }
+
+
         #region Public Properties
 
         /// <summary>
@@ -26,6 +42,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public Guid QuestionId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the group public key.
+        /// </summary>
+        public Guid ParentPublicKey { get; set; }
+        
         #endregion
     }
 }

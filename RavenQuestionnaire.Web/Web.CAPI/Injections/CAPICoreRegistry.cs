@@ -16,7 +16,7 @@ namespace Web.CAPI.Injections
     using Core.CAPI.Synchronization;
 using Core.CAPI.Views;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core;
     using Main.Core.Events;

@@ -34,7 +34,7 @@
             }*@
             @Html.ActionLink("Add Group", "Create", "Group", new { id = Model.QuestionnaireKey, parentGroup = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
             @Html.ActionLink("Edit", "Edit", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
-            @Html.ActionLink("Delete", "Delete", "Group", new { publicKey = Model.PublicKey, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
+            @Html.ActionLink("Delete", "Delete", "Group", new { publicKey = Model.PublicKey, parentPublicKey = Model.Parent, questionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })
             @Html.ActionLink("Move", "Move", "Group", new { PublicKeyGroup = Model.PublicKey, QuestionnaireId = Model.QuestionnaireKey }, new { @class = "btn btn-success btn-mini" })            
         </div>
     </div>

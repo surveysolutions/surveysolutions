@@ -7,12 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcess
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.WcfInfrastructure;
 
     using Main.Core.Commands.Synchronization;
@@ -25,40 +26,6 @@ namespace DataEntryClient.CompleteQuestionnaire
 
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Handshake;
-
-    /// <summary>
-    /// Wireless Sync Process
-    /// </summary>
-    public interface IWirelessSyncProcess : ISyncProcess
-    {
-        /// <summary>
-        /// The Import
-        /// </summary>
-        /// <param name="syncProcessDescription">
-        /// The sync process description.
-        /// </param>
-        /// <param name="baseAdress">
-        /// The base adress.
-        /// </param>
-        /// <returns>
-        /// Error codes
-        /// </returns>
-        ErrorCodes Import(string syncProcessDescription, string baseAdress);
-
-        /// <summary>
-        /// The export
-        /// </summary>
-        /// <param name="syncProcessDescription">
-        /// The sync process description.
-        /// </param>
-        /// <param name="baseAdress">
-        /// The base adress.
-        /// </param>
-        /// <returns>
-        /// Error Codes
-        /// </returns>
-        ErrorCodes Export(string syncProcessDescription, string baseAdress);
-    }
 
     /// <summary>
     /// The complete questionnaire sync.
@@ -191,8 +158,8 @@ namespace DataEntryClient.CompleteQuestionnaire
         protected override IEnumerable<AggregateRootEvent> GetEventStream()
         {
             ListOfAggregateRootsForImportMessage result = null;
-            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(
-                this.baseAdress, (client) => { result = client.Process(); });
+            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress, (client) => { result = client.Process(); });
+            
             if (result == null)
             {
                 throw new Exception("aggregate roots list is empty");
@@ -213,12 +180,10 @@ namespace DataEntryClient.CompleteQuestionnaire
                                     continue;
                                 }
 
-                                AggregateRootEvent[] stream =
-                                    client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
+                                AggregateRootEvent[] stream = client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
                                 events.AddRange(stream);
-                                this.Invoker.Execute(
-                                    new ChangeEventStatusCommand(
-                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
+
+                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
                             }
                             catch (Exception ex)
                             {
@@ -226,9 +191,7 @@ namespace DataEntryClient.CompleteQuestionnaire
                                 logger.Fatal("Import error", ex);
 
                                 events = null;
-                                this.Invoker.Execute(
-                                    new ChangeEventStatusCommand(
-                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
+                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
                             }
                         }
                     });

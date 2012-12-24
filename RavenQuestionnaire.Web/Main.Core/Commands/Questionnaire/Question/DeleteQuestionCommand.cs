@@ -30,13 +30,17 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="questionId">
         /// The question id.
         /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public DeleteQuestionCommand(Guid questionId, Guid questionnaireId)
+        public DeleteQuestionCommand(Guid questionId, Guid parentPublicKey, Guid questionnaireId)
         {
             this.QuestionId = questionId;
             this.QuestionnaireId = questionnaireId;
+            this.ParentPublicKey = parentPublicKey;
         }
 
         #endregion
@@ -44,15 +48,21 @@ namespace Main.Core.Commands.Questionnaire.Question
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the question id.
+        /// Gets the question id.
         /// </summary>
-        public Guid QuestionId { get; set; }
+        public Guid QuestionId { get; private set; }
 
         /// <summary>
-        /// Gets or sets the questionnaire id.
+        /// Gets the parent public key.
+        /// </summary>
+        public Guid ParentPublicKey { get; private set; }
+
+
+        /// <summary>
+        /// Gets the questionnaire id.
         /// </summary>
         [AggregateRootId]
-        public Guid QuestionnaireId { get; set; }
+        public Guid QuestionnaireId { get; private set; }
 
         #endregion
     }

@@ -83,9 +83,9 @@ namespace RavenQuestionnaire.Core.Tests.Entities
             var propogatedGroup = new CompleteGroup("propagated") { Propagated = Propagate.Propagated };
             target.Children.Add(propogatedGroup);
             var groupForRemove = new CompleteGroup(propogatedGroup, Guid.NewGuid());
-            target.Add(groupForRemove, null);
+            target.Children.Add(groupForRemove);
             Assert.AreEqual(target.Children.Count, 2);
-            target.Remove(groupForRemove);
+            target.Children.Remove(groupForRemove);
             Assert.AreEqual(target.Children.Count, 1);
         }
 

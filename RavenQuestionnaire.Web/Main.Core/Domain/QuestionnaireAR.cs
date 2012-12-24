@@ -358,9 +358,12 @@ namespace Main.Core.Domain
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public void DeleteGroup(Guid groupPublicKey)
+        /// <param name="parentPublicKey">
+        /// The parent Public Key.
+        /// </param>
+        public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
         {
-            this.ApplyEvent(new GroupDeleted { GroupPublicKey = groupPublicKey });
+            this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
         }
 
         /// <summary>
@@ -383,9 +386,12 @@ namespace Main.Core.Domain
         /// <param name="questionId">
         /// The question id.
         /// </param>
-        public void DeleteQuestion(Guid questionId)
+        /// <param name="parentPublicKey">
+        /// The parent Public Key.
+        /// </param>
+        public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
         {
-            this.ApplyEvent(new QuestionDeleted { QuestionId = questionId });
+            this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
 
         /// <summary>
@@ -559,7 +565,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnGroupDeleted(GroupDeleted e)
         {
-            this.innerDocument.Remove(e.GroupPublicKey, null);
+            this.innerDocument.Remove(e.GroupPublicKey, null, e.ParentPublicKey, null);
         }
 
         /// <summary>
@@ -648,7 +654,7 @@ namespace Main.Core.Domain
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
-            this.innerDocument.Add(group, e.ParentGroupPublicKey);
+            this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
         /// <summary>
@@ -665,7 +671,7 @@ namespace Main.Core.Domain
                 return;
             }
 
-            this.innerDocument.Add(question, e.GroupPublicKey);
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
         }
 
         /// <summary>
@@ -707,7 +713,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
-            this.innerDocument.Remove(e.QuestionId, null);
+            this.innerDocument.Remove(e.QuestionId, null, e.ParentPublicKey, null);
         }
 
         /// <summary>

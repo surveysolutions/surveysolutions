@@ -39,6 +39,8 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// </param>
         public AddPropagatableGroupCommand(Guid completeQuestionnaireId, Guid propagationKey, Guid publicKey)
         {
+            throw new InvalidOperationException("Is not supported."); 
+
             this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.PublicKey = publicKey;
             this.PropagationKey = propagationKey;

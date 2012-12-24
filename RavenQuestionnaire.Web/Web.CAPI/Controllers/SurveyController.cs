@@ -403,7 +403,10 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public JsonResult PropagateGroup(Guid publicKey, Guid parentGroupPublicKey, Guid questionnaireId)
         {
-            try
+            return this.Json(new { error = "Function temporary unavalable", parentGroupPublicKey = publicKey });
+
+
+            /*try
             {
                 Guid propagationKey = Guid.NewGuid();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
@@ -420,7 +423,7 @@ namespace Web.CAPI.Controllers
             {
                 this.ModelState.AddModelError("PropagationError", e.Message);
                 return this.Json(new { error = e.Message, parentGroupPublicKey = publicKey });
-            }
+            }*/
         }
 
         /// <summary>

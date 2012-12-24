@@ -4,12 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace DataEntryClient.CompleteQuestionnaire
+namespace DataEntryClient.SycProcess
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using DataEntryClient.SycProcess.Interfaces;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;

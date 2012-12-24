@@ -123,12 +123,8 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void AddGroup(ICompleteGroup group)
         {
-            if (group == null)
-            {
-                return;
-            }
-
-            if (!group.PropagationPublicKey.HasValue)
+            
+            if (group == null || !group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("Only propagated group can uppdate hash.");
             }

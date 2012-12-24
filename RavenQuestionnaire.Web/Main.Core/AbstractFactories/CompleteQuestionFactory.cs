@@ -35,6 +35,7 @@ namespace Main.Core.AbstractFactories
         /// </returns>
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
+            var maxValue = int.MaxValue;
             AbstractCompleteQuestion completeQuestion;
             if (question is IMultyOptionsQuestion)
             {
@@ -55,6 +56,7 @@ namespace Main.Core.AbstractFactories
             else if (question is IAutoPropagate)
             {
                 completeQuestion = new AutoPropagateCompleteQuestion(question as IAutoPropagate);
+                maxValue = (question as IAutoPropagate).MaxValue;
             }
             else if (question is IGpsCoordinatesQuestion)
             {
@@ -81,7 +83,7 @@ namespace Main.Core.AbstractFactories
                 question.Capital,
                 question.Instructions,
                 null,
-                int.MaxValue);
+                maxValue);
             ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
 

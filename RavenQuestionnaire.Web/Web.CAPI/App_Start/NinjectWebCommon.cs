@@ -24,6 +24,7 @@ namespace Web.CAPI.App_Start
     using System.Web.Mvc;
 
     using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcessRepository;
     using DataEntryClient.WcfInfrastructure;
 
     using Main.Core;

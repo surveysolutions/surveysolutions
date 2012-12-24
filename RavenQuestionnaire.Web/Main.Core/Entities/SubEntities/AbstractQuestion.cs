@@ -171,7 +171,7 @@ namespace Main.Core.Entities.SubEntities
         public List<Guid> Triggers { get; set; }*/
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -180,10 +180,10 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The add answer.
@@ -292,7 +292,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -301,9 +301,9 @@ namespace Main.Core.Entities.SubEntities
         public void Remove(IComposite c)
         {
             throw new CompositeException();
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
@@ -317,7 +317,7 @@ namespace Main.Core.Entities.SubEntities
         public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The remove card.

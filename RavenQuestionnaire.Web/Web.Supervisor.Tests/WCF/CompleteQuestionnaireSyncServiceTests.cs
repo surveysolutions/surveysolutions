@@ -12,7 +12,9 @@ namespace RavenQuestionnaire.Web.Tests.WCF
     using System;
     using System.Collections.Generic;
 
-    using DataEntryClient.CompleteQuestionnaire;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Events;
 

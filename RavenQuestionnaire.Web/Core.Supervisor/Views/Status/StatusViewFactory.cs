@@ -9,9 +9,6 @@ namespace Core.Supervisor.Views.Status
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Documents;
     using Main.Core.Entities;
@@ -62,8 +59,11 @@ namespace Core.Supervisor.Views.Status
         public StatusView Load(StatusViewInputModel input)
         {
             var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
-            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == input.StatusId)
-                         ?? new SurveyStatus(Guid.Empty, "Any");
+            var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
+            if (status.PublicId == Guid.Empty)
+            {
+                status.Name = "Any";
+            }
 
             var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
 

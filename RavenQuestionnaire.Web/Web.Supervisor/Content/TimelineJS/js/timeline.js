@@ -8746,7 +8746,7 @@ if(typeof VMM.Timeline != 'undefined' && typeof VMM.Timeline.TimeNav == 'undefin
 				interval_major				=		interval_calc.month;
 				interval_macro				=		interval_calc.hour;
 			}
-			
+
 			trace("INTERVAL TYPE: " + interval.type);
 			trace("INTERVAL MAJOR TYPE: " + interval_major.type);
 			

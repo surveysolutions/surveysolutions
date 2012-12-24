@@ -15,8 +15,9 @@ namespace Web.Supervisor.Injections
 
     using Core.Supervisor.Synchronization;
 
-    using DataEntryClient.CompleteQuestionnaire;
     using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcessFactory;
+    using DataEntryClient.SycProcessRepository;
 
     using Main.Core;
     using Main.Core.Events;

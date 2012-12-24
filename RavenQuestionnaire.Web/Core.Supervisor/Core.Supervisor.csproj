@@ -70,6 +70,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
     <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
@@ -118,6 +119,11 @@
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
+    <Compile Include="Views\Timeline\TimelineEvent.cs" />
+    <Compile Include="Views\Timeline\TimelineQuestion.cs" />
+    <Compile Include="Views\Timeline\TimelineView.cs" />
+    <Compile Include="Views\Timeline\TimelineViewFactory.cs" />
+    <Compile Include="Views\Timeline\TimelineViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
