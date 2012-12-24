@@ -101,7 +101,15 @@ namespace Core.Supervisor.Views.Status
         /// </param>
         public void BuildSummary(IQueryable<StatusViewItem> items, List<TemplateLight> headers)
         {
-            var dict = headers.ToDictionary(header => header.TemplateId, header => 0);
+            var dict = new Dictionary<Guid, int>();
+            foreach (var header in headers)
+            {
+                if (!dict.ContainsKey(header.TemplateId))
+                {
+                    dict.Add(header.TemplateId, 0);
+                }
+            }
+
             foreach (var i in items.SelectMany(item => item.Items))
             {
                 dict[i.Key.TemplateId] += i.Value;

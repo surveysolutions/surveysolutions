@@ -279,7 +279,7 @@ namespace Main.Core.Entities.SubEntities
 
         #endregion
 
-        /*public override bool Equals(object obj)
+        public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj))
             {
@@ -331,6 +331,6 @@ namespace Main.Core.Entities.SubEntities
         public static bool operator !=(SurveyStatus left, SurveyStatus right)
         {
             return !Equals(left, right);
-        }*/
+        }
     }
 }
