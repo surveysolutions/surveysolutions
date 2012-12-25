@@ -179,11 +179,13 @@
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
+    <Compile Include="Models\Chart\ChartModelBase.cs" />
+    <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\StringExtension.cs" />
-    <Compile Include="Models\SurveyChartModel.cs" />
+    <Compile Include="Models\Chart\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
-    <Compile Include="Models\InterviewerChartModel.cs" />
+    <Compile Include="Models\Chart\InterviewerChartModel.cs" />
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />

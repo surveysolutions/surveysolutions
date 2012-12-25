@@ -25,7 +25,7 @@ barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
         {
             type: 'pie',
             name: 'Totals',
-            data: @Html.Raw(Json.Encode(chartData.BrowserData)),
+            data: @Html.Raw(Json.Encode(chartData.CategoryData)),
             size: '60%',
             dataLabels: {
                 formatter: function() {
@@ -38,7 +38,7 @@ barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
         {
             type: 'pie',
             name: 'Statuses',
-            data: @Html.Raw(Json.Encode(chartData.VersionsData)),
+            data: @Html.Raw(Json.Encode(chartData.SubCategoryData)),
             showInLegend: false,
             innerSize: '60%',
             dataLabels: {
