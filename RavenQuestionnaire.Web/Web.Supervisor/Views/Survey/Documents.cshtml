@@ -1,12 +1,10 @@
-﻿@using Web.Supervisor.Models
-@using Core.Supervisor.Views.Assignment
+﻿@using Core.Supervisor.Views.Assignment
 @using Main.Core.Entities.SubEntities
-@using System.Web.Script.Serialization
 @model AssignmentView
 <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
 @{
     ViewBag.Title = "Surveys";
-    var statuses = SurveyStatus.GetAllStatuses().Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
+    var statuses = SurveyStatus.GetAllStatuses().Where(s => s.PublicId != SurveyStatus.Unknown.PublicId).Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
     statuses = statuses.Substring(0, statuses.Length - 1);
     statuses += "}";
 }
@@ -48,7 +46,7 @@
         onPagingClick();
 
         $.fn.editable.defaults.success = function(data) {
-            debugger;
+            //debugger;
             if (data.status=="ok") {
                 $('#row-' + data.cqId).find('.td-status').text(data.statusName);
                 var isTransparent = false;
@@ -69,7 +67,7 @@
             }
         };
         $.fn.editable.defaults.error = function(data) {
-           debugger;
+           //debugger;
         };
         makeAssignable();
     });
@@ -175,6 +173,3 @@
 <div id="questionnaireTable">
     @Html.Partial("_TableGroup", Model)
 </div>
-@*
-@Html.Action("Chart", new { templateId = Model.Template.TemplateId })
-*@

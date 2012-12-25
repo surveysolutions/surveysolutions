@@ -11,7 +11,6 @@ namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Linq;
     using System.Web.Mvc;
 
@@ -23,7 +22,6 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Timeline;
 
     using Main.Core.Commands.Questionnaire.Completed;
-    using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
@@ -39,6 +37,7 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using Web.Supervisor.Models;
+    using Web.Supervisor.Models.Chart;
 
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
@@ -112,6 +111,7 @@ namespace Web.Supervisor.Controllers
                     Supervisor = user,
                     StatusId = statusId.HasValue ? statusId.Value : Guid.Empty
                 });
+            ViewBag.GraphData = new StatusChartModel(model);
             return this.View(model);
         }
 
@@ -566,6 +566,7 @@ namespace Web.Supervisor.Controllers
                 Supervisor = user
             };
             var model = this.viewRepository.Load<StatusViewInputModel, StatusView>(input);
+            ViewBag.GraphData = new StatusChartModel(model);
             return this.PartialView("_StatusTable", model);
         }
 
