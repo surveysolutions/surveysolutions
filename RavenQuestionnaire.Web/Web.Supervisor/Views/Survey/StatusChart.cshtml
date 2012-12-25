@@ -1,12 +1,12 @@
 ﻿@using System.Web.Script.Serialization
-@using Core.Supervisor.Views.Index
 @using Core.Supervisor.Views.Status
+@using Web.Supervisor.Models.Chart
 @model StatusView
 @{
     var r = new JavaScriptSerializer();
     var xTitles = r.Serialize(@Model.Items.Select(t => t.User.Name).ToArray());
     var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
-
+    var chartData = ViewBag.GraphData as StatusChartModel;
 }
 <p>
     <div id="switcher" class="btn-group">
@@ -16,95 +16,12 @@
     </div>
 </p>
 <script type="text/javascript">
-
-    init = function() {
-        var containerSettings = {
-            column: { 'height': '400px' },
-            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
-            pie: { 'height': '600px' }
-        };
-
-        var active = "btn-primary";
-
-        $('#switcher button').each(function(i, el) {
-            var self = this;
-            $(self).click(function() {
-                var id = $(self).attr('id');
-                if (!$(self).hasClass(active)) {
-                    $("#switcher .btn").removeClass(active);
-                    $(self).addClass(active);
-                }
-                $('#container').css(containerSettings[id]);
-                drawPlot(id);
-            });
-        });
-       
-        $("#column").click();
-    };
-    xTitles = @Html.Raw(xTitles);
-    barData = [
-        {
-            name: 'Total',
-            data: @Json.Encode(@Model.Items.Select(t => t.Items.Sum(kvp => kvp.Value)).ToArray()) ,
-            stack: 'total'
-        }
-        @foreach (var header in Model.Headers)
-        {
-            <text>,</text>
-            <text>@Html.Raw(Json.Encode(new
-             {
-                 name = string.Join(string.Empty, header.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0])),
-                 title = header.Title,
-                 data = @Model.Items.Select(t => t.Items[header]).ToArray(),
-                 stack = "parts"
-             }))</text>
-        }
-    ];
-    data = @Html.Raw(Json.Encode(@Model.Items.Select((t, index) =>
-    new
-    {
-        y = t.Items.Values.Sum(),
-        color = colors[index],
-        drilldown = new
-        {
-            name = t.User.Name,
-            categories = t.Items.Keys.Select(k => string.Join(string.Empty, k.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]))).ToArray(),
-            data = t.Items.Values.ToArray(),
-            color = colors[index]
-        }
-    }).ToArray())) ;
-
-    // Build the data arrays
-    browserData = [];
-    versionsData = [];
-    for (var i = 0; i < data.length; i++) {
-
-        // add browser data
-        browserData.push({
-                name: data[i].drilldown.name,
-                title: data[i].drilldown.title,
-                category: xTitles[i],
-                y: data[i].y,
-                color: data[i].color
-            });
-
-        // add version data
-        for (var j = 0; j < data[i].drilldown.data.length; j++) {
-            var brightness = 0.2 - (j / data[i].drilldown.data.length) / 5;
-            versionsData.push({
-                    category: xTitles[i],
-                    name: data[i].drilldown.categories[j],
-                    y: data[i].drilldown.data[j],
-                    color: Highcharts.Color(data[i].color).brighten(brightness).get()
-                });
-        }
-    }
-
+    barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
     pieData = [
         {
             type: 'pie',
             name: 'Totals',
-            data: browserData,
+            data: @Html.Raw(Json.Encode(chartData.CategoryData)) ,
             size: '60%',
             dataLabels: {
                 formatter: function() {
@@ -117,7 +34,7 @@
         {
             type: 'pie',
             name: 'Statuses',
-            data: versionsData,
+            data: @Html.Raw(Json.Encode(chartData.SubCategoryData)) ,
             showInLegend: false,
             innerSize: '60%',
             dataLabels: {
@@ -128,70 +45,189 @@
             }
         }
     ];
+    
+    init = function() {
+        var containerSettings = {
+            column: { 'height': '400px' },
+            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
+            pie: { 'height': '600px' }
+        };
+
+         var containerMethods = {
+            column: function() { 
+                chart.xAxis[0].setCategories( @Html.Raw(xTitles) );
+            },
+            bar: function() {chart.xAxis[0].setCategories(@Html.Raw(xTitles))},
+            pie: function() {}
+        };
+        
+        var active = "btn-primary";
+
+        $('#switcher button').each(function(i, el) {
+            var self = this;
+            $(self).click(function() {
+                var id = $(self).attr('id');
+                if (!$(self).hasClass(active)) {
+                    $("#switcher .btn").removeClass(active);
+                    $(self).addClass(active);
+                }
+                $('#container').css(containerSettings[id]);
+                drawPlot(id);
+                containerMethods[id]();
+            });
+        });
+       
+        $("#column").click();
+    };
+    
     data = {
         column: barData,
         bar: barData,
         pie: pieData
     };
-    chart;
+    
+    plotSettings = {
+        column: {
+            chart: {
+                renderTo: 'container',
+                type: 'column',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            xAxis: {
+                
+            },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                allowDecimals: false
+            },
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                },
+                bar: {
+                    stacking: 'normal'
+                },
+                series: {
+                    pointWidth: 20
+                },
+                pie: {
+                    shadow: false,
+                    allowPointSelect: true,
+                    showInLegend: true
+                }
+            }
+        },
+        bar: {
+            chart: {
+                renderTo: 'container',
+                type: 'bar',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            xAxis: {
+            },
+            yAxis: {
+                title: {
+                    text: 'Count'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }],
+                allowDecimals: false
+            },
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal'
+                },
+                bar: {
+                    stacking: 'normal'
+                },
+                series: {
+                    pointWidth: 20
+                }
+            }
+        },
+        pie: {
+            chart: {
+                renderTo: 'container',
+                type: 'pie',
+                marginBottom: 70,
+                marginRight: 5,
+                marginTop: 30
+            },
+            
+            title: {
+                text: ""
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        this.x + ': ' + this.y;
+                }
+            },
+            legend: {
+                align: 'center',
+                verticalAlign: 'top',
+                borderWidth: 0,
+                y: -10
+            },
+            plotOptions: {
+                pie: {
+                    shadow: false,
+                    allowPointSelect: true,
+                    showInLegend: true
+                }
+            }
+        }
+    };
+    chart = null;
     drawPlot = function(type) {
         $("#container").html('');
-        var highchartsOptions = Highcharts.setOptions({ colors: @Html.Raw(Json.Encode(colors)) });
-        chart = new Highcharts.Chart({
-                chart: {
-                    renderTo: 'container',
-                    type: type,
-                    marginBottom: 70,
-                    marginRight: 5,
-                    marginTop: 30
-                },
-                xAxis: {
-                    categories: @Html.Raw(xTitles)
-                },
-                yAxis: {
-                    title: {
-                        text: 'Count'
-                    },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }],
-                    allowDecimals: false
-                },
-                title: {
-                    text: ""
-                },
-                tooltip: {
-                    formatter: function() {
-                        return '<b>' + this.series.name + '</b><br/>' +
-                            this.x + ': ' + this.y;
-                    }
-                },
-                legend: {
-                    align: 'center',
-                    verticalAlign: 'top',
-                    borderWidth: 0,
-                    y: -10
-                },
-                plotOptions: {
-                    column: {
-                        stacking: 'normal'
-                    },
-                    bar: {
-                        stacking: 'normal'
-                    },
-                    series: {
-                        pointWidth: 20
-                    },
-                    pie: {
-                        shadow: false,
-                        allowPointSelect: true,
-                        showInLegend: true
-                    }
-                },
-                series: data[type]
-            });
+        var settings = plotSettings[type];
+        settings.series = data[type];
+        chart = new Highcharts.Chart(settings);
     };
 </script>
 <div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px;

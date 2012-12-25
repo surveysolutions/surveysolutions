@@ -21,11 +21,9 @@ namespace Web.Supervisor.Models
     /// <summary>
     /// The interviewer chart model.
     /// </summary>
-    public class InterviewerChartModel
+    public class InterviewerChartModel : ChartModelBase
     {
         #region Constructors and Destructors
-
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InterviewerChartModel"/> class.
@@ -34,49 +32,12 @@ namespace Web.Supervisor.Models
         /// The model.
         /// </param>
         public InterviewerChartModel(IndexView model)
+            : base()
         {
-            var piePreData =
-                model.Items.Select(
-                    (t, index) =>
-                    new
-                        {
-                            y = t.Total,
-                            color = GetColor(index),
-                            name = t.Title,
-                            title = t.Title.Acronim(),
-                            categories = new[] { "Unassigned", "Initial", "Redo", "Completed", "Approved", "Error" },
-                            data = new[] { t.Unassigned, t.Initial, t.Redo, t.Completed, t.Approved, t.Error },
-                        }).ToArray();
+            var piePreData = this.GetPiePreData(model);
 
-            this.BrowserData = new List<object>();
-            this.VersionsData = new List<object>();
-            foreach (var data in piePreData)
-            {
-                this.BrowserData.Add(
-                    new
-                        {
-                            category = data.name,
-                            name = data.name,
-                            title = data.title,
-                            y = data.y,
-                            color = data.color
-                        });
+            this.CalcPieData(piePreData);
 
-                for (var j = 0; j < data.data.Length; j++)
-                {
-                    var brightness = (float)(0.4 - ((float)j / data.data.Length) / 2.5f);
-                    Color c = ColorTranslator.FromHtml(data.color);
-                    var newColor = ControlPaint.Light(c, brightness);
-                    this.VersionsData.Add(new
-                        {
-                            category = data.name,
-                            name = data.categories[j],
-                            y = data.data[j],
-                            color = ColorTranslator.ToHtml(newColor)
-                        });
-                }
-            }
-           
             this.BarData = new List<object>
                 {
                     new
@@ -130,58 +91,48 @@ namespace Web.Supervisor.Models
                         }
                 };
             this.ScatterData =
+                new List<object>(
+                    model.Items.Select(
+                        (t, index) =>
+                        new
+                            {
+                                name = t.Title,
+                                color = GetColor(index),
+                                data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
+                            }).ToArray());
+        }
+
+        /// <summary>
+        /// Get pie pre data array 
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// Array of PieData
+        /// </returns>
+        private IEnumerable<PieData> GetPiePreData(IndexView model)
+        {
+            var piePreData =
                 model.Items.Select(
                     (t, index) =>
-                    new
+                    new PieData
                         {
+                            y = t.Total,
+                            color = this.GetColor(index),
                             name = t.Title,
-                            color = GetColor(index),
-                            data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
+                            title = t.Title.Acronim(),
+                            categories =
+                                new[]
+                                    {
+                                        SurveyStatus.Unassign.Name, SurveyStatus.Initial.Name, SurveyStatus.Redo.Name,
+                                        SurveyStatus.Complete.Name, SurveyStatus.Approve.Name, SurveyStatus.Error.Name
+                                    },
+                            data = new[] { t.Unassigned, t.Initial, t.Redo, t.Completed, t.Approved, t.Error },
                         }).ToArray();
+            return piePreData;
         }
 
         #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets barData.
-        /// </summary>
-        public List<object> BarData { get; set; }
-
-        #endregion
-
-        /// <summary>
-        /// Gets or sets ScatterData.
-        /// </summary>
-        public object[] ScatterData { get; set; }
-
-        private string GetColor(int index)
-        {
-            return this.colors[index % this.colors.Count()];
-        }
-
-        /// <summary>
-        /// The status colors
-        /// </summary>
-        private Dictionary<string, string> statusColors = new Dictionary<string, string>()
-            {
-                { SurveyStatus.Unassign.Name, "#c3325f" },
-                { SurveyStatus.Initial.Name, "#049cdb" },
-                { SurveyStatus.Redo.Name, "#f89406" },
-                { SurveyStatus.Error.Name, "#c83025" /*"#6602cc" */ },
-                { SurveyStatus.Complete.Name, "#018080" },
-                { SurveyStatus.Approve.Name, "#46a546" },
-                { "Total", "#333333" },
-            };
-
-        /// <summary>
-        /// The colors
-        /// </summary>
-        private string[] colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
-
-        public List<object> VersionsData { get; set; }
-
-        public List<object> BrowserData { get; set; }
     }
 }
