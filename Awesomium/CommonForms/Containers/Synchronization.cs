@@ -80,7 +80,7 @@ namespace Browsing.Common.Containers
 
             try
             {
-                this.syncPanel.ShowError("Looking for available data points ...");
+                this.syncPanel.ShowProcessingStatus("Looking for available data points ...");
 
                 // assume sync possibility by default
                 this.isPullPossible = this.isPushPossible = true;
@@ -128,7 +128,7 @@ namespace Browsing.Common.Containers
             }
             finally
             {
-                this.syncPanel.ShowError(status);
+                this.syncPanel.ShowProcessingStatus(status);
 
                 EnablePull(this.isPullPossible);
                 EnablePush(this.isPushPossible);
@@ -157,8 +157,6 @@ namespace Browsing.Common.Containers
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    if(e.Status.Error==null)
-                        this.syncPanel.ShowResult(e.Log);
                     this.syncPanel.State = SyncState.Idle;
 
                     EnablePush(true);
@@ -232,11 +230,11 @@ namespace Browsing.Common.Containers
             base.OnLoad(e);
 
             this.syncPanel.SetIdleState();
-            
+
             EnablePush(false);
             EnablePull(false);
-            
-            this.syncPanel.ShowError("Looking for available data points ...");
+
+            this.syncPanel.ShowProcessingStatus("Looking for available data points ...");
 
         }
 

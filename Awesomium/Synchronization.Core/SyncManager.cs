@@ -129,32 +129,35 @@ namespace Synchronization.Core
 
             try
             {
-                BgnOfSync(this, new SynchronizationEventArgs(new SyncStatus(syncType, direction, 0, null)));
+                BgnOfSync(this, new SynchronizationEventArgs(new SyncStatus(syncType, direction, 0, null, "Started")));
                 CheckPrerequisites(syncType, direction);
                 log = Sync(syncType, direction, out syncProcessId);
             }
             catch (CancelledServiceException ex)
             {
                 error = ex;
-                log = error.Message;
             }
             catch (CheckPrerequisitesException ex)
             {
                 error = ex;
-                log = error.Message;
+            }
+            catch (SynchronizationException ex)
+            {
+                error = ex;
             }
             catch (Exception ex)
             {
                 error = new SynchronizationException("Synchronization process failed", ex);
-                log = ex.Message;
             }
             finally
             {
                 this.syncIsAvailable.Set();
 
                 Logger.Info(log);
+                if (error != null)
+                    Logger.Info(error.Message);
 
-                EndOfSync(this, new SynchronizationCompletedEventArgs(new SyncStatus(syncType, direction, 100, error), log));
+                EndOfSync(this, new SynchronizationCompletedEventArgs(new SyncStatus(syncType, direction, 100, error, log)));
                 if (error == null)
                 {
                     var statEvent = OnGetStatisticsAfterSyncronization(syncType, syncProcessId);
@@ -183,6 +186,7 @@ namespace Synchronization.Core
             var result = new StringBuilder();
             foreach (Exception synchronizationException in errorList)
                 result.AppendLine(synchronizationException.Message);
+
             if (succesSynchronizer != null)
                 result.AppendLine(succesSynchronizer.GetSuccessMessage(action, direction));
             else

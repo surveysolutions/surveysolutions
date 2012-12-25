@@ -9,12 +9,9 @@ namespace Synchronization.Core.Events
 {
     public class SynchronizationCompletedEventArgs : SynchronizationEventArgs
     {
-        public SynchronizationCompletedEventArgs(SyncStatus status, string log) :
+        public SynchronizationCompletedEventArgs(SyncStatus status) :
             base(status)
         {
-            Log = log;
         }
-
-        public string Log { get; private set; }
     }
 }

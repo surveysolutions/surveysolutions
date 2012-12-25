@@ -223,7 +223,7 @@ namespace Browsing.Common.Containers
 
         private void ShowRegStatus()
         {
-            ShowResult(GetCurrentRegistrationStatus(), false);
+            ShowResult(GetCurrentRegistrationStatus());
         }
 
         private string GetCurrentRegistrationStatus()

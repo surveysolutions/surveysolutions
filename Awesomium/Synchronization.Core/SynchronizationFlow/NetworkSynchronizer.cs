@@ -64,7 +64,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
         {
-            return string.Format("Network synchronization {0} is successful with local center {1}", syncAction, this.UrlUtils.GetEnpointUrl());
+            return string.Format("Network synchronization {0} is successful with {1}", syncAction, this.UrlUtils.GetEnpointUrl());
         }
 
         #endregion
