@@ -60,9 +60,9 @@ namespace Core.Supervisor.Views.Status
         {
             var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
-            if (status.PublicId == Guid.Empty)
+            if (status == SurveyStatus.Unknown)
             {
-                status.Name = "Any";
+                status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
             }
 
             var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
