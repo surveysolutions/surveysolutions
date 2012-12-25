@@ -3,7 +3,7 @@
 @model StatusView
 @{
     this.ViewBag.Title = "Statuses";
-    var statuses = SurveyStatus.GetAllStatuses().Where(s=>s.PublicId!=SurveyStatus.Unassign.PublicId).Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
+    var statuses = SurveyStatus.GetAllStatuses().Where(s => s.PublicId != SurveyStatus.Unknown.PublicId).Where(s => s.PublicId != SurveyStatus.Unassign.PublicId).Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
     statuses = statuses.Substring(0, statuses.Length - 1);
     statuses += "}";
 }
