@@ -31,12 +31,20 @@ namespace Synchronization.Core.Errors
             get
             {
                 var mess = base.Message;
-                var ex = InnerException;
-                while (ex != null)
+
+                var chunks = mess.Split('\n');
+                var uniqueChunks =  chunks.Distinct();
+
+                mess = string.Empty;
+                foreach (var s in uniqueChunks)
                 {
-                    mess += "\n" + ex.Message;
-                    ex = ex.InnerException;
+                    var ch = s.Trim('\n');
+                    if (string.IsNullOrEmpty(ch))
+                        continue;
+
+                    mess += s.Trim('\n') + "\n";
                 }
+
 
                 return mess;
             }

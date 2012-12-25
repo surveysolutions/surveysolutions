@@ -13,5 +13,6 @@ namespace Synchronization.Core.Interface
         SyncDirection Direction { get; }
         int ProgressPercents { get; }
         ServiceException Error { get; }
+        string Message { get; }
     }
 }

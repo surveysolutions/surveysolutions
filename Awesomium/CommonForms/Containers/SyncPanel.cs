@@ -88,12 +88,12 @@ namespace Browsing.Common.Containers
                 CancelPressed(sender, e);
         }
 
-        internal void ShowResult(string log)
+        /*internal void ShowResult(string log, bool highlight)
         {
-            this.usbStatusPanel.SetResult(log);
-        }
+            this.usbStatusPanel.SetResult(log, highlight);
+        }*/
 
-        internal void ShowError(string log)
+        internal void ShowProcessingStatus(string log)
         {
             this.usbStatusPanel.SetStatus(log, true);
         }
@@ -145,7 +145,7 @@ namespace Browsing.Common.Containers
             SetProgress(0);
 
             this.usbStatusPanel.SetStatus(string.Format("{0} data is being processed. Please wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
-            this.usbStatusPanel.SetResult(null);
+            this.usbStatusPanel.SetResult(null, false);
 
             this.usbStatusPanel.InactiveStatus.WaitOne(5000);
 
@@ -164,14 +164,17 @@ namespace Browsing.Common.Containers
 
         public void SetCompleted(ISyncProgressStatus status)
         {
-            var error = status.Error != null;
+            var isError = status.Error != null;
 
-            var statusText = error ?
+            var statusText = isError ?
                 status.Error.Message :
                 string.Format("{0} data has been completed successfully", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing");
 
             MakeInvisibleProgressBar(0);
-            this.usbStatusPanel.SetStatus(statusText, error);
+
+            this.usbStatusPanel.SetStatus(statusText, isError);
+            this.usbStatusPanel.SetResult(status.Message, isError);
+
             this.usbStatusPanel.Deactivate(false);
         }
 

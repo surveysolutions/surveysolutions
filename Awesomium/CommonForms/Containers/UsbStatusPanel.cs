@@ -53,6 +53,9 @@ namespace Browsing.Common.Containers
         /// <param name="status"></param>
         private void SetLabel(Label label, string status, bool error = false)
         {
+            if (IsDisposed)
+                return;
+
             if (label.InvokeRequired)
             {
                 label.Invoke(new MethodInvoker(() =>
@@ -93,14 +96,14 @@ namespace Browsing.Common.Containers
 
         #region Methods
 
-        public void SetStatus(string status, bool error = false)
+        public void SetStatus(string status, bool isError = false)
         {
-            SetLabel(this.statusLabel, status, error);
+            SetLabel(this.statusLabel, status, isError);
         }
 
-        public void SetResult(string result, bool error = false)
+        public void SetResult(string result, bool highligth)
         {
-            SetLabel(this.resultLabel, result, error);
+            SetLabel(this.resultLabel, result, highligth);
         }
 
         /// <summary>
@@ -160,7 +163,7 @@ namespace Browsing.Common.Containers
         {
             Thread.Sleep((int)waitTime);
 
-            SetResult(null);
+            SetResult(null, false);
             SetStatus(null);
 
             this.inactiveStatus.Set();

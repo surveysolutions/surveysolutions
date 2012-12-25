@@ -5,6 +5,7 @@ using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
 using Common.Utils;
+using NLog;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -14,7 +15,8 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private ManualResetEvent stopRequested = new ManualResetEvent(false);
         private readonly IRequestProcessor requestProcessor;
-        
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Synchronization process identifier
         /// </summary>
@@ -63,7 +65,7 @@ namespace Synchronization.Core.SynchronizationFlow
         protected abstract Guid OnPull(SyncDirection direction);
         protected abstract IList<ServiceException> OnCheckSyncIssues(SyncType syncAction, SyncDirection direction);
 
-                
+
         /// <summary>
         /// Interrupt pending loading
         /// </summary>
@@ -90,18 +92,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
         }
 
-        protected abstract bool OnUpdateStatus();
-
-        protected virtual IList<ServiceException> OnGetInactiveErrors()
-        {
-            return new List<ServiceException>();
-        }
-
-        #endregion
-
-        #region utility methods
-
-        protected void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        protected virtual void OnWaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
         {
             int percentage = 0;
             var url = UrlUtils.GetPushCheckStateUrl(this.syncProcessId);
@@ -117,7 +108,31 @@ namespace Synchronization.Core.SynchronizationFlow
                 if (percentage < 0)
                     throw new SynchronizationException("Synchronization is failed");
 
-                eventRiser(new SynchronizationEventArgs(new SyncStatus(syncType, direction, percentage / 2 + 50, null)));
+                eventRiser(new SynchronizationEventArgs(new SyncStatus(syncType, direction, percentage / 2 + 50, null, "Sending data ..")));
+            }
+        }
+
+        protected abstract bool OnUpdateStatus();
+
+        protected virtual IList<ServiceException> OnGetInactiveErrors()
+        {
+            return new List<ServiceException>();
+        }
+
+        #endregion
+
+        #region utility methods
+
+        protected void WaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        {
+            try
+            {
+                OnWaitForEndProcess(eventRiser, syncType, direction);
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+                throw e;
             }
         }
 
@@ -143,11 +158,11 @@ namespace Synchronization.Core.SynchronizationFlow
 
                 return this.syncProcessId;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this.syncProcessId = Guid.Empty;
                 throw new SynchronizationException(
-                    string.Format("Push to local center {0} is failed ", UrlUtils.GetEnpointUrl()), e);
+                    string.Format("Push to {0} is failed ", UrlUtils.GetEnpointUrl()), e);
             }
         }
 
@@ -162,7 +177,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 this.syncProcessId = OnPull(direction);
 
                 WaitForEndProcess(OnSyncProgressChanged, SyncType.Pull, direction);
-            
+
                 return this.syncProcessId;
             }
             catch (Exception e)
@@ -170,7 +185,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 this.syncProcessId = Guid.Empty;
 
                 throw new SynchronizationException(
-                   string.Format("Pull from local center {0} is failed ", UrlUtils.GetEnpointUrl()), e);
+                   string.Format("Pull from {0} is failed ", UrlUtils.GetEnpointUrl()), e);
             }
         }
 

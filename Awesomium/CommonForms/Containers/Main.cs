@@ -212,6 +212,7 @@ namespace Browsing.Common.Containers
                     return this.isDatabaseContainsUsers.Value;
 
                 this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(UrlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+
                 return this.isDatabaseContainsUsers.Value;
             }
         }

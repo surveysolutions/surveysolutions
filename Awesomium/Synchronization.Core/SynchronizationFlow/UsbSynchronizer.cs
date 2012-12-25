@@ -30,10 +30,17 @@ namespace Synchronization.Core.SynchronizationFlow
 
         #region Overrides of AbstractSynchronizer
 
+        protected override void OnWaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        {
+            if (syncType == SyncType.Push)
+                return;
+
+            base.OnWaitForEndProcess(eventRiser, syncType, direction);
+        }
+
         protected override Guid OnPush(SyncDirection direction)
         {
             var drive = GetDrive(); // accept driver to flash on
-            Guid syncProcessId = Guid.Empty;
 
             this.stopUsbAccessRequested.Reset();
 
@@ -54,7 +61,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToReceive == 0 ? 100 :
                                     e.BytesReceived * 100 / e.TotalBytesToReceive;
 
-                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
+                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null, "Downloading data ..");
 
                                 OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
@@ -65,14 +72,6 @@ namespace Synchronization.Core.SynchronizationFlow
                                 bool errornous = e.Error != null;
                                 bool cancelled = e.Cancelled;
                                 int percents = errornous || cancelled ? 0 : 100;
-
-                                try
-                                {
-                                    syncProcessId = new Guid(System.Text.Encoding.UTF8.GetString(e.Result));
-                                }
-                                catch
-                                {
-                                }
 
                                 try
                                 {
@@ -88,7 +87,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                         this.lastUsbArchiveName = usbArchiveName;
                                     }
 
-                                    var status = new SyncStatus(SyncType.Push, direction, percents / 2, error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents, error, error == null ? "Completed .." : null);
 
                                     OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
@@ -127,7 +126,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 throw new SynchronizationException("Push to usb is failed", e);
             }
 
-            return syncProcessId;
+            return Guid.Empty;
         }
 
         /// <summary>
@@ -160,7 +159,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToSend == 0 ? 100 :
                                     e.BytesSent * 100 / e.TotalBytesToSend;
 
-                                var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null);
+                                var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null, "Uploading data ..");
 
                                 OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
@@ -191,7 +190,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                     else
                                         this.lastUsbArchiveName = usbArchiveName;
 
-                                    var status = new SyncStatus(SyncType.Push, direction, percents / 2, error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents / 2, error, error == null ? "Completed .." : null);
 
                                     OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
