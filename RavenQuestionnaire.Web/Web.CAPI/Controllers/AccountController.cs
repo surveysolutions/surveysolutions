@@ -102,7 +102,7 @@ namespace Web.CAPI.Controllers
         /// The is user in base.
         /// </summary>
         /// <returns>
-        /// The is user in base.
+        /// The <see cref="bool"/>.
         /// </returns>
         public bool IsUserInBase()
         {
@@ -113,6 +113,8 @@ namespace Web.CAPI.Controllers
             }
 
             return count.ToList().Count > 0;
+
+            // return this._globalProvider.IsAnyUserExist();
         }
 
         /// <summary>
