@@ -29,6 +29,17 @@ namespace Questionnaire.Core.Web.Helpers
             return GlobalInfo.GetCurrentUser();
         }
 
+        /// <summary>
+        /// The is any user exist.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public bool IsAnyUserExist()
+        {
+            return GlobalInfo.IsAnyUserExist();
+        }
+
         #endregion
     }
 }

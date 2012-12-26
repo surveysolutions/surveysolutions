@@ -39,6 +39,19 @@ namespace Questionnaire.Core.Web.Helpers
             return new UserLight((Guid)currentUser.ProviderUserKey, currentUser.UserName);
         }
 
+        /// <summary>
+        /// The is any user exist.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool IsAnyUserExist()
+        {
+            int count = 0;
+            Membership.GetAllUsers(0, 1, out count);
+            return count > 0;
+        }
+
         #endregion
     }
 }

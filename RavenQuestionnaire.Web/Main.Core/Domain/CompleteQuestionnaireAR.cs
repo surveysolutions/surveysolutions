@@ -325,7 +325,7 @@ namespace Main.Core.Domain
                     {
                         QuestionPublicKey = questionPublicKey, 
                         PropogationPublicKey = propogationPublicKey, 
-                        AnswerKeys = new List<Guid>(completeAnswers), 
+                        AnswerKeys = completeAnswers  != null ? new List<Guid>(completeAnswers) : null, 
                         AnswerValue = completeAnswerValue, 
                         AnswerDate = answerDate,
                         Featured = question.Featured, 
@@ -563,7 +563,7 @@ namespace Main.Core.Domain
         /// <param name="responsible">
         /// The responsible.
         /// </param>
-        protected void ChangeAssignment(UserLight responsible)
+        public void ChangeAssignment(UserLight responsible)
         {
             var prevResponsible = this.doc.Responsible;
 
@@ -586,7 +586,7 @@ namespace Main.Core.Domain
         /// <param name="responsible">
         /// The responsible.
         /// </param>
-        protected void ChangeStatus(SurveyStatus status, UserLight responsible)
+        public void ChangeStatus(SurveyStatus status, UserLight responsible)
         {
             var prevStatus = this.doc.Status;
 

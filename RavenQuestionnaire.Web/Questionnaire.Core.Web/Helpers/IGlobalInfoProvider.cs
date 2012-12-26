@@ -26,6 +26,14 @@ namespace Questionnaire.Core.Web.Helpers
         /// </returns>
         UserLight GetCurrentUser();
 
+        /// <summary>
+        /// The is any user exist.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        bool IsAnyUserExist();
+
         #endregion
     }
 }
