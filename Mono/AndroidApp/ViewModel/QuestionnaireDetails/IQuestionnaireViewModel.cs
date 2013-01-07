@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public interface IQuestionnaireViewModel
+    public interface IQuestionnaireViewModel : INotifyPropertyChanged
     {
         Guid QuestionnaireId { get; }
         string Title { get; }

@@ -11,6 +11,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
+using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Main.Core.Entities.SubEntities;
 

@@ -1562,7 +1562,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""QuestionText"": ""Room type""," +
                 @"                  ""QuestionType"": ""SingleOption""," +
                 @"                  ""StataExportCaption"": ""room_type""," +
-                @"                  ""Valid"": true," +
+                @"                  ""Valid"": false," +
                 @"                  ""ValidationExpression"": null," +
                 @"                  ""ValidationMessage"": null," +
                 @"                  ""Triggers"": []" +
@@ -1671,7 +1671,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""Children"": null," +
                 @"                  ""Comments"": null," +
                 @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
+                @"                  ""Enabled"": false," +
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
@@ -1829,7 +1829,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                         g =>
                         new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
                                        g.Children.OfType<ICompleteQuestion>().Select(
-                                           q => CreateRowItem(q, g.PropagationPublicKey.Value))));
+                                           q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList()));
         }
 
         protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen)

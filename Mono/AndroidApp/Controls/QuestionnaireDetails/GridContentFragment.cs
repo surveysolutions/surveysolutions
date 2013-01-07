@@ -9,6 +9,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Fragment = Android.Support.V4.App.Fragment;
@@ -62,6 +63,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             TableRow th = new TableRow(inflater.Context);
             TextView first = new TextView(inflater.Context);
             AssignHeaderStyles(first);
+            first.SetBackgroundResource(Resource.Drawable.grid_headerItem);
             th.AddView(first);
 
             foreach (HeaderItem headerItem in Model.Header)
@@ -79,6 +81,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 }
                 column.SetTag(Resource.Id.Index, Model.Header.IndexOf(headerItem));
                 AssignHeaderStyles(column);
+                column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
                 th.AddView(column);
             }
 
@@ -109,12 +112,33 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     Button rowViewItem = new Button(inflater.Context);
                     rowViewItem.Text = abstractRowItem.Answer;
                     AssignHeaderStyles(rowViewItem);
+                    rowViewItem.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+
+                    rowViewItem.Enabled = abstractRowItem.Enabled;
+
+                    if (abstractRowItem.Enabled)
+                    {
+                        rowViewItem.Click += new EventHandler(rowViewItem_Click);
+                        if (!abstractRowItem.Valid)
+                            rowViewItem.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
+                        else if (abstractRowItem.Answered)
+                            rowViewItem.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
+                    }
+
+                    rowViewItem.SetTag(Resource.Id.Index, rosterItem.RowItems.IndexOf(abstractRowItem));
+                    rowViewItem.SetTag(Resource.Id.PrpagationKey, abstractRowItem.PropagationKey.ToString());
                     th.AddView(rowViewItem);
                 }
 
 
                 tl.AddView(th);
             }
+        }
+
+        void rowViewItem_Click(object sender, EventArgs e)
+        {
+            int i = int.Parse(((TextView)sender).GetTag(Resource.Id.Index).ToString());
+         //   var template = Model.Header[i];
         }
 
         void first_Click(object sender, EventArgs e)
@@ -141,7 +165,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             tv.Gravity = GravityFlags.Center;
             tv.SetPadding(10,10,10,10);
             tv.TextSize = 20;
-            tv.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+            
         }
 
         public QuestionnaireGridViewModel Model { get; private set; }

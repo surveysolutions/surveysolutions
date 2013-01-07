@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.ComponentModel;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -46,5 +47,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<RosterItem> Rows { get; private set; }
 
         #endregion
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
