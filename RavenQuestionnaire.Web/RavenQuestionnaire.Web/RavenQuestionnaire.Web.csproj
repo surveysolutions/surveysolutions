@@ -111,7 +111,7 @@
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
-      <HintPath>..\Web.Headquarter\Bin\Ionic.Zip.dll</HintPath>
+      <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
