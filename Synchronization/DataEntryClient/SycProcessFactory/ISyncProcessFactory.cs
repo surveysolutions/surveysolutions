@@ -11,7 +11,6 @@ namespace DataEntryClient.SycProcessFactory
 {
     using System;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
 
     /// <summary>
