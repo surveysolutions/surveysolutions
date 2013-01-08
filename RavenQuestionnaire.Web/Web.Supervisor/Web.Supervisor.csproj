@@ -450,6 +450,7 @@
     <Content Include="Views\Survey\StatusChart.cshtml" />
     <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Survey\Timeline.cshtml" />
+    <Content Include="Views\Survey\Timeline1.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
