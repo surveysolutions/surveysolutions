@@ -1,20 +1,31 @@
-using Main.Core.View.Questionnaire;
-using Main.DenormalizerStorage;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="HqEventStreamReader.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the HqEventStreamReader type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Core.HQ.Synchronization
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Main.Core.Documents;
+
     using Main.Core.Domain;
     using Main.Core.Events;
+    using Main.Core.View.Questionnaire;
+    using Main.DenormalizerStorage;
+
     using Ncqrs;
     using Ncqrs.Eventing.Storage;
 
+    /// <summary>
+    /// The HQ event stream reader.
+    /// </summary>
     public class HqEventStreamReader : AbstractSnapshotableEventStreamReader
     {
-
         #region Fields
 
         /// <summary>

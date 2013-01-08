@@ -76,10 +76,10 @@ namespace Web.CAPI.Controllers
         #region Public Methods and Operators
 
         /// <summary>
-        /// Generate guid of current user
+        /// The get current user.
         /// </summary>
         /// <returns>
-        /// Guid of current user
+        /// The <see cref="Guid"/>.
         /// </returns>
         public Guid GetCurrentUser()
         {
@@ -91,7 +91,7 @@ namespace Web.CAPI.Controllers
         /// The is logged in.
         /// </summary>
         /// <returns>
-        /// The is logged in.
+        /// The <see cref="bool"/>.
         /// </returns>
         public bool IsLoggedIn()
         {
