@@ -107,6 +107,7 @@
     <Compile Include="AbstractFactories\ICompleteAnswerFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteGroupFactory.cs" />
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs" />
+    <Compile Include="Backup\IBackupManager.cs" />
     <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="Events\File\FileMetaUpdated.cs" />
     <Compile Include="Events\File\FileUploaded.cs" />
     <Compile Include="Events\IEventStreamReader.cs" />
+    <Compile Include="Events\IUserEventSync.cs" />
     <Compile Include="Events\Location\LocationDeleted.cs" />
     <Compile Include="Events\Location\NewLocationCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\AnswerSet.cs" />
@@ -315,6 +317,7 @@
     <Compile Include="Events\User\UserChanged.cs" />
     <Compile Include="Events\User\UserStatusChanged.cs" />
     <Compile Include="Export\ExportManager.cs" />
+    <Compile Include="Export\FileType.cs" />
     <Compile Include="Export\IDataExport.cs" />
     <Compile Include="Export\IEnvironmentSupplier.cs" />
     <Compile Include="Export\IExportProvider.cs" />
@@ -334,7 +337,6 @@
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\GroupWithRout.cs" />
-    <Compile Include="Utility\IdUtil.cs" />
     <Compile Include="Utility\LINQExtensions.cs" />
     <Compile Include="Utility\NodeWithLevel.cs" />
     <Compile Include="Utility\OrderStrategy\AsIsStrategy.cs" />

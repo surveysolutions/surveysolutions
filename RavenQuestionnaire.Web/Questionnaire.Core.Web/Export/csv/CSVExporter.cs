@@ -1,20 +1,21 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CSVExporter.cs" company="The World Bank">
-//   2012
+// <copyright file="CSVExporter.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   Implements comma-separated values export format.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.IO;
-using CsvHelper;
-using Main.Core.Export;
-using Main.Core.View.Export;
-
 namespace Questionnaire.Core.Web.Export.csv
 {
+    using System;
+    using System.IO;
+
+    using CsvHelper;
+
+    using Main.Core.Export;
+    using Main.Core.View.Export;
+
     /// <summary>
     /// Implements comma-separated values export format.
     /// </summary>
@@ -49,9 +50,6 @@ namespace Questionnaire.Core.Web.Export.csv
         /// <summary>
         /// The do export.
         /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
         /// <param name="records">
         /// The records.
         /// </param>
@@ -61,27 +59,26 @@ namespace Questionnaire.Core.Web.Export.csv
         /// <returns>
         /// The System.Boolean.
         /// </returns>
-        public bool DoExport(CompleteQuestionnaireExportView records,string fileName)
+        public bool DoExport(CompleteQuestionnaireExportView records, string fileName)
         {
-            var bytes = this.DoExportToStream(records);
-           /* using (Stream memoryStream = this.DoExportToStream(records))
-            {*/
-                using (FileStream fileStream = File.Create(fileName))
-                {
-                    fileStream.Write(bytes,0,bytes.Length);
-                   // memoryStream.CopyTo(fileStream);
-                }
-           // }
+            byte[] bytes = this.DoExportToStream(records);
 
+            /* using (Stream memoryStream = this.DoExportToStream(records))
+            {*/
+            using (FileStream fileStream = File.Create(fileName))
+            {
+                fileStream.Write(bytes, 0, bytes.Length);
+
+                // memoryStream.CopyTo(fileStream);
+            }
+
+            // }
             return true;
         }
 
         /// <summary>
         /// The do export to stream.
         /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
         /// <param name="records">
         /// The records.
         /// </param>
@@ -90,8 +87,7 @@ namespace Questionnaire.Core.Web.Export.csv
         /// </returns>
         public byte[] DoExportToStream(CompleteQuestionnaireExportView records)
         {
-            //Stream result = new MemoryStream();
-
+            // Stream result = new MemoryStream();
             using (var memoryStream = new MemoryStream())
             using (var streamWriter = new StreamWriter(memoryStream))
             using (var writer = new CsvWriter(streamWriter))
@@ -101,10 +97,11 @@ namespace Questionnaire.Core.Web.Export.csv
                 writer.WriteField("PublicKey"); // templated column for ID
 
                 // build up header
-                foreach (var question in records.Header)
+                foreach (HeaderItem question in records.Header)
                 {
                     writer.WriteField(question.Caption);
                 }
+
                 writer.WriteField("ForeignKey");
                 writer.NextRecord();
 
@@ -116,20 +113,22 @@ namespace Questionnaire.Core.Web.Export.csv
                     {
                         /*     TODO  var completeAnswer = item.CompleteAnswers.FirstOrDefault(a => a.QuestionPublicKey == guid);*/
                         // var firstOrDefault = item.CompleteQuestions.FirstOrDefault(a => a.PublicKey == guid);
-                        foreach (var itemValue in item.Values[guid])
+                        foreach (string itemValue in item.Values[guid])
                         {
                             writer.WriteField(itemValue);
                         }
-
                     }
+
                     writer.WriteField(item.Parent);
                     writer.NextRecord();
                 }
+
                 streamWriter.Flush();
                 memoryStream.Position = 0;
-             //   memoryStream.CopyTo(result);
 
-             //   result.Position = 0;
+                // memoryStream.CopyTo(result);
+
+                // result.Position = 0;
                 return memoryStream.ToArray();
             }
         }

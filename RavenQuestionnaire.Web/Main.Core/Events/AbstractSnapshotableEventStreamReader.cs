@@ -1,8 +1,11 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="AbstractSnapshotableEventSync.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AbstractSnapshotableEventStreamReader.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.Events
 {
@@ -18,11 +21,10 @@ namespace Main.Core.Events
     using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
-    /// For load Snapshoots
+    /// For load Snapshots.
     /// </summary>
-    public abstract class AbstractSnapshotableEventStreamReader:AbstractEventStreamReader
+    public abstract class AbstractSnapshotableEventStreamReader : AbstractEventStreamReader
     {
-
         #region Fields
 
         /// <summary>
@@ -43,13 +45,14 @@ namespace Main.Core.Events
         /// Initializes a new instance of the <see cref="AbstractSnapshotableEventStreamReader"/> class.
         /// </summary>
         /// <exception cref="Exception">
-        /// exception not found eventstore
+        /// exception not found event store
         /// </exception>
         protected AbstractSnapshotableEventStreamReader()
         {
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (this.myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
+
             this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
         }
 
@@ -57,9 +60,8 @@ namespace Main.Core.Events
 
         #region PublicMethods
 
-
         /// <summary>
-        /// Select from database all event for creation templates
+        /// The get event stream by id.
         /// </summary>
         /// <param name="aggregateRootId">
         /// The aggregate root id.
@@ -68,62 +70,84 @@ namespace Main.Core.Events
         /// The ar type.
         /// </param>
         /// <returns>
-        /// list of questionnaire templates
+        /// The <see cref="List"/>.
         /// </returns>
         public virtual List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId, Type arType)
         {
-            var events = this.myEventStore.ReadFrom(aggregateRootId,
-                                                    int.MinValue, int.MaxValue);
+            var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
 
             if (!events.Any())
+            {
                 return new List<AggregateRootEvent>(0);
+            }
+
             var snapshotables = from i in arType.GetInterfaces()
                                 where i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISnapshotable<>)
                                 select i;
             if (!snapshotables.Any())
-                return BuildEventStream(events);
+            {
+                return this.BuildEventStream(events);
+            }
 
             if (!typeof(SnapshootableAggregateRoot<>).MakeGenericType(
-                snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
+                    snapshotables.FirstOrDefault().GetGenericArguments()[0]).IsAssignableFrom(arType))
+            {
                 return BuildEventStream(events);
+            }
+
             if (events.Last().Payload is SnapshootLoaded)
             {
                 return new List<AggregateRootEvent>()
                            {
-
                                new AggregateRootEvent(events.Last())
                            };
             }
+
             AggregateRoot aggregateRoot;
             using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork(Guid.NewGuid()))
             {
                 if (unitOfWork == null)
-                    return BuildEventStream(events);
+                {
+                    return this.BuildEventStream(events);
+                }
+
                 aggregateRoot = unitOfWork.GetById(arType, aggregateRootId, null);
                 if (aggregateRoot == null)
-                    return BuildEventStream(events);
+                {
+                    return this.BuildEventStream(events);
+                }
             }
+
             var snapshoot = arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
-            var eventSnapshoot = new SnapshootLoaded()
-            {
-                Template =
-                    new Snapshot(aggregateRootId,
-                                 1,
-                                 snapshoot)
-            };
+            var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(aggregateRootId, 1, snapshoot) };
             Guid commitId = Guid.NewGuid();
             Guid eventId = Guid.NewGuid();
             var uncommitedStream = new UncommittedEventStream(commitId);
             var dateOfEvent = NcqrsEnvironment.Get<IClock>().UtcNow();
-            uncommitedStream.Append(new UncommittedEvent(eventId, aggregateRootId, aggregateRoot.Version + 1,
-                                                         aggregateRoot.InitialVersion, dateOfEvent, eventSnapshoot,
-                                                         events.Last().GetType().Assembly.GetName().Version));
+
+            uncommitedStream.Append(
+                new UncommittedEvent(
+                    eventId,
+                    aggregateRootId,
+                    aggregateRoot.Version + 1,
+                    aggregateRoot.InitialVersion,
+                    dateOfEvent,
+                    eventSnapshoot,
+                    events.Last().GetType().Assembly.GetName().Version));
+
             this.myEventStore.Store(uncommitedStream);
+
             return new List<AggregateRootEvent>()
-                       {
-                           new AggregateRootEvent(new CommittedEvent(commitId, eventId, aggregateRootId, 1,
-                                                                     dateOfEvent, eventSnapshoot,
-                                                                     events.Last().GetType().Assembly.GetName().Version))
+                {
+                    new AggregateRootEvent(
+                        new CommittedEvent(
+                        commitId,
+                        eventId,
+                        aggregateRootId,
+                        1,
+                        dateOfEvent,
+                        eventSnapshoot,
+                        events.Last().GetType().Assembly.GetName().Version))
                        };
 
         }

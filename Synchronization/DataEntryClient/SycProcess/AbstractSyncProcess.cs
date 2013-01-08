@@ -12,7 +12,6 @@ namespace DataEntryClient.SycProcess
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.ServiceModel;
 
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessRepository;

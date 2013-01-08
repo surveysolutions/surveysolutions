@@ -6,14 +6,13 @@
 //   The ExportProvider interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System.IO;
-
 namespace Main.Core.Export
 {
     /// <summary>
     /// The ExportProvider interface.
     /// </summary>
+    /// <typeparam name="T">
+    /// </typeparam>
     public interface IExportProvider<T>
     {
         #region Public Methods and Operators
@@ -21,9 +20,6 @@ namespace Main.Core.Export
         /// <summary>
         /// The do export.
         /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
         /// <param name="items">
         /// The items.
         /// </param>
@@ -38,9 +34,6 @@ namespace Main.Core.Export
         /// <summary>
         /// The do export to stream.
         /// </summary>
-        /// <param name="template">
-        /// The template.
-        /// </param>
         /// <param name="items">
         /// The items.
         /// </param>

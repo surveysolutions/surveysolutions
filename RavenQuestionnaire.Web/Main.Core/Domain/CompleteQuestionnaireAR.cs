@@ -126,7 +126,7 @@ namespace Main.Core.Domain
         /// </param>
         public void AddPropagatableGroup(Guid publicKey, Guid propagationKey)
         {
-            throw new InvalidOperationException("Is not supported.");
+            throw new InvalidOperationException("Is not supported any more.");
 
 
             //// performe check before event raising
@@ -283,9 +283,9 @@ namespace Main.Core.Domain
         /// <param name="completeAnswers">
         /// The complete answers.
         /// </param>
-        /// <exception cref="InvalidOperationException">
-        /// Raises InvalidOperationException.
-        /// </exception>
+        /// <param name="answerDate">
+        /// The answer date.
+        /// </param>
         public void SetAnswer(Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers, DateTime answerDate)
         {
             ////performe check before event raising!!

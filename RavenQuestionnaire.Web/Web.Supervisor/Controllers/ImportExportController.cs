@@ -16,10 +16,8 @@ namespace Web.Supervisor.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using Core.Supervisor.Views.Summary;
     using Core.Supervisor.Views.SyncProcess;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 

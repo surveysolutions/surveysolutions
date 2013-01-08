@@ -1,0 +1,10 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>System Backup</h2>
+
+<p>
+    @Html.ActionLink("Get Backup", "Export", "ImportExport", new { syncKey = Guid.NewGuid() }, new { @class = "btn small btn-primary" })
+</p>

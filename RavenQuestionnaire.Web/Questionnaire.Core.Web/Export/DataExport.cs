@@ -98,7 +98,7 @@ namespace Questionnaire.Core.Web.Export
                     manager, 
                     null, 
                     type == "csv" ? FileType.Csv : FileType.Tab);
-                this.supplier.AddCompledResults(allLevels);
+                this.supplier.AddCompletedResults(allLevels);
                 return ZipFileData.ExportInternal(allLevels, fileName);
             }
 

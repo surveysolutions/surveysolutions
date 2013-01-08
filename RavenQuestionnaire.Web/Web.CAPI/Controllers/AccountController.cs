@@ -34,12 +34,12 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// The _global provider.
         /// </summary>
-        private readonly IGlobalInfoProvider _globalProvider;
+        private readonly IGlobalInfoProvider globalProvider;
 
         /// <summary>
         /// The _user event sync.
         /// </summary>
-        private readonly IUserEventSync _userEventSync;
+        private readonly IUserEventSync userEventSync;
 
         /// <summary>
         /// The authentication.
@@ -66,8 +66,8 @@ namespace Web.CAPI.Controllers
             IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
         {
             this.authentication = auth;
-            this._globalProvider = globalProvider;
-            this._userEventSync = userEventSync;
+            this.globalProvider = globalProvider;
+            this.userEventSync = userEventSync;
         }
 
         #endregion
@@ -83,7 +83,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public Guid GetCurrentUser()
         {
-            UserLight currentUser = this._globalProvider.GetCurrentUser();
+            UserLight currentUser = this.globalProvider.GetCurrentUser();
             return currentUser != null ? currentUser.Id : Guid.Empty;
         }
 
@@ -95,7 +95,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public bool IsLoggedIn()
         {
-            return this._globalProvider.GetCurrentUser() != null;
+            return this.globalProvider.GetCurrentUser() != null;
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public bool IsUserInBase()
         {
-            IEnumerable<AggregateRootEvent> count = this._userEventSync.GetUsers(UserRoles.Operator);
+            IEnumerable<AggregateRootEvent> count = this.userEventSync.GetUsers(UserRoles.Operator);
             if (count == null)
             {
                 return false;

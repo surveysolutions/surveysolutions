@@ -29,7 +29,7 @@
 <h2>Surveys</h2>
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn small btn-primary" })
-    @Html.ActionLink("Download", "ExportTemplates", "ImportExport", null, new { @class = "btn small btn-primary" })    
+    @Html.ActionLink("Download All", "ExportTemplates", "ImportExport", null, new { @class = "btn small btn-primary" })    
 </p>
 <table id="questionnaireTable" class="table table-striped table-bordered table-condensed">
     <thead>
@@ -51,10 +51,10 @@
                 Manage
             </th>
             <th sorter='{"disable":"true"}'>
-                Export
+                Export Results
             </th>
             <th sorter='{"disable":"true"}'>
-                Download
+                Download 
             </th>
         </tr>
     </thead>

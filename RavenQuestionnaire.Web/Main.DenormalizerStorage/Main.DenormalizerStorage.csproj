@@ -63,6 +63,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenormalizerFactory.cs" />
     <Compile Include="IDenormalizer.cs" />
     <Compile Include="IDenormalizerStorage.cs" />
     <Compile Include="RavenPersistentStorage.cs" />

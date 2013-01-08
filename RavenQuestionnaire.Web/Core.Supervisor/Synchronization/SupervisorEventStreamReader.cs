@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SupervisorEventSync.cs" company="">
+// <copyright file="SupervisorEventStreamReader.cs" company="">
 //   
 // </copyright>
 // <summary>
@@ -31,7 +31,7 @@ namespace Core.Supervisor.Synchronization
     /// </summary>
     public class SupervisorEventStreamReader : AbstractSnapshotableEventStreamReader
     {
-        #region Constants and Fields
+        #region Fields
 
         /// <summary>
         /// ViewRepository  object
@@ -75,7 +75,7 @@ namespace Core.Supervisor.Synchronization
         #endregion
 
         #region Public Methods and Operators
-        
+
         /// <summary>
         /// Responsible for read events from database
         /// </summary>
@@ -85,20 +85,20 @@ namespace Core.Supervisor.Synchronization
         public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
             var retval = new List<AggregateRootEvent>();
-            var supervisorKey = GetSupervisor();
+            Guid? supervisorKey = this.GetSupervisor();
             if (supervisorKey.HasValue)
             {
                 this.AddFilteredUsers(retval, supervisorKey.Value);
                 this.AddFilteredCompleteQuestionnairesInitState(retval);
-
             }
             else
             {
                 this.AddUsers(retval);
                 this.AddCompleteQuestionnairesInitState(retval);
             }
+
             this.AddQuestionnairesTemplates(retval);
-            
+
             this.AddFiles(retval);
             this.AddRegisterDevice(retval);
             return retval.OrderBy(x => x.EventSequence).ToList();
@@ -107,17 +107,9 @@ namespace Core.Supervisor.Synchronization
         #endregion
 
         #region Methods
-        protected Guid? GetSupervisor()
-        {
-            var supervisor =
-                this.denormalizer.Query<UserDocument>().FirstOrDefault(u => u.Roles.Contains(UserRoles.Supervisor));
-            if (supervisor == null)
-                return null;
-            return supervisor.PublicKey;
-        }
 
         /// <summary>
-        /// Responsible for added init state
+        /// The add complete questionnaires init state.
         /// </summary>
         /// <param name="retval">
         /// The retval.
@@ -134,7 +126,7 @@ namespace Core.Supervisor.Synchronization
                     continue;
                 }
 
-                retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
             }
         }
 
@@ -149,7 +141,53 @@ namespace Core.Supervisor.Synchronization
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
             foreach (FileDescription item in model)
             {
-                retval.AddRange(base.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
+                retval.AddRange(this.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
+            }
+        }
+
+        /// <summary>
+        /// The add filtered complete questionnaires initiate state.
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
+        protected void AddFilteredCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
+        {
+            List<Guid> userGuids = retval.Select(rootEvent => (rootEvent.Payload as NewUserCreated).PublicKey).ToList();
+            IQueryable<CompleteQuestionnaireBrowseItem> model =
+                this.denormalizer.Query<CompleteQuestionnaireBrowseItem>();
+            foreach (CompleteQuestionnaireBrowseItem item in model)
+            {
+                if (SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status) && item.Responsible != null)
+                {
+                    foreach (Guid guid in userGuids)
+                    {
+                        if (item.Responsible.Id == guid)
+                        {
+                            retval.AddRange(
+                                this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// The add filtered users.
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        protected void AddFilteredUsers(List<AggregateRootEvent> retval, Guid syncKey)
+        {
+            IQueryable<UserDocument> model =
+                this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == syncKey);
+            foreach (UserDocument item in model)
+            {
+                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(UserAR)));
             }
         }
 
@@ -165,7 +203,22 @@ namespace Core.Supervisor.Synchronization
 
             foreach (QuestionnaireBrowseItem item in model)
             {
-                retval.AddRange(base.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+            }
+        }
+
+        /// <summary>
+        /// The add register device.
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
+        protected void AddRegisterDevice(List<AggregateRootEvent> retval)
+        {
+            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
+            foreach (SyncDeviceRegisterDocument item in model)
+            {
+                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(DeviceAR)));
             }
         }
 
@@ -180,43 +233,26 @@ namespace Core.Supervisor.Synchronization
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(UserAR)));
             }
         }
 
-        protected void AddRegisterDevice(List<AggregateRootEvent> retval)
+        /// <summary>
+        /// The get supervisor.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Guid?"/>.
+        /// </returns>
+        protected Guid? GetSupervisor()
         {
-            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
-            foreach (SyncDeviceRegisterDocument item in model)
+            UserDocument supervisor =
+                this.denormalizer.Query<UserDocument>().FirstOrDefault(u => u.Roles.Contains(UserRoles.Supervisor));
+            if (supervisor == null)
             {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(DeviceAR)));
+                return null;
             }
-        }
 
-        protected void AddFilteredUsers(List<AggregateRootEvent> retval, Guid syncKey)
-        {
-            IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == syncKey);
-            foreach (UserDocument item in model)
-            {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
-            }
-        }
-
-        protected void AddFilteredCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-        {
-            var userGuids = retval.Select(rootEvent => (rootEvent.Payload as NewUserCreated).PublicKey).ToList();
-            var model = this.denormalizer.Query<CompleteQuestionnaireBrowseItem>();
-            foreach (var item in model)
-            {
-                if (SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status) && item.Responsible != null)
-                {
-                    foreach (var guid in userGuids)
-                    {
-                        if (item.Responsible.Id == guid)
-                        retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
-                    }
-                }
-            }
+            return supervisor.PublicKey;
         }
 
         #endregion

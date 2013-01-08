@@ -1,29 +1,30 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="UserEventSync.cs" company="WorldBank">
-// 2012
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserEventStreamReader.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.DenormalizerStorage;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.Events
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using Main.Core.Documents;
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events.User;
+    using Main.DenormalizerStorage;
 
     using Ncqrs;
     using Ncqrs.Eventing.Storage;
 
-    public interface IUserEventSync
-    {
-        IEnumerable<AggregateRootEvent> GetUsers(UserRoles? role);
-    }
-
+    /// <summary>
+    /// The user event stream reader.
+    /// </summary>
     public class UserEventStreamReader : AbstractSnapshotableEventStreamReader, IUserEventSync
     {
         #region Fields

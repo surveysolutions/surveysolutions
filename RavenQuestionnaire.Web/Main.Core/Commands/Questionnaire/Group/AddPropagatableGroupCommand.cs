@@ -17,7 +17,7 @@ namespace Main.Core.Commands.Questionnaire.Group
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
     /// <summary>
-    /// The add propagatable group command.
+    /// The add propagate group command.
     /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "AddPropagatableGroup")]
@@ -41,9 +41,9 @@ namespace Main.Core.Commands.Questionnaire.Group
         {
             throw new InvalidOperationException("Is not supported."); 
 
-            this.CompleteQuestionnaireId = completeQuestionnaireId;
+/*            this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.PublicKey = publicKey;
-            this.PropagationKey = propagationKey;
+            this.PropagationKey = propagationKey;*/
         }
 
         #endregion

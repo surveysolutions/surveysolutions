@@ -164,6 +164,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -450,6 +451,7 @@
     <Content Include="Views\Survey\StatusChart.cshtml" />
     <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Survey\Timeline.cshtml" />
+    <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
