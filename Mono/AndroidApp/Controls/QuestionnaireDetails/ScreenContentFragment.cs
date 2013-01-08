@@ -13,6 +13,7 @@ using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -55,26 +56,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-
+                    var _bindingActivity = inflater.Context as IMvxBindingActivity;
                     switch (question.QuestionType)
                     {
                         case QuestionType.Text:
-                            itemView = new TextQuestionView(inflater.Context, question);
+                            itemView = new TextQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                         case QuestionType.Numeric:
-                            itemView = new NumericQuestionView(inflater.Context, question);
+                            itemView = new NumericQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                         case QuestionType.DateTime:
-                            itemView = new DateQuestionView(inflater.Context, question);
+                            itemView = new DateQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                         case QuestionType.SingleOption:
-                            itemView = new SingleChoiseQuestionView(inflater.Context, question);
+                            itemView = new SingleChoiseQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                         case QuestionType.MultyOption:
-                            itemView = new MultyQuestionView(inflater.Context, question);
+                            itemView = new MultyQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                         default:
-                            itemView = new TextQuestionView(inflater.Context, question);
+                            itemView = new TextQuestionView(inflater.Context, _bindingActivity, question);
                             break;
                     }
 

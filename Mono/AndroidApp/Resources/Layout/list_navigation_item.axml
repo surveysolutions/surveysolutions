@@ -5,7 +5,7 @@
     android:padding="8dip"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-    <TextView
+    <!--<TextView
         android:id="@+id/tvITem"
         android:layout_alignParentLeft="true"
         android:layout_width="wrap_content"
@@ -33,5 +33,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        local:MvxBind="{'Text':{'Path':'Total'}}"/>
+        local:MvxBind="{'Text':{'Path':'Total'}}"/>-->
+  <TextView
+        android:id="@+id/tvITem"
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+       
+        android:textSize="16sp"/>
+  <TextView
+        android:id="@+id/tvCount"
+         android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"/>
 </RelativeLayout>

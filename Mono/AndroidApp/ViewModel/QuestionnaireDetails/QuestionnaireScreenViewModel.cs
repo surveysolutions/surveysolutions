@@ -10,10 +10,12 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Cirrious.MvvmCross.Interfaces.ViewModels;
+using Cirrious.MvvmCross.Interfaces.Views;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class QuestionnaireScreenViewModel : IQuestionnaireViewModel
+    public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
         public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
@@ -40,12 +42,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
-        public event PropertyChangedEventHandler PropertyChanged;
+       
 
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+      
     }
 }

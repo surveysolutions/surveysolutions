@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+               xmlns:local="http://schemas.android.com/apk/res/AndroidApp.AndroidApp"
                android:id="@+id/llRoot"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" android:padding="10px" android:background="@drawable/questionShape" android:layout_marginBottom="10px">
+    android:orientation="vertical" android:padding="10px" android:layout_marginBottom="10px"
+              local:MvxBind="{'Background':{'Path':'Status', 'Converter':'BorderColor'}}"
+              >
   <Button
       android:id="@+id/btnInstructions"
       android:layout_width="wrap_content"
@@ -13,19 +16,21 @@
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:id="@+id/tvTitle"
-     android:textSize="20dip"/>
+     android:textSize="20dip"
+     local:MvxBind="{'Text':{'Path':'Text'}}"/>
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:id="@+id/llWrapper"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+                 local:MvxBind="{'EnableQuestion':{'Path':'Status', 'Converter':'EnableQuestion'}}">
   </LinearLayout>
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:id="@+id/tvComments"
-    android:textSize="15dip"/>
+    android:textSize="15dip" local:MvxBind="{'Text':{'Path':'Comments'}}"/>
   <EditText
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
-   android:id="@+id/etComments" android:visibility="gone"/>
+   android:id="@+id/etComments" android:visibility="gone"  local:MvxBind="{'Text':{'Path':'Comments'}}"/>
 </LinearLayout>

@@ -105,10 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity1.cs" />
+    <Compile Include="Bindings\BackgroundBinding.cs" />
     <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\GridContentFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationAdapter.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\QuestionnaireNavigationFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenContentFragment.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AbstractQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\DateQuestionView.cs" />
@@ -118,6 +121,9 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
+    <Compile Include="Converters\BorderColorConverter.cs" />
+    <Compile Include="Converters\Converters.cs" />
+    <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
@@ -153,7 +159,9 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\DetailsPortret.axml" />
-    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml" />
+    <AndroidResource Include="Resources\Layout\AbstractQuestionView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\Values\MvxBindingAttributes.xml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -235,9 +243,7 @@
     <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
     <AndroidResource Include="Resources\Drawable\capi.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Converters\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

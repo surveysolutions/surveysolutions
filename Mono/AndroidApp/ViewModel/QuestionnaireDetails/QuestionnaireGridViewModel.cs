@@ -17,7 +17,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class QuestionnaireGridViewModel : IQuestionnaireViewModel
+    public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel,IQuestionnaireViewModel
     {
         #region Implementation of IQuestionnaireViewModel
 
@@ -48,12 +48,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         #endregion
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string propertyName)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+       
     }
 }

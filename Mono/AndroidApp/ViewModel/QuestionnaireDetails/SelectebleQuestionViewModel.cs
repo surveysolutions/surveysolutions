@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Windows.Input;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Main.Core.Entities.SubEntities;
-
+using Cirrious.MvvmCross.ViewModels;
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
@@ -19,9 +19,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             : base(publicKey, text, type,enabled,instructions,comments,valid, mandatory)
         {
             Answers = answers;
-            Answered = answers.Any(a => a.Selected);
+            var answered = answers.Any(a => a.Selected);
+            if(answered)
+                Status = Status | QuestionStatus.Answered;
+            //Answered = answers.Any(a => a.Selected);
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
+        
     }
 }

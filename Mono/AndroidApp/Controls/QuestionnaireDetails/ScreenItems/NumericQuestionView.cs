@@ -11,26 +11,28 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class NumericQuestionView : AbstractQuestionView
     {
-        public NumericQuestionView(Context context, QuestionViewModel model) : base(context, model)
+       /* public NumericQuestionView(Context context, QuestionViewModel model) : base(context, model)
+        {
+        }*/
+
+        public NumericQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
+            : base(context, bindingActivity, source)
         {
         }
 
-        public NumericQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model) : base(context, attrs, model)
-        {
-        }
-
-        public NumericQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
+       /* public NumericQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
         {
         }
 
         public NumericQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model) : base(javaReference, transfer, model)
         {
-        }
+        }*/
 
         protected override void Initialize()
         {

@@ -13,7 +13,7 @@ using Android.Widget;
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
 
-    public interface IQuestionnaireItemViewModel
+    public interface IQuestionnaireItemViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }

@@ -11,26 +11,28 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class DateQuestionView : AbstractQuestionView
     {
-        public DateQuestionView(Context context, QuestionViewModel model) : base(context, model)
+     /*   public DateQuestionView(Context context, QuestionViewModel model) : base(context, model)
+        {
+        }
+        */
+        public DateQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
+            : base(context, bindingActivity, source)
         {
         }
 
-        public DateQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model) : base(context, attrs, model)
-        {
-        }
-
-        public DateQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
+       /* public DateQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model) : base(context, attrs, defStyle, model)
         {
         }
 
         public DateQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model) : base(javaReference, transfer, model)
         {
-        }
+        }*/
 
         #region Overrides of AbstractQuestionView
 

@@ -19,7 +19,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             : base(publicKey, text, type, enabled,instructions,comments,valid, mandatory)
         {
             Answer = answer;
-            Answered = !string.IsNullOrEmpty(answer);
+            var answered = !string.IsNullOrEmpty(answer);
+            if (answered)
+                Status = Status | QuestionStatus.Answered;
         }
 
         public string Answer { get; private set; }

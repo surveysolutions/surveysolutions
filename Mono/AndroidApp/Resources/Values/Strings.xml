@@ -4,5 +4,6 @@
   <item  type="id"  name="QuestionnaireId" />
   <item  type="id"  name="ScreenId" />
   <item  type="id"  name="PrpagationKey" />
+  <item  type="id"  name="AnswerId" />
   <item  type="id"  name="Index" />
 </resources>

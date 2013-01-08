@@ -72,7 +72,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"              ""Capital"": false," +
                 @"              ""Cards"": []," +
                 @"              ""Children"": null," +
-                @"              ""Comments"": null," +
+                @"              ""Comments"": ""Hello commment""," +
                 @"              ""ConditionExpression"": null," +
                 @"              ""Enabled"": true," +
                 @"              ""Featured"": false," +

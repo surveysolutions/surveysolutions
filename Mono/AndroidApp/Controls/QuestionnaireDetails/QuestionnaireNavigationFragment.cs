@@ -12,6 +12,7 @@ using Android.Support.V4.App;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -88,13 +89,5 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
     }
 
-    public class ScreenChangedEventArgs : EventArgs
-    {
-        public ScreenChangedEventArgs(ItemPublicKey? screenId)
-        {
-            ScreenId = screenId;
-        }
-        public ItemPublicKey? ScreenId { get; private set; }
-    }
 
 }
