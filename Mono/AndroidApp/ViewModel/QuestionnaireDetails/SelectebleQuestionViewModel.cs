@@ -26,6 +26,17 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        
+        public void SelectAnswer(Guid publicKey)
+        {
+            foreach (var answer in Answers)
+            {
+                answer.Selected = answer.PublicKey == publicKey;
+            }
+            if (!Status.HasFlag(QuestionStatus.Answered))
+            {
+                Status = Status | QuestionStatus.Answered;
+                RaisePropertyChanged("Status");
+            }
+        }
     }
 }

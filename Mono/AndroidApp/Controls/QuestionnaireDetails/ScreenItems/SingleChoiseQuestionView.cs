@@ -63,12 +63,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
-            var selectedAnswer = typedMode.Answers.FirstOrDefault(a => a.PublicKey == answerGuid);
 
-            foreach (var answer in typedMode.Answers)
-            {
-                answer.Selected = answer.PublicKey==answerGuid;
-            }
+            typedMode.SelectAnswer(answerGuid);
         }
 
    
