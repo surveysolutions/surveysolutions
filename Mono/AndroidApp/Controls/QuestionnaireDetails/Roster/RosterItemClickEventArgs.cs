@@ -16,11 +16,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
 {
     public class RosterItemClickEventArgs:EventArgs
     {
-        public RosterItemClickEventArgs(RowItem model)
+        public RosterItemClickEventArgs(AbstractQuestionRowItem model)
         {
             Model = model;
         }
 
-        public RowItem Model { get; private set; }
+        public AbstractQuestionRowItem Model { get; private set; }
     }
 }

@@ -13,15 +13,14 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
-    public class SelectableRowItem : AbstractRowItem
+    public class SelectableRowItem : AbstractQuestionRowItem
     {
-        public SelectableRowItem(Guid publicKey, Guid propagationKey, string text, QuestionType questionType,
-                                 bool enabled, bool valid, string comments, string answer)
-            : base(publicKey, propagationKey, text, questionType, enabled, valid, comments)
+        public SelectableRowItem(Guid publicKey, Guid propagationKey, QuestionType questionType,
+                                 bool enabled, bool valid, string comments, string answer, IEnumerable<AnswerViewModel> answers)
+            : base(publicKey, propagationKey,enabled, comments, questionType, valid, answer)
         {
-            Answer = answer;
-            Answered = answers.Any(a => a.Selected);
+            Answers = answers;
         }
-
+        public IEnumerable<AnswerViewModel> Answers { get; private set; }
     }
 }

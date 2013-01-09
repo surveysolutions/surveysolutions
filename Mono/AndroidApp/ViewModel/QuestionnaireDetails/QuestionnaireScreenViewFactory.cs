@@ -52,7 +52,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""NameCollection"": null," +
                 @"                  ""PropogationPublicKey"": null," +
                 @"                  ""PublicKey"": ""13f206a2-b762-4877-9210-00984883e6c8""," +
-                @"                  ""Selected"": false" +
+                @"                  ""Selected"": true" +
                 @"                }," +
                 @"                {" +
                 @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
@@ -1531,7 +1531,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                      ""NameCollection"": null," +
                 @"                      ""PropogationPublicKey"": null," +
                 @"                      ""PublicKey"": ""6f4f93b2-0e16-4a2f-8606-68465c383d0f""," +
-                @"                      ""Selected"": false" +
+                @"                      ""Selected"": true" +
                 @"                    }," +
                 @"                    {" +
                 @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
@@ -1846,12 +1846,17 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return screen.Children.Select(CreateView).Where(c => c != null);
         }
 
-        protected RowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
+        protected AbstractRowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
         {
             var newType = CalculateViewType(item.QuestionType);
-           // if (IsTypeSelectable(newType))
-                return new RowItem(item.PublicKey, propagationKey, item.QuestionText, newType,
-                                             item.Enabled, item.Valid, item.Comments,item.GetAnswerString());
+            if (IsTypeSelectable(newType))
+                return new SelectableRowItem(item.PublicKey, propagationKey, newType,
+                                             item.Enabled, item.Valid, item.Comments, item.GetAnswerString(), item.Answers.OfType<ICompleteAnswer>().Select(
+                                                               a =>
+                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));
+            else
+                return new ValueRowItem(item.PublicKey, propagationKey, item.GetAnswerString(), newType,
+                                                  item.Enabled, item.Valid, item.Comments);
            /* return new ValueRowItem(item.PublicKey, propagationKey, item.QuestionText, newType,
                                     item.Enabled,
                                     item.Valid, item.Comments, item.GetAnswerString());*/

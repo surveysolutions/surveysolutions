@@ -25,9 +25,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 Status = Status | QuestionStatus.Answered;
         }
 
-        public ValueQuestionViewModel(RowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+        public ValueQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
         {
-            Answer = rosterItem.Answer;
+            Answer = rosterItem.Text;
         }
 
         public string Answer { get; private set; }

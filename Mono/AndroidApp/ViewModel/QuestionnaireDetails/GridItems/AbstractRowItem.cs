@@ -13,18 +13,37 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
-    public class RowItem
+    public abstract class AbstractRowItem
     {
-        public RowItem(Guid publicKey, Guid propagationKey, string text, QuestionType questionType, bool enabled, bool valid, string comments, string answer)
+        public AbstractRowItem(Guid publicKey, Guid propagationKey, string text, bool enabled, string comments)
         {
             PublicKey = new ItemPublicKey(publicKey,propagationKey);
             Text = text;
-            QuestionType = questionType;
+        //   
             Enabled = enabled;
             Comments = comments;
-            this.Answer = answer;
-            bool answered = !string.IsNullOrEmpty(answer);
+          //  this.Answer = answer;
+         /*   bool answered = !string.IsNullOrEmpty(answer);
 
+          */
+        }
+
+        public ItemPublicKey PublicKey { get; private set; }
+   //     public string Text { get; private set; }
+      //  
+        public bool Enabled { get; private set; }
+        public string Comments { get; private set; }
+        public string Text { get; protected set; }
+
+     //  
+    }
+
+    public abstract class AbstractQuestionRowItem : AbstractRowItem
+    {
+        protected AbstractQuestionRowItem(Guid publicKey, Guid propagationKey,  bool enabled, string comments, QuestionType questionType, bool valid, string answer)
+            : base(publicKey, propagationKey, answer, enabled, comments)
+        {
+            QuestionType = questionType;
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
@@ -33,21 +52,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
             {
                 Status = Status | QuestionStatus.Valid;
             }
+            bool answered = !string.IsNullOrEmpty(answer);
             if (answered)
             {
                 Status = Status | QuestionStatus.Answered;
             }
         }
-
-        public ItemPublicKey PublicKey { get; private set; }
-        public string Text { get; private set; }
+      //  public string AnswerString { get; private set; }
         public QuestionType QuestionType { get; private set; }
-        public bool Enabled { get; private set; }
-      //  public bool Valid { get; private set; }
-        public string Comments { get; private set; }
-      //  public bool Answered { get; private set; }
-        public string Answer { get; private set; }
-
         public QuestionStatus Status { get; protected set; }
     }
 }

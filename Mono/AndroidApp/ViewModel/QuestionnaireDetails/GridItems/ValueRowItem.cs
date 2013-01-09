@@ -13,12 +13,13 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
-    public class ValueRowItem:AbstractRowItem
+    public class ValueRowItem:AbstractQuestionRowItem
     {
-        public ValueRowItem(Guid publicKey, Guid propagationKey, string text, QuestionType questionType, bool enabled, bool valid, string comments, string answer) : base(publicKey, propagationKey, text, questionType, enabled, valid, comments)
+        public ValueRowItem(Guid publicKey, Guid propagationKey, string answer, QuestionType questionType, bool enabled, bool valid, string comments)
+            : base(publicKey, propagationKey, enabled, comments, questionType, valid, answer)
         {
-            this.Answer = answer;
-            this.Answered = !string.IsNullOrEmpty(answer);
+            /*this.Answer = answer;
+            this.Answered = !string.IsNullOrEmpty(answer);*/
         }
 
     }

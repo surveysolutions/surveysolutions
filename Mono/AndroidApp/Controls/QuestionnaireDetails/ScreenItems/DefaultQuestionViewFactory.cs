@@ -48,7 +48,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             return itemView;
         }
 
-        public AbstractQuestionView CreateQuestionView(Context context, RowItem model, HeaderItem header)
+        public AbstractQuestionView CreateQuestionView(Context context, AbstractQuestionRowItem model, HeaderItem header)
         {
             var selectable = header as SelectableHeaderItem;
             QuestionViewModel viewModel;

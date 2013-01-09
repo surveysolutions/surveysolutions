@@ -26,12 +26,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             //Answered = answers.Any(a => a.Selected);
         }
 
-        public SelectebleQuestionViewModel(RowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+        public SelectebleQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
         {
-            var typedHeader = headerItem as SelectableHeaderItem;
-            if(typedHeader==null)
+            var typedRoaster = rosterItem as SelectableRowItem;
+            if (typedRoaster == null)
                 throw new ArgumentException();
-            this.Answers = typedHeader.Answers;
+            this.Answers = typedRoaster.Answers;
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }

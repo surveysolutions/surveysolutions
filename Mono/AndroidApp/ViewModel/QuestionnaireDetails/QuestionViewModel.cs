@@ -19,7 +19,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
-        public QuestionViewModel(RowItem rosterItem, HeaderItem headerItem)
+        public QuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem)
             : this(rosterItem.PublicKey, rosterItem.Text, rosterItem.QuestionType, rosterItem.Enabled, headerItem.Instructions, rosterItem.Comments, false, false)
         {
             this.Status = rosterItem.Status;

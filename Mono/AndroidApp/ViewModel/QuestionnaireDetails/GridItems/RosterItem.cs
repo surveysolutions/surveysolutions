@@ -14,7 +14,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
     public class RosterItem
     {
-        public RosterItem(ItemPublicKey publicKey, string title, IList<RowItem> rowItems)
+        public RosterItem(ItemPublicKey publicKey, string title, IList<AbstractRowItem> rowItems)
         {
             PublicKey = publicKey;
             Title = title;
@@ -23,6 +23,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 
         public ItemPublicKey PublicKey { get; private set; }
         public string Title { get; private set; }
-        public IList<RowItem> RowItems { get; private set; }
+        public IList<AbstractRowItem> RowItems { get; private set; }
     }
 }

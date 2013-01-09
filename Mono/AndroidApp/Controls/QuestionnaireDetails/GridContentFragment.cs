@@ -111,11 +111,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // AssignHeaderStyles(first);
                 th.AddView(first);
 
-                foreach (RowItem abstractRowItem in rosterItem.RowItems)
+                foreach (AbstractRowItem abstractRowItem in rosterItem.RowItems)
                 {
                     RosterQuestionView rowViewItem = new RosterQuestionView(inflater.Context,
                                                                             inflater.Context as IMvxBindingActivity,
-                                                                            abstractRowItem);
+                                                                            abstractRowItem as AbstractQuestionRowItem);
                     rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
                    // AssignHeaderStyles(rowViewItem);
                     /*  Button rowViewItem = new Button(inflater.Context);
