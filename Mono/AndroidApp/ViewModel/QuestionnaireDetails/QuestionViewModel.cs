@@ -45,10 +45,24 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public bool Enabled { get; private set; }
     //    public bool Valid { get; private set; }
         public string Instructions { get; private set; }
-        public string Comments { get; private set; }
+
+        public string Comments
+        {
+            get { return comments; }
+            set
+            {
+                comments = value;
+                RaisePropertyChanged("Comments");
+            }
+        }
+
+        private string comments;
       //  public bool Answered { get; protected set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
+
+        
+
         /* public IMvxLanguageBinder BorderColor
         {
             get { return new BorderColorConverter(Constants.GeneralNamespace, GetType().Name); }
