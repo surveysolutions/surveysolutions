@@ -15,7 +15,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
     public class RosterQuestionView : LinearLayout
     {
 
-        protected AbstractQuestionRowItem Model { get; private set; }
+        protected QuestionViewModel Model { get; private set; }
         protected View Content { get; set; }
 
         public virtual void BindTo(object source)
@@ -44,7 +44,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
             return view.TryGetStoredBindings(out result);
         }
         private readonly IMvxBindingActivity _bindingActivity;
-        public RosterQuestionView(Context context, IMvxBindingActivity bindingActivity, AbstractQuestionRowItem source)
+        public RosterQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
             : base(context)
         {
             this.Model = source;

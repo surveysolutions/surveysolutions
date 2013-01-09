@@ -38,7 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             base.Initialize();
             etAnswer=new EditText(this.Context);
-            etAnswer.Text = ((ValueQuestionViewModel)Model).Answer;
+            etAnswer.Text = Model.AnswerString;
             llWrapper.AddView(etAnswer);
         }
 

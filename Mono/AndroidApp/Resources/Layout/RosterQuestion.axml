@@ -14,5 +14,5 @@
      android:id="@+id/tvTitle"
        android:padding="10dip"
      android:textSize="20dip"
-     local:MvxBind="{'Text':{'Path':'Text'}}"/>
+     local:MvxBind="{'Text':{'Path':'AnswerString'}}"/>
 </LinearLayout>

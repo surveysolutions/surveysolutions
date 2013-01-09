@@ -17,6 +17,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
     public interface IQuestionViewFactory
     {
          AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model);
-         AbstractQuestionView CreateQuestionView(Context context, AbstractQuestionRowItem model, HeaderItem header);
+        // AbstractQuestionView CreateQuestionView(Context context, AbstractQuestionRowItem model, HeaderItem header);
     }
 }

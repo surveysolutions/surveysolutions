@@ -16,24 +16,22 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
     {
-        public SelectebleQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory)
-            : base(publicKey, text, type,enabled,instructions,comments,valid, mandatory)
+        public SelectebleQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory, string answerString)
+            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, answerString)
         {
             Answers = answers;
-            var answered = answers.Any(a => a.Selected);
-            if(answered)
-                Status = Status | QuestionStatus.Answered;
+          
             //Answered = answers.Any(a => a.Selected);
         }
 
-        public SelectebleQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+     /*   public SelectebleQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
         {
             var typedRoaster = rosterItem as SelectableRowItem;
             if (typedRoaster == null)
                 throw new ArgumentException();
             this.Answers = typedRoaster.Answers;
         }
-
+        */
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
         public void SelectAnswer(Guid publicKey)
         {
@@ -46,6 +44,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 Status = Status | QuestionStatus.Answered;
                 RaisePropertyChanged("Status");
             }
+            RaisePropertyChanged("AnswerString");
         }
     }
 }

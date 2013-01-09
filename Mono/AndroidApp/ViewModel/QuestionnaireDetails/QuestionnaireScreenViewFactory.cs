@@ -1814,13 +1814,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         #endregion
         protected HeaderItem BuildHeader(ICompleteQuestion question)
         {
-            var newType = CalculateViewType(question.QuestionType);
-            if (!IsTypeSelectable(newType))
+          /*  var newType = CalculateViewType(question.QuestionType);
+            if (!IsTypeSelectable(newType))*/
                 return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
-            return new SelectableHeaderItem(question.PublicKey, question.QuestionText, question.Instructions,
+          /*  return new SelectableHeaderItem(question.PublicKey, question.QuestionText, question.Instructions,
                                             question.Answers.OfType<ICompleteAnswer>().Select(
                                                 a =>
-                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));
+                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));*/
         }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
@@ -1836,9 +1836,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
                     Select(
                         g =>
-                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
-                                       g.Children.OfType<ICompleteQuestion>().Select(
-                                           q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList()));
+                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,BuildItems(g).ToList())
+                                      /* g.Children.OfType<ICompleteQuestion>().Select(
+                                           q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
         }
 
         protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen)
@@ -1846,7 +1846,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return screen.Children.Select(CreateView).Where(c => c != null);
         }
 
-        protected AbstractRowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
+      /*  protected AbstractRowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
         {
             var newType = CalculateViewType(item.QuestionType);
             if (IsTypeSelectable(newType))
@@ -1857,10 +1857,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             else
                 return new ValueRowItem(item.PublicKey, propagationKey, item.GetAnswerString(), newType,
                                                   item.Enabled, item.Valid, item.Comments);
-           /* return new ValueRowItem(item.PublicKey, propagationKey, item.QuestionText, newType,
-                                    item.Enabled,
-                                    item.Valid, item.Comments, item.GetAnswerString());*/
-        }
+        }*/
 
         protected IQuestionnaireItemViewModel CreateView(IComposite item)
         {
@@ -1882,7 +1879,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                                                a =>
                                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)),
                                                            question.Enabled, question.Instructions, question.Comments,
-                                                           question.Valid, question.Mandatory);
+                                                           question.Valid, question.Mandatory, question.GetAnswerString());
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)

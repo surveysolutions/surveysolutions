@@ -140,13 +140,10 @@
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\GroupRowItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\AbstractRowItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\RosterItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\SelectableHeaderItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\SelectableRowItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\ValueRowItem.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\RosterItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ViewModel\QuestionnaireDetails\GroupViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireViewModel.cs" />

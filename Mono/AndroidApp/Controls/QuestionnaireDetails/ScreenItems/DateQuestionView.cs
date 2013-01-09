@@ -54,7 +54,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
                     dialog.Show();
                 };
-            if (!DateTime.TryParse(((ValueQuestionViewModel) Model).Answer, out date))
+            if (!DateTime.TryParse(Model.AnswerString, out date))
                 // get the current date
                 date = DateTime.Today;
 

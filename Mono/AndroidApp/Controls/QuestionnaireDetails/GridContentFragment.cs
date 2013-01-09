@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Android.App;
@@ -26,6 +27,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.Model = model;
         }
+
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -98,6 +100,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             instructionsBuilder.SetMessage(Model.Header[i].Instructions);
             
             instructionsBuilder.Show();
+
+            
         }
         protected void CreateBody(LayoutInflater inflater, TableLayout tl)
         {
@@ -111,11 +115,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // AssignHeaderStyles(first);
                 th.AddView(first);
 
-                foreach (AbstractRowItem abstractRowItem in rosterItem.RowItems)
+                foreach (var abstractRowItem in rosterItem.RowItems)
                 {
                     RosterQuestionView rowViewItem = new RosterQuestionView(inflater.Context,
                                                                             inflater.Context as IMvxBindingActivity,
-                                                                            abstractRowItem as AbstractQuestionRowItem);
+                                                                            abstractRowItem as QuestionViewModel);
                     rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
                    // AssignHeaderStyles(rowViewItem);
                     /*  Button rowViewItem = new Button(inflater.Context);
@@ -146,15 +150,33 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
-            var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
-            if (headerItem == null)
-                return;
+            /*   var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
+               if (headerItem == null)
+                   return;*/
 
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(new DefaultQuestionViewFactory().CreateQuestionView(this.Activity, e.Model,
-                                                                                       headerItem));
-            setAnswerPopup.Show();
+            setAnswerPopup.SetView(new DefaultQuestionViewFactory().CreateQuestionView(this.Activity, e.Model /*,
+                                                                                       headerItem*/));
+            //  setAnswerPopup.Show();
+            var dialog = setAnswerPopup.Create();
+
+            PropertyChangedEventHandler answerHandler = (s, evt) =>
+                {
+                    if (evt.PropertyName == "AnswerString")
+                    {
+                        dialog.Dismiss();
+                    }
+                };
+            
+            dialog.DismissEvent += (dialogSender, dialogEvt) =>
+                {
+                    e.Model.PropertyChanged -= answerHandler;
+                };
+            dialog.Show();
+
+            e.Model.PropertyChanged += answerHandler;
         }
+
 
 
 

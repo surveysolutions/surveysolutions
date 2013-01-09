@@ -19,19 +19,19 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
-        public QuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem)
+      /*  public QuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem)
             : this(rosterItem.PublicKey, rosterItem.Text, rosterItem.QuestionType, rosterItem.Enabled, headerItem.Instructions, rosterItem.Comments, false, false)
         {
             this.Status = rosterItem.Status;
-        }
+        }*/
 
-        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory)
+        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory, string answerString)
         {
             PublicKey = publicKey;
             Text = text;
             QuestionType = type;
+            AnswerString = answerString;
             this.Enabled = enabled;
-            this.Status = QuestionStatus.None;
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
@@ -42,6 +42,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             {
                 Status = Status | QuestionStatus.Valid;
             }
+            var answered = !string.IsNullOrEmpty(answerString);
+            if (answered)
+                Status = Status | QuestionStatus.Answered;
         //    Valid = valid;
             Mandatory = mandatory;
         }
@@ -64,7 +67,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         private string comments;
-      //  public bool Answered { get; protected set; }
+        public string AnswerString { get; protected set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
 

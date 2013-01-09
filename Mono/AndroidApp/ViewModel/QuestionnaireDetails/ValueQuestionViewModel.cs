@@ -17,19 +17,17 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     public class ValueQuestionViewModel : QuestionViewModel
     {
         public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool mandatory)
-            : base(publicKey, text, type, enabled,instructions,comments,valid, mandatory)
+            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, answer)
         {
-            Answer = answer;
-            var answered = !string.IsNullOrEmpty(answer);
-            if (answered)
-                Status = Status | QuestionStatus.Answered;
+           // Answer = answer;
+         
         }
 
-        public ValueQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+      /*  public ValueQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
         {
             Answer = rosterItem.Text;
-        }
+        }*/
 
-        public string Answer { get; private set; }
+      //  public string Answer { get; private set; }
     }
 }
