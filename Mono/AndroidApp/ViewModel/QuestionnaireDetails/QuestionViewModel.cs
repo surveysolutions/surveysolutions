@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Converters;
+using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -18,6 +19,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
+        public QuestionViewModel(RowItem rosterItem, HeaderItem headerItem)
+            : this(rosterItem.PublicKey, rosterItem.Text, rosterItem.QuestionType, rosterItem.Enabled, headerItem.Instructions, rosterItem.Comments, false, false)
+        {
+            this.Status = rosterItem.Status;
+        }
+
         public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory)
         {
             PublicKey = publicKey;

@@ -20,6 +20,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 {
     public class ScreenContentFragment : Fragment
     {
+        private readonly IQuestionViewFactory questionViewFactory;
         public static ScreenContentFragment NewInstance(QuestionnaireScreenViewModel model)
         {
             ScreenContentFragment f = new ScreenContentFragment(model);
@@ -30,6 +31,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public ScreenContentFragment(QuestionnaireScreenViewModel model):base()
         {
             this.Model = model;
+            this.questionViewFactory=new DefaultQuestionViewFactory();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -56,29 +58,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-                    var _bindingActivity = inflater.Context as IMvxBindingActivity;
-                    switch (question.QuestionType)
-                    {
-                        case QuestionType.Text:
-                            itemView = new TextQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                        case QuestionType.Numeric:
-                            itemView = new NumericQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                        case QuestionType.DateTime:
-                            itemView = new DateQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                        case QuestionType.SingleOption:
-                            itemView = new SingleChoiseQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                        case QuestionType.MultyOption:
-                            itemView = new MultyQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                        default:
-                            itemView = new TextQuestionView(inflater.Context, _bindingActivity, question);
-                            break;
-                    }
-
+                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question);
                 }
                 var group = item as GroupViewModel;
                 if (group != null)

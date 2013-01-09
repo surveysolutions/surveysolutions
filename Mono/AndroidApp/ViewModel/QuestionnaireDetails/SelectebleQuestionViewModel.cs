@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Main.Core.Entities.SubEntities;
 using Cirrious.MvvmCross.ViewModels;
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -23,6 +24,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             if(answered)
                 Status = Status | QuestionStatus.Answered;
             //Answered = answers.Any(a => a.Selected);
+        }
+
+        public SelectebleQuestionViewModel(RowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+        {
+            var typedHeader = headerItem as SelectableHeaderItem;
+            if(typedHeader==null)
+                throw new ArgumentException();
+            this.Answers = typedHeader.Answers;
         }
 
         public IEnumerable<AnswerViewModel> Answers { get; private set; }

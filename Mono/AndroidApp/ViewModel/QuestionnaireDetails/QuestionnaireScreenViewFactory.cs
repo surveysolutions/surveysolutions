@@ -1426,7 +1426,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                      ""NameCollection"": null," +
                 @"                      ""PropogationPublicKey"": null," +
                 @"                      ""PublicKey"": ""9df57979-6578-4883-846e-6675333b2f9e""," +
-                @"                      ""Selected"": false" +
+                @"                      ""Selected"": true" +
                 @"                    }" +
                 @"                  ]," +
                 @"                  ""AnswerOrder"": ""AsIs""," +
@@ -1807,12 +1807,21 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
                                                   Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                   BuildChapters(root),
-                                                  screen.Children.OfType<ICompleteQuestion>().Select(
-                                                      c => new HeaderItem(c.PublicKey, c.QuestionText, c.Instructions)).ToList(),
+                                                  screen.Children.OfType<ICompleteQuestion>().Select(BuildHeader).ToList(),
                                                   BuildGridRows(root, screen));
         }
 
         #endregion
+        protected HeaderItem BuildHeader(ICompleteQuestion question)
+        {
+            var newType = CalculateViewType(question.QuestionType);
+            if (!IsTypeSelectable(newType))
+                return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
+            return new SelectableHeaderItem(question.PublicKey, question.QuestionText, question.Instructions,
+                                            question.Answers.OfType<ICompleteAnswer>().Select(
+                                                a =>
+                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));
+        }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
         {

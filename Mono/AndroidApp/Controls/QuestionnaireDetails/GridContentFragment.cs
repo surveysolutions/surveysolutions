@@ -9,9 +9,12 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Controls.QuestionnaireDetails.Roster;
+using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -93,6 +96,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             int i = int.Parse(((TextView) sender).GetTag(Resource.Id.Index).ToString());
             var instructionsBuilder = new AlertDialog.Builder(this.Activity);
             instructionsBuilder.SetMessage(Model.Header[i].Instructions);
+            
             instructionsBuilder.Show();
         }
         protected void CreateBody(LayoutInflater inflater, TableLayout tl)
@@ -104,29 +108,34 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.PublicKey.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.Title;
-               // AssignHeaderStyles(first);
+                // AssignHeaderStyles(first);
                 th.AddView(first);
 
                 foreach (RowItem abstractRowItem in rosterItem.RowItems)
                 {
-                    Button rowViewItem = new Button(inflater.Context);
-                    rowViewItem.Text = abstractRowItem.Answer;
-                    AssignHeaderStyles(rowViewItem);
-                    rowViewItem.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+                    RosterQuestionView rowViewItem = new RosterQuestionView(inflater.Context,
+                                                                            inflater.Context as IMvxBindingActivity,
+                                                                            abstractRowItem);
+                    rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
+                   // AssignHeaderStyles(rowViewItem);
+                    /*  Button rowViewItem = new Button(inflater.Context);
+                      rowViewItem.Text = abstractRowItem.Answer;
+                    
+                      rowViewItem.SetBackgroundResource(Resource.Drawable.grid_headerItem);
 
-                    rowViewItem.Enabled = abstractRowItem.Enabled;
+                      rowViewItem.Enabled = abstractRowItem.Enabled;
 
-                    if (abstractRowItem.Enabled)
-                    {
-                        rowViewItem.Click += new EventHandler(rowViewItem_Click);
-                        if (!abstractRowItem.Valid)
-                            rowViewItem.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
-                        else if (abstractRowItem.Answered)
-                            rowViewItem.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
-                    }
+                      if (abstractRowItem.Enabled)
+                      {
+                          rowViewItem.Click += new EventHandler(rowViewItem_Click);
+                          if (!abstractRowItem.Valid)
+                              rowViewItem.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
+                          else if (abstractRowItem.Answered)
+                              rowViewItem.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
+                      }
 
-                    rowViewItem.SetTag(Resource.Id.Index, rosterItem.RowItems.IndexOf(abstractRowItem));
-                    rowViewItem.SetTag(Resource.Id.PrpagationKey, abstractRowItem.PropagationKey.ToString());
+                      rowViewItem.SetTag(Resource.Id.Index, rosterItem.RowItems.IndexOf(abstractRowItem));
+                      rowViewItem.SetTag(Resource.Id.PrpagationKey, abstractRowItem.PropagationKey.ToString());*/
                     th.AddView(rowViewItem);
                 }
 
@@ -135,11 +144,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
         }
 
-        void rowViewItem_Click(object sender, EventArgs e)
+        void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
-            int i = int.Parse(((TextView)sender).GetTag(Resource.Id.Index).ToString());
-         //   var template = Model.Header[i];
+            var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
+            if (headerItem == null)
+                return;
+
+            var setAnswerPopup = new AlertDialog.Builder(this.Activity);
+            setAnswerPopup.SetView(new DefaultQuestionViewFactory().CreateQuestionView(this.Activity, e.Model,
+                                                                                       headerItem));
+            setAnswerPopup.Show();
         }
+
+
 
         void first_Click(object sender, EventArgs e)
         {

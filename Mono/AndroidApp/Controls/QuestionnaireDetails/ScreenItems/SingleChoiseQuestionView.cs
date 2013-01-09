@@ -43,7 +43,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             typedMode = Model as SelectebleQuestionViewModel;
             var radioButton = new RadioButton[typedMode.Answers.Count()];
             radioGroup = new RadioGroup(this.Context);
-            radioGroup.CheckedChange += radioGroup_CheckedChange;
+           
             radioGroup.Orientation = Orientation.Vertical;
             //radioGroup.
             int i = 0;
@@ -56,6 +56,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
                 radioButton[i].SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
 
             }
+            radioGroup.CheckedChange += radioGroup_CheckedChange;
             llWrapper.AddView(radioGroup);
         }
 

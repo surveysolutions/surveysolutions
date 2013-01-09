@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -22,6 +23,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             var answered = !string.IsNullOrEmpty(answer);
             if (answered)
                 Status = Status | QuestionStatus.Answered;
+        }
+
+        public ValueQuestionViewModel(RowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
+        {
+            Answer = rosterItem.Answer;
         }
 
         public string Answer { get; private set; }
