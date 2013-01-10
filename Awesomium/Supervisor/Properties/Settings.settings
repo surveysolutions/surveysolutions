@@ -9,7 +9,7 @@
       <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost</Value>
+      <Value Profile="(Default)">http://localhost:9089/</Value>
     </Setting>
     <Setting Name="EnginePathName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine</Value>
@@ -52,6 +52,9 @@
     </Setting>
     <Setting Name="PutAuthConfirmedPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/ConfirmAuthorization</Value>
+    </Setting>
+    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ImportExport/ProgressInPersentage</Value>
     </Setting>
   </Settings>
 </SettingsFile>

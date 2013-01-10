@@ -187,7 +187,27 @@ namespace Web.Supervisor.Controllers
 
             return syncProcess;
         }
+        /// <summary>
+        /// The progress in persentage.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The progress in persentage.
+        /// </returns>
+        public int ProgressInPersentage(Guid id)
+        {
+         /*   SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
 
+            if (stat == null)
+            {
+                return -1;
+            }
+
+            return stat.ProgressPercentage;*/
+            return 100;
+        }
         /// <summary>
         /// The import completed 
         /// </summary>
