@@ -1,23 +1,32 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="AuthorizationPacket.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AuthorizationPacket.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.WCF
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+    using Main.Core.Entities;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class AuthorizationPacket : IAuthorizationPacket
     {
-        public Entities.RegisterData Data { get; set; }
+        #region Public Properties
 
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        public RegisterData Data { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is authorized.
+        /// </summary>
         public bool IsAuthorized { get; set; }
+
+        #endregion
     }
 }

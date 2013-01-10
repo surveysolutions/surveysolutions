@@ -6,16 +6,11 @@
 //   The interviewer chart model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace Web.Supervisor.Models
+namespace Web.Supervisor.Models.Chart
 {
-    using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Linq;
-    using System.Windows.Forms;
 
-    using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Summary;
 
     using Main.Core.Entities.SubEntities;
@@ -28,15 +23,15 @@ namespace Web.Supervisor.Models
         #region Constructors and Destructors
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="SurveyChartModel"/> class. 
         /// Initializes a new instance of the <see cref="InterviewerChartModel"/> class.
         /// </summary>
         /// <param name="model">
         /// The model.
         /// </param>
-        public SurveyChartModel(SummaryView model) 
-            : base()
+        public SurveyChartModel(SummaryView model)
         {
-            var piePreData = this.GetPiePreData(model);
+            IEnumerable<PieData> piePreData = this.GetPiePreData(model);
 
             this.CalcPieData(piePreData);
 
@@ -44,45 +39,45 @@ namespace Web.Supervisor.Models
                 {
                     new
                         {
-                            name = "Total",
-                            data = model.Items.Select(t => t.Total).ToArray(),
-                            stack = "total",
-                            color = this.statusColors["Total"]
-                        },
+                            name = "Total", 
+                            data = model.Items.Select(t => t.Total).ToArray(), 
+                            stack = "total", 
+                            color = this.StatusColors["Total"]
+                        }, 
                     new
                         {
-                            name = SurveyStatus.Initial.Name,
-                            data = model.Items.Select(t => t.Initial).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Initial.Name]
-                        },
+                            name = SurveyStatus.Initial.Name, 
+                            data = model.Items.Select(t => t.Initial).ToArray(), 
+                            stack = "parts", 
+                            color = this.StatusColors[SurveyStatus.Initial.Name]
+                        }, 
                     new
                         {
-                            name = SurveyStatus.Redo.Name,
-                            data = model.Items.Select(t => t.Redo).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Redo.Name]
-                        },
+                            name = SurveyStatus.Redo.Name, 
+                            data = model.Items.Select(t => t.Redo).ToArray(), 
+                            stack = "parts", 
+                            color = this.StatusColors[SurveyStatus.Redo.Name]
+                        }, 
                     new
                         {
-                            name = SurveyStatus.Error.Name,
-                            data = model.Items.Select(t => t.Error).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Error.Name]
-                        },
+                            name = SurveyStatus.Error.Name, 
+                            data = model.Items.Select(t => t.Error).ToArray(), 
+                            stack = "parts", 
+                            color = this.StatusColors[SurveyStatus.Error.Name]
+                        }, 
                     new
                         {
-                            name = SurveyStatus.Complete.Name,
-                            data = model.Items.Select(t => t.Completed).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Complete.Name]
-                        },
+                            name = SurveyStatus.Complete.Name, 
+                            data = model.Items.Select(t => t.Completed).ToArray(), 
+                            stack = "parts", 
+                            color = this.StatusColors[SurveyStatus.Complete.Name]
+                        }, 
                     new
                         {
-                            name = SurveyStatus.Approve.Name,
-                            data = model.Items.Select(t => t.Approved).ToArray(),
-                            stack = "parts",
-                            color = this.statusColors[SurveyStatus.Approve.Name]
+                            name = SurveyStatus.Approve.Name, 
+                            data = model.Items.Select(t => t.Approved).ToArray(), 
+                            stack = "parts", 
+                            color = this.StatusColors[SurveyStatus.Approve.Name]
                         }
                 };
             this.ScatterData =
@@ -91,11 +86,15 @@ namespace Web.Supervisor.Models
                         (t, index) =>
                         new
                             {
-                                name = t.User.Name,
-                                color = GetColor(index),
+                                name = t.User.Name, 
+                                color = this.GetColor(index), 
                                 data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
                             }).ToArray());
         }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Get pie pre data array 
@@ -108,30 +107,22 @@ namespace Web.Supervisor.Models
         /// </returns>
         private IEnumerable<PieData> GetPiePreData(SummaryView model)
         {
-            return model.Items.Select(
+            return
+                model.Items.Select(
                     (t, index) =>
                     new PieData
                         {
-                            y = t.Total,
-                            color = this.GetColor(index),
-                            name = t.User.Name,
-                            title = t.User.Name,
-                            categories = new[]
-                            {
-                                SurveyStatus.Initial.Name, 
-                                SurveyStatus.Redo.Name, 
-                                SurveyStatus.Complete.Name,
-                                SurveyStatus.Approve.Name, 
-                                SurveyStatus.Error.Name
-                            },
-                            data = new[]
-                                {
-                                    t.Initial, 
-                                    t.Redo, 
-                                    t.Completed, 
-                                    t.Approved, 
-                                    t.Error
-                                },
+                            y = t.Total, 
+                            color = this.GetColor(index), 
+                            name = t.User.Name, 
+                            title = t.User.Name, 
+                            categories =
+                                new[]
+                                    {
+                                        SurveyStatus.Initial.Name, SurveyStatus.Redo.Name, SurveyStatus.Complete.Name, 
+                                        SurveyStatus.Approve.Name, SurveyStatus.Error.Name
+                                    }, 
+                            data = new[] { t.Initial, t.Redo, t.Completed, t.Approved, t.Error }, 
                         }).ToArray();
         }
 
