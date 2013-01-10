@@ -13,6 +13,8 @@ using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Assign
 {
+    using Core.Supervisor.Documents;
+
     /// <summary>
     /// The assign survey view factory.
     /// </summary>
