@@ -28,7 +28,7 @@ using Orientation = Android.Content.Res.Orientation;*/
 namespace AndroidApp
 {
     [Activity(Icon = "@drawable/capi")]
-    public class DetailsActivity : MvxSimpleBindingFragmentActivity<IQuestionnaireViewModel>
+    public class DetailsActivity : MvxSimpleBindingFragmentActivity<QuestionnaireScreenViewModel>
     {
         protected Guid QuestionnaireId
         {
@@ -66,8 +66,7 @@ namespace AndroidApp
            
             /*  DualPanel = Resources.Configuration.Orientation
                           == Orientation.Landscape;*/
-            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, null));
+           
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Details);
 

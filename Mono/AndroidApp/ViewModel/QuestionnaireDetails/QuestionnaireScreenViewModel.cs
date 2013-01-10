@@ -17,6 +17,22 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
+        public QuestionnaireScreenViewModel(string completeQuestionnaireId)
+        {
+            var objectQ = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                   new QuestionnaireScreenInput(Guid.Parse(completeQuestionnaireId), null)) as QuestionnaireScreenViewModel;
+
+
+            QuestionnaireId = objectQ.QuestionnaireId;
+            Items = objectQ.Items;
+            ScreenId = objectQ.ScreenId;
+            Siblings = objectQ.Siblings;
+            Breadcrumbs = objectQ.Breadcrumbs;
+            Chapters = objectQ.Chapters;
+            ScreenName = objectQ.ScreenName;
+            Title = objectQ.Title;
+        }
+
         public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             IList<QuestionnaireNavigationPanelItem> siblings,

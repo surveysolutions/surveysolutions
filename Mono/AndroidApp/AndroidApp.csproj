@@ -106,6 +106,8 @@
   <ItemGroup>
     <Compile Include="Activity1.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
+    <Compile Include="Bindings\TableLayoutContentBinding.cs" />
+    <Compile Include="Bindings\TableLayoutHeaderBinding.cs" />
     <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
@@ -174,6 +176,12 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
+    <AndroidResource Include="Resources\Layout\dashboard_survey_row.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_survey_item.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">

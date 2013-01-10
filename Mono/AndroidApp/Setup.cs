@@ -10,6 +10,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Bindings;
+using AndroidApp.Controls.Dashboard;
+using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 
@@ -29,8 +31,17 @@ namespace AndroidApp
         protected override void FillTargetFactories(Cirrious.MvvmCross.Binding.Interfaces.Bindings.Target.Construction.IMvxTargetBindingFactoryRegistry registry)
         {
             base.FillTargetFactories(registry);
-
+            
             registry.RegisterFactory(new MvxCustomBindingFactory<ViewGroup>("Background", (button) => new BackgroundBinding(button)));
+            
+        }
+        protected override IDictionary<Type, Type> GetViewModelViewLookup()
+        {
+            var lookups = base.GetViewModelViewLookup();
+
+            if (!lookups.ContainsKey(typeof (QuestionnaireScreenViewModel)))
+                lookups.Add(typeof (QuestionnaireScreenViewModel), typeof (DetailsActivity));
+            return lookups;
         }
     }
 }

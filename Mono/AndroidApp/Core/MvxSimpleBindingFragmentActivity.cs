@@ -16,12 +16,14 @@ using Cirrious.MvvmCross.Binding.Interfaces;
 using Cirrious.MvvmCross.Droid.ExtensionMethods;
 using Cirrious.MvvmCross.Droid.Interfaces;
 using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.Interfaces.ViewModels;
 using Cirrious.MvvmCross.Interfaces.Views;
 
 namespace AndroidApp.Core
 {
-    public abstract class MvxSimpleBindingFragmentActivity<TViewModel> : FragmentActivity, IMvxBindingActivity, IMvxAndroidView<TViewModel> where TViewModel : class, IMvxViewModel 
+    public abstract class MvxSimpleBindingFragmentActivity<TViewModel> : FragmentActivity, IMvxBindingActivity, IMvxAndroidView<TViewModel>, IMvxServiceConsumer<IMvxIntentResultSink>
+        where TViewModel : class, IMvxViewModel
     {
         protected MvxSimpleBindingFragmentActivity()
         {

@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Windows.Input;
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-
+using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Commands;
+using Cirrious.MvvmCross.ViewModels;
 namespace AndroidApp.ViewModel.Model
 {
-    public class DashboardQuestionnaireItem
+    public class DashboardQuestionnaireItem : MvxViewModel
     {
         public DashboardQuestionnaireItem(Guid publicKey, string status, IList<string> properties)
         {
@@ -25,5 +27,16 @@ namespace AndroidApp.ViewModel.Model
        
         public string Status { get; private set; }
         public IList<string> Properties { get; private set; }
+
+        public ICommand ViewDetailCommand
+        {
+            get
+            {
+                return new MvxRelayCommand(() =>
+                    {
+                        RequestNavigate<QuestionnaireScreenViewModel>(new { completeQuestionnaireId = PublicKey.ToString() });
+                    });
+            }
+        }
     }
 }
