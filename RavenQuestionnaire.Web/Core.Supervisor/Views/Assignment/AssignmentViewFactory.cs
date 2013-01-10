@@ -96,7 +96,7 @@ namespace Core.Supervisor.Views.Assignment
             if (input.Statuses != null && input.Statuses.Count > 0)
             {
                 var status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
-                if (status == SurveyStatus.Unknown)
+                if (status != SurveyStatus.Unknown)
                 {
                     view.Status = status;
                 }

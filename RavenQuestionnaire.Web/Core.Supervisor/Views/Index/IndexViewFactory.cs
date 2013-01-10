@@ -166,53 +166,6 @@ namespace Core.Supervisor.Views.Index
             }
         }
 
-        /// <summary>
-        /// Builds items
-        /// </summary>
-        /// <param name="grouped">
-        /// The grouped.
-        /// </param>
-        /// <returns>
-        /// List of survey browse items
-        /// </returns>
-        protected IEnumerable<IndexViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
-        {
-            foreach (var templateGroup in grouped)
-            {
-                yield
-                    return new IndexViewItem(templateGroup.Key,
-                                                templateGroup.FirstOrDefault().QuestionnaireTitle,
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Status.PublicId == SurveyStatus.Unassign.PublicId),
-                                                templateGroup.Count(),
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Responsible != null &&
-                                                    q.Status.PublicId ==
-                                                    SurveyStatus.Initial.PublicId),
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Responsible != null &&
-                                                    q.Status.PublicId == SurveyStatus.Error.PublicId),
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Responsible != null &&
-                                                    q.Status.PublicId ==
-                                                    SurveyStatus.Complete.PublicId),
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Responsible != null &&
-                                                    q.Status.PublicId ==
-                                                    SurveyStatus.Approve.PublicId),
-                                                templateGroup.Count(
-                                                    q =>
-                                                    q.Responsible != null &&
-                                                    q.Status.PublicId ==
-                                                    SurveyStatus.Redo.PublicId));
-            }
-        }
-
         #endregion
     }
 }

@@ -244,22 +244,6 @@ namespace Core.Supervisor.Denormalizer
         }
 
         /// <summary>
-        /// Converts string into the md5 hash and coverts bytes to Guid
-        /// </summary>
-        /// <param name="key">
-        /// The key.
-        /// </param>
-        /// <returns>
-        /// The guid
-        /// </returns>
-        private static Guid StringToGuid(string key)
-        {
-            MD5 md5Hasher = MD5.Create();
-            byte[] data = md5Hasher.ComputeHash(Encoding.Default.GetBytes(key));
-            return new Guid(data);
-        }
-
-        /// <summary>
         /// Generates guids to store statistics objects in denormalizer storage
         /// </summary>
         /// <param name="templateId">
@@ -277,7 +261,7 @@ namespace Core.Supervisor.Denormalizer
         private Guid GetKey(Guid templateId, Guid statusId, Guid userId)
         {
             string key = string.Format("{0}-{1}-{2}", templateId, statusId, userId);
-            return StringToGuid(key);
+            return Helper.StringToGuid(key);
         }
 
         /// <summary>
@@ -292,7 +276,7 @@ namespace Core.Supervisor.Denormalizer
         private Guid GetDateKey(DateTime date)
         {
             string key = string.Format("{0}-{1}-{2}", date.Year, date.Month, date.Day);
-            return StringToGuid(key);
+            return Helper.StringToGuid(key);
         }
 
         /// <summary>
