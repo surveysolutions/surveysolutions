@@ -233,6 +233,7 @@ RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/success.marker
 RavenQuestionnaire.Web/Web.Headquarter/App_Data/success.marker
 RavenQuestionnaire.Web/Main.Core.Tests/bin/
 RavenQuestionnaire.Web/Main.Core.Tests/obj/*
+*.StyleCop
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
