@@ -6,10 +6,6 @@
 //   The questionnaire membership provider.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.View;
-using Main.Core.View.User;
-
 namespace Questionnaire.Core.Web.Security
 {
     using System;
@@ -17,13 +13,15 @@ namespace Questionnaire.Core.Web.Security
     using System.Web;
     using System.Web.Security;
 
+    using Main.Core.View;
+    using Main.Core.View.User;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
     using Ninject;
 
     using Questionnaire.Core.Web.Helpers;
-
 
     /// <summary>
     /// The questionnaire membership provider.
@@ -33,7 +31,7 @@ namespace Questionnaire.Core.Web.Security
         #region Static Fields
 
         /// <summary>
-        /// The perso n_ t o_ request.
+        /// The person to request.
         /// </summary>
         private static readonly string PERSON_TO_REQUEST = "FEF8050CBFAC46edBDF6B73C5C14DF0B.";
 
@@ -44,7 +42,7 @@ namespace Questionnaire.Core.Web.Security
         /// <summary>
         /// The _application name.
         /// </summary>
-        private string _applicationName = "Questionnaire";
+        private string applicationName = "Questionnaire";
 
         #endregion
 
@@ -57,12 +55,12 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return this._applicationName;
+                return this.applicationName;
             }
 
             set
             {
-                this._applicationName = value;
+                this.applicationName = value;
             }
         }
 

@@ -26,7 +26,7 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using Web.Supervisor.Models;
-
+    using Web.Supervisor.Models.Chart;
 
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
