@@ -53,7 +53,7 @@ namespace Browsing.Supervisor.Utils
 
         public string GetPushCheckStateUrl(Guid processid)
         {
-            throw new NotImplementedException();
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.NetworkCheckStatePath, processid); 
         }
 
         public string GetUsbPullUrl(Guid clientId)
