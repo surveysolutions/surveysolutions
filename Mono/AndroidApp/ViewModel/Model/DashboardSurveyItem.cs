@@ -16,17 +16,15 @@ namespace AndroidApp.ViewModel.Model
     /// </summary>
     public class DashboardSurveyItem
     {
-        public DashboardSurveyItem(Guid publicKey, string surveyTitle, IList<string> propertesTitles, IList<DashboardQuestionnaireItem> items)
+        public DashboardSurveyItem(Guid publicKey, string surveyTitle, IList<DashboardQuestionnaireItem> items)
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            PropertesTitles = propertesTitles;
             Items = items;
         }
 
         public Guid PublicKey { get; private set; }
         public string SurveyTitle { get; private set; }
-        public IList<string> PropertesTitles { get; private set; } 
         public IList<DashboardQuestionnaireItem> Items { get; private set; }
     }
 }

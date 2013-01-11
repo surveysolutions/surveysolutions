@@ -139,6 +139,7 @@
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
+    <Compile Include="ViewModel\Model\FeaturedItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GridItems\RosterItem.cs">
@@ -179,6 +180,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_survey_item.axml">
       <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\dashboard_survey_property_item.axml">
+      <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>

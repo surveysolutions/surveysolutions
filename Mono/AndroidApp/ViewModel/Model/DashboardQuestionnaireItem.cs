@@ -16,7 +16,7 @@ namespace AndroidApp.ViewModel.Model
 {
     public class DashboardQuestionnaireItem : MvxViewModel
     {
-        public DashboardQuestionnaireItem(Guid publicKey, string status, IList<string> properties)
+        public DashboardQuestionnaireItem(Guid publicKey, string status, IList<FeaturedItem> properties)
         {
             PublicKey = publicKey;
             Status = status;
@@ -26,7 +26,7 @@ namespace AndroidApp.ViewModel.Model
         public Guid PublicKey { get;private set; }
        
         public string Status { get; private set; }
-        public IList<string> Properties { get; private set; }
+        public IList<FeaturedItem> Properties { get; private set; }
 
         public ICommand ViewDetailCommand
         {

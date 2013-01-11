@@ -99,11 +99,11 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040000
 			public const int MvxBindingTagUnique = 2130968576;
 			
-			// aapt resource value: 0x7f04000d
-			public const int MyLayout = 2130968589;
+			// aapt resource value: 0x7f04000e
+			public const int MyLayout = 2130968590;
 			
-			// aapt resource value: 0x7f040011
-			public const int NavList = 2130968593;
+			// aapt resource value: 0x7f040012
+			public const int NavList = 2130968594;
 			
 			// aapt resource value: 0x7f040004
 			public const int PrpagationKey = 2130968580;
@@ -120,44 +120,47 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04000c
 			public const int etComments = 2130968588;
 			
-			// aapt resource value: 0x7f040013
-			public const int flDetails = 2130968595;
+			// aapt resource value: 0x7f040014
+			public const int flDetails = 2130968596;
 			
-			// aapt resource value: 0x7f040010
-			public const int llContainer = 2130968592;
+			// aapt resource value: 0x7f040011
+			public const int llContainer = 2130968593;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f040017
-			public const int llScreen = 2130968599;
+			// aapt resource value: 0x7f040018
+			public const int llScreen = 2130968600;
 			
 			// aapt resource value: 0x7f04000a
 			public const int llWrapper = 2130968586;
 			
-			// aapt resource value: 0x7f040016
-			public const int qGuid = 2130968598;
+			// aapt resource value: 0x7f040017
+			public const int qGuid = 2130968599;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvComments = 2130968587;
 			
-			// aapt resource value: 0x7f040015
-			public const int tvCount = 2130968597;
+			// aapt resource value: 0x7f040016
+			public const int tvCount = 2130968598;
 			
-			// aapt resource value: 0x7f040014
-			public const int tvITem = 2130968596;
+			// aapt resource value: 0x7f040015
+			public const int tvITem = 2130968597;
+			
+			// aapt resource value: 0x7f04000d
+			public const int tvStatus = 2130968589;
 			
 			// aapt resource value: 0x7f040009
 			public const int tvTitle = 2130968585;
 			
+			// aapt resource value: 0x7f040010
+			public const int txtSurveyCount = 2130968592;
+			
 			// aapt resource value: 0x7f04000f
-			public const int txtSurveyCount = 2130968591;
+			public const int txtSurveyName = 2130968591;
 			
-			// aapt resource value: 0x7f04000e
-			public const int txtSurveyName = 2130968590;
-			
-			// aapt resource value: 0x7f040012
-			public const int vpContent = 2130968594;
+			// aapt resource value: 0x7f040013
+			public const int vpContent = 2130968595;
 			
 			private Id()
 			{
@@ -174,28 +177,31 @@ namespace AndroidApp
 			public const int dashboard_survey_item = 2130903041;
 			
 			// aapt resource value: 0x7f030002
-			public const int dashboard_survey_row = 2130903042;
+			public const int dashboard_survey_property_item = 2130903042;
 			
 			// aapt resource value: 0x7f030003
-			public const int Details = 2130903043;
+			public const int dashboard_survey_row = 2130903043;
 			
 			// aapt resource value: 0x7f030004
-			public const int DetailsPortret = 2130903044;
+			public const int Details = 2130903044;
 			
 			// aapt resource value: 0x7f030005
-			public const int list_navigation_item = 2130903045;
+			public const int DetailsPortret = 2130903045;
 			
 			// aapt resource value: 0x7f030006
-			public const int Main = 2130903046;
+			public const int list_navigation_item = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int RosterQuestion = 2130903047;
+			public const int Main = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int ScreenGroupView = 2130903048;
+			public const int RosterQuestion = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int ScreenNavigationView = 2130903049;
+			public const int ScreenGroupView = 2130903049;
+			
+			// aapt resource value: 0x7f03000a
+			public const int ScreenNavigationView = 2130903050;
 			
 			private Layout()
 			{
