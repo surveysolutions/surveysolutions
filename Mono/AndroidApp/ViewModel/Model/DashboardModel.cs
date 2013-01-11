@@ -10,10 +10,11 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Main.Core.View.CompleteQuestionnaire;
+using Cirrious.MvvmCross.ViewModels;
 
 namespace AndroidApp.ViewModel.Model
 {
-    public class DashboardModel
+    public class DashboardModel : MvxViewModel
     {
         public DashboardModel(IEnumerable<DashboardSurveyItem> surveys)
         {

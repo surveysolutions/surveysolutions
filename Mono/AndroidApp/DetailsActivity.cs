@@ -66,8 +66,10 @@ namespace AndroidApp
            
             /*  DualPanel = Resources.Configuration.Orientation
                           == Orientation.Landscape;*/
-           
+          
             base.OnCreate(bundle);
+            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                  new QuestionnaireScreenInput(ViewModel.QuestionnaireId, null)) as QuestionnaireScreenViewModel;
             SetContentView(Resource.Layout.Details);
 
 

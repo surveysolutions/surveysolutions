@@ -28,7 +28,7 @@ using Ninject;
 using Android.Graphics;
 namespace AndroidApp
 {
-    [Activity(Label = "CAPI", MainLauncher = true, Icon = "@drawable/capi")]
+    [Activity(Label = "CAPI",  Icon = "@drawable/capi")]
     public class Activity1 : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)

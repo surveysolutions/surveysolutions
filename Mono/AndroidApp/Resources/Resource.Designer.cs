@@ -74,10 +74,13 @@ namespace AndroidApp
 			public const int questionShape = 2130837512;
 			
 			// aapt resource value: 0x7f020009
-			public const int SurveyShape = 2130837513;
+			public const int splash = 2130837513;
 			
 			// aapt resource value: 0x7f02000a
-			public const int SurveyTableHeader = 2130837514;
+			public const int SurveyShape = 2130837514;
+			
+			// aapt resource value: 0x7f02000b
+			public const int SurveyTableHeader = 2130837515;
 			
 			private Drawable()
 			{
@@ -205,6 +208,9 @@ namespace AndroidApp
 			
 			// aapt resource value: 0x7f03000a
 			public const int ScreenNavigationView = 2130903050;
+			
+			// aapt resource value: 0x7f03000b
+			public const int SplashScreen = 2130903051;
 			
 			private Layout()
 			{
