@@ -19,13 +19,12 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
     using Core.Supervisor.Views.Status;
+    using Core.Supervisor.Views.Survey;
     using Core.Supervisor.Views.Timeline;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
-    using Main.Core.View.CompleteQuestionnaire;
-    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
@@ -38,6 +37,8 @@ namespace Web.Supervisor.Controllers
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
+
+    using CompleteQuestionnaireViewInputModel = Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireViewInputModel;
 
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
@@ -361,9 +362,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
-            //if (id)
-            //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<DisplayViewInputModel, ScreenGroupView>(
+            var model = this.viewRepository.Load<DisplayViewInputModel, SurveyScreenView>(
                 new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
@@ -395,7 +394,7 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<DisplayViewInputModel, ScreenGroupView>(
+            var model = this.viewRepository.Load<DisplayViewInputModel, SurveyScreenView>(
                 new DisplayViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
@@ -610,7 +609,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ShowComments(Guid id, string template)
         {
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, SurveyScreenView>(
                 new CompleteQuestionnaireViewInputModel(id));
             ViewBag.TemplateId = template;
             return this.View("Comments", model);

@@ -1,12 +1,9 @@
-﻿@using Main.Core.View.Card
-@using Main.Core.View.Group
-@using Main.Core.View.Question
-@model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
+﻿@using Main.Core.View.Group
+@using Core.Supervisor.Views.Survey
+@model SurveyScreenView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     ViewBag.CurrentQuestion = questionKey;
-}
-@{
     ViewBag.AjaxOptions = new AjaxOptions
     {
         OnComplete = "JsonResults"
@@ -14,75 +11,40 @@
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
 }
-<!-- Start of second page -->
 <div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page">
-    @RenderNavigation(Model.Navigation.NavigationContent)
-    <!-- /header -->
-    <div data-role="content" class="dummy-scroll">
-        <div class="scroller-@(Model.PublicKey)" id="scroller">
-            <div>           
-                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
-                 <div style="width: 100%; height: 50px;text-align: center"><strong>End of Section</strong></div>
-            </div>
-        </div>
-    </div>    
-    @RenderFooter(Model.Navigation.NavigationContent)
-    <!-- /content -->
+    <div class="title">
+        @RenderNavigation(Model.Navigation.NavigationContent)
+    </div>
+    <div class="body">
+        @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
+    </div>
 </div>
-<!-- /page -->
-<!-- other main panel pages here -->
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
-    <ul class="breadcrumb" >
+    <ul class="breadcrumb">
         @for (int i = 0; i < crumbs.Count; i++)
         {
             CompleteGroupHeaders breadCumb = crumbs[i];
             if (i == 0)
             {
             <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })" class=" nav-link" data-inline="true" data-role="button"
-                data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> <span class="divider">/</span></li>
+                data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+                <span class="divider">/</span></li>
             }
             else
             {
-            <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class=" nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a><span class="divider">/</span></li>
+            <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class=" nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a><span
+                class="divider">/</span></li>
             }
         }
         <li class="active">
-            @screen.CurrentScreenTitle  
+            @screen.CurrentScreenTitle
             @if (!string.IsNullOrEmpty(Model.Description))
             {
-                <div>Description: @Model.Description</div>
+                <div>
+                    Description: @Model.Description</div>
             }
         </li>
-    </ul>
-}
-@helper RenderFooter(ScreenNavigation screen)
-    {
-    <ul  data-role="footer" data-theme="b" class="pager">
-        @if (screen.PrevScreen != null)
-        {
-            <li><a class="previous nav-link ui-btn-left" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
-               &larr;  Prev Group</a></li>
-            
-        }
-        else
-        {
-            <li><b class="previous previous-screen disabled  nav-link" href="#" data-icon="arrow-l" data-theme="b"
-                iconpos="notext" data-corners="false">&larr; Prev Group</b></li>
-        }
-
-        @if (screen.NextScreen != null)
-        {
-           
-            <li><a class="next nav-link ui-btn-right " href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey = screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
-                Next Group &rarr;</a></li>
-            
-        }
-        else
-        {
-            <li  class="disabled"><b class="next next-screen disabled   nav-link" href="#" data-icon="arrow-r" data-iconpos="right"
-                data-theme="b" data-corners="false">Next Group &rarr;</b></li>
-        }
     </ul>
 }

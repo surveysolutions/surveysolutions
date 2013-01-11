@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IScreenViewSupplier.cs" company="The World Bank">
+// <copyright file="ISurveyScreenSupplier.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,17 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
+namespace Core.Supervisor.Views.Survey
 {
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
     using Main.Core.View.Group;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public interface IScreenViewSupplier
+    public interface ISurveyScreenSupplier
     {
         /// <summary>
         /// The build view.
@@ -31,12 +32,9 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="navigation">
         /// The navigation.
         /// </param>
-        /// <param name="scope">
-        /// The scope.
-        /// </param>
         /// <returns>
         /// The <see cref="ScreenGroupView"/>.
         /// </returns>
-        ScreenGroupView BuildView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation, QuestionScope scope);
+        SurveyScreenView BuildView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation);
     }
 }

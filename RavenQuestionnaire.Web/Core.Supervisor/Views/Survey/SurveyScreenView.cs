@@ -1,10 +1,10 @@
 // -----------------------------------------------------------------------
-// <copyright file="ScreenGroupView.cs" company="">
+// <copyright file="SurveyScreenView.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
+namespace Core.Supervisor.Views.Survey
 {
     using System;
     using System.Linq;
@@ -20,11 +20,12 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class ScreenGroupView
+    public class SurveyScreenView
     {
         #region Constructors and Destructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ScreenGroupView"/> class. 
+        /// Initializes a new instance of the <see cref="SurveyScreenView"/> class.
         /// </summary>
         /// <param name="doc">
         /// The doc.
@@ -35,38 +36,11 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="navigation">
         /// The navigation.
         /// </param>
-        public ScreenGroupView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation, QuestionScope scope)
-            : this(
-                doc,
-                currentGroup,
-                new ScreenNavigationView(
-                    doc.Children.OfType<ICompleteGroup>().Where(g => g.HasVisibleItemsForScope(scope)).Select(g => new CompleteGroupHeaders(g)),
-                    navigation))
-        {
-            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);*/
-
-            var validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
-            validator.Execute(currentGroup);
-
-            this.BuildScreenContent(doc, currentGroup, scope);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScreenGroupView"/> class.
-        /// </summary>
-        /// <param name="doc">
-        /// The doc.
+        /// <param name="scope">
+        /// The scope.
         /// </param>
-        /// <param name="currentGroup">
-        /// The current group.
-        /// </param>
-        /// <param name="navigation">
-        /// The navigation.
-        /// </param>
-        protected ScreenGroupView(
-            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation)
+        public SurveyScreenView(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigationView navigation, QuestionScope scope)
         {
             this.QuestionnairePublicKey = doc.PublicKey;
             this.PublicKey = currentGroup.PublicKey;
@@ -74,6 +48,11 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             this.Status = doc.Status;
             this.Description = currentGroup.Description;
             this.Navigation = navigation;
+
+            var validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
+            validator.Execute(currentGroup);
+
+            this.BuildScreenContent(doc, currentGroup, scope);
         }
 
 
@@ -129,6 +108,9 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="currentGroup">
         /// The current group.
         /// </param>
+        /// <param name="scope">
+        /// The scope.
+        /// </param>
         private void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, QuestionScope scope)
         {
             if (currentGroup.PropagationPublicKey.HasValue)
@@ -154,7 +136,11 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                     if (q.QuestionScope <= scope)
                     {
                         var question = new CompleteQuestionView(doc, q);
-                        if (q.QuestionScope == scope) question.Editable = true;
+                        if (q.QuestionScope == scope)
+                        {
+                            question.Editable = true;
+                        }
+
                         this.Group.Children.Add(question);
                     }
                 }

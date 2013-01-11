@@ -2,6 +2,8 @@
 @using Core.Supervisor.Views.Index
 @using Web.Supervisor.Models
 @using Web.Supervisor.Models.Chart
+@using ClientDependency.Core.Mvc
+
 @model IndexView
 @{
     var r = new JavaScriptSerializer();
@@ -16,7 +18,10 @@
         <button id="scatter" class="btn">Scatter</button>
     </div>
 </p>
-<script src="../../Scripts/plotSettings.js" type="text/javascript"></script>
+@{
+    Html.RequiresJs("plotSettings.js", "Scripts", 70);
+}
+
 <script type="text/javascript">
     barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
     scatterData = @Html.Raw(Json.Encode(chartData.ScatterData)) ;

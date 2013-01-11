@@ -7,10 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.View.CompleteQuestionnaire
+namespace Core.Supervisor.Views.Survey
 {
-    using Main.Core.Entities.SubEntities;
-
     using System;
 
     /// <summary>

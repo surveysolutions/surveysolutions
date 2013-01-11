@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GroupWithRout.cs" company="The World Bank">
+// <copyright file="ScreenWithRout.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.Utility
+namespace Core.Supervisor.Views.Survey
 {
     using System;
     using System.Collections.Generic;
@@ -15,31 +15,21 @@ namespace Main.Core.Utility
 
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Utility;
     using Main.Core.View.Group;
 
     /// <summary>
     /// The group with rout.
     /// </summary>
-    public class GroupWithRout
+    public class ScreenWithRout
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GroupWithRout"/> class.
+        /// The navigation.
         /// </summary>
-        /// <param name="currentRout">
-        /// The current rout.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        public GroupWithRout(IEnumerable<NodeWithLevel> currentRout, ICompleteGroup group, QuestionScope scope)
-        {
-            this.CurrentRout = currentRout;
-            this.Group = group;
-            this.Scope = scope;
-        }
+        private ScreenNavigation navigation;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GroupWithRout"/> class.
+        /// Initializes a new instance of the <see cref="ScreenWithRout"/> class.
         /// </summary>
         /// <param name="doc">
         /// The doc.
@@ -50,7 +40,10 @@ namespace Main.Core.Utility
         /// <param name="propagationKey">
         /// The propagation key.
         /// </param>
-        public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
+        /// <param name="scope">
+        /// The scope.
+        /// </param>
+        public ScreenWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
         {
             this.Scope = scope;
             var rout = new List<NodeWithLevel>();
@@ -97,7 +90,7 @@ namespace Main.Core.Utility
 
             this.CurrentRout = rout;
             this.Group = group;
-            this.GroupsTree = new List<NodeWithLevel>();
+            this.MenuItems = new List<NodeWithLevel>();
 
             {
                 var treeStack = new Stack<NodeWithLevel>();
@@ -105,15 +98,6 @@ namespace Main.Core.Utility
                 while (treeStack.Count > 0)
                 {
                     NodeWithLevel node = treeStack.Pop();
-
-                    this.UpdateNavigation(rout, node);
-
-                    if (group != null)
-                    {
-                        continue;
-                    }
-
-                    this.GroupsTree.Add(node);
                    
                     ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
                     for (int i = subGroups.Length - 1; i >= 0; i--)
@@ -126,55 +110,49 @@ namespace Main.Core.Utility
 
                         treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
                     }
+
+                    group = this.ProceedScreen(node);
+
+                    if (group == null)
+                    {
+                        continue;
+                    }
+
+                    this.MenuItems.Add(node);
                 }
             }
         }
 
-
         /// <summary>
-        /// The proceed group.
+        /// Gets the navigation.
         /// </summary>
-        /// <param name="node">
-        /// The node.
-        /// </param>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.SubEntities.Complete.ICompleteGroup.
-        /// </returns>
-        private ICompleteGroup ProceedGroup(ICompleteGroup node, Guid publicKey, Guid? propagationKey)
+        public ScreenNavigation Navigation
         {
-            if (node.PublicKey != publicKey)
+            get
             {
-                return null;
+                return this.navigation ?? (this.navigation = this.CompileNavigation());
             }
-
-            if (propagationKey.HasValue && node.PropagationPublicKey != propagationKey.Value)
-            {
-                return null;
-            }
-
-            return node;
         }
 
         /// <summary>
-        /// The update navigation.
+        /// Gets the current rout.
         /// </summary>
-        /// <param name="navigations">
-        /// The navigations.
-        /// </param>
-        /// <param name="node">
-        /// The node.
-        /// </param>
-        private void UpdateNavigation(List<NodeWithLevel> navigations, NodeWithLevel node)
-        {
-            navigations.RemoveAll(n => n.Level >= node.Level);
-            navigations.Add(node);
-        }
+        public IEnumerable<NodeWithLevel> CurrentRout { get; private set; }
+
+        /// <summary>
+        /// Gets the group.
+        /// </summary>
+        public ICompleteGroup Group { get; private set; }
+
+        /// <summary>
+        /// Gets or sets Scope.
+        /// </summary>
+        public QuestionScope Scope { get; set; }
+
+        /// <summary>
+        /// Gets or sets MenuItems.
+        /// </summary>
+        public List<NodeWithLevel> MenuItems { get; set; }
 
         /// <summary>
         /// The compile navigation.
@@ -207,7 +185,7 @@ namespace Main.Core.Utility
                     .Where(g => !g.PropagationPublicKey.HasValue)
 
                     // filter all empty groups or groups with any visible question
-                    .Where(g => g.HasVisibleItemsForScope(this.Scope)).ToList(); 
+                    .Where(g => g.HasVisibleItemsForScope(this.Scope)).ToList();
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
@@ -229,41 +207,72 @@ namespace Main.Core.Utility
         }
 
         /// <summary>
-        /// Gets the navigation.
+        /// The update navigation.
         /// </summary>
-        public ScreenNavigation Navigation
+        /// <param name="navigations">
+        /// The navigations.
+        /// </param>
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        private void UpdateNavigation(List<NodeWithLevel> navigations, NodeWithLevel node)
         {
-            get
-            {
-                if (navigation == null)
-                    navigation = CompileNavigation();
-                return navigation;
-            }
+            navigations.RemoveAll(n => n.Level >= node.Level);
+            navigations.Add(node);
         }
 
         /// <summary>
-        /// Gets the current rout.
+        /// The proceed group.
         /// </summary>
-        public IEnumerable<NodeWithLevel> CurrentRout { get; private set; }
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        /// <returns>
+        /// The ICompleteGroup.
+        /// </returns>
+        private ICompleteGroup ProceedScreen(NodeWithLevel node)
+        {
+            if (node.Level == 0)
+            {
+                return null;
+            }
+
+            if (node.Group.Propagated != Propagate.None && !node.Group.PropagationPublicKey.HasValue)
+            {
+                return null;
+            }
+
+            return node.Group;
+        }
 
         /// <summary>
-        /// The navigation.
+        /// The proceed group.
         /// </summary>
-        private ScreenNavigation navigation;
+        /// <param name="node">
+        /// The node.
+        /// </param>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The Main.Core.Entities.SubEntities.Complete.ICompleteGroup.
+        /// </returns>
+        private ICompleteGroup ProceedGroup(ICompleteGroup node, Guid publicKey, Guid? propagationKey)
+        {
+            if (node.PublicKey != publicKey)
+            {
+                return null;
+            }
 
-        /// <summary>
-        /// Gets the group.
-        /// </summary>
-        public ICompleteGroup Group { get; private set; }
+            if (propagationKey.HasValue && node.PropagationPublicKey != propagationKey.Value)
+            {
+                return null;
+            }
 
-        /// <summary>
-        /// Gets or sets Scope.
-        /// </summary>
-        public QuestionScope Scope { get; set; }
-
-        /// <summary>
-        /// Gets or sets GroupsTree.
-        /// </summary>
-        public List<NodeWithLevel> GroupsTree { get; set; }
+            return node;
+        }
     }
 }

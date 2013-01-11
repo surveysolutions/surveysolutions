@@ -2,7 +2,6 @@
 {
 	padding-top: 40px;
 }
-
 .pull-right #menu li
 {
 	float: right;
@@ -277,7 +276,7 @@ h1.inline
 	}
 	.bs-docs-sidenav
 	{
-		width: 258px;
+		width: 100%;
 	}
 }
 
