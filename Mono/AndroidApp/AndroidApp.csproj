@@ -106,8 +106,6 @@
   <ItemGroup>
     <Compile Include="Activity1.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
-    <Compile Include="Bindings\TableLayoutContentBinding.cs" />
-    <Compile Include="Bindings\TableLayoutHeaderBinding.cs" />
     <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
     <Compile Include="CapiApplication.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ContentFrameAdapter.cs" />
@@ -177,10 +175,10 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\RosterQuestion.axml" />
     <AndroidResource Include="Resources\Layout\dashboard_survey_row.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\dashboard_survey_item.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
@@ -256,6 +254,9 @@
     <AndroidResource Include="Resources\Drawable\questionAnsweredShape.xml" />
     <AndroidResource Include="Resources\Drawable\grid_headerItem.xml" />
     <AndroidResource Include="Resources\Drawable\capi.png" />
+    <AndroidResource Include="Resources\Drawable\dashboardquestionnaire.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
