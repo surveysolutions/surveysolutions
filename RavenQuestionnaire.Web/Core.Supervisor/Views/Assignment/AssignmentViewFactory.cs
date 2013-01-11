@@ -7,15 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.DenormalizerStorage;
-
 namespace Core.Supervisor.Views.Assignment
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Documents;
     using Main.Core.Entities;
@@ -24,6 +20,8 @@ namespace Core.Supervisor.Views.Assignment
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Questionnaire;
+
+    using Main.DenormalizerStorage;
 
     /// <summary>
     /// The survey group view factory.

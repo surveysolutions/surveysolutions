@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
+namespace Core.Supervisor.Views.Survey
 {
     using System;
     using System.Linq;
@@ -15,14 +15,15 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
-    using Main.Core.ExpressionExecutors;
     using Main.Core.Utility;
+    using Main.Core.View;
+    using Main.Core.View.Group;
     using Main.DenormalizerStorage;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DisplaySurveyViewFactory : IViewFactory<DisplayViewInputModel, ScreenGroupView>
+    public class DisplaySurveyViewFactory : IViewFactory<DisplayViewInputModel, SurveyScreenView>
     {
         #region Constants and Fields
 
@@ -34,7 +35,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <summary>
         /// The screen view supplier.
         /// </summary>
-        private readonly IScreenViewSupplier screenViewSupplier;
+        private readonly ISurveyScreenSupplier surveyScreenSupplier;
 
         #endregion
 
@@ -46,13 +47,13 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// <param name="store">
         /// The store.
         /// </param>
-        /// <param name="screenViewSupplier">
+        /// <param name="surveyScreenSupplier">
         /// The screen view supplier.
         /// </param>
-        public DisplaySurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IScreenViewSupplier screenViewSupplier)
+        public DisplaySurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, ISurveyScreenSupplier surveyScreenSupplier)
         {
             this.store = store;
-            this.screenViewSupplier = screenViewSupplier;
+            this.surveyScreenSupplier = surveyScreenSupplier;
         }
 
         #endregion
@@ -66,16 +67,16 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Mobile.CompleteGroupMobileView.
+        /// The SurveyScreenView.
         /// </returns>
-        public ScreenGroupView Load(DisplayViewInputModel input)
+        public SurveyScreenView Load(DisplayViewInputModel input)
         {
             if (input.CompleteQuestionnaireId == Guid.Empty)
             {
                 return null;
             }
 
-            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            var doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
 
             if (doc == null)
             {
@@ -93,12 +94,14 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 input.CurrentGroupPublicKey = firstGroup.PublicKey;
             }
 
-            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);*/
+            var rout = new ScreenWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, QuestionScope.Supervisor);
 
-            var rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, QuestionScope.Supervisor);
+            var menu = rout.MenuItems.Select(g => new DetailsMenuItem(doc, g));
 
-            var result = this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, QuestionScope.Supervisor);
+            var screenView = new ScreenNavigationView(menu, rout.Navigation);
+
+            var result = this.surveyScreenSupplier.BuildView(doc, rout.Group, screenView);
+
             result.Title = doc.Title;
 
             return result;

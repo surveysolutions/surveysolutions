@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TimelineView.cs" company="">
-//   
+// <copyright file="TimelineView.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
 // <summary>
 //   The complete questionnaire statistic view.
@@ -18,8 +18,9 @@ namespace Core.Supervisor.Views.Timeline
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors;
-    using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Question;
+
+    using ChangeStatusHistoryView = Core.Supervisor.Views.Survey.ChangeStatusHistoryView;
 
     /// <summary>
     /// The complete questionnaire statistic view.

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteGroupHeaders.cs" company="The World Bank">
+// <copyright file="DetailsMenuItem.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -7,42 +7,58 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-
-namespace Main.Core.View.Group
+namespace Core.Supervisor.Views.Survey
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Utility;
+    using Main.Core.View.Group;
+
     /// <summary>
     /// The complete group headers.
     /// </summary>
-    public class CompleteGroupHeaders
+    public class DetailsMenuItem
     {
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteGroupHeaders"/> class.
+        /// Initializes a new instance of the <see cref="DetailsMenuItem"/> class.
         /// </summary>
-        /// <param name="group">
-        /// The group.
+        /// <param name="node">
+        /// The node.
         /// </param>
-        public CompleteGroupHeaders(ICompleteGroup group)
+        public DetailsMenuItem(CompleteQuestionnaireStoreDocument doc, NodeWithLevel node)
         {
+            var group = node.Group;
             this.PublicKey = group.PublicKey;
-            this.GroupText = group.Title;
+            this.GroupText = /*group.Title;
+
+            this.Title = */ group.PropagationPublicKey.HasValue
+                    ? string.Concat(doc.GetPropagatedGroupsByKey(group.PropagationPublicKey.Value)
+                            .SelectMany(q => q.Children)
+                            .OfType<ICompleteQuestion>()
+                            .Where(q => q.Capital)
+                            .Select(q =>q.GetAnswerString() + " "))+ " " + group.Title
+                    : group.Title;
+
             this.PropagationKey = group.PropagationPublicKey;
             this.Enabled = group.Enabled;
             this.Description = group.Description;
             this.Totals = this.CalcProgress(group);
             this.Propagated = group.Propagated;
+            this.Level = node.Level;
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CompleteGroupHeaders"/> class.
+        /// Initializes a new instance of the <see cref="DetailsMenuItem"/> class.
         /// </summary>
-        public CompleteGroupHeaders()
+        public DetailsMenuItem()
         {
         }
 
@@ -89,6 +105,11 @@ namespace Main.Core.View.Group
         /// Gets or sets Propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
+
+        /// <summary>
+        /// Gets or sets Level.
+        /// </summary>
+        public int Level { get; set; }
 
         #endregion
 
@@ -170,6 +191,7 @@ namespace Main.Core.View.Group
 
         #endregion
 
-       
+
+
     }
 }
