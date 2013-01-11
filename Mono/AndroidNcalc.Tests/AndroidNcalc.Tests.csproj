@@ -35,12 +35,6 @@
     <OutputPath>bin\MONODROID\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AndroidFluentAssertions">
-      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidFluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="AndroidMoq">
-      <HintPath>..\LibrariesPortedToAndroid\Bin\AndroidMoq.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -54,6 +48,14 @@
     <Compile Include="Verification.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
+      <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
+      <Name>AndroidFluentAssertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{F0476C33-6F4F-4524-9CEA-37E87D55E67E}</Project>
       <Name>AndroidNCalc</Name>
