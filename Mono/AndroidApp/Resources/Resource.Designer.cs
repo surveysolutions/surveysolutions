@@ -117,11 +117,14 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040003
 			public const int ScreenId = 2130968579;
 			
-			// aapt resource value: 0x7f040017
-			public const int bSynch = 2130968599;
+			// aapt resource value: 0x7f04001a
+			public const int bSynch = 2130968602;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
+			
+			// aapt resource value: 0x7f040019
+			public const int btnLogin = 2130968601;
 			
 			// aapt resource value: 0x7f04000c
 			public const int etComments = 2130968588;
@@ -129,20 +132,26 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040014
 			public const int flDetails = 2130968596;
 			
+			// aapt resource value: 0x7f040018
+			public const int footer = 2130968600;
+			
+			// aapt resource value: 0x7f040017
+			public const int header = 2130968599;
+			
 			// aapt resource value: 0x7f040011
 			public const int llContainer = 2130968593;
 			
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f040019
-			public const int llScreen = 2130968601;
+			// aapt resource value: 0x7f04001c
+			public const int llScreen = 2130968604;
 			
 			// aapt resource value: 0x7f04000a
 			public const int llWrapper = 2130968586;
 			
-			// aapt resource value: 0x7f040018
-			public const int qGuid = 2130968600;
+			// aapt resource value: 0x7f04001b
+			public const int qGuid = 2130968603;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvComments = 2130968587;
@@ -198,19 +207,22 @@ namespace AndroidApp
 			public const int list_navigation_item = 2130903046;
 			
 			// aapt resource value: 0x7f030007
-			public const int Main = 2130903047;
+			public const int Login = 2130903047;
 			
 			// aapt resource value: 0x7f030008
-			public const int RosterQuestion = 2130903048;
+			public const int Main = 2130903048;
 			
 			// aapt resource value: 0x7f030009
-			public const int ScreenGroupView = 2130903049;
+			public const int RosterQuestion = 2130903049;
 			
 			// aapt resource value: 0x7f03000a
-			public const int ScreenNavigationView = 2130903050;
+			public const int ScreenGroupView = 2130903050;
 			
 			// aapt resource value: 0x7f03000b
-			public const int SplashScreen = 2130903051;
+			public const int ScreenNavigationView = 2130903051;
+			
+			// aapt resource value: 0x7f03000c
+			public const int SplashScreen = 2130903052;
 			
 			private Layout()
 			{

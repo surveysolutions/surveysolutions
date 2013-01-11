@@ -29,7 +29,7 @@ using Android.Graphics;
 namespace AndroidApp
 {
     [Activity(Label = "CAPI",  Icon = "@drawable/capi")]
-    public class Activity1 : MvxSimpleBindingActivity<DashboardModel>
+    public class DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)
         {

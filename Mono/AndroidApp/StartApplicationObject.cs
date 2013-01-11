@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.ViewModel.Login;
 using AndroidApp.ViewModel.Model;
 using Cirrious.MvvmCross.Interfaces.ViewModels;
 using Cirrious.MvvmCross.ViewModels;
@@ -21,7 +22,8 @@ namespace AndroidApp
     {
         public void Start()
         {
-            RequestNavigate<DashboardModel>();
+            
+                RequestNavigate<LoginViewModel>();
         }
 
         public bool ApplicationCanOpenBookmarks

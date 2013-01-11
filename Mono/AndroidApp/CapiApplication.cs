@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Authorization;
 using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
@@ -31,7 +32,18 @@ namespace AndroidApp
             return Kernel.Get<IViewRepository>().Load<TInput, TOutput>(input);
         }
 
+        public static IAuthentication Membership
+        {
+            get { return Kernel.Get<IAuthentication>(); }
+        }
         public static Context CurrentContext { get; set; }
+
+        static CapiApplication()
+        {
+            Kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+           
+        }
+
         public CapiApplication()
 		{
 		}
@@ -39,17 +51,18 @@ namespace AndroidApp
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
 		{
+          
 		}
         public override void OnCreate()
         {
             base.OnCreate();
             CurrentContext = this;
-            Kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+            
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
+           
+          //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
             NCQRSInit.Init(Kernel);
             NcqrsEnvironment.SetDefault(new SQLiteEventStore(this.ApplicationContext));
-            //  GenerateEvents();
-          //  NCQRSInit.RebuildReadLayer();
         }
 
         protected void GenerateEvents()

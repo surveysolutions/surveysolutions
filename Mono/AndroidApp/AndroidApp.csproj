@@ -105,7 +105,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity1.cs" />
+    <Compile Include="Authorization\AndroidAuthentication.cs" />
+    <Compile Include="Authorization\IAuthentication.cs" />
+    <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
     <Compile Include="BroadcastReceivers\ScreenChangedReciver.cs" />
@@ -134,12 +136,14 @@
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoginActivity.cs" />
+    <Compile Include="SplashScreenActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="StartApplicationObject.cs" />
     <Compile Include="ViewModel\Factory\DashboardFactory.cs" />
     <Compile Include="ViewModel\Input\DashboardInput.cs" />
+    <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\Model\DashboardModel.cs" />
     <Compile Include="ViewModel\Model\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Model\DashboardSurveyItem.cs" />
@@ -189,6 +193,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\SplashScreen.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\Login.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

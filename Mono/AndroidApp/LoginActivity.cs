@@ -1,14 +1,31 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
 using Android.App;
-using Cirrious.MvvmCross.Droid.Views;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+using AndroidApp.ViewModel.Login;
+using AndroidApp.ViewModel.Model;
+using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace AndroidApp
 {
-    [Activity(Label = "CAPI", MainLauncher = true, NoHistory = true, Icon = "@drawable/capi")]
-    public class SplashScreenActivity : MvxBaseSplashScreenActivity
+    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
+    public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel>
     {
-        public SplashScreenActivity()
-            : base(Resource.Layout.SplashScreen)
+        protected override void OnCreate(Bundle bundle)
         {
+            base.OnCreate(bundle);
+            ViewModel=new LoginViewModel();
+            if (CapiApplication.Membership.IsLoggedIn)
+               StartActivity(typeof(DashboardActivity));
+           
+            SetContentView(Resource.Layout.Login);
         }
     }
 }

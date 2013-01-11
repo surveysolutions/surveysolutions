@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Bindings;
+using AndroidApp.ViewModel.Login;
 using AndroidApp.ViewModel.Model;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Application;
@@ -47,7 +48,10 @@ namespace AndroidApp
             if (!lookups.ContainsKey(typeof (QuestionnaireScreenViewModel)))
                 lookups.Add(typeof (QuestionnaireScreenViewModel), typeof (DetailsActivity));
             if (!lookups.ContainsKey(typeof(DashboardModel)))
-                lookups.Add(typeof(DashboardModel), typeof(Activity1));
+                lookups.Add(typeof(DashboardModel), typeof(DashboardActivity));
+
+            if (!lookups.ContainsKey(typeof(LoginViewModel)))
+                lookups.Add(typeof(LoginViewModel), typeof(LoginActivity));
             return lookups;
         }
     }
