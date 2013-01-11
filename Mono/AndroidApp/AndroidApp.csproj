@@ -97,8 +97,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Users\Stacy\Downloads\MvvmCross-vnext\MvvmCross-vnext\bin\Droid\Debug\System.Net.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows">
-      <HintPath>..\..\..\..\Users\Stacy\Downloads\MvvmCross-vnext\MvvmCross-vnext\bin\Droid\Debug\System.Windows.dll</HintPath>
+    <Reference Include="System.Windows, Version=2.0.5.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MvvmCross\System.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />

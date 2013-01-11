@@ -28,7 +28,7 @@ namespace AndroidApp.ViewModel.Model
         public string Status { get; private set; }
         public IList<FeaturedItem> Properties { get; private set; }
 
-        public ICommand ViewDetailCommand
+        public System.Windows.Input.ICommand ViewDetailCommand
         {
             get
             {
