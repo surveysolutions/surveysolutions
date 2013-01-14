@@ -1,4 +1,6 @@
 using Android.App;
+using Android.Provider;
+using Android.Widget;
 using Cirrious.MvvmCross.Droid.Views;
 
 namespace AndroidApp
@@ -10,5 +12,6 @@ namespace AndroidApp
             : base(Resource.Layout.SplashScreen)
         {
         }
+    
     }
 }
