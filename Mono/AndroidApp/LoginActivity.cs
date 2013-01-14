@@ -15,16 +15,15 @@ using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace AndroidApp
 {
-    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
+    [Activity(Label = "CAPI", NoHistory = true, Icon = "@drawable/capi")]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel>
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            ViewModel=new LoginViewModel();
+            ViewModel = new LoginViewModel();
             if (CapiApplication.Membership.IsLoggedIn)
-               StartActivity(typeof(DashboardActivity));
-           
+                StartActivity(typeof(DashboardActivity));
             SetContentView(Resource.Layout.Login);
         }
     }

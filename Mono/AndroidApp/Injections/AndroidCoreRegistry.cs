@@ -41,8 +41,9 @@ namespace AndroidApp.Injections
         {
             base.Load();
             this.Bind<IEventStore>().To<SQLiteEventStore>();
-         /*   var membership = new AndroidAuthentication();
-            this.Bind<IAuthentication>().ToConstant(membership);*/
+            this.Unbind<IAuthentication>();
+            var membership = new AndroidAuthentication();
+            this.Bind<IAuthentication>().ToConstant(membership);
            
         }
     }
