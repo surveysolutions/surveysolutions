@@ -31,7 +31,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.QuestionnaireKey = questionnaireKey;
         }
-
+        public override void OnCreate(Bundle p0)
+        {
+            base.OnCreate(p0);
+        }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -40,10 +43,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-
-            TextView tv = new TextView(inflater.Context);
-            tv.Text = "Statistics";
-            return tv;
+            var view = inflater.Inflate(Resource.Layout.StatisticsContent, null);
+            return view;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
