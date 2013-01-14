@@ -97,37 +97,6 @@ namespace Main.Core.Utility
 
             this.CurrentRout = rout;
             this.Group = group;
-            this.GroupsTree = new List<NodeWithLevel>();
-
-            {
-                var treeStack = new Stack<NodeWithLevel>();
-                treeStack.Push(new NodeWithLevel(doc, 0));
-                while (treeStack.Count > 0)
-                {
-                    NodeWithLevel node = treeStack.Pop();
-
-                    this.UpdateNavigation(rout, node);
-
-                    if (group != null)
-                    {
-                        continue;
-                    }
-
-                    this.GroupsTree.Add(node);
-                   
-                    ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
-                    for (int i = subGroups.Length - 1; i >= 0; i--)
-                    {
-                        // questions exists, but they are hidden 
-                        if (!subGroups[i].HasVisibleItemsForScope(this.Scope))
-                        {
-                            continue;
-                        }
-
-                        treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
-                    }
-                }
-            }
         }
 
 
@@ -260,10 +229,5 @@ namespace Main.Core.Utility
         /// Gets or sets Scope.
         /// </summary>
         public QuestionScope Scope { get; set; }
-
-        /// <summary>
-        /// Gets or sets GroupsTree.
-        /// </summary>
-        public List<NodeWithLevel> GroupsTree { get; set; }
     }
 }
