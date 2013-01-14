@@ -13,13 +13,7 @@
       android:orientation="vertical"
                android:padding="10px"
     >
-  <Button
-                android:id="@+id/bSynch"
-       android:layout_width="fill_parent"
-       android:layout_height="wrap_content"
-                
-                android:text="Synchronize"
-                />
+
   <ScrollView 
                android:id="@+id/MyLayout"
       android:layout_width="fill_parent"

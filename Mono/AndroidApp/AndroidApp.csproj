@@ -107,6 +107,10 @@
   <ItemGroup>
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\IAuthentication.cs" />
+    <Compile Include="Controls\Navigation\NavigationItem.cs" />
+    <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
+    <Compile Include="Controls\Navigation\NavigationListener.cs" />
+    <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -134,6 +138,7 @@
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
+    <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
     <Compile Include="LoginActivity.cs" />
     <Compile Include="SplashScreenActivity.cs" />

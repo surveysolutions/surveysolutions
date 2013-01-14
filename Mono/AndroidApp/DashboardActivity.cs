@@ -11,6 +11,8 @@ using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using AndroidApp.Controls.Navigation;
+using AndroidApp.Extensions;
 using AndroidApp.Injections;
 using AndroidApp.ViewModel.Input;
 using AndroidApp.ViewModel.Model;
@@ -38,6 +40,11 @@ namespace AndroidApp
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput());
             SetContentView(Resource.Layout.Main);
 
+        }
+        public override bool OnCreateOptionsMenu(Android.Views.IMenu menu)
+        {
+            this.CreateActionBar();
+            return base.OnCreateOptionsMenu(menu);
         }
     }
 }

@@ -11,9 +11,11 @@ using Android.Support.V4.App;
 using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Controls.Navigation;
 using AndroidApp.Controls.QuestionnaireDetails;
 using AndroidApp.Core;
 using AndroidApp.Events;
+using AndroidApp.Extensions;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Binders;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
@@ -119,7 +121,7 @@ namespace AndroidApp
             Adapter.UpdateScreenData(firstScreen);
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
-
+       
         protected Guid CurrentScreen { get; set; }
 
     }

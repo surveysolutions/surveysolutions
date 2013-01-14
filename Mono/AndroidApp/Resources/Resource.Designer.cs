@@ -117,9 +117,6 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040003
 			public const int ScreenId = 2130968579;
 			
-			// aapt resource value: 0x7f04001a
-			public const int bSynch = 2130968602;
-			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
@@ -144,14 +141,14 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f04001c
-			public const int llScreen = 2130968604;
+			// aapt resource value: 0x7f04001b
+			public const int llScreen = 2130968603;
 			
 			// aapt resource value: 0x7f04000a
 			public const int llWrapper = 2130968586;
 			
-			// aapt resource value: 0x7f04001b
-			public const int qGuid = 2130968603;
+			// aapt resource value: 0x7f04001a
+			public const int qGuid = 2130968602;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvComments = 2130968587;
