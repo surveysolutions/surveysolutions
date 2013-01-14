@@ -85,13 +85,7 @@ namespace Core.Supervisor.Views.Survey
 
             if (!input.CurrentGroupPublicKey.HasValue)
             {
-                var firstGroup = doc.Children.OfType<ICompleteGroup>().FirstOrDefault();
-                if (firstGroup == null)
-                {
-                    return null;
-                }
-
-                input.CurrentGroupPublicKey = firstGroup.PublicKey;
+                input.CurrentGroupPublicKey = doc.PublicKey;
             }
 
             var rout = new ScreenWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, QuestionScope.Supervisor);

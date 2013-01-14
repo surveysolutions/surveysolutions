@@ -162,48 +162,7 @@ namespace Core.Supervisor.Views.Survey
         /// </returns>
         protected ScreenNavigation CompileNavigation()
         {
-            var temtNavigation = new ScreenNavigation { PublicKey = this.Group.PublicKey, CurrentScreenTitle = this.Group.Title };
-
-            var rout = this.CurrentRout.Take(this.CurrentRout.Count() - 1).ToList();
-            temtNavigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
-            NodeWithLevel parent = rout.Last();
-            List<ICompleteGroup> groupNeighbors;
-            int indexOfTarget;
-            if (this.Group.PropagationPublicKey.HasValue)
-            {
-                groupNeighbors =
-                    parent.Group.Children.OfType<ICompleteGroup>().Where(
-                        g => g.PublicKey == this.Group.PublicKey && g.PropagationPublicKey.HasValue).ToList();
-
-
-                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
-                indexOfTarget = groupNeighbors.FindIndex(0, g => g.PropagationPublicKey == this.Group.PropagationPublicKey);
-            }
-            else
-            {
-                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>()
-                    .Where(g => !g.PropagationPublicKey.HasValue)
-
-                    // filter all empty groups or groups with any visible question
-                    .Where(g => g.HasVisibleItemsForScope(this.Scope)).ToList();
-
-                groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
-                indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
-            }
-
-            /*  if (indexOfTarget < 0)
-                  throw new InvalidOperationException("groups wasn't founded");*/
-            if (indexOfTarget > 0)
-            {
-                temtNavigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
-            }
-
-            if (indexOfTarget < groupNeighbors.Count - 1)
-            {
-                temtNavigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
-            }
-
-            return temtNavigation;
+            return new ScreenNavigation();
         }
 
         /// <summary>
@@ -232,11 +191,6 @@ namespace Core.Supervisor.Views.Survey
         /// </returns>
         private ICompleteGroup ProceedScreen(NodeWithLevel node)
         {
-            if (node.Level == 0)
-            {
-                return null;
-            }
-
             if (node.Group.Propagated != Propagate.None && !node.Group.PropagationPublicKey.HasValue)
             {
                 return null;

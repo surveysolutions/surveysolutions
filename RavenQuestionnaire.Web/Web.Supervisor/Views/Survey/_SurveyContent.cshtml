@@ -1,5 +1,6 @@
 ﻿@using Main.Core.View.Group
 @using Core.Supervisor.Views.Survey
+@using Main.Core.View.Question
 @model SurveyScreenView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
@@ -16,7 +17,38 @@
         @RenderNavigation(Model.Navigation.NavigationContent)
     </div>
     <div class="body">
-        @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
+        @foreach (var screen in Model.Screens)
+        {
+            <h2 class="heading">
+                @screen.Title
+            </h2>
+            if (screen.Questions.Count > 0)
+            {
+            <ul id="survey_content" class="questions">
+                @foreach (var question in screen.Questions)
+                {
+                    <li>
+                        <div class="line-wrap">
+                            <div class="div-table">
+                                <div class="div-row">
+                                    <div class="div-cell">
+                                        <div class="cell-content">@question.Title</div>
+                                    </div>
+                                    <div class="div-cell">
+                                        <div class="cell-content">@question.Answer &nbsp;</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            }
+        }
+    </div>
+    <div class="bottom">
+        <div class="inner">
+        </div>
     </div>
 </div>
 @helper RenderNavigation(ScreenNavigation screen)

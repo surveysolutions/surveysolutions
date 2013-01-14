@@ -79,25 +79,26 @@
                     {
                         if (gh.Propagated == Propagate.None)
                         {
-                        <li class="@(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >
+                        <li class="@("level" + gh.Level) @(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >
                             <span id="counter-@gh.PublicKey" class="count">@gh.Totals.Answered/@gh.Totals.Enablad</span>
                             <span class="link-text">@gh.GroupText</span> </a></li>
                         }
                         else
                         {
-                        <li class="@(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey, propagationKey = gh.PropagationKey })" >
+                        <li class="@("level" + gh.Level) @(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey"><a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey, propagationKey = gh.PropagationKey })" >
                             <span id="counter-@gh.PublicKey" class="count">@gh.Totals.Answered/@gh.Totals.Enablad</span>
                             <span class="link-text">@gh.GroupText</span> </a></li>
                         }
                     }
                 </ul>
-                <br />
-                <ul class="nav nav-list bs-docs-sidenav">
-                    <li id="statusHistoryLink"><a class="nav-link" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >
-                        Status history</a></li>
-                </ul>
             </div>
             <div class="bottom">
+            <div class="inner">
+                <a class="btn btn-mini btn-info" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >
+                    Status history</a>
+
+
+            </div>
             </div>
         </div>
     </div>
