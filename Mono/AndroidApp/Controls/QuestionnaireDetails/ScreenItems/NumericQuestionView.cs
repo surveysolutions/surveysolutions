@@ -7,8 +7,10 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Text;
 using Android.Util;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
@@ -37,9 +39,29 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
+            this.Click += NumericQuestionView_Click;
             etAnswer=new EditText(this.Context);
+            etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             etAnswer.Text = Model.AnswerString;
+            etAnswer.InputType = InputTypes.ClassNumber;
+            
+            etAnswer.SetSelectAllOnFocus(true);
+            etAnswer.ImeOptions=ImeAction.Done;
+            etAnswer.SetSingleLine(true);
+            etAnswer.EditorAction += etAnswer_EditorAction;
             llWrapper.AddView(etAnswer);
+        }
+        void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            etAnswer.ClearFocus();
+            InputMethodManager imm
+                = (InputMethodManager)this.Context.GetSystemService(
+                    Context.InputMethodService);
+            imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
+        }
+        void NumericQuestionView_Click(object sender, EventArgs e)
+        {
+            etAnswer.RequestFocus();
         }
 
         protected TextView tvTitle

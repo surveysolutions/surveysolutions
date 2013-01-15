@@ -42,14 +42,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             // capture our View elements
             dateDisplay = new TextView(this.Context);
             llWrapper.AddView(dateDisplay);
-            pickDate =new Button(this.Context);
+         /*   pickDate =new Button(this.Context);
             pickDate.Text = "Change the date";
-            llWrapper.AddView(pickDate);
+            llWrapper.AddView(pickDate);*/
             dialog = new DatePickerDialog(this.Context, OnDateSet, date.Year, date.Month - 1, date.Day);
            
             // add a click event handler to the button
 
-            pickDate.Click += delegate
+            this.Click += delegate
                 {
 
                     dialog.Show();
@@ -85,7 +85,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         #endregion
 
         private TextView dateDisplay;
-        private Button pickDate;
+       // private Button pickDate;
         private DateTime date;
         private DatePickerDialog dialog;
         // const int DATE_DIALOG_ID = 0;

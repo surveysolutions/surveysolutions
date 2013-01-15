@@ -51,7 +51,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             Fragment fragment = null;
             if (position == screensHolder.Count && isRoot)
             {
-                fragment = StatisticsContentFragment.NewInstance(questionnaireId);
+                fragment = new StatisticsContentFragment(questionnaireId);
             }
             else
             {

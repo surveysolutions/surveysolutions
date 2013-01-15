@@ -12,7 +12,6 @@ using Android.Widget;
 using AndroidApp.Controls.Navigation;
 using AndroidApp.Extensions;
 using AndroidApp.ViewModel.Login;
-using AndroidApp.ViewModel.Model;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace AndroidApp

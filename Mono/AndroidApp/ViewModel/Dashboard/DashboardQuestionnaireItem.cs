@@ -7,17 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace AndroidApp.ViewModel.Model
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Commands;
+using Cirrious.MvvmCross.ViewModels;
+
+namespace AndroidApp.ViewModel.Dashboard
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Windows.Input;
-
-    using AndroidApp.ViewModel.QuestionnaireDetails;
-
-    using Cirrious.MvvmCross.Commands;
-    using Cirrious.MvvmCross.ViewModels;
-
     /// <summary>
     /// The dashboard questionnaire item.
     /// </summary>

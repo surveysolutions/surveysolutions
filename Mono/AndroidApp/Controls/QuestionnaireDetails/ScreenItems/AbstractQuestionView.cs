@@ -12,6 +12,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
@@ -90,6 +91,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             _templateId = Resource.Layout.AbstractQuestionView;
             Content = BindingActivity.BindingInflate(source, _templateId, this);
             this.Model = source;
+           
             Initialize();
           
             PostInit();
@@ -118,17 +120,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);*/
         //    tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
         //    etComments.Text = tvComments.Text = Model.Comments;
-            etComments.FocusChange += new EventHandler<FocusChangeEventArgs>(etComments_FocusChange);
+            etComments.ImeOptions = ImeAction.Done;
+            etComments.SetSelectAllOnFocus(true);
+            etComments.SetSingleLine(true);
+            etComments.EditorAction += etComments_EditorAction;
             this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            this.Clickable = true;
         }
-
-        void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
+        void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            if(!e.HasFocus)
-            {
-                etComments.Visibility = ViewStates.Gone;
-                tvComments.Visibility = ViewStates.Visible;
-            }
+            etComments.ClearFocus();
+            etComments.Visibility = ViewStates.Gone;
+            tvComments.Visibility = ViewStates.Visible;
+            InputMethodManager imm
+                = (InputMethodManager)this.Context.GetSystemService(
+                    Context.InputMethodService);
+            imm.HideSoftInputFromWindow(etComments.WindowToken, 0);
         }
         protected virtual void PostInit()
         {
@@ -162,6 +169,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             etComments.Visibility = ViewStates.Visible;
             tvComments.Visibility = ViewStates.Gone;
+            etComments.RequestFocus();
            
         }
 

@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Authorization;
-using AndroidApp.ViewModel.Model;
+using AndroidApp.ViewModel.Dashboard;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ViewModels;

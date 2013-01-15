@@ -1,21 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using AndroidApp.ViewModel.Input;
-using AndroidApp.ViewModel.Model;
 using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
 
-namespace AndroidApp.ViewModel.Factory
+namespace AndroidApp.ViewModel.Dashboard
 {
     public class DashboardFactory : IViewFactory<DashboardInput, DashboardModel>
     {

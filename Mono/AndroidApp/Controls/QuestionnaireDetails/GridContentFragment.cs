@@ -25,6 +25,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public GridContentFragment(QuestionnaireGridViewModel model)
             : base()
         {
+            this.questionViewFactory = new DefaultQuestionViewFactory();
             this.Model = model;
         }
 
@@ -155,7 +156,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                    return;*/
 
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(new DefaultQuestionViewFactory().CreateQuestionView(this.Activity, e.Model /*,
+            setAnswerPopup.SetView(this.questionViewFactory.CreateQuestionView(this.Activity, e.Model /*,
                                                                                        headerItem*/));
             //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
@@ -206,7 +207,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             tv.TextSize = 20;
             
         }
-
+        protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
 
        

@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.Navigation;
 using AndroidApp.Controls.QuestionnaireDetails;
+using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Core;
 using AndroidApp.Events;
 using AndroidApp.Extensions;
@@ -53,6 +54,7 @@ namespace AndroidApp
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
         }
 
+       
         protected ViewPager VpContent
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
