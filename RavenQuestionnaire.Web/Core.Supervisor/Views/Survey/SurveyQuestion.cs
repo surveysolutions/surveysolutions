@@ -31,6 +31,7 @@ namespace Core.Supervisor.Views.Survey
             this.SurveyPublicKey = doc.PublicKey;
             this.Featured = question.Featured;
             this.Mandatory = question.Mandatory;
+            this.Capital = question.Capital;
             this.PublicKey = question.PublicKey;
             this.Title = question.QuestionText;
             this.Answers = new List<SurveyAnswer> { new SurveyAnswer(question) };
@@ -65,5 +66,10 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets Answers.
         /// </summary>
         public List<SurveyAnswer> Answers { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Capital.
+        /// </summary>
+        public bool Capital { get; set; }
     }
 }

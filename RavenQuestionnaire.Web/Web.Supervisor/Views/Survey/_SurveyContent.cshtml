@@ -25,7 +25,7 @@
                 @screen.Title
             </h2>
             <div class="questions">
-                <table class="table table-striped table-bordered table-hover table-condensed">
+                <table class="table table-bordered table-condensed">
                     @if (screen.Captions.Count > 0)
                     {
                         <colgroup></colgroup>
@@ -52,11 +52,12 @@
                         @foreach (var question in screen.Questions)
                         {
                             <tr>
-                                <td class="question-title">@question.Title
+                                <td class="question-title @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">@question.Title
                                 </td>
                                 @foreach (var answer in question.Answers)
                                 {
-                                    <td>
+                                    <td class="@(answer.Enabled? "": "disabled") @(answer.Valid? "": "invalid") 
+                                     @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">
                                         <div class="cell-content">@answer.Answer &nbsp;</div>
                                     </td>
                                 }
