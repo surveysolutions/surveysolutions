@@ -166,6 +166,7 @@ namespace Core.Supervisor.Views.Survey
                     {
                         screen.Questions[i].Answers.Add(surveyScreen.Questions[i].Answers[0]);
                     }
+
                     screen.Captions.Add(surveyScreen.Captions[0]);
                 }
 
