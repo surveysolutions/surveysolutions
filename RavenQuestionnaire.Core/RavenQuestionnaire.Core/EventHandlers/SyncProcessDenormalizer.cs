@@ -7,17 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Core.Supervisor.Denormalizer
+using Main.Core.Documents;
+using Main.Core.Events.Synchronization;
+using Main.DenormalizerStorage;
+using Ncqrs.Eventing.ServiceModel.Bus;
+
+namespace RavenQuestionnaire.Core.EventHandlers
 {
-    using System;
-
-    using Main.Core.Documents;
-    using Main.Core.Events.Synchronization;
-    using Main.Core.View.CompleteQuestionnaire;
-    using Main.DenormalizerStorage;
-
-    using Ncqrs.Eventing.ServiceModel.Bus;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

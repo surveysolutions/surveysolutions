@@ -38,9 +38,8 @@ namespace Core.Supervisor.Tests
         public void HandleNewSynchronizationProcessCreated_EventIsCome_OneNewItemIsAddedToStorage()
         {
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
-            var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
+            var denormalizer = new SyncProcessDenormalizer(storage.Object);
 
             var evnt = new NewSynchronizationProcessCreated
                 {
@@ -70,9 +69,8 @@ namespace Core.Supervisor.Tests
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
             storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
 
-            var survey = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
 
-            var denormalizer = new SyncProcessDenormalizer(storage.Object, survey.Object);
+            var denormalizer = new SyncProcessDenormalizer(storage.Object);
 
             var evnt = new ProcessEnded { Status = EventState.Completed };
 
