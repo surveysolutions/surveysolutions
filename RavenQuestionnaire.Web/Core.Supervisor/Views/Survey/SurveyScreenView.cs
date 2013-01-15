@@ -119,13 +119,6 @@ namespace Core.Supervisor.Views.Survey
         /// </param>
         private void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, QuestionScope scope)
         {
-            
-            //if (currentGroup.PropagationPublicKey.HasValue)
-            //{
-            //    this.Group = new PropagatedGroupMobileView(doc, currentGroup, scope);
-            //    return;
-            //}
-
             this.Group = new CompleteGroupMobileView()
             {
                 PublicKey = currentGroup.PublicKey,
@@ -135,12 +128,12 @@ namespace Core.Supervisor.Views.Survey
                 Description = currentGroup.Description,
                 QuestionnairePublicKey = doc.PublicKey
             };
-            //this.Questions =
-            //    doc.QuestionHash.Questions.Where(q => q.QuestionScope <= scope).Select(
-            //        q => new CompleteQuestionView(doc, q)).ToList();
 
             var treeStack = new Stack<NodeWithLevel>();
             treeStack.Push(new NodeWithLevel(currentGroup, 0));
+
+            var screens = new List<SurveyScreen>();
+
             while (treeStack.Count > 0)
             {
                 NodeWithLevel node = treeStack.Pop();
@@ -151,58 +144,33 @@ namespace Core.Supervisor.Views.Survey
                 }
 
                 var screen = new SurveyScreen(doc, node);
-                this.Screens.Add(screen);
+                screens.Add(screen);
 
-                ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
-                for (int i = subGroups.Length - 1; i >= 0; i--)
+                var subGroups = node.Group.Children.OfType<ICompleteGroup>().Reverse().ToArray();
+                foreach (var completeGroup in subGroups.Where(completeGroup => completeGroup.HasVisibleItemsForScope(scope)))
                 {
-                    // questions exists, but they are hidden 
-                    if (!subGroups[i].HasVisibleItemsForScope(scope))
-                    {
-                        continue;
-                    }
-
-                    treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
+                    treeStack.Push(new NodeWithLevel(completeGroup, node.Level + 1));
                 }
             }
-            //foreach (IComposite composite in currentGroup.Children)
-            //{
-            //    if ((composite as ICompleteQuestion) != null)
-            //    {
-            //        var q = composite as ICompleteQuestion;
-            //        if (q.QuestionScope <= scope)
-            //        {
-            //            var question = new CompleteQuestionView(doc, q);
-            //            if (q.QuestionScope == scope)
-            //            {
-            //                question.Editable = true;
-            //            }
 
-            //            this.Group.Children.Add(question);
-            //        }
-            //    }
-            //    else
-            //    {
-            //        var g = composite as CompleteGroup;
-            //        if (g.Propagated == Propagate.None)
-            //        {
-            //            this.Group.Children.Add(new CompleteGroupMobileView(doc, g, scope));
-            //        }
-            //        else if (!g.PropagationPublicKey.HasValue)
-            //        {
-            //            var propagatedGroup = new CompleteGroupMobileView(doc, g, scope);
-            //            this.Group.Children.Add(propagatedGroup);
-            //            var subGroups = currentGroup.Children.OfType<ICompleteGroup>().Where(
-            //                p =>
-            //                p.PublicKey == g.PublicKey && p.PropagationPublicKey.HasValue);
-            //            foreach (
-            //                ICompleteGroup completeGroup in subGroups)
-            //            {
-            //                propagatedGroup.Children.Add(new PropagatedGroupMobileView(doc, completeGroup, scope));
-            //            }
-            //        }
-            //    }
-            //}
+            var groupedScreens = screens.GroupBy(s => s.Key.PublicKey)
+                .ToDictionary(g => g.Key, g => g.ToList())
+                .Values.ToList();
+
+            foreach (var screenList in groupedScreens)
+            {
+                var screen = screenList.First();
+                foreach (var surveyScreen in screenList.Skip(1))
+                {
+                    for (int i = 0; i < surveyScreen.Questions.Count; i++)
+                    {
+                        screen.Questions[i].Answers.Add(surveyScreen.Questions[i].Answers[0]);
+                    }
+                    screen.Captions.Add(surveyScreen.Captions[0]);
+                }
+
+                this.Screens.Add(screen);
+            }
         }
 
         #endregion

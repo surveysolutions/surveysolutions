@@ -14,6 +14,7 @@ namespace Core.Supervisor.Views.Survey
     using System.Linq;
 
     using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Utility;
@@ -41,9 +42,20 @@ namespace Core.Supervisor.Views.Survey
 
             this.Title = node.Group.Title;
 
+            this.Captions = new List<string>();
+            if (node.Group.PropagationPublicKey.HasValue)
+            {
+                this.Captions.Add(string.Concat(
+                    doc.GetPropagatedGroupsByKey(node.Group.PropagationPublicKey.Value)
+                    .SelectMany(q => q.Children)
+                    .OfType<ICompleteQuestion>()
+                    .Where(q => q.Capital)
+                    .Select(q => q.GetAnswerString() + " ")).Trim());
+            }
+
             this.Questions = node.Group.Children.OfType<ICompleteQuestion>()
                 .Where(q => q.QuestionScope <= QuestionScope.Supervisor)
-                .Select(q => new CompleteQuestionView(doc, q))
+                .Select(q => new SurveyQuestion(doc, q))
                 .ToList();
         }
 
@@ -64,6 +76,11 @@ namespace Core.Supervisor.Views.Survey
         /// </summary>
         public string Title { get; set; }
 
-        public List<CompleteQuestionView> Questions { get; set; }
+        /// <summary>
+        /// Gets or sets Questions.
+        /// </summary>
+        public List<SurveyQuestion> Questions { get; set; }
+
+        public List<string> Captions { get; set; }
     }
 }

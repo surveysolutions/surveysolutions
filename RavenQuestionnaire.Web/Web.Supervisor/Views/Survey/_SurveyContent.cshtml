@@ -14,40 +14,68 @@
 }
 <div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page">
     <div class="title">
-        @RenderNavigation(Model.Navigation.NavigationContent)
     </div>
     <div class="body">
         @foreach (var screen in Model.Screens)
         {
+            if (screen.Questions.Count > 0)
+            {
+                
             <h2 class="heading">
                 @screen.Title
             </h2>
-            if (screen.Questions.Count > 0)
-            {
-            <ul id="survey_content" class="questions">
-                @foreach (var question in screen.Questions)
-                {
-                    <li>
-                        <div class="line-wrap">
-                            <div class="div-table">
-                                <div class="div-row">
-                                    <div class="div-cell">
-                                        <div class="cell-content">@question.Title</div>
-                                    </div>
-                                    <div class="div-cell">
-                                        <div class="cell-content">@question.Answer &nbsp;</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                }
-            </ul>
+            <div class="questions">
+                <table class="table table-striped table-bordered table-hover table-condensed">
+                    @if (screen.Captions.Count > 0)
+                    {
+                        <colgroup></colgroup>
+                        foreach (var caption in screen.Captions)
+                        {
+                        <colgroup class="slim" width="@((100 - 40) / screen.Captions.Count)%"></colgroup>
+                        }
+                        <thead>
+                            <tr>
+                                <th></th>
+                                @foreach (var caption in screen.Captions)
+                                {
+                                    <th>@caption</th>
+                                }
+                            </tr>
+                        </thead>
+                    }
+                    else
+                    {
+                        <colgroup></colgroup>
+                        <colgroup></colgroup>
+                    }
+                    <tbody>
+                        @foreach (var question in screen.Questions)
+                        {
+                            <tr>
+                                <td class="question-title">@question.Title
+                                </td>
+                                @foreach (var answer in question.Answers)
+                                {
+                                    <td>
+                                        <div class="cell-content">@answer.Answer &nbsp;</div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
             }
         }
     </div>
     <div class="bottom">
         <div class="inner">
+            <div class="btn-group pull-right">
+                <a href="#" class="btn btn-mini"><i class="icon-flag"></i>flagged</a> <a href="#"
+                    class="btn btn-mini"><i class="icon-ok"></i>answered</a> <a href="#" class="btn btn-mini">
+                        <i class="icon-warning-sign"></i>invalid</a> <a href="#" class="btn btn-mini"><i
+                            class="icon-pencil"></i>supervisor's</a>
+            </div>
         </div>
     </div>
 </div>
