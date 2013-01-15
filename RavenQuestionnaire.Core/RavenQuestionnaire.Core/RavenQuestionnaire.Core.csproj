@@ -127,6 +127,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseInputModel.cs" />
     <Compile Include="Views\Assignment\AssigmentBrowseItem.cs" />

@@ -105,8 +105,9 @@ namespace DataEntryClient.SycProcess
         /// <param name="client">
         /// The client.
         /// </param>
-        protected new void ProcessEvents(IEventPipe client)
+        protected override ErrorCodes ProcessEvents(IEventPipe client)
         {
+            ErrorCodes returnCode = ErrorCodes.Fail;
             var archive = new List<AggregateRootEvent>();
             var events = this.EventStore.ReadEvents().ToList();
             if (this.TemplateGuid != null)
@@ -130,11 +131,11 @@ namespace DataEntryClient.SycProcess
             {
                 this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, command.EventChuncks[i].EventChunckPublicKey, EventState.InProgress));
                 var message = new EventSyncMessage { Command = eventsList[i].ToArray(), SynchronizationKey = this.ProcessGuid };
-                ErrorCodes returnCode = client.Process(message);
+                returnCode = client.Process(message);
                 this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, command.EventChuncks[i].EventChunckPublicKey, returnCode == ErrorCodes.None ? EventState.Completed : EventState.Error));
             }
 
-            this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
+            return returnCode;
         }
 
     }
