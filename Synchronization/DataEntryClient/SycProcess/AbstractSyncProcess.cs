@@ -189,7 +189,7 @@ namespace DataEntryClient.SycProcess
         /// <returns>
         /// The process events.
         /// </returns>
-        protected ErrorCodes ProcessEvents(IEventPipe client)
+        protected virtual ErrorCodes ProcessEvents(IEventPipe client)
         {
             ErrorCodes returnCode = ErrorCodes.None;
             var events = this.EventStore.ReadEventsByChunks().ToList();
