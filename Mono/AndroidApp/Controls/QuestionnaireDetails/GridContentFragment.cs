@@ -12,10 +12,12 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.Roster;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
+using AndroidApp.Core;
 using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Java.Interop;
 using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -23,12 +25,17 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class GridContentFragment : Fragment
     {
         public GridContentFragment(QuestionnaireGridViewModel model)
+            : this()
+        {
+            
+            this.Model = model;
+        }
+        public GridContentFragment()
             : base()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
-            this.Model = model;
+            this.RetainInstance = true;
         }
-
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -63,6 +70,28 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.AddView(tl);
             sv.AddView(ll);
             return sv;
+        }
+        [Export]
+        public override void OnViewStateRestored(Bundle p0)
+        {
+            if (Model != null)
+            {
+                base.OnViewStateRestored(p0);
+                return;
+            }
+            var modelWrapped = p0.GetParcelable("model") as ParcelableWrapper;
+            if (modelWrapped == null)
+            {
+                base.OnViewStateRestored(p0);
+                return;
+            }
+            Model = modelWrapped.Value as QuestionnaireGridViewModel;
+        }
+        [Export]
+        public override void OnSaveInstanceState(Bundle p0)
+        {
+            base.OnSaveInstanceState(p0);
+            p0.PutParcelable("model", new ParcelableWrapper(Model));
         }
         protected void CreateHeader(LayoutInflater inflater, TableLayout tl)
         {

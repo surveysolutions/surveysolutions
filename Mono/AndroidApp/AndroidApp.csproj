@@ -85,6 +85,7 @@
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Json.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="Mono.Android.Support.v4" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -113,6 +114,8 @@
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
     <Compile Include="Controls\Statistics\AnsweredQuestionsView.cs" />
     <Compile Include="Controls\Statistics\InvalidQuestionsView.cs" />
+    <Compile Include="Core\CAPIParcelableCreator.cs" />
+    <Compile Include="Core\ParcelableWrapper.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />

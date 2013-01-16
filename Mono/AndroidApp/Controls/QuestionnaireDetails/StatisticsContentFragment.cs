@@ -10,7 +10,10 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.Statistics;
+using AndroidApp.Core;
+using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.Statistics;
+using Java.Interop;
 using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -21,12 +24,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected AlertDialog answeredDilog;
         protected AlertDialog invaliDilog;
         public StatisticsContentFragment(Guid questionnaireKey)
-            : base()
+            : this()
         {
             this.Model =
                 CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
         }
-
+        public StatisticsContentFragment()
+            : base()
+        {
+            this.RetainInstance = true;
+        }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -86,7 +93,28 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-
+        [Export]
+        public override void OnViewStateRestored(Bundle p0)
+        {
+            if (Model != null)
+            {
+                base.OnViewStateRestored(p0);
+                return;
+            }
+            var modelWrapped = p0.GetParcelable("model") as ParcelableWrapper;
+            if (modelWrapped == null)
+            {
+                base.OnViewStateRestored(p0);
+                return;
+            }
+            Model = modelWrapped.Value as StatisticsViewModel;
+        }
+        [Export]
+        public override void OnSaveInstanceState(Bundle p0)
+        {
+            base.OnSaveInstanceState(p0);
+            p0.PutParcelable("model", new ParcelableWrapper(Model));
+        }
         void btnUnanswered_Click(object sender, EventArgs e)
         {
         

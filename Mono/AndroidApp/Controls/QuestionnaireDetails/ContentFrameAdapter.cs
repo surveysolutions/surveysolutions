@@ -62,7 +62,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment = ScreenContentFragment.NewInstance(screenModel);
+                    fragment =new  ScreenContentFragment(screenModel);
                     ((ScreenContentFragment) fragment).ScreenChanged +=
                         new EventHandler<ScreenChangedEventArgs>(fragment_ScreenChanged);
                 }

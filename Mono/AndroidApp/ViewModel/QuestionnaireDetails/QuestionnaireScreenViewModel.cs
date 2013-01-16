@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Interfaces.ViewModels;
 using Cirrious.MvvmCross.Interfaces.Views;
+using Java.IO;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
@@ -47,8 +48,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
-       
 
-      
     }
 }
