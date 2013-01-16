@@ -6,26 +6,16 @@
 //   The mvc application.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Web
 {
     using System;
     using System.Web;
-    using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
-
-    using Main.Core;
-
-    using Ninject;
 
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using Raven.Client.Document;
-
-    using RavenQuestionnaire.Web.Controllers;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -35,6 +25,20 @@ namespace RavenQuestionnaire.Web
     /// </summary>
     public class MvcApplication : HttpApplication
     {
+        #region Fields
+
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The correctly initialyzed.
+        /// </summary>
+        private bool correctlyInitialyzed;
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -45,7 +49,7 @@ namespace RavenQuestionnaire.Web
         /// </param>
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-             filters.Add(new HandleErrorAttribute());
+            filters.Add(new HandleErrorAttribute());
         }
 
         /// <summary>
@@ -59,17 +63,15 @@ namespace RavenQuestionnaire.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
-                "Default",
+                "Default", 
                 // Route name
-                "{controller}/{action}/{id}",
+                "{controller}/{action}/{id}", 
                 // URL with parameters
-                new {controller = "Questionnaire", action = "Index", id = UrlParameter.Optional} // Parameter defaults
+                new { controller = "Questionnaire", action = "Index", id = UrlParameter.Optional } // Parameter defaults
                 );
         }
 
         #endregion
-
-        #region Methods
 
         /* /// <summary>
         /// The application_ error.
@@ -80,46 +82,74 @@ namespace RavenQuestionnaire.Web
             Logger logger = LogManager.GetCurrentClassLogger();
             logger.Fatal(lastException);
         }*/
+        #region Methods
 
         /// <summary>
         /// The application_ start.
         /// </summary>
         protected void Application_Start()
         {
+            AppDomain current = AppDomain.CurrentDomain;
+            current.UnhandledException += this.CurrentUnhandledException;
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
+            try
+            {
+                SuccessMarker.Start(KernelLocator.Kernel);
+                this.correctlyInitialyzed = true;
+            }
+            catch (Exception e)
+            {
+                this.logger.Fatal("Initialization failed", e);
+                this.correctlyInitialyzed = false;
+                this.BeginRequest += (sender, args) =>
+                    {
+                        base.Response.Write("Sorry, Application cann't handle his!");
+                        this.CompleteRequest();
+                    };
+                throw;
+            }
+
             // maybe better to move outside this class
-            //NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
-            //RegisterGlobalFilters(GlobalFilters.Filters);
-//            RegisterRoutes(RouteTable.Routes);
-//
-//            ViewEngines.Engines.Clear();
-//            ViewEngines.Engines.Add(new RazorViewEngine());
-//            ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
+            // NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
+            // RegisterGlobalFilters(GlobalFilters.Filters);
+            // RegisterRoutes(RouteTable.Routes);
+            // ViewEngines.Engines.Clear();
+            // ViewEngines.Engines.Add(new RazorViewEngine());
+            // ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-        /// <summary>
-        /// The host services.
-        /// </summary>
-        /*protected void HostServices()
+        /* protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            bool isDiscovereble;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["WCFVisible"], out isDiscovereble))
-            {
-                return;
-            }
 
-            if (!isDiscovereble)
+            if (!correctlyInitialyzed)
             {
-                return;
-            }
+                base.Response.Write("Sorry, Application cann't handle his!");
 
-            // i need to ping wcf server to make it visible or install app fabric
+                base.CompleteRequest();
+            }
+            
+
+        }*/
+
+        // <summary>
+        /// <summary>
+        /// The current unhandled exception.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            this.logger.Fatal(e.ExceptionObject);
         }
-        */
 
         #endregion
     }

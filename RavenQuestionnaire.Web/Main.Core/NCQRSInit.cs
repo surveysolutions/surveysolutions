@@ -71,26 +71,17 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer(IKernel kernel)
         {
-            /*var store = kernel.Get<DocumentStore>();
-            store.Conventions = new DocumentConvention
-                {
-                    JsonContractResolver = new PropertiesOnlyContractResolver(),
-                    FindTypeTagName = x => "Events"
-                    //NewDocumentETagGenerator = GenerateETag
-                };
-*/
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
             {
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
-            // convertion is not great and clear but NcqrsEnvironment is still untouchable
-            var myEventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); // as MsSqlServerEventStore;
+            var myEventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); 
 
             if (myEventStore == null)
             {
-                throw new Exception("IStreamableEventStore is not correct.");
+                throw new Exception("IStreamableEventStore is not correctly initialized.");
             }
 
             // store.CreateIndex();

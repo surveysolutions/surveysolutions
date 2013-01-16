@@ -1,16 +1,8 @@
-using System.ServiceModel;
-using System.Threading;
 using System.Web.Configuration;
 using System.Web.Mvc;
 using Main.Core;
 using Questionnaire.Core.Web.Binding;
-using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Security;
-using Raven.Client;
-using Raven.Client.Document;
-using RavenQuestionnaire.Core;
-using Main.Core.Events;
 using RavenQuestionnaire.Web.Injections;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(RavenQuestionnaire.Web.App_Start.NinjectWebCommon), "Start")]
@@ -57,22 +49,22 @@ namespace RavenQuestionnaire.Web.App_Start
         {
             bool isEmbeded;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
+            {
                 isEmbeded = false;
-            string storePath;
-            if (isEmbeded)
-                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
-            else
-                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            }
+
+            string storePath = isEmbeded
+                                   ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
+                                   : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
             var kernel = new StandardKernel(new MainCoreRegistry(storePath, isEmbeded));
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-            //   kernel.Bind<MembershipProvider>().ToConstant(Membership.Provider);
-            //  kernel.Inject(Membership.Provider);
+
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
-            SuccessMarker.Start(kernel);
+            // SuccessMarker.Start(kernel);
             return kernel;
         }
       

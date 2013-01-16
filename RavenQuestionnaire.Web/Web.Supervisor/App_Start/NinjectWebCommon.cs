@@ -1,20 +1,14 @@
 using System;
-using System.ServiceModel;
-using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 using System.Web.Mvc;
-using Core.Supervisor.Synchronization;
 using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
-using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Security;
 
-using Main.Core.Events;
 
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
@@ -68,7 +62,7 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
-            SuccessMarker.Start(kernel);
+            // SuccessMarker.Start(kernel);
             return kernel;
         }
 

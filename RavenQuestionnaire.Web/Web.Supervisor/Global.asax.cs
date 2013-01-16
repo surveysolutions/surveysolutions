@@ -6,7 +6,6 @@
 //   The mvc application.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor
 {
     using System;
@@ -15,6 +14,8 @@ namespace Web.Supervisor
     using System.Web.Routing;
 
     using NLog;
+
+    using Questionnaire.Core.Web.Helpers;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -30,6 +31,11 @@ namespace Web.Supervisor
         /// The logger.
         /// </summary>
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        /// <summary>
+        /// The correctly initialyzed.
+        /// </summary>
+        private bool correctlyInitialyzed;
 
         #endregion
 
@@ -87,6 +93,9 @@ namespace Web.Supervisor
         /// </summary>
         protected void Application_Start()
         {
+            AppDomain current = AppDomain.CurrentDomain;
+            current.UnhandledException += this.CurrentUnhandledException;
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
@@ -96,8 +105,22 @@ namespace Web.Supervisor
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
 
-            AppDomain current = AppDomain.CurrentDomain;
-            current.UnhandledException += this.CurrentUnhandledException;
+            try
+            {
+                SuccessMarker.Start(KernelLocator.Kernel);
+                this.correctlyInitialyzed = true;
+            }
+            catch (Exception e)
+            {
+                this.logger.Fatal("Initialization failed", e);
+                this.correctlyInitialyzed = false;
+                this.BeginRequest += (sender, args) =>
+                    {
+                        base.Response.Write("Sorry, Application cann't handle your request!");
+                        this.CompleteRequest();
+                    };
+                throw;
+            }
         }
 
         /// <summary>

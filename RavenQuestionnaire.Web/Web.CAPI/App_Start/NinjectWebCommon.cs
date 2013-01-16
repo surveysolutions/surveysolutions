@@ -109,7 +109,7 @@ namespace Web.CAPI.App_Start
             kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
 
             NCQRSInit.Init(kernel);
-            SuccessMarker.Start(kernel);
+            // SuccessMarker.Start(kernel);
             return kernel;
         }
 
