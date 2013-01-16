@@ -236,6 +236,7 @@ RavenQuestionnaire.Web/Main.Core.Tests/obj/*
 *.StyleCop
 RavenQuestionnaire.Web/Main.Synchronization/bin/*
 RavenQuestionnaire.Web/Main.Synchronization/obj/*
+*/StyleCop.Cache
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
