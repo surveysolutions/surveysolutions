@@ -6,32 +6,28 @@
 //   The ncqrs init.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Commands;
-using Main.Core.Services;
-using Main.DenormalizerStorage;
-using Ncqrs;
-using Ncqrs.Commanding;
-using Ncqrs.Commanding.CommandExecution.Mapping;
-using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-using Ncqrs.Commanding.ServiceModel;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Eventing.Storage;
-using Ncqrs.Eventing.Storage.RavenDB;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB;
-using Ninject;
-using Ninject.Parameters;
-using Ninject.Planning.Bindings;
-using Raven.Client.Document;
-
 namespace Main.Core
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Commands;
+    using Main.Core.Services;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.CommandExecution.Mapping;
+    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
+    using Ncqrs.Commanding.ServiceModel;
+    using Ncqrs.Eventing.ServiceModel.Bus;
+    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Eventing.Storage;
+    using Ncqrs.Eventing.Storage.RavenDB;
+
+    using Ninject;
+
+    using Raven.Client.Document;
+
     /// <summary>
     /// The ncqrs init.
     /// </summary>
@@ -47,7 +43,10 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
-            NcqrsEnvironment.SetDefault(InitializeEventStore(kernel.Get<DocumentStore>()));
+            var store = InitializeEventStore(kernel.Get<DocumentStore>());
+
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
@@ -65,45 +64,50 @@ namespace Main.Core
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
+        /// <param name="kernel">
+        /// The kernel.
+        /// </param>
         /// <exception cref="Exception">
         /// </exception>
         public static void RebuildReadLayer(IKernel kernel)
         {
-            var store = kernel.Get<DocumentStore>();
+            /*var store = kernel.Get<DocumentStore>();
             store.Conventions = new DocumentConvention
                 {
                     JsonContractResolver = new PropertiesOnlyContractResolver(),
                     FindTypeTagName = x => "Events"
                     //NewDocumentETagGenerator = GenerateETag
                 };
-
+*/
             var myEventBus = NcqrsEnvironment.Get<IEventBus>();
             if (myEventBus == null)
             {
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>() as RavenDBEventStore; // as MsSqlServerEventStore;
+            // convertion is not great and clear but NcqrsEnvironment is still untouchable
+            var myEventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); // as MsSqlServerEventStore;
 
             if (myEventStore == null)
             {
-                throw new Exception("IEventStore is not correct.");
+                throw new Exception("IStreamableEventStore is not correct.");
             }
-            store.CreateIndex();
-            var myEvents = store.GetAllEvents();
-            myEventBus.Publish(myEvents);
+
+            // store.CreateIndex();
+            // var myEvents = store.GetAllEvents();
+            myEventBus.Publish(myEventStore.GetEventStream());
         }
 
         #endregion
 
         #region Methods
 
-
-        
-
         /// <summary>
         /// The initialize command service.
         /// </summary>
+        /// <param name="commandSupplier">
+        /// The command Supplier.
+        /// </param>
         /// <returns>
         /// The Ncqrs.Commanding.ServiceModel.ICommandService.
         /// </returns>
@@ -112,14 +116,13 @@ namespace Main.Core
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
 
-            foreach (var type in commandSupplier.GetCommandList())
+            foreach (Type type in commandSupplier.GetCommandList())
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
             return service;
         }
-
 
         /// <summary>
         /// The initialize event store.
@@ -130,11 +133,11 @@ namespace Main.Core
         /// <returns>
         /// The Ncqrs.Eventing.Storage.IEventStore.
         /// </returns>
-        private static IEventStore InitializeEventStore(DocumentStore store)
+        private static IStreamableEventStore InitializeEventStore(DocumentStore store)
         {
-            var eventStore = new RavenDBEventStore(store);
-            return eventStore;
+            return new RavenDBEventStore(store);
         }
+
         /// <summary>
         /// The is i event handler interface.
         /// </summary>
@@ -146,7 +149,7 @@ namespace Main.Core
         /// </returns>
         private static bool IsIEventHandlerInterface(Type type)
         {
-            return type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof (IEventHandler<>);
+            return type.IsInterface && type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEventHandler<>);
         }
 
         /// <summary>
@@ -160,17 +163,14 @@ namespace Main.Core
         /// </param>
         private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
-            IEnumerable<object> handlers =
-                kernel.GetAll(typeof (IEventHandler<>)).Distinct();
+            IEnumerable<object> handlers = kernel.GetAll(typeof(IEventHandler<>)).Distinct();
             foreach (object handler in handlers)
             {
-                var ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
+                IEnumerable<Type> ieventHandlers = handler.GetType().GetInterfaces().Where(IsIEventHandlerInterface);
                 foreach (Type ieventHandler in ieventHandlers)
                 {
-
                     bus.RegisterHandler(handler, ieventHandler.GetGenericArguments()[0]);
                 }
-
             }
         }
 

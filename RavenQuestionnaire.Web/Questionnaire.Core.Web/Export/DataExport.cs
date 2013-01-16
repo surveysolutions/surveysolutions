@@ -22,6 +22,8 @@ namespace Questionnaire.Core.Web.Export
     using Ninject;
     using Ninject.Parameters;
 
+    using SynchronizationMessages.Export;
+
     /// <summary>
     /// The data export.
     /// </summary>

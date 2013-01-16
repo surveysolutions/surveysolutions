@@ -33,7 +33,7 @@ namespace DataEntryClient.SycProcessFactory
         /// The parent sync key.
         /// </param>
         /// <returns>
-        /// Sync procces object
+        /// The <see cref="ISyncProcess"/>.
         /// </returns>
         ISyncProcess GetProcess(SyncProcessType type, Guid syncKey, Guid? parentSyncKey);
 

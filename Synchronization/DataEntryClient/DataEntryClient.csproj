@@ -88,6 +88,7 @@
     <Compile Include="SycProcess\Interfaces\IUsbSyncProcess.cs" />
     <Compile Include="SycProcessFactory\SyncProcessFactory.cs" />
     <Compile Include="SycProcessFactory\SyncProcessType.cs" />
+    <Compile Include="SycProcess\ITemplateExportSyncProcess.cs" />
     <Compile Include="SycProcess\TemplateExportSyncProcess.cs" />
     <Compile Include="SycProcess\WirelessSyncProcess.cs" />
     <Compile Include="SycProcess\AbstractSyncProcess.cs" />
@@ -121,7 +122,7 @@
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
+      <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">

@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IEventStreamReader.cs" company="">
-//   
+// <copyright file="IEventStreamReader.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Defines the IEventSync type.
@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Events
 {
-    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -26,15 +25,15 @@ namespace Main.Core.Events
         /// </returns>
         IEnumerable<AggregateRootEvent> ReadEvents();
 
+        #endregion
+
         ///// <summary>
         ///// The write events.
         ///// </summary>
         ///// <param name="stream">
         ///// The stream.
         ///// </param>
-        //void WriteEvents(IEnumerable<AggregateRootEvent> stream);
-
-        #endregion
+        // void WriteEvents(IEnumerable<AggregateRootEvent> stream);
 
         //// AggregateRootEventStream ReadEventStream(Guid eventSurceId);
         //// IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();

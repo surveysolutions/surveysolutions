@@ -1,54 +1,143 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Raven.Client;
-using Raven.Client.Document;
-
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="RavenDBEventStore.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The raven db event store.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
-    public class RavenDBEventStore : IEventStore
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
+
+    using Raven.Client;
+    using Raven.Client.Document;
+
+    using ConcurrencyException = Ncqrs.Eventing.Storage.ConcurrencyException;
+
+    /// <summary>
+    /// The raven DB event store.
+    /// </summary>
+    public class RavenDBEventStore : IStreamableEventStore
     {
-        private bool useAsyncSave = false;//research. in the embedded mode true is not valid  
+        #region Fields
 
-        protected readonly IDocumentStore _documentStore;
+        /// <summary>
+        /// The _document store.
+        /// </summary>
+        protected readonly IDocumentStore DocumentStore;
 
+        /// <summary>
+        /// The use async save.
+        /// </summary>
+        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.  
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
+        /// </summary>
+        /// <param name="ravenUrl">
+        /// The raven url.
+        /// </param>
         public RavenDBEventStore(string ravenUrl)
         {
-            _documentStore = new DocumentStore
-            {
-                Url = ravenUrl,                
-                Conventions = CreateConventions()
-            }.Initialize(); 
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RavenDBEventStore"/> class.
+        /// </summary>
+        /// <param name="externalDocumentStore">
+        /// The external document store.
+        /// </param>
         public RavenDBEventStore(DocumentStore externalDocumentStore)
         {
             externalDocumentStore.Conventions = CreateConventions();
-            _documentStore = externalDocumentStore;            
+            this.DocumentStore = externalDocumentStore;
         }
 
-        private static DocumentConvention CreateConventions()
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The to committed event.
+        /// </summary>
+        /// <param name="x">
+        /// The x.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CommittedEvent"/>.
+        /// </returns>
+        public static CommittedEvent ToCommittedEvent(StoredEvent x)
         {
-            return new DocumentConvention
-            {
-                JsonContractResolver = new PropertiesOnlyContractResolver(),
-                FindTypeTagName = x => "Events"
-                //NewDocumentETagGenerator = GenerateETag
-            };
+            return new CommittedEvent(
+                x.CommitId, x.EventIdentifier, x.EventSourceId, x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
         }
 
-        private static Guid? GenerateETag(object entity)
+        /// <summary>
+        /// The get event stream.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public IEnumerable<CommittedEvent> GetEventStream()
         {
-            var sourcedEvent = entity as StoredEvent;
-            if (sourcedEvent != null)
+            return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+        }
+
+        /// <summary>
+        /// The get stream by chunk.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        private IEnumerable<IEnumerable<StoredEvent>> GetStreamByChunk()
+        {
+            const int PageSize = 1024;
+            var page = 0;
+
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                return Guid.NewGuid();
+                while (true)
+                {
+                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * PageSize).Take(PageSize);
+
+                    if (!chunk.Any())
+                    {
+                        yield break;
+                    }
+
+                    page++;
+                    yield return chunk.ToList();
+                }
             }
-            return null;
         }
-       
 
+        /// <summary>
+        /// The read from.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="minVersion">
+        /// The min version.
+        /// </param>
+        /// <param name="maxVersion">
+        /// The max version.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CommittedEventStream"/>.
+        /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             /*  using (var session = _documentStore.OpenSession())
@@ -59,45 +148,49 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     .Where(x => x.EventSequence >= minVersion)
                     .Where(x => x.EventSequence <= maxVersion)
                     .ToList().OrderBy(x => x.EventSequence);*/
+            IOrderedEnumerable<StoredEvent> storedEvents =
+                this.AccumulateEvents(
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(x => x.EventSequence);
+            return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
 
-            var storedEvents =
-                AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).
-                    OrderBy(x => x.EventSequence);
-            return new CommittedEventStream(id, storedEvents.Select(ToComittedEvent));
             // }
         }
 
-        public static CommittedEvent ToComittedEvent(StoredEvent x)
-        {
-            return new CommittedEvent(x.CommitId, x.EventIdentifier, x.EventSourceId,x.EventSequence, x.EventTimeStamp, x.Data, x.Version);
-        }
-
+        /// <summary>
+        /// The store.
+        /// </summary>
+        /// <param name="eventStream">
+        /// The event stream.
+        /// </param>
+        /// <exception cref="Storage.ConcurrencyException">
+        /// </exception>
         public void Store(UncommittedEventStream eventStream)
         {
             try
             {
-                if (useAsyncSave)
+                if (this.useAsyncSave)
                 {
-                    using (var session = _documentStore.OpenAsyncSession())
+                    using (IAsyncDocumentSession session = this.DocumentStore.OpenAsyncSession())
                     {
                         session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (var uncommittedEvent in eventStream)
+                        foreach (UncommittedEvent uncommittedEvent in eventStream)
                         {
                             session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                         }
+
                         session.SaveChangesAsync();
                     }
                 }
                 else
                 {
-                    using (var session = _documentStore.OpenSession())
+                    using (IDocumentSession session = this.DocumentStore.OpenSession())
                     {
                         session.Advanced.UseOptimisticConcurrency = true;
-                        foreach (var uncommittedEvent in eventStream)
+                        foreach (UncommittedEvent uncommittedEvent in eventStream)
                         {
                             session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                         }
+
                         session.SaveChanges();
                     }
                 }
@@ -111,51 +204,49 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     sourceId = eventStream.SourceId;
                     version = eventStream.Sources.Single().CurrentVersion;
                 }
+
                 throw new ConcurrencyException(sourceId, version);
             }
         }
 
-        private static StoredEvent ToStoredEvent(Guid commitId, UncommittedEvent uncommittedEvent)
-        {
-            return new StoredEvent
-                       {
-                           Id = uncommittedEvent.EventSourceId + "/" + uncommittedEvent.EventSequence,
-                           EventIdentifier = uncommittedEvent.EventIdentifier,
-                           EventTimeStamp = uncommittedEvent.EventTimeStamp,
-                           Version = uncommittedEvent.EventVersion,
-                           CommitId = commitId,
-                           Data = uncommittedEvent.Payload,
-                           EventSequence = uncommittedEvent.EventSequence,
-                           EventSourceId = uncommittedEvent.EventSourceId,
-                       };
-        }
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Reads all committed events from storage. 
         /// </summary>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <param name="query">
+        /// The query.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
         protected virtual IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
-            IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable(); 
+            IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable();
             int maxPageSize = 1024;
             int page = 0;
             while (true)
             {
-                using (var session = _documentStore.OpenSession())
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    var chunk =
+                    IQueryable<StoredEvent> chunk =
                         session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * maxPageSize)
                             .Take(maxPageSize).Where(query);
                     if (!chunk.Any())
+                    {
                         break;
+                    }
 
                     result = result.Concat(chunk);
                     page++;
                 }
             }
+
             return result.OrderBy(x => x.EventSequence);
-          /*  List<StoredEvent> retval = new List<StoredEvent>();
+
+            /*  List<StoredEvent> retval = new List<StoredEvent>();
             int maxPageSize = 1024;
             int page = 0;
             while (true)
@@ -177,7 +268,73 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
 
             return retval.OrderBy(x=>x.EventSequence);*/
-
         }
+
+        /// <summary>
+        /// The create conventions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="DocumentConvention"/>.
+        /// </returns>
+        private static DocumentConvention CreateConventions()
+        {
+            return new DocumentConvention
+                {
+                    JsonContractResolver = new PropertiesOnlyContractResolver(), 
+                    FindTypeTagName = x => "Events"
+                    
+                    
+                    // NewDocumentETagGenerator = GenerateETag
+                };
+        }
+
+        /*/// <summary>
+        /// The generate e tag.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid?"/>.
+        /// </returns>
+        private static Guid? GenerateETag(object entity)
+        {
+            var sourcedEvent = entity as StoredEvent;
+            if (sourcedEvent != null)
+            {
+                return Guid.NewGuid();
+            }
+
+            return null;
+        }*/
+
+        /// <summary>
+        /// The to stored event.
+        /// </summary>
+        /// <param name="commitId">
+        /// The commit id.
+        /// </param>
+        /// <param name="uncommittedEvent">
+        /// The uncommitted event.
+        /// </param>
+        /// <returns>
+        /// The <see cref="StoredEvent"/>.
+        /// </returns>
+        private static StoredEvent ToStoredEvent(Guid commitId, UncommittedEvent uncommittedEvent)
+        {
+            return new StoredEvent
+                {
+                    Id = uncommittedEvent.EventSourceId + "/" + uncommittedEvent.EventSequence, 
+                    EventIdentifier = uncommittedEvent.EventIdentifier, 
+                    EventTimeStamp = uncommittedEvent.EventTimeStamp, 
+                    Version = uncommittedEvent.EventVersion, 
+                    CommitId = commitId, 
+                    Data = uncommittedEvent.Payload, 
+                    EventSequence = uncommittedEvent.EventSequence, 
+                    EventSourceId = uncommittedEvent.EventSourceId, 
+                };
+        }
+
+        #endregion
     }
 }

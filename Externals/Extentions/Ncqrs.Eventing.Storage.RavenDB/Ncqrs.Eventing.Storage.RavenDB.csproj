@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IStreamableEventStore.cs" />
     <Compile Include="PropertiesOnlyContractResolver.cs" />
     <Compile Include="RavenDBEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

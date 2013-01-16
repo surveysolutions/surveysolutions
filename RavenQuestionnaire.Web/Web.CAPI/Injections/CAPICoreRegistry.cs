@@ -6,7 +6,6 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.CAPI.Injections
 {
     using System.Collections.Generic;
@@ -14,14 +13,14 @@ namespace Web.CAPI.Injections
     using System.Reflection;
 
     using Core.CAPI.Synchronization;
-using Core.CAPI.Views;
+    using Core.CAPI.Views;
 
     using DataEntryClient.SycProcessFactory;
 
     using Main.Core;
     using Main.Core.Events;
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
-    using Questionnaire.Core.Web.Export;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+
     using Questionnaire.Core.Web.Security;
 
     /// <summary>
@@ -53,6 +52,7 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
         /// The get assweblys for register.
         /// </summary>
         /// <returns>
+        /// The <see cref="IEnumerable"/>.
         /// </returns>
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
@@ -67,7 +67,7 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
         public override void Load()
         {
             base.Load();
-    
+
             this.Unbind<IScreenViewSupplier>();
             this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
 
