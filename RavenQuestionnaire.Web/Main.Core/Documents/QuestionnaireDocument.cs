@@ -292,19 +292,35 @@ namespace Main.Core.Documents
             throw new CompositeException();
         }*/
 
-
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="itemKey">
+        /// The item key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
+        /// <param name="parentPropagationKey">
+        /// The parent propagation key.
+        /// </param>
         public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
         {
-
             // we could delete group from the root of Questionnaire
-            if (parentPublicKey == null || this.PublicKey == parentPublicKey)
+            if (parentPublicKey == null || parentPublicKey == Guid.Empty || this.PublicKey == parentPublicKey)
             {
                 this.Children.RemoveAll(i => i.PublicKey == itemKey);
             }
             else
             {
                 IGroup parent = this.Find<IGroup>(g => g.PublicKey == parentPublicKey).FirstOrDefault();
-                parent.Children.RemoveAll(i => i.PublicKey == itemKey);
+                if (parent != null)
+                {
+                    parent.Children.RemoveAll(i => i.PublicKey == itemKey);
+                }
             }
         }
 
