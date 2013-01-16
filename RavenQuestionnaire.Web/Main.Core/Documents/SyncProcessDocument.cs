@@ -90,7 +90,7 @@ namespace Main.Core.Documents
         public DateTime StartDate { get; set; }
 
         /// <summary>
-        /// Gets or sets the synck type.
+        /// Gets or sets the sync type.
         /// </summary>
         public SynchronizationType SynckType { get; set; }
 
@@ -110,7 +110,5 @@ namespace Main.Core.Documents
         public string ExitDescription { get; set; }
 
         #endregion
-
-        
     }
 }

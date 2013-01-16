@@ -17,7 +17,6 @@ namespace Core.CAPI.Synchronization
 
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
-    using Main.Core.EventHandlers;
     using Main.Core.Events;
     using Main.Core.View.CompleteQuestionnaire;
 
@@ -35,7 +34,7 @@ namespace Core.CAPI.Synchronization
         /// <summary>
         /// The my event store.
         /// </summary>
-        private readonly IEventStore myEventStore;
+        private readonly IEventStore eventStore;
 
         /// <summary>
         /// The storage.
@@ -64,7 +63,7 @@ namespace Core.CAPI.Synchronization
         {
             this.user = users;
             this.storage = storage;
-            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
         }
 
         #endregion
@@ -113,7 +112,7 @@ namespace Core.CAPI.Synchronization
         /// </returns>
         protected List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId)
         {
-            CommittedEventStream events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
+            CommittedEventStream events = this.eventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
             return events.Select(e => new AggregateRootEvent(e)).ToList();
         }
 

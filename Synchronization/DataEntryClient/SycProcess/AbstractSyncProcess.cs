@@ -29,8 +29,6 @@ namespace DataEntryClient.SycProcess
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
-    using LogManager = NLog.LogManager;
-
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
@@ -130,7 +128,7 @@ namespace DataEntryClient.SycProcess
             }
             catch (Exception ex)
             {
-                Logger logger = LogManager.GetCurrentClassLogger();
+                Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal("Import error: " + ex.Message, ex);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, ex.Message));
                 return ErrorCodes.Fail;
@@ -158,7 +156,7 @@ namespace DataEntryClient.SycProcess
             }
             catch (Exception ex)
             {
-                Logger logger = LogManager.GetCurrentClassLogger();
+                Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal("Import error", ex);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, ex.Message));
                 return ErrorCodes.Fail;
@@ -192,9 +190,10 @@ namespace DataEntryClient.SycProcess
         protected ErrorCodes ProcessEvents(IEventPipe client)
         {
             ErrorCodes returnCode = ErrorCodes.None;
-            var events = this.EventStore.ReadEventsByChunks().ToList();
-            var command = new PushEventsCommand(this.ProcessGuid, events);
-            this.Invoker.Execute(command);
+
+            List<IEnumerable<AggregateRootEvent>> events = this.EventStore.ReadEventsByChunks().ToList();
+
+            this.Invoker.Execute(new PushEventsCommand(this.ProcessGuid, events));
             foreach (IEnumerable<AggregateRootEvent> t in events)
             {
                 var message = new EventSyncMessage { Command = t.ToArray(), SynchronizationKey = this.ProcessGuid };

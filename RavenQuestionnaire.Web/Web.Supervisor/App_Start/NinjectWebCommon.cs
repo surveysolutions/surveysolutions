@@ -13,8 +13,7 @@ using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Export;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using Raven.Client;
-using Raven.Client.Document;
+
 using Main.Core.Events;
 
 using Web.Supervisor.App_Start;

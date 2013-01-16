@@ -62,7 +62,7 @@ namespace Ncqrs.Restoring.EventStapshoot.EventStores.RavenDB
                 retval.AddRange(ReadByAggregateRootId(documentStore, uniqueEventsResultse.EventSourceId));
             }
 
-            return retval.Select(RavenDBEventStore.ToComittedEvent);
+            return retval.Select(RavenDBEventStore.ToCommittedEvent);
         }
 
         #endregion

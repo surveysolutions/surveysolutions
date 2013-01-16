@@ -1,17 +1,15 @@
 // --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ImportExportController.cs" company="">
-//   2012
+//   
 // </copyright>
 // <summary>
 //   The import export controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Main.Core.Export;
-
 namespace Web.Supervisor.Controllers
 {
     using System;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Web;
     using System.Web.Mvc;
@@ -21,7 +19,10 @@ namespace Web.Supervisor.Controllers
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 
+    using Main.Core.Export;
     using Main.Core.View;
+    using Main.Synchronization.SyncManager;
+    using Main.Synchronization.SyncSreamProvider;
 
     using NLog;
 
@@ -36,7 +37,7 @@ namespace Web.Supervisor.Controllers
     [NoAsyncTimeout]
     public class ImportExportController : AsyncController
     {
-        #region Constants and Fields
+        #region Fields
 
         /// <summary>
         /// Data exporter
@@ -44,14 +45,14 @@ namespace Web.Supervisor.Controllers
         private readonly IDataExport exporter;
 
         /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        /// <summary>
         /// The syncs process factory
         /// </summary>
         private readonly ISyncProcessFactory syncProcessFactory;
+
+        /// <summary>
+        /// View repository
+        /// </summary>
+        private readonly IViewRepository viewRepository;
 
         #endregion
 
@@ -69,7 +70,8 @@ namespace Web.Supervisor.Controllers
         /// <param name="syncProcessFactory">
         /// The sync Process Factory.
         /// </param>
-        public ImportExportController(IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
+        public ImportExportController(
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
@@ -79,14 +81,6 @@ namespace Web.Supervisor.Controllers
         #endregion
 
         #region Public Methods and Operators
-
-        public ActionResult Index()
-        {
-            ViewBag.ActivePage = MenuItem.Administration;
-            var model = this.viewRepository.Load<SyncProcessLogInputModel, SyncProcessLogView>(new SyncProcessLogInputModel());
-            return this.View(model);
-        }
-
 
         /// <summary>
         /// The export async.
@@ -102,22 +96,23 @@ namespace Web.Supervisor.Controllers
             Guid syncProcess = Guid.NewGuid();
 
             AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager,
+                this.AsyncManager, 
                 () =>
-                {
-                    try
                     {
-                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        try
+                        {
+                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
-                        this.AsyncManager.Parameters["result"] = process.Export("Export DB on Supervisor in zip file");
-                    }
-                    catch (Exception e)
-                    {
-                        this.AsyncManager.Parameters["result"] = null;
-                        Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.Fatal("Error on export ", e);
-                    }
-                });
+                            this.AsyncManager.Parameters["result"] =
+                                process.Export("Export DB on Supervisor in zip file");
+                        }
+                        catch (Exception e)
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                            Logger logger = LogManager.GetCurrentClassLogger();
+                            logger.Fatal("Error on export ", e);
+                        }
+                    });
 
             return syncProcess;
         }
@@ -134,6 +129,114 @@ namespace Web.Supervisor.Controllers
         public ActionResult ExportCompleted(byte[] result)
         {
             return this.File(result, "application/zip", string.Format("backup_{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+        }
+
+
+        /// <summary>
+        /// The export async.
+        /// </summary>
+        /// <param name="syncKey">
+        /// The synchronization key.
+        /// </param>
+        /// <returns>
+        /// The sync process guid
+        /// </returns>
+        public Guid? BackupAsync(Guid syncKey)
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        //var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        //this.AsyncManager.Parameters["result"] = process.Export("Export DB on Supervisor in zip file");
+
+                        var syncManager = new StorageSyncManager(new AllEventsStreamProvider(), syncProcess, null);
+
+                        this.AsyncManager.Parameters["result"] = syncManager.GetExportedStream().ToArray();
+
+                        //var syncManager = new 
+
+                    }
+                    catch (Exception e)
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on export ", e);
+                        if (e.InnerException != null)
+                        {
+                            logger.Fatal("Error on export (Inner Exception)", e.InnerException);
+                        }
+                    }
+                });
+
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// The export completed.
+        /// </summary>
+        /// <param name="result">
+        /// Zip archive as array of bytes
+        /// </param>
+        /// <returns>
+        /// Downlods zip archive with events to client
+        /// </returns>
+        public ActionResult BackupCompleted(byte[] result)
+        {
+            return this.File(result, "application/zip", string.Format("backup_{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+        }
+
+
+        /// <summary>
+        /// Gets exported data
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <exception cref="HttpException">
+        /// Not found exception
+        /// </exception>
+        public void GetExportedDataAsync(Guid id, string type)
+        {
+            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
+            {
+                throw new HttpException(404, "Invalid quesry string parameters");
+            }
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager, 
+                () =>
+                    {
+                        try
+                        {
+                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                        }
+                        catch
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                        }
+                    });
+        }
+
+        /// <summary>
+        /// Gets exported data
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// Zipped data file
+        /// </returns>
+        public ActionResult GetExportedDataCompleted(byte[] result)
+        {
+            return this.File(result, "application/zip", "data.zip");
         }
 
         /// <summary>
@@ -160,7 +263,7 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public Guid? Import(HttpPostedFileBase uploadFile)
         {
-            var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
+            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
 
             if (zipData == null || zipData.Count == 0)
             {
@@ -170,44 +273,25 @@ namespace Web.Supervisor.Controllers
             Guid syncProcess = Guid.NewGuid();
 
             WaitCallback callback = (state) =>
-            {
-                try
                 {
-                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                    try
+                    {
+                        var process =
+                            (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
-                    process.Import(zipData, "Usb syncronization");
-                }
-                catch (Exception e)
-                {
-                    Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.Fatal("Error on import ", e);
-                }
-            };
+                        process.Import(zipData, "Usb syncronization");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on import ", e);
+                    }
+                };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
 
             return syncProcess;
         }
-        /// <summary>
-        /// The progress in persentage.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The progress in persentage.
-        /// </returns>
-        public int ProgressInPersentage(Guid id)
-        {
-         /*   SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
 
-            if (stat == null)
-            {
-                return -1;
-            }
-
-            return stat.ProgressPercentage;*/
-            return 100;
-        }
         /// <summary>
         /// The import completed 
         /// </summary>
@@ -220,53 +304,41 @@ namespace Web.Supervisor.Controllers
         }
 
         /// <summary>
-        /// Gets exported data
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Index()
+        {
+            this.ViewBag.ActivePage = MenuItem.Administration;
+            SyncProcessLogView model =
+                this.viewRepository.Load<SyncProcessLogInputModel, SyncProcessLogView>(new SyncProcessLogInputModel());
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// The progress in persentage.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <exception cref="HttpException">
-        /// Not found exception
-        /// </exception>
-        public void GetExportedDataAsync(Guid id, string type)
+        /// <returns>
+        /// The progress in persentage.
+        /// </returns>
+        public int ProgressInPersentage(Guid id)
         {
-            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
+            /*   SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+
+            if (stat == null)
             {
-                throw new HttpException(404, "Invalid quesry string parameters");
+                return -1;
             }
 
-            AsyncQuestionnaireUpdater.Update(
-               this.AsyncManager,
-               () =>
-               {
-                   try
-                   {
-                       this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
-                   }
-                   catch
-                   {
-                       this.AsyncManager.Parameters["result"] = null;
-                   }
-               });
+            return stat.ProgressPercentage;*/
+            return 100;
         }
 
-        /// <summary>
-        /// Gets exported data
-        /// </summary>
-        /// <param name="result">
-        /// The result.
-        /// </param>
-        /// <returns>
-        /// Zipped data file
-        /// </returns>
-        public ActionResult GetExportedDataCompleted(byte[] result)
-        {
-            return this.File(
-                result, "application/zip", "data.zip");
-        }
         #endregion
     }
 }

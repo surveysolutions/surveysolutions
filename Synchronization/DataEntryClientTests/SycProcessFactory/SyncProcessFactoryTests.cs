@@ -28,7 +28,7 @@ namespace DataEntryClientTests.SycProcessFactory
 
     using Ninject;
 
-    using SynchronizationMessages.Handshake;
+    using SynchronizationMessages.Synchronization;
 
     /// <summary>
     /// TODO: Update summary.

@@ -195,7 +195,7 @@ namespace Web.CAPI.Controllers
                     byte[] file;
                     try
                     {
-                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        var process = (IUsbSyncProcess)this. syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                         file = process.Export("Export DB on CAPI in zip file");
                     }

@@ -35,7 +35,7 @@ namespace Main.Core.Commands.Synchronization
         /// The parent process key
         /// </param>
         /// <param name="synckType">
-        ///   The synck type.
+        ///   The sync type.
         /// </param>
         /// <param name="description">
         ///   The description
@@ -63,7 +63,7 @@ namespace Main.Core.Commands.Synchronization
         public Guid? ParentProcessKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the synck type.
+        /// Gets or sets the sync type.
         /// </summary>
         public SynchronizationType SynckType { get; set; }
 

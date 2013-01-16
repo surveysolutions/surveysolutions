@@ -20,7 +20,7 @@ namespace DataEntryClient.SycProcessFactory
         Network = 1,
 
         /// <summary>
-        /// Usb sync type
+        /// USB sync type
         /// </summary>
         Usb = 2,
 
