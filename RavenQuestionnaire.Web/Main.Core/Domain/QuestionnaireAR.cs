@@ -88,7 +88,7 @@ namespace Main.Core.Domain
         /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() { PublicKey = this.EventSourceId, Title = title });
+            this.ApplyEvent(new QuestionnaireUpdated() {Title = title });
         }
 
         /// <summary>

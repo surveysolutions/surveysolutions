@@ -25,6 +25,7 @@ namespace Main.Core.Events.Questionnaire
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
+        [Obsolete]
         public Guid PublicKey { get; set; }
 
         /// <summary>

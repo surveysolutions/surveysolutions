@@ -87,6 +87,7 @@ namespace Main.Core.Events.Questionnaire
         /// <summary>
         /// Gets or sets the target group key.
         /// </summary>
+        [Obsolete]
         public Guid TargetGroupKey { get; set; }
 
         /// <summary>
