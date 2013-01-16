@@ -170,7 +170,10 @@ namespace Core.Supervisor.Views.Survey
                     screen.Captions.Add(surveyScreen.Captions[0]);
                 }
 
-                this.Screens.Add(screen);
+                if (screen.Questions.Count > 0)
+                {
+                    this.Screens.Add(screen);
+                }
             }
         }
 
