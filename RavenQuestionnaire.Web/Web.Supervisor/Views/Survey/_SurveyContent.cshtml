@@ -12,15 +12,13 @@
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
 }
+<script type="text/javascript">
+var questionnaire = @Html.Raw(Json.Encode(Model)) ;
+</script>
 <div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page">
-    <div class="title">
-    </div>
     <div class="body">
         @foreach (var screen in Model.Screens)
         {
-            if (screen.Questions.Count > 0)
-            {
-                
             <h2 class="heading">
                 @screen.Title
             </h2>
@@ -29,9 +27,9 @@
                     @if (screen.Captions.Count > 0)
                     {
                         <colgroup></colgroup>
-                        foreach (var caption in screen.Captions)
+                        for (int index = 0; index < screen.Captions.Count; index++)
                         {
-                        <colgroup class="slim" width="@((100 - 40) / screen.Captions.Count)%"></colgroup>
+                            <colgroup width="@((100 - 40) / screen.Captions.Count)%"></colgroup>
                         }
                         <thead>
                             <tr>
@@ -56,7 +54,7 @@
                                 </td>
                                 @foreach (var answer in question.Answers)
                                 {
-                                    <td class="@(answer.Enabled? "": "disabled") @(answer.Valid? "": "invalid") 
+                                    <td class="@(answer.Enabled ? "" : "disabled") @(answer.Valid ? "" : "invalid") 
                                      @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">
                                         <div class="cell-content">@answer.Answer &nbsp;</div>
                                     </td>
@@ -66,15 +64,14 @@
                     </tbody>
                 </table>
             </div>
-            }
         }
     </div>
     <div class="bottom">
         <div class="inner">
             <div class="btn-group pull-right">
-                <a href="#" class="btn btn-mini"><i class="icon-flag"></i>flagged</a> <a href="#"
-                    class="btn btn-mini"><i class="icon-ok"></i>answered</a> <a href="#" class="btn btn-mini">
-                        <i class="icon-warning-sign"></i>invalid</a> <a href="#" class="btn btn-mini"><i
+                <a href="#" class="btn "><i class="icon-flag"></i>flagged</a> <a href="#"
+                    class="btn "><i class="icon-ok"></i>answered</a> <a href="#" class="btn ">
+                        <i class="icon-warning-sign"></i>invalid</a> <a href="#" class="btn "><i
                             class="icon-pencil"></i>supervisor's</a>
             </div>
         </div>
