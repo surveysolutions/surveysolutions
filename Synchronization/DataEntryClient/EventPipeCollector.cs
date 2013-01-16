@@ -17,7 +17,7 @@ namespace DataEntryClient
     using SynchronizationMessages.CompleteQuestionnaire;
 
     /// <summary>
-    /// Event collector for usb syncronization
+    /// Event collector for USB synchronization
     /// </summary>
     public class EventPipeCollector : IEventPipe
     {

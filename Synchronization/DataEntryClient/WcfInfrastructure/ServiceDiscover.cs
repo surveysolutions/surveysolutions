@@ -12,7 +12,7 @@ namespace DataEntryClient.WcfInfrastructure
     using System;
     using System.ServiceModel.Discovery;
 
-    using SynchronizationMessages.Handshake;
+    using SynchronizationMessages.Synchronization;
 
     /// <summary>
     /// The service discover.
