@@ -25,7 +25,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The execute.
         /// </summary>
         /// <param name="baseAdress">
-        /// The base adress.
+        /// The base address.
         /// </param>
         /// <param name="handler">
         /// The handler.
@@ -39,7 +39,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The get chanel.
         /// </summary>
         /// <param name="baseAdress">
-        /// The base adress.
+        /// The base address.
         /// </param>
         /// <typeparam name="T">
         /// Classes only
@@ -63,7 +63,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The execute.
         /// </summary>
         /// <param name="baseAdress">
-        /// The base adress.
+        /// The base address.
         /// </param>
         /// <param name="handler">
         /// The handler.
@@ -95,7 +95,7 @@ namespace DataEntryClient.WcfInfrastructure
         /// The get chanel.
         /// </summary>
         /// <param name="baseAdress">
-        /// The base adress.
+        /// The base address.
         /// </param>
         /// <typeparam name="T">
         /// Classes only

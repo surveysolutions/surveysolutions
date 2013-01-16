@@ -10,8 +10,6 @@ namespace DataEntryClient.SycProcess
     using System.Collections.Generic;
     using System.Linq;
 
-    using DataEntryClient.SycProcess.Interfaces;
-
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
@@ -21,26 +19,6 @@ namespace DataEntryClient.SycProcess
     using Ninject;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-
-    public interface ITemplateExportSyncProcess : ISyncProcess
-    {
-        /// <summary>
-        /// The export
-        /// </summary>
-        /// <param name="syncProcessDescription">
-        /// The sync process description.
-        /// </param>
-        /// <param name="templateGuid">
-        /// The template guid.
-        /// </param>
-        /// <param name="clientGuid">
-        /// The client guid.
-        /// </param>
-        /// <returns>
-        /// Zip file as byte array
-        /// </returns>
-        byte[] Export(string syncProcessDescription, Guid? templateGuid, Guid? clientGuid);
-    }
 
     /// <summary>
     /// TODO: Update summary.

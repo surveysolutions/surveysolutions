@@ -24,21 +24,21 @@ namespace DataEntryClient.SycProcess.Interfaces
         void Import(string syncProcessDescription, IEnumerable<AggregateRootEvent> events);
 
         /// <summary>
-        /// Export events
+        /// The export.
         /// </summary>
         /// <param name="syncProcessDescription">
-        /// The sync Process Description.
+        /// The sync process description.
         /// </param>
-        /// <param name="firstEventPulicKey">
-        /// The first Event Pulic Key.
+        /// <param name="firstEventPublicKey">
+        /// The first event public key.
         /// </param>
         /// <param name="length">
         /// The length.
         /// </param>
         /// <returns>
-        /// ImportSynchronizationMessage file with events
+        /// The <see cref="ImportSynchronizationMessage"/>.
         /// </returns>
-        ImportSynchronizationMessage Export(string syncProcessDescription, Guid firstEventPulicKey, int length);
+        ImportSynchronizationMessage Export(string syncProcessDescription, Guid firstEventPublicKey, int length);
 
         /// <summary>
         /// Export events

@@ -1,12 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WirelessSyncProcess.cs" company="World bank">
-//   2012
+// <copyright file="WirelessSyncProcess.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   The complete questionnaire sync.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace DataEntryClient.SycProcess
 {
     using System;
@@ -25,24 +24,24 @@ namespace DataEntryClient.SycProcess
     using NLog;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.Handshake;
+    using SynchronizationMessages.Synchronization;
 
     /// <summary>
     /// The complete questionnaire sync.
     /// </summary>
     public class WirelessSyncProcess : AbstractSyncProcess, IWirelessSyncProcess
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The base adress.
-        /// </summary>
-        private string baseAdress;
+        #region Fields
 
         /// <summary>
         /// The chanel factory wrapper.
         /// </summary>
         private readonly IChanelFactoryWrapper chanelFactoryWrapper;
+
+        /// <summary>
+        /// The base address.
+        /// </summary>
+        private string baseAddress;
 
         #endregion
 
@@ -65,40 +64,7 @@ namespace DataEntryClient.SycProcess
 
         #endregion
 
-        /// <summary>
-        /// The Import
-        /// </summary>
-        /// <param name="syncProcessDescription">
-        /// The sync process description.
-        /// </param>
-        /// <returns>
-        /// Error Codes
-        /// </returns>
-        [Obsolete("Import(string) is deprecated, please use Import(string, string) instead.", true)]
-        public ErrorCodes Import(string syncProcessDescription)
-        {
-            return ErrorCodes.Fail;
-        }
-
         #region Public Methods and Operators
-
-        /// <summary>
-        /// The Import
-        /// </summary>
-        /// <param name="syncProcessDescription">
-        /// The sync process description.
-        /// </param>
-        /// <param name="baseAdress">
-        /// The base adress.
-        /// </param>
-        /// <returns>
-        /// Error codes
-        /// </returns>
-        public ErrorCodes Import(string syncProcessDescription, string baseAdress)
-        {
-            this.baseAdress = baseAdress;
-            return base.Import(syncProcessDescription);
-        }
 
         /// <summary>
         /// The export
@@ -114,8 +80,8 @@ namespace DataEntryClient.SycProcess
         /// </returns>
         public ErrorCodes Export(string syncProcessDescription, string baseAdress)
         {
-            this.baseAdress = baseAdress;
-            return base.Export(syncProcessDescription);
+            this.baseAddress = baseAdress;
+            return this.Export(syncProcessDescription);
         }
 
         /// <summary>
@@ -130,8 +96,42 @@ namespace DataEntryClient.SycProcess
         public Guid? GetLastSyncEventGuid(Guid clientKey)
         {
             Guid? result = null;
-            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>(this.baseAdress, (client) => { result = client.Process(clientKey); });
+            this.chanelFactoryWrapper.Execute<IGetLastSyncEvent>(
+                this.baseAddress, (client) => { result = client.Process(clientKey); });
             return result;
+        }
+
+        /// <summary>
+        /// The Import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <returns>
+        /// Error Codes
+        /// </returns>
+        [Obsolete("Import(string) is deprecated, please use Import(string, string) instead.", true)]
+        public ErrorCodes Import(string syncProcessDescription)
+        {
+            return ErrorCodes.Fail;
+        }
+
+        /// <summary>
+        /// The Import
+        /// </summary>
+        /// <param name="syncProcessDescription">
+        /// The sync process description.
+        /// </param>
+        /// <param name="baseAdress">
+        /// The base adress.
+        /// </param>
+        /// <returns>
+        /// Error codes
+        /// </returns>
+        public ErrorCodes Import(string syncProcessDescription, string baseAdress)
+        {
+            this.baseAddress = baseAdress;
+            return base.Import(syncProcessDescription);
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace DataEntryClient.SycProcess
         /// </summary>
         protected override void ExportEvents()
         {
-            this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAdress, (client) => this.ProcessEvents(client));
+            this.chanelFactoryWrapper.Execute<IEventPipe>(this.baseAddress, (client) => this.ProcessEvents(client));
         }
 
         /// <summary>
@@ -158,8 +158,9 @@ namespace DataEntryClient.SycProcess
         protected override IEnumerable<AggregateRootEvent> GetEventStream()
         {
             ListOfAggregateRootsForImportMessage result = null;
-            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(this.baseAdress, (client) => { result = client.Process(); });
-            
+            this.chanelFactoryWrapper.Execute<IGetAggragateRootList>(
+                this.baseAddress, (client) => { result = client.Process(); });
+
             if (result == null)
             {
                 throw new Exception("aggregate roots list is empty");
@@ -168,7 +169,7 @@ namespace DataEntryClient.SycProcess
             this.Invoker.Execute(new PushEventsCommand(this.ProcessGuid, result.Roots));
             var events = new List<AggregateRootEvent>();
             this.chanelFactoryWrapper.Execute<IGetEventStream>(
-                this.baseAdress, 
+                this.baseAddress, 
                 (client) =>
                     {
                         foreach (ProcessedEventChunk root in result.Roots)
@@ -180,10 +181,13 @@ namespace DataEntryClient.SycProcess
                                     continue;
                                 }
 
-                                AggregateRootEvent[] stream = client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
+                                AggregateRootEvent[] stream =
+                                    client.Process(root.EventKeys.First(), root.EventKeys.Count).EventStream;
                                 events.AddRange(stream);
 
-                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
+                                this.Invoker.Execute(
+                                    new ChangeEventStatusCommand(
+                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));
                             }
                             catch (Exception ex)
                             {
@@ -191,7 +195,9 @@ namespace DataEntryClient.SycProcess
                                 logger.Fatal("Import error", ex);
 
                                 events = null;
-                                this.Invoker.Execute(new ChangeEventStatusCommand(this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
+                                this.Invoker.Execute(
+                                    new ChangeEventStatusCommand(
+                                        this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));
                             }
                         }
                     });

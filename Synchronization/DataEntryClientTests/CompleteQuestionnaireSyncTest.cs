@@ -33,7 +33,6 @@ namespace DataEntryClientTests
     using NUnit.Framework;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.Handshake;
 
     /// <summary>
     /// The complete questionnaire sync test.

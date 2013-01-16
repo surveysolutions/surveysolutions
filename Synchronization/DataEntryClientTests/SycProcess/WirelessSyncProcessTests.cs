@@ -31,7 +31,7 @@ namespace DataEntryClientTests.SycProcess
     using Ninject;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.Handshake;
+    using SynchronizationMessages.Synchronization;
 
     /// <summary>
     /// TODO: Update summary.
