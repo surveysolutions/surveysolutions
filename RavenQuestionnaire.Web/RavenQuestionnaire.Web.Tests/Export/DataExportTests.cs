@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.SubEntities.Complete;
+
 namespace RavenQuestionnaire.Web.Tests.Export
 {
     using System;
@@ -67,22 +69,24 @@ namespace RavenQuestionnaire.Web.Tests.Export
         /// The collect l evels_2 l evels_ all l evels are collected.
         /// </summary>
         [Test]
-        public void CollectLEvels_2LEvels_AllLEvelsAreCollected()
+        public void CollectLEvels_2LEvelsAllNonEmpty_AllLEvelsAreCollected()
         {
             var allLevels = new Dictionary<string, byte[]>();
             Guid guid1 = Guid.NewGuid();
             Guid guid2 = Guid.NewGuid();
             var provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
             var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
-
+            var items = new CompleteQuestionnaireExportItem[]
+                {new CompleteQuestionnaireExportItem(new CompleteGroup("test"), new Guid[0], null)};
             var topResult = new CompleteQuestionnaireExportView(
                 Guid.NewGuid(), 
                 "top group", 
-                new CompleteQuestionnaireExportItem[0], 
+                items, 
                 new[] { guid1, guid2 }, 
                 Enumerable.Empty<Guid>(), 
                 new HeaderCollection());
-            var subResult = new CompleteQuestionnaireExportView();
+            var subResult = new CompleteQuestionnaireExportView(Guid.NewGuid(), "sub group", items, new Guid[0],
+                                                                Enumerable.Empty<Guid>(), new HeaderCollection());
             this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(
@@ -120,8 +124,10 @@ namespace RavenQuestionnaire.Web.Tests.Export
             var allLevels = new Dictionary<string, byte[]>();
             var provider = new Mock<IExportProvider<CompleteQuestionnaireExportView>>();
             var manager = new ExportManager<CompleteQuestionnaireExportView>(provider.Object);
+            var items = new CompleteQuestionnaireExportItem[] { new CompleteQuestionnaireExportItem(new CompleteGroup("test"), new Guid[0], null) };
+        
+            var result = new CompleteQuestionnaireExportView(Guid.NewGuid(),"res",items,Enumerable.Empty<Guid>(),Enumerable.Empty<Guid>(),new HeaderCollection());
 
-            var result = new CompleteQuestionnaireExportView();
             this.ViewRepositoryMock.Setup(
                 x =>
                 x.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(

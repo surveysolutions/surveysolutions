@@ -130,16 +130,16 @@ namespace Questionnaire.Core.Web.Export
         /// The type.
         /// </param>
         protected void CollectLevels(
-            CompleteQuestionnaireExportInputModel input, 
-            Dictionary<string, byte[]> container, 
-            ExportManager<CompleteQuestionnaireExportView> manager, 
-            string parentName, 
+            CompleteQuestionnaireExportInputModel input,
+            Dictionary<string, byte[]> container,
+            ExportManager<CompleteQuestionnaireExportView> manager,
+            string parentName,
             FileType type)
         {
             CompleteQuestionnaireExportView records =
                 this.viewRepository.Load<CompleteQuestionnaireExportInputModel, CompleteQuestionnaireExportView>(input);
-            
-            if(records==null)
+
+            if (records == null || !records.Items.Any())
                 return;
             string fileName = this.GetName(records.GroupName, container, 0);
             container.Add(fileName, manager.ExportToStream(records));
@@ -149,11 +149,11 @@ namespace Questionnaire.Core.Web.Export
                 this.CollectLevels(
                     new CompleteQuestionnaireExportInputModel(input.QuestionnairiesForImport, input.TemplateId)
                         {
-                           AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey 
-                        }, 
-                    container, 
-                    manager, 
-                    currentName, 
+                            AutoPropagatebleQuestionPublicKey = autoPropagatebleQuestionPublicKey
+                        },
+                    container,
+                    manager,
+                    currentName,
                     type);
             }
 
@@ -161,10 +161,10 @@ namespace Questionnaire.Core.Web.Export
             {
                 this.CollectLevels(
                     new CompleteQuestionnaireExportInputModel(
-                        input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup), 
-                    container, 
-                    manager, 
-                    currentName, 
+                        input.QuestionnairiesForImport, input.TemplateId, subPropagatebleGroup),
+                    container,
+                    manager,
+                    currentName,
                     type);
             }
         }
