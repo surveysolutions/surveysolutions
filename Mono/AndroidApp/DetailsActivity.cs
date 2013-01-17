@@ -79,7 +79,7 @@ namespace AndroidApp
             if (bundle == null)
             {
                 NavList.DataItems = model.Chapters;
-                
+                NavList.SelectItem(0);
             }
 
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, model, VpContent);

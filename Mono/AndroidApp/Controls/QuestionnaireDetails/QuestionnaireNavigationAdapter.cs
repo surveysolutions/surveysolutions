@@ -18,11 +18,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     {
         private readonly IList<QuestionnaireNavigationPanelItem> items;
         private readonly Context context;
-
-        public QuestionnaireNavigationAdapter(Context context, IEnumerable<QuestionnaireNavigationPanelItem> items)
+        private readonly int selectedItem;
+        public QuestionnaireNavigationAdapter(Context context, IEnumerable<QuestionnaireNavigationPanelItem> items,int selectedItem)
             : base()
         {
             this.context = context;
+            this.selectedItem = selectedItem;
             this.items = items.ToList();
           //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
@@ -37,7 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-           
+
             View view = convertView;
             if (view == null)
             {
@@ -48,7 +49,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
 
             var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
-            if (position < Count-1)
+            if (position < Count - 1)
             {
                 var item = items[position];
                 tvITem.Text = item.Title;
@@ -61,7 +62,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 tvITem.Text = "Complete";
                 tvCount.Visibility = ViewStates.Gone;
             }
-            
+            if (position == selectedItem)
+            {
+                view.SetBackgroundColor(Color.Blue);
+                ;
+            }
             return view;
         }
 
