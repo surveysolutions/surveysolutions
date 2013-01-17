@@ -46,9 +46,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.ListView.ChoiceMode = ChoiceMode.Single;
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
         }
-     
-    
-        
 
         public void SelectItem(int ind)
         {
@@ -76,7 +73,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             OnItemClick(screenId);
         }
-
+        public override void OnDetach()
+        {
+            ItemClick = null;
+            base.OnDetach();
+        }
 
     }
 

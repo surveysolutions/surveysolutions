@@ -83,7 +83,6 @@ namespace AndroidApp
             }
 
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, model, VpContent);
-            NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
         
@@ -104,6 +103,11 @@ namespace AndroidApp
             if (grid != null)
             {
                 grid.ScreenChanged += ContentFrameAdapter_ScreenChanged;
+            }
+            var navBar = p0 as QuestionnaireNavigationFragment;
+            if(navBar!=null)
+            {
+                navBar.ItemClick += navList_ItemClick;
             }
             base.OnAttachFragment(p0);
         }
