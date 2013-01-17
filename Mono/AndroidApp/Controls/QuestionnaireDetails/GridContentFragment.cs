@@ -30,7 +30,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             
             this.Model = model;
         }
-        public GridContentFragment()
+        protected GridContentFragment()
             : base()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
@@ -70,28 +70,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.AddView(tl);
             sv.AddView(ll);
             return sv;
-        }
-        [Export]
-        public override void OnViewStateRestored(Bundle p0)
-        {
-            if (Model != null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            var modelWrapped = p0.GetParcelable("model") as ParcelableWrapper;
-            if (modelWrapped == null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            Model = modelWrapped.Value as QuestionnaireGridViewModel;
-        }
-        [Export]
-        public override void OnSaveInstanceState(Bundle p0)
-        {
-            base.OnSaveInstanceState(p0);
-            p0.PutParcelable("model", new ParcelableWrapper(Model));
         }
         protected void CreateHeader(LayoutInflater inflater, TableLayout tl)
         {

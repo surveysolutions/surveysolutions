@@ -24,18 +24,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     {
         private readonly IQuestionViewFactory questionViewFactory;
 
-        public ScreenContentFragment()
+        protected ScreenContentFragment()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.RetainInstance = true;
+            this.questionViewFactory = new DefaultQuestionViewFactory();
         }
 
         public ScreenContentFragment(QuestionnaireScreenViewModel model)
             : this()
         {
+           
             this.Model = model;
-            this.questionViewFactory = new DefaultQuestionViewFactory();
-          
+            
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -79,29 +80,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-        [Export]
-        public override void OnViewStateRestored(Bundle p0)
-        {
-            if (Model != null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            var modelWrapped = p0.GetParcelable("model") as ParcelableWrapper;
-            if (modelWrapped == null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            Model = modelWrapped.Value as QuestionnaireScreenViewModel;
-        }
-        [Export]
-        public override void OnSaveInstanceState(Bundle p0)
-        {
-            base.OnSaveInstanceState(p0);
-            p0.PutParcelable("model", new ParcelableWrapper(Model));
-        }
-
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);

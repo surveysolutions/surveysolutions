@@ -217,5 +217,10 @@ namespace AndroidApp.Core
         protected virtual void OnViewModelSet()
         {
         }
+
+        public override void SetContentView(int layoutResId)
+        {
+            this.SetContentView(this.BindingInflate(layoutResId, (ViewGroup)null));
+        }
     }
 }

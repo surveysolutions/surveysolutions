@@ -29,33 +29,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         #endregion
 
-
-
         protected void OnItemClick(ItemPublicKey? groupKey)
         {
             var handler = ItemClick;
             if (handler != null)
                 handler(this, new ScreenChangedEventArgs(groupKey));
         }
-        public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+        public override void OnResume()
         {
-            var result=  base.OnCreateView(inflater, container, savedInstanceState);
-           
-            
-         //   result.LayoutParameters = new ViewGroup.LayoutParams(10, ViewGroup.LayoutParams.FillParent);
-            return result;
-        }
-        public override void OnActivityCreated(Bundle savedInstanceState)
-        {
-
-            base.OnActivityCreated(savedInstanceState);
-            
+            base.OnResume();
             this.ListView.ChoiceMode = ChoiceMode.Single;
-         //   this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
+            //   this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
-          
         }
-
+     
     
         
 

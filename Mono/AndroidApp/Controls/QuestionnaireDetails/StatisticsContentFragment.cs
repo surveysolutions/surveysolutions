@@ -29,7 +29,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Model =
                 CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
         }
-        public StatisticsContentFragment()
+        protected StatisticsContentFragment()
             : base()
         {
             this.RetainInstance = true;
@@ -92,28 +92,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
-        }
-        [Export]
-        public override void OnViewStateRestored(Bundle p0)
-        {
-            if (Model != null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            var modelWrapped = p0.GetParcelable("model") as ParcelableWrapper;
-            if (modelWrapped == null)
-            {
-                base.OnViewStateRestored(p0);
-                return;
-            }
-            Model = modelWrapped.Value as StatisticsViewModel;
-        }
-        [Export]
-        public override void OnSaveInstanceState(Bundle p0)
-        {
-            base.OnSaveInstanceState(p0);
-            p0.PutParcelable("model", new ParcelableWrapper(Model));
         }
         void btnUnanswered_Click(object sender, EventArgs e)
         {
