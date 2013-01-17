@@ -24,6 +24,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         #region public fields
 
+        public QuestionnaireNavigationFragment()
+        {
+            this.RetainInstance = true;
+        }
+
         public event EventHandler<ScreenChangedEventArgs> ItemClick;
         public IEnumerable<QuestionnaireNavigationPanelItem> DataItems { get; set; }
 
@@ -39,7 +44,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             base.OnResume();
             this.ListView.ChoiceMode = ChoiceMode.Single;
-            //   this.ListView.SetSelector(Resource.Drawable.navigation_Selector);
             this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems);
         }
      

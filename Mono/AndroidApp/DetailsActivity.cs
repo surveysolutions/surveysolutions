@@ -36,7 +36,7 @@ namespace AndroidApp
        
 
         protected ItemPublicKey? ScreenId;
-
+        protected Guid QuestionnaireId;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -61,21 +61,58 @@ namespace AndroidApp
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            
             SetContentView(Resource.Layout.Details);
+            QuestionnaireId = ViewModel.QuestionnaireId;
+            if (bundle != null)
+            {
+                var savedScreen = bundle.GetString("ScreenId");
+                if (string.IsNullOrEmpty(savedScreen))
+                    return;
+                ScreenId = ItemPublicKey.Parse(savedScreen);
+            }
+            var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, ScreenId));
+            ViewModel = model as QuestionnaireScreenViewModel;
+            this.Title = model.Title;
+
+            if (bundle == null)
+            {
+                NavList.DataItems = model.Chapters;
+                
+            }
+
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, model, VpContent);
+            NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
+            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
-        protected override void OnResume()
+        
+      /*  protected override void OnResume()
         {
             base.OnResume();
-            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, ScreenId)) as QuestionnaireScreenViewModel;
-            this.Title = ViewModel.Title;
-           
-            NavList.ItemClick += new EventHandler<ScreenChangedEventArgs>(navList_ItemClick);
-            NavList.DataItems = ViewModel.Chapters;
+            Adapter.NotifyDataSetChanged();
+        }
+        */
+        public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
+        {
+            var screen = p0 as ScreenContentFragment;
+            if (screen != null)
+            {
+                screen.ScreenChanged += ContentFrameAdapter_ScreenChanged;
+            }
+            var grid = p0 as GridContentFragment;
+            if (grid != null)
+            {
+                grid.ScreenChanged += ContentFrameAdapter_ScreenChanged;
+            }
+            base.OnAttachFragment(p0);
+        }
 
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent);
-         
-            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
+        void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
+        {
+            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+              new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
+            Adapter.UpdateScreenData(firstScreen);
         }
         protected override void OnSaveInstanceState(Bundle outState)
         {
@@ -83,15 +120,6 @@ namespace AndroidApp
             if (!Adapter.ScreenId.HasValue)
                 return;
             outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
-        }
-        protected override void OnRestoreInstanceState(Bundle savedInstanceState)
-        {
-            base.OnRestoreInstanceState(savedInstanceState);
-            var savedScreen = savedInstanceState.GetString("ScreenId");
-            if (string.IsNullOrEmpty(savedScreen))
-                return;
-            ScreenId = ItemPublicKey.Parse(savedScreen);
-
         }
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
@@ -110,8 +138,10 @@ namespace AndroidApp
                 return;
             }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, e.ScreenId));
+                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
             Adapter.UpdateScreenData(firstScreen);
+           /* Adapter = new ContentFrameAdapter(this.SupportFragmentManager, firstScreen, VpContent);
+            Adapter.NotifyDataSetChanged();*/
         }
 
     }

@@ -204,6 +204,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 handler(this, evt);
         }
 
+        public override void OnDetach()
+        {
+            ScreenChanged = null;
+            base.OnDetach();
+        }
+
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
 
         protected void AssignHeaderStyles(TextView tv)
