@@ -13,6 +13,7 @@ namespace Core.Supervisor.Views.Survey
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Utility;
@@ -43,7 +44,7 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="scope">
         /// The scope.
         /// </param>
-        public ScreenWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
+        public ScreenWithRout(CompleteQuestionnaireStoreDocument doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
         {
             this.Scope = scope;
             var rout = new List<NodeWithLevel>();
@@ -90,15 +91,14 @@ namespace Core.Supervisor.Views.Survey
 
             this.CurrentRout = rout;
             this.Group = group;
-            this.MenuItems = new List<NodeWithLevel>();
-
+            this.MenuItems = new List<DetailsMenuItem>();
             {
                 var treeStack = new Stack<NodeWithLevel>();
                 treeStack.Push(new NodeWithLevel(doc, 0));
                 while (treeStack.Count > 0)
                 {
                     NodeWithLevel node = treeStack.Pop();
-                   
+
                     ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
                     for (int i = subGroups.Length - 1; i >= 0; i--)
                     {
@@ -118,7 +118,9 @@ namespace Core.Supervisor.Views.Survey
                         continue;
                     }
 
-                    this.MenuItems.Add(node);
+                    var item = new DetailsMenuItem(doc, node);
+                       
+                    this.MenuItems.Add(item);
                 }
             }
         }
@@ -152,7 +154,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets MenuItems.
         /// </summary>
-        public List<NodeWithLevel> MenuItems { get; set; }
+        public List<DetailsMenuItem> MenuItems { get; set; }
 
         /// <summary>
         /// The compile navigation.

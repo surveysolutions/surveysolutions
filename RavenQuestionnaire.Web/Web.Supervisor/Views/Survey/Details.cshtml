@@ -4,15 +4,29 @@
 @using ClientDependency.Core.Mvc
 @model SurveyScreenView
 <script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
-@{Html.RequiresCss("details.css", "Content", 50);}
+@{
+    Html.RequiresCss("jquery.dataTables.css", "Content", 50);
+    Html.RequiresCss("details.css", "Content", 50);
+
+    Html.RequiresJs("jquery.dataTables.min.js", "Scripts", 50);
+    Html.RequiresJs("FixedHeader.min.js", "Scripts", 50);
+}
 <script type="text/javascript">
 
+
     $(document).ready(function () {
+
+
 
         $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
 
         $.ajaxSetup({
             cache: false
+        });
+
+        $('a.answer-btn').live('click', function () {
+            $('#stacks').addClass('detail-visible');
+            return false;
         });
 
         $('a.nav-link').live("click", function () {

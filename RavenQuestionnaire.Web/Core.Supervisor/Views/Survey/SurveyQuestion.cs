@@ -23,10 +23,13 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="doc">
         /// The survey
         /// </param>
-        /// <param name="question">
-        ///   The question.
+        /// <param name="group">
+        /// The group.
         /// </param>
-        public SurveyQuestion(CompleteQuestionnaireStoreDocument doc, ICompleteQuestion question)
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        public SurveyQuestion(CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteQuestion question)
         {
             this.SurveyPublicKey = doc.PublicKey;
             this.Featured = question.Featured;
@@ -34,7 +37,7 @@ namespace Core.Supervisor.Views.Survey
             this.Capital = question.Capital;
             this.PublicKey = question.PublicKey;
             this.Title = question.QuestionText;
-            this.Answers = new List<SurveyAnswer> { new SurveyAnswer(question) };
+            this.Answers = new List<SurveyAnswer> { new SurveyAnswer(group, question) };
         }
 
         /// <summary>

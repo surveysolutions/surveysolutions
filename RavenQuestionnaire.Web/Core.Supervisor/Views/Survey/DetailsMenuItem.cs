@@ -30,22 +30,23 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Initializes a new instance of the <see cref="DetailsMenuItem"/> class.
         /// </summary>
+        /// <param name="doc">
+        /// The doc
+        /// </param>
         /// <param name="node">
         /// The node.
         /// </param>
         public DetailsMenuItem(CompleteQuestionnaireStoreDocument doc, NodeWithLevel node)
         {
             var group = node.Group;
+            this.Key = new ScreenKey(group);
             this.PublicKey = group.PublicKey;
-            this.GroupText = /*group.Title;
-
-            this.Title = */ group.PropagationPublicKey.HasValue
-                    ? string.Concat(doc.GetPropagatedGroupsByKey(group.PropagationPublicKey.Value)
-                            .SelectMany(q => q.Children)
-                            .OfType<ICompleteQuestion>()
-                            .Where(q => q.Capital)
-                            .Select(q =>q.GetAnswerString() + " "))+ " " + group.Title
-                    : group.Title;
+            this.GroupText = group.PropagationPublicKey.HasValue
+                                 ? string.Concat(
+                                     doc.GetPropagatedGroupsByKey(group.PropagationPublicKey.Value).SelectMany(
+                                         q => q.Children).OfType<ICompleteQuestion>().Where(q => q.Capital).Select(
+                                             q => q.GetAnswerString() + " ")) + " " + group.Title
+                                 : group.Title;
 
             this.PropagationKey = group.PropagationPublicKey;
             this.Enabled = group.Enabled;
@@ -111,23 +112,15 @@ namespace Core.Supervisor.Views.Survey
         /// </summary>
         public int Level { get; set; }
 
+        /// <summary>
+        /// Gets or sets Key.
+        /// </summary>
+        public ScreenKey Key { get; set; }
+
         #endregion
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The get client id.
-        /// </summary>
-        /// <param name="prefix">
-        /// The prefix.
-        /// </param>
-        /// <returns>
-        /// The System.String.
-        /// </returns>
-        public virtual string GetClientId(string prefix)
-        {
-            return string.Format("{0}_{1}", prefix, this.PublicKey);
-        }
         /// <summary>
         /// The calc progress.
         /// </summary>
@@ -163,6 +156,7 @@ namespace Core.Supervisor.Views.Survey
 
             return total;
         }
+
         /// <summary>
         /// The count questions.
         /// </summary>
@@ -190,8 +184,5 @@ namespace Core.Supervisor.Views.Survey
         }
 
         #endregion
-
-
-
     }
 }

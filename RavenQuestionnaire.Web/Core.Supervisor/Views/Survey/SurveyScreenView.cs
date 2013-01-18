@@ -11,13 +11,11 @@ namespace Core.Supervisor.Views.Survey
     using System.Linq;
 
     using Main.Core.Documents;
-    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors;
     using Main.Core.Utility;
     using Main.Core.View.Group;
-    using Main.Core.View.Question;
 
     /// <summary>
     /// TODO: Update summary.
@@ -170,13 +168,20 @@ namespace Core.Supervisor.Views.Survey
                     screen.Captions.Add(surveyScreen.Captions[0]);
                 }
 
-                if (screen.Questions.Count > 0)
+                if (screen.Key.Propagated != Propagate.None)
                 {
-                    this.Screens.Add(screen);
+                    screen.Key.PropagationKey = Guid.Empty;
                 }
+
+                //if (screen.Questions.Count > 0)
+                //{
+                    this.Screens.Add(screen);
+                //}
             }
         }
 
         #endregion
+
+        public UserLight User { get; set; }
     }
 }

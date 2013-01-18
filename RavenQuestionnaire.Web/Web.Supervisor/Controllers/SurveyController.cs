@@ -363,7 +363,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
             var model = this.viewRepository.Load<DisplayViewInputModel, SurveyScreenView>(
-                new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
+                new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey, User = this.globalInfo.GetCurrentUser() });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
             return this.View(model);
@@ -395,7 +395,7 @@ namespace Web.Supervisor.Controllers
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
             var model = this.viewRepository.Load<DisplayViewInputModel, SurveyScreenView>(
-                new DisplayViewInputModel(id, group, propagationKey));
+                new DisplayViewInputModel(id, group, propagationKey, this.globalInfo.GetCurrentUser()));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
             return this.PartialView("_SurveyContent", model);

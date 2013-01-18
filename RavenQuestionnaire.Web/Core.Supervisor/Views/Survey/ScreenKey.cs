@@ -26,10 +26,27 @@ namespace Core.Supervisor.Views.Survey
         /// The group.
         /// </param>
         public ScreenKey(ICompleteGroup group)
+            : this(group.PublicKey, group.PropagationPublicKey, group.Propagated)
         {
-            this.Propagated = group.Propagated;
-            this.PublicKey = group.PublicKey;
-            this.PropagationKey = group.PropagationPublicKey.HasValue ? group.PropagationPublicKey.Value : Guid.Empty;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ScreenKey"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationPublicKey">
+        /// The propagation public key.
+        /// </param>
+        /// <param name="propagated">
+        /// The propagated.
+        /// </param>
+        public ScreenKey(Guid publicKey, Guid? propagationPublicKey, Propagate propagated)
+        {
+            this.Propagated = propagated;
+            this.PublicKey = publicKey;
+            this.PropagationKey = propagationPublicKey.HasValue ? propagationPublicKey.Value : Guid.Empty;
         }
 
         /// <summary>
@@ -69,5 +86,94 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets the public key.
         /// </summary>
         public Guid PropagationKey { get; set; }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            if (obj.GetType() != typeof(ScreenKey))
+            {
+                return false;
+            }
+
+            return Equals((ScreenKey)obj);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public bool Equals(ScreenKey other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return other.PublicKey.Equals(this.PublicKey) && other.PropagationKey.Equals(this.PropagationKey);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (this.PublicKey.GetHashCode() * 397) ^ this.PropagationKey.GetHashCode();
+            }
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="left">
+        /// The left.
+        /// </param>
+        /// <param name="right">
+        /// The right.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator ==(ScreenKey left, ScreenKey right)
+        {
+            return Equals(left, right);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="left">
+        /// The left.
+        /// </param>
+        /// <param name="right">
+        /// The right.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public static bool operator !=(ScreenKey left, ScreenKey right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

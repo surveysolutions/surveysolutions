@@ -23,17 +23,24 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyAnswer"/> class.
         /// </summary>
+        /// <param name="unknown"></param>
         /// <param name="question">
-        /// The question.
+        ///   The question.
         /// </param>
-        public SurveyAnswer(ICompleteQuestion question)
+        public SurveyAnswer(ICompleteGroup group, ICompleteQuestion question)
         {
+            this.Key = new ScreenKey(question.PublicKey, question.PropagationPublicKey, group.Propagated);
+            this.ParentKey = new ScreenKey(group);
+            
             this.IsReadOnly = question.QuestionScope != QuestionScope.Supervisor;
             this.Enabled = question.Enabled;
-            this.Answers = question.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToArray();
-            this.Answer = question.GetAnswerString();
             this.Valid = question.Valid;
             this.Answered = question.IsAnswered();
+
+            this.AnswerOptions = question.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToArray();
+            this.Type = question.QuestionType;
+            this.Answer = question.GetAnswerString();
+           
             this.Comments = question.Comments;
         }
 
@@ -45,7 +52,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Answers.
         /// </summary>
-        public CompleteAnswerView[] Answers { get; set; }
+        public CompleteAnswerView[] AnswerOptions { get; set; }
 
         /// <summary>
         /// Gets or sets Answer.
@@ -71,5 +78,20 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets a value indicating whether IsReadOnly.
         /// </summary>
         public bool IsReadOnly { get; set; }
+
+        /// <summary>
+        /// Gets or sets Key.
+        /// </summary>
+        public ScreenKey Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets ParentKey.
+        /// </summary>
+        public ScreenKey ParentKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets Type.
+        /// </summary>
+        public QuestionType Type { get; set; }
     }
 }

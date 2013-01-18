@@ -23,13 +23,14 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
                 @screen.Title
             </h2>
             <div class="questions">
-                <table class="table table-bordered table-condensed">
+                <table class="table table-bordered table-condensed" style="width: @(300 + 200 * (screen.Captions.Count == 0 ? 1 : screen.Captions.Count))px">
+                    <colgroup width="@(300)px"></colgroup>
                     @if (screen.Captions.Count > 0)
                     {
-                        <colgroup></colgroup>
+                        
                         for (int index = 0; index < screen.Captions.Count; index++)
                         {
-                            <colgroup width="@((100 - 40) / screen.Captions.Count)%"></colgroup>
+                        <colgroup width="@(200)px"></colgroup>
                         }
                         <thead>
                             <tr>
@@ -43,8 +44,7 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
                     }
                     else
                     {
-                        <colgroup></colgroup>
-                        <colgroup></colgroup>
+                        <colgroup width="@(200)px"></colgroup>
                     }
                     <tbody>
                         @foreach (var question in screen.Questions)
@@ -54,25 +54,37 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
                                 </td>
                                 @foreach (var answer in question.Answers)
                                 {
-                                    <td class="@(answer.Enabled ? "" : "disabled") @(answer.Valid ? "" : "invalid") 
+                                    <td class="question-answer @(answer.Enabled ? "" : "disabled") @(answer.Valid ? "" : "invalid") 
                                      @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">
-                                        <div class="cell-content">@answer.Answer &nbsp;</div>
+                                        <div class="cell-content">@answer.Answer &nbsp;
+                                        @if (answer.Enabled)
+                                        {
+                                            <div class="question-toolbar btn-group pull-right">
+                                                @if (!answer.IsReadOnly)
+                                                {
+                                                    <a class="btn btn-primary btn-mini answer-btn" href="#">answer</a>
+                                                }
+                                                <a class="btn btn-mini"><i class="icon-flag"></i></a>
+                                                <a class="btn btn-mini"><i class="icon-comment"></i></a>
+                                            </div>
+                                        }
+                                        </div>
                                     </td>
                                 }
                             </tr>
                         }
                     </tbody>
                 </table>
+               
             </div>
         }
     </div>
     <div class="bottom">
         <div class="inner">
             <div class="btn-group pull-right">
-                <a href="#" class="btn "><i class="icon-flag"></i>flagged</a> <a href="#"
-                    class="btn "><i class="icon-ok"></i>answered</a> <a href="#" class="btn ">
-                        <i class="icon-warning-sign"></i>invalid</a> <a href="#" class="btn "><i
-                            class="icon-pencil"></i>supervisor's</a>
+                <a href="#" class="btn "><i class="icon-flag"></i>flagged</a> <a href="#" class="btn ">
+                    <i class="icon-ok"></i>answered</a> <a href="#" class="btn "><i class="icon-warning-sign">
+                    </i>invalid</a> <a href="#" class="btn "><i class="icon-pencil"></i>supervisor's</a>
             </div>
         </div>
     </div>
