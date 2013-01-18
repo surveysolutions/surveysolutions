@@ -292,6 +292,7 @@
     </AndroidResource>
     <AndroidResource Include="Resources\Drawable\splash.png" />
     <AndroidResource Include="Resources\Drawable\errorwarningstyle.xml" />
+    <AndroidResource Include="Resources\Drawable\statistics_row_style.xml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controls\Synchroniation\" />

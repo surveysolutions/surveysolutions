@@ -80,10 +80,13 @@ namespace AndroidApp
 			public const int splash = 2130837514;
 			
 			// aapt resource value: 0x7f02000b
-			public const int SurveyShape = 2130837515;
+			public const int statistics_row_style = 2130837515;
 			
 			// aapt resource value: 0x7f02000c
-			public const int SurveyTableHeader = 2130837516;
+			public const int SurveyShape = 2130837516;
+			
+			// aapt resource value: 0x7f02000d
+			public const int SurveyTableHeader = 2130837517;
 			
 			private Drawable()
 			{

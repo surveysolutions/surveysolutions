@@ -53,6 +53,8 @@ namespace AndroidApp.Controls.Statistics
             foreach (var statisticsQuestionViewModel in questions)
             {
                 TableRow tr = new TableRow(this.Context);
+                tr.Clickable = true;
+                tr.SetBackgroundResource(Resource.Drawable.statistics_row_style);
 
                 TextView tvQuestion = new TextView(this.Context);
                 tvQuestion.Text = statisticsQuestionViewModel.Text;
