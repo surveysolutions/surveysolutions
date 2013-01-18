@@ -105,7 +105,7 @@ namespace DataEntryClientTests.SycProcess
                               }
             };
 
-            this.syncProcessRepository.Setup(x => x.GetProcess(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
             eventServiceMock
                 .Setup(x => x.Process(
@@ -113,7 +113,7 @@ namespace DataEntryClientTests.SycProcess
                     serviceResult.Roots[0].EventKeys.Count))
                 .Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
 
-            this.syncProcessRepository.Setup(r => r.GetProcess(processGuid)).Returns(syncProcessor.Object);
+            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
             
             var process = new WirelessSyncProcess(this.kernel, processGuid);
 
@@ -123,7 +123,7 @@ namespace DataEntryClientTests.SycProcess
 
             this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(3));
 
-            this.syncProcessRepository.Verify(x => x.GetProcess(processGuid), Times.Once());
+            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Once());
 
             syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
 
@@ -157,7 +157,7 @@ namespace DataEntryClientTests.SycProcess
                               }
             };
 
-            this.syncProcessRepository.Setup(x => x.GetProcess(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
             eventServiceMock
                 .Setup(x => x.Process(
@@ -165,7 +165,7 @@ namespace DataEntryClientTests.SycProcess
                     serviceResult.Roots[0].EventKeys.Count))
                 .Throws(new Exception("Test exception"));
 
-            this.syncProcessRepository.Setup(r => r.GetProcess(processGuid)).Returns(syncProcessor.Object);
+            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
 
             var process = new WirelessSyncProcess(this.kernel, processGuid);
 
@@ -175,7 +175,7 @@ namespace DataEntryClientTests.SycProcess
 
             this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
 
-            this.syncProcessRepository.Verify(x => x.GetProcess(processGuid), Times.Never());
+            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Never());
 
             syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Never());
 
@@ -270,7 +270,7 @@ namespace DataEntryClientTests.SycProcess
                             }
             };
 
-            this.syncProcessRepository.Setup(x => x.GetProcess(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
             eventServiceMock.Setup(
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
@@ -284,7 +284,7 @@ namespace DataEntryClientTests.SycProcess
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count),
                 Times.Exactly(1));
 
-            this.syncProcessRepository.Verify(x => x.GetProcess(It.IsAny<Guid>()), Times.Exactly(1));
+            this.syncProcessRepository.Verify(x => x.GetProcessor(It.IsAny<Guid>()), Times.Exactly(1));
         }
 
     }

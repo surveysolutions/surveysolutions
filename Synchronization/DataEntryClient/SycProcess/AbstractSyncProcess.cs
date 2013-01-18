@@ -114,7 +114,7 @@ namespace DataEntryClient.SycProcess
                     return ErrorCodes.Fail;
                 }
 
-                var syncProcess = this.SyncProcessRepository.GetProcess(this.ProcessGuid);
+                var syncProcess = this.SyncProcessRepository.GetProcessor(this.ProcessGuid);
 
                 syncProcess.Merge(events);
 

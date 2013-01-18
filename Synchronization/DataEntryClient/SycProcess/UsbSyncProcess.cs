@@ -24,7 +24,6 @@ namespace DataEntryClient.SycProcess
 
     using Ninject;
 
-    //using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Export;
 
     using SynchronizationMessages.CompleteQuestionnaire;
