@@ -11,6 +11,8 @@ namespace Core.Supervisor.Views.Survey
 {
     using System;
 
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// The complete questionnaire view input model.
     /// </summary>
@@ -57,8 +59,12 @@ namespace Core.Supervisor.Views.Survey
         /// <param name="propagationKey">
         /// The propagation key.
         /// </param>
-        public DisplayViewInputModel(Guid id, Guid groupKey, Guid? propagationKey)
+        /// <param name="user">
+        /// The user.
+        /// </param>
+        public DisplayViewInputModel(Guid id, Guid groupKey, Guid? propagationKey, UserLight user)
         {
+            this.User = user;
             this.CompleteQuestionnaireId = id;
             this.CurrentGroupPublicKey = groupKey;
             this.PropagationKey = propagationKey;
@@ -72,6 +78,11 @@ namespace Core.Supervisor.Views.Survey
         /// Gets the complete questionnaire id.
         /// </summary>
         public Guid CompleteQuestionnaireId { get; private set; }
+
+        /// <summary>
+        /// Gets User.
+        /// </summary>
+        public UserLight User { get; set; }
 
         /// <summary>
         /// Gets or sets the current group public key.

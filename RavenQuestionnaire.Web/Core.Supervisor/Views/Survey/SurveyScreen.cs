@@ -55,8 +55,10 @@ namespace Core.Supervisor.Views.Survey
 
             this.Questions = node.Group.Children.OfType<ICompleteQuestion>()
                 .Where(q => q.QuestionScope <= QuestionScope.Supervisor)
-                .Select(q => new SurveyQuestion(doc, q))
+                .Select(q => new SurveyQuestion(doc, node.Group, q))
                 .ToList();
+
+            this.ChildrenKeys = node.Group.Children.OfType<ICompleteGroup>().Select(q => new ScreenKey(q)).ToList();
         }
 
         #endregion
@@ -81,6 +83,14 @@ namespace Core.Supervisor.Views.Survey
         /// </summary>
         public List<SurveyQuestion> Questions { get; set; }
 
+        /// <summary>
+        /// Gets or sets Captions.
+        /// </summary>
         public List<string> Captions { get; set; }
+
+        /// <summary>
+        /// Gets or sets ChildrenKeys.
+        /// </summary>
+        public List<ScreenKey> ChildrenKeys { get; set; }
     }
 }

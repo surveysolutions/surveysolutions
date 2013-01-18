@@ -223,6 +223,7 @@
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
+    <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\TimelineJS\css\loading.gif" />
     <Content Include="Content\TimelineJS\css\timeline.css" />
     <Content Include="Content\TimelineJS\css\timeline.png" />
@@ -237,6 +238,7 @@
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
@@ -245,6 +247,7 @@
     <Content Include="Scripts\jquery-latest.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
