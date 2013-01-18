@@ -31,12 +31,13 @@ namespace AndroidApp.ViewModel.Statistics
                                                     "Respondent's highest level of education:", "University degree",
                                                     string.Empty)
                 };
-            var invalid = new List<StatisticsQuestionViewModel>()
-                {
-                    new StatisticsQuestionViewModel(new ItemPublicKey(Guid.NewGuid(), null), Guid.NewGuid(),
-                                                    "How do you go to work?", string.Empty,
-                                                    string.Empty)
-                };
+            var invalid = new List<StatisticsQuestionViewModel>();
+            for (int i = 0; i < 100; i++)
+            {
+                invalid.Add(new StatisticsQuestionViewModel(new ItemPublicKey(Guid.NewGuid(), null), Guid.NewGuid(),
+                                                            "How do you go to work?", string.Empty,
+                                                            string.Empty));
+            }
             var result = new StatisticsViewModel(input.QuestionnaireId, "2012 Research department general survey",
                                                  SurveyStatus.Initial, 20, new List<StatisticsQuestionViewModel>(0),
                                                  answered, invalid);

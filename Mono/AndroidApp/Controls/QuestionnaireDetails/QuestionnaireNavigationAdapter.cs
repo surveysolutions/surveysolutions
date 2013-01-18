@@ -48,7 +48,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
                 if (position == selectedItem)
                 {
-                    view.SetBackgroundColor(Color.Blue);
+                    view.SetBackgroundColor(Color.LightBlue);
                 }
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);

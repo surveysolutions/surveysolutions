@@ -52,7 +52,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             {
                 if (idx == ind)
                 {
-                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.Blue);
+                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.LightBlue);
                 }
                 else
                     this.ListView.GetChildAt(idx).SetBackgroundColor(Color.Transparent);
