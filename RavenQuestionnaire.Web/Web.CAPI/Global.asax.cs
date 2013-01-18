@@ -101,26 +101,37 @@ namespace Web.CAPI
             try
             {
                 SuccessMarker.Start(KernelLocator.Kernel);
-                this.correctlyInitialyzed = true;
+                correctlyInitialyzed = true;
             }
             catch (Exception e)
             {
                 this.logger.Fatal("Initialization failed", e);
-                this.correctlyInitialyzed = false;
-                this.BeginRequest += (sender, args) =>
+                correctlyInitialyzed = false;
+
+                // due to the bug in iis7 moved to Application_BeginRequest
+                /*this.BeginRequest += (sender, args) =>
                 {
                     base.Response.Write("Sorry, Application cann't handle your request!");
                     this.CompleteRequest();
-                };
+                };*/
 
-                throw;
+                // throw;
+            }
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (!correctlyInitialyzed)
+            {
+                base.Response.Write("Sorry, Application cann't handle your request!");
+                this.CompleteRequest();
             }
         }
 
         /// <summary>
         /// The correctly initialyzed.
         /// </summary>
-        private bool correctlyInitialyzed;
+        private static bool correctlyInitialyzed;
 
         /// <summary>
         /// The host services.

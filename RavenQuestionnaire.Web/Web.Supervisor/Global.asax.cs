@@ -33,9 +33,9 @@ namespace Web.Supervisor
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
-        /// The correctly initialyzed.
+        /// The correctly initialized.
         /// </summary>
-        private bool correctlyInitialyzed;
+        private static bool correctlyInitialized;
 
         #endregion
 
@@ -108,20 +108,32 @@ namespace Web.Supervisor
             try
             {
                 SuccessMarker.Start(KernelLocator.Kernel);
-                this.correctlyInitialyzed = true;
+                correctlyInitialized = true;
             }
             catch (Exception e)
             {
                 this.logger.Fatal("Initialization failed", e);
-                this.correctlyInitialyzed = false;
-                this.BeginRequest += (sender, args) =>
+                correctlyInitialized = false;
+
+                // due to the bug in iis7 moved to Application_BeginRequest
+                /*this.BeginRequest += (sender, args) =>
                     {
                         base.Response.Write("Sorry, Application cann't handle your request!");
                         this.CompleteRequest();
                     };
-                throw;
+                throw;*/
             }
         }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (!correctlyInitialized)
+            {
+                base.Response.Write("Sorry, Application cann't handle this!");
+                this.CompleteRequest();
+            }
+        }
+
 
         /// <summary>
         /// The current_ unhandled exception.

@@ -23,6 +23,7 @@ namespace Web.Supervisor.Controllers
     using Main.Core.View;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
+    using Main.Synchronization.SyncStreamCollector;
 
     using NLog;
 
@@ -131,19 +132,18 @@ namespace Web.Supervisor.Controllers
             return this.File(result, "application/zip", string.Format("backup_{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
-
         /// <summary>
-        /// The export async.
+        /// The backup async.
         /// </summary>
         /// <param name="syncKey">
-        /// The synchronization key.
+        /// The sync key.
         /// </param>
         /// <returns>
-        /// The sync process guid
+        /// The <see cref="Guid?"/>.
         /// </returns>
         public Guid? BackupAsync(Guid syncKey)
         {
-            Guid syncProcess = Guid.NewGuid();
+            Guid syncProcessKey = Guid.NewGuid();
 
             AsyncQuestionnaireUpdater.Update(
                 this.AsyncManager,
@@ -151,15 +151,15 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        //var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
-                        //this.AsyncManager.Parameters["result"] = process.Export("Export DB on Supervisor in zip file");
+                        var collector = new CompressedStreamStreamCollector(syncProcessKey);
 
-                        var syncManager = new StorageSyncManager(new AllEventsStreamProvider(), syncProcess, null);
+                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, null);
+                        
+                        syncManager.StartPush();
 
-                        this.AsyncManager.Parameters["result"] = syncManager.GetExportedStream().ToArray();
+                        var timings = syncManager.StartTime - syncManager.EndTime;
 
-                        //var syncManager = new 
-
+                        this.AsyncManager.Parameters["result"] = collector.GetExportedStream().ToArray();
                     }
                     catch (Exception e)
                     {
@@ -173,7 +173,7 @@ namespace Web.Supervisor.Controllers
                     }
                 });
 
-            return syncProcess;
+            return syncProcessKey;
         }
 
         /// <summary>
@@ -187,7 +187,15 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult BackupCompleted(byte[] result)
         {
-            return this.File(result, "application/zip", string.Format("backup_{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+            if (result != null)
+            {
+                return this.File(
+                    result,
+                    "application/zip",
+                    string.Format("backup_{0}.zip", DateTime.UtcNow.ToString("yyyyMMddhhnnss")));
+            }
+
+            return null;
         }
 
 
@@ -276,8 +284,7 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        var process =
-                            (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                         process.Import(zipData, "Usb syncronization");
                     }

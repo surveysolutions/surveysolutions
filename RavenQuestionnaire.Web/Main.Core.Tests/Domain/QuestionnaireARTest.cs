@@ -85,7 +85,7 @@ namespace Main.Core.Tests.Domain
         }
 
         /// <summary>
-        /// The ar event raising on add question.
+        /// The AR event raising on add question.
         /// </summary>
         [Test]
         public void AREventRaisingOnAddQuestion()
@@ -142,7 +142,7 @@ namespace Main.Core.Tests.Domain
                     {
                         Assert.AreEqual(evnt.AnswerOrder, answerOrder);
 
-                        Assert.AreEqual(evnt.Answers, null);
+                        Assert.AreEqual(evnt.Answers, answers);
                         Assert.AreEqual(evnt.PublicKey, publicKey);
                         Assert.AreEqual(evnt.ConditionExpression, conditionExpression);
                         Assert.AreEqual(evnt.Featured, featured);

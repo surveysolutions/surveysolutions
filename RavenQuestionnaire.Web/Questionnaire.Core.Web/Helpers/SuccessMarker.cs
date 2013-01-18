@@ -16,15 +16,25 @@ namespace Questionnaire.Core.Web.Helpers
     /// </summary>
     public static class SuccessMarker
     {
+        /// <summary>
+        /// Gets the success file path.
+        /// </summary>
         private static string SuccessFilePath
         {
-            get { return HostingEnvironment.MapPath("/App_Data/" + successMarker); }
+            get { return HostingEnvironment.MapPath("/App_Data/" + SuccessMarkerFileName); }
         }
 
-        private static readonly string successMarker = "success.marker";
+        /// <summary>
+        /// The success marker.
+        /// </summary>
+        private const string SuccessMarkerFileName = "success.marker";
 
+        /// <summary>
+        /// The stop.
+        /// </summary>
         public static void Stop()
-        {/*
+        {
+            /*
             File.CreateText(SuccessMarker.SuccessFilePath);
             // Get file info
             FileInfo myFile = new FileInfo(SuccessMarker.SuccessFilePath);
@@ -32,11 +42,12 @@ namespace Questionnaire.Core.Web.Helpers
             // Remove the hidden attribute of the file
             myFile.Attributes |= FileAttributes.Hidden;*/
         }
+
         public static void Start(IKernel kernel)
         {
            /* if (!File.Exists(SuccessMarker.SuccessFilePath))
             {*/
-                NCQRSInit.RebuildReadLayer(kernel);
+                NcqrsInit.RebuildReadLayer(kernel);
          /*   }
             else
                 File.Delete(SuccessMarker.SuccessFilePath);*/

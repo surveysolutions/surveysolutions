@@ -20,6 +20,6 @@ namespace DataEntryClient.SycProcessRepository
         /// </param>
         /// <returns>
         /// </returns>
-        ISyncProcessor GetProcess(Guid synkProcessKey);
+        ISyncProcessor GetProcessor(Guid synkProcessKey);
     }
 }

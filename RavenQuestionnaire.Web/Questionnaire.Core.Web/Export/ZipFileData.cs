@@ -34,6 +34,7 @@ namespace Questionnaire.Core.Web.Export
         public ZipFileData()
         {
             this.ImportDate = DateTime.Now;
+            this.CreationDate = DateTime.UtcNow;
         }
 
         #endregion
@@ -54,6 +55,11 @@ namespace Questionnaire.Core.Web.Export
         /// Gets or sets the import date.
         /// </summary>
         public DateTime ImportDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the import date.
+        /// </summary>
+        public DateTime CreationDate { get; set; }
 
         #endregion
 
