@@ -96,13 +96,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             return -1;
         }
-        public void UpdateScreenData(IQuestionnaireViewModel initScreen)
+        public void UpdateScreenData(IQuestionnaireViewModel initScreen, ItemPublicKey? newScreenId)
         {
             this.screensHolder = initScreen.Siblings;
             this.screenId = initScreen.ScreenId;
             this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
             this.NotifyDataSetChanged();
-            target.CurrentItem = this.GetScreenIndex(this.screenId);
+            target.CurrentItem = this.GetScreenIndex(newScreenId);
         }
     }
 }

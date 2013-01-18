@@ -116,7 +116,7 @@ namespace AndroidApp
         {
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
               new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
-            Adapter.UpdateScreenData(firstScreen);
+            Adapter.UpdateScreenData(firstScreen, e.ScreenId);
         }
         protected override void OnSaveInstanceState(Bundle outState)
         {
@@ -143,7 +143,7 @@ namespace AndroidApp
             }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
                 new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
-            Adapter.UpdateScreenData(firstScreen);
+            Adapter.UpdateScreenData(firstScreen,e.ScreenId);
            /* Adapter = new ContentFrameAdapter(this.SupportFragmentManager, firstScreen, VpContent);
             Adapter.NotifyDataSetChanged();*/
         }
