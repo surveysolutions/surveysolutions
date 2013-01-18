@@ -57,15 +57,15 @@ namespace DataEntryClient.SycProcessRepository
         /// <summary>
         /// The get process
         /// </summary>
-        /// <param name="synkProcessKey">
+        /// <param name="syncProcessKey">
         /// The synk process key.
         /// </param>
         /// <returns>
         /// Syncronization process item
         /// </returns>
-        public ISyncProcessor GetProcess(Guid synkProcessKey)
+        public ISyncProcessor GetProcessor(Guid syncProcessKey)
         {
-            return new SyncProcessor(this.processes.GetByGuid(synkProcessKey), this.surveys, this.users);
+            return new SyncProcessor(this.processes.GetByGuid(syncProcessKey), this.surveys, this.users);
         }
     }
 }

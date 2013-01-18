@@ -31,7 +31,7 @@ namespace Main.Core
     /// <summary>
     /// The ncqrs init.
     /// </summary>
-    public static class NCQRSInit
+    public static class NcqrsInit
     {
         #region Public Methods and Operators
 
@@ -71,22 +71,22 @@ namespace Main.Core
         /// </exception>
         public static void RebuildReadLayer(IKernel kernel)
         {
-            var myEventBus = NcqrsEnvironment.Get<IEventBus>();
-            if (myEventBus == null)
+            var eventBus = NcqrsEnvironment.Get<IEventBus>();
+            if (eventBus == null)
             {
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
-            var myEventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); 
+            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); 
 
-            if (myEventStore == null)
+            if (eventStore == null)
             {
                 throw new Exception("IStreamableEventStore is not correctly initialized.");
             }
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            myEventBus.Publish(myEventStore.GetEventStream());
+            eventBus.Publish(eventStore.GetEventStream());
         }
 
         #endregion
@@ -97,10 +97,10 @@ namespace Main.Core
         /// The initialize command service.
         /// </summary>
         /// <param name="commandSupplier">
-        /// The command Supplier.
+        /// The command supplier.
         /// </param>
         /// <returns>
-        /// The Ncqrs.Commanding.ServiceModel.ICommandService.
+        /// The <see cref="ICommandService"/>.
         /// </returns>
         private static ICommandService InitializeCommandService(ICommandListSupplier commandSupplier)
         {
@@ -122,7 +122,7 @@ namespace Main.Core
         /// The store.
         /// </param>
         /// <returns>
-        /// The Ncqrs.Eventing.Storage.IEventStore.
+        /// The <see cref="IStreamableEventStore"/>.
         /// </returns>
         private static IStreamableEventStore InitializeEventStore(DocumentStore store)
         {

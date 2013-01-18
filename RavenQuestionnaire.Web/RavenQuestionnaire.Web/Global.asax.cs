@@ -35,7 +35,7 @@ namespace RavenQuestionnaire.Web
         /// <summary>
         /// The correctly initialyzed.
         /// </summary>
-        private bool correctlyInitialyzed;
+        private static bool correctlyInitialyzed;
 
         #endregion
 
@@ -100,18 +100,20 @@ namespace RavenQuestionnaire.Web
             try
             {
                 SuccessMarker.Start(KernelLocator.Kernel);
-                this.correctlyInitialyzed = true;
+                correctlyInitialyzed = true;
             }
             catch (Exception e)
             {
                 this.logger.Fatal("Initialization failed", e);
-                this.correctlyInitialyzed = false;
-                this.BeginRequest += (sender, args) =>
+                correctlyInitialyzed = false;
+
+                // due to the bug in iis7 moved to Application_BeginRequest
+                /*this.BeginRequest += (sender, args) =>
                     {
                         base.Response.Write("Sorry, Application cann't handle his!");
                         this.CompleteRequest();
                     };
-                throw;
+                throw;*/
             }
 
             // maybe better to move outside this class
@@ -123,18 +125,14 @@ namespace RavenQuestionnaire.Web
             // ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
 
-        /* protected void Application_BeginRequest(object sender, EventArgs e)
+        protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
             if (!correctlyInitialyzed)
             {
-                base.Response.Write("Sorry, Application cann't handle his!");
-
-                base.CompleteRequest();
+                base.Response.Write("Sorry, Application cann't handle this!");
+                this.CompleteRequest();
             }
-            
-
-        }*/
+        }
 
         // <summary>
         /// <summary>

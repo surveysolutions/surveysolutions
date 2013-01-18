@@ -19,7 +19,7 @@ namespace Main.Synchronization.SyncSreamProvider
     /// <summary>
     /// The all events stream provider.
     /// </summary>
-    public class AllEventsStreamProvider : ISyncEventStreamProvider
+    public class AllIntEventsStreamProvider : IIntSyncEventStreamProvider
     {
         #region Fields
 
@@ -33,9 +33,9 @@ namespace Main.Synchronization.SyncSreamProvider
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AllEventsStreamProvider"/> class.
+        /// Initializes a new instance of the <see cref="AllIntEventsStreamProvider"/> class.
         /// </summary>
-        public AllEventsStreamProvider()
+        public AllIntEventsStreamProvider()
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
         }
@@ -53,6 +53,25 @@ namespace Main.Synchronization.SyncSreamProvider
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
             return this.eventStore.GetEventStream().Select(item => new AggregateRootEvent(item));
+        }
+
+        /// <summary>
+        /// The get total event count.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="int?"/>.
+        /// </returns>
+        public int? GetTotalEventCount()
+        {
+            return null;
+        }
+
+        public string ProviderName
+        {
+            get
+            {
+                return "Backup";
+            }
         }
 
         #endregion

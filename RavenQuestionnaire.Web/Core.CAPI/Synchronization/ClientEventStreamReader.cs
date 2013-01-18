@@ -82,18 +82,18 @@ namespace Core.CAPI.Synchronization
         /// </exception>
         public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
-            var myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            if (myEventStore == null)
+            if (eventStore == null)
             {
                 throw new Exception("IEventStore is not correct.");
             }
+
             var usersGuid = new List<Guid>();
             var retval = new List<AggregateRootEvent>();
 
-            foreach (var item in this.storage.Query().
-                Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)))
+            foreach (var item in this.storage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)))
+            {
                 retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId));
-
+            }
 
             return retval.OrderBy(x => x.EventSequence);
         }

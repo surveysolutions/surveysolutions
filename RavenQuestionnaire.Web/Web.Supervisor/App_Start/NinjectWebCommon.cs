@@ -14,23 +14,29 @@ using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
-[assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
+[assembly: WebActivator.PreApplicationStartMethod(typeof(NinjectWebCommon), "Start")]
+[assembly: ApplicationShutdownMethod(typeof(NinjectWebCommon), "Stop")]
 
 namespace Web.Supervisor.App_Start
 {
+    /// <summary>
+    /// The ninject web common.
+    /// </summary>
     public static class NinjectWebCommon
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
+        /// <summary>
+        /// The bootstrapper.
+        /// </summary>
+        private static readonly Bootstrapper Bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
         public static void Start()
         {
-            DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
-            DynamicModuleUtility.RegisterModule(typeof (NinjectHttpModule));
-            bootstrapper.Initialize(CreateKernel);
+            DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
+            DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
+            Bootstrapper.Initialize(CreateKernel);
         }
 
         /// <summary>
@@ -38,7 +44,7 @@ namespace Web.Supervisor.App_Start
         /// </summary>
         public static void Stop()
         {
-            bootstrapper.ShutDown();
+            Bootstrapper.ShutDown();
             SuccessMarker.Stop();
         }
 
@@ -50,18 +56,21 @@ namespace Web.Supervisor.App_Start
         {
             bool isEmbeded;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
+            {
                 isEmbeded = false;
-            string storePath;
-            if (isEmbeded)
-                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"];
-            else
-                storePath = WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            }
+
+            string storePath = isEmbeded
+                                   ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
+                                   : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+            
             var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
+            NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
+            
             // SuccessMarker.Start(kernel);
             return kernel;
         }

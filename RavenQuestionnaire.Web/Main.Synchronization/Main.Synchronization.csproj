@@ -51,8 +51,19 @@
     <Compile Include="SyncManager\ISyncManager.cs" />
     <Compile Include="SyncManager\NetworkSyncManager.cs" />
     <Compile Include="SyncManager\StorageSyncManager.cs" />
-    <Compile Include="SyncSreamProvider\AllEventsStreamProvider.cs" />
+    <Compile Include="SyncManager\SyncManager.cs" />
+    <Compile Include="SyncManager\SyncManagerSettings.cs" />
+    <Compile Include="SyncSreamProvider\AllIntEventsStreamProvider.cs" />
+    <Compile Include="SyncSreamProvider\ExtFileEventStreamProvider.cs" />
+    <Compile Include="SyncSreamProvider\IExtSyncEventStreamProvider.cs" />
+    <Compile Include="SyncSreamProvider\IIntSyncEventStreamProvider.cs" />
+    <Compile Include="SyncSreamProvider\IntClientEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ISyncEventStreamProvider.cs" />
+    <Compile Include="SyncSreamProvider\RemoteServiceEventStreamProvider.cs" />
+    <Compile Include="SyncStreamCollector\CompressedStreamStreamCollector.cs" />
+    <Compile Include="SyncStreamCollector\ISyncStreamCollector.cs" />
+    <Compile Include="SyncStreamCollector\LocalStorageStreamCollector.cs" />
+    <Compile Include="SyncStreamCollector\RemoteServiceStreamCollector.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -71,6 +82,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>

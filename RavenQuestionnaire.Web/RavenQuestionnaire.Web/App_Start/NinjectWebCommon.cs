@@ -63,7 +63,7 @@ namespace RavenQuestionnaire.Web.App_Start
             KernelLocator.SetKernel(kernel);
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
+            NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
             // SuccessMarker.Start(kernel);
             return kernel;
         }

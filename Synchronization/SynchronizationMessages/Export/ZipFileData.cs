@@ -34,6 +34,13 @@ namespace SynchronizationMessages.Export
         public _ZipFileData()
         {
             this.ImportDate = DateTime.Now;
+            this.CreationDate = DateTime.UtcNow;
+        }
+
+        protected DateTime CreationDate
+        {
+            get;
+            set;
         }
 
         #endregion
@@ -89,7 +96,8 @@ namespace SynchronizationMessages.Export
         {
             var data = new _ZipFileData
                 {
-                    ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value, Events = events 
+                    ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value,
+                    Events = events
                 };
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             return JsonConvert.SerializeObject(data, Formatting.Indented, settings);
@@ -111,12 +119,12 @@ namespace SynchronizationMessages.Export
         {
             return ExportInternal(
                 (zip) =>
+                {
+                    foreach (var file in files)
                     {
-                        foreach (var file in files)
-                        {
-                            zip.AddEntry(MakeValidFileName(file.Key), file.Value);
-                        }
-                    }, 
+                        zip.AddEntry(MakeValidFileName(file.Key), file.Value);
+                    }
+                },
                 entryFileName);
         }
 
@@ -136,12 +144,12 @@ namespace SynchronizationMessages.Export
         {
             return ExportInternal(
                 (zip) =>
+                {
+                    foreach (var file in files)
                     {
-                        foreach (var file in files)
-                        {
-                            zip.AddEntry(MakeValidFileName(file.Key), file.Value);
-                        }
-                    }, 
+                        zip.AddEntry(MakeValidFileName(file.Key), file.Value);
+                    }
+                },
                 entryFileName);
         }
 

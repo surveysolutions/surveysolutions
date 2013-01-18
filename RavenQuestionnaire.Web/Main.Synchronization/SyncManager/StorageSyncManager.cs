@@ -130,9 +130,4 @@ namespace Main.Synchronization.SyncManager
             return outputStream;
         }
     }
-
-    public class SyncManagerSettings
-    {
-
-    }
 }
