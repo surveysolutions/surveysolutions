@@ -17,7 +17,7 @@ using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationFragment : ListFragment
+    public class QuestionnaireNavigationFragment : ListFragment, IScreenChanging
     {
         #region public fields
 
@@ -26,14 +26,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.RetainInstance = true;
         }
 
-        public event EventHandler<ScreenChangedEventArgs> ItemClick;
+        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
         public IEnumerable<QuestionnaireNavigationPanelItem> DataItems { get; set; }
         private int selectedItemIndex=0;
         #endregion
 
         protected void OnItemClick(ItemPublicKey? groupKey)
         {
-            var handler = ItemClick;
+            var handler = ScreenChanged;
             if (handler != null)
                 handler(this, new ScreenChangedEventArgs(groupKey));
         }
@@ -74,7 +74,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public override void OnDetach()
         {
-            ItemClick = null;
+            ScreenChanged = null;
             base.OnDetach();
         }
         public override void OnSaveInstanceState(Bundle p0)

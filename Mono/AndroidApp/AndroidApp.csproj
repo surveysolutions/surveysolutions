@@ -112,8 +112,9 @@
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
-    <Compile Include="Controls\Statistics\AnsweredQuestionsView.cs" />
-    <Compile Include="Controls\Statistics\InvalidQuestionsView.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\AbstractScreenChangingFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
+    <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs" />
     <Compile Include="Core\ParcelableWrapper.cs" />
     <Compile Include="DashboardActivity.cs" />

@@ -18,11 +18,10 @@ using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Java.Interop;
-using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class GridContentFragment : Fragment
+    public class GridContentFragment : AbstractScreenChangingFragment
     {
         public GridContentFragment(QuestionnaireGridViewModel model)
             : this()
@@ -197,20 +196,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             OnScreenChanged(new ScreenChangedEventArgs(publicKey));
             
         }
-        protected void OnScreenChanged(ScreenChangedEventArgs evt)
-        {
-            var handler = ScreenChanged;
-            if (handler != null)
-                handler(this, evt);
-        }
-
-        public override void OnDetach()
-        {
-            ScreenChanged = null;
-            base.OnDetach();
-        }
-
-        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
+       
 
         protected void AssignHeaderStyles(TextView tv)
         {

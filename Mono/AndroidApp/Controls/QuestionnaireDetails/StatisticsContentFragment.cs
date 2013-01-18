@@ -18,10 +18,11 @@ using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class StatisticsContentFragment : Fragment
+    public class StatisticsContentFragment : AbstractScreenChangingFragment
     {
         public StatisticsViewModel Model { get; private set; }
         protected AlertDialog answeredDilog;
+        protected AlertDialog unansweredDilog;
         protected AlertDialog invaliDilog;
         public StatisticsContentFragment(Guid questionnaireKey)
             : this()
@@ -51,8 +52,18 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             else
             {
                 var answeredPopup = new AlertDialog.Builder(this.Activity);
-                var answeredQuestionsView = new AnsweredQuestionsView(this.Activity, Model.AnsweredQuestions);
-                answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
+                var answeredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.AnsweredQuestions,
+                                                                             OnScreenChanged
+                                                                             , new string[2] {"Question", "Answer"},
+                                                                             new Func
+                                                                                 <StatisticsQuestionViewModel, string>[2
+                                                                                 ]
+                                                                                 {
+                                                                                     (s) => s.Text,
+                                                                                     (s) => s.AnswerString
+                                                                                 });
+                answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                                                    ViewGroup.LayoutParams.FillParent);
                 answeredPopup.SetView(answeredQuestionsView);
                 //  setAnswerPopup.Show();
                 answeredDilog = answeredPopup.Create();
@@ -66,6 +77,21 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             else
             {
+                var unansweredPopup = new AlertDialog.Builder(this.Activity);
+                var unansweredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.UnansweredQuestions,
+                                                                             OnScreenChanged
+                                                                             , new string[1] { "Question"},
+                                                                             new Func
+                                                                                 <StatisticsQuestionViewModel, string>[1
+                                                                                 ]
+                                                                                 {
+                                                                                     (s) => s.Text
+                                                                                 });
+                unansweredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                                                    ViewGroup.LayoutParams.FillParent);
+                unansweredPopup.SetView(unansweredQuestionsView);
+                unansweredDilog = unansweredPopup.Create();
+
                 btnUnanswered.Click += btnUnanswered_Click;
             }
             btnInvalid.Text += string.Format(" - {0}", this.Model.InvalidQuestions.Count);
@@ -77,7 +103,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             else
             {
                 var invalidPopup = new AlertDialog.Builder(this.Activity);
-                var invalidQuestionsView = new InvalidQuestionsView(this.Activity, Model.InvalidQuestions);
+                var invalidQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.InvalidQuestions,
+                                                                    OnScreenChanged, new string[3]{"Question","Answer","Error message"},new Func<StatisticsQuestionViewModel, string>[3]
+                                                                        {
+                                                                            (s)=> s.Text,
+                                                                            (s)=> s.AnswerString,
+                                                                            (s)=> s.ErrorMessage
+                                                                        } );
                 invalidQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
                 invalidPopup.SetView(invalidQuestionsView);
                 //  setAnswerPopup.Show();
@@ -93,9 +125,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
+        protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)
+        {
+            if (invaliDilog != null && invaliDilog.IsShowing)
+                invaliDilog.Hide();
+            if (answeredDilog != null && answeredDilog.IsShowing)
+                answeredDilog.Hide();
+            if (unansweredDilog != null && unansweredDilog.IsShowing)
+                unansweredDilog.Hide();
+            base.OnScreenChanged(evt);
+        }
+
         void btnUnanswered_Click(object sender, EventArgs e)
         {
-        
+            unansweredDilog.Show();
         }
 
         void btnInvalid_Click(object sender, EventArgs e)

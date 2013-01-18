@@ -20,7 +20,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class ScreenContentFragment : Fragment
+    public class ScreenContentFragment : AbstractScreenChangingFragment
     {
         private readonly IQuestionViewFactory questionViewFactory;
 
@@ -80,11 +80,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-        public override void OnDetach()
-        {
-            ScreenChanged = null;
-            base.OnDetach();
-        }
+       
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);
@@ -92,18 +88,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
 
         public QuestionnaireScreenViewModel Model { get; private set; }
-
-        protected void OnScreenChanged(ScreenChangedEventArgs evt)
-        {
-            var handler = ScreenChanged;
-            if (handler != null)
-                handler(this, evt);
-        }
-
-        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-
-
-       
 
     }
 }

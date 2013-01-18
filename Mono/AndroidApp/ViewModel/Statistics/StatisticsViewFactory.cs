@@ -32,14 +32,16 @@ namespace AndroidApp.ViewModel.Statistics
                                                     string.Empty)
                 };
             var invalid = new List<StatisticsQuestionViewModel>();
+          
+            var unanswered = new List<StatisticsQuestionViewModel>();
             for (int i = 0; i < 100; i++)
             {
-                invalid.Add(new StatisticsQuestionViewModel(new ItemPublicKey(Guid.NewGuid(), null), Guid.NewGuid(),
+                unanswered.Add(new StatisticsQuestionViewModel(new ItemPublicKey(Guid.NewGuid(), null), Guid.NewGuid(),
                                                             "How do you go to work?", string.Empty,
                                                             string.Empty));
             }
             var result = new StatisticsViewModel(input.QuestionnaireId, "2012 Research department general survey",
-                                                 SurveyStatus.Initial, 20, new List<StatisticsQuestionViewModel>(0),
+                                                 SurveyStatus.Initial, 20, unanswered,
                                                  answered, invalid);
             return result;
         }

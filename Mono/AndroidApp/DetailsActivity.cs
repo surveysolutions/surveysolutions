@@ -94,20 +94,10 @@ namespace AndroidApp
         */
         public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
         {
-            var screen = p0 as ScreenContentFragment;
+            var screen = p0 as IScreenChanging;
             if (screen != null)
             {
                 screen.ScreenChanged += ContentFrameAdapter_ScreenChanged;
-            }
-            var grid = p0 as GridContentFragment;
-            if (grid != null)
-            {
-                grid.ScreenChanged += ContentFrameAdapter_ScreenChanged;
-            }
-            var navBar = p0 as QuestionnaireNavigationFragment;
-            if(navBar!=null)
-            {
-                navBar.ItemClick += navList_ItemClick;
             }
             base.OnAttachFragment(p0);
         }
