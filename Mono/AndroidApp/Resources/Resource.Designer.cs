@@ -258,17 +258,6 @@ namespace AndroidApp
 			}
 		}
 		
-		public partial class Style
-		{
-			
-			// aapt resource value: 0x7f060000
-			public const int MyAppTheme = 2131099648;
-			
-			private Style()
-			{
-			}
-		}
-		
 		public partial class Styleable
 		{
 			

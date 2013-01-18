@@ -45,6 +45,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
                 // no view to re-use, create new
                 view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
+
+                if (position == selectedItem)
+                {
+                    view.SetBackgroundColor(Color.Blue);
+                }
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
 
@@ -62,11 +67,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 tvITem.Text = "Complete";
                 tvCount.Visibility = ViewStates.Gone;
             }
-            if (position == selectedItem)
-            {
-                view.SetBackgroundColor(Color.Blue);
-                ;
-            }
+           
             return view;
         }
 
