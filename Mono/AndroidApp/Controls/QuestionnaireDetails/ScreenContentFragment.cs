@@ -47,6 +47,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+        
+           
             ScrollView sv = new ScrollView(inflater.Context);
             sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
@@ -57,6 +59,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.SetPadding(0, 10, 0, 0);
 
             sv.AddView(ll);
+
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            ll.AddView(breadcrumbs);
+
             foreach (var item in Model.Items)
             {
                 var question = item as QuestionViewModel;

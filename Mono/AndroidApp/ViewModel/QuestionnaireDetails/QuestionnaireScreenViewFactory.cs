@@ -1801,11 +1801,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             if (screen.Propagated == Propagate.None || screen.PropagationPublicKey.HasValue)
                 return new QuestionnaireScreenViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,
                                                         screen.PropagationPublicKey), BuildItems(screen), siblings,
-                                                        Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
+                                                        BuildBreadCrumbs(root, screen),
                                                         BuildChapters(root));
 
             return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
-                                                  Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
+                                                  BuildBreadCrumbs(root,screen),
                                                   BuildChapters(root),
                                                   screen.Children.OfType<ICompleteQuestion>().Select(BuildHeader).ToList(),
                                                   BuildGridRows(root, screen));
@@ -1821,6 +1821,40 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                             question.Answers.OfType<ICompleteAnswer>().Select(
                                                 a =>
                                                 new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));*/
+        }
+        protected IEnumerable<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(CompleteQuestionnaireDocument doc, ICompleteGroup screen)
+        {
+            Stack<ICompleteGroup> stack = new Stack<ICompleteGroup>(new ICompleteGroup[1] { doc });
+            List<ICompleteGroup> rout = new List<ICompleteGroup>();
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+
+                while (rout.Count > 0 && !rout[rout.Count - 1].Children.Contains(current))
+                {
+                    rout.RemoveAt(rout.Count - 1);
+                }
+
+                rout.Add(current);
+                if (current.PublicKey == screen.PublicKey)
+                {
+                    if (!screen.PropagationPublicKey.HasValue ||
+                        screen.PropagationPublicKey == current.PropagationPublicKey)
+                    {
+                       break;
+                    }
+                }
+
+                foreach (IComposite composite in current.Children)
+                {
+                    var newGroup = composite as ICompleteGroup;
+                    if (newGroup != null)
+                        stack.Push(newGroup);
+                }
+            }
+            return rout.Skip(1).Select(r =>
+                                       new QuestionnaireNavigationPanelItem(
+                                           new ItemPublicKey(r.PublicKey, r.PropagationPublicKey), r.Title, 0, 0));
         }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)

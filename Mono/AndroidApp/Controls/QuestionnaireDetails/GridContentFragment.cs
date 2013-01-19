@@ -58,6 +58,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.Orientation = Orientation.Vertical;
             ll.SetPadding(0, 10, 0, 0);
 
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            ll.AddView(breadcrumbs);
 
             TableLayout tl = new TableLayout(inflater.Context);
             tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);

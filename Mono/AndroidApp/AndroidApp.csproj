@@ -113,6 +113,7 @@
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
     <Compile Include="Controls\Navigation\NavigationSpinnerAdapter.cs" />
     <Compile Include="Controls\QuestionnaireDetails\AbstractScreenChangingFragment.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs" />
