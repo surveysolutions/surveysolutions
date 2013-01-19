@@ -39,13 +39,30 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             {
                 Button crumb = new Button(this.Context);
                 crumb.Text = questionnaireNavigationPanelItem.Title;
+                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenPublicKey.ToString());
+                crumb.Click += crumb_Click;
                 var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                                ViewGroup.LayoutParams.WrapContent);
+
+                var img = Context.Resources.GetDrawable(Android.Resource.Drawable.IcMediaPlay);
+                //img.SetBounds(0, 0, 45, 45);
+                crumb.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+
                 butParam.SetMargins(0, 0, 10, 0);
                 crumb.LayoutParameters = butParam;
                 
                 this.AddView(crumb);
             }
+            this.GetChildAt(this.ChildCount - 1).Enabled = false;
+        }
+
+        void crumb_Click(object sender, EventArgs e)
+        {
+            var crumb = sender as Button;
+            if (crumb == null)
+                return;
+            var screenId = ItemPublicKey.Parse(crumb.GetTag(Resource.Id.ScreenId).ToString());
+            notifier(new ScreenChangedEventArgs(screenId));
         }
     }
 }
