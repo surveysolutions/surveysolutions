@@ -1,6 +1,36 @@
 /*global ko, crossroads */
+ko.bindingHandlers.datepicker = {
+    init: function (element, valueAccessor, allBindingsAccessor) {
+        //initialize datepicker with some optional options
+        var options = allBindingsAccessor().datepickerOptions || {};
+        $(element).datepicker(options);
 
+        //when a user changes the date, update the view model
+        ko.utils.registerEventHandler(element, "changeDate", function (event) {
+            var value = valueAccessor();
+            if (ko.isObservable(value)) {
+                value(event.date);
+            }
+        });
+    },
+    update: function (element, valueAccessor) {
+        var widget = $(element).data("datepicker");
+        //when the view model is updated, update the widget
+        if (widget) {
+            widget.date = ko.utils.unwrapObservable(valueAccessor());
+            if (widget.date) {
+                widget.setValue();
+            }
+        }
+    }
+};
 
+Date.prototype.mmddyyyy = function () {
+    var yyyy = this.getFullYear().toString();
+    var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+    var dd = this.getDate().toString();
+    return  (mm[1] ? mm : "0" + mm[0]) + '/' + (dd[1] ? dd : "0" +  dd[0]) + '/' + yyyy; // padding
+};
 
 (function () {
     'use strict';
@@ -295,7 +325,7 @@
                         break;
                     case "DateTime":
                         //parse date
-                        newAnswer = value;
+                        newAnswer = value.mmddyyyy();
                         break;
                 }
                 if (newAnswer.trim() != '') {
@@ -378,17 +408,20 @@
                     }
                     break;
                 case "Numeric":
-                    self.selectedOption(answer);
+                    self.selectedOption(self.answer);
                     break;
                 case "Text":
-                    self.selectedOption(answer);
+                    self.selectedOption(self.answer);
                     break;
                 case "AutoPropagate":
-                    self.selectedOption(answer);
+                    self.selectedOption(self.answer);
                     break;
                 case "DateTime":
                     //parse date
-                    self.selectedOption(new Date(answer));
+                    var date = new Date(Date.parse(self.answer()));
+                    self.answer(date.mmddyyyy());
+                    date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
+                    self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() +1 ,  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
                     break;
             }
         };

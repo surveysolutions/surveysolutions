@@ -157,7 +157,7 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
         <input data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 <script type="text/html" id="DateTime">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
 </script>
 <script type="text/html" id="AutoPropagate">
         <input data-bind="value: selectedOption, disable: isReadonly" />
@@ -167,7 +167,8 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
 </script>
 @{
     Html.RequiresJs("director.min.js", "Scripts", 50);
-    Html.RequiresJs("knockout.min.js", "Scripts", 80);
+    Html.RequiresJs("knockout-2.2.1.js", "Scripts", 80);
+    Html.RequiresJs("knockout.validation.js", "Scripts", 80);
     Html.RequiresJs("details.js", "Scripts", 90);
 }
 <script type="text/javascript">
