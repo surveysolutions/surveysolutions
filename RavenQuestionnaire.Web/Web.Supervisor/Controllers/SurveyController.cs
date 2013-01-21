@@ -30,6 +30,8 @@ namespace Web.Supervisor.Controllers
     using Main.Core.View.Questionnaire;
     using Main.Core.View.User;
 
+    using NLog;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
@@ -39,6 +41,7 @@ namespace Web.Supervisor.Controllers
     using Web.Supervisor.Models.Chart;
 
     using CompleteQuestionnaireViewInputModel = Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireViewInputModel;
+    using LogManager = Ncqrs.LogManager;
 
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
@@ -80,6 +83,45 @@ namespace Web.Supervisor.Controllers
         #endregion
 
         #region Actions
+
+        [HttpPost]
+        public JsonResult AddComment(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, string comment)
+        {
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(
+                    new SetCommentCommand(
+                        surveyKey,
+                        questionKey,
+                        comment,
+                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey));
+            }
+            catch (Exception e)
+            {
+                Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return this.Json(new { status = "error", error = e.Message });
+            }
+
+            return this.Json(new { status = "ok" });
+        }
+
+        public JsonResult FlagQuestion(Guid surveyKey, Guid questionKey, Guid? questionPropagationKey, bool isFlaged)
+        {
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+            }
+            catch (Exception e)
+            {
+                Logger logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return this.Json(new { status = "error", error = e.Message });
+            }
+
+            return this.Json(new { status = "ok" });
+        }
 
         /// <summary>
         /// Display statistic surveys on page

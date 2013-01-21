@@ -1,5 +1,7 @@
 /*global ko, crossroads */
 
+
+
 (function () {
     'use strict';
 
@@ -221,9 +223,10 @@
         questionMap.push(self);
     };
 
-    var Answer = function (key, parentKey, type, question, answer, answerOptions, isReadonly, isValid, isEnabled, isAnswered, comments) {
+    var Answer = function (key, surveyKey, parentKey, type, question, answer, answerOptions, isReadonly, isValid, isEnabled, isAnswered, comments) {
         var self = this;
         self.key = key;
+        self.surveyKey = surveyKey;
         self.question = question;
         self.answer = ko.observable(answer);
         self.answerOptions = answerOptions;
@@ -246,6 +249,24 @@
             if (current) {
                 self.comments.push(new Comment(current));
                 self.currentComment('', undefined, new Date());
+
+                var request = dataHelper.createAddCommentRequest();
+                request.data = {
+                    surveyKey: self.surveyKey,
+                    questionKey: key.publicKey,
+                    questionPropagationKey: key.propagatekey,
+                    comment: current
+                };
+
+                request = $.ajax(request);
+
+                request.done(function (msg) {
+                    console.log("comment saved");
+                });
+
+                request.fail(function (jqXHR, textStatus) {
+                    console.log("comment error");
+                });
             }
         };
 
@@ -405,7 +426,7 @@
 
                 var answers = ko.observableArray(ko.utils.arrayMap(question.Answers, function (answer) {
 
-                    var comments = (answer.Comments == null || answer.Comments.trim()) ? [] : [new Comment(answer.Comments)];
+                    var comments = (answer.Comments == null || answer.Comments.trim() == '') ? [] : [new Comment(answer.Comments)];
 
                     var options = ko.utils.arrayMap(answer.AnswerOptions, function (option) {
                         return new AnswerOption(option.PublicKey, option.AnswerValue, option.Title, option.Selected);
@@ -413,6 +434,7 @@
 
                     return new Answer(
                         new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated),
+                        questionnaire.PublicKey,
                         new Key(answer.ParentKey.PublicKey, answer.ParentKey.PropagationKey, answer.ParentKey.IsPropagated),
                         answer.Type,
                         question.Title,
