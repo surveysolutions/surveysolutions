@@ -254,7 +254,7 @@
                 var newAnswer = '';
                 switch (self.displayMode()) {
                     case "SingleOption":
-                        var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.title == value; }) || undefined;
+                        var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
                         if (selected != undefined) {
                             newAnswer = selected.title;
                         }
@@ -274,14 +274,38 @@
                         break;
                 }
                 if (newAnswer.trim() != '') {
-                    self.answer(newAnswer)
+                    self.answer(newAnswer);
                     self.isAnswered(true);
                 }
                 else {
+                    self.answer('');
                     self.isAnswered(false);
                 }
             });
-        }
+
+            self.selectedOptions.subscribe(function (values) {
+                var newAnswer = '';
+                ko.utils.arrayForEach(values, function (value) {
+                    var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
+
+                    if (selected != undefined) {
+                        newAnswer += selected.title + ", ";
+                    }
+                });
+
+                newAnswer = newAnswer.trim();
+                newAnswer = newAnswer.substring(0, newAnswer.length - 1);
+
+                if (newAnswer != '') {
+                    self.answer(newAnswer);
+                    self.isAnswered(true);
+                }
+                else {
+                    self.answer('');
+                    self.isAnswered(false);
+                }
+            });
+        };
 
         var processOptions = function () {
             switch (self.displayMode()) {
@@ -622,7 +646,7 @@
         }
     };
 
-    $(document).ready(function() {
+    $(document).ready(function () {
         // bind a new instance of our view model to the page
         var viewModel = new SurveyModel(questionnaire || {});
         ko.applyBindings(viewModel);
@@ -636,5 +660,5 @@
         // set up filter routing
         Router({ '/:filter': viewModel.showMode }).init();
     });
-    
+
 } ());
