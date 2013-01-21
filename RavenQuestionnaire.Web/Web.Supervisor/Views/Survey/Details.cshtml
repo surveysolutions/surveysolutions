@@ -3,137 +3,155 @@
 @using Core.Supervisor.Views.Survey
 @using ClientDependency.Core.Mvc
 @model SurveyScreenView
-<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
 @{
-    Html.RequiresCss("jquery.dataTables.css", "Content", 50);
     Html.RequiresCss("details.css", "Content", 50);
-
-    Html.RequiresJs("jquery.dataTables.min.js", "Scripts", 50);
-    Html.RequiresJs("FixedHeader.min.js", "Scripts", 50);
 }
 <script type="text/javascript">
-
-
-    $(document).ready(function () {
-
-
-
-        $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
-
-        $.ajaxSetup({
-            cache: false
-        });
-
-        $('a.answer-btn').live('click', function () {
-            $('#stacks').addClass('detail-visible');
-            return false;
-        });
-
-        $('a.nav-link').live("click", function () {
-
-            if ($(this).hasClass("disabled")) {
-                return false;
-            }
-
-            var href = $(this).attr('href');
-
-            var ref = $('#groups ul a[href=\"' + href + '\"]');
-
-            if (ref.length > 0) {
-                $('#groups ul a').parent().removeClass('active');
-
-                $(ref).parent().addClass('active');
-            }
-
-            var request = $.ajax({
-                url: href,
-                type: "POST",
-                data: {},
-                dataType: "html"
-            });
-
-            request.done(function (msg) {
-                $("#content_container").html(msg);
-
-                $('div.expander').expander();
-            });
-
-            request.fail(function (jqXHR, textStatus) {
-                alert("Request failed: " + textStatus);
-            });
-            return false;
-        });
-    });
-    function JsonResults(data) {
-        var response = jQuery.parseJSON(data.responseText);
-        if (response.status === "ok") {
-
-        } else {
-            alert(response.error);
-        }
-    };
+var questionnaire = @Html.Raw(Json.Encode(Model)) ;
 </script>
+
 <div id="stacks">
-    <div id="groups" class="stack">
-        <div class="inner">
-            <div class="title">
-                <span>
-                    @if (!string.IsNullOrEmpty(Model.Status.ChangeComment))
-                    { 
-                        <a  data-content="@Model.Status.ChangeComment" data-placement="bottom" rel="popover" href="#" data-original-title="Survey comment">@Model.Title</a>
-                    }
-                    else
-                    {
-                        <text>@Model.Title</text>
-                    }
-                </span>
+        <div id="groups" class="stack">
+            <div class="inner">
+                <div class="title">
+                    <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+                    <span data-bind="text: title"></span>
+                </div>
+                <div class="body">
+                    <ul class="nav nav-list" data-bind="foreach: menu">
+                        <li data-bind="css: { active: isCurrent, level1: $data.level == 1, level2: $data.level == 2 }">
+                            <a data-bind="    click: $root.selectMenuItem" href="#/group">
+                                <span class="count" data-bind="    text: totals.counters"></span><span class="link-text" data-bind="    text: title"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bottom">
+                    <div class="inner">
+                        <a class="btn btn-info nav-link" id="ref-link-statusHistoryLink" href="#">Status history</a>
+                    </div>
+                </div>
             </div>
-            <div class="body">
-                <ul class="nav nav-list">
-                    @foreach (var gh in Model.Navigation.Menu)
-                    {
-                        if (gh.Propagated == Propagate.None)
-                        {
-                        <li class="@("level" + gh.Level) @(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey">
-                            <a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey })" >
-                                <span id="counter-@gh.PublicKey" class="count">@gh.Totals.Answered/@gh.Totals.Enablad</span>
-                                <span class="link-text">@gh.GroupText</span> </a></li>
-                        }
-                        else
-                        {
-                        <li class="@("level" + gh.Level) @(gh.Enabled ? "" : "ui-disabled")" id="@gh.PublicKey">
-                            <a class="nav-link" id="ref-link-@gh.PublicKey"  data-panel="main" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = gh.PublicKey, propagationKey = gh.PropagationKey })" >
-                                <span id="counter-@gh.PublicKey" class="count">@gh.Totals.Answered/@gh.Totals.Enablad</span>
-                                <span class="link-text">@gh.GroupText</span> </a></li>
-                        }
-                    }
-                </ul>
+        </div>
+        <div id="answers" class="stack">
+            <div class="inner">
+                <div class="body">
+                    <!-- ko foreach: filteredScreen -->
+                    <!-- ko if: hasQuestions -->
+                    <h2 class="heading" data-bind="text: title, visible: isVisible"></h2>
+                    <div class="questions">
+                        <table class="table table-bordered table-condensed" data-bind="style: { width: (300 + 250 * visibleCount()) + 'px' }">
+                            <tbody data-bind="foreach: questions">
+                                <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}">
+                                    <td style="width: 300px;" data-bind="text: title"></td>
+                                    <!-- ko foreach: answers -->
+                                    <!-- ko if: isVisible -->
+                                    <td style="width: 250px;">
+                                        <div class="cell-content">
+                                            <span data-bind="text: answer"></span>
+                                            <div class="question-toolbar btn-group pull-right">
+                                                <a class="btn btn-primary btn-mini answer-btn" href="#" data-bind="click: $root.openDetails, visible: isReadonly == false">answer</a>
+                                                <a class="btn btn-mini" data-bind="click: $root.openDetails"><span data-bind="    text: comments().length + ' ', visible: comments().length > 0"></span><i class="icon-comment"></i></a>
+                                                <a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }"><i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i></a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+                <div class="bottom">
+                    <div class="inner">
+                            <button class="btn" data-bind="visible: isMenuHidden, click: $root.openMenu"><i class="icon-th-list"></i></button>
+                        <div class="btn-group pull-right">
+                            <a href="#/all" class="btn" data-bind="css: { 'btn-primary': showMode() == 'all' }">all</a>
+                            <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': showMode() == 'flaged' }"><i class="icon-flag" data-bind="    css: { 'icon-white': showMode() == 'flaged' }"></i>flagged <span data-bind="    text: flagedCount"></span></a>
+                            <a href="#/answered" class="btn" data-bind="css: { 'btn-primary': showMode() == 'answered' }"><i class="icon-ok" data-bind="    css: { 'icon-white': showMode() == 'answered' }"></i>answered <span data-bind="    text: answeredCount"></span></a>
+                            <a href="#/invalid" class="btn " data-bind="css: { 'btn-primary': showMode() == 'invalid' }"><i class="icon-warning-sign" data-bind="    css: { 'icon-white': showMode() == 'invalid' }"></i>invalid <span data-bind="    text: invalidCount"></span></a>
+                            <a href="#/supervisor" class="btn " data-bind="css: { 'btn-primary': showMode() == 'supervisor' }"><i class="icon-pencil" data-bind="    css: { 'icon-white': showMode() == 'supervisor' }"></i>supervisor's <span data-bind="    text: editableCount"></span></a>
+                            <a href="#/enabled" class="btn " data-bind="css: { 'btn-primary': showMode() == 'enabled' }"><i class="icon-pencil" data-bind="    css: { 'icon-white': showMode() == 'enabled' }"></i>enabled <span data-bind="    text: enabledCount"></span></a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="bottom">
-                <div class="inner">
-                    <a class="btn btn-info nav-link" id="ref-link-statusHistoryLink" href="@Url.Action("StatusHistory", new { Id = Model.QuestionnairePublicKey })" >
-                        Status history</a>
+        </div>
+        <div id="details" data-bind="with: currentAnswer" class="stack">
+            <div class="inner">
+                <div class="title">
+                    <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+                    <span data-bind="text: question"></span>
+                </div>
+                <div class="body">
+                    <div class="details-block ">
+                        <h2 class="heading">Answer</h2>
+                        <p>
+                            <span data-bind="    visible: !isAnswered ">no yet</span>
+                            <span data-bind="   text: answer ">no yet answer</span>
+                        </p>
+                        <div data-bind="visible: !isReadonly">
+                        </div>
+                        <div data-bind="template: { name: displayMode }">
+                        </div>
+                    </div>
+                    <div class="details-block ">
+                        <h2 class="heading">Comments</h2>
+                        <ul data-bind="foreach: comments">
+                            <li data-bind="text: text"></li>
+                        </ul>
+                        <textarea data-bind="value: currentComment, valueUpdate: 'afterkeydown'"></textarea>
+                        <button class="btn" data-bind="click: addComment, enable: currentComment().trim().length > 0"><i class="icon-comment"></i>Add comment</button>
+                    </div>
+                </div>
+                <div class="bottom">
+                    <div class="inner">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="answers" class="stack">
-        <div class="inner">
-            <div id="content_container" class='@((Model.Status.PublicId == SurveyStatus.Complete.PublicId) ? "ui-disabled" : "")'>
-                @Html.Partial("_SurveyContent", Model)
-            </div>
-        </div>
-    </div>
-    <div id="details" class="stack">
-        <div class="inner">
-            <div class="title">
-            </div>
-            <div class="body">
-            </div>
-            <div class="bottom">
-                <div class="inner">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
+    <script type="text/html" id="SingleOption">
+        <ul data-bind="foreach: answerOptions">
+            <li>
+                <label data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
+                    <input type='radio' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </label>
+            </li>
+        </ul>
+    </script>
+
+    <script type="text/html" id="MultyOption">
+        <ul data-bind="foreach: answerOptions">
+            <li>
+                <label data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
+                    <input type='checkbox' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </label>
+            </li>
+        </ul>
+
+    </script>
+    <script type="text/html" id="Numeric">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    <script type="text/html" id="DateTime">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    <script type="text/html" id="AutoPropagate">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+    <script type="text/html" id="Text">
+        <input data-bind="value: selectedOption, disable: isReadonly" />
+    </script>
+
+@{
+    Html.RequiresJs("director.min.js", "Scripts", 50);
+    Html.RequiresJs("knockout.min.js", "Scripts", 80);
+    Html.RequiresJs("details.js", "Scripts", 90);
+}
