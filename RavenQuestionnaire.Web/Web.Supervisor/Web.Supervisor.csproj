@@ -232,12 +232,14 @@
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\details.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />
     <Content Include="Scripts\bootstrap-editable-inline.min.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\director.min.js" />
     <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
     <Content Include="Scripts\highcharts.js" />
@@ -252,6 +254,7 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\knockout.min.js" />
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
