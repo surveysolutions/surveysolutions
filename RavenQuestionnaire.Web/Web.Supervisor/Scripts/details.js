@@ -50,7 +50,7 @@
         self.totals = totals;
     };
 
-    var Screen = function (model, key, title, questions, childScreenKeys) {
+    var Screen = function (model, key, title, questions, childScreenKeys, captions) {
         var self = this;
         var model = model;
 
@@ -60,6 +60,7 @@
         self.isVisible = ko.observable(true);
         self.childScreenKeys = childScreenKeys;
         self.hasQuestions = !(childScreenKeys.length > 0);
+        self.captions = captions;
 
         self.setVisible = function (key) {
             self.isVisible(true);
@@ -223,7 +224,7 @@
         questionMap.push(self);
     };
 
-    var Answer = function (key, surveyKey, parentKey, type, question, answer, answerOptions, isReadonly, isValid, isEnabled, isAnswered, comments) {
+    var Answer = function (key, surveyKey, parentKey, type, question, answer, answerOptions, isReadonly, isValid, isEnabled, isAnswered, isFlaged, comments) {
         var self = this;
         self.key = key;
         self.surveyKey = surveyKey;
@@ -238,7 +239,7 @@
         self.isValid = ko.observable(isValid);
         self.isEnabled = ko.observable(isEnabled);
         self.isReadonly = isReadonly;
-        self.isFlaged = ko.observable(false);
+        self.isFlaged = ko.observable(isFlaged);
         self.type = type;
         self.comments = ko.observableArray(comments || []);
         self.isAnswered = ko.observable(isAnswered);
@@ -312,7 +313,7 @@
             self.selectedOptions.subscribe(function (values) {
                 var newAnswer = '';
                 self.answerKeys = [];
-                
+
                 ko.utils.arrayForEach(values, function (value) {
                     var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
 
@@ -476,6 +477,7 @@
                         answer.Valid,
                         answer.Enabled,
                         answer.Answered,
+                        answer.IsFlaged,
                         comments);
                 }));
 
@@ -486,7 +488,15 @@
                 return new Key(child.PublicKey, child.PropagationKey, child.IsPropagated);
             });
 
-            return new Screen(self, new Key(screen.Key.PublicKey, screen.Key.PropagationKey, screen.Key.IsPropagated), screen.Title, questions, childScreenKeys);
+            var captions = [];
+            if (screen.Captions.length > 0) {
+                captions.push('');
+                ko.utils.arrayForEach(screen.Captions, function (item) {
+                    captions.push(item);
+                });
+            }
+
+            return new Screen(self, new Key(screen.Key.PublicKey, screen.Key.PropagationKey, screen.Key.IsPropagated), screen.Title, questions, childScreenKeys, captions);
         }));
 
         self.currentAnswer = ko.observable();

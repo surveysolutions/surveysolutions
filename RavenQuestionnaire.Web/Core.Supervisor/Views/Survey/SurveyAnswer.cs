@@ -36,6 +36,7 @@ namespace Core.Supervisor.Views.Survey
             this.Enabled = question.Enabled;
             this.Valid = question.Valid;
             this.Answered = question.IsAnswered();
+            this.IsFlaged = question.IsFlaged;
 
             this.AnswerOptions = question.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(question.PublicKey, a)).ToArray();
             this.Type = question.QuestionType;
@@ -68,6 +69,11 @@ namespace Core.Supervisor.Views.Survey
         /// Gets or sets a value indicating whether Answered.
         /// </summary>
         public bool Answered { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsFlaged.
+        /// </summary>
+        public bool IsFlaged { get; set; }
 
         /// <summary>
         /// Gets or sets Comments.

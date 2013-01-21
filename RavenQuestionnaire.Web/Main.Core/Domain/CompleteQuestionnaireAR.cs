@@ -269,6 +269,29 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
+        /// The set comment.
+        /// </summary>
+        /// <param name="questionPublickey">
+        /// The question public key.
+        /// </param>
+        /// <param name="comments">
+        /// The comments.
+        /// </param>
+        /// <param name="propogationPublicKey">
+        /// The propagation public key.
+        /// </param>
+        public void SetFlag(Guid questionPublickey, Guid? propogationPublicKey, bool isFlaged)
+        {
+            this.ApplyEvent(
+                new FlagSet
+                {
+                    IsFlaged = isFlaged,
+                    PropagationPublicKey = propogationPublicKey,
+                    QuestionPublickey = questionPublickey
+                });
+        }
+        
+        /// <summary>
         /// The set answer.
         /// </summary>
         /// <param name="questionPublicKey">
@@ -827,6 +850,23 @@ namespace Main.Core.Domain
             }
 
             question.SetComments(e.Comments);
+        }
+
+        /// <summary>
+        /// The on set comment command.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnSetFlagCommand(FlagSet e)
+        {
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropagationPublicKey);
+            if (question == null)
+            {
+                return;
+            }
+
+            question.IsFlaged = e.IsFlaged;
         }
         #endregion
     }

@@ -39,6 +39,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </summary>
         string Comments { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether IsFlaged.
+        /// </summary>
+        bool IsFlaged { get; set; }
+
         #endregion
 
         #region Public Methods and Operators

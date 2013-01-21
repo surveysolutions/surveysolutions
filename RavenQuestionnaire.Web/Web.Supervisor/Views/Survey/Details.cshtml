@@ -36,9 +36,16 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
             <div class="body">
                 <!-- ko foreach: filteredScreen -->
                 <!-- ko if: hasQuestions -->
-                <h2 class="heading" data-bind="text: title, visible: isVisible"></h2>
+                <h2 class="heading" data-bind="text: title"></h2>
                 <div class="questions">
                     <table class="table table-bordered table-condensed" data-bind="style: { width: (300 + 250 * visibleCount()) + 'px' }">
+                       @* <!-- ko if: (captions.length > 0) -->
+                        <thead>
+                            <tr data-bind="foreach: captions">
+                                <td data-bind="text: $data"></td>
+                            </tr>
+                        </thead>
+                         <!-- /ko -->*@
                         <tbody data-bind="foreach: questions">
                             <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}">
                                 <td style="width: 300px;" data-bind="text: title">

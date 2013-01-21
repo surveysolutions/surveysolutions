@@ -119,6 +119,7 @@
     <Compile Include="Commands\Location\CreateLocationCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\ChangeStatusCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Completed\SetFlagCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\CreateCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
@@ -284,6 +285,7 @@
     <Compile Include="Events\Questionnaire\Completed\CommentSeted.cs" />
     <Compile Include="Events\Questionnaire\Completed\CompleteQuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\Completed\ConditionalStatusChanged.cs" />
+    <Compile Include="Events\Questionnaire\Completed\FlagSet.cs" />
     <Compile Include="Events\Questionnaire\Completed\FeaturedQuestionUpdated.cs" />
     <Compile Include="Events\Questionnaire\Completed\NewCompleteQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\Completed\PropagatableGroupAdded.cs" />

@@ -32,6 +32,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Valid = true;
+            this.IsFlaged = false;
             this.Cards = new List<Image>();
             this.AnswerDate = DateTime.Now;
             this.Answers = new List<IAnswer>();
@@ -105,6 +106,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the comments.
         /// </summary>
         public string Comments { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsFlaged.
+        /// </summary>
+        public bool IsFlaged { get; set; }
 
         /// <summary>
         /// Gets or sets the condition expression.

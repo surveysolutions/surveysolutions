@@ -25,8 +25,9 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
-    public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                                     IEventHandler<CommentSet>, 
+    public class CompleteQuestionnaireDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+                                                     IEventHandler<CommentSet>,
+                                                     IEventHandler<FlagSet>, 
                                                      IEventHandler<SnapshootLoaded>, 
                                                      IEventHandler<CompleteQuestionnaireDeleted>, 
                                                      IEventHandler<AnswerSet>, 
@@ -95,6 +96,30 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetComments(evnt.Payload.Comments);
+            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
+            item.LastEntryDate = evnt.EventTimeStamp;
+            this._documentStorage.Store(item, item.PublicKey);
+        }
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The event.
+        /// </param>
+        public void Handle(IPublishedEvent<FlagSet> evnt)
+        {
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+
+            CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
+                evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey);
+            ICompleteQuestion question = questionWrapper.Question;
+            if (question == null)
+            {
+                return;
+            }
+
+            question.IsFlaged = evnt.Payload.IsFlaged;
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;
             this._documentStorage.Store(item, item.PublicKey);

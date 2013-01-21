@@ -148,6 +148,13 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(
+                    new SetFlagCommand(
+                        surveyKey,
+                        questionKey,
+                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey,
+                         isFlaged)
+                       );
             }
             catch (Exception e)
             {
