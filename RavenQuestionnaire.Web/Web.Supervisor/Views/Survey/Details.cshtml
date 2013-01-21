@@ -176,18 +176,31 @@ var DataHelper = function (host) {
             url: self.host + "survey/addcomment",
             type: "POST",
             data: {},
-            dataType: "html"
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
         };
         return request;
     };
 
     self.createFlagQuestionRequest = function () {
-        var request = $.ajax({
+        var request = {
             url: self.host + "survey/FlagQuestion",
             type: "POST",
             data: {},
-            dataType: "html"
-        });
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
+        };
+        return request;
+    };
+
+    self.createAnswerQuestionRequest = function () {
+        var request = {
+            url: self.host + "survey/AnswerQuestion",
+            type: "POST",
+            data: {},
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
+        };
         return request;
     };
 }

@@ -242,6 +242,7 @@
         self.type = type;
         self.comments = ko.observableArray(comments || []);
         self.isAnswered = ko.observable(isAnswered);
+        self.answerKeys = [];
         self.currentComment = ko.observable('');
 
         self.addComment = function () {
@@ -251,12 +252,12 @@
                 self.currentComment('', undefined, new Date());
 
                 var request = dataHelper.createAddCommentRequest();
-                request.data = {
+                request.data = JSON.stringify({
                     surveyKey: self.surveyKey,
                     questionKey: key.publicKey,
                     questionPropagationKey: key.propagatekey,
                     comment: current
-                };
+                });
 
                 request = $.ajax(request);
 
@@ -278,6 +279,8 @@
                         var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
                         if (selected != undefined) {
                             newAnswer = selected.title;
+                            self.answerKeys = [];
+                            self.answerKeys.push(selected.key);
                         }
                         break;
                     case "Numeric":
@@ -302,15 +305,20 @@
                     self.answer('');
                     self.isAnswered(false);
                 }
+
+                answerQuestion();
             });
 
             self.selectedOptions.subscribe(function (values) {
                 var newAnswer = '';
+                self.answerKeys = [];
+                
                 ko.utils.arrayForEach(values, function (value) {
                     var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
 
                     if (selected != undefined) {
                         newAnswer += selected.title + ", ";
+                        self.answerKeys.push(selected.key);
                     }
                 });
 
@@ -325,6 +333,30 @@
                     self.answer('');
                     self.isAnswered(false);
                 }
+
+                answerQuestion();
+            });
+        };
+
+        var answerQuestion = function () {
+
+            var request = dataHelper.createAnswerQuestionRequest();
+            request.data = JSON.stringify({
+                surveyKey: self.surveyKey,
+                questionKey: key.publicKey,
+                questionPropagationKey: key.propagatekey,
+                answers: self.answerKeys,
+                answerValue: self.answer()
+            });
+
+            request = $.ajax(request);
+
+            request.done(function (data) {
+                console.log("answers saved");
+            });
+
+            request.fail(function (data) {
+                console.log("answers error");
             });
         };
 
@@ -584,6 +616,26 @@
 
         self.flagAnswer = function (answer, event) {
             answer.isFlaged(!answer.isFlaged());
+
+            var request = dataHelper.createFlagQuestionRequest();
+
+            request.data = JSON.stringify({
+                surveyKey: answer.surveyKey,
+                questionKey: answer.key.publicKey,
+                questionPropagationKey: answer.key.propagatekey,
+                isFlaged: answer.isFlaged()
+            });
+
+            request = $.ajax(request);
+
+            request.done(function (msg) {
+                console.log("comment saved");
+            });
+
+            request.fail(function (jqXHR, textStatus) {
+                console.log("comment error");
+            });
+
         } .bind(self);
 
         self.flagedCount = ko.computed(function () {
@@ -649,23 +701,6 @@
             $('#stacks').removeClass('menu-hidden');
             self.isMenuHidden(false);
         };
-
-        var createRequest = function () {
-            var request = $.ajax({
-                // url: href,
-                type: "POST",
-                data: {},
-                dataType: "html"
-            });
-
-            request.done(function (msg) {
-            });
-
-            request.fail(function (jqXHR, textStatus) {
-            });
-
-            return request;
-        }
     };
 
     $(document).ready(function () {

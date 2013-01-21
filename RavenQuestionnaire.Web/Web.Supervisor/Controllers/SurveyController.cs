@@ -84,6 +84,42 @@ namespace Web.Supervisor.Controllers
 
         #region Actions
 
+        /// <summary>
+        /// Save questionnaire answer in database 
+        /// </summary>
+        /// <param name="settings">
+        /// The settings.
+        /// </param>
+        /// <param name="questions">
+        /// The questions.
+        /// </param>
+        /// <returns>
+        /// Return Json result
+        /// </returns>
+        [HttpPost]
+        public JsonResult AnswerQuestion(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, Guid[] answers, string answerValue)
+        {
+            try
+            {
+                var commandService = NcqrsEnvironment.Get<ICommandService>();
+                commandService.Execute(
+                    new SetAnswerCommand(
+                        surveyKey,
+                        questionKey,
+                        new List<Guid>(answers ?? (new Guid[0])),
+                        answerValue,
+                        questionPropagationKey));
+            }
+            catch (Exception e)
+            {
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpPost]
         public JsonResult AddComment(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, string comment)
         {
