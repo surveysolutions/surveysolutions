@@ -198,11 +198,14 @@ var DataHelper = function (host) {
 
 </script>
 <script type="text/html" id="SingleImage">
-        <ul data-bind="foreach: answerOptions">
-            <li> image
-                <label data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
-                    <input type='radio' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
-                    <span data-bind="text: title"></span>
+        <ul data-bind="foreach: answerOptions" class="thumbnails">
+            <li  class="span1_5">
+                <label class="thumbnail" data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
+                    <img data-bind="attr: {src : image, alt: title}" />
+                    <div class="caption">
+                        <input type='radio' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                        <span data-bind="text: title"></span>
+                    </div>
                 </label>
             </li>
         </ul>
@@ -213,8 +216,8 @@ var DataHelper = function (host) {
                 <label class="thumbnail" data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
                     <img data-bind="attr: {src : image, alt: title}" />
                     <div class="caption">
-                    <input type='checkbox' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
-                    <span data-bind="text: title"></span>
+                        <input type='checkbox' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                        <span data-bind="text: title"></span>
                     </div>
                 </label>
             </li>
