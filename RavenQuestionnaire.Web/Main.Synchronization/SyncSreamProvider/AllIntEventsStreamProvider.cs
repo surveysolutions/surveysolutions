@@ -11,6 +11,7 @@ namespace Main.Synchronization.SyncSreamProvider
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Events;
 
     using Ncqrs;
@@ -64,6 +65,14 @@ namespace Main.Synchronization.SyncSreamProvider
         public int? GetTotalEventCount()
         {
             return null;
+        }
+
+        public SynchronizationType SyncType
+        {
+            get
+            {
+                return SynchronizationType.Push;
+            }
         }
 
         public string ProviderName

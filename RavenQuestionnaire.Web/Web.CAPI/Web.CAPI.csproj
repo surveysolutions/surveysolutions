@@ -386,6 +386,10 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
+      <Name>Main.Synchronization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>

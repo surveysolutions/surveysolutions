@@ -104,6 +104,8 @@
     <Compile Include="Synchronization\IGetLastSyncEvent.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />
     <Compile Include="Synchronization\ICustomSerializable.cs" />
+    <Compile Include="WcfInfrastructure\ChanelFactoryWrapper.cs" />
+    <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">

@@ -153,7 +153,7 @@ namespace Web.Supervisor.Controllers
                     {
                         var collector = new CompressedStreamStreamCollector(syncProcessKey);
 
-                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, null);
+                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, "Backup Request" ,null);
                         
                         syncManager.StartPush();
 

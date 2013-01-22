@@ -1,4 +1,13 @@
-namespace DataEntryClient.SycProcessRepository
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ISyncProcessor.cs" company="The World Bank">
+//   The World Bank
+// </copyright>
+// <summary>
+//   Sync Procesor Interface
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace Main.Synchronization.SycProcessRepository
 {
     using System.Collections.Generic;
 
@@ -8,14 +17,11 @@ namespace DataEntryClient.SycProcessRepository
     using Ncqrs.Eventing;
 
     /// <summary>
-    /// Sync Procesor Interface
+    /// Sync Processor Interface
     /// </summary>
     public interface ISyncProcessor
     {
-        /// <summary>
-        /// Gets or sets IncomeEvents.
-        /// </summary>
-        UncommittedEventStream[] IncomeEvents { get; set; }
+        #region Public Methods and Operators
 
         /// <summary>
         /// Calculate statistics
@@ -37,5 +43,7 @@ namespace DataEntryClient.SycProcessRepository
         /// The stream.
         /// </param>
         void Merge(IEnumerable<AggregateRootEvent> stream);
+
+        #endregion
     }
 }

@@ -6,25 +6,96 @@
 //   The local storage stream collector.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Synchronization.SyncStreamCollector
 {
     using System;
     using System.Collections.Generic;
 
     using Main.Core.Events;
+    using Main.Core.View.SyncProcess;
+    using Main.Synchronization.SycProcessRepository;
+
+    using Ninject;
 
     /// <summary>
     /// The local storage stream collector.
     /// </summary>
     public class LocalStorageStreamCollector : ISyncStreamCollector
     {
+        #region Fields
+
+        /// <summary>
+        /// sync process repository
+        /// </summary>
+        protected readonly ISyncProcessRepository SyncProcessRepository;
+
+        /// <summary>
+        /// The process Guid.
+        /// </summary>
+        private readonly Guid processGuid;
+
+        /// <summary>
+        /// The processor.
+        /// </summary>
+        private ISyncProcessor processor;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LocalStorageStreamCollector"/> class.
+        /// </summary>
+        /// <param name="kernel">
+        /// The kernel.
+        /// </param>
+        /// <param name="processGuid">
+        /// The process guid.
+        /// </param>
+        public LocalStorageStreamCollector(IKernel kernel, Guid processGuid)
+        {
+            this.SyncProcessRepository = kernel.Get<ISyncProcessRepository>();
+            this.processGuid = processGuid;
+        }
+
+        #endregion
+
         #region Public Properties
 
         /// <summary>
         /// Gets the max chunk size.
         /// </summary>
-        public int MaxChunkSize { get; private set; }
+        public int MaxChunkSize
+        {
+            get
+            {
+                return 1024;
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether support sync stat.
+        /// </summary>
+        public bool SupportSyncStat
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// The get stat.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public List<UserSyncProcessStatistics> GetStat()
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
 
@@ -39,41 +110,26 @@ namespace Main.Synchronization.SyncStreamCollector
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
-            throw new NotImplementedException();
+            this.processor.Merge(chunk);
+            return true;
         }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// The finish.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public void Finish()
         {
-            throw new NotImplementedException();
+            this.processor.Commit();
         }
 
         /// <summary>
         /// The prepare to collect.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         public void PrepareToCollect()
         {
-            throw new NotImplementedException();
+            this.processor = this.SyncProcessRepository.GetProcessor(this.processGuid);
         }
 
         #endregion

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Main.Synchronization.SyncSreamProvider
 {
+    using Main.Core.Documents;
     using Main.Core.Events;
 
     class ExtFileEventStreamProvider : IExtSyncEventStreamProvider
@@ -21,8 +22,16 @@ namespace Main.Synchronization.SyncSreamProvider
             return null;
         }
 
-        public string ProviderName 
-        { 
+        public SynchronizationType SyncType
+        {
+            get
+            {
+                return SynchronizationType.Pull;
+            }
+        }
+
+        public string ProviderName
+        {
             get
             {
                 return "File Stream";

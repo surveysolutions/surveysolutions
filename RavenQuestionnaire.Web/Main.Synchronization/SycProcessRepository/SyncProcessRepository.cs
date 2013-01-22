@@ -1,10 +1,12 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SyncProcessRepository.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SyncProcessRepository.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
-// -----------------------------------------------------------------------
-
-namespace DataEntryClient.SycProcessRepository
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace Main.Synchronization.SycProcessRepository
 {
     using System;
 
@@ -17,10 +19,12 @@ namespace DataEntryClient.SycProcessRepository
     /// </summary>
     public class SyncProcessRepository : ISyncProcessRepository
     {
+        #region Fields
+
         /// <summary>
-        /// The users
+        /// the processes
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> processes;
 
         /// <summary>
         /// the surveys
@@ -28,9 +32,13 @@ namespace DataEntryClient.SycProcessRepository
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         /// <summary>
-        /// the processes
+        /// The users
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> processes;
+        private readonly IDenormalizerStorage<UserDocument> users;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SyncProcessRepository"/> class.
@@ -45,8 +53,8 @@ namespace DataEntryClient.SycProcessRepository
         /// The users.
         /// </param>
         public SyncProcessRepository(
-            IDenormalizerStorage<SyncProcessStatisticsDocument> processes,
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IDenormalizerStorage<SyncProcessStatisticsDocument> processes, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
             IDenormalizerStorage<UserDocument> users)
         {
             this.processes = processes;
@@ -54,18 +62,24 @@ namespace DataEntryClient.SycProcessRepository
             this.users = users;
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
         /// <summary>
-        /// The get process
+        /// The get processor.
         /// </summary>
         /// <param name="syncProcessKey">
-        /// The synk process key.
+        /// The sync process key.
         /// </param>
         /// <returns>
-        /// Syncronization process item
+        /// The <see cref="ISyncProcessor"/>.
         /// </returns>
         public ISyncProcessor GetProcessor(Guid syncProcessKey)
         {
             return new SyncProcessor(this.processes.GetByGuid(syncProcessKey), this.surveys, this.users);
         }
+
+        #endregion
     }
 }

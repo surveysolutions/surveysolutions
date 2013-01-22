@@ -13,7 +13,6 @@ namespace DataEntryClient.SycProcess
     using System.Linq;
 
     using DataEntryClient.SycProcess.Interfaces;
-    using DataEntryClient.WcfInfrastructure;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
@@ -25,6 +24,7 @@ namespace DataEntryClient.SycProcess
 
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Synchronization;
+    using SynchronizationMessages.WcfInfrastructure;
 
     /// <summary>
     /// The complete questionnaire sync.

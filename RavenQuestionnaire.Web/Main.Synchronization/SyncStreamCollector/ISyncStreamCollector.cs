@@ -13,11 +13,12 @@ namespace Main.Synchronization.SyncStreamCollector
     using System.Collections.Generic;
 
     using Main.Core.Events;
+    using Main.Core.View.SyncProcess;
 
     /// <summary>
     /// The SyncStreamCollector interface.
     /// </summary>
-    public interface ISyncStreamCollector : IDisposable
+    public interface ISyncStreamCollector
     {
         #region Public Methods and Operators
 
@@ -43,6 +44,17 @@ namespace Main.Synchronization.SyncStreamCollector
         /// Gets the max chunk size.
         /// </summary>
         int MaxChunkSize { get; }
+
+
+        bool SupportSyncStat { get; }
+
+        /// <summary>
+        /// The get stat.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="List"/>.
+        /// </returns>
+        List<UserSyncProcessStatistics> GetStat();
 
         #endregion
     }

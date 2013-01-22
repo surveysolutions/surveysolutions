@@ -1,26 +1,19 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GetAggragateRootListService.svc.cs" company="The World Bank">
-//   Get Aggragate Root List Service
+// <copyright file="GetAggragateRootListService.svc.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   The get aggragate root list service.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.WCF
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 
-    using Main.Core.Documents;
     using Main.Core.Events;
-
-    using Questionnaire.Core.Web.Helpers;
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
@@ -31,7 +24,7 @@ namespace Web.Supervisor.WCF
     /// </summary>
     public class GetAggragateRootListService : IGetAggragateRootList
     {
-        #region Constants and Fields
+        #region Fields
 
         /// <summary>
         /// The event store.

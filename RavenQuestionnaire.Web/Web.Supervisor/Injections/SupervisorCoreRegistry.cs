@@ -6,7 +6,6 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.Injections
 {
     using System.Collections.Generic;
@@ -15,14 +14,13 @@ namespace Web.Supervisor.Injections
 
     using Core.Supervisor.Synchronization;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcessFactory;
-    using DataEntryClient.SycProcessRepository;
 
     using Main.Core;
     using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
+    using Main.Synchronization.SycProcessRepository;
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
@@ -64,8 +62,7 @@ namespace Web.Supervisor.Injections
                 base.GetAssweblysForRegister().Concat(
                     new[]
                         {
-                            typeof(SupervisorEventStreamReader).Assembly, 
-                            typeof(QuestionnaireMembershipProvider).Assembly
+                            typeof(SupervisorEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly
                         });
         }
 

@@ -22,12 +22,9 @@ namespace Web.CAPI.App_Start
     using System.Web;
     using System.Web.Configuration;
     using System.Web.Mvc;
-
-    using DataEntryClient.SycProcess;
-    using DataEntryClient.SycProcessRepository;
-    using DataEntryClient.WcfInfrastructure;
-
+    
     using Main.Core;
+    using Main.Synchronization.SycProcessRepository;
 
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
@@ -36,6 +33,8 @@ namespace Web.CAPI.App_Start
 
     using Questionnaire.Core.Web.Binding;
     using Questionnaire.Core.Web.Helpers;
+
+    using SynchronizationMessages.WcfInfrastructure;
 
     using Web.CAPI.Injections;
 

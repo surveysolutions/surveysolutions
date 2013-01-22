@@ -1,56 +1,18 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IChanelFactoryWrapper.cs" company="">
-//   Chanel Factory Wrapper
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChanelFactoryWrapper.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
 // <summary>
-//   The ChanelFactoryWrapper interface.
+//   The chanel factory wrapper.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace DataEntryClient.WcfInfrastructure
+namespace SynchronizationMessages.WcfInfrastructure
 {
     using System;
     using System.Linq;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
-
-    /// <summary>
-    /// The ChanelFactoryWrapper interface.
-    /// </summary>
-    public interface IChanelFactoryWrapper
-    {
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The execute.
-        /// </summary>
-        /// <param name="baseAdress">
-        /// The base address.
-        /// </param>
-        /// <param name="handler">
-        /// The handler.
-        /// </param>
-        /// <typeparam name="T">
-        /// Classes only
-        /// </typeparam>
-        void Execute<T>(string baseAdress, Action<T> handler) where T : class;
-
-        /// <summary>
-        /// The get chanel.
-        /// </summary>
-        /// <param name="baseAdress">
-        /// The base address.
-        /// </param>
-        /// <typeparam name="T">
-        /// Classes only
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        T GetChanel<T>(string baseAdress) where T : class;
-
-        #endregion
-    }
 
     /// <summary>
     /// The chanel factory wrapper.

@@ -6,22 +6,10 @@
 //   The complete questionnaire sync test.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace DataEntryClientTests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using DataEntryClient.SycProcess;
-    using DataEntryClient.SycProcessRepository;
-    using DataEntryClient.WcfInfrastructure;
-
-    using DataEntryClientTests.Stubs;
-
-    using Main.Core.Commands.Synchronization;
-    using Main.Core.Documents;
     using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
 
     using Moq;
 
@@ -31,8 +19,6 @@ namespace DataEntryClientTests
     using Ninject;
 
     using NUnit.Framework;
-
-    using SynchronizationMessages.CompleteQuestionnaire;
 
     /// <summary>
     /// The complete questionnaire sync test.
@@ -86,7 +72,7 @@ namespace DataEntryClientTests
             clientSettingsMock.Setup(x => x.ClientSettings).Returns(
                 new ClientSettingsView(new ClientSettingsDocument() { PublicKey = Guid.NewGuid() }));
             Kernel.Bind<IClientSettingsProvider>().ToConstant(clientSettingsMock.Object);*/
-            NcqrsEnvironment.SetDefault<ICommandService>(this.CommandService.Object);
+            NcqrsEnvironment.SetDefault(this.CommandService.Object);
         }
 
         #endregion

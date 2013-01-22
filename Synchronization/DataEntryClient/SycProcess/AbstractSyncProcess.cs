@@ -14,11 +14,11 @@ namespace DataEntryClient.SycProcess
     using System.Linq;
 
     using DataEntryClient.SycProcess.Interfaces;
-    using DataEntryClient.SycProcessRepository;
-
+    
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;

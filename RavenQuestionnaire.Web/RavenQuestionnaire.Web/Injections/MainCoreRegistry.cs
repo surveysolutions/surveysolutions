@@ -13,17 +13,15 @@ namespace RavenQuestionnaire.Web.Injections
     using System.Linq;
     using System.Reflection;
 
-    using DataEntryClient.SycProcessFactory;
-    using DataEntryClient.SycProcessRepository;
-
     using global::Core.HQ.Synchronization;
 
-    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core;
     using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
+    using Main.Synchronization.SycProcessRepository;
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
@@ -67,7 +65,8 @@ namespace RavenQuestionnaire.Web.Injections
                 base.GetAssweblysForRegister().Concat(
                     new[]
                         {
-                            typeof(HqEventStreamReader).Assembly, typeof(QuestionnaireView).Assembly, 
+                            typeof(HqEventStreamReader).Assembly, 
+                            typeof(QuestionnaireView).Assembly, 
                             typeof(QuestionnaireMembershipProvider).Assembly
                         });
         }

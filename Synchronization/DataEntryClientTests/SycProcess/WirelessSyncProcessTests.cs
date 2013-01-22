@@ -1,28 +1,26 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="WirelessSyncProcessTests.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace DataEntryClientTests.SycProcess
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
     using DataEntryClient.SycProcess;
-    using DataEntryClient.SycProcessRepository;
-    using DataEntryClient.WcfInfrastructure;
 
     using DataEntryClientTests.Stubs;
 
     using Main.Core.Documents;
     using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
 
     using Moq;
-
-    using NUnit.Framework;
 
     using Ncqrs;
     using Ncqrs.Commanding;
@@ -30,8 +28,11 @@ namespace DataEntryClientTests.SycProcess
 
     using Ninject;
 
+    using NUnit.Framework;
+
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Synchronization;
+    using SynchronizationMessages.WcfInfrastructure;
 
     /// <summary>
     /// TODO: Update summary.
@@ -62,6 +63,8 @@ namespace DataEntryClientTests.SycProcess
 
         #endregion
 
+        #region Public Methods and Operators
+
         /// <summary>
         /// The create objects.
         /// </summary>
@@ -77,132 +80,7 @@ namespace DataEntryClientTests.SycProcess
             this.kernel.Bind<ISyncProcessRepository>().ToConstant(this.syncProcessRepository.Object);
 
             this.commandService = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault<ICommandService>(this.commandService.Object);
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void WirelessSyncProcess_CheckImportScenario()
-        {
-            var processGuid = Guid.NewGuid();
-
-            var syncProcessor = new Mock<ISyncProcessor>();
-
-            var serviceMock = new Mock<IGetAggragateRootList>();
-            var eventServiceMock = new Mock<IGetEventStream>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
-            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
-
-            var serviceResult = new ListOfAggregateRootsForImportMessage
-            {
-                Roots = new[] { 
-                                new ProcessedEventChunk
-                                    {
-                                        EventChunckPublicKey = Guid.NewGuid(), 
-                                        EventKeys = new List<Guid> { Guid.NewGuid() }
-                                    }
-                              }
-            };
-
-            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
-            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
-            eventServiceMock
-                .Setup(x => x.Process(
-                    serviceResult.Roots[0].EventKeys.First(), 
-                    serviceResult.Roots[0].EventKeys.Count))
-                .Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
-
-            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
-            
-            var process = new WirelessSyncProcess(this.kernel, processGuid);
-
-            var result = process.Import("Test", "http://192.162.0.0");
-
-            Assert.AreEqual(ErrorCodes.None, result);
-
-            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(3));
-
-            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Once());
-
-            syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
-
-            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Exactly(1));
-
-            syncProcessor.Verify(x => x.Commit(), Times.Exactly(1));
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void WirelessSyncProcess_ExceptionWhileEventsLoading_ImportIsFailed()
-        {
-            var processGuid = Guid.NewGuid();
-
-            var syncProcessor = new Mock<ISyncProcessor>();
-
-            var serviceMock = new Mock<IGetAggragateRootList>();
-            var eventServiceMock = new Mock<IGetEventStream>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
-            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
-
-            var serviceResult = new ListOfAggregateRootsForImportMessage
-            {
-                Roots = new[] { 
-                                new ProcessedEventChunk
-                                    {
-                                        EventChunckPublicKey = Guid.NewGuid(), 
-                                        EventKeys = new List<Guid> { Guid.NewGuid() }
-                                    }
-                              }
-            };
-
-            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
-            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
-            eventServiceMock
-                .Setup(x => x.Process(
-                    serviceResult.Roots[0].EventKeys.First(),
-                    serviceResult.Roots[0].EventKeys.Count))
-                .Throws(new Exception("Test exception"));
-
-            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
-
-            var process = new WirelessSyncProcess(this.kernel, processGuid);
-
-            var result = process.Import("Test", "http://192.162.0.0");
-
-            Assert.AreEqual(ErrorCodes.Fail, result);
-
-            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
-
-            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Never());
-
-            syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Never());
-
-            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Never());
-
-            syncProcessor.Verify(x => x.Commit(), Times.Never());
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void WirelessSyncProcess_CheckExportScenario()
-        {
-            var processGuid = Guid.NewGuid();
-            var pipeMock = new Mock<IEventPipe>();
-
-            var eventServiceMock = new Mock<IGetEventStream>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { pipeMock, eventServiceMock });
-            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
-
-            var process = new WirelessSyncProcess(this.kernel, processGuid);
-
-            var result = process.Export("Test", "http://192.162.0.0");
-
-            Assert.AreEqual(ErrorCodes.None, result);
-
-            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
+            NcqrsEnvironment.SetDefault(this.commandService.Object);
         }
 
         /// <summary>
@@ -251,16 +129,17 @@ namespace DataEntryClientTests.SycProcess
         {
             var serviceMock = new Mock<IGetAggragateRootList>();
             var eventServiceMock = new Mock<IGetEventStream>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
+            IChanelFactoryWrapper chanelFactoryStub =
+                new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
             this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
 
             Guid clientGuid = Guid.NewGuid();
             Guid? eventGuid = Guid.NewGuid();
-            var syncProcessGiud = Guid.NewGuid();
+            Guid syncProcessGiud = Guid.NewGuid();
             var serviceResult = new ListOfAggregateRootsForImportMessage
-            {
-                Roots =
-                    new[]
+                {
+                    Roots =
+                        new[]
                             {
                                 new ProcessedEventChunk
                                     {
@@ -268,7 +147,7 @@ namespace DataEntryClientTests.SycProcess
                                         EventKeys = new List<Guid> { Guid.NewGuid() }
                                     }
                             }
-            };
+                };
 
             this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
             serviceMock.Setup(x => x.Process()).Returns(serviceResult);
@@ -281,11 +160,139 @@ namespace DataEntryClientTests.SycProcess
 
             serviceMock.Verify(x => x.Process(), Times.Exactly(1));
             eventServiceMock.Verify(
-                x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count),
+                x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count), 
                 Times.Exactly(1));
 
             this.syncProcessRepository.Verify(x => x.GetProcessor(It.IsAny<Guid>()), Times.Exactly(1));
         }
 
+        /// <summary>
+        /// </summary>
+        [Test]
+        public void WirelessSyncProcess_CheckExportScenario()
+        {
+            Guid processGuid = Guid.NewGuid();
+            var pipeMock = new Mock<IEventPipe>();
+
+            var eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(new object[] { pipeMock, eventServiceMock });
+            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var process = new WirelessSyncProcess(this.kernel, processGuid);
+
+            ErrorCodes result = process.Export("Test", "http://192.162.0.0");
+
+            Assert.AreEqual(ErrorCodes.None, result);
+
+            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
+        }
+
+        /// <summary>
+        /// </summary>
+        [Test]
+        public void WirelessSyncProcess_CheckImportScenario()
+        {
+            Guid processGuid = Guid.NewGuid();
+
+            var syncProcessor = new Mock<ISyncProcessor>();
+
+            var serviceMock = new Mock<IGetAggragateRootList>();
+            var eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub =
+                new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
+            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var serviceResult = new ListOfAggregateRootsForImportMessage
+                {
+                    Roots =
+                        new[]
+                            {
+                                new ProcessedEventChunk
+                                    {
+                                        EventChunckPublicKey = Guid.NewGuid(), 
+                                        EventKeys = new List<Guid> { Guid.NewGuid() }
+                                    }
+                            }
+                };
+
+            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
+            eventServiceMock.Setup(
+                x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
+                Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
+
+            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
+
+            var process = new WirelessSyncProcess(this.kernel, processGuid);
+
+            ErrorCodes result = process.Import("Test", "http://192.162.0.0");
+
+            Assert.AreEqual(ErrorCodes.None, result);
+
+            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(3));
+
+            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Once());
+
+            syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
+
+            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Exactly(1));
+
+            syncProcessor.Verify(x => x.Commit(), Times.Exactly(1));
+        }
+
+        /// <summary>
+        /// </summary>
+        [Test]
+        public void WirelessSyncProcess_ExceptionWhileEventsLoading_ImportIsFailed()
+        {
+            Guid processGuid = Guid.NewGuid();
+
+            var syncProcessor = new Mock<ISyncProcessor>();
+
+            var serviceMock = new Mock<IGetAggragateRootList>();
+            var eventServiceMock = new Mock<IGetEventStream>();
+            IChanelFactoryWrapper chanelFactoryStub =
+                new ChanelFactoryStub(new object[] { serviceMock, eventServiceMock });
+            this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
+
+            var serviceResult = new ListOfAggregateRootsForImportMessage
+                {
+                    Roots =
+                        new[]
+                            {
+                                new ProcessedEventChunk
+                                    {
+                                        EventChunckPublicKey = Guid.NewGuid(), 
+                                        EventKeys = new List<Guid> { Guid.NewGuid() }
+                                    }
+                            }
+                };
+
+            this.syncProcessRepository.Setup(x => x.GetProcessor(It.IsAny<Guid>())).Returns(new SyncProcessorStub());
+            serviceMock.Setup(x => x.Process()).Returns(serviceResult);
+            eventServiceMock.Setup(
+                x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).Throws
+                (new Exception("Test exception"));
+
+            this.syncProcessRepository.Setup(r => r.GetProcessor(processGuid)).Returns(syncProcessor.Object);
+
+            var process = new WirelessSyncProcess(this.kernel, processGuid);
+
+            ErrorCodes result = process.Import("Test", "http://192.162.0.0");
+
+            Assert.AreEqual(ErrorCodes.Fail, result);
+
+            this.commandService.Verify(x => x.Execute(It.IsAny<ICommand>()), Times.AtLeast(2));
+
+            this.syncProcessRepository.Verify(x => x.GetProcessor(processGuid), Times.Never());
+
+            syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Never());
+
+            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Never());
+
+            syncProcessor.Verify(x => x.Commit(), Times.Never());
+        }
+
+        #endregion
     }
 }
