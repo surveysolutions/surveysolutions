@@ -11,11 +11,9 @@ namespace DataEntryClientTests.Stubs
 {
     using System.Collections.Generic;
 
-    using DataEntryClient.SycProcess;
-    using DataEntryClient.SycProcessRepository;
-
     using Main.Core.Events;
     using Main.Core.View.SyncProcess;
+    using Main.Synchronization.SycProcessRepository;
 
     using Ncqrs.Eventing;
 
@@ -31,19 +29,10 @@ namespace DataEntryClientTests.Stubs
         /// </summary>
         public SyncProcessorStub()
         {
-            this.IncomeEvents = new UncommittedEventStream[0];
         }
 
         #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets IncomeEvents.
-        /// </summary>
-        public UncommittedEventStream[] IncomeEvents { get; set; }
-
-        #endregion
+        
 
         #region Public Methods and Operators
 

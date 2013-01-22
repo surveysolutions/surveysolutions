@@ -107,6 +107,10 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
+      <Name>Main.Synchronization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataEntryClient\DataEntryClient.csproj">
       <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
       <Name>DataEntryClient</Name>

@@ -1,34 +1,34 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SyncProcessFactoryTests.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace DataEntryClientTests.SycProcessFactory
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
+    using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
-    using DataEntryClient.SycProcessRepository;
-    using DataEntryClient.WcfInfrastructure;
 
     using DataEntryClientTests.Stubs;
 
     using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
 
     using Moq;
-
-    using NUnit.Framework;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
     using Ninject;
 
+    using NUnit.Framework;
+
     using SynchronizationMessages.Synchronization;
+    using SynchronizationMessages.WcfInfrastructure;
 
     /// <summary>
     /// TODO: Update summary.
@@ -60,6 +60,8 @@ namespace DataEntryClientTests.SycProcessFactory
 
         #endregion
 
+        #region Public Methods and Operators
+
         /// <summary>
         /// The create objects.
         /// </summary>
@@ -75,7 +77,7 @@ namespace DataEntryClientTests.SycProcessFactory
             this.kernel.Bind<ISyncProcessRepository>().ToConstant(this.syncProcessRepository.Object);
 
             this.commandService = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault<ICommandService>(this.commandService.Object);
+            NcqrsEnvironment.SetDefault(this.commandService.Object);
 
             var serviceMock = new Mock<IGetLastSyncEvent>();
             IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(serviceMock);
@@ -93,7 +95,7 @@ namespace DataEntryClientTests.SycProcessFactory
             {
                 try
                 {
-                    var syncProcess = factory.GetProcess(type, Guid.NewGuid(), null);
+                    ISyncProcess syncProcess = factory.GetProcess(type, Guid.NewGuid(), null);
                 }
                 catch (Exception ex)
                 {
@@ -101,5 +103,7 @@ namespace DataEntryClientTests.SycProcessFactory
                 }
             }
         }
+
+        #endregion
     }
 }
