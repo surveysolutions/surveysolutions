@@ -144,6 +144,8 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireView.cs" />
+    <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
@@ -240,6 +242,10 @@
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
+      <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
+      <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
