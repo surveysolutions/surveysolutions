@@ -392,7 +392,7 @@ td.capital
 	font-size: 13px;
 	position: relative;
 	text-shadow: 0 1px 0 white;
-	background: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAACCAYAAACddGYaAAAAF0lEQVQIHWNgYGCw/f//PwMIg4jFMA4AtWgP0gDjJSAAAAAASUVORK5CYII=") center bottom repeat-x;
+	background: url("img/divider.png") center bottom repeat-x;
 }
 #details .bottom
 {
