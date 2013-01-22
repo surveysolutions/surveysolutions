@@ -50,7 +50,7 @@ namespace Core.Supervisor.Views.Survey
             this.Navigation = navigation;
 
             var validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
-            validator.Execute(currentGroup);
+            validator.Execute(doc);
             this.Screens = new List<SurveyScreen>();
             this.BuildScreenContent(doc, currentGroup, scope);
         }
@@ -117,6 +117,9 @@ namespace Core.Supervisor.Views.Survey
         /// </param>
         private void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, QuestionScope scope)
         {
+            var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
+            validator.Execute(doc);
+
             this.Group = new CompleteGroupMobileView()
             {
                 PublicKey = currentGroup.PublicKey,
@@ -147,6 +150,7 @@ namespace Core.Supervisor.Views.Survey
                 var subGroups = node.Group.Children.OfType<ICompleteGroup>().Reverse().ToArray();
                 foreach (var completeGroup in subGroups.Where(completeGroup => completeGroup.HasVisibleItemsForScope(scope)))
                 {
+                    validator.Execute(completeGroup);
                     treeStack.Push(new NodeWithLevel(completeGroup, node.Level + 1));
                 }
             }
