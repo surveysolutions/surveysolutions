@@ -306,6 +306,7 @@ Date.prototype.mmddyyyy = function () {
             self.selectedOption.subscribe(function (value) {
                 var newAnswer = '';
                 switch (self.displayMode()) {
+                    case "SingleImage":
                     case "SingleOption":
                         var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.value == value; }) || undefined;
                         if (selected != undefined) {
@@ -391,38 +392,40 @@ Date.prototype.mmddyyyy = function () {
             });
         };
 
-        var processOptions = function () {
+        var processOptions = function() {
             switch (self.displayMode()) {
-                case "SingleOption":
-                    var selected = ko.utils.arrayFirst(self.answerOptions, function (option) { return option.isSelected; }) || undefined;
-                    if (selected != undefined) {
-                        self.selectedOption(selected.value);
-                    }
-                    break;
-                case "MultyOption":
-                    var selected = ko.utils.arrayFilter(self.answerOptions, function (option) { return option.isSelected; }) || undefined;
-                    if (selected != undefined) {
-                        self.selectedOptions(ko.utils.arrayMap(selected, function (option) {
-                            return option.value;
-                        }));
-                    }
-                    break;
-                case "Numeric":
-                    self.selectedOption(self.answer);
-                    break;
-                case "Text":
-                    self.selectedOption(self.answer);
-                    break;
-                case "AutoPropagate":
-                    self.selectedOption(self.answer);
-                    break;
-                case "DateTime":
+            case "SingleImage":
+            case "SingleOption":
+                var selected = ko.utils.arrayFirst(self.answerOptions, function(option) { return option.isSelected; }) || undefined;
+                if (selected != undefined) {
+                    self.selectedOption(selected.value);
+                }
+                break;
+            case "MultyImage":
+            case "MultyOption":
+                var selected = ko.utils.arrayFilter(self.answerOptions, function(option) { return option.isSelected; }) || undefined;
+                if (selected != undefined) {
+                    self.selectedOptions(ko.utils.arrayMap(selected, function(option) {
+                        return option.value;
+                    }));
+                }
+                break;
+            case "Numeric":
+                self.selectedOption(self.answer);
+                break;
+            case "Text":
+                self.selectedOption(self.answer);
+                break;
+            case "AutoPropagate":
+                self.selectedOption(self.answer);
+                break;
+            case "DateTime":
                     //parse date
-                    var date = new Date(Date.parse(self.answer()));
-                    self.answer(date.mmddyyyy());
-                    date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
-                    self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() +1 ,  date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
-                    break;
+                var date = new Date(Date.parse(self.answer()));
+                self.answer(date.mmddyyyy());
+                date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
+                self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+                break;
             }
         };
 
@@ -438,6 +441,8 @@ Date.prototype.mmddyyyy = function () {
                 case 6: tmpl = "Text"; break; //GpsCoordinates
                 case 7: tmpl = "Text"; break;
                 case 8: tmpl = "AutoPropagate"; break;
+                case 9:tmpl = "SingleImage"; break;
+                case 10:tmpl = "MultyImage"; break;
             }
             return tmpl;
         };
@@ -446,26 +451,27 @@ Date.prototype.mmddyyyy = function () {
         answerMap.push(self);
     };
 
-    var AnswerOption = function (key, value, title, isSelected) {
+    var AnswerOption = function(key, value, title, isSelected, image) {
         var self = this;
         self.key = key;
         self.value = value;
         self.title = title;
+        self.image = "/Resource/Thumb/" + image;
         self.isSelected = isSelected;
-    }
+    };
 
-    var Comment = function (text, user, date) {
+    var Comment = function(text, user, date) {
         var self = this;
         self.text = text;
         self.user = user;
         self.date = date;
-    }
+    };
 
-    var User = function (key, name) {
+    var User = function(key, name) {
         var self = this;
         self.key = key;
         self.name = name;
-    }
+    };
 
     // our main view model
     var SurveyModel = function (questionnaire) {
@@ -494,15 +500,26 @@ Date.prototype.mmddyyyy = function () {
 
                     var comments = (answer.Comments == null || answer.Comments.trim() == '') ? [] : [new Comment(answer.Comments)];
 
-                    var options = ko.utils.arrayMap(answer.AnswerOptions, function (option) {
-                        return new AnswerOption(option.PublicKey, option.AnswerValue, option.Title, option.Selected);
+                    var isImageType = false;
+                    var options = ko.utils.arrayMap(answer.AnswerOptions, function(option) {
+                        isImageType = isImageType || (option.AnswerType == 1);
+                        return new AnswerOption(option.PublicKey, option.AnswerValue, option.Title, option.Selected, option.AnswerImage);
                     });
 
+                    var type = answer.Type;
+                    if (isImageType) {
+                        switch (type) {
+                            case 0:
+                            case 1:
+                            case 2: type = 9;break;
+                            case 3: type = 10; break;
+                        }
+                    }
                     return new Answer(
                         new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated),
                         questionnaire.PublicKey,
                         new Key(answer.ParentKey.PublicKey, answer.ParentKey.PropagationKey, answer.ParentKey.IsPropagated),
-                        answer.Type,
+                        type,
                         question.Title,
                         answer.Answer,
                         options,
