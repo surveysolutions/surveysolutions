@@ -432,3 +432,16 @@ td.capital
 .span1_5 {
 	width: 130px;
 }
+.answer-list {
+	 padding: 0;
+	margin: 0;
+	 list-style: none;
+}
+.answer-list:after {
+    clear: both;
+}
+.answer-list:before, .answer-list:after {
+    content: "";
+    display: table;
+    line-height: 0;
+}

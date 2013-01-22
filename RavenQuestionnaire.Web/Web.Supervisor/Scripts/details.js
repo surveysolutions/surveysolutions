@@ -421,10 +421,15 @@ Date.prototype.mmddyyyy = function () {
                 break;
             case "DateTime":
                     //parse date
-                var date = new Date(Date.parse(self.answer()));
-                self.answer(date.mmddyyyy());
-                date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
-                self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+                if (!!self.answer() == false ) {
+                    self.selectedOption(new Date());
+                    }
+                else {
+                    var date = new Date(Date.parse(self.answer()));
+                    self.answer(date.mmddyyyy());
+                    date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
+                    self.selectedOption(new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1, date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()));
+                }
                 break;
             }
         };
