@@ -13,6 +13,10 @@ using AndroidApp.Authorization;
 
 namespace AndroidApp.Controls.Navigation
 {
+    /*using System.IO;
+
+    using Ionic.Zip;*/
+
     public class NavigationItemsCollection : List<NavigationItem>
     {
         private readonly Context context;
@@ -47,7 +51,17 @@ namespace AndroidApp.Controls.Navigation
         protected bool Synchronization(object sender, EventArgs e)
         {
             var builder = new AlertDialog.Builder(context);
-            builder.SetMessage("Sync");
+
+            builder.SetMessage("Synchronization will be here.");
+
+            /*var zip = new ZipFile();
+            zip.AddEntry("backup.txt", "It's a compression test.");
+            var outputStream = new MemoryStream();
+            zip.Save(outputStream);
+
+            builder.SetMessage("Sync. Result length: " + outputStream.Length);
+*/
+
             builder.Show();
             return false;
         }
