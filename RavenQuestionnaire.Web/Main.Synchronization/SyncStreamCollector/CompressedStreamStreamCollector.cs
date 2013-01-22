@@ -16,6 +16,7 @@ namespace Main.Synchronization.SyncStreamCollector
     using Ionic.Zlib;
 
     using Main.Core.Events;
+    using Main.Core.View.SyncProcess;
 
     using Newtonsoft.Json;
 
@@ -64,6 +65,19 @@ namespace Main.Synchronization.SyncStreamCollector
             }
         }
 
+        public bool SupportSyncStat
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public List<UserSyncProcessStatistics> GetStat()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Properties
@@ -97,17 +111,7 @@ namespace Main.Synchronization.SyncStreamCollector
 
             return true;
         }
-
-        /// <summary>
-        /// The dispose.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
+        
         /// <summary>
         /// The finish.
         /// </summary>
@@ -128,10 +132,10 @@ namespace Main.Synchronization.SyncStreamCollector
             zip.CompressionLevel = CompressionLevel.BestSpeed;
 
             zip.AddEntry(
-                "backup.txt", 
+                "backup.txt",
                 JsonConvert.SerializeObject(
-                    new ZipFileData { ClientGuid = this.ProcessGuid, Events = this.eventStore }, 
-                    Formatting.Indented, 
+                    new ZipFileData { ClientGuid = this.ProcessGuid, Events = this.eventStore },
+                    Formatting.Indented,
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
 
             var outputStream = new MemoryStream();

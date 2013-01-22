@@ -10,6 +10,7 @@ namespace Main.Synchronization.SyncSreamProvider
 {
     using System.Collections.Generic;
 
+    using Main.Core.Documents;
     using Main.Core.Events;
 
     /// <summary>
@@ -43,6 +44,11 @@ namespace Main.Synchronization.SyncSreamProvider
         /// The <see cref="int?"/>.
         /// </returns>
         int? GetTotalEventCount();
+
+        /// <summary>
+        /// Gets the sync type.
+        /// </summary>
+        SynchronizationType SyncType { get; }
 
         #endregion
     }

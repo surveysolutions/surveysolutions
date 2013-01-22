@@ -6,12 +6,12 @@
 //   The int client event stream provider.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Synchronization.SyncSreamProvider
 {
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View.CompleteQuestionnaire;
@@ -44,6 +44,9 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <summary>
         /// Initializes a new instance of the <see cref="IntClientEventStreamProvider"/> class.
         /// </summary>
+        /// <param name="storage">
+        /// The storage.
+        /// </param>
         public IntClientEventStreamProvider(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
@@ -65,6 +68,17 @@ namespace Main.Synchronization.SyncSreamProvider
             }
         }
 
+        /// <summary>
+        /// Gets the sync type.
+        /// </summary>
+        public SynchronizationType SyncType
+        {
+            get
+            {
+                return SynchronizationType.Push;
+            }
+        }
+
         #endregion
 
         #region Public Methods and Operators
@@ -77,18 +91,11 @@ namespace Main.Synchronization.SyncSreamProvider
         /// </returns>
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
-            foreach (
-                CompleteQuestionnaireBrowseItem item in
-                    this.storage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)))
-            {
-                foreach (
-                    AggregateRootEvent aggregateRootEvent in
-                        this.eventStore.ReadFrom(item.CompleteQuestionnaireId, int.MinValue, int.MaxValue).Select(
-                            e => new AggregateRootEvent(e)))
-                {
-                    yield return aggregateRootEvent;
-                }
-            }
+            return
+                this.storage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
+                    item =>
+                    this.eventStore.ReadFrom(item.CompleteQuestionnaireId, int.MinValue, int.MaxValue).Select(
+                        e => new AggregateRootEvent(e)));
         }
 
         /// <summary>

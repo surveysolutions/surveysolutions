@@ -27,7 +27,6 @@ namespace DataEntryClient.SycProcess
     using Questionnaire.Core.Web.Export;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.Export;
 
     /// <summary>
     /// The complete questionnaire sync.

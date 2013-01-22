@@ -1,13 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncProcesor.cs" company="">
-//   
+// <copyright file="SyncProcesor.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
 // <summary>
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace DataEntryClient.SycProcessRepository
+namespace Main.Synchronization.SycProcessRepository
 {
     using System;
     using System.Collections.Generic;
@@ -34,17 +33,7 @@ namespace DataEntryClient.SycProcessRepository
     /// </summary>
     public class SyncProcessor : ISyncProcessor
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// Gets or sets statistics.
-        /// </summary>
-        private readonly SyncProcessStatisticsDocument statistics;
-
-        /// <summary>
-        /// Gets or sets users.
-        /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        #region Fields
 
         /// <summary>
         /// The event store.
@@ -52,9 +41,19 @@ namespace DataEntryClient.SycProcessRepository
         private readonly IEventStore eventStore;
 
         /// <summary>
+        /// Gets or sets statistics.
+        /// </summary>
+        private readonly SyncProcessStatisticsDocument statistics;
+
+        /// <summary>
         /// The surveys
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+
+        /// <summary>
+        /// Gets or sets users.
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -76,15 +75,17 @@ namespace DataEntryClient.SycProcessRepository
         /// Some exception
         /// </exception>
         public SyncProcessor(
-            SyncProcessStatisticsDocument statistics,
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            SyncProcessStatisticsDocument statistics, 
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys, 
             IDenormalizerStorage<UserDocument> users)
         {
             this.statistics = statistics;
             this.surveys = surveys;
             this.users = users;
-            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
 
+            this.IncomeEvents = new List<UncommittedEventStream>();
+
+            this.eventStore = NcqrsEnvironment.Get<IEventStore>();
             if (this.eventStore == null)
             {
                 throw new Exception("IEventStore is not properly initialized.");
@@ -98,12 +99,12 @@ namespace DataEntryClient.SycProcessRepository
         /// <summary>
         /// Gets or sets IncomeEvents.
         /// </summary>
-        public UncommittedEventStream[] IncomeEvents { get; set; }
+        private List<UncommittedEventStream> IncomeEvents { get; set; }
 
         /// <summary>
-        /// Gets SynckProcessId.
+        /// Gets the sync process key.
         /// </summary>
-        public Guid SynckProcessKey { get; private set; }
+        public Guid SyncProcessKey { get; private set; }
 
         #endregion
 
@@ -117,7 +118,9 @@ namespace DataEntryClient.SycProcessRepository
         /// </returns>
         public List<UserSyncProcessStatistics> CalculateStatistics()
         {
-            foreach (var uncommittedEvent in this.IncomeEvents.SelectMany(uncommittedEventStream => uncommittedEventStream))
+            foreach (
+                UncommittedEvent uncommittedEvent in
+                    this.IncomeEvents.SelectMany(uncommittedEventStream => uncommittedEventStream))
             {
                 this.ProcessEvent(uncommittedEvent);
             }
@@ -151,11 +154,10 @@ namespace DataEntryClient.SycProcessRepository
         /// </param>
         public void Merge(IEnumerable<AggregateRootEvent> stream)
         {
-            IEnumerable<UncommittedEventStream> uncommitedStreams = this.BuildEventStreams(stream);
-
-            var events = uncommitedStreams as UncommittedEventStream[] ?? uncommitedStreams.ToArray();
-
-            this.IncomeEvents = events.Where(s => s.Any()).ToArray();
+            if (stream != null)
+            {
+                this.IncomeEvents.AddRange(this.BuildEventStreams(stream));
+            }
         }
 
         #endregion
@@ -173,14 +175,71 @@ namespace DataEntryClient.SycProcessRepository
         /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
-            return stream
-                    .GroupBy(x => x.EventSourceId)
-                    .Select(g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
+            return
+                stream.GroupBy(x => x.EventSourceId).Select(
+                    g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
 
             // foreach (IGrouping<Guid, AggregateRootEvent> g in stream.GroupBy(x => x.EventSourceId))
             // {
             // yield return g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
             // }
+        }
+
+        /// <summary>
+        /// Get difference between already stored item and new-come CQ document and generates statistics
+        /// </summary>
+        /// <param name="item">
+        /// The item.
+        /// </param>
+        /// <param name="cq">
+        /// The cq.
+        /// </param>
+        private void MeasureDifference(CompleteQuestionnaireBrowseItem item, CompleteQuestionnaireDocument cq)
+        {
+            Func<CompleteQuestionnaireDocument, UserSyncProcessStatistics> newStatItem =
+                document =>
+                new UserSyncProcessStatistics
+                    {
+                        Type = SynchronizationStatisticType.NewSurvey, 
+                        User = document.Responsible, 
+                        TemplateId = document.TemplateId, 
+                        Title = document.Title, 
+                        SurveyId = document.PublicKey, 
+                        Status = document.Status
+                    };
+
+            if (item == null)
+            {
+                UserSyncProcessStatistics statItem = newStatItem(cq);
+                statItem.Type = SynchronizationStatisticType.NewSurvey;
+                this.statistics.Statistics.Add(statItem);
+                return;
+            }
+
+            if (cq.Responsible != null)
+            {
+                if (item.Responsible == null)
+                {
+                    UserSyncProcessStatistics statItem = newStatItem(cq);
+                    statItem.Type = SynchronizationStatisticType.NewAssignment;
+                    this.statistics.Statistics.Add(statItem);
+                }
+                else if (item.Responsible != null && item.Responsible.Id != cq.Responsible.Id)
+                {
+                    UserSyncProcessStatistics statItem = newStatItem(cq);
+                    statItem.Type = SynchronizationStatisticType.AssignmentChanged;
+                    statItem.PrevUser = item.Responsible;
+                    this.statistics.Statistics.Add(statItem);
+                }
+            }
+
+            if (item.Status.PublicId != cq.Status.PublicId)
+            {
+                UserSyncProcessStatistics statItem = newStatItem(cq);
+                statItem.Type = SynchronizationStatisticType.StatusChanged;
+                statItem.PrevStatus = item.Status;
+                this.statistics.Statistics.Add(statItem);
+            }
         }
 
         /// <summary>
@@ -198,10 +257,11 @@ namespace DataEntryClient.SycProcessRepository
 
             if (uncommittedEvent.Payload is SnapshootLoaded)
             {
-                var document = (uncommittedEvent.Payload as SnapshootLoaded).Template.Payload as CompleteQuestionnaireDocument;
+                var document =
+                    (uncommittedEvent.Payload as SnapshootLoaded).Template.Payload as CompleteQuestionnaireDocument;
                 if (document != null)
                 {
-                    var item = this.surveys.GetByGuid(document.PublicKey);
+                    CompleteQuestionnaireBrowseItem item = this.surveys.GetByGuid(document.PublicKey);
                     this.MeasureDifference(item, document);
                 }
             }
@@ -210,27 +270,25 @@ namespace DataEntryClient.SycProcessRepository
             {
                 var e = uncommittedEvent.Payload as NewUserCreated;
                 var stat = new UserSyncProcessStatistics
-                {
-                    Type = SynchronizationStatisticType.NewUser,
-                    User = new UserLight(e.PublicKey, e.Name),
-                };
+                    {
+                       Type = SynchronizationStatisticType.NewUser, User = new UserLight(e.PublicKey, e.Name), 
+                    };
                 this.statistics.Statistics.Add(stat);
             }
 
             if (uncommittedEvent.Payload is QuestionnaireStatusChanged)
             {
                 var e = uncommittedEvent.Payload as QuestionnaireStatusChanged;
-                var document = this.surveys.GetByGuid(e.CompletedQuestionnaireId);
+                CompleteQuestionnaireBrowseItem document = this.surveys.GetByGuid(e.CompletedQuestionnaireId);
 
                 var stat = new UserSyncProcessStatistics
-                {
-                    Type = SynchronizationStatisticType.StatusChanged,
-                    User = e.Responsible,
-                   
-                    SurveyId = e.CompletedQuestionnaireId,
-                    Status = e.Status,
-                    PrevStatus = e.PreviousStatus
-                };
+                    {
+                        Type = SynchronizationStatisticType.StatusChanged, 
+                        User = e.Responsible, 
+                        SurveyId = e.CompletedQuestionnaireId, 
+                        Status = e.Status, 
+                        PrevStatus = e.PreviousStatus
+                    };
 
                 if (document != null)
                 {
@@ -241,62 +299,6 @@ namespace DataEntryClient.SycProcessRepository
                 this.statistics.Statistics.Add(stat);
             }
         }
-
-        /// <summary>
-        /// Get difference between already stored item and new-come CQ document and generates statistics
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <param name="cq">
-        /// The cq.
-        /// </param>
-        private void MeasureDifference(CompleteQuestionnaireBrowseItem item, CompleteQuestionnaireDocument cq)
-        {
-            Func<CompleteQuestionnaireDocument, UserSyncProcessStatistics> newStatItem = document => new UserSyncProcessStatistics
-            {
-                Type = SynchronizationStatisticType.NewSurvey,
-                User = document.Responsible,
-                TemplateId = document.TemplateId,
-                Title = document.Title,
-                SurveyId = document.PublicKey,
-                Status = document.Status
-            };
-
-            if (item == null)
-            {
-                var statItem = newStatItem(cq);
-                statItem.Type = SynchronizationStatisticType.NewSurvey;
-                this.statistics.Statistics.Add(statItem);
-                return;
-            }
-
-            if (cq.Responsible != null)
-            {
-                if (item.Responsible == null)
-                {
-                    var statItem = newStatItem(cq);
-                    statItem.Type = SynchronizationStatisticType.NewAssignment;
-                    this.statistics.Statistics.Add(statItem);
-                }
-                else if (item.Responsible != null && item.Responsible.Id != cq.Responsible.Id)
-                {
-                    var statItem = newStatItem(cq);
-                    statItem.Type = SynchronizationStatisticType.AssignmentChanged;
-                    statItem.PrevUser = item.Responsible;
-                    this.statistics.Statistics.Add(statItem);
-                }
-            }
-
-            if (item.Status.PublicId != cq.Status.PublicId)
-            {
-                var statItem = newStatItem(cq);
-                statItem.Type = SynchronizationStatisticType.StatusChanged;
-                statItem.PrevStatus = item.Status;
-                this.statistics.Statistics.Add(statItem);
-            }
-        }
-
 
         #endregion
     }

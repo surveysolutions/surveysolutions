@@ -1,33 +1,24 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="EventSyncProcessTests.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace DataEntryClientTests.SycProcess
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
-    using DataEntryClient.SycProcess;
-    using DataEntryClient.SycProcessRepository;
-
     using Main.Core.Events;
+    using Main.Synchronization.SycProcessRepository;
 
     using Moq;
 
-    using NUnit.Framework;
-
     using Ncqrs;
-    using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
-    using Ncqrs.Eventing;
 
     using Ninject;
 
-    using SynchronizationMessages.CompleteQuestionnaire;
+    using NUnit.Framework;
 
     /// <summary>
     /// TODO: Update summary.
@@ -58,6 +49,8 @@ namespace DataEntryClientTests.SycProcess
 
         #endregion
 
+        #region Public Methods and Operators
+
         /// <summary>
         /// The create objects.
         /// </summary>
@@ -73,9 +66,12 @@ namespace DataEntryClientTests.SycProcess
             this.kernel.Bind<ISyncProcessRepository>().ToConstant(this.syncProcessRepository.Object);
 
             this.commandService = new Mock<ICommandService>();
-            NcqrsEnvironment.SetDefault<ICommandService>(this.commandService.Object);
+            NcqrsEnvironment.SetDefault(this.commandService.Object);
         }
 
+        /// <summary>
+        /// The event sync process_ check import scenario.
+        /// </summary>
         [Test]
         public void EventSyncProcess_CheckImportScenario()
         {
@@ -110,5 +106,7 @@ namespace DataEntryClientTests.SycProcess
             this.eventStore.Verify(x => x.ReadEventsByChunks(100), Times.Once());
             */
         }
+
+        #endregion
     }
 }
