@@ -154,16 +154,16 @@ var questionnaire = @Html.Raw(Json.Encode(Model)) ;
 
 </script>
 <script type="text/html" id="Numeric">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input data-bind="value: selectedOption(), disable: isReadonly" />
 </script>
 <script type="text/html" id="DateTime">
         <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
 </script>
 <script type="text/html" id="AutoPropagate">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input data-bind="value: selectedOption(), disable: isReadonly" />
 </script>
 <script type="text/html" id="Text">
-        <input data-bind="value: selectedOption, disable: isReadonly" />
+        <input data-bind="value: selectedOption(), disable: isReadonly" />
 </script>
 @{
     Html.RequiresJs("director.min.js", "Scripts", 50);
