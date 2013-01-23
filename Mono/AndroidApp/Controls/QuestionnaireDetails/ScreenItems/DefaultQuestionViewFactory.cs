@@ -20,29 +20,29 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
     {
         #region Implementation of IQuestionViewFactory
 
-        public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model)
+        public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model, Guid questionnairePublicKey)
         {
             var bindingActivity = context as IMvxBindingActivity;
             AbstractQuestionView itemView;
             switch (model.QuestionType)
             {
                 case QuestionType.Text:
-                    itemView = new TextQuestionView(context, bindingActivity, model);
+                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
                 case QuestionType.Numeric:
-                    itemView = new NumericQuestionView(context, bindingActivity, model);
+                    itemView = new NumericQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
                 case QuestionType.DateTime:
-                    itemView = new DateQuestionView(context, bindingActivity, model);
+                    itemView = new DateQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
                 case QuestionType.SingleOption:
-                    itemView = new SingleChoiseQuestionView(context, bindingActivity, model);
+                    itemView = new SingleChoiseQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
                 case QuestionType.MultyOption:
-                    itemView = new MultyQuestionView(context, bindingActivity, model);
+                    itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
                 default:
-                    itemView = new TextQuestionView(context, bindingActivity, model);
+                    itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
             }
             return itemView;

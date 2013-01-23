@@ -71,7 +71,17 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
 
-        
+
+        public virtual void SetAnswer(List<Guid> answer, string answerString)
+        {
+            this.AnswerString = answerString;
+            if (!Status.HasFlag(QuestionStatus.Answered))
+            {
+                Status = Status | QuestionStatus.Answered;
+                RaisePropertyChanged("Status");
+            }
+            RaisePropertyChanged("AnswerString");
+        }
 
         /* public IMvxLanguageBinder BorderColor
         {

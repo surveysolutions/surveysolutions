@@ -164,8 +164,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                    return;*/
 
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(this.questionViewFactory.CreateQuestionView(this.Activity, e.Model /*,
-                                                                                       headerItem*/));
+            setAnswerPopup.SetView(this.questionViewFactory.CreateQuestionView(this.Activity, e.Model,
+                                                                               Model.QuestionnaireId));
             //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
 

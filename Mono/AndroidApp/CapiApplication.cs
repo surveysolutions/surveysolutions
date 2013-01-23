@@ -16,6 +16,9 @@ using Main.Core;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.View;
 using Ncqrs;
+using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -30,6 +33,11 @@ namespace AndroidApp
         public static TOutput LoadView<TInput, TOutput>(TInput input)
         {
             return Kernel.Get<IViewRepository>().Load<TInput, TOutput>(input);
+        }
+
+        public static ICommandService CommandService
+        {
+            get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
         public static IAuthentication Membership

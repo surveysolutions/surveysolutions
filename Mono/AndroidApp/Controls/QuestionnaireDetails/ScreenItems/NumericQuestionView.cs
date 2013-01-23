@@ -23,8 +23,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
         }*/
 
-        public NumericQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
-            : base(context, bindingActivity, source)
+        public NumericQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+            : base(context, bindingActivity, source, questionnairePublicKey)
         {
         }
 

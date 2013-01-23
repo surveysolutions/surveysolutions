@@ -21,8 +21,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
         }*/
 
-        public TextQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
-            : base(context, bindingActivity, source)
+        public TextQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+            : base(context, bindingActivity, source,questionnairePublicKey)
         {
         }
 

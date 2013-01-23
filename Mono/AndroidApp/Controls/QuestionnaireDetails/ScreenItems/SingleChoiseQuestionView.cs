@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Main.Core.Commands.Questionnaire.Completed;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -21,8 +22,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
         }*/
 
-        public SingleChoiseQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
-            : base(context, bindingActivity, source)
+        public SingleChoiseQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
+            : base(context, bindingActivity, source, questionnairePublicKey)
         {
         }
 
@@ -65,11 +66,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
 
-            typedMode.SelectAnswer(answerGuid);
+            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                         new List<Guid>(1) {answerGuid}, "",
+                                                         Model.PublicKey.PropagationKey));
+            //typedMode.SelectAnswer(answerGuid);
         }
 
-   
-     
+
+
         #endregion
     }
 }

@@ -33,7 +33,20 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
         */
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
-        public void SelectAnswer(Guid publicKey)
+        public override void SetAnswer(List<Guid> answer, string answerString)
+        {
+            if (answer == null)
+            {
+                return;
+            }
+            foreach (var item in this.Answers)
+            {
+                item.Selected = answer.Contains(item.PublicKey);
+            }
+            base.SetAnswer(answer, answerString);
+        }
+
+        /*public void SelectAnswer(Guid publicKey)
         {
             foreach (var answer in Answers)
             {
@@ -45,6 +58,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 RaisePropertyChanged("Status");
             }
             RaisePropertyChanged("AnswerString");
-        }
+        }*/
     }
 }

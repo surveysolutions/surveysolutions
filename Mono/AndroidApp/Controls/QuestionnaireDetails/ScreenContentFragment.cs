@@ -69,7 +69,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question);
+                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,Model.QuestionnaireId);
                 }
                 var group = item as GroupViewModel;
                 if (group != null)

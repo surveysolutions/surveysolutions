@@ -18,6 +18,7 @@ using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Cirrious.MvvmCross.Binding.Droid.Views;
+using Ncqrs.Commanding.ServiceModel;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -25,8 +26,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
     {
         protected QuestionViewModel Model { get; private set; }
 
-
-         private readonly IMvxBindingActivity _bindingActivity;
+        protected Guid QuestionnairePublicKey { get; private set; }
+        protected ICommandService CommandService { get; private set; }
+        private readonly IMvxBindingActivity _bindingActivity;
 
         private readonly int _templateId;
 
@@ -84,14 +86,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             return view.TryGetStoredBindings(out result);
         }
-        public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
+        public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context)
         {
             _bindingActivity = bindingActivity;
             _templateId = Resource.Layout.AbstractQuestionView;
             Content = BindingActivity.BindingInflate(source, _templateId, this);
             this.Model = source;
-           
+            this.QuestionnairePublicKey = questionnairePublicKey;
+            this.CommandService = CapiApplication.CommandService;
             Initialize();
           
             PostInit();

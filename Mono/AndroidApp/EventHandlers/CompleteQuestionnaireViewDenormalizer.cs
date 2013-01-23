@@ -28,9 +28,9 @@ namespace AndroidApp.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, 
                                                      IEventHandler<CommentSeted>, */
-                                                     IEventHandler<SnapshootLoaded>/*,
-                                                     IEventHandler<CompleteQuestionnaireDeleted>, 
-                                                     IEventHandler<AnswerSet>, 
+                                                     IEventHandler<SnapshootLoaded>,
+                                                     /*IEventHandler<CompleteQuestionnaireDeleted>, */
+                                                     IEventHandler<AnswerSet>/*, 
                                                      IEventHandler<PropagatableGroupAdded>, 
                                                      IEventHandler<PropagatableGroupDeleted>, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>, 
@@ -1499,7 +1499,7 @@ namespace AndroidApp.EventHandlers
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": null," +
+                @"                  ""PropagationPublicKey"": ""7bd9a87d-2b65-4172-aa2a-07a93d85a958""," +
                 @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
                 @"                  ""QuestionText"": ""What is the area of room?""," +
                 @"                  ""QuestionType"": ""Numeric""," +
@@ -1577,7 +1577,7 @@ namespace AndroidApp.EventHandlers
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": null," +
+                @"                  ""PropagationPublicKey"": ""7bd9a87d-2b65-4172-aa2a-07a93d85a958""," +
                 @"                  ""PublicKey"": ""a61498b9-d0f2-4b11-a372-db6ed7ef6098""," +
                 @"                  ""QuestionText"": ""Room type""," +
                 @"                  ""QuestionType"": ""SingleOption""," +
@@ -1617,7 +1617,7 @@ namespace AndroidApp.EventHandlers
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": null," +
+                @"                  ""PropagationPublicKey"": ""4f181138-5720-45aa-9f50-b716ea785ddb""," +
                 @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
                 @"                  ""QuestionText"": ""What is the area of room?""," +
                 @"                  ""QuestionType"": ""Numeric""," +
@@ -1695,7 +1695,7 @@ namespace AndroidApp.EventHandlers
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": null," +
+                @"                  ""PropagationPublicKey"": ""4f181138-5720-45aa-9f50-b716ea785ddb""," +
                 @"                  ""PublicKey"": ""a61498b9-d0f2-4b11-a372-db6ed7ef6098""," +
                 @"                  ""QuestionText"": ""Room type""," +
                 @"                  ""QuestionType"": ""SingleOption""," +
@@ -1768,12 +1768,12 @@ namespace AndroidApp.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
-            var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
+            var view = new CompleteQuestionnaireView();
             var chapters = BuildChapters(document);
             List<ICompleteGroup> rout = new List<ICompleteGroup>();
             rout.Add(document);
             Stack<ICompleteGroup> queue = new Stack<ICompleteGroup>(document.Children.OfType<ICompleteGroup>());
-            while (queue.Count>0)
+            while (queue.Count > 0)
             {
                 var current = queue.Pop();
 
@@ -1782,49 +1782,14 @@ namespace AndroidApp.EventHandlers
                     rout.RemoveAt(rout.Count - 1);
                 }
                 rout.Add(current);
-
-                HandleGroup(screens, rout, document, chapters, current);
+                view.AddScreen(rout,document,chapters,current);
+               
                 foreach (ICompleteGroup child in current.Children.OfType<ICompleteGroup>())
                 {
                     queue.Push(child);
                 }
             }
-            _documentStorage.Store(new CompleteQuestionnaireView(screens), document.PublicKey);
-        }
-        protected void HandleGroup(
-            IDictionary<ItemPublicKey, IQuestionnaireViewModel> screens,
-            List<ICompleteGroup> rout,
-            CompleteQuestionnaireDocument document,
-            IEnumerable<QuestionnaireNavigationPanelItem> chapters,
-            ICompleteGroup group)
-        {
-            var key = new ItemPublicKey(group.PublicKey,
-                                        group.PropagationPublicKey);
-            if (group.Propagated == Propagate.None || group.PropagationPublicKey.HasValue)
-                screens.Add(key, new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
-                                                                  key, BuildItems(group),
-                                                                  BuildSiblings(rout),
-                                                                  BuildBreadCrumbs(rout),
-                                                                  chapters));
-            else
-                screens.Add(key, new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
-                                                                key,
-                                                                BuildSiblings(rout),
-                                                                BuildBreadCrumbs(rout),
-                                                                chapters,
-                                                                group.Children.OfType<ICompleteQuestion>().Select(
-                                                                    BuildHeader).ToList(),
-                                                                BuildGridRows(document, group)));
-        }
-
-        protected IEnumerable<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout)
-        {
-            return
-                rout.Skip(1).ToList().Select(BuildNamivgationItem);
-        }
-        protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout)
-        {
-            return rout[rout.Count - 2].Children.OfType<ICompleteGroup>().Select(BuildNamivgationItem).ToList();
+            _documentStorage.Store(view, document.PublicKey);
         }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
@@ -1836,76 +1801,18 @@ namespace AndroidApp.EventHandlers
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0);
         }
+        #endregion
 
-        protected HeaderItem BuildHeader(ICompleteQuestion question)
-        {
-            /*  var newType = CalculateViewType(question.QuestionType);
-              if (!IsTypeSelectable(newType))*/
-            return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
-            /*  return new SelectableHeaderItem(question.PublicKey, question.QuestionText, question.Instructions,
-                                              question.Answers.OfType<ICompleteAnswer>().Select(
-                                                  a =>
-                                                  new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));*/
-        }
-        protected IEnumerable<RosterItem> BuildGridRows(CompleteQuestionnaireDocument root, ICompleteGroup template)
-        {
-            return
-                root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
-                    Select(
-                        g =>
-                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title, BuildItems(g).ToList())
-                /* g.Children.OfType<ICompleteQuestion>().Select(
-                     q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
-        }
-        protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen)
-        {
-            return screen.Children.Select(CreateView).Where(c => c != null);
-        }
-        protected IQuestionnaireItemViewModel CreateView(IComposite item)
-        {
-            var question = item as ICompleteQuestion;
+        #region Implementation of IEventHandler<in AnswerSet>
 
-            if (question != null)
-            {
-                var newType = CalculateViewType(question.QuestionType);
-                if (!IsTypeSelectable(newType))
-                    return new ValueQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
-                                                      newType,
-                                                      question.GetAnswerString(),
-                                                      question.Enabled, question.Instructions, question.Comments,
-                                                      question.Valid, question.Mandatory);
-                else
-                    return new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
-                                                           newType,
-                                                           question.Answers.OfType<ICompleteAnswer>().Select(
-                                                               a =>
-                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)),
-                                                           question.Enabled, question.Instructions, question.Comments,
-                                                           question.Valid, question.Mandatory, question.GetAnswerString());
-            }
-            var group = item as ICompleteGroup;
-            if (group != null && !group.PropagationPublicKey.HasValue)
-                return new GroupViewModel(new ItemPublicKey(group.PublicKey, group.PropagationPublicKey), group.Title,
-                                          group.Enabled);
-            return null;
-        }
-        protected QuestionType CalculateViewType(QuestionType type)
+        public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            if (type == QuestionType.Numeric || type == QuestionType.AutoPropagate)
-                return QuestionType.Numeric;
-            if (type == QuestionType.Text || type == QuestionType.Percentage || type == QuestionType.Text)
-                return QuestionType.Text;
-            if (type == QuestionType.SingleOption || type == QuestionType.DropDownList || type == QuestionType.YesNo)
-                return QuestionType.SingleOption;
-            return type;
+            var doc = _documentStorage.Query().First();
+            var question =
+                doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey)];
+            question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
         }
 
-        protected bool IsTypeSelectable(QuestionType type)
-        {
-            if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
-                return true;
-            return false;
-        }
         #endregion
     }
 }
