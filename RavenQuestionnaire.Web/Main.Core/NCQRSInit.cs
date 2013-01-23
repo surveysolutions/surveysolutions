@@ -30,10 +30,12 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 #else
 //using Ncqrs.Eventing.Storage.RavenDB;
 #endif
+    
+    //using Ncqrs.Eventing.Storage.RavenDB;
 
     using Ninject;
 
-    using Raven.Client.Document;
+    /*using Raven.Client.Document;*/
 
     /// <summary>
     /// The ncqrs init.
@@ -52,13 +54,14 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         {
 #if MONODROID
 			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             //NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
             //NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
             
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            //NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
@@ -69,7 +72,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
          
             var bus = new InProcessEventBus(true);
-            RegisterEventHandlers(bus, kernel);
+
+            // RegisterEventHandlers(bus, kernel);
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
@@ -99,7 +103,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream());
+            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
         }
 
         #endregion

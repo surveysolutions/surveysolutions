@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionView.cs" company="The World Bank">
-//   2012
+// <copyright file="QuestionView.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   The abstract question view.
@@ -10,16 +10,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.View;
 using Main.Core.View.Answer;
 using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
-    using System.ComponentModel.DataAnnotations;
+    /*using System.ComponentModel.DataAnnotations;*/
 
     /// <summary>
     /// The abstract question view.
@@ -73,6 +75,7 @@ namespace Main.Core.View.Question
             this.ValidationMessage = doc.ValidationMessage;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
+
             ////this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
@@ -114,6 +117,16 @@ namespace Main.Core.View.Question
         public bool Featured { get; set; }
 
         /// <summary>
+        /// Gets or sets parent group title.
+        /// </summary>
+        public string GroupTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets Groups.
+        /// </summary>
+        public Dictionary<string, Guid> Groups { get; set; }
+
+        /// <summary>
         /// Gets or sets the index.
         /// </summary>
         public int Index { get; set; }
@@ -129,6 +142,12 @@ namespace Main.Core.View.Question
         public bool Mandatory { get; set; }
 
         /// <summary>
+        /// Gets or sets MaxValue
+        /// </summary>
+        /*[Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]*/
+        public int MaxValue { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         public Guid? Parent { get; set; }
@@ -139,14 +158,14 @@ namespace Main.Core.View.Question
         public Guid PublicKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the question type.
-        /// </summary>
-        public QuestionType QuestionType { get; set; }
-
-        /// <summary>
         /// Gets or sets question scope.
         /// </summary>
         public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question type.
+        /// </summary>
+        public QuestionType QuestionType { get; set; }
 
         /// <summary>
         /// Gets or sets the questionnaire key.
@@ -169,6 +188,11 @@ namespace Main.Core.View.Question
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+        /// <summary>
         /// Gets or sets the validation expression.
         /// </summary>
         public string ValidationExpression { get; set; }
@@ -178,29 +202,7 @@ namespace Main.Core.View.Question
         /// </summary>
         public string ValidationMessage { get; set; }
 
-        /// <summary>
-        /// Gets or sets Triggers.
-        /// </summary>
-        public List<Guid> Triggers { get; set; }
-
-        /// <summary>
-        /// Gets or sets MaxValue
-        /// </summary>
-        [Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]
-        public int MaxValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets Groups.
-        /// </summary>
-        public Dictionary<string, Guid> Groups { get; set; }
-
-        /// <summary>
-        /// Gets or sets parent group title.
-        /// </summary>
-        public string GroupTitle { get; set; }
-
         #endregion
-      
     }
 
     /// <summary>
@@ -265,10 +267,49 @@ namespace Main.Core.View.Question
             this.Cards = new CardView[0];
             this.Triggers = new List<Guid>();
             this.Groups = new Dictionary<string, Guid>();
-            var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+            IGroup parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
             this.Parent = parent.PublicKey;
             this.GroupTitle = parent.Title;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public T[] Answers
+        {
+            get
+            {
+                return this._answers;
+            }
+
+            set
+            {
+                this._answers = value;
+                if (this._answers == null)
+                {
+                    this._answers = new T[0];
+                    return;
+                }
+
+                for (int i = 0; i < this._answers.Length; i++)
+                {
+                    this._answers[i].Index = i + 1;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the cards.
+        /// </summary>
+        public CardView[] Cards { get; set; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// The get question group.
@@ -310,7 +351,7 @@ namespace Main.Core.View.Question
                     foreach (IComposite child in queueItem.Children)
                     {
                         /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
-                         if(childWithQuestion!=null)*/
+                             if(childWithQuestion!=null)*/
                         group.Enqueue(child);
                     }
                 }
@@ -318,40 +359,6 @@ namespace Main.Core.View.Question
 
             throw new ArgumentException("group does not exist");
         }
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the answers.
-        /// </summary>
-        public T[] Answers
-        {
-            get
-            {
-                return this._answers;
-            }
-
-            set
-            {
-                this._answers = value;
-                if (this._answers == null)
-                {
-                    this._answers = new T[0];
-                    return;
-                }
-
-                for (int i = 0; i < this._answers.Length; i++)
-                {
-                    this._answers[i].Index = i + 1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the cards.
-        /// </summary>
-        public CardView[] Cards { get; set; }
 
         #endregion
     }
@@ -366,7 +373,9 @@ namespace Main.Core.View.Question
     /// <typeparam name="TQuestion">
     /// </typeparam>
     public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
-        where T : AnswerView where TQuestion : IQuestion where TGroup : IGroup
+        where T : AnswerView
+        where TQuestion : IQuestion
+        where TGroup : IGroup
     {
         #region Constructors and Destructors
 
@@ -426,16 +435,29 @@ namespace Main.Core.View.Question
         /// <summary>
         /// LoadAllGroups
         /// </summary>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
+        /// <param name="questionnaire">
+        /// The questionnaire.
         /// </param>
-        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? questionPublicKey, Guid? groupPublicKey)
+        /// <param name="questionPublicKey">
+        /// The question Public Key.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group Public Key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Dictionary"/>.
+        /// </returns>
+        protected Dictionary<string, Guid> LoadGroups(
+            IQuestionnaireDocument questionnaire, Guid? questionPublicKey, Guid? groupPublicKey)
         {
             try
             {
                 var excludedGroups = new List<Guid>();
                 if (questionPublicKey != null)
+                {
                     groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey.Value).PublicKey;
+                }
+
                 if (groupPublicKey != null)
                 {
                     excludedGroups.Add(groupPublicKey.Value);
@@ -444,7 +466,7 @@ namespace Main.Core.View.Question
                 var groups = new Dictionary<string, Guid>();
                 if (questionnaire != null)
                 {
-                    foreach (var group in questionnaire.Children.Where(t => t is IGroup))
+                    foreach (IComposite group in questionnaire.Children.Where(t => t is IGroup))
                     {
                         this.SelectAll(group, groups, excludedGroups);
                     }
@@ -452,12 +474,11 @@ namespace Main.Core.View.Question
 
                 return groups;
             }
-            catch 
+            catch
             {
                 return null;
             }
         }
-
 
         /// <summary>
         /// Select all groups
@@ -473,18 +494,17 @@ namespace Main.Core.View.Question
         /// </param>
         private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
         {
-            var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
+            Guid s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
             if (excludedGroups.Count > 0 && s == Guid.Empty
                 && (currentGroup as IGroup).Propagated == Propagate.AutoPropagated)
             {
                 groups.Add(
-                    string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey),
-                    currentGroup.PublicKey);
+                    string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey), currentGroup.PublicKey);
             }
 
             if (currentGroup.Children.Where(t => t is IGroup).Count() > 0)
             {
-                foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
+                foreach (IComposite childGroup in currentGroup.Children.Where(t => t is IGroup))
                 {
                     this.SelectAll(childGroup, groups, excludedGroups);
                 }
@@ -492,7 +512,7 @@ namespace Main.Core.View.Question
         }
 
         #endregion
-   }
+    }
 
     /// <summary>
     /// The question view.
@@ -517,10 +537,20 @@ namespace Main.Core.View.Question
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public QuestionView(string questionnaireId, Guid? groupPublicKey) : base(questionnaireId, groupPublicKey)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey)
+            : base(questionnaireId, groupPublicKey)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionView"/> class.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
         public QuestionView(IQuestionnaireDocument questionnaire, Guid? groupPublicKey)
         {
             this.Groups = this.LoadGroups(questionnaire, null, groupPublicKey);
@@ -538,14 +568,11 @@ namespace Main.Core.View.Question
         public QuestionView(IQuestionnaireDocument questionnaire, IQuestion doc)
             : base(questionnaire, doc)
         {
-            this.Answers =
-                doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+            this.Answers = doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a)).ToArray();
             if (doc.Cards != null)
             {
-                this.Cards =
-                    doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
+                this.Cards = doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
-
 
             var autoQuestion = doc as IAutoPropagate;
             if (autoQuestion != null)
@@ -556,10 +583,11 @@ namespace Main.Core.View.Question
                     this.Triggers = autoQuestion.Triggers.ToList();
                 }
             }
-            
+
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
 
         #endregion
     }
+
 }

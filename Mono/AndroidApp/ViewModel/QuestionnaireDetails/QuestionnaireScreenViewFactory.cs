@@ -1926,7 +1926,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         {
             if (type == QuestionType.Numeric || type == QuestionType.AutoPropagate)
                 return QuestionType.Numeric;
-            if (type == QuestionType.Text || type == QuestionType.Percentage || type == QuestionType.Text)
+            if (type == QuestionType.Text || /*type == QuestionType.Percentage ||*/ type == QuestionType.Text)
                 return QuestionType.Text;
             if (type == QuestionType.SingleOption || type == QuestionType.DropDownList || type == QuestionType.YesNo)
                 return QuestionType.SingleOption;

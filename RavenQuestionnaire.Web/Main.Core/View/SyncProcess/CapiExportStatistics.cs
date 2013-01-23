@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserSyncProcessStatistics.cs" company="The World Bank">
+// <copyright file="CapiExportStatistics.cs" company="The World Bank">
 //   2012
 // </copyright>
 // <summary>
@@ -17,7 +17,7 @@ namespace Main.Core.View.SyncProcess
     /// <summary>
     /// User sync process statistics
     /// </summary>
-    public class UserSyncProcessStatistics
+    public class CapiExportStatistics
     {
         #region Public Properties
 
@@ -45,26 +45,6 @@ namespace Main.Core.View.SyncProcess
         /// Gets or sets Status.
         /// </summary>
         public SurveyStatus Status { get; set; }
-
-        /// <summary>
-        /// Gets or sets PrevStatus.
-        /// </summary>
-        public SurveyStatus PrevStatus { get; set; }
-
-        /// <summary>
-        /// Gets or sets PrevUser.
-        /// </summary>
-        public UserLight PrevUser { get; set; }
-
-        /// <summary>
-        /// Gets or sets message Type.
-        /// </summary>
-        public SynchronizationStatisticType Type { get; set; }
-
-        /// <summary>
-        /// Gets or sets amount of duplicates
-        /// </summary>
-        public int Count { get; set; }
 
         #endregion
     }

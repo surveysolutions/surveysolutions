@@ -35,7 +35,7 @@ namespace AndroidApp.Injections
         {
             return
                 base.GetAssweblysForRegister().Concat(
-                    new[] { typeof(ClientEventSync).Assembly, GetType().Assembly });
+                    new[] { typeof(ClientEventStreamReader).Assembly, GetType().Assembly });
         }
         public override void Load()
         {

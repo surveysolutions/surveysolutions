@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IStreamableEventStore.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The StreamableEventStore interface.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-namespace Ncqrs.Eventing.Storage.RavenDB
+﻿namespace Ncqrs.Eventing.Storage
 {
     using System.Collections.Generic;
 

@@ -13,6 +13,7 @@
     <AssemblyName>AndroidMain.Core.Tests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -46,8 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\CompleteQuestionnaireARTest.cs">
+      <Link>Domain\CompleteQuestionnaireARTest.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\Configuration.cs">
       <Link>Domain\Configuration.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\QuestionnaireARTest.cs">
+      <Link>Domain\QuestionnaireARTest.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\TestDataConfigurator.cs">
+      <Link>Domain\TestDataConfigurator.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core.Tests\Domain\when_creating_a_new_questionnaire.cs">
       <Link>Domain\when_creating_a_new_questionnaire.cs</Link>
@@ -107,7 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
-      <Project>{6B9B6AB7-8858-49A3-A44A-4B56EE31C12C}</Project>
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">

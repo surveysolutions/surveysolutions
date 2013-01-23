@@ -119,6 +119,7 @@
     <Compile Include="AbstractFactories\ICompleteQuestionFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CommandListSupplier.cs" />
     <Compile Include="Commands\Collection\CreateCollectionCommand.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionCommand.cs" />
     <Compile Include="Commands\Collection\RemoveCollectionItemCommand.cs" />
@@ -275,7 +276,6 @@
     <Compile Include="EventHandlers\FileStoreDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireBrowseItemDenormalizer.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer.cs" />
-    <Compile Include="EventHandlers\SyncProcessDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="Events\AbstractEventStreamReader.cs" />
     <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
@@ -346,7 +346,6 @@
     <Compile Include="NCQRSInit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IFileStorageService.cs" />
-    <Compile Include="Services\RavenFileStorageService.cs" />
     <Compile Include="Utility\EnumerableExtensions.cs" />
     <Compile Include="Utility\EventMergeUtils.cs" />
     <Compile Include="Utility\GroupWithRout.cs" />

@@ -91,7 +91,6 @@ namespace Main.Core
         }
 
         #endregion
-#endif
 
         #region virtual methods
         protected virtual IEnumerable<Type> RegisteredCommandList()
@@ -110,7 +109,7 @@ namespace Main.Core
 #endif
 
 
-            ICommandListSupplier commands=new CommandListSupplier(RegisteredCommandList());
+            ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
             this.Kernel.Bind(
                 x =>
@@ -211,10 +210,7 @@ namespace Main.Core
         }
         protected object ActivteDenormalizerFromProvider(IContext ctx)
         {
-            return
-                (ctx.Kernel.Get(
-                    typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments))
-                 as IProvider).Create(ctx);
+            return (ctx.Kernel.Get(typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
         }
     }
 }
