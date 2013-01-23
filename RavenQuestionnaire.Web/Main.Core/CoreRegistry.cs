@@ -110,12 +110,13 @@ namespace Main.Core
 
 
             ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
-            #if !MONODROID
             this.Bind<ICommandListSupplier>().ToConstant(commands);
+
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
-#endif
+                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
+                    new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
+
 
         }
 

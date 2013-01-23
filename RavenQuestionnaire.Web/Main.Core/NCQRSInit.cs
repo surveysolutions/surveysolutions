@@ -74,7 +74,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             var bus = new InProcessEventBus(true);
 
             // RegisterEventHandlers(bus, kernel);
-#endif
+
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
@@ -124,11 +124,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-            var commands =
-            foreach (Type type in commandSupplier.GetCommandList())
-                    .ToList();
-            foreach (Type type in commands)
-            {
+            foreach (Type type in commandSupplier.GetCommandList()){
+                   
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
