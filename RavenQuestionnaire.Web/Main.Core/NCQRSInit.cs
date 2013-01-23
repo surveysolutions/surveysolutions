@@ -65,7 +65,9 @@ namespace Main.Core
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
          
             var bus = new InProcessEventBus(true);
-            RegisterEventHandlers(bus, kernel);
+            #if !MONODROID
+                RegisterEventHandlers(bus, kernel);
+#endif
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
@@ -177,8 +179,10 @@ namespace Main.Core
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-
-            foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneICommand))
+            var commands =
+                AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneICommand)
+                    .ToList();
+            foreach (Type type in commands)
             {
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }

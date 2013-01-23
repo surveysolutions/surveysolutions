@@ -65,7 +65,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 		{
 			_sqLiteContext.ExecuteWithTransaction(() => SaveEvents(events));
 		}
-
+        public void ClearDB()
+        {
+            _sqLiteContext.ExecuteWithTransaction(() => _databaseHelper.WritableDatabase.Delete("Events", null, null));
+        }
 		public IEnumerable<CommittedEvent> GetAllEvents()
 		{
 			var cursor = _databaseHelper
@@ -120,8 +123,9 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 				_databaseHelper.WritableDatabase.Insert("Events", null, values);
 			}
 		}
+        
 
-		#region DataConverter
+	    #region DataConverter
 
 		private string GetJsonData(object payload)
 		{

@@ -100,6 +100,7 @@ namespace Main.Core
 
            
             RegisterDenormalizers();
+            #if !MONODROID
             this.Kernel.Bind(
                 x =>
                 x.From(GetAssweblysForRegister()).Select(
@@ -107,8 +108,8 @@ namespace Main.Core
                     t.GetInterfaces().FirstOrDefault(
                         i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEventHandler<>)) != null).
                     BindAllInterfaces());
-
-           this.Kernel.Bind(
+#endif
+            this.Kernel.Bind(
                 x => x.From(GetAssweblysForRegister()).SelectAllInterfaces().BindWith(new RegisterFirstInstanceOfInterface()));
 
         }

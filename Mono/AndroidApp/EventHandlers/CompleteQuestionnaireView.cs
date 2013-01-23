@@ -36,16 +36,13 @@ namespace AndroidApp.EventHandlers
            
             if (group.Propagated == Propagate.None || group.PropagationPublicKey.HasValue)
             {
+                var screenItems = BuildItems(group,true);
                 var screen = new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
-                                                         key, BuildItems(group),
+                                                         key, screenItems,
                                                          BuildSiblings(rout),
                                                          BuildBreadCrumbs(rout),
                                                          chapters);
                 this.Screens.Add(key, screen);
-                foreach (var question in screen.Items.OfType<QuestionViewModel>())
-                {
-                    this.Questions.Add(question.PublicKey, question);
-                }
             }
             else
             {
@@ -101,14 +98,29 @@ namespace AndroidApp.EventHandlers
                 root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
                     Select(
                         g =>
-                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title, BuildItems(g).ToList())
-                /* g.Children.OfType<ICompleteQuestion>().Select(
+                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
+                                       BuildItems(g, false).ToList())
+                    /* g.Children.OfType<ICompleteQuestion>().Select(
                      q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
         }
-        protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen)
+
+        protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
         {
-            return screen.Children.Select(CreateView).Where(c => c != null);
+            IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
+            foreach (var children in screen.Children)
+            {
+                var item = CreateView(children);
+                if (item == null)
+                    continue;
+                var question = item as QuestionViewModel;
+                if (question != null && updateHash)
+                    this.Questions.Add(question.PublicKey, question);
+                result.Add(item);
+            }
+            return result;
+            //  return screen.Children.Select(CreateView).Where(c => c != null);
         }
+
         protected IQuestionnaireItemViewModel CreateView(IComposite item)
         {
             var question = item as ICompleteQuestion;
@@ -127,9 +139,10 @@ namespace AndroidApp.EventHandlers
                                                            newType,
                                                            question.Answers.OfType<ICompleteAnswer>().Select(
                                                                a =>
-                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)),
+                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)).ToList(),
                                                            question.Enabled, question.Instructions, question.Comments,
                                                            question.Valid, question.Mandatory, question.GetAnswerString());
+                
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)
