@@ -39,7 +39,7 @@ namespace AndroidApp.EventHandlers
                 var screenItems = BuildItems(group,true);
                 var screen = new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
                                                          key, screenItems,
-                                                         BuildSiblings(rout),
+                                                         BuildSiblings(rout, key),
                                                          BuildBreadCrumbs(rout),
                                                          chapters);
                 this.Screens.Add(key, screen);
@@ -48,7 +48,7 @@ namespace AndroidApp.EventHandlers
             {
                 this.Screens.Add(key, new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
                                                                      key,
-                                                                     BuildSiblings(rout),
+                                                                     BuildSiblings(rout, key),
                                                                      BuildBreadCrumbs(rout),
                                                                      chapters,
                                                                      group.Children.OfType<ICompleteQuestion>().Select(
@@ -65,21 +65,31 @@ namespace AndroidApp.EventHandlers
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout)
         {
             return
-                rout.Skip(1).ToList().Select(BuildNamivgationItem);
+                rout.Skip(1).ToList().Select(BuildNavigationItem);
         }
-        protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout)
+        protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
-            return rout[rout.Count - 2].Children.OfType<ICompleteGroup>().Select(BuildNamivgationItem).ToList();
+            var parent = rout[rout.Count - 2];
+            IEnumerable<ICompleteGroup> result;
+            if (key.PropagationKey.HasValue)
+                result = parent.Children.OfType<ICompleteGroup>().Where(
+                    c => c.PropagationPublicKey.HasValue && c.PublicKey == key.PublicKey);
+            else
+
+                result =
+                    parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer());
+            return result.Select(BuildNavigationItem).ToList();
         }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
         {
             return
-                root.Children.OfType<ICompleteGroup>().Select(BuildNamivgationItem);
+                root.Children.OfType<ICompleteGroup>().Select(BuildNavigationItem);
         }
-        protected QuestionnaireNavigationPanelItem BuildNamivgationItem(ICompleteGroup g)
+
+        protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
-            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0);
+            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey), g.Title, 0, 0);
         }
 
         protected HeaderItem BuildHeader(ICompleteQuestion question)
@@ -166,6 +176,29 @@ namespace AndroidApp.EventHandlers
             if (type == QuestionType.SingleOption || type == QuestionType.MultyOption)
                 return true;
             return false;
+        }
+
+        private class PropagatedGroupEqualityComparer : IEqualityComparer<ICompleteGroup>
+        {
+
+            public bool Equals(ICompleteGroup b1, ICompleteGroup b2)
+            {
+                if (b1.PublicKey == b2.PublicKey)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+
+            public int GetHashCode(ICompleteGroup bx)
+            {
+                return bx.PublicKey.GetHashCode();
+            }
+
         }
     }
 }
