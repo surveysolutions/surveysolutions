@@ -16,8 +16,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
     {
-        public SelectebleQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory, string answerString)
-            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, answerString)
+        public SelectebleQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory, bool capital, string answerString)
+            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory,capital, answerString)
         {
             Answers = answers;
           

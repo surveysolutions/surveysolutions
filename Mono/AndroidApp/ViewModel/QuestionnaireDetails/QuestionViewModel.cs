@@ -25,13 +25,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             this.Status = rosterItem.Status;
         }*/
 
-        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory, string answerString)
+        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory, bool capital, string answerString)
         {
             PublicKey = publicKey;
             Text = text;
             QuestionType = type;
             AnswerString = answerString;
             this.Enabled = enabled;
+            this.Capital = capital;
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
@@ -53,6 +54,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
         public bool Enabled { get; private set; }
+        public bool Capital { get; private set; }
     //    public bool Valid { get; private set; }
         public string Instructions { get; private set; }
 

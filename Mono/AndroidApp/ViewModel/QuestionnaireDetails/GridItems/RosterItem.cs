@@ -14,15 +14,21 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.GridItems
 {
     public class RosterItem
     {
-        public RosterItem(ItemPublicKey publicKey, string title, IList<IQuestionnaireItemViewModel> rowItems)
+        private readonly Func<string> titleUpdater;
+        public RosterItem(ItemPublicKey publicKey, IList<IQuestionnaireItemViewModel> rowItems,Func<string> titleUpdater)
         {
             PublicKey = publicKey;
-            Title = title;
             RowItems = rowItems;
+            this.titleUpdater = titleUpdater;
         }
 
         public ItemPublicKey PublicKey { get; private set; }
-        public string Title { get; private set; }
+
+        public string Title
+        {
+            get { return titleUpdater(); }
+        }
+
         public IList<IQuestionnaireItemViewModel> RowItems { get; private set; }
     }
 }

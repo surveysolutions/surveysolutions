@@ -44,7 +44,7 @@ namespace AndroidApp.EventHandlers
                                                               BuildBreadCrumbs(rout),
                                                               chapters);
                 this.Screens.Add(key, screen);
-                if (group.PropagationPublicKey.HasValue)
+                if (key.PropagationKey.HasValue)
                 {
                     QuestionnaireGridViewModel roster;
                     ItemPublicKey rosterKey = new ItemPublicKey(key.PublicKey, null);
@@ -61,7 +61,8 @@ namespace AndroidApp.EventHandlers
                                                                     BuildHeader).ToList());
                         this.Screens.Add(rosterKey, roster);
                     }
-                    roster.Rows.Add(new RosterItem(key, group.Title, screenItems));
+                    roster.Rows.Add(new RosterItem(key, screenItems,
+                                                   () => GetPropagatebleGroupTitle(key.PropagationKey.Value)));
                 }
             }
 
@@ -71,6 +72,13 @@ namespace AndroidApp.EventHandlers
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
         public IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
 
+        protected string GetPropagatebleGroupTitle(Guid propagationKey)
+        {
+            return
+                string.Concat(
+                    Questions.Where(q => q.Key.PropagationKey == propagationKey && q.Value.Capital).Select(
+                        q => q.Value.AnswerString));
+        }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout)
         {
@@ -112,17 +120,7 @@ namespace AndroidApp.EventHandlers
                                                   a =>
                                                   new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));*/
         }
-        protected IEnumerable<RosterItem> BuildGridRows(CompleteQuestionnaireDocument root, ICompleteGroup template)
-        {
-            return
-                root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
-                    Select(
-                        g =>
-                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
-                                       BuildItems(g, false).ToList())
-                    /* g.Children.OfType<ICompleteQuestion>().Select(
-                     q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
-        }
+       
 
         protected IList<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
         {
@@ -153,7 +151,7 @@ namespace AndroidApp.EventHandlers
                                                       newType,
                                                       question.GetAnswerString(),
                                                       question.Enabled, question.Instructions, question.Comments,
-                                                      question.Valid, question.Mandatory);
+                                                      question.Valid,question.Capital, question.Mandatory);
                 else
                     return new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                                                            newType,
@@ -161,7 +159,7 @@ namespace AndroidApp.EventHandlers
                                                                a =>
                                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)).ToList(),
                                                            question.Enabled, question.Instructions, question.Comments,
-                                                           question.Valid, question.Mandatory, question.GetAnswerString());
+                                                           question.Valid, question.Mandatory,question.Capital, question.GetAnswerString());
                 
             }
             var group = item as ICompleteGroup;
