@@ -41,7 +41,7 @@ namespace AndroidApp.EventHandlers
                 var screen = new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
                                                               key, screenItems,
                                                               BuildSiblings(rout, key),
-                                                              BuildBreadCrumbs(rout),
+                                                              BuildBreadCrumbs(rout, key, group.Propagated),
                                                               chapters);
                 this.Screens.Add(key, screen);
                 if (key.PropagationKey.HasValue)
@@ -55,7 +55,7 @@ namespace AndroidApp.EventHandlers
                         roster = new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
                                                                 key,
                                                                 BuildSiblings(rout, rosterKey),
-                                                                BuildBreadCrumbs(rout),
+                                                                BuildBreadCrumbs(rout, rosterKey, group.Propagated),
                                                                 chapters,
                                                                 group.Children.OfType<ICompleteQuestion>().Select(
                                                                     BuildHeader).ToList());
@@ -80,11 +80,21 @@ namespace AndroidApp.EventHandlers
                         q => q.Value.AnswerString));
         }
 
-        protected IEnumerable<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout)
+        protected IList<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key, Propagate nodeType)
         {
+            var baseRout = rout.Skip(1).Select(BuildNavigationItem).ToList();
+            if (nodeType == Propagate.None || !key.PropagationKey.HasValue)
+                return baseRout;
+            var last = baseRout.Last();
+            baseRout.Remove(baseRout.Last());
+            baseRout.Add(new QuestionnaireNavigationPanelItem(new ItemPublicKey(key.PublicKey, null), last.Title, 0, 0));
+            baseRout.Add(new QuestionnaireNavigationPanelItem(key, GetPropagatebleGroupTitle(key.PropagationKey.Value),
+                                                              0, 0));
             return
-                rout.Skip(1).ToList().Select(BuildNavigationItem);
+                baseRout;
+
         }
+
         protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
             var parent = rout[rout.Count - 2];
@@ -102,7 +112,7 @@ namespace AndroidApp.EventHandlers
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
         {
             return
-                root.Children.OfType<ICompleteGroup>().Select(BuildNavigationItem);
+                root.Children.OfType<ICompleteGroup>().Select(BuildNavigationItem).ToList();
         }
 
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
