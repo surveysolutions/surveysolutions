@@ -94,7 +94,7 @@ namespace AndroidApp.EventHandlers
             var doc = _documentStorage.Query().First();
             var question =
                 doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey)];
-            question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
+            question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
         }
 
         #endregion

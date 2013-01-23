@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,28 +34,37 @@ namespace AndroidApp.EventHandlers
             var key = new ItemPublicKey(group.PublicKey,
                                         group.PropagationPublicKey);
 
-           
+
             if (group.Propagated == Propagate.None || group.PropagationPublicKey.HasValue)
             {
-                var screenItems = BuildItems(group,true);
+                var screenItems = BuildItems(group, true);
                 var screen = new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
-                                                         key, screenItems,
-                                                         BuildSiblings(rout, key),
-                                                         BuildBreadCrumbs(rout),
-                                                         chapters);
+                                                              key, screenItems,
+                                                              BuildSiblings(rout, key),
+                                                              BuildBreadCrumbs(rout),
+                                                              chapters);
                 this.Screens.Add(key, screen);
+                if (group.PropagationPublicKey.HasValue)
+                {
+                    QuestionnaireGridViewModel roster;
+                    ItemPublicKey rosterKey = new ItemPublicKey(key.PublicKey, null);
+                    if (Screens.ContainsKey(rosterKey))
+                        roster = Screens[rosterKey] as QuestionnaireGridViewModel;
+                    else
+                    {
+                        roster = new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
+                                                                key,
+                                                                BuildSiblings(rout, rosterKey),
+                                                                BuildBreadCrumbs(rout),
+                                                                chapters,
+                                                                group.Children.OfType<ICompleteQuestion>().Select(
+                                                                    BuildHeader).ToList());
+                        this.Screens.Add(rosterKey, roster);
+                    }
+                    roster.Rows.Add(new RosterItem(key, group.Title, screenItems));
+                }
             }
-            else
-            {
-                this.Screens.Add(key, new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
-                                                                     key,
-                                                                     BuildSiblings(rout, key),
-                                                                     BuildBreadCrumbs(rout),
-                                                                     chapters,
-                                                                     group.Children.OfType<ICompleteQuestion>().Select(
-                                                                         BuildHeader).ToList(),
-                                                                     BuildGridRows(document, group)));
-            }
+
         }
 
 
@@ -114,7 +124,7 @@ namespace AndroidApp.EventHandlers
                      q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
         }
 
-        protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
+        protected IList<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
         {
             IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
             foreach (var children in screen.Children)
