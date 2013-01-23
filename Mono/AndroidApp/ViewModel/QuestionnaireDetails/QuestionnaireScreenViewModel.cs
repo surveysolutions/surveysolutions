@@ -23,10 +23,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             QuestionnaireId = Guid.Parse(completeQuestionnaireId);
         }
 
+        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue; 
         public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             IList<QuestionnaireNavigationPanelItem> siblings,
-            IList<QuestionnaireNavigationPanelItem> breadcrumbs, IEnumerable<QuestionnaireNavigationPanelItem> chapters)
+            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
@@ -34,7 +35,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             ScreenId = screenId;
             Siblings = siblings;
             Breadcrumbs = breadcrumbs;
-            Chapters = chapters;
+            chaptersValue = chapters;
             ScreenName = screenName;
             Title = title;
         }
@@ -45,7 +46,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public ItemPublicKey ScreenId { get; private set; }
         public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }
         public IList<QuestionnaireNavigationPanelItem> Breadcrumbs { get; private set; }
-        public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
+        public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get { return chaptersValue(); }
+    }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
 

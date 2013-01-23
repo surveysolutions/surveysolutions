@@ -44,6 +44,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 item.Selected = answer.Contains(item.PublicKey);
             }
             base.SetAnswer(answer, answerString);
+            if (QuestionType==QuestionType.MultyOption && Status.HasFlag(QuestionStatus.Answered) && !Answers.Any(a=>a.Selected))
+            {
+                Status &= ~QuestionStatus.Answered;
+                RaisePropertyChanged("Status");
+            }
         }
 
         /*public void SelectAnswer(Guid publicKey)

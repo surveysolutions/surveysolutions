@@ -21,14 +21,15 @@ namespace AndroidApp.EventHandlers
 {
     public class CompleteQuestionnaireView
     {
-        public CompleteQuestionnaireView()
+        public CompleteQuestionnaireView(Guid publicKey, string title, IEnumerable<QuestionnaireNavigationPanelItem> chapters)
         {
+            this.PublicKey = publicKey;
+            this.Title = title;
+            this.Chapters = chapters;
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
         }
         public void AddScreen(List<ICompleteGroup> rout,
-            CompleteQuestionnaireDocument document,
-            IEnumerable<QuestionnaireNavigationPanelItem> chapters,
             ICompleteGroup group)
         {
             var key = new ItemPublicKey(group.PublicKey,
@@ -38,11 +39,11 @@ namespace AndroidApp.EventHandlers
             if (group.Propagated == Propagate.None || group.PropagationPublicKey.HasValue)
             {
                 var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(document.PublicKey, group.Title, document.Title,
+                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
                                                               key, screenItems,
                                                               BuildSiblings(rout, key),
                                                               BuildBreadCrumbs(rout, key, group.Propagated),
-                                                              chapters);
+                                                              () => this.Chapters);
                 this.Screens.Add(key, screen);
                 if (key.PropagationKey.HasValue)
                 {
@@ -52,11 +53,11 @@ namespace AndroidApp.EventHandlers
                         roster = Screens[rosterKey] as QuestionnaireGridViewModel;
                     else
                     {
-                        roster = new QuestionnaireGridViewModel(document.PublicKey, group.Title, document.Title,
+                        roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                                 key,
                                                                 BuildSiblings(rout, rosterKey),
                                                                 BuildBreadCrumbs(rout, rosterKey, group.Propagated),
-                                                                chapters,
+                                                                () => this.Chapters,
                                                                 group.Children.OfType<ICompleteQuestion>().Select(
                                                                     BuildHeader).ToList());
                         this.Screens.Add(rosterKey, roster);
@@ -71,6 +72,9 @@ namespace AndroidApp.EventHandlers
 
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
         public IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
+        public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
+        public string Title { get; private set; }
+        public Guid PublicKey { get; private set; }
 
         protected string GetPropagatebleGroupTitle(Guid propagationKey)
         {
@@ -108,13 +112,7 @@ namespace AndroidApp.EventHandlers
                     parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer());
             return result.Select(BuildNavigationItem).ToList();
         }
-
-        protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
-        {
-            return
-                root.Children.OfType<ICompleteGroup>().Select(BuildNavigationItem).ToList();
-        }
-
+        
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey), g.Title, 0, 0);
@@ -156,21 +154,24 @@ namespace AndroidApp.EventHandlers
             if (question != null)
             {
                 var newType = CalculateViewType(question.QuestionType);
+                QuestionViewModel questionView;
                 if (!IsTypeSelectable(newType))
-                    return new ValueQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
+                    questionView= new ValueQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                                                       newType,
                                                       question.GetAnswerString(),
                                                       question.Enabled, question.Instructions, question.Comments,
                                                       question.Valid,question.Capital, question.Mandatory);
                 else
-                    return new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
+                    questionView= new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                                                            newType,
                                                            question.Answers.OfType<ICompleteAnswer>().Select(
                                                                a =>
                                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)).ToList(),
                                                            question.Enabled, question.Instructions, question.Comments,
                                                            question.Valid, question.Mandatory,question.Capital, question.GetAnswerString());
-                
+              //  questionView.PropertyChanged += questionView_PropertyChanged;
+                return questionView;
+
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)
@@ -178,6 +179,14 @@ namespace AndroidApp.EventHandlers
                                           group.Enabled);
             return null;
         }
+
+      /*  void questionView_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "Answered")
+                return;
+            QuestionViewModel question = sender as QuestionViewModel;
+        }*/
+
         protected QuestionType CalculateViewType(QuestionType type)
         {
             if (type == QuestionType.Numeric || type == QuestionType.AutoPropagate)

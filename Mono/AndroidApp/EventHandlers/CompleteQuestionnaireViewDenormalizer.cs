@@ -52,8 +52,7 @@ namespace AndroidApp.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
-            var view = new CompleteQuestionnaireView();
-            var chapters = BuildChapters(document);
+            var view = new CompleteQuestionnaireView(document.PublicKey, document.Title, BuildChapters(document));
             List<ICompleteGroup> rout = new List<ICompleteGroup>();
             rout.Add(document);
             Stack<ICompleteGroup> queue = new Stack<ICompleteGroup>(document.Children.OfType<ICompleteGroup>());
@@ -66,7 +65,7 @@ namespace AndroidApp.EventHandlers
                     rout.RemoveAt(rout.Count - 1);
                 }
                 rout.Add(current);
-                view.AddScreen(rout,document,chapters,current);
+                view.AddScreen(rout, current);
                
                 foreach (ICompleteGroup child in current.Children.OfType<ICompleteGroup>())
                 {
@@ -79,9 +78,9 @@ namespace AndroidApp.EventHandlers
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
         {
             return
-                root.Children.OfType<ICompleteGroup>().Select(BuildNamivgationItem);
+                root.Children.OfType<ICompleteGroup>().Select(BuildNavigationItem).ToList();
         }
-        protected QuestionnaireNavigationPanelItem BuildNamivgationItem(ICompleteGroup g)
+        protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0);
         }
