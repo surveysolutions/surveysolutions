@@ -57,6 +57,7 @@ namespace Main.Core.Tests.Export
             Console.WriteLine(target.Result);
             Assert.AreEqual(target.Result, "label var q1 `\"good question\"'\r\n");
         }
+       
         [Test]
         public void BuildLabels_OneHeaderLAbelsAreNotEmpty_ResultIsNotEmpty()
         {
@@ -66,6 +67,21 @@ namespace Main.Core.Tests.Export
             var headeritem = new HeaderItem(new SingleQuestion(){ StataExportCaption = "q", PublicKey = labelGuid, QuestionText = "good question"});
             headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer(){ AnswerValue = "aValue1", AnswerText = "label text 1"}));
             headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue2", AnswerText = "label text 2" }));
+            header.Add(headeritem);
+            target.BuildLabelsTestable(header);
+            Console.WriteLine(target.Result);
+            Assert.AreEqual(target.Result, "\r\nlabel define lq aValue1 `\"label text 1\"' aValue2 `\"label text 2\"' \r\nlabel values q lq\r\nlabel var q `\"good question\"'\r\n");
+        }
+
+        [Test]
+        public void BuildLabels_OneHeaderLAbelsAreNotEmptyNewLineIsPresentInLiterals_ResultIsNotEmptyNewLinesAreRomved()
+        {
+            StataSuplierFake target = new StataSuplierFake();
+            var labelGuid = Guid.NewGuid();
+            var header = new HeaderCollection();
+            var headeritem = new HeaderItem(new SingleQuestion() { StataExportCaption = "q", PublicKey = labelGuid, QuestionText = "good \r\nquestion" });
+            headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue1", AnswerText = "label \r\ntext 1" }));
+            headeritem.Labels.Add(Guid.NewGuid(), new LabelItem(new Answer() { AnswerValue = "aValue2", AnswerText = "label \r\ntext 2" }));
             header.Add(headeritem);
             target.BuildLabelsTestable(header);
             Console.WriteLine(target.Result);
