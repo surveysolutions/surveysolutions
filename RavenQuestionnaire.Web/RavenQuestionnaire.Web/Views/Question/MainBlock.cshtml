@@ -56,6 +56,12 @@
                     </div>
                 </div>
                 <div class="control-group">
+                    @Html.LabelFor(model => model.Capital, new { @class = "control-label" })
+                    <div class="controls">
+                        <label class="checkbox">@Html.CheckBoxFor(model => model.Capital) Yes</label>
+                    </div>
+                </div>
+                <div class="control-group">
                     @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
                     <div class="controls">
                         @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })

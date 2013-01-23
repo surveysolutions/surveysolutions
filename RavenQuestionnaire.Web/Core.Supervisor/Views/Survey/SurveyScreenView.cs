@@ -169,7 +169,7 @@ namespace Core.Supervisor.Views.Survey
                         screen.Questions[i].Answers.Add(surveyScreen.Questions[i].Answers[0]);
                     }
 
-                    screen.Captions.Add(surveyScreen.Captions[0]);
+                    screen.Captions.Add(surveyScreen.Captions.Keys.First(), surveyScreen.Captions.Values.First());
                 }
 
                 if (screen.Key.Propagated != Propagate.None)

@@ -91,18 +91,21 @@ var DataHelper = function (host) {
                         </thead>
                          <!-- /ko -->*@
                         <tbody data-bind="foreach: questions">
-                            <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}">
+                            <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}, css: {avtive : isActive}">
                                 <td style="width: 300px;" data-bind="text: title">
                                 </td>
                                 <!-- ko foreach: answers -->
                                 <!-- ko if: isVisible -->
                                 <td style="width: 250px;">
                                     <div class="cell-content">
+                                        <span data-bind="css: markerStyle()"></span>
                                         <span data-bind="text: answer"></span>
                                         <div class="question-toolbar btn-group pull-right">
                                             <a class="btn btn-primary btn-mini answer-btn" href="#" data-bind="click: $root.openDetails, visible: isReadonly == false">
-                                                answer</a> <a class="btn btn-mini" data-bind="click: $root.openDetails"><span data-bind="    text: comments().length + ' ', visible: comments().length > 0">
-                                                </span><i class="icon-comment"></i></a><a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }">
+                                                answer</a> 
+                                            <a class="btn btn-mini" data-bind="click: $root.openDetails"><span data-bind="    text: comments().length + ' ', visible: comments().length > 0">
+                                                </span><i class="icon-comment"></i></a>
+                                            <a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }, visible: isFlaged">
                                                     <i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i>
                                             </a>
                                         </div>

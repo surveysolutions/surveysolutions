@@ -29,6 +29,7 @@ namespace Main.Core.View.Question
             this.Featured = view.Featured;
             this.Instructions = view.Instructions;
             this.Mandatory = view.Mandatory;
+            this.Capital = view.Capital;
             this.Parent = view.Parent.HasValue ? view.Parent.Value : Guid.Empty;
             this.PublicKey = view.PublicKey;
             this.QuestionScope = view.QuestionScope;
@@ -83,6 +84,11 @@ namespace Main.Core.View.Question
         /// Gets or sets a value indicating whether Mandatory.
         /// </summary>
         public bool Mandatory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Capital.
+        /// </summary>
+        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets StataExportCaption.

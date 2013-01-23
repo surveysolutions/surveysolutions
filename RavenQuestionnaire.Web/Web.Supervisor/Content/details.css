@@ -445,3 +445,21 @@ td.capital
     display: table;
     line-height: 0;
 }
+.cell-content {
+	position: relative;
+}
+.question-marker {
+    background: #ddd;
+    display: block;
+    height: 4px;
+    left: 0;
+    position: absolute;
+    top: -4px;
+    width: 40px;
+}
+.question-marker.invalid {
+	background-color: #CB4D4D;
+}
+.question-marker.supervisor {
+	background-color: #4C9BDD;
+}

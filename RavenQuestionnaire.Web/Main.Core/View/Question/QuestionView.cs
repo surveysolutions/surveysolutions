@@ -77,6 +77,7 @@ namespace Main.Core.View.Question
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
+            this.Capital = doc.Capital;
             var autoQuestion = doc as IAutoPropagate;
             if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
@@ -127,6 +128,11 @@ namespace Main.Core.View.Question
         /// Gets or sets a value indicating whether mandatory.
         /// </summary>
         public bool Mandatory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether Capital.
+        /// </summary>
+        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets the parent.

@@ -184,6 +184,7 @@ Date.prototype.mmddyyyy = function () {
         self.title = title;
         self.answers = answers;
         self.isVisible = ko.observable(true);
+        self.isActive = ko.observable(false);
         self.visibleCount = ko.computed(function () {
             var count = 0;
             ko.utils.arrayForEach(self.answers(), function (item) {
@@ -270,6 +271,18 @@ Date.prototype.mmddyyyy = function () {
         self.isEnabled = ko.observable(isEnabled);
         self.isReadonly = isReadonly;
         self.isFlaged = ko.observable(isFlaged);
+        
+        self.markerStyle = function() {
+            var style = "question-marker ";
+            if (self.isValid()==false) {
+                return style + "invalid";
+            }
+            if (self.isReadonly == false) {
+                 return style + "supervisor";
+            }
+            return '';
+        };
+        
         self.type = type;
         self.comments = ko.observableArray(comments || []);
         self.isAnswered = ko.observable(isAnswered);
@@ -745,6 +758,7 @@ Date.prototype.mmddyyyy = function () {
 
         self.openDetails = function (answer, event) {
             self.currentAnswer(answer);
+            
             $('#stacks').addClass('detail-visible');
             event.stopPropagation();
 
