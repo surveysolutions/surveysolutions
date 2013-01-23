@@ -26,8 +26,8 @@ using Newtonsoft.Json;
 
 namespace AndroidApp.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                                     IEventHandler<CommentSeted>, */
+    public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, */
+                                                     IEventHandler<CommentSeted>, 
                                                      IEventHandler<SnapshootLoaded>,
                                                      /*IEventHandler<CompleteQuestionnaireDeleted>, */
                                                      IEventHandler<AnswerSet>/*, 
@@ -95,6 +95,18 @@ namespace AndroidApp.EventHandlers
             var question =
                 doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey)];
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in CommentSeted>
+
+        public void Handle(IPublishedEvent<CommentSeted> evnt)
+        {
+            var doc = _documentStorage.Query().First();
+            var question =
+                doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey)];
+            question.SetComment(evnt.Payload.Comments);
         }
 
         #endregion

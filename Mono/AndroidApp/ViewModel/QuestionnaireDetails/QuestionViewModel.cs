@@ -58,15 +58,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         public string Comments
         {
-            get { return comments; }
-            set
-            {
-                comments = value;
-                RaisePropertyChanged("Comments");
-            }
-        }
+            get; private set; /*  get { return comments; }
+              set
+              {
+                  comments = value;
+                  RaisePropertyChanged("Comments");
+              }*/ }
 
-        private string comments;
+       // private string comments;
         public string AnswerString { get; protected set; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
@@ -81,6 +80,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 RaisePropertyChanged("Status");
             }
             RaisePropertyChanged("AnswerString");
+        }
+        public virtual void SetComment(string comment)
+        {
+            this.Comments = comment;
+            RaisePropertyChanged("Comments");
         }
 
         /* public IMvxLanguageBinder BorderColor

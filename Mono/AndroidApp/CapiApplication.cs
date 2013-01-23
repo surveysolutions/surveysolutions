@@ -88,7 +88,7 @@ namespace AndroidApp
                 new CompleteQuestionnaireViewDenormalizer(Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
             bus.RegisterHandler(eventHandler, typeof(SnapshootLoaded));
             bus.RegisterHandler(eventHandler, typeof(AnswerSet));
-
+            bus.RegisterHandler(eventHandler, typeof (CommentSeted));
             #endregion
 
             GenerateEvents(bus);

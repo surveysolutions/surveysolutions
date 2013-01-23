@@ -18,6 +18,7 @@ using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Cirrious.MvvmCross.Binding.Droid.Views;
+using Main.Core.Commands.Questionnaire.Completed;
 using Ncqrs.Commanding.ServiceModel;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
@@ -132,6 +133,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+            CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
+                                                         etComments.Text, this.Model.PublicKey.PropagationKey));
             etComments.ClearFocus();
             etComments.Visibility = ViewStates.Gone;
             tvComments.Visibility = ViewStates.Visible;
