@@ -12,6 +12,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Main.Core.Commands.Questionnaire.Completed;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -51,6 +52,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                      null, etAnswer.Text,
+                                                      Model.PublicKey.PropagationKey));
             etAnswer.ClearFocus();
             InputMethodManager imm
                 = (InputMethodManager) this.Context.GetSystemService(

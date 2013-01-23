@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Main.Core.Commands.Questionnaire.Completed;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -42,19 +43,39 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            SelectebleQuestionViewModel typedMode = Model as SelectebleQuestionViewModel;
+            typedMode = Model as SelectebleQuestionViewModel;
 
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
                 cb.Text = answer.Title;
                 cb.Checked = answer.Selected;
+                cb.CheckedChange += cb_CheckedChange;
+                cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
                 llWrapper.AddView(cb);
             }
            
         }
 
+        private SelectebleQuestionViewModel typedMode;
         #endregion
+
+        void cb_CheckedChange(object sender, CheckBox.CheckedChangeEventArgs e)
+        {
+            var cb = sender as CheckBox;
+            var answerGuid = Guid.Parse(cb.GetTag(Resource.Id.AnswerId).ToString());
+            var answered = typedMode.Answers.Where(a => a.Selected).Select(a => a.PublicKey).ToList();
+            if(e.IsChecked)
+                answered.Add(answerGuid);
+            else
+            {
+                answered.Remove(answerGuid);
+            }
+            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                         answered, "",
+                                                         Model.PublicKey.PropagationKey));
+            //typedMode.SelectAnswer(answerGuid);
+        }
 
     }
 }

@@ -12,6 +12,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Main.Core.Commands.Questionnaire.Completed;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -54,24 +55,29 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
                     dialog.Show();
                 };
-            if (!DateTime.TryParse(Model.AnswerString, out date))
+          /*  if (!DateTime.TryParse(Model.AnswerString, out date))
                 // get the current date
-                date = DateTime.Today;
+                date = DateTime.Today;*/
 
             // display the current date (this method is below)
-            UpdateDisplay();
+            dateDisplay.Text = Model.AnswerString;
         }
 
-        // updates the date in the TextView
+       /* // updates the date in the TextView
         private void UpdateDisplay()
         {
             dateDisplay.Text = date.ToString("d");
-        }
+        }*/
         // the event received when the user "sets" the date in the dialog
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
+            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                        null, e.Date.ToString("d"),
+                                                        Model.PublicKey.PropagationKey));
+            dateDisplay.Text = Model.AnswerString;
             this.date = e.Date;
-            UpdateDisplay();
+
+          //  UpdateDisplay();
         }
  /*       protected override Dialog OnCreateDialog(int id)
         {
