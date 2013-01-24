@@ -447,6 +447,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
+            ViewBag.ActivePage = MenuItem.Docs;
             var model = this.viewRepository.Load<DisplayViewInputModel, SurveyScreenView>(
                 new DisplayViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey, User = this.globalInfo.GetCurrentUser() });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();

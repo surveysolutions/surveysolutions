@@ -58,7 +58,9 @@ var DataHelper = function (host) {
         <div class="inner">
             <div class="title">
                 <button type="button" class="close" data-bind="click: closeMenu">&times</button>
-                <span data-bind="text: title"></span>
+                <span data-bind="text: title"></span>.
+                Responsible: <span data-bind="text: user.name"></span>.
+                Status: <span data-bind="text: status.name"></span>
             </div>
             <div class="body">
                 <ul class="nav nav-list" data-bind="foreach: menu">
@@ -83,28 +85,42 @@ var DataHelper = function (host) {
                 <h2 class="heading" data-bind="text: title"></h2>
                 <div class="questions">
                     <table class="table table-bordered table-condensed" data-bind="style: { width: (300 + 250 * visibleCount()) + 'px' }">
-                       @* <!-- ko if: (captions.length > 0) -->
+                        <!-- ko if: (captions.length > 0) -->
                         <thead>
-                            <tr data-bind="foreach: captions">
-                                <td data-bind="text: $data"></td>
+                            <tr>
+                                <td>
+                                </td>
+                                <!-- ko foreach: captions -->
+                                <td data-bind="visible: isVisible">
+                                    <span data-bind="text: title"></span>
+                                </td>
+                                <!-- /ko -->
                             </tr>
                         </thead>
-                         <!-- /ko -->*@
+                        <!-- /ko -->
                         <tbody data-bind="foreach: questions">
-                            <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}">
+                            <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}, css: {avtive : isActive}">
                                 <td style="width: 300px;" data-bind="text: title">
                                 </td>
                                 <!-- ko foreach: answers -->
                                 <!-- ko if: isVisible -->
                                 <td style="width: 250px;">
                                     <div class="cell-content">
-                                        <span data-bind="text: answer"></span>
-                                        <div class="question-toolbar btn-group pull-right">
-                                            <a class="btn btn-primary btn-mini answer-btn" href="#" data-bind="click: $root.openDetails, visible: isReadonly == false">
-                                                answer</a> <a class="btn btn-mini" data-bind="click: $root.openDetails"><span data-bind="    text: comments().length + ' ', visible: comments().length > 0">
-                                                </span><i class="icon-comment"></i></a><a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }">
-                                                    <i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i>
-                                            </a>
+                                        <span data-bind="css: markerStyle()"></span><span data-bind="text: answer"></span>
+                                        <div class="question-toolbar pull-right">
+                                            <a class="btn btn-mini" data-bind="click: $root.openDetails, visible: comments().length > 0"><span data-bind="text: comments().length + ' '"></span><i class="icon-comment"></i></a>
+                                            <a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }, visible: isFlaged"><i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i></a>
+                                            <div class="btn-group">
+                                                
+                                                <a style="display: none;" class="actions btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                <ul class="dropdown-menu">
+                                                    <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.openDetails">
+                                                        Answer</a></li>
+                                                    <li data-bind="visible: comments().length == 0"><a class="" href="#" data-bind="click: $root.openDetails">
+                                                        Comment</a></li>
+                                                    <li data-bind="visible: isFlaged() == false"><a data-bind="click: $root.flagAnswer">Flag</a></li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -152,7 +168,7 @@ var DataHelper = function (host) {
             <div class="body">
                 <div class="details-block ">
                     <h2 class="heading">Answer</h2>
-                    <p><span data-bind="    visible: !isAnswered ">no yet</span> <span data-bind="   text: answer ">
+                    <p><span data-bind="visible: !isAnswered ">no yet</span> <span data-bind="   text: answer ">
                         no yet answer</span> </p>
                     <div data-bind="visible: !isReadonly">
                     </div>

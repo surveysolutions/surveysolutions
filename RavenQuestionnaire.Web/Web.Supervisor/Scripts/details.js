@@ -25,6 +25,20 @@ ko.bindingHandlers.datepicker = {
     }
 };
 
+ko.bindingHandlers.popover = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var cssSelectorForPopoverTemplate = ko.utils.unwrapObservable(valueAccessor());
+            var popOverTemplate = "<div id='my-knockout-popver'>" + $(cssSelectorForPopoverTemplate).html() + "</div>";
+            $(element).popover({ content: popOverTemplate, html:true, trigger: 'manual' });
+
+            $(element).click(function() {
+                $(this).popover('toggle');
+                var thePopover = document.getElementById("my-knockout-popver");
+                ko.applyBindings(viewModel, thePopover);
+            });  
+        }
+    };
+
 Date.prototype.mmddyyyy = function () {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
@@ -80,6 +94,13 @@ Date.prototype.mmddyyyy = function () {
         self.totals = totals;
     };
 
+    var ScreenCaption = function(key, title) {
+        var self = this;
+        self.key = key;
+        self.title = title;
+        self.isVisible = ko.observable(true);
+    };
+    
     var Screen = function (model, key, title, questions, childScreenKeys, captions) {
         var self = this;
         var model = model;
@@ -92,9 +113,17 @@ Date.prototype.mmddyyyy = function () {
         self.hasQuestions = !(childScreenKeys.length > 0);
         self.captions = captions;
 
-        self.setVisible = function (key) {
+        self.setVisible = function(key) {
             self.isVisible(true);
             self.filterAnswers(key);
+            ko.utils.arrayForEach(self.captions, function(item) {
+                    item.isVisible(true);
+                });
+            if (!!key) {
+                ko.utils.arrayForEach(self.captions, function(item) {
+                    item.isVisible(key.propagatekey == item.key.propagatekey);
+                });
+            }
 
             for (var i = 0; i < self.childScreenKeys.length; i++) {
                 var child = self.childScreenKeys[i];
@@ -103,7 +132,7 @@ Date.prototype.mmddyyyy = function () {
                     child = new Key(child.publicKey, empty, false);
                 }
 
-                var s = ko.utils.arrayFirst(model.screens(), function (screen) {
+                var s = ko.utils.arrayFirst(model.screens(), function(screen) {
                     return screen.key.id == child.id;
                 });
 
@@ -112,7 +141,7 @@ Date.prototype.mmddyyyy = function () {
                     s.filterAnswers(key);
                 }
             }
-        }
+        };
 
         self.filterAnswers = function (key) {
             if (!key)
@@ -184,6 +213,7 @@ Date.prototype.mmddyyyy = function () {
         self.title = title;
         self.answers = answers;
         self.isVisible = ko.observable(true);
+        self.isActive = ko.observable(false);
         self.visibleCount = ko.computed(function () {
             var count = 0;
             ko.utils.arrayForEach(self.answers(), function (item) {
@@ -270,6 +300,18 @@ Date.prototype.mmddyyyy = function () {
         self.isEnabled = ko.observable(isEnabled);
         self.isReadonly = isReadonly;
         self.isFlaged = ko.observable(isFlaged);
+        
+        self.markerStyle = function() {
+            var style = "question-marker ";
+            if (self.isValid()==false) {
+                return style + "invalid";
+            }
+            if (self.isReadonly == false) {
+                 return style + "supervisor";
+            }
+            return '';
+        };
+        
         self.type = type;
         self.comments = ko.observableArray(comments || []);
         self.isAnswered = ko.observable(isAnswered);
@@ -477,6 +519,14 @@ Date.prototype.mmddyyyy = function () {
         self.key = key;
         self.name = name;
     };
+    
+    var Status = function(key, name, comment) {
+        var self = this;
+        self.key = key;
+        self.name = name;
+        self.comment = comment;
+    };
+
 
     // our main view model
     var SurveyModel = function (questionnaire) {
@@ -488,6 +538,8 @@ Date.prototype.mmddyyyy = function () {
         self.title = questionnaire.Title;
 
         self.user = new User(questionnaire.User.Id, questionnaire.User.Name);
+        
+        self.status = new Status(questionnaire.Status.PublicId, questionnaire.Status.Name, questionnaire.ChangeComment);
 
         // map array of passed in todos to an observableArray of Todo objects
         self.menu = ko.observableArray(ko.utils.arrayMap(questionnaire.Navigation.Menu, function (item) {
@@ -544,12 +596,9 @@ Date.prototype.mmddyyyy = function () {
             });
 
             var captions = [];
-            if (screen.Captions.length > 0) {
-                captions.push('');
-                ko.utils.arrayForEach(screen.Captions, function (item) {
-                    captions.push(item);
-                });
-            }
+            for(var key in screen.Captions) {
+                captions.push(new ScreenCaption(new Key(screen.Key.PublicKey, key, true), screen.Captions[key]));
+            };
 
             return new Screen(self, new Key(screen.Key.PublicKey, screen.Key.PropagationKey, screen.Key.IsPropagated), screen.Title, questions, childScreenKeys, captions);
         }));
@@ -744,11 +793,20 @@ Date.prototype.mmddyyyy = function () {
         });
 
         self.openDetails = function (answer, event) {
+            if (!!self.currentAnswer()) {
+                $('#question-' + self.currentAnswer().key.publicKey).removeClass('active');
+            }
+            
             self.currentAnswer(answer);
+            
+            $('#question-' + answer.key.publicKey).addClass('active');
+            
             $('#stacks').addClass('detail-visible');
             event.stopPropagation();
 
             $('#details .body').css('top', ($('#details .title').outerHeight() + 'px'));
+
+           $('[data-toggle="dropdown"]').parent().removeClass('open');
         };
 
         self.closeDetails = function (answer, event) {

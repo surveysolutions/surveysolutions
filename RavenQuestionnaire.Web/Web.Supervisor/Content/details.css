@@ -232,6 +232,7 @@ body:before
 	border-radius: 5px 5px 5px 5px;
 	width: 100%;
 	overflow-x: auto;
+	overflow-y: visible;
 	margin-bottom: 20px;
 	position: relative;
 }
@@ -444,4 +445,34 @@ td.capital
     content: "";
     display: table;
     line-height: 0;
+}
+.cell-content {
+	position: relative;
+	min-height: 25px;
+}
+.cell-content:hover .actions {
+	display: inline-block !important;	
+}
+
+.question-marker {
+    background: #ddd;
+    display: block;
+    height: 4px;
+    left: 0;
+    position: absolute;
+    top: -4px;
+    width: 40px;
+}
+.question-marker.invalid {
+	background-color: #CB4D4D;
+}
+.question-marker.supervisor {
+	background-color: #4C9BDD;
+}
+tr.active td{
+	background: #D9EDF7;
+}
+tr td .btn-mini,
+.btn-group > .btn-mini + .dropdown-toggle {
+	 padding: 1px 3px;
 }
