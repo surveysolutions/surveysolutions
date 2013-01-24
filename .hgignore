@@ -313,6 +313,11 @@ Mono/AndroidApp.Tests/obj/*
 Mono/AndroidApp.Core.Model/obj/*
 Mono/AndroidApp.Tests/bin/*
 Mono/AndroidApp.Core.Model/bin/*
+Mono/AndroidMain.Synchronization/bin/*
+Mono/AndroidSynchronizationMessages/bin/*
+Mono/AndroidSynchronizationMessages/obj/*
+Mono/AndroidMain.Synchronization/obj/*
+RavenQuestionnaire.Web/Main.Synchronization.Tests/bin/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
