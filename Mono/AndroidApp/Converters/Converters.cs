@@ -14,6 +14,6 @@ namespace AndroidApp.Converters
 {
     public class Converters
     {
-        public readonly BorderColorConverter BorderColor = new BorderColorConverter();
+       // public readonly BorderColorConverter BorderColor = new BorderColorConverter();
     }
 }

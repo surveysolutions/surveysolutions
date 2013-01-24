@@ -5,24 +5,26 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" android:padding="10px" android:layout_marginBottom="10px"
-              local:MvxBind="{'Background':{'Path':'Status', 'Converter':'BorderColor'}}"
+              local:MvxBind="{'Background':{'Path':'Status'}}"
               >
   <Button
       android:id="@+id/btnInstructions"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:text="Instructions" />
-  <TextView
-     android:layout_width="wrap_content"
+  
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/llWrapper"
+    android:layout_width="fill_parent"
+                 android:orientation="vertical" 
+    android:layout_height="wrap_content"
+                 local:MvxBind="{'EnableQuestion':{'Path':'Status', 'Converter':'EnableQuestion'}}">
+    <TextView
+     android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:id="@+id/tvTitle"
      android:textSize="20dip"
      local:MvxBind="{'Text':{'Path':'Text'}}"/>
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/llWrapper"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-                 local:MvxBind="{'EnableQuestion':{'Path':'Status', 'Converter':'EnableQuestion'}}">
   </LinearLayout>
   <TextView
     android:layout_width="fill_parent"

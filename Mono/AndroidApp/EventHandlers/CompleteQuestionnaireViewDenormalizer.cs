@@ -27,7 +27,8 @@ using Newtonsoft.Json;
 namespace AndroidApp.EventHandlers
 {
     public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, */
-                                                     IEventHandler<CommentSet>, 
+        IEventHandler<ConditionalStatusChanged>,
+    IEventHandler<CommentSet>, 
                                                      IEventHandler<SnapshootLoaded>,
                                                      /*IEventHandler<CompleteQuestionnaireDeleted>, */
                                                      IEventHandler<AnswerSet>/*, 
@@ -106,6 +107,32 @@ namespace AndroidApp.EventHandlers
             var question =
                 doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey)];
             question.SetComment(evnt.Payload.Comments);
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in ConditionalStatusChanged>
+
+        public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
+        {
+            var doc = _documentStorage.Query().First();
+            foreach (var item in evnt.Payload.ResultQuestionsStatus)
+            {
+                if (!item.Value.HasValue)
+                    continue;
+                var question =
+                    doc.Questions[ParseCrap(item.Key)];
+                question.SetEnabled(item.Value.Value);
+            }
+        }
+        private ItemPublicKey ParseCrap(string key)
+        {
+            Guid publicKey;
+            if (Guid.TryParse(key, out publicKey))
+                return new ItemPublicKey(publicKey, null);
+            var pkString = key.Substring(0, key.Length/2);
+            var prKey = key.Substring(key.Length/2);
+            return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
         }
 
         #endregion

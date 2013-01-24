@@ -17,6 +17,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }
-        bool Enabled { get; }
+     //   bool Enabled { get; }
     }
 }

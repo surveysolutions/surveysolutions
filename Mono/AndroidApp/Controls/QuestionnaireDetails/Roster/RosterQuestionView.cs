@@ -51,7 +51,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
             this._bindingActivity = bindingActivity;
             Content = bindingActivity.BindingInflate(source, Resource.Layout.RosterQuestion, this);
             this.Click += rowViewItem_Click;
-            this.Enabled = this.Model.Enabled;
+            this.Enabled = this.Model.Status.HasFlag(QuestionStatus.Enabled);
          //   this.SetBackgroundResource(Resource.Drawable.grid_headerItem);
         }
 

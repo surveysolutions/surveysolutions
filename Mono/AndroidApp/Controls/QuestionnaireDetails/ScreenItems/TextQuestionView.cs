@@ -46,7 +46,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
-            this.Click += TextQuestionView_Click;
+            llWrapper.Click += TextQuestionView_Click;
             llWrapper.AddView(etAnswer);
         }
 

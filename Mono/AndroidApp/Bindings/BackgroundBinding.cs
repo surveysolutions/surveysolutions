@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.Binding.Interfaces;
 
@@ -25,29 +26,48 @@ namespace AndroidApp.Bindings
 
         public override void SetValue(object value)
         {
-            var backGroundId = (int) value;
-            if (backGroundId == -1)
-            {
-            //    var llWrapper=_control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
-             //   EnableDisableView(_control, false);
-                return;
+            var status = (QuestionStatus) value;
+          
 
-            }
-            _control.SetBackgroundResource(backGroundId);
+            int bgId = Resource.Drawable.questionShape;
+            if (!status.HasFlag(QuestionStatus.Valid))
+                bgId = Resource.Drawable.questionInvalidShape;
+            else if (status.HasFlag(QuestionStatus.Answered))
+                bgId = Resource.Drawable.questionAnsweredShape;
+
+            _control.SetBackgroundResource(bgId);
+
+            var llWrapper = _control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
+
+            if (llWrapper != null)
+                EnableDisableView(llWrapper, status.HasFlag(QuestionStatus.Enabled));
         }
 
         public override Type TargetType
         {
-            get { return typeof(int); }
+            get { return typeof(QuestionStatus); }
         }
 
         public override MvxBindingMode DefaultMode
         {
-            get { return MvxBindingMode.TwoWay; }
+            get { return MvxBindingMode.OneWay; }
         }
 
         #endregion
+        protected void EnableDisableView(View view, bool enabled)
+        {
+            view.Enabled = enabled;
+            ViewGroup group = view as ViewGroup;
+            if (group != null)
+            {
 
+                for (int idx = 0; idx < group.ChildCount; idx++)
+                {
+                    EnableDisableView(group.GetChildAt(idx), enabled);
+                }
+            }
+
+        }
        
     }
 }

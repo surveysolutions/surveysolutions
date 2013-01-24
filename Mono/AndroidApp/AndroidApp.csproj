@@ -140,7 +140,6 @@
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\SingleChoiseQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\ScreenItems\TextQuestionView.cs" />
     <Compile Include="Controls\QuestionnaireDetails\StatisticsContentFragment.cs" />
-    <Compile Include="Converters\BorderColorConverter.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />

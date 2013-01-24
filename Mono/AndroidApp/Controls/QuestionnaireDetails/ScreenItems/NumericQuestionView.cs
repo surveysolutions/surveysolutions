@@ -40,7 +40,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            this.Click += NumericQuestionView_Click;
+            llWrapper.Click += NumericQuestionView_Click;
             etAnswer=new EditText(this.Context);
             etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
             etAnswer.Text = Model.AnswerString;

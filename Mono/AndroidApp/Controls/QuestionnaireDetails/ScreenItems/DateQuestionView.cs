@@ -50,7 +50,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
            
             // add a click event handler to the button
 
-            this.Click += delegate
+            llWrapper.Click += delegate
                 {
 
                     dialog.Show();

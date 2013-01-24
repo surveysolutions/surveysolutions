@@ -31,7 +31,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             Text = text;
             QuestionType = type;
             AnswerString = answerString;
-            this.Enabled = enabled;
+     //       this.Enabled = enabled;
             this.Capital = capital;
             if (enabled)
             {
@@ -53,7 +53,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public ItemPublicKey PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }
-        public bool Enabled { get; private set; }
+       // public bool Enabled { get; private set; }
         public bool Capital { get; private set; }
     //    public bool Valid { get; private set; }
         public string Instructions { get; private set; }
@@ -87,6 +87,16 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         {
             this.Comments = comment;
             RaisePropertyChanged("Comments");
+        }
+        public virtual void SetEnabled(bool enabled)
+        {
+            if (Status.HasFlag(QuestionStatus.Enabled) == enabled)
+                return;
+            if(enabled)
+                Status = Status | QuestionStatus.Enabled;
+            else
+                Status &= ~QuestionStatus.Enabled;
+            RaisePropertyChanged("Status");
         }
 
         /* public IMvxLanguageBinder BorderColor

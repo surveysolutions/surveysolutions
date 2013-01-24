@@ -89,6 +89,7 @@ namespace AndroidApp
             bus.RegisterHandler(eventHandler, typeof(SnapshootLoaded));
             bus.RegisterHandler(eventHandler, typeof(AnswerSet));
             bus.RegisterHandler(eventHandler, typeof(CommentSet));
+            bus.RegisterHandler(eventHandler, typeof(ConditionalStatusChanged));
             #endregion
 
             GenerateEvents(bus);

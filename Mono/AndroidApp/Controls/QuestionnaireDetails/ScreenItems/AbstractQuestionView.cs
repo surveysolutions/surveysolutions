@@ -56,37 +56,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected View Content { get; set; }
 
-        public virtual void BindTo(object source)
-        {
-            BindViewTo(Content, source);
-        }
 
-        public int TemplateId
-        {
-            get { return _templateId; }
-        }
-
-        protected static void BindViewTo(View view, object source)
-        {
-            IDictionary<View, IList<Cirrious.MvvmCross.Binding.Interfaces.IMvxUpdateableBinding>> bindings;
-            if (!TryGetJavaBindingContainer(view, out bindings))
-            {
-                return;
-            }
-
-            foreach (var binding in bindings)
-            {
-                foreach (var bind in binding.Value)
-                {
-                    bind.DataContext = source;
-                }
-            }
-        }
-
-        private static bool TryGetJavaBindingContainer(View view, out IDictionary<View, IList<Cirrious.MvvmCross.Binding.Interfaces.IMvxUpdateableBinding>> result)
-        {
-            return view.TryGetStoredBindings(out result);
-        }
         public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source, Guid questionnairePublicKey)
             : base(context)
         {
@@ -96,11 +66,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
+            
             Initialize();
           
             PostInit();
         }
-
+        
         //public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
         //    : base(context, attrs, defStyle)
         //{
@@ -145,10 +116,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void PostInit()
         {
-            
-            if (!Model.Enabled)
-                EnableDisableView(llWrapper, Model.Enabled);
-           /* else
+        /*    EnableDisableView(llWrapper, this.Enabled);
+            this.Enabled = true;*/
+            /* else
             {
                 if (!Model.Valid)
                     llRoot.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
