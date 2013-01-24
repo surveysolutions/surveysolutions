@@ -32,7 +32,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.questionnaireId = initScreen.QuestionnaireId;
             this.target = target;
-            this.screensHolder = initScreen.Siblings;
+            this.screensHolder = initScreen.Siblings.ToList();
             this.screenId = initScreen.ScreenId;
             this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
             this.target.Adapter = this;
@@ -98,7 +98,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public void UpdateScreenData(IQuestionnaireViewModel initScreen, ItemPublicKey? newScreenId)
         {
-            this.screensHolder = initScreen.Siblings;
+            this.screensHolder = initScreen.Siblings.ToList();
             this.screenId = initScreen.ScreenId;
             this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
             this.NotifyDataSetChanged();

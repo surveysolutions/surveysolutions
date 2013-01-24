@@ -23,17 +23,33 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             QuestionnaireId = Guid.Parse(completeQuestionnaireId);
         }
 
-        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue; 
-        public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
+        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue;
+        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> sibligsValue;
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-            IList<QuestionnaireNavigationPanelItem> siblings,
+            Func<IEnumerable<QuestionnaireNavigationPanelItem>> siblings,
             IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
-            Siblings = siblings;
+            sibligsValue = siblings;
+            Breadcrumbs = breadcrumbs;
+            chaptersValue = chapters;
+            ScreenName = screenName;
+            Title = title;
+        }
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
+            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+            IEnumerable<QuestionnaireNavigationPanelItem> siblings,
+            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
+        {
+
+            QuestionnaireId = questionnaireId;
+            Items = items;
+            ScreenId = screenId;
+            sibligsValue = () => siblings;
             Breadcrumbs = breadcrumbs;
             chaptersValue = chapters;
             ScreenName = screenName;
@@ -44,7 +60,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public string Title { get; private set; }
         public string ScreenName { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
-        public IList<QuestionnaireNavigationPanelItem> Siblings { get; private set; }
+        public IEnumerable<QuestionnaireNavigationPanelItem> Siblings
+        {
+            get { return sibligsValue(); }
+        }
         public IList<QuestionnaireNavigationPanelItem> Breadcrumbs { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get { return chaptersValue(); }
     }

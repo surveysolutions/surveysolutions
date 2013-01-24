@@ -84,9 +84,7 @@ namespace AndroidApp.EventHandlers
             var key = new ItemPublicKey(publicKey, propagationKey);
             var bradCrumbs = template.Breadcrumbs.ToList();
             AddPropagatebleBreadCrumb(bradCrumbs, key);
-            var siblings =
-                this.Screens.Where(s => s.Key.PublicKey == key.PublicKey && s.Key.PropagationKey.HasValue).Select(
-                    s => new QuestionnaireNavigationPanelItem(s.Key, s.Value.Title, 0, 0, true)).ToList();
+
             var items = new List<IQuestionnaireItemViewModel>();
             foreach (var questionnaireItemViewModel in template.Items)
             {
@@ -98,9 +96,16 @@ namespace AndroidApp.EventHandlers
             }
             var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title, Title,
                                                           key, items,
-                                                          siblings, bradCrumbs, () => this.Chapters);
+                                                          () => GetSiblings(key.PublicKey), bradCrumbs,
+                                                          () => this.Chapters);
 
             this.Screens.Add(key, screen);
+        }
+
+        protected IEnumerable<QuestionnaireNavigationPanelItem> GetSiblings(Guid publicKey)
+        {
+            return this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
+                        s => new QuestionnaireNavigationPanelItem(s.Key, s.Value.Title, 0, 0, true)).ToList();
         }
 
         public void RemovePropagatedGroup(Guid publicKey, Guid propagationKey)
