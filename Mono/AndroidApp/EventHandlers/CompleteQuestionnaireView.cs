@@ -37,12 +37,22 @@ namespace AndroidApp.EventHandlers
                                         group.PropagationPublicKey);
 
 
-            if (group.Propagated == Propagate.None || group.PropagationPublicKey.HasValue)
+            if (group.Propagated == Propagate.None)
             {
                 var screenItems = BuildItems(group, true);
                 var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
                                                               key, screenItems,
                                                               BuildSiblings(rout, key),
+                                                              BuildBreadCrumbs(rout, key, group.Propagated),
+                                                              () => this.Chapters);
+                this.Screens.Add(key, screen);
+            }
+            else if (group.PropagationPublicKey.HasValue)
+            {
+                var screenItems = BuildItems(group, true);
+                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, () => GetPropagatebleGroupTitle(group.PropagationPublicKey.Value),
+                                                              key, screenItems,
+                                                              () => GetSiblings(key.PublicKey),
                                                               BuildBreadCrumbs(rout, key, group.Propagated),
                                                               () => this.Chapters);
                 this.Screens.Add(key, screen);
@@ -94,7 +104,8 @@ namespace AndroidApp.EventHandlers
                     this.Questions.Add(newItem.PublicKey, newQuestion);
                 items.Add(newItem);
             }
-            var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title, Title,
+            var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title,
+                                                          () => GetPropagatebleGroupTitle(propagationKey),
                                                           key, items,
                                                           () => GetSiblings(key.PublicKey), bradCrumbs,
                                                           () => this.Chapters);
