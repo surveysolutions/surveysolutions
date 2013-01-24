@@ -116,8 +116,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void PostInit()
         {
-        /*    EnableDisableView(llWrapper, this.Enabled);
-            this.Enabled = true;*/
+            EnableDisableView(llWrapper, this.Model.Status.HasFlag(QuestionStatus.Enabled));
+          /*  this.Enabled = true;*/
             /* else
             {
                 if (!Model.Valid)
