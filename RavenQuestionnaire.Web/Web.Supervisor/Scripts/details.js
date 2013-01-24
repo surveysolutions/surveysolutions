@@ -498,13 +498,16 @@ Date.prototype.mmddyyyy = function () {
         answerMap.push(self);
     };
 
-    var AnswerOption = function(key, value, title, isSelected, image) {
+    var AnswerOption = function(key, parentKey, value, title, isSelected, image) {
         var self = this;
         self.key = key;
+        self.parentKey = parentKey;
         self.value = value;
         self.title = title;
         self.image = "/Resource/Thumb/" + image;
         self.isSelected = isSelected;
+        self.optionFor = "optionFor" + parentKey.id + "_" + key;
+        self.groupName = 'optionFor' + parentKey.id;
     };
 
     var Comment = function(text, user, date) {
@@ -554,13 +557,13 @@ Date.prototype.mmddyyyy = function () {
             var questions = ko.observableArray(ko.utils.arrayMap(screen.Questions, function (question) {
 
                 var answers = ko.observableArray(ko.utils.arrayMap(question.Answers, function (answer) {
-
+                    var answerKey = new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated);
                     var comments = (answer.Comments == null || answer.Comments.trim() == '') ? [] : [new Comment(answer.Comments)];
 
                     var isImageType = false;
                     var options = ko.utils.arrayMap(answer.AnswerOptions, function(option) {
                         isImageType = isImageType || (option.AnswerType == 1);
-                        return new AnswerOption(option.PublicKey, option.AnswerValue, option.Title, option.Selected, option.AnswerImage);
+                        return new AnswerOption(option.PublicKey, answerKey, option.AnswerValue, option.Title, option.Selected, option.AnswerImage);
                     });
 
                     var type = answer.Type;
@@ -573,7 +576,7 @@ Date.prototype.mmddyyyy = function () {
                         }
                     }
                     return new Answer(
-                        new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated),
+                        answerKey,
                         questionnaire.PublicKey,
                         new Key(answer.ParentKey.PublicKey, answer.ParentKey.PropagationKey, answer.ParentKey.IsPropagated),
                         type,

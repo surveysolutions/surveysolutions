@@ -209,11 +209,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-editable.css" />
+    <Content Include="Content\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
     <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\images\glyphicons-halflings-white.png" />
+    <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\img\details_bg.jpg" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
@@ -232,6 +238,7 @@
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\details.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-editable-inline.js" />

@@ -100,7 +100,8 @@ var DataHelper = function (host) {
                         <!-- /ko -->
                         <tbody data-bind="foreach: questions">
                             <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}, css: {avtive : isActive}">
-                                <td style="width: 300px;" data-bind="text: title">
+                                <td style="width: 300px;">
+                                    <div class="cell-content"  data-bind="text: title"></div>
                                 </td>
                                 <!-- ko foreach: answers -->
                                 <!-- ko if: isVisible -->
@@ -113,7 +114,7 @@ var DataHelper = function (host) {
                                             <div class="btn-group">
                                                 
                                                 <a style="display: none;" class="actions btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
-                                                <ul class="dropdown-menu">
+                                                <ul class="dropdown-menu pull-right">
                                                     <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.openDetails">
                                                         Answer</a></li>
                                                     <li data-bind="visible: comments().length == 0"><a class="" href="#" data-bind="click: $root.openDetails">
@@ -195,8 +196,8 @@ var DataHelper = function (host) {
 <script type="text/html" id="SingleOption">
         <ul data-bind="foreach: answerOptions"  class="answer-list">
             <li>
-                <label data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
-                    <input type='radio' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                <label data-bind='attr: { "for": optionFor }'>
+                    <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
                     <span data-bind="text: title"></span>
                 </label>
             </li>
@@ -205,8 +206,8 @@ var DataHelper = function (host) {
 <script type="text/html" id="MultyOption">
         <ul data-bind="foreach: answerOptions" class="answer-list">
             <li>
-                <label data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
-                    <input type='checkbox' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                <label data-bind='attr: { "for": optionFor }'>
+                    <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
                     <span data-bind="text: title"></span>
                 </label>
             </li>
@@ -216,10 +217,10 @@ var DataHelper = function (host) {
 <script type="text/html" id="SingleImage">
         <ul data-bind="foreach: answerOptions" class="thumbnails">
             <li  class="span1_5">
-                <label class="thumbnail" data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
+                <label class="thumbnail" data-bind='attr: { "for": optionFor }'>
                     <img data-bind="attr: {src : image, alt: title}" />
                     <div class="caption">
-                        <input type='radio' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                        <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
                         <span data-bind="text: title"></span>
                     </div>
                 </label>
@@ -229,10 +230,10 @@ var DataHelper = function (host) {
 <script type="text/html" id="MultyImage">
         <ul data-bind="foreach: answerOptions" class="thumbnails">
             <li class="span1_5">
-                <label class="thumbnail" data-bind='attr: { for: "optionFor" + $parent.key.id + "_" + key }'>
+                <label class="thumbnail" data-bind="attr: { 'for': optionFor }">
                     <img data-bind="attr: {src : image, alt: title}" />
                     <div class="caption">
-                        <input type='checkbox' data-bind="attr: { value: value, name: 'optionFor' + $parent.key.id, id: 'optionFor' + $parent.key.id + '_' + key }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                        <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
                         <span data-bind="text: title"></span>
                     </div>
                 </label>
