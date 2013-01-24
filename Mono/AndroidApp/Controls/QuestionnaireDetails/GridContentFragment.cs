@@ -114,17 +114,17 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         protected void CreateBody(LayoutInflater inflater, TableLayout tl)
         {
-            foreach (RosterItem rosterItem in Model.Rows)
+            foreach (var rosterItem in Model.Rows)
             {
                 TableRow th = new TableRow(inflater.Context);
                 Button first = new Button(inflater.Context);
-                first.SetTag(Resource.Id.PrpagationKey, rosterItem.PublicKey.ToString());
+                first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.Title;
                 // AssignHeaderStyles(first);
                 th.AddView(first);
 
-                foreach (var abstractRowItem in rosterItem.RowItems)
+                foreach (var abstractRowItem in rosterItem.Items)
                 {
                     RosterQuestionView rowViewItem = new RosterQuestionView(inflater.Context,
                                                                             inflater.Context as IMvxBindingActivity,

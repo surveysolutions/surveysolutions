@@ -20,9 +20,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel,IQuestionnaireViewModel
     {
         #region Implementation of IQuestionnaireViewModel
-        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue; 
+        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue;
+        private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> rowsValue;
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName,string title, ItemPublicKey screenId, IList<QuestionnaireNavigationPanelItem> siblings,
-            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters, IList<HeaderItem> header)
+            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters, IList<HeaderItem> header
+            , Func<IEnumerable<QuestionnaireScreenViewModel>> rows)
         {
             QuestionnaireId = questionnaireId;
             ScreenName = screenName;
@@ -31,8 +33,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             Siblings = siblings;
             Breadcrumbs = breadcrumbs;
             chaptersValue = chapters;
+            rowsValue = rows;
             Header = header;
-            Rows = new List<RosterItem>();
+            
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -46,7 +49,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             get { return chaptersValue(); }
         }
         public IList<HeaderItem> Header { get; private set; }
-        public IList<RosterItem> Rows { get; private set; }
+        public IEnumerable<QuestionnaireScreenViewModel> Rows
+        {
+            get { return rowsValue(); }
+        }
 
         #endregion
 

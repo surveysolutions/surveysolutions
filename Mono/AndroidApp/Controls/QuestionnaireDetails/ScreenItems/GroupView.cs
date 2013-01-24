@@ -17,31 +17,31 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class GroupView:LinearLayout
     {
-        protected GroupViewModel Model { get; private set; }
+        protected QuestionnaireNavigationPanelItem Model { get; private set; }
         protected Button GroupButton { get; private set; }
 
-        public GroupView(Context context, GroupViewModel model)
+        public GroupView(Context context, QuestionnaireNavigationPanelItem model)
             : base(context)
         {
             Model = model;
             Initialize();
         }
 
-        public GroupView(Context context, IAttributeSet attrs, GroupViewModel model)
+        public GroupView(Context context, IAttributeSet attrs, QuestionnaireNavigationPanelItem model)
             : base(context, attrs)
         {
             Model = model;
             Initialize();
         }
 
-        public GroupView(Context context, IAttributeSet attrs, int defStyle, GroupViewModel model)
+        public GroupView(Context context, IAttributeSet attrs, int defStyle, QuestionnaireNavigationPanelItem model)
             : base(context, attrs, defStyle)
         {
             Model = model;
             Initialize();
         }
 
-        protected GroupView(IntPtr javaReference, JniHandleOwnership transfer, GroupViewModel model)
+        protected GroupView(IntPtr javaReference, JniHandleOwnership transfer, QuestionnaireNavigationPanelItem model)
             : base(javaReference, transfer)
         {
             Model = model;

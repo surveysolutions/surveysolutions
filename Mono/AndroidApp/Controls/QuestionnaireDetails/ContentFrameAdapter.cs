@@ -34,7 +34,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.target = target;
             this.screensHolder = initScreen.Siblings;
             this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
+            this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
             this.target.Adapter = this;
         }
 
@@ -64,7 +64,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
                 var param = screensHolder[position];
                 var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                    new QuestionnaireScreenInput(questionnaireId, param.ScreenPublicKey));
+                    new QuestionnaireScreenInput(questionnaireId, param.PublicKey));
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
@@ -91,7 +91,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 return isRoot ? Count - 1 : -1;
             for (int i = 0; i < screensHolder.Count; i++)
             {
-                if (screensHolder[i].ScreenPublicKey == screenId.Value)
+                if (screensHolder[i].PublicKey == screenId.Value)
                     return i;
             }
             return -1;
@@ -100,7 +100,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.screensHolder = initScreen.Siblings;
             this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.ScreenPublicKey == initScreen.ScreenId);
+            this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
         }

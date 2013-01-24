@@ -33,6 +33,15 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
         */
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
+        public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        {
+            return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+                                                   this.Text, this.QuestionType, this.Answers,
+                                                   this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
+                                                   this.Mandatory, this.Capital, this.AnswerString);
+        }
+
         public override void SetAnswer(List<Guid> answer, string answerString)
         {
             if (answer == null)

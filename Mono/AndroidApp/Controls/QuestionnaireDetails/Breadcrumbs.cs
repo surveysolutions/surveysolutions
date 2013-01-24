@@ -38,8 +38,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             foreach (QuestionnaireNavigationPanelItem questionnaireNavigationPanelItem in breadcrumbs)
             {
                 Button crumb = new Button(this.Context);
-                crumb.Text = questionnaireNavigationPanelItem.Title;
-                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenPublicKey.ToString());
+                crumb.Text = questionnaireNavigationPanelItem.Text;
+                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.PublicKey.ToString());
                 crumb.Click += crumb_Click;
                 var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                                ViewGroup.LayoutParams.WrapContent);

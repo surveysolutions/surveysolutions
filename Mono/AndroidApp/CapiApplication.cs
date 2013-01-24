@@ -90,6 +90,8 @@ namespace AndroidApp
             bus.RegisterHandler(eventHandler, typeof(AnswerSet));
             bus.RegisterHandler(eventHandler, typeof(CommentSet));
             bus.RegisterHandler(eventHandler, typeof(ConditionalStatusChanged));
+            bus.RegisterHandler(eventHandler, typeof(PropagatableGroupAdded));
+            bus.RegisterHandler(eventHandler, typeof(PropagatableGroupDeleted));
             #endregion
 
             GenerateEvents(bus);
@@ -1379,8 +1381,8 @@ namespace AndroidApp
                 @"            {" +
                 @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.AutoPropagateCompleteQuestion, Main.Core""," +
                 @"              ""TargetGroupKey"": ""7995abad-41a3-45ac-bc33-40745674e998""," +
-                @"              ""Answer"": 4," +
-                @"              ""MaxValue"": 0," +
+                @"              ""Answer"": 0," +
+                @"              ""MaxValue"": 8," +
                 @"              ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
                 @"              ""Answers"": []," +
                 @"              ""AnswerOrder"": ""AsIs""," +
@@ -1417,15 +1419,17 @@ namespace AndroidApp
                 @"        }," +
                 @"        {" +
                 @"          ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteGroup, Main.Core""," +
-                @"          ""Children"": [" +
-                @"            {" +
+                @"          ""Children"": [" +   
+
+              
+                @"{" +
                 @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteGroup, Main.Core""," +
                 @"              ""Children"": [" +
                 @"                {" +
                 @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.NumericCompleteQuestion, Main.Core""," +
                 @"                  ""AddNumericAttr"": null," +
                 @"                  ""IntAttr"": 0," +
-                @"                  ""Answer"": null," +
+                @"                  ""Answer"": 0," +
                 @"                  ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
                 @"                  ""Answers"": []," +
                 @"                  ""AnswerOrder"": ""AsIs""," +
@@ -1436,7 +1440,7 @@ namespace AndroidApp
                 @"                  ""ConditionExpression"": null," +
                 @"                  ""Enabled"": true," +
                 @"                  ""Featured"": false," +
-                @"                  ""Instructions"": ""HEllo room area""," +
+                @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
                 @"                  ""PropagationPublicKey"": null," +
                 @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
@@ -1503,7 +1507,7 @@ namespace AndroidApp
                 @"                      ""NameCollection"": null," +
                 @"                      ""PropogationPublicKey"": null," +
                 @"                      ""PublicKey"": ""9df57979-6578-4883-846e-6675333b2f9e""," +
-                @"                      ""Selected"": true" +
+                @"                      ""Selected"": false" +
                 @"                    }" +
                 @"                  ]," +
                 @"                  ""AnswerOrder"": ""AsIs""," +
@@ -1512,7 +1516,7 @@ namespace AndroidApp
                 @"                  ""Children"": null," +
                 @"                  ""Comments"": null," +
                 @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
+                @"                  ""Enabled"": false," +
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
@@ -1532,242 +1536,6 @@ namespace AndroidApp
                 @"              ""Description"": null," +
                 @"              ""Propagated"": ""AutoPropagated""," +
                 @"              ""PropagationPublicKey"": null," +
-                @"              ""PublicKey"": ""7995abad-41a3-45ac-bc33-40745674e998""," +
-                @"              ""Title"": ""Description of rooms""," +
-                @"              ""Triggers"": []" +
-                @"            }," +
-                @"{" +
-                @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteGroup, Main.Core""," +
-                @"              ""Children"": [" +
-                @"                {" +
-                @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.NumericCompleteQuestion, Main.Core""," +
-                @"                  ""AddNumericAttr"": null," +
-                @"                  ""IntAttr"": 0," +
-                @"                  ""Answer"": null," +
-                @"                  ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
-                @"                  ""Answers"": []," +
-                @"                  ""AnswerOrder"": ""AsIs""," +
-                @"                  ""Capital"": false," +
-                @"                  ""Cards"": []," +
-                @"                  ""Children"": null," +
-                @"                  ""Comments"": null," +
-                @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
-                @"                  ""Featured"": false," +
-                @"                  ""Instructions"": null," +
-                @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": ""7bd9a87d-2b65-4172-aa2a-07a93d85a958""," +
-                @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
-                @"                  ""QuestionText"": ""What is the area of room?""," +
-                @"                  ""QuestionType"": ""Numeric""," +
-                @"                  ""StataExportCaption"": null," +
-                @"                  ""Valid"": true," +
-                @"                  ""ValidationExpression"": null," +
-                @"                  ""ValidationMessage"": null," +
-                @"                  ""Triggers"": []" +
-                @"                }," +
-                @"                {" +
-                @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.SingleCompleteQuestion, Main.Core""," +
-                @"                  ""AddSingleAttr"": null," +
-                @"                  ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
-                @"                  ""Answers"": [" +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Living room""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""0""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""c826dad9-d76a-49d6-a40a-590fc0265b74""," +
-                @"                      ""Selected"": false" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Kitchen""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""1""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""737d0ec8-850b-4138-b239-8f5a1d0da874""," +
-                @"                      ""Selected"": false" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Bedroom""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""2""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""6f4f93b2-0e16-4a2f-8606-68465c383d0f""," +
-                @"                      ""Selected"": true" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Cabinet""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""3""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""9df57979-6578-4883-846e-6675333b2f9e""," +
-                @"                      ""Selected"": false" +
-                @"                    }" +
-                @"                  ]," +
-                @"                  ""AnswerOrder"": ""AsIs""," +
-                @"                  ""Capital"": true," +
-                @"                  ""Cards"": []," +
-                @"                  ""Children"": null," +
-                @"                  ""Comments"": null," +
-                @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
-                @"                  ""Featured"": false," +
-                @"                  ""Instructions"": null," +
-                @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": ""7bd9a87d-2b65-4172-aa2a-07a93d85a958""," +
-                @"                  ""PublicKey"": ""a61498b9-d0f2-4b11-a372-db6ed7ef6098""," +
-                @"                  ""QuestionText"": ""Room type""," +
-                @"                  ""QuestionType"": ""SingleOption""," +
-                @"                  ""StataExportCaption"": ""room_type""," +
-                @"                  ""Valid"": false," +
-                @"                  ""ValidationExpression"": null," +
-                @"                  ""ValidationMessage"": null," +
-                @"                  ""Triggers"": []" +
-                @"                }" +
-                @"              ]," +
-                @"              ""ConditionExpression"": """"," +
-                @"              ""Enabled"": true," +
-                @"              ""Description"": null," +
-                @"              ""Propagated"": ""AutoPropagated""," +
-                @"              ""PropagationPublicKey"": ""7bd9a87d-2b65-4172-aa2a-07a93d85a958""," +
-                @"              ""PublicKey"": ""7995abad-41a3-45ac-bc33-40745674e998""," +
-                @"              ""Title"": ""Description of rooms""," +
-                @"              ""Triggers"": []" +
-                @"            }," +
-                @"{" +
-                @"              ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteGroup, Main.Core""," +
-                @"              ""Children"": [" +
-                @"                {" +
-                @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.NumericCompleteQuestion, Main.Core""," +
-                @"                  ""AddNumericAttr"": null," +
-                @"                  ""IntAttr"": 0," +
-                @"                  ""Answer"": 55," +
-                @"                  ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
-                @"                  ""Answers"": []," +
-                @"                  ""AnswerOrder"": ""AsIs""," +
-                @"                  ""Capital"": false," +
-                @"                  ""Cards"": []," +
-                @"                  ""Children"": null," +
-                @"                  ""Comments"": null," +
-                @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
-                @"                  ""Featured"": false," +
-                @"                  ""Instructions"": null," +
-                @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": ""4f181138-5720-45aa-9f50-b716ea785ddb""," +
-                @"                  ""PublicKey"": ""b4817432-1e18-4437-bc4c-22a524fb1e71""," +
-                @"                  ""QuestionText"": ""What is the area of room?""," +
-                @"                  ""QuestionType"": ""Numeric""," +
-                @"                  ""StataExportCaption"": null," +
-                @"                  ""Valid"": true," +
-                @"                  ""ValidationExpression"": null," +
-                @"                  ""ValidationMessage"": null," +
-                @"                  ""Triggers"": []" +
-                @"                }," +
-                @"                {" +
-                @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.Question.SingleCompleteQuestion, Main.Core""," +
-                @"                  ""AddSingleAttr"": null," +
-                @"                  ""AnswerDate"": ""2012-09-06T19:05:28.0640000""," +
-                @"                  ""Answers"": [" +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Living room""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""0""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""c826dad9-d76a-49d6-a40a-590fc0265b74""," +
-                @"                      ""Selected"": false" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Kitchen""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""1""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""737d0ec8-850b-4138-b239-8f5a1d0da874""," +
-                @"                      ""Selected"": false" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Bedroom""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""2""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""6f4f93b2-0e16-4a2f-8606-68465c383d0f""," +
-                @"                      ""Selected"": false" +
-                @"                    }," +
-                @"                    {" +
-                @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
-                @"                      ""AnswerImage"": null," +
-                @"                      ""AnswerText"": ""Cabinet""," +
-                @"                      ""AnswerType"": ""Select""," +
-                @"                      ""AnswerValue"": ""3""," +
-                @"                      ""Children"": []," +
-                @"                      ""Mandatory"": false," +
-                @"                      ""NameCollection"": null," +
-                @"                      ""PropogationPublicKey"": null," +
-                @"                      ""PublicKey"": ""9df57979-6578-4883-846e-6675333b2f9e""," +
-                @"                      ""Selected"": true" +
-                @"                    }" +
-                @"                  ]," +
-                @"                  ""AnswerOrder"": ""AsIs""," +
-                @"                  ""Capital"": true," +
-                @"                  ""Cards"": []," +
-                @"                  ""Children"": null," +
-                @"                  ""Comments"": null," +
-                @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": false," +
-                @"                  ""Featured"": false," +
-                @"                  ""Instructions"": null," +
-                @"                  ""Mandatory"": false," +
-                @"                  ""PropagationPublicKey"": ""4f181138-5720-45aa-9f50-b716ea785ddb""," +
-                @"                  ""PublicKey"": ""a61498b9-d0f2-4b11-a372-db6ed7ef6098""," +
-                @"                  ""QuestionText"": ""Room type""," +
-                @"                  ""QuestionType"": ""SingleOption""," +
-                @"                  ""StataExportCaption"": ""room_type""," +
-                @"                  ""Valid"": true," +
-                @"                  ""ValidationExpression"": null," +
-                @"                  ""ValidationMessage"": null," +
-                @"                  ""Triggers"": []" +
-                @"                }" +
-                @"              ]," +
-                @"              ""ConditionExpression"": """"," +
-                @"              ""Enabled"": true," +
-                @"              ""Description"": null," +
-                @"              ""Propagated"": ""AutoPropagated""," +
-                @"              ""PropagationPublicKey"": ""4f181138-5720-45aa-9f50-b716ea785ddb""," +
                 @"              ""PublicKey"": ""7995abad-41a3-45ac-bc33-40745674e998""," +
                 @"              ""Title"": ""Description of rooms""," +
                 @"              ""Triggers"": []" +

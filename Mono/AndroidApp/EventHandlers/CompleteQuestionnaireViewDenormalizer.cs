@@ -31,9 +31,9 @@ namespace AndroidApp.EventHandlers
     IEventHandler<CommentSet>, 
                                                      IEventHandler<SnapshootLoaded>,
                                                      /*IEventHandler<CompleteQuestionnaireDeleted>, */
-                                                     IEventHandler<AnswerSet>/*, 
+                                                     IEventHandler<AnswerSet>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
-                                                     IEventHandler<PropagatableGroupDeleted>, 
+                                                     IEventHandler<PropagatableGroupDeleted>/*, 
                                                      IEventHandler<QuestionnaireAssignmentChanged>, 
                                                      IEventHandler<QuestionnaireStatusChanged>*/
     {
@@ -83,7 +83,7 @@ namespace AndroidApp.EventHandlers
         }
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
-            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0);
+            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, null), g.Title, 0, 0,g.Enabled);
         }
         #endregion
 
@@ -91,7 +91,7 @@ namespace AndroidApp.EventHandlers
 
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            var doc = _documentStorage.Query().First();
+            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
             var question =
                 doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey)];
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
@@ -103,7 +103,7 @@ namespace AndroidApp.EventHandlers
 
         public void Handle(IPublishedEvent<CommentSet> evnt)
         {
-            var doc = _documentStorage.Query().First();
+            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
             var question =
                 doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey)];
             question.SetComment(evnt.Payload.Comments);
@@ -115,7 +115,7 @@ namespace AndroidApp.EventHandlers
 
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
         {
-            var doc = _documentStorage.Query().First();
+            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
             foreach (var item in evnt.Payload.ResultQuestionsStatus)
             {
                 if (!item.Value.HasValue)
@@ -125,6 +125,7 @@ namespace AndroidApp.EventHandlers
                 question.SetEnabled(item.Value.Value);
             }
         }
+        #endregion
         private ItemPublicKey ParseCrap(string key)
         {
             Guid publicKey;
@@ -133,6 +134,27 @@ namespace AndroidApp.EventHandlers
             var pkString = key.Substring(0, key.Length/2);
             var prKey = key.Substring(key.Length/2);
             return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
+        }
+
+        
+
+        #region Implementation of IEventHandler<in PropagatableGroupAdded>
+
+        public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
+        {
+            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+                doc.PropagateGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
+            //   doc.AddScreen(rout, current);
+        }
+
+        #endregion
+
+        #region Implementation of IEventHandler<in PropagatableGroupDeleted>
+
+        public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
+        {
+            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            doc.RemovePropagatedGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
         }
 
         #endregion

@@ -57,10 +57,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (position < Count - 1)
                 {
                     var item = items[position];
-                    tvITem.Text = item.Title;
+                    tvITem.Text = item.Text;
 
                     tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
-                    view.SetTag(Resource.Id.ScreenId, item.ScreenPublicKey.ToString());
+                    view.SetTag(Resource.Id.ScreenId, item.PublicKey.ToString());
                 }
                 else
                 {

@@ -17,6 +17,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }
-     //   bool Enabled { get; }
+        IQuestionnaireItemViewModel Clone(Guid propagationKey);
+        //   bool Enabled { get; }
     }
 }

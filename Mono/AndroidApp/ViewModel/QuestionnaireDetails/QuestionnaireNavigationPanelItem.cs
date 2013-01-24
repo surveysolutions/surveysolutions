@@ -12,19 +12,28 @@ using Android.Widget;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationPanelItem
+    public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(ItemPublicKey screenPublicKey, string title, int total, int answered)
+        public QuestionnaireNavigationPanelItem(ItemPublicKey screenPublicKey, string title, int total, int answered, bool enabled)
         {
-            ScreenPublicKey = screenPublicKey;
-            Title = title;
+            PublicKey = screenPublicKey;
+            Text = title;
             Total = total;
             Answered = answered;
+            Enabled = enabled;
         }
 
-        public ItemPublicKey ScreenPublicKey { get; private set; }
-        public string Title { get; private set; }
+        public ItemPublicKey PublicKey { get; private set; }
+        public string Text { get; private set; }
+        public IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        {
+            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+                                                        this.Text, this.Total, this.Answered, this.Enabled);
+        }
+
+        public bool Enabled { get; private set; }
         public int Total { get; private set; }
         public int Answered { get; private set; }
+
     }
 }

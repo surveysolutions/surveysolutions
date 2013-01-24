@@ -29,5 +29,18 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }*/
 
       //  public string Answer { get; private set; }
+
+        #region Overrides of QuestionViewModel
+
+        public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
+        {
+            return new ValueQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
+                                                   this.Text, this.QuestionType, this.AnswerString,
+                                                   this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
+                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
+                                                   this.Mandatory, this.Capital);
+        }
+
+        #endregion
     }
 }

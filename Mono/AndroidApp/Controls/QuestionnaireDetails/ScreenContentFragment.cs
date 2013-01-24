@@ -71,7 +71,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 {
                     itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,Model.QuestionnaireId);
                 }
-                var group = item as GroupViewModel;
+                var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
                 {
                     var groupView = new GroupView(inflater.Context, group);

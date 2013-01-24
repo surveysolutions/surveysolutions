@@ -28,6 +28,7 @@ namespace AndroidApp.EventHandlers
             this.Chapters = chapters;
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
+            Templates=new Dictionary<Guid, QuestionnaireScreenViewModel>();
         }
         public void AddScreen(List<ICompleteGroup> rout,
             ICompleteGroup group)
@@ -45,36 +46,89 @@ namespace AndroidApp.EventHandlers
                                                               BuildBreadCrumbs(rout, key, group.Propagated),
                                                               () => this.Chapters);
                 this.Screens.Add(key, screen);
-                if (key.PropagationKey.HasValue)
-                {
-                    QuestionnaireGridViewModel roster;
-                    ItemPublicKey rosterKey = new ItemPublicKey(key.PublicKey, null);
-                    if (Screens.ContainsKey(rosterKey))
-                        roster = Screens[rosterKey] as QuestionnaireGridViewModel;
-                    else
-                    {
-                        roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
-                                                                key,
-                                                                BuildSiblings(rout, rosterKey),
-                                                                BuildBreadCrumbs(rout, rosterKey, group.Propagated),
-                                                                () => this.Chapters,
-                                                                group.Children.OfType<ICompleteQuestion>().Select(
-                                                                    BuildHeader).ToList());
-                        this.Screens.Add(rosterKey, roster);
-                    }
-                    roster.Rows.Add(new RosterItem(key, screenItems,
-                                                   () => GetPropagatebleGroupTitle(key.PropagationKey.Value)));
-                }
+            }
+            else
+            {
+
+                CreateGrid(group, rout);
             }
 
         }
 
+        protected void CreateGrid(ICompleteGroup group, List<ICompleteGroup> rout)
+        {
+            ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
+            var siblings = BuildSiblings(rout, rosterKey);
+            var screenItems = BuildItems(group, false);
+            var breadcrumbs = BuildBreadCrumbs(rout, rosterKey, group.Propagated);
+            var template = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
+                                                            rosterKey, screenItems,
+                                                            siblings,
+                                                            breadcrumbs,
+                                                            () => this.Chapters);
+            Templates.Add(rosterKey.PublicKey, template);
+            var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
+                                                                  rosterKey,
+                                                                  siblings,
+                                                                  breadcrumbs,
+                                                                  () => this.Chapters,
+                                                                  group.Children.OfType<ICompleteQuestion>().Select(
+                                                                      BuildHeader).ToList(),
+                                                                  () => CollectPropagatedScreen(rosterKey.PublicKey));
+            this.Screens.Add(rosterKey, roster);
+        }
+
+        public void PropagateGroup(Guid publicKey, Guid propagationKey)
+        {
+            var template = this.Templates[publicKey];
+            var key = new ItemPublicKey(publicKey, propagationKey);
+            var bradCrumbs = template.Breadcrumbs.ToList();
+            AddPropagatebleBreadCrumb(bradCrumbs, key);
+            var siblings =
+                this.Screens.Where(s => s.Key.PublicKey == key.PublicKey && s.Key.PropagationKey.HasValue).Select(
+                    s => new QuestionnaireNavigationPanelItem(s.Key, s.Value.Title, 0, 0, true)).ToList();
+            var items = new List<IQuestionnaireItemViewModel>();
+            foreach (var questionnaireItemViewModel in template.Items)
+            {
+                var newItem = questionnaireItemViewModel.Clone(propagationKey);
+                var newQuestion = newItem as QuestionViewModel;
+                if (newQuestion != null)
+                    this.Questions.Add(newItem.PublicKey, newQuestion);
+                items.Add(newItem);
+            }
+            var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title, Title,
+                                                          key, items,
+                                                          siblings, bradCrumbs, () => this.Chapters);
+
+            this.Screens.Add(key, screen);
+        }
+
+        public void RemovePropagatedGroup(Guid publicKey, Guid propagationKey)
+        {
+            var key = new ItemPublicKey(publicKey, propagationKey);
+            var screen = this.Screens[key] as QuestionnaireScreenViewModel;
+            foreach (var item in screen.Items)
+            {
+                var question = item as QuestionViewModel;
+                if (question != null)
+                    this.Questions.Remove(question.PublicKey);
+            }
+            this.Screens.Remove(key);
+            
+        }
 
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
+        public IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
         public IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
         public string Title { get; private set; }
         public Guid PublicKey { get; private set; }
+        protected IEnumerable<QuestionnaireScreenViewModel> CollectPropagatedScreen(Guid publicKey)
+        {
+            return
+                this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
+                    s => s.Value).OfType<QuestionnaireScreenViewModel>();
+        }
 
         protected string GetPropagatebleGroupTitle(Guid propagationKey)
         {
@@ -83,17 +137,21 @@ namespace AndroidApp.EventHandlers
                     Questions.Where(q => q.Key.PropagationKey == propagationKey && q.Value.Capital).Select(
                         q => q.Value.AnswerString));
         }
+        protected void AddPropagatebleBreadCrumb(IList<QuestionnaireNavigationPanelItem> baseRout, ItemPublicKey key)
+        {
+            var last = baseRout.Last();
+            baseRout.Remove(baseRout.Last());
+            baseRout.Add(new QuestionnaireNavigationPanelItem(new ItemPublicKey(key.PublicKey, null), last.Text, 0, 0, true));
+            baseRout.Add(new QuestionnaireNavigationPanelItem(key, GetPropagatebleGroupTitle(key.PropagationKey.Value),
+                                                              0, 0, true));
+        }
 
         protected IList<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key, Propagate nodeType)
         {
             var baseRout = rout.Skip(1).Select(BuildNavigationItem).ToList();
             if (nodeType == Propagate.None || !key.PropagationKey.HasValue)
                 return baseRout;
-            var last = baseRout.Last();
-            baseRout.Remove(baseRout.Last());
-            baseRout.Add(new QuestionnaireNavigationPanelItem(new ItemPublicKey(key.PublicKey, null), last.Title, 0, 0));
-            baseRout.Add(new QuestionnaireNavigationPanelItem(key, GetPropagatebleGroupTitle(key.PropagationKey.Value),
-                                                              0, 0));
+            AddPropagatebleBreadCrumb(baseRout, key);
             return
                 baseRout;
 
@@ -115,7 +173,7 @@ namespace AndroidApp.EventHandlers
         
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
-            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey), g.Title, 0, 0);
+            return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey), g.Title, 0, 0,g.Enabled);
         }
 
         protected HeaderItem BuildHeader(ICompleteQuestion question)
@@ -175,7 +233,7 @@ namespace AndroidApp.EventHandlers
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)
-                return new GroupViewModel(new ItemPublicKey(group.PublicKey, group.PropagationPublicKey), group.Title,
+                return new QuestionnaireNavigationPanelItem(new ItemPublicKey(group.PublicKey, group.PropagationPublicKey), group.Title,0,0,
                                           group.Enabled);
             return null;
         }
