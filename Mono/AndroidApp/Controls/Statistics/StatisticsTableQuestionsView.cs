@@ -61,10 +61,12 @@ namespace AndroidApp.Controls.Statistics
                 TableRow tr = new TableRow(this.Context);
                 tr.Clickable = true;
                 tr.Click += tr_Click;
+                tr.SetTag(Resource.Id.ScreenId, statisticsQuestionViewModel.ParentKey.ToString());
                 tr.SetBackgroundResource(Resource.Drawable.statistics_row_style);
                 foreach (Func<StatisticsQuestionViewModel, string> valueFucntion in valueFucntions)
                 {
                     TextView tvQuestion = new TextView(this.Context);
+                   
                     tvQuestion.Text = valueFucntion(statisticsQuestionViewModel);
                     StyleCell(tvQuestion);
                     tr.AddView(tvQuestion);
@@ -77,9 +79,11 @@ namespace AndroidApp.Controls.Statistics
 
         void tr_Click(object sender, EventArgs e)
         {
-            notifier(
-                new ScreenChangedEventArgs(new ItemPublicKey(Guid.Parse("e2aaeffe-4b4c-4db1-a773-83bebc394543"), null)));
+            var typedSender = sender as TableRow;
+            var screenId = ItemPublicKey.Parse(typedSender.GetTag(Resource.Id.ScreenId).ToString());
+            notifier(new ScreenChangedEventArgs(screenId));
         }
+
         protected void StyleCell(View cell)
         {
             cell.SetBackgroundResource(Resource.Drawable.cell_shape);
