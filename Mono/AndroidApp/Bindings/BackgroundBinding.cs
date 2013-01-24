@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Extensions;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.Binding.Interfaces;
@@ -40,7 +41,7 @@ namespace AndroidApp.Bindings
             var llWrapper = _control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
 
             if (llWrapper != null)
-                EnableDisableView(llWrapper, status.HasFlag(QuestionStatus.Enabled));
+                llWrapper.EnableDisableView(status.HasFlag(QuestionStatus.Enabled));
         }
 
         public override Type TargetType
@@ -54,20 +55,6 @@ namespace AndroidApp.Bindings
         }
 
         #endregion
-        protected void EnableDisableView(View view, bool enabled)
-        {
-            view.Enabled = enabled;
-            ViewGroup group = view as ViewGroup;
-            if (group != null)
-            {
-
-                for (int idx = 0; idx < group.ChildCount; idx++)
-                {
-                    EnableDisableView(group.GetChildAt(idx), enabled);
-                }
-            }
-
-        }
        
     }
 }

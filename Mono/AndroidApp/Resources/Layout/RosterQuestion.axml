@@ -7,12 +7,21 @@
               local:MvxBind="{'Background':{'Path':'Status'}}"
               >
  
-  <TextView
-     android:layout_width="wrap_content"
-     android:layout_height="wrap_content"
-      android:gravity="center"
-     android:id="@+id/tvTitle"
-       android:padding="10dip"
-     android:textSize="20dip"
-     local:MvxBind="{'Text':{'Path':'AnswerString'}}"/>
+  
+
+
+  <LinearLayout 
+             android:id="@+id/llWrapper"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="vertical">
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+       android:gravity="center"
+      android:id="@+id/tvTitle"
+        android:padding="10dip"
+      android:textSize="20dip"
+      local:MvxBind="{'Text':{'Path':'AnswerString'}}"/>
+  </LinearLayout>
 </LinearLayout>

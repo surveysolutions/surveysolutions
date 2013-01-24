@@ -14,6 +14,7 @@ using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
+using AndroidApp.Extensions;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
@@ -116,7 +117,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void PostInit()
         {
-            EnableDisableView(llWrapper, this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
           /*  this.Enabled = true;*/
             /* else
             {
@@ -177,19 +178,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
         }
-        protected void EnableDisableView(View view, bool enabled)
-        {
-            view.Enabled = enabled;
-            ViewGroup group = view as ViewGroup;
-            if (group != null)
-            {
-
-                for (int idx = 0; idx < group.ChildCount; idx++)
-                {
-                    EnableDisableView(group.GetChildAt(idx), enabled);
-                }
-            }
-
-        }
+       
     }
 }

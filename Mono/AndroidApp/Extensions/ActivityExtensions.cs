@@ -23,6 +23,19 @@ namespace AndroidApp.Extensions
                 new NavigationSpinnerAdapter(activity, navigation),
                 new NavigationListener(activity, navigation));
         }
+        public static void EnableDisableView(this View view, bool enabled)
+        {
+            view.Enabled = enabled;
+            ViewGroup group = view as ViewGroup;
+            if (group != null)
+            {
 
+                for (int idx = 0; idx < group.ChildCount; idx++)
+                {
+                    EnableDisableView(group.GetChildAt(idx), enabled);
+                }
+            }
+
+        }
     }
 }
