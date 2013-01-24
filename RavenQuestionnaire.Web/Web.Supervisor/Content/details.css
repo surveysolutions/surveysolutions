@@ -232,6 +232,7 @@ body:before
 	border-radius: 5px 5px 5px 5px;
 	width: 100%;
 	overflow-x: auto;
+	overflow-y: visible;
 	margin-bottom: 20px;
 	position: relative;
 }
@@ -447,7 +448,12 @@ td.capital
 }
 .cell-content {
 	position: relative;
+	min-height: 25px;
 }
+.cell-content:hover .actions {
+	display: inline-block !important;	
+}
+
 .question-marker {
     background: #ddd;
     display: block;
@@ -462,4 +468,11 @@ td.capital
 }
 .question-marker.supervisor {
 	background-color: #4C9BDD;
+}
+tr.active td{
+	background: #D9EDF7;
+}
+tr td .btn-mini,
+.btn-group > .btn-mini + .dropdown-toggle {
+	 padding: 1px 3px;
 }
