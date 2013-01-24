@@ -24,19 +24,23 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue;
+        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> breadcrumbsValue;
         private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> sibligsValue;
         private readonly Func<string> titleValue;
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, Func<string> title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             Func<IEnumerable<QuestionnaireNavigationPanelItem>> siblings,
-            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
+            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
             sibligsValue = siblings;
-            Breadcrumbs = breadcrumbs;
+            breadcrumbsValue =
+                () =>
+                breadcrumbs.Union(new QuestionnaireNavigationPanelItem[1]
+                    {new QuestionnaireNavigationPanelItem(ScreenId, Title, 0, 0, true)});
             chaptersValue = chapters;
             ScreenName = screenName;
             titleValue = title;
@@ -44,14 +48,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             IEnumerable<QuestionnaireNavigationPanelItem> siblings,
-            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
+            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
             sibligsValue = () => siblings;
-            Breadcrumbs = breadcrumbs;
+            breadcrumbsValue = () => breadcrumbs;
             chaptersValue = chapters;
             ScreenName = screenName;
             titleValue = () => title;
@@ -68,7 +72,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         {
             get { return sibligsValue(); }
         }
-        public IList<QuestionnaireNavigationPanelItem> Breadcrumbs { get; private set; }
+        public IEnumerable<QuestionnaireNavigationPanelItem> Breadcrumbs
+        {
+            get { return breadcrumbsValue(); }
+        }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get { return chaptersValue(); }
     }
 

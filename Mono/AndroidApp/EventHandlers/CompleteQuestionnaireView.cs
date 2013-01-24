@@ -93,7 +93,6 @@ namespace AndroidApp.EventHandlers
             var template = this.Templates[publicKey];
             var key = new ItemPublicKey(publicKey, propagationKey);
             var bradCrumbs = template.Breadcrumbs.ToList();
-            AddPropagatebleBreadCrumb(bradCrumbs, key);
 
             var items = new List<IQuestionnaireItemViewModel>();
             foreach (var questionnaireItemViewModel in template.Items)
@@ -153,24 +152,18 @@ namespace AndroidApp.EventHandlers
                     Questions.Where(q => q.Key.PropagationKey == propagationKey && q.Value.Capital).Select(
                         q => q.Value.AnswerString));
         }
-        protected void AddPropagatebleBreadCrumb(IList<QuestionnaireNavigationPanelItem> baseRout, ItemPublicKey key)
+      /*  protected void AddPropagatebleBreadCrumb(IList<QuestionnaireNavigationPanelItem> baseRout, ItemPublicKey key)
         {
             var last = baseRout.Last();
             baseRout.Remove(baseRout.Last());
             baseRout.Add(new QuestionnaireNavigationPanelItem(new ItemPublicKey(key.PublicKey, null), last.Text, 0, 0, true));
             baseRout.Add(new QuestionnaireNavigationPanelItem(key, GetPropagatebleGroupTitle(key.PropagationKey.Value),
                                                               0, 0, true));
-        }
+        }*/
 
         protected IList<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key, Propagate nodeType)
         {
-            var baseRout = rout.Skip(1).Select(BuildNavigationItem).ToList();
-            if (nodeType == Propagate.None || !key.PropagationKey.HasValue)
-                return baseRout;
-            AddPropagatebleBreadCrumb(baseRout, key);
-            return
-                baseRout;
-
+            return  rout.Skip(1).Select(BuildNavigationItem).ToList();
         }
 
         protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout, ItemPublicKey key)
