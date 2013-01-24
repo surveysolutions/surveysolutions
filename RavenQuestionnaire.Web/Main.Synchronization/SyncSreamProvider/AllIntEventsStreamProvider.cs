@@ -15,7 +15,8 @@ namespace Main.Synchronization.SyncSreamProvider
     using Main.Core.Events;
 
     using Ncqrs;
-    using Ncqrs.Eventing.Storage.RavenDB;
+    using Ncqrs.Eventing.Storage;
+    
 
     /// <summary>
     /// The all events stream provider.

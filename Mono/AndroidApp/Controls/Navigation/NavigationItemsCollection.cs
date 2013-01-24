@@ -13,9 +13,13 @@ using AndroidApp.Core.Model.Authorization;
 
 namespace AndroidApp.Controls.Navigation
 {
-    /*using System.IO;
+    using System.IO;
 
-    using Ionic.Zip;*/
+    using Ionic.Zip;
+
+    using Main.Synchronization.SyncManager;
+    using Main.Synchronization.SyncSreamProvider;
+    using Main.Synchronization.SyncStreamCollector;
 
     public class NavigationItemsCollection : List<NavigationItem>
     {
@@ -54,13 +58,34 @@ namespace AndroidApp.Controls.Navigation
 
             builder.SetMessage("Synchronization will be here.");
 
-            /*var zip = new ZipFile();
+
+            /*try
+            {
+                var address = "http://217.12.197.135/DEV-Supervisor/importexport/export";
+                var syncId = Guid.NewGuid();
+                var kernel = CapiApplication.Kernel;
+                var provider = new RemoteServiceEventStreamProvider(kernel, syncId, address);
+                var collector = new LocalStorageStreamCollector(kernel, syncId);
+                var synkMngr = new SyncManager(provider, collector, syncId, "remote sync", null);
+                synkMngr.StartPush();
+
+                builder.SetMessage("Sync is OK.");
+            }
+            catch (Exception exc)
+            {
+                builder.SetMessage("Error on sync. " + exc.Message);
+            }*/
+
+/*
+
+            var zip = new ZipFile();
             zip.AddEntry("backup.txt", "It's a compression test.");
             var outputStream = new MemoryStream();
             zip.Save(outputStream);
 
             builder.SetMessage("Sync. Result length: " + outputStream.Length);
 */
+
 
             builder.Show();
             return false;
