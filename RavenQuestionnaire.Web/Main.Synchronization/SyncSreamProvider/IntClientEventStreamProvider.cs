@@ -18,7 +18,7 @@ namespace Main.Synchronization.SyncSreamProvider
     using Main.DenormalizerStorage;
 
     using Ncqrs;
-    using Ncqrs.Eventing.Storage.RavenDB;
+    using Ncqrs.Eventing.Storage;
 
     /// <summary>
     /// The int client event stream provider.

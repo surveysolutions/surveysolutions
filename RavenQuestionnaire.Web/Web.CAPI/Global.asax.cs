@@ -123,7 +123,7 @@ namespace Web.CAPI
         {
             if (!correctlyInitialyzed)
             {
-                base.Response.Write("Sorry, Application cann't handle your request!");
+                base.Response.Write("Sorry, Application cann't handle your request. Initialization of storage was not correct.");
                 this.CompleteRequest();
             }
         }
