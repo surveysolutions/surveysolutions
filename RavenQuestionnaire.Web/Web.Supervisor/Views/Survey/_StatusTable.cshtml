@@ -21,6 +21,7 @@
                     <th class="sorting" role="columnheader" sorter='{"key": "@item.TemplateId"}'><a href="#" data-placement="top" rel="tooltip" data-original-title="@item.Title" title="@item.Title">@acronim</a>
                     </th>
                 }
+                <th class="sorting" sorter='{"key":"Total"}'>Total</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,7 @@
                             }
                         </td>
                     }
+                    <td>@collect.Total</td>
                 </tr>
             }
             <tr>
@@ -53,6 +55,7 @@
                         @Model.Summary.Items[it]
                     </th>
                 }
+                <th>@Model.Summary.Total</th>
             </tr>
         </tbody>
     </table>

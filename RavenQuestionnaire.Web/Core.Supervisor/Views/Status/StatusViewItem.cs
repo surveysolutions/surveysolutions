@@ -11,6 +11,7 @@ namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Main.Core.Entities;
     using Main.Core.Entities.SubEntities;
@@ -44,6 +45,8 @@ namespace Core.Supervisor.Views.Status
                 this.Items.Add(
                     header, templateGroup.ContainsKey(header.TemplateId) ? templateGroup[header.TemplateId] : 0);
             }
+
+            this.Total = this.Items.Values.Sum();
         }
 
         #endregion
@@ -54,6 +57,11 @@ namespace Core.Supervisor.Views.Status
         /// Gets or sets Items.
         /// </summary>
         public Dictionary<TemplateLight, int> Items { get; set; }
+
+        /// <summary>
+        /// Gets or sets Total.
+        /// </summary>
+        public int Total { get; set; }
 
         /// <summary>
         /// Gets or sets user.

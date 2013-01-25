@@ -113,6 +113,11 @@ namespace Core.Supervisor.Views.Status
                 return item.User.Name;
             }
 
+            if (field == "Total")
+            {
+                return item.Total;
+            }
+
             Guid templateId;
             if (Guid.TryParse(field, out templateId))
             {
