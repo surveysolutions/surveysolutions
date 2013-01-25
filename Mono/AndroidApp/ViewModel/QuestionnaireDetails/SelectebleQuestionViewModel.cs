@@ -35,8 +35,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
         public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
+            IList<AnswerViewModel> newAnswers = new List<AnswerViewModel>();
+            foreach (AnswerViewModel answerViewModel in Answers)
+            {
+                newAnswers.Add(answerViewModel.Clone() as AnswerViewModel);
+            }
             return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                   this.Text, this.QuestionType, this.Answers.ToList(),
+                                                   this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                                                    this.Mandatory, this.Capital, this.AnswerString);

@@ -87,14 +87,29 @@ namespace AndroidApp.EventHandlers
                                                                   () => CollectPropagatedScreen(rosterKey.PublicKey));
             this.Screens.Add(rosterKey, roster);
         }
-
+        protected IList<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
+        {
+            IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
+            foreach (var children in screen.Children)
+            {
+                var item = CreateView(children);
+                if (item == null)
+                    continue;
+                var question = item as QuestionViewModel;
+                if (question != null && updateHash)
+                    this.Questions.Add(question.PublicKey, question);
+                result.Add(item);
+            }
+            return result;
+            //  return screen.Children.Select(CreateView).Where(c => c != null);
+        }
         public void PropagateGroup(Guid publicKey, Guid propagationKey)
         {
             var template = this.Templates[publicKey];
             var key = new ItemPublicKey(publicKey, propagationKey);
             var bradCrumbs = template.Breadcrumbs.ToList();
 
-            var items = new List<IQuestionnaireItemViewModel>();
+            IList<IQuestionnaireItemViewModel> items = new List<IQuestionnaireItemViewModel>();
             foreach (var questionnaireItemViewModel in template.Items)
             {
                 var newItem = questionnaireItemViewModel.Clone(propagationKey);
@@ -192,22 +207,7 @@ namespace AndroidApp.EventHandlers
         }
        
 
-        protected IList<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen, bool updateHash)
-        {
-            IList<IQuestionnaireItemViewModel> result = new List<IQuestionnaireItemViewModel>();
-            foreach (var children in screen.Children)
-            {
-                var item = CreateView(children);
-                if (item == null)
-                    continue;
-                var question = item as QuestionViewModel;
-                if (question != null && updateHash)
-                    this.Questions.Add(question.PublicKey, question);
-                result.Add(item);
-            }
-            return result;
-            //  return screen.Children.Select(CreateView).Where(c => c != null);
-        }
+        
 
         protected IQuestionnaireItemViewModel CreateView(IComposite item)
         {
