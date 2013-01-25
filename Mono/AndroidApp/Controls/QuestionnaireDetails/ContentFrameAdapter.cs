@@ -34,7 +34,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.target = target;
             this.screensHolder = initScreen.Siblings.ToList();
             this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
+            this.isRoot = initScreen.Chapters.Any(s => s.ScreenId == initScreen.ScreenId);
             this.target.Adapter = this;
         }
 
@@ -100,7 +100,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             this.screensHolder = initScreen.Siblings.ToList();
             this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.PublicKey == initScreen.ScreenId);
+            this.isRoot = initScreen.Chapters.Any(s => s.ScreenId == initScreen.ScreenId);
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
         }

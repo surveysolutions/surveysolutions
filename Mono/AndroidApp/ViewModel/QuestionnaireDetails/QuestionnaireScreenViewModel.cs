@@ -23,14 +23,16 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             QuestionnaireId = Guid.Parse(completeQuestionnaireId);
         }
 
-        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> chaptersValue;
+        private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> breadcrumbsValue;
         private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> sibligsValue;
         private readonly Func<string> titleValue;
+
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, Func<string> title,
-            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-            Func<IEnumerable<QuestionnaireNavigationPanelItem>> siblings,
-            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
+                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                            Func<IEnumerable<QuestionnaireNavigationPanelItem>> siblings,
+                                            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs,
+                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
@@ -45,10 +47,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             ScreenName = screenName;
             titleValue = title;
         }
+
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
-            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-            IEnumerable<QuestionnaireNavigationPanelItem> siblings,
-            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireNavigationPanelItem>> chapters)
+                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                            IEnumerable<QuestionnaireNavigationPanelItem> siblings,
+                                            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs,
+                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters)
         {
 
             QuestionnaireId = questionnaireId;
@@ -62,22 +66,31 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public Guid QuestionnaireId { get; private set; }
+
         public string Title
         {
             get { return titleValue(); }
         }
+
         public string ScreenName { get; private set; }
+        public int Answered { get; private set; }
+        public int Total { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
+
         public IEnumerable<QuestionnaireNavigationPanelItem> Siblings
         {
             get { return sibligsValue(); }
         }
+
         public IEnumerable<QuestionnaireNavigationPanelItem> Breadcrumbs
         {
             get { return breadcrumbsValue(); }
         }
-        public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get { return chaptersValue(); }
-    }
+
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters
+        {
+            get { return chaptersValue(); }
+        }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
 

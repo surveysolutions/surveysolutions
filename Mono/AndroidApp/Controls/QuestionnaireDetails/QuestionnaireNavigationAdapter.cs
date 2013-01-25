@@ -14,12 +14,12 @@ using AndroidApp.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class QuestionnaireNavigationAdapter : BaseAdapter<QuestionnaireNavigationPanelItem>
+    public class QuestionnaireNavigationAdapter : BaseAdapter<QuestionnaireScreenViewModel>
     {
-        private readonly IList<QuestionnaireNavigationPanelItem> items;
+        private readonly IList<QuestionnaireScreenViewModel> items;
         private readonly Context context;
         private readonly int selectedItem;
-        public QuestionnaireNavigationAdapter(Context context, IEnumerable<QuestionnaireNavigationPanelItem> items,int selectedItem)
+        public QuestionnaireNavigationAdapter(Context context, IEnumerable<QuestionnaireScreenViewModel> items, int selectedItem)
             : base()
         {
             this.context = context;
@@ -57,10 +57,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (position < Count - 1)
                 {
                     var item = items[position];
-                    tvITem.Text = item.Text;
+                    tvITem.Text = item.ScreenName;
 
                     tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
-                    view.SetTag(Resource.Id.ScreenId, item.PublicKey.ToString());
+                    view.SetTag(Resource.Id.ScreenId, item.ScreenId.ToString());
                 }
                 else
                 {
@@ -80,7 +80,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         #region Overrides of BaseAdapter<QuestionnaireNavigationPanelItem>
 
-        public override QuestionnaireNavigationPanelItem this[int position]
+        public override QuestionnaireScreenViewModel this[int position]
         {
             get
             {

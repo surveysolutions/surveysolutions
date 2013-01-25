@@ -27,7 +27,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
 
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-        public IEnumerable<QuestionnaireNavigationPanelItem> DataItems { get; set; }
+        public IEnumerable<QuestionnaireScreenViewModel> DataItems { get; set; }
         private int selectedItemIndex=0;
         #endregion
 

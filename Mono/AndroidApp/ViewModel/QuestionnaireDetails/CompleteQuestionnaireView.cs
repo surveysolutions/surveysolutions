@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using AndroidApp.ViewModel.QuestionnaireDetails.Validation;
+using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
@@ -11,14 +12,37 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class CompleteQuestionnaireView
     {
-        public CompleteQuestionnaireView(Guid publicKey, string title, IEnumerable<QuestionnaireNavigationPanelItem> chapters)
+        public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
         {
-            this.PublicKey = publicKey;
-            this.Title = title;
-            this.Chapters = chapters;
+            this.PublicKey = document.PublicKey;
+            this.Title = document.Title;
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
-            Templates=new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            Templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
+
+            List<ICompleteGroup> rout = new List<ICompleteGroup>();
+            rout.Add(document);
+            Stack<ICompleteGroup> queue = new Stack<ICompleteGroup>(document.Children.OfType<ICompleteGroup>());
+            while (queue.Count > 0)
+            {
+                var current = queue.Pop();
+
+                while (rout.Count > 0 && !rout[rout.Count - 1].Children.Contains(current))
+                {
+                    rout.RemoveAt(rout.Count - 1);
+                }
+                rout.Add(current);
+                this.AddScreen(rout, current);
+
+                foreach (ICompleteGroup child in current.Children.OfType<ICompleteGroup>())
+                {
+                    queue.Push(child);
+                }
+            }
+            this.Chapters =
+                this.Screens.Where(s => document.Children.Any(c => c.PublicKey == s.Key.PublicKey)).Select(s => s.Value)
+                    .OfType<QuestionnaireScreenViewModel>().ToList();
+           
             this.validator = new QuestionnaireValidationExecutor(this);
         }
         public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString )
@@ -79,7 +103,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             }
 
         }
-
         protected void CreateGrid(ICompleteGroup group, List<ICompleteGroup> rout)
         {
             ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
@@ -166,7 +189,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
         protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
-        public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }
         private readonly QuestionnaireValidationExecutor validator;
         public string Title { get; private set; }
         public Guid PublicKey { get; private set; }
