@@ -79,6 +79,42 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
+        public void UpdateCounters()
+        {
+            var total = 0;
+            var answered = 0;
+            foreach (var item in Items)
+            {
+                var question = item as QuestionViewModel;
+                if (question != null)
+                {
+                    if (question.Status.HasFlag(QuestionStatus.Enabled))
+                    {
+                        total++;
+                        if (question.Status.HasFlag(QuestionStatus.Answered))
+                            answered++;
+                    }
+                    continue;
+                }
+                var group = item as QuestionnaireNavigationPanelItem;
+                if (group != null)
+                {
+                    total = total + group.Total;
+                    answered = answered + group.Answered;
+                }
+
+            }
+            if (total != Total)
+            {
+                Total = total;
+                this.RaisePropertyChanged("Total");
+            }
+            if (answered != Answered)
+            {
+                Answered = answered;
+                this.RaisePropertyChanged("Answered");
+            }
+        }
 
     }
 }

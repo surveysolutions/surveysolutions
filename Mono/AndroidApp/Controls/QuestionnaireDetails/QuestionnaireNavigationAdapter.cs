@@ -57,9 +57,18 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (position < Count - 1)
                 {
                     var item = items[position];
+                    item.PropertyChanged += (sender,e)=>
+                    {
+                        if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                            return;
+                        var question = sender as QuestionnaireScreenViewModel;
+                        if (question == null)
+                            return;
+                        UpdateCounter(tvCount, item);
+                    }
+                    ;
                     tvITem.Text = item.ScreenName;
-
-                    tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+                    UpdateCounter(tvCount, item);
                     view.SetTag(Resource.Id.ScreenId, item.ScreenId.ToString());
                 }
                 else
@@ -70,6 +79,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             return view;
         }
+        protected void UpdateCounter(TextView tvCount, QuestionnaireScreenViewModel item)
+        {
+            tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+        }
+
 
         public override int Count
         {

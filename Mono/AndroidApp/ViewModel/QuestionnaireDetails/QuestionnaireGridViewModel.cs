@@ -42,12 +42,28 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public string Title { get; private set; }
         public string ScreenName { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
+        public int Total { get; private set; }
+        public int Answered { get; private set; }
         public IEnumerable<ItemPublicKey> Siblings { get; private set; }
         public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; private set; }
         public IEnumerable<QuestionnaireScreenViewModel> Chapters
         {
             get { return chaptersValue(); }
         }
+
+        public void UpdateCounters()
+        {
+            var total = 0;
+            var answered = 0;
+            foreach (var screenViewModel in Rows)
+            {
+                total = total + screenViewModel.Total;
+                answered = answered + screenViewModel.Answered;
+            }
+            Total = total;
+            Answered = answered;
+        }
+
         public IList<HeaderItem> Header { get; private set; }
         public IEnumerable<QuestionnaireScreenViewModel> Rows
         {

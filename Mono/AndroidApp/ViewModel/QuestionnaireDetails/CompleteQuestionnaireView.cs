@@ -105,6 +105,31 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             }
 
         }
+        protected void UpdateQuestionHash(QuestionViewModel question)
+        {
+            this.Questions.Add(question.PublicKey, question);
+            question.PropertyChanged += question_PropertyChanged;
+        }
+
+        void question_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            
+            if (e.PropertyName != "Status")
+                return;
+            var question = sender as QuestionViewModel;
+            if(question==null)
+                return;
+            var screen =
+                this.Screens.Select(s => s.Value).OfType<QuestionnaireScreenViewModel>().FirstOrDefault(s => s.Items.Any(i => i.PublicKey == question.PublicKey));
+            if(screen==null)
+                return;
+            var breadcrumbs = screen.Breadcrumbs.ToList();
+            for (int i = breadcrumbs.Count - 1; i >= 0; i--)
+            {
+                breadcrumbs[i].UpdateCounters();
+            }
+        }
+
         protected void CreateGrid(ICompleteGroup group, List<ICompleteGroup> rout)
         {
             ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
@@ -137,7 +162,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     continue;
                 var question = item as QuestionViewModel;
                 if (question != null && updateHash)
-                    this.Questions.Add(question.PublicKey, question);
+                    UpdateQuestionHash( question);
                 result.Add(item);
             }
             return result;
@@ -156,7 +181,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 items.Add(newItem);
                 var newQuestion = newItem as QuestionViewModel;
                 if (newQuestion != null)
-                    this.Questions.Add(newItem.PublicKey, newQuestion);
+                    UpdateQuestionHash( newQuestion);
               
             }
             var screen = new QuestionnaireScreenViewModel(PublicKey,
