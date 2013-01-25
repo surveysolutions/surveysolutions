@@ -26,7 +26,7 @@ namespace Main.Synchronization.SyncSreamProvider
     /// <summary>
     /// The remote service event stream provider.
     /// </summary>
-    internal class RemoteServiceEventStreamProvider : IIntSyncEventStreamProvider
+    public class RemoteServiceEventStreamProvider : IIntSyncEventStreamProvider
     {
         #region Fields
 

@@ -22,6 +22,8 @@ namespace Main.Synchronization.SyncStreamCollector
 
     using Questionnaire.Core.Web.Export;
 
+    using SynchronizationMessages.Export;
+
     /// <summary>
     /// The compressed stream stream collector.
     /// </summary>
