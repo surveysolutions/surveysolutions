@@ -39,6 +39,7 @@ namespace AndroidApp
             base.FillTargetFactories(registry);
             
             registry.RegisterFactory(new MvxCustomBindingFactory<ViewGroup>("Background", (button) => new BackgroundBinding(button)));
+            registry.RegisterFactory(new MvxCustomBindingFactory<TextView>("ValidationMessage", (button) => new ValidationMessageBinding(button)));
             
         }
         protected override IDictionary<Type, Type> GetViewModelViewLookup()

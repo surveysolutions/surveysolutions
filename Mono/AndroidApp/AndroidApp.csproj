@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\IAuthentication.cs" />
+    <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
