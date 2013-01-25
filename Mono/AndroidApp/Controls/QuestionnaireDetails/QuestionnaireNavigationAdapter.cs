@@ -82,6 +82,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected void UpdateCounter(TextView tvCount, QuestionnaireScreenViewModel item)
         {
             tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
+            if(item.Total==item.Answered)
+                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
+            else
+                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
         }
 
 
