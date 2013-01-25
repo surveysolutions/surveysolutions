@@ -109,11 +109,7 @@ var DataHelper = function (host) {
                                     <div class="cell-content">
                                         <span data-bind="css: markerStyle()"></span><span data-bind="text: answer"></span>
                                         <div class="question-toolbar pull-right">
-                                            <a class="btn btn-mini" data-bind="click: $root.openDetails, visible: comments().length > 0">
-                                                <span data-bind="text: comments().length + ' '"></span><i class="icon-comment"></i>
-                                            </a><a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }, visible: isFlaged">
-                                                <i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i></a>
-                                            <div class="btn-group">
+                                             <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlaged() == false || isReadonly == false)}">
                                                 <a style="display: none;" class="actions btn dropdown-toggle btn-mini" data-toggle="dropdown"
                                                     href="#"><i class="icon-cog"></i><span class="caret"></span></a>
                                                 <ul class="dropdown-menu pull-right">
@@ -124,6 +120,12 @@ var DataHelper = function (host) {
                                                         Flag</a></li>
                                                 </ul>
                                             </div>
+                                            <a class="btn btn-mini btn-success" data-bind="click: $root.openDetails, visible: comments().length > 0">
+                                                <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                            </a>
+                                            <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlaged">
+                                                <i class="icon-flag icon-white"></i></a>
+                                           
                                         </div>
                                     </div>
                                 </td>
