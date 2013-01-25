@@ -126,12 +126,14 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
+                var user = this.globalInfo.GetCurrentUser();
                 commandService.Execute(
                     new SetCommentCommand(
                         surveyKey,
                         questionKey,
                         comment,
-                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey));
+                        (questionPropagationKey == Guid.Empty) ? (Guid?)null : questionPropagationKey,
+                        user));
             }
             catch (Exception e)
             {

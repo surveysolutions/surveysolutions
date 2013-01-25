@@ -50,7 +50,7 @@ namespace Core.CAPI.Views.Json
             this.PublicKey = doc.PublicKey;
             this.Featured = doc.Featured;
             this.Valid = doc.Valid;
-            this.Comments = doc.Comments;
+            this.Comments = doc.LastComment;
             this.Enabled = doc.Enabled;
             this.Mandatory = doc.Mandatory;
             CompleteAnswerView[] answers =

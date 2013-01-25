@@ -231,8 +231,6 @@ body:before
 .questions {
 	border-radius: 5px 5px 5px 5px;
 	width: 100%;
-	overflow-x: auto;
-	overflow-y: visible;
 	margin-bottom: 20px;
 	position: relative;
 }

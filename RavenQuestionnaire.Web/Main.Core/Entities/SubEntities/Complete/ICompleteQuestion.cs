@@ -12,6 +12,8 @@ namespace Main.Core.Entities.SubEntities.Complete
     using System;
     using System.Collections.Generic;
 
+    using Main.Core.Documents;
+
     /// <summary>
     /// The CompleteQuestion interface.
     /// </summary>
@@ -37,7 +39,12 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the comments.
         /// </summary>
-        string Comments { get; set; }
+        string LastComment { get; set; }
+
+        /// <summary>
+        /// Gets or sets comments.
+        /// </summary>
+        List<CommentDocument> Comments { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsFlaged.
@@ -87,9 +94,15 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The set comments.
         /// </summary>
         /// <param name="comments">
-        /// The comments.
+        ///   The comments.
         /// </param>
-        void SetComments(string comments);
+        /// <param name="date">
+        /// The date
+        /// </param>
+        /// <param name="user">
+        /// The user
+        /// </param>
+        void SetComments(string comments, DateTime date, UserLight user);
         
        #endregion
     }

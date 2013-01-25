@@ -162,6 +162,7 @@
     <Compile Include="Documents\CollectionDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocument.cs" />
     <Compile Include="Documents\CompleteQuestionnaireStoreDocument.cs" />
+    <Compile Include="Documents\CommentDocument.cs" />
     <Compile Include="Documents\EventState.cs" />
     <Compile Include="Documents\ExportSchemaDocument.cs" />
     <Compile Include="Documents\FileDescription.cs" />

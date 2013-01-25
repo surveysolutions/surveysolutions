@@ -11,6 +11,8 @@ namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
 
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs.Eventing.Storage;
 
     /// <summary>
@@ -36,6 +38,11 @@ namespace Main.Core.Events.Questionnaire.Completed
         /// Gets or sets the question Public key.
         /// </summary>
         public Guid QuestionPublickey { get; set; }
+
+        /// <summary>
+        /// Gets or sets User.
+        /// </summary>
+        public UserLight User { get; set; }
 
         #endregion
     }

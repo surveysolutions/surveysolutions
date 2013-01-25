@@ -54,6 +54,7 @@ Date.prototype.mmddyyyy = function () {
     var empty = "00000000-0000-0000-0000-000000000000";
     var answerMap = [];
     var questionMap = [];
+    var currentUser = undefined;
 
     var Key = function (publicKey, propagatekey, isPropagated) {
         var self = this;
@@ -321,7 +322,7 @@ Date.prototype.mmddyyyy = function () {
         self.addComment = function () {
             var current = self.currentComment().trim();
             if (current) {
-                self.comments.push(new Comment(current));
+                self.comments.push(new Comment(current, currentUser, new Date()));
                 self.currentComment('', undefined, new Date());
 
                 var request = dataHelper.createAddCommentRequest();
@@ -541,6 +542,7 @@ Date.prototype.mmddyyyy = function () {
         self.title = questionnaire.Title;
 
         self.user = new User(questionnaire.User.Id, questionnaire.User.Name);
+        currentUser = self.user;
         
         self.status = new Status(questionnaire.Status.PublicId, questionnaire.Status.Name, questionnaire.ChangeComment);
 
@@ -558,7 +560,10 @@ Date.prototype.mmddyyyy = function () {
 
                 var answers = ko.observableArray(ko.utils.arrayMap(question.Answers, function (answer) {
                     var answerKey = new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated);
-                    var comments = (answer.Comments == null || answer.Comments.trim() == '') ? [] : [new Comment(answer.Comments)];
+                    
+                    var comments = ko.utils.arrayMap(answer.Comments, function(comment) {
+                        return new Comment(comment.Comment, new User(comment.User.Id,comment.User.Name), comment.CommentDate);
+                    });
 
                     var isImageType = false;
                     var options = ko.utils.arrayMap(answer.AnswerOptions, function(option) {

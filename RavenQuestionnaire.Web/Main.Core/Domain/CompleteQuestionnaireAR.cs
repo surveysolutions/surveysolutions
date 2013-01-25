@@ -257,11 +257,12 @@ namespace Main.Core.Domain
         /// <param name="propogationPublicKey">
         /// The propagation public key.
         /// </param>
-        public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey)
+        public void SetComment(Guid questionPublickey, string comments, Guid? propogationPublicKey, UserLight user)
         {
             this.ApplyEvent(
                 new CommentSet
                 {
+                    User = user,
                     Comments = comments,
                     PropagationPublicKey = propogationPublicKey,
                     QuestionPublickey = questionPublickey
@@ -849,7 +850,7 @@ namespace Main.Core.Domain
                 return;
             }
 
-            question.SetComments(e.Comments);
+            question.SetComments(e.Comments, DateTime.Now, e.User);
         }
 
         /// <summary>
