@@ -235,7 +235,7 @@ namespace Main.Synchronization.SyncManager
                     this.ProcessGuid, 
                     Guid.Empty, 
                     this.eventStreamProvider.SyncType, 
-                    string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider)));
+                    string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
 
             this.streamCollector.PrepareToCollect();
 
