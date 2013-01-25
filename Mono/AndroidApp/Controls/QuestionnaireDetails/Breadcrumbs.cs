@@ -17,11 +17,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class BreadcrumbsView : LinearLayout
     {
         private readonly Action<ScreenChangedEventArgs> notifier;
-        protected readonly IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs;
+        protected readonly IEnumerable<IQuestionnaireViewModel> breadcrumbs;
 
         public BreadcrumbsView(
             Context context,
-            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs,
+            IEnumerable<IQuestionnaireViewModel> breadcrumbs,
             Action<ScreenChangedEventArgs> notifier) :
                 base(context)
         {
@@ -35,11 +35,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                ViewGroup.LayoutParams.WrapContent);
             this.Orientation = Orientation.Horizontal;
-            foreach (QuestionnaireNavigationPanelItem questionnaireNavigationPanelItem in breadcrumbs)
+            foreach (var questionnaireNavigationPanelItem in breadcrumbs)
             {
                 Button crumb = new Button(this.Context);
-                crumb.Text = questionnaireNavigationPanelItem.Text;
-                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.PublicKey.ToString());
+                crumb.Text = questionnaireNavigationPanelItem.ScreenName;
+                crumb.SetTag(Resource.Id.ScreenId, questionnaireNavigationPanelItem.ScreenId.ToString());
                 crumb.Click += crumb_Click;
                 var butParam = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                                                                ViewGroup.LayoutParams.WrapContent);

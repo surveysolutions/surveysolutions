@@ -120,7 +120,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 Button first = new Button(inflater.Context);
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
-                first.Text = rosterItem.Title;
+                first.Text = rosterItem.ScreenName;
                 // AssignHeaderStyles(first);
                 th.AddView(first);
 

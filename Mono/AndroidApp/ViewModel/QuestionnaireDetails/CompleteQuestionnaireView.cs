@@ -84,17 +84,17 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
                                                               key, screenItems,
                                                               BuildSiblingsForNonPropagatedGroups(rout, key),
-                                                              BuildBreadCrumbs(rout, key, group.Propagated),
+                                                              BuildBreadCrumbs(rout, key),
                                                               () => this.Chapters);
                 this.Screens.Add(key, screen);
             }
             else if (group.PropagationPublicKey.HasValue)
             {
                 var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, () => GetPropagatebleGroupTitle(group.PropagationPublicKey.Value),
+                var screen = new QuestionnaireScreenViewModel(PublicKey, () => GetPropagatebleGroupTitle(group.PropagationPublicKey.Value), group.Title,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
-                                                              BuildBreadCrumbs(rout, key, group.Propagated),
+                                                              BuildBreadCrumbs(rout, key),
                                                               () => this.Chapters);
                 this.Screens.Add(key, screen);
             }
@@ -110,7 +110,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
-            var breadcrumbs = BuildBreadCrumbs(rout, rosterKey, group.Propagated);
+            var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
             var template = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
                                                             rosterKey, screenItems,
                                                             siblings,
@@ -159,8 +159,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     this.Questions.Add(newItem.PublicKey, newQuestion);
               
             }
-            var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title,
-                                                          () => GetPropagatebleGroupTitle(propagationKey),
+            var screen = new QuestionnaireScreenViewModel(PublicKey,
+                                                          () => GetPropagatebleGroupTitle(propagationKey), template.Title,
                                                           key, items,
                                                           () => GetSiblings(key.PublicKey), bradCrumbs,
                                                           () => this.Chapters);
@@ -219,9 +219,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                                               0, 0, true));
         }*/
 
-        protected IList<QuestionnaireNavigationPanelItem> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key, Propagate nodeType)
+        protected IList<IQuestionnaireViewModel> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
-            return  rout.Skip(1).Select(BuildNavigationItem).ToList();
+            return
+                rout.Skip(1).TakeWhile(r => r.PublicKey != key.PublicKey).Select(
+                    r => this.Screens[new ItemPublicKey(r.PublicKey, r.PropagationPublicKey)]).ToList();
         }
 
         protected IEnumerable<ItemPublicKey> BuildSiblingsForNonPropagatedGroups(IList<ICompleteGroup> rout, ItemPublicKey key)
