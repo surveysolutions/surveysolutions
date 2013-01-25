@@ -112,12 +112,11 @@ var DataHelper = function (host) {
                                             <a class="btn btn-mini" data-bind="click: $root.openDetails, visible: comments().length > 0"><span data-bind="text: comments().length + ' '"></span><i class="icon-comment"></i></a>
                                             <a class="btn btn-mini" data-bind="click: $root.flagAnswer, css: { 'btn-info': isFlaged }, visible: isFlaged"><i class="icon-flag" data-bind="    css: { 'icon-white': isFlaged }"></i></a>
                                             <div class="btn-group">
-                                                
                                                 <a style="display: none;" class="actions btn dropdown-toggle btn-mini" data-toggle="dropdown" href="#"><i class="icon-cog"></i><span class="caret"></span></a>
                                                 <ul class="dropdown-menu pull-right">
                                                     <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.openDetails">
                                                         Answer</a></li>
-                                                    <li data-bind="visible: comments().length == 0"><a class="" href="#" data-bind="click: $root.openDetails">
+                                                    <li><a class="" href="#" data-bind="click: $root.openDetails">
                                                         Comment</a></li>
                                                     <li data-bind="visible: isFlaged() == false"><a data-bind="click: $root.flagAnswer">Flag</a></li>
                                                 </ul>
