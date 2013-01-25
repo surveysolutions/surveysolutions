@@ -98,10 +98,11 @@ namespace AndroidApp.EventHandlers
             foreach (var questionnaireItemViewModel in template.Items)
             {
                 var newItem = questionnaireItemViewModel.Clone(propagationKey);
+                items.Add(newItem);
                 var newQuestion = newItem as QuestionViewModel;
                 if (newQuestion != null)
                     this.Questions.Add(newItem.PublicKey, newQuestion);
-                items.Add(newItem);
+              
             }
             var screen = new QuestionnaireScreenViewModel(PublicKey, template.Title,
                                                           () => GetPropagatebleGroupTitle(propagationKey),
@@ -142,7 +143,7 @@ namespace AndroidApp.EventHandlers
         {
             return
                 this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
-                    s => s.Value).OfType<QuestionnaireScreenViewModel>();
+                    s => s.Value).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
         protected string GetPropagatebleGroupTitle(Guid propagationKey)
@@ -169,17 +170,11 @@ namespace AndroidApp.EventHandlers
         protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
             var parent = rout[rout.Count - 2];
-            IEnumerable<ICompleteGroup> result;
-            if (key.PropagationKey.HasValue)
-                result = parent.Children.OfType<ICompleteGroup>().Where(
-                    c => c.PropagationPublicKey.HasValue && c.PublicKey == key.PublicKey);
-            else
-
-                result =
-                    parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer());
+            IEnumerable<ICompleteGroup> result =
+                parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer());
             return result.Select(BuildNavigationItem).ToList();
         }
-        
+
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey), g.Title, 0, 0,g.Enabled);

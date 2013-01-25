@@ -36,7 +36,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
             return new SelectebleQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                   this.Text, this.QuestionType, this.Answers,
+                                                   this.Text, this.QuestionType, this.Answers.ToList(),
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
                                                    this.Mandatory, this.Capital, this.AnswerString);
