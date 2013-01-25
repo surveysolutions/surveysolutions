@@ -40,8 +40,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 }
             }
             this.Chapters =
-                this.Screens.Where(s => document.Children.Any(c => c.PublicKey == s.Key.PublicKey)).Select(s => s.Value)
-                    .OfType<QuestionnaireScreenViewModel>().ToList();
+                document.Children.OfType<ICompleteGroup>().Select(
+                    c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)]).OfType<QuestionnaireScreenViewModel>().ToList();
+            /*    this.Screens.Where(s => document.Children.Any(c => c.PublicKey == s.Key.PublicKey)).Select(s => s.Value)
+                    .OfType<QuestionnaireScreenViewModel>().ToList();*/
            
             this.validator = new QuestionnaireValidationExecutor(this);
         }
@@ -81,7 +83,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 var screenItems = BuildItems(group, true);
                 var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
                                                               key, screenItems,
-                                                              BuildSiblings(rout, key),
+                                                              BuildSiblingsForNonPropagatedGroups(rout, key),
                                                               BuildBreadCrumbs(rout, key, group.Propagated),
                                                               () => this.Chapters);
                 this.Screens.Add(key, screen);
@@ -106,7 +108,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         protected void CreateGrid(ICompleteGroup group, List<ICompleteGroup> rout)
         {
             ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
-            var siblings = BuildSiblings(rout, rosterKey);
+            var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey, group.Propagated);
             var template = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title,
@@ -166,10 +168,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             this.Screens.Add(key, screen);
         }
 
-        protected IEnumerable<QuestionnaireNavigationPanelItem> GetSiblings(Guid publicKey)
+        protected IEnumerable<ItemPublicKey> GetSiblings(Guid publicKey)
         {
-            return this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
-                        s => new QuestionnaireNavigationPanelItem(s.Key, s.Value.Title, 0, 0, true)).ToList();
+            return
+                this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
+                    s => new ItemPublicKey(publicKey, s.Key.PropagationKey)).ToList();
         }
 
         public void RemovePropagatedGroup(Guid publicKey, Guid propagationKey)
@@ -221,12 +224,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return  rout.Skip(1).Select(BuildNavigationItem).ToList();
         }
 
-        protected IList<QuestionnaireNavigationPanelItem> BuildSiblings(IList<ICompleteGroup> rout, ItemPublicKey key)
+        protected IEnumerable<ItemPublicKey> BuildSiblingsForNonPropagatedGroups(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
             var parent = rout[rout.Count - 2];
-            IEnumerable<ICompleteGroup> result =
-                parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer());
-            return result.Select(BuildNavigationItem).ToList();
+            return
+                parent.Children.OfType<ICompleteGroup>().Distinct(new PropagatedGroupEqualityComparer()).Select(g => new ItemPublicKey(g.PublicKey, g.PropagationPublicKey)).ToList();
+         //   return result.Select(r => Screens[new ItemPublicKey(r.PublicKey, r.PropagationPublicKey)]).ToList();
+            //    return result.Select(BuildNavigationItem).ToList();
         }
 
         protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)

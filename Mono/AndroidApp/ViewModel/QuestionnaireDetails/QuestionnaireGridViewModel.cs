@@ -22,8 +22,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         #region Implementation of IQuestionnaireViewModel
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> rowsValue;
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, IEnumerable<QuestionnaireNavigationPanelItem> siblings,
-            IList<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, IList<HeaderItem> header
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, IEnumerable<ItemPublicKey> siblings,
+            IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs, Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, IList<HeaderItem> header
             , Func<IEnumerable<QuestionnaireScreenViewModel>> rows)
         {
             QuestionnaireId = questionnaireId;
@@ -42,7 +42,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public string Title { get; private set; }
         public string ScreenName { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
-        public IEnumerable<QuestionnaireNavigationPanelItem> Siblings { get; private set; }
+        public IEnumerable<ItemPublicKey> Siblings { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Breadcrumbs { get; private set; }
         public IEnumerable<QuestionnaireScreenViewModel> Chapters
         {

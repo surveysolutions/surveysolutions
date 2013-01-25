@@ -26,7 +26,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private readonly ViewPager target;
         private ItemPublicKey? screenId;
         private bool isRoot;
-        private IList<QuestionnaireNavigationPanelItem> screensHolder;
+        private IList<ItemPublicKey> screensHolder;
         public ContentFrameAdapter(FragmentManager fm, IQuestionnaireViewModel initScreen, ViewPager target)
             : base(fm)
         {
@@ -64,11 +64,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
                 var param = screensHolder[position];
                 var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                    new QuestionnaireScreenInput(questionnaireId, param.PublicKey));
+                    new QuestionnaireScreenInput(questionnaireId, param));
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment =new  ScreenContentFragment(screenModel);
+                    fragment = new ScreenContentFragment(screenModel);
                 }
                 var grid = model as QuestionnaireGridViewModel;
                 if (grid != null)
@@ -81,6 +81,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 throw new InvalidOperationException();
             return fragment;
         }
+
         public override int GetItemPosition(Java.Lang.Object p0)
         {
             return PositionNone;
@@ -91,7 +92,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 return isRoot ? Count - 1 : -1;
             for (int i = 0; i < screensHolder.Count; i++)
             {
-                if (screensHolder[i].PublicKey == screenId.Value)
+                if (screensHolder[i] == screenId.Value)
                     return i;
             }
             return -1;

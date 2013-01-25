@@ -10,7 +10,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         string Title { get; }
         string ScreenName { get; }
         ItemPublicKey ScreenId { get; }
-        IEnumerable<QuestionnaireNavigationPanelItem> Siblings { get; }
+        IEnumerable<ItemPublicKey> Siblings { get; }
         IEnumerable<QuestionnaireNavigationPanelItem> Breadcrumbs { get; }
         IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
     }

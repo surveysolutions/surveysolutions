@@ -25,12 +25,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> breadcrumbsValue;
-        private readonly Func<IEnumerable<QuestionnaireNavigationPanelItem>> sibligsValue;
+        private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;
         private readonly Func<string> titleValue;
 
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, Func<string> title,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            Func<IEnumerable<QuestionnaireNavigationPanelItem>> siblings,
+                                            Func<IEnumerable<ItemPublicKey>> siblings,
                                             IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs,
                                             Func<IEnumerable<QuestionnaireScreenViewModel>> chapters)
         {
@@ -50,7 +50,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<QuestionnaireNavigationPanelItem> siblings,
+                                            IEnumerable<ItemPublicKey> siblings,
                                             IEnumerable<QuestionnaireNavigationPanelItem> breadcrumbs,
                                             Func<IEnumerable<QuestionnaireScreenViewModel>> chapters)
         {
@@ -77,7 +77,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public int Total { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
 
-        public IEnumerable<QuestionnaireNavigationPanelItem> Siblings
+        public IEnumerable<ItemPublicKey> Siblings
         {
             get { return sibligsValue(); }
         }
