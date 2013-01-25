@@ -143,7 +143,6 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireView.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\CompleteQuestionnaireView.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireViewModel.cs" />
@@ -175,6 +175,7 @@
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\Validation\QuestionnaireValidationExecutor.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsInput.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsQuestionViewModel.cs" />
@@ -226,6 +227,10 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
+      <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
+      <Name>AndroidAntlr3.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
       <Name>AndroidCore.Capi</Name>
@@ -241,6 +246,10 @@
     <ProjectReference Include="..\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
       <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
+      <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
+      <Name>AndroidNCalc</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>

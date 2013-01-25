@@ -40,7 +40,7 @@ namespace AndroidApp.ViewModel.Statistics
             var invalid = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
                 q =>
                 new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
-                                                q.AnswerString, "")).ToList();
+                                                q.AnswerString, q.ValidationMessage)).ToList();
 
             var unanswered = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
                 q =>

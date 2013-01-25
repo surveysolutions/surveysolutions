@@ -1,23 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
-using Main.Core.Documents;
+using AndroidApp.ViewModel.QuestionnaireDetails.Validation;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 
-namespace AndroidApp.EventHandlers
+namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class CompleteQuestionnaireView
     {
@@ -29,12 +19,14 @@ namespace AndroidApp.EventHandlers
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
             Templates=new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            this.validator = new QuestionnaireValidationExecutor(this);
         }
         public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString )
         {
             var question =
               this.Questions[key];
             question.SetAnswer(answerKeys, answerString);
+            this.validator.Execute();
         }
         public void SetComment(ItemPublicKey key, string comment)
         {
@@ -175,6 +167,7 @@ namespace AndroidApp.EventHandlers
         protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
+        private readonly QuestionnaireValidationExecutor validator;
         public string Title { get; private set; }
         public Guid PublicKey { get; private set; }
         protected IEnumerable<QuestionnaireScreenViewModel> CollectPropagatedScreen(Guid publicKey)
@@ -238,6 +231,8 @@ namespace AndroidApp.EventHandlers
 
             if (question != null)
             {
+                if (question.QuestionScope != QuestionScope.Interviewer)
+                    return null;
                 var newType = CalculateViewType(question.QuestionType);
                 QuestionViewModel questionView;
                 if (!IsTypeSelectable(newType))
@@ -245,15 +240,15 @@ namespace AndroidApp.EventHandlers
                                                       newType,
                                                       question.GetAnswerString(),
                                                       question.Enabled, question.Instructions, question.Comments,
-                                                      question.Valid,question.Capital, question.Mandatory);
+                                                      question.Valid,question.Capital, question.Mandatory,question.ValidationExpression,question.ValidationMessage);
                 else
                     questionView= new SelectebleQuestionViewModel(new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                                                            newType,
                                                            question.Answers.OfType<ICompleteAnswer>().Select(
                                                                a =>
-                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)).ToList(),
+                                                               new AnswerViewModel(a.PublicKey, a.AnswerText,a.AnswerValue, a.Selected)).ToList(),
                                                            question.Enabled, question.Instructions, question.Comments,
-                                                           question.Valid, question.Mandatory,question.Capital, question.GetAnswerString());
+                                                           question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(), question.ValidationExpression, question.ValidationMessage);
               //  questionView.PropertyChanged += questionView_PropertyChanged;
                 return questionView;
 

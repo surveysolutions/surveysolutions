@@ -25,9 +25,23 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             this.Status = rosterItem.Status;
         }*/
 
-        public QuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, bool enabled, string instructions, string comments, bool valid, bool mandatory, bool capital, string answerString)
+        public QuestionViewModel(
+            ItemPublicKey publicKey, 
+            string text, 
+            QuestionType type, 
+            bool enabled, 
+            string instructions, 
+            string comments, 
+            bool valid, 
+            bool mandatory, 
+            bool capital, 
+            string answerString, 
+            string validationExpression, 
+            string validationMessage)
         {
             PublicKey = publicKey;
+            ValidationExpression = validationExpression;
+            ValidationMessage = validationMessage;
             Text = text;
             QuestionType = type;
             AnswerString = answerString;
@@ -71,9 +85,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
        // private string comments;
         public string AnswerString { get; protected set; }
+        public abstract string AnswerObject { get; }
         public bool Mandatory { get; private set; }
         public QuestionStatus Status { get; protected set; }
-
+        public string ValidationExpression { get; private set; }
+        public string ValidationMessage { get; private set; }
 
         public virtual void SetAnswer(List<Guid> answer, string answerString)
         {
@@ -100,7 +116,16 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 Status &= ~QuestionStatus.Enabled;
             RaisePropertyChanged("Status");
         }
-
+        public virtual void SetValid(bool valid)
+        {
+            if (Status.HasFlag(QuestionStatus.Valid) == valid)
+                return;
+            if (valid)
+                Status = Status | QuestionStatus.Valid;
+            else
+                Status &= ~QuestionStatus.Valid;
+            RaisePropertyChanged("Status");
+        }
         /* public IMvxLanguageBinder BorderColor
         {
             get { return new BorderColorConverter(Constants.GeneralNamespace, GetType().Name); }

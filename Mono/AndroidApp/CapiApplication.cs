@@ -12,6 +12,7 @@ using Android.Widget;
 using AndroidApp.Authorization;
 using AndroidApp.EventHandlers;
 using AndroidApp.Injections;
+using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
 using Main.Core.Documents;

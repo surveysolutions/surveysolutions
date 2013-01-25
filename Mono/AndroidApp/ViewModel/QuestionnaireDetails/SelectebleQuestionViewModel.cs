@@ -16,8 +16,21 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class SelectebleQuestionViewModel:QuestionViewModel
     {
-        public SelectebleQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, IEnumerable<AnswerViewModel> answers, bool enabled, string instructions, string comments, bool valid, bool mandatory, bool capital, string answerString)
-            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory,capital, answerString)
+        public SelectebleQuestionViewModel(
+            ItemPublicKey publicKey, 
+            string text, 
+            QuestionType type, 
+            IEnumerable<AnswerViewModel> answers, 
+            bool enabled, 
+            string instructions, 
+            string comments, 
+            bool valid, 
+            bool mandatory, 
+            bool capital, 
+            string answerString, 
+            string validationExpression,
+            string validationMessage)
+            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
         {
             Answers = answers;
           
@@ -44,7 +57,18 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                                    this.Text, this.QuestionType, newAnswers,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
                                                    this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital, this.AnswerString);
+                                                   this.Mandatory, this.Capital, this.AnswerString, this.ValidationExpression,this.ValidationMessage);
+        }
+
+        public override string AnswerObject
+        {
+            get
+            {
+                var value = this.Answers.Where(a => a.Selected).Select(a => a.Value).FirstOrDefault();
+                if (value == null)
+                    return string.Empty;
+                return value;
+            }
         }
 
         public override void SetAnswer(List<Guid> answer, string answerString)
