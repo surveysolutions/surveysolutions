@@ -92,9 +92,8 @@ namespace AndroidApp.EventHandlers
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
             var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
-            var question =
-                doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey)];
-            question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
+            doc.SetAnswer(new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey),
+                          evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
         }
 
         #endregion
@@ -104,9 +103,8 @@ namespace AndroidApp.EventHandlers
         public void Handle(IPublishedEvent<CommentSet> evnt)
         {
             var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
-            var question =
-                doc.Questions[new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey)];
-            question.SetComment(evnt.Payload.Comments);
+            doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey),
+                           evnt.Payload.Comments);
         }
 
         #endregion
@@ -120,9 +118,7 @@ namespace AndroidApp.EventHandlers
             {
                 if (!item.Value.HasValue)
                     continue;
-                var question =
-                    doc.Questions[ParseCrap(item.Key)];
-                question.SetEnabled(item.Value.Value);
+                doc.SetQuestionStatus(ParseCrap(item.Key), item.Value.Value);
             }
         }
         #endregion

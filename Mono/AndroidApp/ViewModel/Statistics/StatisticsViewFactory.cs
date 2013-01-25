@@ -32,23 +32,23 @@ namespace AndroidApp.ViewModel.Statistics
         {
             var doc = this._documentStorage.Query().First();
             var answered =
-                doc.Questions.Where(q => q.Value.Status.HasFlag(QuestionStatus.Answered)).Select(
+                doc.FindQuestion(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
                     q =>
-                    new StatisticsQuestionViewModel(q.Value.PublicKey, CalculateScreen(doc, q.Value.PublicKey),
-                                                    q.Value.Text,
-                                                    q.Value.AnswerString, "")).ToList();
-            var invalid = doc.Questions.Where(q => !q.Value.Status.HasFlag(QuestionStatus.Valid)).Select(
+                    new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey),
+                                                    q.Text,
+                                                    q.AnswerString, "")).ToList();
+            var invalid = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
                 q =>
-                new StatisticsQuestionViewModel(q.Value.PublicKey, CalculateScreen(doc, q.Value.PublicKey), q.Value.Text,
-                                                q.Value.AnswerString, "")).ToList();
+                new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
+                                                q.AnswerString, "")).ToList();
 
-            var unanswered = doc.Questions.Where(q => !q.Value.Status.HasFlag(QuestionStatus.Answered)).Select(
+            var unanswered = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
                 q =>
-                new StatisticsQuestionViewModel(q.Value.PublicKey, CalculateScreen(doc, q.Value.PublicKey), q.Value.Text,
-                                                q.Value.AnswerString, "")).ToList();
+                new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
+                                                q.AnswerString, "")).ToList();
 
             var result = new StatisticsViewModel(input.QuestionnaireId, doc.Title,
-                                                 SurveyStatus.Initial, doc.Questions.Count(), unanswered,
+                                                 SurveyStatus.Initial, doc.FindQuestion(q => true).Count(), unanswered,
                                                  answered, invalid);
             return result;
         }

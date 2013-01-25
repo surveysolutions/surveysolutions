@@ -30,6 +30,29 @@ namespace AndroidApp.EventHandlers
             Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
             Templates=new Dictionary<Guid, QuestionnaireScreenViewModel>();
         }
+        public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString )
+        {
+            var question =
+              this.Questions[key];
+            question.SetAnswer(answerKeys, answerString);
+        }
+        public void SetComment(ItemPublicKey key, string comment)
+        {
+            var question =
+              this.Questions[key];
+            question.SetComment(comment);
+        }
+        public void SetQuestionStatus(ItemPublicKey key, bool enebled)
+        {
+            var question =
+                this.Questions[key];
+            question.SetEnabled(enebled);
+        }
+        public IEnumerable<QuestionViewModel> FindQuestion(Func<QuestionViewModel, bool> filter)
+        {
+            return this.Questions.Select(q => q.Value).Where(filter);
+        }
+
         public void AddScreen(List<ICompleteGroup> rout,
             ICompleteGroup group)
         {
@@ -149,8 +172,8 @@ namespace AndroidApp.EventHandlers
         }
 
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
-        public IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
-        public IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
+        protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
+        protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
         public string Title { get; private set; }
         public Guid PublicKey { get; private set; }
