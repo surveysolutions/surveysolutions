@@ -1,9 +1,12 @@
 ﻿@using Core.Supervisor.Views.Index
+@using ClientDependency.Core.Mvc
 @model IndexView
 @{
     this.ViewBag.Title = "Surveys";
 }
-
+@{
+    Html.RequiresJs("plotSettings.js", "Scripts", 70);
+}
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;

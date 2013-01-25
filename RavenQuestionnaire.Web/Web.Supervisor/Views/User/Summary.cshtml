@@ -1,6 +1,8 @@
 ﻿@using Web.Supervisor.Models
+@using ClientDependency.Core.Mvc
 @model Core.Supervisor.Views.Summary.SummaryView
 
+@{Html.RequiresJs("plotSettings.js", "Scripts", 70);}
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;

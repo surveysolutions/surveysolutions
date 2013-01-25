@@ -1,8 +1,6 @@
 ﻿@using System.Web.Script.Serialization
 @using Core.Supervisor.Views.Summary
-@using Web.Supervisor.Models
 @using Web.Supervisor.Models.Chart
-@using ClientDependency.Core.Mvc
 
 @model SummaryView
 @{
@@ -20,7 +18,6 @@
     </div>
 </p>
 
-@{Html.RequiresJs("plotSettings.js", "Scripts", 70);}
 
 <script type="text/javascript">
 barData = @Html.Raw(Json.Encode(chartData.BarData)) ;

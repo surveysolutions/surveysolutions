@@ -653,9 +653,9 @@ Date.prototype.mmddyyyy = function () {
                     });
 
                 case 'flaged':
-                    ko.utils.arrayForEach(answerMap, function (item) {
+                    /*ko.utils.arrayForEach(answerMap, function (item) {
                         item.isVisible(item.isFlaged() ? true : false);
-                    });
+                    });*/
 
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.flagedCount() > 0);
@@ -665,9 +665,9 @@ Date.prototype.mmddyyyy = function () {
                         return screen.flagedCount() > 0;
                     });
                 case 'answered':
-                    ko.utils.arrayForEach(answerMap, function (item) {
+                    /*ko.utils.arrayForEach(answerMap, function (item) {
                         item.isVisible(item.isAnswered() ? true : false);
-                    });
+                    });*/
 
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.answeredCount() > 0);
@@ -677,9 +677,9 @@ Date.prototype.mmddyyyy = function () {
                         return screen.answeredCount() > 0;
                     });
                 case 'invalid':
-                    ko.utils.arrayForEach(answerMap, function (item) {
+                    /*ko.utils.arrayForEach(answerMap, function (item) {
                         item.isVisible(item.isValid() ? true : false);
-                    });
+                    });*/
 
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.invalidCount() > 0);
@@ -689,10 +689,10 @@ Date.prototype.mmddyyyy = function () {
                         return screen.invalidCount() > 0;
                     });
                 case 'supervisor':
-                    ko.utils.arrayForEach(answerMap, function (item) {
+                    /*ko.utils.arrayForEach(answerMap, function (item) {
                         item.isVisible(!item.isReadonly ? true : false);
                     });
-
+                    */
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.editableCount() > 0);
                     });
@@ -701,9 +701,9 @@ Date.prototype.mmddyyyy = function () {
                         return screen.editableCount() > 0;
                     });
                 case 'enabled':
-                    ko.utils.arrayForEach(answerMap, function (item) {
+                    /*ko.utils.arrayForEach(answerMap, function (item) {
                         item.isVisible(item.isEnabled ? true : false);
-                    });
+                    });*/
 
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.enabledCount() > 0);

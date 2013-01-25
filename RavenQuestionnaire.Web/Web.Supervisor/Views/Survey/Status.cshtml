@@ -1,5 +1,6 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Status
+@using ClientDependency.Core.Mvc
 @model StatusView
 @{
     this.ViewBag.Title = "Statuses";
@@ -7,6 +8,7 @@
     statuses = statuses.Substring(0, statuses.Length - 1);
     statuses += "}";
 }
+@{ Html.RequiresJs("plotSettings.js", "Scripts", 70); }
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
