@@ -63,7 +63,7 @@
             <div class="body">
                 <ul class="nav nav-list" data-bind="foreach: menu">
                     <li data-bind="css: { active: isCurrent, level1: $data.level == 1, level2: $data.level == 2 }">
-                        <a data-bind="    click: $root.selectMenuItem" href="#/group"><span class="count"
+                        <a data-bind="attr: {'href': getHref() }" href="#/group"><span class="count"
                             data-bind="    text: totals.counters"></span><span class="link-text" data-bind="    text: title"></span></a></li>
                 </ul>
             </div>

@@ -103,6 +103,9 @@ Date.prototype.mmddyyyy = function () {
         self.isCurrent = ko.observable(false);
         self.level = level * 1;
         self.totals = totals;
+        self.getHref = function() {
+            return '#/group/' + self.key.publicKey + '/' + self.key.propagatekey;
+        };
     };
 
     var ScreenCaption = function(key, title) {
@@ -650,6 +653,9 @@ Date.prototype.mmddyyyy = function () {
 
             ko.utils.arrayForEach(self.screens(), function (item) {
                 item.isVisible(false);
+                ko.utils.arrayForEach(item.captions, function (caption) {
+                    caption.isVisible(true);
+                });
             });
 
             ko.utils.arrayForEach(answerMap, function (item) {
@@ -733,18 +739,6 @@ Date.prototype.mmddyyyy = function () {
                     });
             }
         });
-
-        self.selectMenuItem = function (menuItem) {
-            ko.utils.arrayForEach(this.menu(), function (item) {
-                item.isCurrent(false);
-            });
-
-            self.currentScreenKey(menuItem.key);
-
-            menuItem.isCurrent(true);
-
-            self.showMode('group');
-        } .bind(self);
 
         self.flagAnswer = function (answer, event) {
             answer.isFlaged(!answer.isFlaged());
@@ -856,7 +850,32 @@ Date.prototype.mmddyyyy = function () {
         });
 
         // set up filter routing
-        Router({ '/:filter': viewModel.showMode }).init();
+        Router({
+            '/:filter': viewModel.showMode,
+            '/group/:groupId/:propId': function (groupId, propId) {
+                console.log('group was selected');
+                
+                ko.utils.arrayForEach(viewModel.menu(), function (item) {
+                    item.isCurrent(false);
+                });
+
+                var key = groupId + propId;
+                
+                if (keyMap[key] != undefined) {
+                    var id = keyMap[key];
+                    
+                    var menuItem = ko.utils.arrayFirst(viewModel.menu(), function(item) {
+                        return item.key.id == id;
+                    });
+                    
+                    viewModel.currentScreenKey(menuItem.key);
+                    
+                    menuItem.isCurrent(true);
+                    
+                    viewModel.showMode('group');
+                }
+            }
+        }).init();
     });
 
 } ());
