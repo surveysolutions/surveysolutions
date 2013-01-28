@@ -88,13 +88,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.Validation
             var e = new Expression(question.ValidationExpression);
             e.EvaluateParameter += (name, args) =>
                 {
-                    var nameGuid = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0
-                                       ? question.PublicKey
-                                       : new ItemPublicKey(Guid.Parse(name), question.PublicKey.PropagationKey);
+                    name = name.Trim();
+                    var targetQuestion = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0
+                                       ? question
+                                       : doc.FindQuestion(q => q.PublicKey == new ItemPublicKey(Guid.Parse(name), question.PublicKey.PropagationKey)).FirstOrDefault();
 
-               //     Guid? propagationKey = question.PropagationPublicKey;
-                    var targetQuestion = /* this.doc.GetQuestion(nameGuid, propagationKey);*/
-                        doc.FindQuestion(q => q.PublicKey == nameGuid).FirstOrDefault();
                     if (targetQuestion == null || !targetQuestion.Status.HasFlag(QuestionStatus.Enabled))
                     {
                         args.Result = null;

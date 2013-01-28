@@ -38,8 +38,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return new ValueQuestionViewModel(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
                                                    this.Text, this.QuestionType, this.AnswerString,
                                                    this.Status.HasFlag(QuestionStatus.Enabled), this.Instructions,
-                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid),
-                                                   this.Mandatory, this.Capital,this.ValidationExpression,this.ValidationMessage);
+                                                   this.Comments, this.Status.HasFlag(QuestionStatus.Valid), this.Capital,
+                                                   this.Mandatory,this.ValidationExpression,this.ValidationMessage);
         }
 
         public override string AnswerObject
