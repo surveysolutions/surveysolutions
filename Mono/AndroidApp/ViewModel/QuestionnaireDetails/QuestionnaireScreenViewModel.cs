@@ -31,16 +31,14 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                             Func<IEnumerable<ItemPublicKey>> siblings,
                                             IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters)
+                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
             sibligsValue = siblings;
-            Breadcrumbs =
-                breadcrumbs.Union(new IQuestionnaireViewModel[1]
-                    {this});
+            Breadcrumbs = updateBreadBrumbs ? breadcrumbs.Union(new IQuestionnaireViewModel[1] { this }) : breadcrumbs.ToList();
             chaptersValue = chapters;
             screenNameValue = screenName;
             Title = title;
@@ -50,7 +48,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                             IEnumerable<ItemPublicKey> siblings,
                                             IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters):this(questionnaireId,()=>screenName,title,screenId,items,()=>siblings,breadcrumbs,chapters)
+                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
+            : this(questionnaireId, () => screenName, title, screenId, items, () => siblings, breadcrumbs, chapters, updateBreadBrumbs)
         {
         }
 
@@ -99,8 +98,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
                 {
-                    total = total + group.Total;
-                    answered = answered + group.Answered;
+                    var bigVersion = group.Screen;
+                    total = total + bigVersion.Total;
+                    answered = answered + bigVersion.Answered;
                 }
 
             }

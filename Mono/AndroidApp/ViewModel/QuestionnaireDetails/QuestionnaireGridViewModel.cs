@@ -60,8 +60,16 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 total = total + screenViewModel.Total;
                 answered = answered + screenViewModel.Answered;
             }
-            Total = total;
-            Answered = answered;
+            if (total != Total)
+            {
+                Total = total;
+                this.RaisePropertyChanged("Total");
+            }
+            if (answered != Answered)
+            {
+                Answered = answered;
+                this.RaisePropertyChanged("Answered");
+            }
         }
 
         public IList<HeaderItem> Header { get; private set; }
