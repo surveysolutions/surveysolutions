@@ -47,11 +47,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-        
-           
+
+            LinearLayout top = new LinearLayout(inflater.Context);
+            top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                              ViewGroup.LayoutParams.FillParent);
+            top.Orientation = Orientation.Vertical;
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            top.AddView(breadcrumbs);
+
             ScrollView sv = new ScrollView(inflater.Context);
             sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
+                                                             ViewGroup.LayoutParams.WrapContent);
+            
             LinearLayout ll = new LinearLayout(inflater.Context);
             ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
@@ -59,9 +67,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
             sv.AddView(ll);
 
-            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
-            breadcrumbs.SetPadding(0, 0, 0, 10);
-            ll.AddView(breadcrumbs);
+
 
             foreach (var item in Model.Items)
             {
@@ -69,7 +75,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,Model.QuestionnaireId);
+                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
+                                                                           Model.QuestionnaireId);
                 }
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
@@ -81,12 +88,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (itemView != null)
                     ll.AddView(itemView);
             }
-            return sv;
+            top.AddView(sv);
+            return top;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-       
+
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);

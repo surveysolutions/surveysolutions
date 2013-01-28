@@ -60,40 +60,51 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
             ll.AddView(breadcrumbs);
-
-            TableLayout tl = new TableLayout(inflater.Context);
-            tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
-            tl.StretchAllColumns = true;
-            
-
-            CreateHeader(inflater, tl);
-            CreateBody(inflater, tl);
-            ll.AddView(tl);
+            for (int i = 0; i < Model.Header.Count; i = i + 2)
+            {
+                var count = Math.Min(Model.Header.Count - i, 2);
+                BuildTable(inflater.Context, ll, i, count);
+            }
             sv.AddView(ll);
             return sv;
         }
-        protected void CreateHeader(LayoutInflater inflater, TableLayout tl)
+
+        protected void BuildTable(Context context, LinearLayout ll, int index, int count)
         {
-            TableRow th = new TableRow(inflater.Context);
-            TextView first = new TextView(inflater.Context);
+            TableLayout tl = new TableLayout(context);
+            tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.WrapContent);
+            tl.StretchAllColumns = true;
+
+            CreateHeader(context, tl, index,count);
+            CreateBody(context, tl , index,count);
+
+
+            ll.AddView(tl);
+        }
+
+        protected void CreateHeader(Context context, TableLayout tl, int index, int count)
+        {
+            TableRow th = new TableRow(context);
+            TextView first = new TextView(context);
             AssignHeaderStyles(first);
             first.SetBackgroundResource(Resource.Drawable.grid_headerItem);
             th.AddView(first);
 
-            foreach (HeaderItem headerItem in Model.Header)
+            foreach (HeaderItem headerItem in Model.Header.Skip(index).Take(count))
             {
-                TextView column = new TextView(inflater.Context);
+                TextView column = new TextView(context);
                 column.Text = headerItem.Title;
                 if (!string.IsNullOrEmpty(headerItem.Instructions))
                 {
 
-                    var img = inflater.Context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
+                    var img = context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
                     //img.SetBounds(0, 0, 45, 45);
                     column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
                     column.Click += new EventHandler(column_Click);
                    
                 }
-                column.SetTag(Resource.Id.Index, Model.Header.IndexOf(headerItem));
+                column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
                 AssignHeaderStyles(column);
                 column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
                 th.AddView(column);
@@ -102,53 +113,25 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             tl.AddView(th);
         }
 
-        void column_Click(object sender, EventArgs e)
-        {
-            int i = int.Parse(((TextView) sender).GetTag(Resource.Id.Index).ToString());
-            var instructionsBuilder = new AlertDialog.Builder(this.Activity);
-            instructionsBuilder.SetMessage(Model.Header[i].Instructions);
-            
-            instructionsBuilder.Show();
 
-            
-        }
-        protected void CreateBody(LayoutInflater inflater, TableLayout tl)
+        protected void CreateBody(Context context, TableLayout tl, int index, int count)
         {
             foreach (var rosterItem in Model.Rows)
             {
-                TableRow th = new TableRow(inflater.Context);
-                Button first = new Button(inflater.Context);
+                TableRow th = new TableRow(context);
+                Button first = new Button(context);
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.ScreenName;
                 // AssignHeaderStyles(first);
                 th.AddView(first);
 
-                foreach (var abstractRowItem in rosterItem.Items)
+                foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
                 {
-                    RosterQuestionView rowViewItem = new RosterQuestionView(inflater.Context,
-                                                                            inflater.Context as IMvxBindingActivity,
+                    RosterQuestionView rowViewItem = new RosterQuestionView(context,
+                                                                            context as IMvxBindingActivity,
                                                                             abstractRowItem as QuestionViewModel);
                     rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
-                   // AssignHeaderStyles(rowViewItem);
-                    /*  Button rowViewItem = new Button(inflater.Context);
-                      rowViewItem.Text = abstractRowItem.Answer;
-                    
-                      rowViewItem.SetBackgroundResource(Resource.Drawable.grid_headerItem);
-
-                      rowViewItem.Enabled = abstractRowItem.Enabled;
-
-                      if (abstractRowItem.Enabled)
-                      {
-                          rowViewItem.Click += new EventHandler(rowViewItem_Click);
-                          if (!abstractRowItem.Valid)
-                              rowViewItem.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
-                          else if (abstractRowItem.Answered)
-                              rowViewItem.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
-                      }
-
-                      rowViewItem.SetTag(Resource.Id.Index, rosterItem.RowItems.IndexOf(abstractRowItem));
-                      rowViewItem.SetTag(Resource.Id.PrpagationKey, abstractRowItem.PropagationKey.ToString());*/
                     th.AddView(rowViewItem);
                 }
 
@@ -157,6 +140,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
         }
 
+        void column_Click(object sender, EventArgs e)
+        {
+            var key = Guid.Parse(((TextView) sender).GetTag(Resource.Id.ScreenId).ToString());
+            var instructionsBuilder = new AlertDialog.Builder(this.Activity);
+            instructionsBuilder.SetMessage(Model.Header.First(h=>h.PublicKey==key).Instructions);
+            
+            instructionsBuilder.Show();
+
+            
+        }
         void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
             /*   var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
