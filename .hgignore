@@ -441,3 +441,6 @@ RavenQuestionnaire.Web/Main.Core/obj/*
 RavenQuestionnaire.Web/Web.CAPI/Bin/*
 RavenQuestionnaire.Web/Web.Headquarter/Bin/*
 RavenQuestionnaire.Web/Main.Core/obj/*
+
+*.ncrunchsolution.user
+_NCrunch_*
