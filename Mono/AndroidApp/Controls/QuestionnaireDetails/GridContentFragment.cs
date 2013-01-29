@@ -49,46 +49,57 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+            LinearLayout top = new LinearLayout(inflater.Context);
+            top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                              ViewGroup.LayoutParams.FillParent);
+            top.Orientation = Orientation.Vertical;
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            top.AddView(breadcrumbs);
+
             ScrollView sv = new ScrollView(inflater.Context);
             sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
+                                                             ViewGroup.LayoutParams.WrapContent);
             LinearLayout ll = new LinearLayout(inflater.Context);
             ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
 
-            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
-            breadcrumbs.SetPadding(0, 0, 0, 10);
-            ll.AddView(breadcrumbs);
+          
             for (int i = 0; i < Model.Header.Count; i = i + 2)
             {
                 var count = Math.Min(Model.Header.Count - i, 2);
                 BuildTable(inflater.Context, ll, i, count);
             }
             sv.AddView(ll);
-            return sv;
+            top.AddView(sv);
+            return top;
         }
 
         protected void BuildTable(Context context, LinearLayout ll, int index, int count)
         {
             TableLayout tl = new TableLayout(context);
-            tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+            
+            var layout= new TableLayout.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.WrapContent);
-            tl.StretchAllColumns = true;
+            layout.SetMargins(0, 0, 0, 10);
+            
+            tl.LayoutParameters = layout;
 
+            tl.StretchAllColumns = true;
             CreateHeader(context, tl, index,count);
             CreateBody(context, tl , index,count);
 
-
+            
             ll.AddView(tl);
         }
 
         protected void CreateHeader(Context context, TableLayout tl, int index, int count)
         {
             TableRow th = new TableRow(context);
+         //   th.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             TextView first = new TextView(context);
             AssignHeaderStyles(first);
-            first.SetBackgroundResource(Resource.Drawable.grid_headerItem);
             th.AddView(first);
 
             foreach (HeaderItem headerItem in Model.Header.Skip(index).Take(count))
@@ -105,8 +116,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                    
                 }
                 column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
+           //     column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
                 AssignHeaderStyles(column);
-                column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+                
                 th.AddView(column);
             }
 
@@ -123,14 +135,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.ScreenName;
-                // AssignHeaderStyles(first);
+                AlignTableCell(first);
                 th.AddView(first);
-
+               
                 foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
                 {
                     RosterQuestionView rowViewItem = new RosterQuestionView(context,
                                                                             context as IMvxBindingActivity,
                                                                             abstractRowItem as QuestionViewModel);
+                    AlignTableCell(rowViewItem);
                     rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
                     th.AddView(rowViewItem);
                 }
@@ -195,12 +208,31 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         protected void AssignHeaderStyles(TextView tv)
         {
-       //     tv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
+         //   tv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.FillParent);
+         /*   var layout = new TableLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.WrapContent,
+                                    ViewGroup.LayoutParams.WrapContent);
+            layout.Weight =(float)0.3;
+            tv.LayoutParameters = layout;*/
             tv.Gravity = GravityFlags.Center;
+
             tv.SetPadding(10,10,10,10);
             tv.TextSize = 20;
+            tv.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+            AlignTableCell(tv);
             
         }
+       
+        protected void AlignTableCell(View view)
+        {
+
+            var layout = new TableRow.LayoutParams(0,
+                                       ViewGroup.LayoutParams.FillParent);
+            
+           // layout.Weight =1;
+            view.LayoutParameters = layout;
+        }
+
         protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
 
