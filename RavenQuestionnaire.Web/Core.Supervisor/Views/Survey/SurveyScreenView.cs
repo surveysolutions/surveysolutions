@@ -44,16 +44,20 @@ namespace Core.Supervisor.Views.Survey
         {
             this.QuestionnairePublicKey = doc.PublicKey;
             this.PublicKey = currentGroup.PublicKey;
-            this.Title = currentGroup.Title;
+            this.Title = doc.Title;
             this.Status = doc.Status;
             this.Description = currentGroup.Description;
             this.Navigation = navigation;
+            this.Responsible = doc.Responsible;
 
             var validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
             validator.Execute(doc);
             this.Screens = new List<SurveyScreen>();
-            this.BuildScreenContent(doc, currentGroup, scope);
+            this.BuildScreenContent(doc, currentGroup, scope);            
+            this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status, s.ChangeDate)).ToList();
         }
+
+        public UserLight Responsible { get; set; }
 
         /// <summary>
         /// Gets or sets Screens.
@@ -103,6 +107,10 @@ namespace Core.Supervisor.Views.Survey
         /// </summary>
         public ScreenNavigationView Navigation { get; set; }
 
+        public UserLight User { get; set; }
+
+        public List<ChangeStatusHistoryView> StatusHistory { get; set; }
+
         /// <summary>
         /// The build screen content.
         /// </summary>
@@ -117,8 +125,12 @@ namespace Core.Supervisor.Views.Survey
         /// </param>
         private void BuildScreenContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, QuestionScope scope)
         {
-            var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
-            validator.Execute(doc);
+            if (SurveyStatus.Unassign.PublicId != doc.Status.PublicId &&
+                SurveyStatus.Initial.PublicId != doc.Status.PublicId)
+            {
+                var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
+                validator.Execute(doc);
+            }
 
             this.Group = new CompleteGroupMobileView()
             {
@@ -150,7 +162,7 @@ namespace Core.Supervisor.Views.Survey
                 var subGroups = node.Group.Children.OfType<ICompleteGroup>().Reverse().ToArray();
                 foreach (var completeGroup in subGroups.Where(completeGroup => completeGroup.HasVisibleItemsForScope(scope)))
                 {
-                    validator.Execute(completeGroup);
+                    //validator.Execute(completeGroup);
                     treeStack.Push(new NodeWithLevel(completeGroup, node.Level + 1));
                 }
             }
@@ -176,16 +188,11 @@ namespace Core.Supervisor.Views.Survey
                 {
                     screen.Key.PropagationKey = Guid.Empty;
                 }
-
-                //if (screen.Questions.Count > 0)
-                //{
-                    this.Screens.Add(screen);
-                //}
+                
+                this.Screens.Add(screen);
             }
         }
 
         #endregion
-
-        public UserLight User { get; set; }
     }
 }

@@ -37,7 +37,17 @@ ko.bindingHandlers.popover = {
                 ko.applyBindings(viewModel, thePopover);
             });  
         }
-    };
+};
+
+ko.bindingHandlers.date = {
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor(),
+            allBindings = allBindingsAccessor();
+        var valueUnwrapped = ko.utils.unwrapObservable(value);
+        var pattern = allBindings.datePattern || 'MM/dd/yyyy';
+        $(element).text(valueUnwrapped.toString(pattern));
+    }
+};
 
 Date.prototype.mmddyyyy = function () {
     var yyyy = this.getFullYear().toString();
@@ -93,6 +103,9 @@ Date.prototype.mmddyyyy = function () {
         self.isCurrent = ko.observable(false);
         self.level = level * 1;
         self.totals = totals;
+        self.getHref = function() {
+            return '#/group/' + self.key.publicKey + '/' + self.key.propagatekey;
+        };
     };
 
     var ScreenCaption = function(key, title) {
@@ -531,22 +544,44 @@ Date.prototype.mmddyyyy = function () {
         self.comment = comment;
     };
 
+    var StatusHistory = function (user, status, date, comment) {
+        var self = this;
+        self.user = user;
+        self.status = status;
+        self.date = parseDate(date);
+        self.comment = comment;
+    };
 
+    var parseDate = function(date) {
+        return new Date(parseInt(date.substr(6)));
+    };
+    
     // our main view model
     var SurveyModel = function (questionnaire) {
+
         var self = this;
 
+        self.statusHistory = ko.utils.arrayMap(questionnaire.StatusHistory, function (history) {
+            return new StatusHistory(history.UserName, history.StatusName, history.ChangeDate, history.Comment);
+        });
+        
         self.showMode = ko.observable('all');
         self.isMenuHidden = ko.observable(false);
 
         self.title = questionnaire.Title;
 
         self.user = new User(questionnaire.User.Id, questionnaire.User.Name);
+        if (!!questionnaire.Responsible) {
+            self.responsible = new User(questionnaire.Responsible.Id, questionnaire.Responsible.Name);
+        } else {
+            self.responsible = new User(empty, 'nobody');
+        }
+        
+        
         currentUser = self.user;
         
         self.status = new Status(questionnaire.Status.PublicId, questionnaire.Status.Name, questionnaire.ChangeComment);
 
-        // map array of passed in todos to an observableArray of Todo objects
         self.menu = ko.observableArray(ko.utils.arrayMap(questionnaire.Navigation.Menu, function (item) {
             return new MenuItem(new Key(item.Key.PublicKey, item.Key.PropagationKey, item.Key.IsPropagated),
                                 item.GroupText,
@@ -618,6 +653,9 @@ Date.prototype.mmddyyyy = function () {
 
             ko.utils.arrayForEach(self.screens(), function (item) {
                 item.isVisible(false);
+                ko.utils.arrayForEach(item.captions, function (caption) {
+                    caption.isVisible(true);
+                });
             });
 
             ko.utils.arrayForEach(answerMap, function (item) {
@@ -632,8 +670,6 @@ Date.prototype.mmddyyyy = function () {
                 ko.utils.arrayForEach(self.menu(), function (item) {
                     item.isCurrent(false);
                 });
-
-                //self.currentScreenKey(undefined);
             }
 
             switch (self.showMode()) {
@@ -658,10 +694,6 @@ Date.prototype.mmddyyyy = function () {
                     });
 
                 case 'flaged':
-                    /*ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isFlaged() ? true : false);
-                    });*/
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.flagedCount() > 0);
                     });
@@ -670,10 +702,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.flagedCount() > 0;
                     });
                 case 'answered':
-                    /*ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isAnswered() ? true : false);
-                    });*/
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.answeredCount() > 0);
                     });
@@ -682,10 +710,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.answeredCount() > 0;
                     });
                 case 'invalid':
-                    /*ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isValid() ? true : false);
-                    });*/
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.invalidCount() > 0);
                     });
@@ -694,10 +718,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.invalidCount() > 0;
                     });
                 case 'supervisor':
-                    /*ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(!item.isReadonly ? true : false);
-                    });
-                    */
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.editableCount() > 0);
                     });
@@ -706,10 +726,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.editableCount() > 0;
                     });
                 case 'enabled':
-                    /*ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isEnabled ? true : false);
-                    });*/
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.enabledCount() > 0);
                     });
@@ -723,18 +739,6 @@ Date.prototype.mmddyyyy = function () {
                     });
             }
         });
-
-        self.selectMenuItem = function (menuItem) {
-            ko.utils.arrayForEach(this.menu(), function (item) {
-                item.isCurrent(false);
-            });
-
-            self.currentScreenKey(menuItem.key);
-
-            menuItem.isCurrent(true);
-
-            self.showMode('group');
-        } .bind(self);
 
         self.flagAnswer = function (answer, event) {
             answer.isFlaged(!answer.isFlaged());
@@ -846,7 +850,32 @@ Date.prototype.mmddyyyy = function () {
         });
 
         // set up filter routing
-        Router({ '/:filter': viewModel.showMode }).init();
+        Router({
+            '/:filter': viewModel.showMode,
+            '/group/:groupId/:propId': function (groupId, propId) {
+                console.log('group was selected');
+                
+                ko.utils.arrayForEach(viewModel.menu(), function (item) {
+                    item.isCurrent(false);
+                });
+
+                var key = groupId + propId;
+                
+                if (keyMap[key] != undefined) {
+                    var id = keyMap[key];
+                    
+                    var menuItem = ko.utils.arrayFirst(viewModel.menu(), function(item) {
+                        return item.key.id == id;
+                    });
+                    
+                    viewModel.currentScreenKey(menuItem.key);
+                    
+                    menuItem.isCurrent(true);
+                    
+                    viewModel.showMode('group');
+                }
+            }
+        }).init();
     });
 
 } ());

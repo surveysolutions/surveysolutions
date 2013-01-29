@@ -447,3 +447,7 @@ tr td .btn-mini,
 .btn-group > .btn-mini + .dropdown-toggle {
 	 padding: 1px 3px;
 }
+ .comment-table td,
+ .comment-table th {
+     word-break: break-all;
+ }
