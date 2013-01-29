@@ -297,6 +297,7 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
     <EmbeddedResource Include="initEvent.txt" />
     <Content Include="Properties\AndroidManifest.xml" />
     <AndroidResource Include="Resources\Layout\ScreenNavigationView.axml" />

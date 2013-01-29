@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -28,10 +29,12 @@ namespace AndroidApp.Bindings
         public override void SetValue(object value)
         {
             var status = (QuestionStatus) value;
-          
+
 
             int bgId = Resource.Drawable.questionShape;
-            if (!status.HasFlag(QuestionStatus.Valid))
+            if (!status.HasFlag(QuestionStatus.Enabled))
+                bgId = Resource.Drawable.questionDisabledShape;
+            else if (!status.HasFlag(QuestionStatus.Valid))
                 bgId = Resource.Drawable.questionInvalidShape;
             else if (status.HasFlag(QuestionStatus.Answered))
                 bgId = Resource.Drawable.questionAnsweredShape;
@@ -41,7 +44,9 @@ namespace AndroidApp.Bindings
             var llWrapper = _control.FindViewById<LinearLayout>(Resource.Id.llWrapper);
 
             if (llWrapper != null)
+            {
                 llWrapper.EnableDisableView(status.HasFlag(QuestionStatus.Enabled));
+            }
         }
 
         public override Type TargetType
