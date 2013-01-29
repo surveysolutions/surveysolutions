@@ -9,6 +9,8 @@
 namespace RavenQuestionnaire.Web
 {
     using System;
+    using System.Net;
+    using System.Net.Sockets;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -132,10 +134,29 @@ namespace RavenQuestionnaire.Web
         {
             if (!correctlyInitialyzed)
             {
-                base.Response.Write("Sorry, Application can't handle this!<br/>");
-                base.Response.Write(intializationException.ToString().Replace(Environment.NewLine, "<br/>"));
+                base.Response.Write("Sorry, Application can't handle this!");
+
+                string errorDescription = GetUserFriendlyErrorDescription(intializationException);
+                if (errorDescription != null)
+                {
+                    base.Response.Write(string.Format("<br/><br/><i>{0}</i>", errorDescription));
+                }
+
                 this.CompleteRequest();
             }
+        }
+
+        private static string GetUserFriendlyErrorDescription(Exception exception)
+        {
+            bool isRavenNotAvailable =
+                exception is WebException &&
+                exception.InnerException is SocketException &&
+                ((SocketException)exception.InnerException).ErrorCode == 10061;
+
+            if (isRavenNotAvailable)
+                return "Seems like RavenDB is not available.";
+
+            return "Please see log file for details or (better) debug the application.";
         }
 
         // <summary>
