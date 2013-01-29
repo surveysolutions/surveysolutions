@@ -130,6 +130,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             foreach (var rosterItem in Model.Rows)
             {
+                if (!rosterItem.Enabled)
+                    continue;
                 TableRow th = new TableRow(context);
                 Button first = new Button(context);
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
@@ -137,7 +139,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 first.Text = rosterItem.ScreenName;
                 AlignTableCell(first);
                 th.AddView(first);
-               
+
                 foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
                 {
                     RosterQuestionView rowViewItem = new RosterQuestionView(context,

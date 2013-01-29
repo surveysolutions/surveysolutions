@@ -94,6 +94,12 @@ namespace AndroidApp.EventHandlers
                     continue;
                 doc.SetQuestionStatus(ParseCrap(item.Key), item.Value.Value);
             }
+            foreach (var item in evnt.Payload.ResultGroupsStatus)
+            {
+                if (!item.Value.HasValue)
+                    continue;
+                doc.SetScreenStatus(ParseCrap(item.Key), item.Value.Value);
+            }
         }
         #endregion
         private ItemPublicKey ParseCrap(string key)

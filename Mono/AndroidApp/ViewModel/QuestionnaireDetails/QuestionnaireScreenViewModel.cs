@@ -27,7 +27,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;
         private readonly Func<string> screenNameValue;
 
-        public QuestionnaireScreenViewModel(Guid questionnaireId, Func<string> screenName, string title,
+        public QuestionnaireScreenViewModel(Guid questionnaireId, Func<string> screenName, string title,bool enabled,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                             Func<IEnumerable<ItemPublicKey>> siblings,
                                             IEnumerable<IQuestionnaireViewModel> breadcrumbs,
@@ -42,14 +42,15 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             chaptersValue = chapters;
             screenNameValue = screenName;
             Title = title;
+            Enabled = enabled;
         }
 
-        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title,
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                             IEnumerable<ItemPublicKey> siblings,
                                             IEnumerable<IQuestionnaireViewModel> breadcrumbs,
                                             Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
-            : this(questionnaireId, () => screenName, title, screenId, items, () => siblings, breadcrumbs, chapters, updateBreadBrumbs)
+            : this(questionnaireId, () => screenName, title, enabled, screenId, items, () => siblings, breadcrumbs, chapters, updateBreadBrumbs)
         {
         }
 
@@ -116,5 +117,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             }
         }
 
+        public bool Enabled { get; private set; }
+        public void SetEnabled(bool enabled)
+        {
+            if (Enabled == enabled)
+                return;
+            Enabled = enabled;
+            RaisePropertyChanged("Enabled");
+        }
     }
 }

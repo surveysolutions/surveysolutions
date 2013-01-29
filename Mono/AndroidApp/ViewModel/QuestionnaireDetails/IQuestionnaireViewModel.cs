@@ -10,11 +10,13 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         string Title { get; }
         string ScreenName { get; }
         ItemPublicKey ScreenId { get; }
-         int Total { get; }
-         int Answered { get;  }
+        int Total { get; }
+        int Answered { get; }
         IEnumerable<ItemPublicKey> Siblings { get; }
         IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; }
         IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
         void UpdateCounters();
+        bool Enabled { get; }
+        void SetEnabled(bool enabled);
     }
 }

@@ -22,7 +22,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         #region Implementation of IQuestionnaireViewModel
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> rowsValue;
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, IEnumerable<ItemPublicKey> siblings,
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId,bool enabled, IEnumerable<ItemPublicKey> siblings,
             IEnumerable<IQuestionnaireViewModel> breadcrumbs, Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, IList<HeaderItem> header
             , Func<IEnumerable<QuestionnaireScreenViewModel>> rows)
         {
@@ -35,7 +35,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             chaptersValue = chapters;
             rowsValue = rows;
             Header = header;
-            
+            Enabled = enabled;
         }
 
         public Guid QuestionnaireId { get; private set; }
@@ -70,6 +70,19 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 Answered = answered;
                 this.RaisePropertyChanged("Answered");
             }
+        }
+
+        public bool Enabled { get; private set; }
+        public void SetEnabled(bool enabled)
+        {
+            if (Enabled == enabled)
+                return;
+            Enabled = enabled;
+            foreach (var model in Rows)
+            {
+                model.SetEnabled(enabled);
+            }
+            RaisePropertyChanged("Enabled");
         }
 
         public IList<HeaderItem> Header { get; private set; }
