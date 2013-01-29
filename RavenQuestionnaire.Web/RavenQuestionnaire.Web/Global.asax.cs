@@ -37,6 +37,8 @@ namespace RavenQuestionnaire.Web
         /// </summary>
         private static bool correctlyInitialyzed;
 
+        private static Exception intializationException;
+
         #endregion
 
         #region Public Methods and Operators
@@ -106,6 +108,7 @@ namespace RavenQuestionnaire.Web
             {
                 this.logger.Fatal("Initialization failed", e);
                 correctlyInitialyzed = false;
+                intializationException = e;
 
                 // due to the bug in iis7 moved to Application_BeginRequest
                 /*this.BeginRequest += (sender, args) =>
@@ -129,7 +132,8 @@ namespace RavenQuestionnaire.Web
         {
             if (!correctlyInitialyzed)
             {
-                base.Response.Write("Sorry, Application cann't handle this!");
+                base.Response.Write("Sorry, Application can't handle this!<br/>");
+                base.Response.Write(intializationException.ToString().Replace(Environment.NewLine, "<br/>"));
                 this.CompleteRequest();
             }
         }
