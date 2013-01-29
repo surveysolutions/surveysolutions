@@ -22,6 +22,7 @@ _NCrunch_*
 ClientDependency
 
 *.log
+success.marker
 
 
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/Content/Bootstrap/*
@@ -82,10 +83,6 @@ RavenQuestionnaire.Web/Main.Core/Events/ZipFileData.cs
 RavenQuestionnaire.Web/Main.Core/Events/ExportImportEvents.cs
 RavenQuestionnaire.Web/Core.Supervisor.Tests/StyleCop.Cache
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.Tests/Web.CAPI.Tests.csproj
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/success.marker
-RavenQuestionnaire.Web/Web.Supervisor/success.marker
-RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/success.marker
-RavenQuestionnaire.Web/Web.Headquarter/App_Data/success.marker
 RavenQuestionnaire.Web/RavenQuestionnaire.Web/Content/Bootstrap/*
 RavenQuestionnaire.Web/RavenQuestionnaire.Web.sln.DotSettings.user
 RavenQuestionnaire.Web/*.trx
