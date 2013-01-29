@@ -130,9 +130,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             foreach (var rosterItem in Model.Rows)
             {
-                if (!rosterItem.Enabled)
-                    continue;
+                
                 TableRow th = new TableRow(context);
+                if (!rosterItem.Enabled)
+                    th.Visibility = ViewStates.Gone;
+                rosterItem.PropertyChanged += (s, e) =>
+                    {
+                        if (e.PropertyName != "Enabled")
+                            return;
+                        var item = s as QuestionnaireScreenViewModel;
+                        if (item == null)
+                            return;
+                        var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
+                        th.Visibility = visibility;
+                    };
                 Button first = new Button(context);
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
