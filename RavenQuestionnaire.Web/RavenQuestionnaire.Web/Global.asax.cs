@@ -134,6 +134,8 @@ namespace RavenQuestionnaire.Web
         {
             if (!correctlyInitialyzed)
             {
+                base.Response.Write("<html>");
+
                 base.Response.Write("Sorry, Application can't handle this!");
 
                 string errorDescription = GetUserFriendlyErrorDescription(intializationException);
@@ -141,6 +143,8 @@ namespace RavenQuestionnaire.Web
                 {
                     base.Response.Write(string.Format("<br/><br/><i>{0}</i>", errorDescription));
                 }
+
+                base.Response.Write("</html>");
 
                 this.CompleteRequest();
             }
