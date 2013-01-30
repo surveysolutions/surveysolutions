@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Main.Core.Entities.SubEntities;
 using Main.Core.ExpressionExecutors.ExpressionExtentions;
 using NCalc;
 
@@ -99,7 +100,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.Validation
                         return;
                     }
 
-                    args.Result = targetQuestion.AnswerObject;
+                    args.Result = TryToMakeType(targetQuestion);
                 };
 
             e.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains; ////support for multioption
@@ -117,5 +118,22 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails.Validation
         }
 
         #endregion
+        /// <summary>
+        /// very very bad method, in order to make a hot fix of numeric value
+        /// TODO clean up this shit
+        /// </summary>
+        /// <param name="question"></param>
+        /// <returns></returns>
+        protected object TryToMakeType(QuestionViewModel question)
+        {
+            if (question.QuestionType != QuestionType.Numeric)
+            {
+                return question.AnswerObject;
+            }
+            int val;
+            if (int.TryParse(question.AnswerObject, out val))
+                return val;
+            return question.AnswerObject;
+        }
     }
 }
