@@ -18,7 +18,7 @@
     <TextView
          android:id="@+id/txtSurveyName"
         android:textColor="#000"
-       android:textSize="22px"
+         android:textSize="22dp"
          android:layout_alignParentLeft="true"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
@@ -34,8 +34,8 @@
       
         android:background="@drawable/counterroundshape"
      
-        android:layout_width="20px"
-        android:layout_height="20px"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         local:MvxBind="{'Text':{'Path':'Items.Count'}}"/>
   </RelativeLayout>
   <!---->

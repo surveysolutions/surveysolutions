@@ -27,7 +27,7 @@
                android:layout_width="200px"
                android:layout_height="fill_parent"
                android:gravity=    "center"
-               android:textSize="20px"
+               android:textSize="20dp"
                local:MvxBind="{'Text':{'Path':'Status'}}"/>
       <Mvx.MvxBindableLinearLayout
            android:layout_width="fill_parent"
