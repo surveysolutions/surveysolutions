@@ -15,7 +15,10 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
         {
             this.PublicKey = document.PublicKey;
-            this.Title = document.Title;
+            this.Title = string.Format("{0} - {1}", document.Title,
+                                       string.Concat(
+                                           document.Find<ICompleteQuestion>(q => q.Featured).Select(
+                                               q => q.GetAnswerString())));
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             Templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
