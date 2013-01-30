@@ -134,20 +134,28 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 TableRow th = new TableRow(context);
                 if (!rosterItem.Enabled)
                     th.Visibility = ViewStates.Gone;
-                rosterItem.PropertyChanged += (s, e) =>
-                    {
-                        if (e.PropertyName != "Enabled")
-                            return;
-                        var item = s as QuestionnaireScreenViewModel;
-                        if (item == null)
-                            return;
-                        var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
-                        th.Visibility = visibility;
-                    };
+               
                 Button first = new Button(context);
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.ScreenName;
+                rosterItem.PropertyChanged += (s, e) =>
+                {
+                    var item = s as QuestionnaireScreenViewModel;
+                    if (item == null)
+                        return;
+                    if (e.PropertyName == "Enabled")
+                    {
+
+                        var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
+                        th.Visibility = visibility;
+                        return;
+                    }
+                    if (e.PropertyName == "ScreenName")
+                    {
+                        first.Text = item.ScreenName;
+                    }
+                };
                 AlignTableCell(first);
                 th.AddView(first);
 

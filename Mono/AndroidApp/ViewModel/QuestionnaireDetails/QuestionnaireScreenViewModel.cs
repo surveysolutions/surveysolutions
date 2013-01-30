@@ -25,13 +25,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;
-        private readonly Func<string> screenNameValue;
-
-        public QuestionnaireScreenViewModel(Guid questionnaireId, Func<string> screenName, string title,bool enabled,
-                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            Func<IEnumerable<ItemPublicKey>> siblings,
-                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string title, bool enabled,
+                                           ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                           Func<IEnumerable<ItemPublicKey>> siblings,
+                                           IEnumerable<IQuestionnaireViewModel> breadcrumbs,
+                                           Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
         {
 
             QuestionnaireId = questionnaireId;
@@ -40,16 +38,30 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             sibligsValue = siblings;
             Breadcrumbs = updateBreadBrumbs ? breadcrumbs.Union(new IQuestionnaireViewModel[1] { this }) : breadcrumbs.ToList();
             chaptersValue = chapters;
-            screenNameValue = screenName;
             Title = title;
             Enabled = enabled;
 
             foreach (var item in Items)
             {
                 item.PropertyChanged += item_PropertyChanged;
-                
+
             }
 
+        }
+
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
+                                           ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                           IEnumerable<ItemPublicKey> siblings,
+                                           IEnumerable<IQuestionnaireViewModel> breadcrumbs,
+                                           Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
+            : this(questionnaireId,  title, enabled, screenId, items, () => siblings, breadcrumbs, chapters, updateBreadBrumbs)
+        {
+            this.ScreenName = screenName;
+        }
+
+        public string ScreenName
+        {
+            get; private set; //   get { return screenNameValue(); }
         }
 
         void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -69,15 +81,12 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 UpdateCounters();
             }
         }
-
-        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<ItemPublicKey> siblings,
-                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                            Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, bool updateBreadBrumbs)
-            : this(questionnaireId, () => screenName, title, enabled, screenId, items, () => siblings, breadcrumbs, chapters, updateBreadBrumbs)
+        public void UpdateScreenName(string screenName)
         {
+            this.ScreenName = screenName;
+            RaisePropertyChanged("ScreenName");
         }
+
 
         /*
         void question_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -102,10 +111,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         public string Title { get; private set; }
 
-        public string ScreenName
-        {
-            get { return screenNameValue(); }
-        }
+       
         public int Answered { get; private set; }
         public int Total { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }

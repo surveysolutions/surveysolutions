@@ -97,7 +97,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             else if (group.PropagationPublicKey.HasValue)
             {
                 var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(PublicKey, () => GetPropagatebleGroupTitle(group.PropagationPublicKey.Value), group.Title,
+                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title,
                     group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
@@ -115,7 +115,32 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         protected void UpdateQuestionHash(QuestionViewModel question)
         {
             this.Questions.Add(question.PublicKey, question);
+            if (question.Capital)
+            {
+                question.PropertyChanged += question_PropertyChanged;
+            }
         }
+
+        void question_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "AnswerString")
+                return;
+            var question = sender as QuestionViewModel;
+            if (question == null || !question.Capital || !question.PublicKey.PropagationKey.HasValue)
+                return;
+            var screens =
+                Screens.Where(q => q.Key.PropagationKey == question.PublicKey.PropagationKey).Select(
+                    q => q.Value).OfType<QuestionnaireScreenViewModel>();
+            var newTitle = string.Concat(
+                Questions.Where(q => q.Key.PropagationKey == question.PublicKey.PropagationKey && q.Value.Capital).
+                    Select(
+                        q => q.Value.AnswerString));
+            foreach (var screen in screens)
+            {
+                screen.UpdateScreenName(newTitle);
+            }
+        }
+
         protected void CreateGrid(ICompleteGroup group, List<ICompleteGroup> rout)
         {
             ItemPublicKey rosterKey = new ItemPublicKey(group.PublicKey, null);
@@ -174,7 +199,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
               
             }
             var screen = new QuestionnaireScreenViewModel(PublicKey,
-                                                          () => GetPropagatebleGroupTitle(propagationKey),
                                                           template.Title, true,
                                                           key, items,
                                                           () => GetSiblings(key.PublicKey), bradCrumbs,
@@ -239,13 +263,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                     s => s.Value).OfType<QuestionnaireScreenViewModel>().ToList();
         }
 
-        protected string GetPropagatebleGroupTitle(Guid propagationKey)
-        {
-            return
-                string.Concat(
-                    Questions.Where(q => q.Key.PropagationKey == propagationKey && q.Value.Capital).Select(
-                        q => q.Value.AnswerString));
-        }
+       
       /*  protected void AddPropagatebleBreadCrumb(IList<QuestionnaireNavigationPanelItem> baseRout, ItemPublicKey key)
         {
             var last = baseRout.Last();
