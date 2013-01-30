@@ -43,6 +43,31 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             screenNameValue = screenName;
             Title = title;
             Enabled = enabled;
+
+            foreach (var item in Items)
+            {
+                item.PropertyChanged += item_PropertyChanged;
+                
+            }
+
+        }
+
+        void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var question = sender as QuestionViewModel;
+            if (question != null)
+            {
+                if (e.PropertyName != "Status")
+                    return;
+                UpdateCounters();
+            }
+            var group = sender as QuestionnaireNavigationPanelItem;
+            if (group != null)
+            {
+                if (e.PropertyName != "Answered" &&  e.PropertyName != "Total")
+                    return;
+                UpdateCounters();
+            }
         }
 
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
@@ -54,6 +79,25 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         {
         }
 
+        /*
+        void question_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+            if (e.PropertyName != "Status")
+                return;
+            var question = sender as QuestionViewModel;
+            if (question == null)
+                return;
+            var screen =
+                this.Screens.Select(s => s.Value).OfType<QuestionnaireScreenViewModel>().FirstOrDefault(s => s.Items.Any(i => i.PublicKey == question.PublicKey));
+            if (screen == null)
+                return;
+            var breadcrumbs = screen.Breadcrumbs.ToList();
+            for (int i = breadcrumbs.Count - 1; i >= 0; i--)
+            {
+                breadcrumbs[i].UpdateCounters();
+            }
+        }*/
         public Guid QuestionnaireId { get; private set; }
 
         public string Title { get; private set; }
@@ -79,7 +123,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
-        public void UpdateCounters()
+        protected void UpdateCounters()
         {
             var total = 0;
             var answered = 0;
@@ -99,9 +143,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
                 {
-                    var bigVersion = group.Screen;
-                    total = total + bigVersion.Total;
-                    answered = answered + bigVersion.Answered;
+                    total = total + group.Total;
+                    answered = answered + group.Answered;
                 }
 
             }

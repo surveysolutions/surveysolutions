@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -13,7 +14,7 @@ using Android.Widget;
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
 
-    public interface IQuestionnaireItemViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel
+    public interface IQuestionnaireItemViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel, INotifyPropertyChanged
     {
         ItemPublicKey PublicKey { get; }
         string Text { get; }

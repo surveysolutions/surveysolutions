@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel
+    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel, INotifyPropertyChanged
     {
         Guid QuestionnaireId { get; }
         string Title { get; }
@@ -15,7 +15,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         IEnumerable<ItemPublicKey> Siblings { get; }
         IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; }
         IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
-        void UpdateCounters();
         bool Enabled { get; }
         void SetEnabled(bool enabled);
     }

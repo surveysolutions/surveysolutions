@@ -38,7 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.target.Adapter = this;
         }
 
-       
+
         public override int Count
         {
             get { return screensHolder.Count + (isRoot ? 1 : 0); }

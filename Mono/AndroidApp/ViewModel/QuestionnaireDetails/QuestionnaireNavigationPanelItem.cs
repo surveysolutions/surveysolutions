@@ -15,35 +15,59 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel,
                                                     IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(ItemPublicKey screenPublicKey, string title, int total, int answered,
-                                                bool enabled, Func<IQuestionnaireViewModel> getFullScreen)
+        public QuestionnaireNavigationPanelItem(ItemPublicKey publicKey, Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
         {
-            PublicKey = screenPublicKey;
-            Text = title;
-            Total = total;
-            Answered = answered;
-            Enabled = enabled;
+            this.PublicKey = publicKey;
             this.getFullScreen = getFullScreen;
         }
 
-        private readonly Func<IQuestionnaireViewModel> getFullScreen;
+        private readonly Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen;
+
         public ItemPublicKey PublicKey { get; private set; }
-        public string Text { get; private set; }
+       
 
         public IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                        this.Text, this.Total, this.Answered, this.Enabled,
                                                         getFullScreen);
         }
+        public string Text { get { return Screen.ScreenName; } }
 
-        public bool Enabled { get; private set; }
-        public int Total { get; private set; }
-        public int Answered { get; private set; }
-
-        public IQuestionnaireViewModel Screen
+        public bool Enabled
         {
-            get { return getFullScreen(); }
+            get { return Screen.Enabled; }
         }
+
+        public int Total
+        {
+            get { return Screen.Total; }
+        }
+
+        public int Answered
+        {
+            get { return Screen.Answered; }
+        }
+
+        protected IQuestionnaireViewModel Screen
+        {
+            get
+            {
+                if (screen == null)
+                {
+                    screen = getFullScreen(this.PublicKey);
+                    screen.PropertyChanged += screen_PropertyChanged;
+                }
+                return screen;
+            }
+        }
+
+        private void screen_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                return;
+            RaisePropertyChanged(e.PropertyName);
+        }
+
+        private IQuestionnaireViewModel screen;
     }
 }
