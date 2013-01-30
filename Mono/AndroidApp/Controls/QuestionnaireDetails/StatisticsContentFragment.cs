@@ -62,8 +62,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                                                      (s) => s.Text,
                                                                                      (s) => s.AnswerString
                                                                                  });
-                answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                                                    ViewGroup.LayoutParams.FillParent);
+                answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                                    ViewGroup.LayoutParams.WrapContent);
                 answeredPopup.SetView(answeredQuestionsView);
                 //  setAnswerPopup.Show();
                 answeredDilog = answeredPopup.Create();
@@ -87,8 +87,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                                                  {
                                                                                      (s) => s.Text
                                                                                  });
-                unansweredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                                                    ViewGroup.LayoutParams.FillParent);
+                unansweredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                                    ViewGroup.LayoutParams.WrapContent);
                 unansweredPopup.SetView(unansweredQuestionsView);
                 unansweredDilog = unansweredPopup.Create();
 
@@ -110,7 +110,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                                             (s)=> s.AnswerString,
                                                                             (s)=> s.ErrorMessage
                                                                         } );
-                invalidQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
+                invalidQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
                 invalidPopup.SetView(invalidQuestionsView);
                 //  setAnswerPopup.Show();
                 invaliDilog = invalidPopup.Create();

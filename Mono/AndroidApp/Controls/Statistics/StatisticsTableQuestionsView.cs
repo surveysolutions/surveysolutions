@@ -88,6 +88,8 @@ namespace AndroidApp.Controls.Statistics
         {
             cell.SetBackgroundResource(Resource.Drawable.cell_shape);
             cell.SetPadding(10,10,10,10);
+            var layout = new TableRow.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.FillParent);
+            cell.LayoutParameters = layout;
         }
 
        
