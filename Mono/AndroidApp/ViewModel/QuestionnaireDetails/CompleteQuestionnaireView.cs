@@ -10,8 +10,13 @@ using Main.Core.Entities.SubEntities.Complete;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView
+    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
     {
+        public CompleteQuestionnaireView(string publicKey)
+        {
+            this.PublicKey = Guid.Parse(publicKey); ;
+        }
+
         public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
         {
             this.PublicKey = document.PublicKey;
@@ -259,6 +264,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         private readonly QuestionnaireValidationExecutor validator;
         public string Title { get; private set; }
         public Guid PublicKey { get; private set; }
+        
         protected IEnumerable<QuestionnaireScreenViewModel> CollectPropagatedScreen(Guid publicKey)
         {
             return

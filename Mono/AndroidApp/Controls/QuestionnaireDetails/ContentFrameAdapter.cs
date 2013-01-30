@@ -22,19 +22,21 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     /// </summary>
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
-        private readonly Guid questionnaireId;
+     //   private readonly Guid questionnaireId;
         private readonly ViewPager target;
+        private readonly CompleteQuestionnaireView questionnaire;
         private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
-        public ContentFrameAdapter(FragmentManager fm, IQuestionnaireViewModel initScreen, ViewPager target)
+        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey screenId)
             : base(fm)
         {
-            this.questionnaireId = initScreen.QuestionnaireId;
+            this.questionnaire = questionnaire;
+          //  this.questionnaireId = questionnaire.PublicKey;
             this.target = target;
-            this.screensHolder = initScreen.Siblings.ToList();
-            this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.ScreenId == initScreen.ScreenId);
+            this.screensHolder = questionnaire.Screens[screenId].Siblings.ToList();
+            this.screenId = screenId;
+            this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId);
             this.target.Adapter = this;
         }
 
@@ -57,14 +59,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             Fragment fragment = null;
             if (position == screensHolder.Count && isRoot)
             {
-                fragment = new StatisticsContentFragment(questionnaireId);
+                fragment = new StatisticsContentFragment(questionnaire.PublicKey);
             }
             else
             {
 
                 var param = screensHolder[position];
-                var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                    new QuestionnaireScreenInput(questionnaireId, param));
+                var model = questionnaire.Screens[param];
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
@@ -97,11 +98,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             return -1;
         }
-        public void UpdateScreenData(IQuestionnaireViewModel initScreen, ItemPublicKey? newScreenId)
+        public void UpdateScreenData(ItemPublicKey? newScreenId)
         {
-            this.screensHolder = initScreen.Siblings.ToList();
-            this.screenId = initScreen.ScreenId;
-            this.isRoot = initScreen.Chapters.Any(s => s.ScreenId == initScreen.ScreenId);
+            var screenIdNotNull = newScreenId ?? this.questionnaire.Chapters.First().ScreenId;
+            this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
+            this.screenId = newScreenId;
+            this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
         }

@@ -18,10 +18,6 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
-        public QuestionnaireScreenViewModel(string completeQuestionnaireId)
-        {
-            QuestionnaireId = Guid.Parse(completeQuestionnaireId);
-        }
 
         private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
         private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;

@@ -71,8 +71,8 @@ namespace AndroidApp.ViewModel.Dashboard
                 return
                     new MvxRelayCommand(
                         () =>
-                        RequestNavigate<QuestionnaireScreenViewModel>(
-                            new { completeQuestionnaireId = this.PublicKey.ToString() }));
+                        RequestNavigate<CompleteQuestionnaireView>(
+                            new { publicKey = this.PublicKey.ToString() }));
             }
         }
 

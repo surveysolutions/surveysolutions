@@ -24,7 +24,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, IQuestionnaireViewModel>
+    public class QuestionnaireScreenViewFactory : IViewFactory<QuestionnaireScreenInput, CompleteQuestionnaireView>
     {
         private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
 
@@ -35,10 +35,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 
         #region Implementation of IViewFactory<QuestionnaireScreenInput,QuestionnaireScreenViewModel>
 
-        public IQuestionnaireViewModel Load(QuestionnaireScreenInput input)
+        public CompleteQuestionnaireView Load(QuestionnaireScreenInput input)
         {
-            var doc = this._documentStorage.Query().First();
-            return input.ScreenPublicKey.HasValue ? doc.Screens[input.ScreenPublicKey.Value] : doc.Screens.FirstOrDefault().Value;
+            return this._documentStorage.Query().First();
         }
 
         #endregion

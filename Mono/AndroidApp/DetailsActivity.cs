@@ -31,12 +31,10 @@ using Orientation = Android.Content.Res.Orientation;*/
 namespace AndroidApp
 {
     [Activity(Icon = "@drawable/capi")]
-    public class DetailsActivity : MvxSimpleBindingFragmentActivity<QuestionnaireScreenViewModel>
+    public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
-       
-
         protected ItemPublicKey? ScreenId;
-        protected Guid QuestionnaireId;
+    
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -63,7 +61,6 @@ namespace AndroidApp
             base.OnCreate(bundle);
             
             SetContentView(Resource.Layout.Details);
-            QuestionnaireId = ViewModel.QuestionnaireId;
             if (bundle != null)
             {
                 var savedScreen = bundle.GetString("ScreenId");
@@ -71,18 +68,18 @@ namespace AndroidApp
                     return;
                 ScreenId = ItemPublicKey.Parse(savedScreen);
             }
-            var model = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, ScreenId));
-            ViewModel = model as QuestionnaireScreenViewModel;
-            this.Title = model.Title;
+            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                new QuestionnaireScreenInput(ViewModel.PublicKey));
+            this.Title = ViewModel.Title;
 
             if (bundle == null)
             {
-                NavList.DataItems = model.Chapters;
+                NavList.DataItems = ViewModel.Chapters;
                 NavList.SelectItem(0);
             }
 
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, model, VpContent);
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
+                                              ViewModel.Chapters.FirstOrDefault().ScreenId);
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
         
@@ -111,9 +108,10 @@ namespace AndroidApp
                 VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
                 return;
             }
-            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-              new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
-            Adapter.UpdateScreenData(firstScreen, e.ScreenId);
+         /*   var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+              new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));*/
+          
+            Adapter.UpdateScreenData(e.ScreenId);
         }
         protected override void OnSaveInstanceState(Bundle outState)
         {

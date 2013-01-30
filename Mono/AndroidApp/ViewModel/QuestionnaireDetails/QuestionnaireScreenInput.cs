@@ -14,13 +14,11 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
     public class QuestionnaireScreenInput
     {
-        public QuestionnaireScreenInput(Guid questionnaireId, ItemPublicKey? screenPublicKey)
+        public QuestionnaireScreenInput(Guid questionnaireId)
         {
             QuestionnaireId = questionnaireId;
-            ScreenPublicKey = screenPublicKey;
         }
 
         public Guid QuestionnaireId { get; private set; }
-        public ItemPublicKey? ScreenPublicKey { get; private set; }
     }
 }
