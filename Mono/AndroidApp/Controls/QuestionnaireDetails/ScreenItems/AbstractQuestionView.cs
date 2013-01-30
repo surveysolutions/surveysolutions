@@ -174,6 +174,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             get { return this.FindViewById<TextView>(Resource.Id.tvComments); }
         }
+        protected TextView tvError
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvError); }
+        }
         protected EditText etComments
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }

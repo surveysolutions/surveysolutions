@@ -31,18 +31,22 @@ namespace AndroidApp.ViewModel.Statistics
         public StatisticsViewModel Load(StatisticsInput input)
         {
             var doc = this._documentStorage.Query().First();
+            var enabledQuestion =
+                doc.FindQuestion(
+                    q => q.Status.HasFlag(QuestionStatus.Enabled));
+            
             var answered =
-                doc.FindQuestion(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
+                enabledQuestion.Where(q => q.Status.HasFlag(QuestionStatus.Answered)).Select(
                     q =>
                     new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey),
                                                     q.Text,
                                                     q.AnswerString, "")).ToList();
-            var invalid = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
+            var invalid = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Valid)).Select(
                 q =>
                 new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
                                                 q.AnswerString, q.ValidationMessage)).ToList();
 
-            var unanswered = doc.FindQuestion(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
+            var unanswered = enabledQuestion.Where(q => !q.Status.HasFlag(QuestionStatus.Answered)).Select(
                 q =>
                 new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
                                                 q.AnswerString, "")).ToList();

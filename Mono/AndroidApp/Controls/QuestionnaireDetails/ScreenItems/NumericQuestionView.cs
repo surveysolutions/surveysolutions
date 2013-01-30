@@ -54,9 +54,21 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                       null, etAnswer.Text,
-                                                       Model.PublicKey.PropagationKey));
+            try
+            {
+                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                            null, etAnswer.Text,
+                                                            Model.PublicKey.PropagationKey));
+                tvError.Visibility = ViewStates.Gone;
+            }
+            catch (Exception ex)
+            {
+               // etAnswer.Text = Model.AnswerString;
+                tvError.Visibility = ViewStates.Visible;
+                etAnswer.Text = Model.AnswerString;
+                tvError.Text = (ex.InnerException??ex).Message;
+            }
+            
             etAnswer.ClearFocus();
             InputMethodManager imm
                 = (InputMethodManager)this.Context.GetSystemService(
