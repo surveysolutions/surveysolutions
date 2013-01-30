@@ -1,12 +1,20 @@
-﻿@using Main.Core.View.Question
+﻿@using System.Web.Script.Serialization
+@using Main.Core.View.Question
 @using Questionnaire.Core.Web.Helpers
 @using RavenQuestionnaire.Core.Views.Group
 @using RavenQuestionnaire.Core.Views.Questionnaire
+@using RavenQuestionnaire.Web.Utils
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 <script type="text/javascript">
+    
+    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
+
+
     !function ($) {
 
         $(function () {

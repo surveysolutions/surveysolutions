@@ -1,13 +1,16 @@
-﻿@using Main.Core.Entities.SubEntities
+﻿@using System.Web.Script.Serialization
+@using Main.Core.Entities.SubEntities
 @using Main.Core.View.Group
 @using Core.Supervisor.Views.Survey
 @using ClientDependency.Core.Mvc
 @model SurveyScreenView
 @{
     Html.RequiresCss("details.css", "Content", 50);
+
+    JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver());
 }
 <script type="text/javascript">
-    var questionnaire = @Html.Raw(Json.Encode(Model)) ;
+    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
     $(document).ready(function() {
         dataHelper = new DataHelper('@Url.Action("Index", "Survey", new { }, "http")');
     });
@@ -96,7 +99,7 @@
                             </thead>
                             <!-- /ko -->
                             <tbody data-bind="foreach: questions">
-                                <tr data-bind="visible: isVisible, style : {height : height() + 'px'}, attr : { id: 'question-' + key}, css: {avtive : isActive}">
+                                <tr data-bind="visible: isVisible, attr : { id: 'question-' + key}, css: {avtive : isActive}">
                                     <td style="width: 300px;">
                                         <div class="cell-content" data-bind="text: title">
                                         </div>

@@ -1,4 +1,5 @@
 /*global ko, crossroads */
+var viewModel = null;
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
@@ -124,12 +125,11 @@ Date.prototype.mmddyyyy = function () {
         self.questions = questions;
         self.isVisible = ko.observable(true);
         self.childScreenKeys = childScreenKeys;
-        self.hasQuestions = !(childScreenKeys.length > 0);
+        self.hasQuestions = (self.questions().length > 0);
         self.captions = captions;
 
         self.setVisible = function(key) {
             self.isVisible(true);
-            self.filterAnswers(key);
             ko.utils.arrayForEach(self.captions, function(item) {
                     item.isVisible(true);
                 });
@@ -152,23 +152,7 @@ Date.prototype.mmddyyyy = function () {
 
                 if (s != null) {
                     s.setVisible();
-                    s.filterAnswers(key);
                 }
-            }
-        };
-
-        self.filterAnswers = function (key) {
-            if (!key)
-                return;
-
-            if (key.isPropagated == false) {
-                return
-            }
-
-            if (self.hasQuestions) {
-                ko.utils.arrayForEach(self.questions(), function (item) {
-                    item.filterAnswers(key);
-                });
             }
         };
 
@@ -283,18 +267,6 @@ Date.prototype.mmddyyyy = function () {
             return count;
         });
 
-        self.height = ko.observable();
-        self.filterAnswers = function (key) {
-            if (!key)
-                return;
-
-            if (self.answers().length > 0) {
-                ko.utils.arrayForEach(self.answers(), function (item) {
-                    if (item.key.propagatekey != key.propagatekey)
-                        item.isVisible(false);
-                });
-            }
-        };
         questionMap.push(self);
     };
 
@@ -840,7 +812,7 @@ Date.prototype.mmddyyyy = function () {
 
     $(document).ready(function () {
         // bind a new instance of our view model to the page
-        var viewModel = new SurveyModel(questionnaire || {});
+        viewModel = new SurveyModel(questionnaire || {});
         ko.applyBindings(viewModel);
 
         $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
