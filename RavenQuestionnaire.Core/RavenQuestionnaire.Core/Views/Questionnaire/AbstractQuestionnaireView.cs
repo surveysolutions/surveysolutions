@@ -85,11 +85,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     {
         #region Constants and Fields
 
-        /// <summary>
-        /// The questions.
-        /// </summary>
-        private TQuestion[] questions;
-
         #endregion
 
         #region Constructors and Destructors
@@ -104,8 +99,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
             : base(doc)
         {
             this.Children = new List<ICompositeView>();
-            this.Questions = new TQuestion[0];
-            this.Groups = new TGroup[0];
             this.PublicKey = doc.PublicKey;
             this.Title = doc.Title;
         }
@@ -130,34 +123,9 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         public List<ICompositeView> Children { get; set; }
 
         /// <summary>
-        /// Gets or sets the groups.
-        /// </summary>
-        public TGroup[] Groups { get; set; }
-
-        /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         public Guid? Parent { get; set; }
-
-        /// <summary>
-        /// Gets or sets the questions.
-        /// </summary>
-        public TQuestion[] Questions
-        {
-            get
-            {
-                return this.questions;
-            }
-
-            set
-            {
-                this.questions = value;
-                for (int i = 0; i < this.questions.Length; i++)
-                {
-                    this.questions[i].Index = i + 1;
-                }
-            }
-        }
 
         #endregion
     }
