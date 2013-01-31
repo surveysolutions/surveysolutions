@@ -10,6 +10,7 @@
     JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver());
 }
 <script type="text/javascript">
+    var dataHelper = null;
     var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
     $(document).ready(function() {
         dataHelper = new DataHelper('@Url.Action("Index", "Survey", new { }, "http")');
@@ -62,6 +63,7 @@
             <div class="title">
                 <button type="button" class="close" data-bind="click: closeMenu">&times</button>
                 <span data-bind="text: title"></span>. Responsible: <span data-bind="text: responsible.name"></span>. Status: <span data-bind="text: status.name"></span>
+                <input data-bind="value: title"/>
             </div>
             <div class="body">
                 <ul class="nav nav-list" data-bind="foreach: menu">
@@ -196,7 +198,7 @@
                     </p>
                     <div data-bind="visible: !isReadonly">
                     </div>
-                    <div data-bind="template: { name: displayMode }">
+                    <div data-bind="template: { name: displayMode, data: $root.currentAnswer }">
                     </div>
                 </div>
                 <div class="details-block ">
@@ -278,16 +280,16 @@
 
 </script>
 <script type="text/html" id="Numeric">
-    <input data-bind="value: selectedOption(), disable: isReadonly" />
+    <input data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 <script type="text/html" id="DateTime">
     <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
 </script>
 <script type="text/html" id="AutoPropagate">
-    <input data-bind="value: selectedOption(), disable: isReadonly" />
+    <input data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 <script type="text/html" id="Text">
-    <input data-bind="value: selectedOption(), disable: isReadonly" />
+    <input data-bind="value: selectedOption" />
 </script>
 @{
     Html.RequiresJs("director.min.js", "Scripts", 50);

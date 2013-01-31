@@ -439,20 +439,19 @@ Date.prototype.mmddyyyy = function () {
                 }
                 break;
             case "Numeric":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "Text":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "AutoPropagate":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "DateTime":
-                    //parse date
-                if (!!self.answer() == false ) {
+                //parse date
+                if (!!self.answer() == false) {
                     self.selectedOption(new Date());
-                    }
-                else {
+                } else {
                     var date = new Date(Date.parse(self.answer()));
                     self.answer(date.mmddyyyy());
                     date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
