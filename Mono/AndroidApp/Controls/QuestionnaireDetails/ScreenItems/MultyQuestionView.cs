@@ -10,7 +10,7 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
-using AndroidApp.ViewModel.QuestionnaireDetails;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 

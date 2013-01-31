@@ -10,9 +10,9 @@ using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Core.Model.ViewModel.Statistics;
 using AndroidApp.Events;
-using AndroidApp.ViewModel.QuestionnaireDetails;
-using AndroidApp.ViewModel.Statistics;
 
 namespace AndroidApp.Controls.Statistics
 {

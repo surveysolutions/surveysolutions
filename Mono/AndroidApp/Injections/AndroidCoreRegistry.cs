@@ -1,11 +1,14 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="AndroidCoreRegistry.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using AndroidApp.Authorization;
+using AndroidApp.Core.Model.Authorization;
+using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Core.CAPI.Synchronization;
 using Main.Core;
@@ -13,11 +16,6 @@ using Ncqrs.Eventing.Storage;
 
 namespace AndroidApp.Injections
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -34,8 +32,7 @@ namespace AndroidApp.Injections
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
-                base.GetAssweblysForRegister().Concat(
-                    new[] { typeof(ClientEventStreamReader).Assembly, GetType().Assembly });
+                Enumerable.Concat(base.GetAssweblysForRegister(), new[] { typeof(ClientEventStreamReader).Assembly, typeof(DashboardModel).Assembly, GetType().Assembly });
         }
         public override void Load()
         {

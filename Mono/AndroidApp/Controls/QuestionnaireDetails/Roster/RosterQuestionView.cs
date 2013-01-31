@@ -5,9 +5,8 @@ using System.Text;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Extensions;
-using AndroidApp.ViewModel.QuestionnaireDetails;
-using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 

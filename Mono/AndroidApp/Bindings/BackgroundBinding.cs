@@ -10,8 +10,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Extensions;
-using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Target;
 using Cirrious.MvvmCross.Binding.Interfaces;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Android.App;
+using AndroidApp.Core.Model.Tests;
 using AndroidMain.Core.Tests.CommonTests;
 using NUnitLite;
 using NUnitLite.MonoDroid;
@@ -20,6 +21,7 @@ namespace Android.Tests.Runner
 			yield return StepshootTests();
 			yield return MainCoreTests();
 			yield return SQliteEventStoreTests();
+            yield return AndroidAppTests();
 		}
 
 		#region TestAssemblyInfos
@@ -50,7 +52,12 @@ namespace Android.Tests.Runner
 
 			return new TestAssemblyInfo(assembly);
 		}
+        private TestAssemblyInfo AndroidAppTests()
+        {
+            var assembly = typeof(CompleteQuestionnaireViewTests).Assembly;
 
+            return new TestAssemblyInfo(assembly);
+        }
 		private TestAssemblyInfo MainCoreTests()
 		{
 			var assembly = typeof(RavenQuestionnaire.Core.Tests.Entities.QuestionTest).Assembly;

@@ -9,7 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using AndroidApp.Authorization;
+using AndroidApp.Core.Model.Authorization;
 
 namespace AndroidApp.Controls.Navigation
 {

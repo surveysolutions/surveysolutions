@@ -11,8 +11,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.Statistics;
 using AndroidApp.Core;
-using AndroidApp.ViewModel.QuestionnaireDetails;
-using AndroidApp.ViewModel.Statistics;
+using AndroidApp.Core.Model.ViewModel.Statistics;
 using Java.Interop;
 using Fragment = Android.Support.V4.App.Fragment;
 

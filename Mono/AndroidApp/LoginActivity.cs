@@ -10,8 +10,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.Navigation;
+using AndroidApp.Core.Model.ViewModel.Login;
 using AndroidApp.Extensions;
-using AndroidApp.ViewModel.Login;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace AndroidApp
@@ -22,7 +22,7 @@ namespace AndroidApp
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            ViewModel = new LoginViewModel();
+            ViewModel = new LoginViewModel(CapiApplication.Membership);
             if (CapiApplication.Membership.IsLoggedIn)
                 StartActivity(typeof (DashboardActivity));
             SetContentView(Resource.Layout.Login);

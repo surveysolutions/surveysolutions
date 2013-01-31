@@ -13,9 +13,9 @@ using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.Roster;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Core;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using AndroidApp.Events;
-using AndroidApp.ViewModel.QuestionnaireDetails;
-using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Java.Interop;
 

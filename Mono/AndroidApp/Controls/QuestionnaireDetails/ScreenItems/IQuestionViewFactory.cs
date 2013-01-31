@@ -9,8 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using AndroidApp.ViewModel.QuestionnaireDetails;
-using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {

@@ -29,7 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
@@ -109,8 +109,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authorization\AndroidAuthentication.cs" />
-    <Compile Include="Authorization\IAuthentication.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
@@ -120,8 +118,12 @@
     <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
-    <Compile Include="Core\CAPIParcelableCreator.cs" />
-    <Compile Include="Core\ParcelableWrapper.cs" />
+    <Compile Include="Core\CAPIParcelableCreator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Core\ParcelableWrapper.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -147,7 +149,6 @@
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Core\MvxSimpleBindingFragmentActivity.cs" />
     <Compile Include="DetailsActivity.cs" />
-    <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
     <Compile Include="Events\ScreenChangedEventArgs.cs" />
     <Compile Include="Extensions\ActivityExtensions.cs" />
     <Compile Include="Injections\AndroidCoreRegistry.cs" />
@@ -159,32 +160,6 @@
     <Compile Include="StartApplicationObject.cs" />
     <Compile Include="Services\SimpleSyncService.cs" />
     <Compile Include="Services\SyncService.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
-    <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
-    <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
-    <Compile Include="ViewModel\Login\LoginViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\CompleteQuestionnaireView.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\GridItems\HeaderItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireItemViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\IQuestionnaireViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\ItemPublicKey.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireGridViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireNavigationPanelItem.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenInput.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewFactory.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\Validation\QuestionnaireValidationExecutor.cs" />
-    <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsInput.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsQuestionViewModel.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsViewFactory.cs" />
-    <Compile Include="ViewModel\Statistics\StatisticsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -234,6 +209,10 @@
     <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidApp.Core.Model\AndroidApp.Core.Model.csproj">
+      <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
+      <Name>AndroidApp.Core.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
