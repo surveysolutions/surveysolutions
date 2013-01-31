@@ -60,18 +60,20 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public Guid PublicKey { get; private set; }
         public string Title { get; private set; }
-        public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; private set; }
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }
+        public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get; private set; }
-        protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get; private set; }
-        
-        private readonly QuestionnaireValidationExecutor validator;
+        protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get;  set; }
+        protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
+
+        protected IQuestionnaireValidationExecutor validator;
 
         #endregion
 
 
         #region public methods
+
+       
 
         public void PropagateGroup(Guid publicKey, Guid propagationKey)
         {
@@ -113,6 +115,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             UpdateGrid(publicKey);
 
         }
+
         public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString)
         {
             var question =
@@ -147,41 +150,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             return this.Questions.Select(q => q.Value).Where(filter);
         }
 
-        public void AddScreen(List<ICompleteGroup> rout,
-                              ICompleteGroup group)
-        {
-            var key = new ItemPublicKey(group.PublicKey,
-                                        group.PropagationPublicKey);
-
-
-            if (group.Propagated == Propagate.None)
-            {
-                var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title, group.Enabled,
-                                                              key, screenItems,
-                                                              BuildSiblingsForNonPropagatedGroups(rout, key),
-                                                              BuildBreadCrumbs(rout, key),
-                                                              () => this.Chapters, true);
-                this.Screens.Add(key, screen);
-            }
-            else if (group.PropagationPublicKey.HasValue)
-            {
-                var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title,
-                                                              group.Enabled,
-                                                              key, screenItems,
-                                                              () => GetSiblings(key.PublicKey),
-                                                              BuildBreadCrumbs(rout, key),
-                                                              () => this.Chapters, true);
-                this.Screens.Add(key, screen);
-            }
-            else
-            {
-
-                CreateGrid(group, rout);
-            }
-
-        }
+       
 
         #endregion
 
@@ -223,6 +192,41 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         #endregion
 
         #region protected helper methods
+        protected void AddScreen(List<ICompleteGroup> rout,
+                            ICompleteGroup group)
+        {
+            var key = new ItemPublicKey(group.PublicKey,
+                                        group.PropagationPublicKey);
+
+
+            if (group.Propagated == Propagate.None)
+            {
+                var screenItems = BuildItems(group, true);
+                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title, group.Enabled,
+                                                              key, screenItems,
+                                                              BuildSiblingsForNonPropagatedGroups(rout, key),
+                                                              BuildBreadCrumbs(rout, key),
+                                                              () => this.Chapters, true);
+                this.Screens.Add(key, screen);
+            }
+            else if (group.PropagationPublicKey.HasValue)
+            {
+                var screenItems = BuildItems(group, true);
+                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title,
+                                                              group.Enabled,
+                                                              key, screenItems,
+                                                              () => GetSiblings(key.PublicKey),
+                                                              BuildBreadCrumbs(rout, key),
+                                                              () => this.Chapters, true);
+                this.Screens.Add(key, screen);
+            }
+            else
+            {
+
+                CreateGrid(group, rout);
+            }
+
+        }
 
         protected void UpdateQuestionHash(QuestionViewModel question)
         {

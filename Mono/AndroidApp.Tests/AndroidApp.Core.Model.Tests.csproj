@@ -58,6 +58,10 @@
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327c81-7655-443d-9e04-443ac07bd6cc}</Project>
       <Name>NUnitLite.MonoDroid</Name>

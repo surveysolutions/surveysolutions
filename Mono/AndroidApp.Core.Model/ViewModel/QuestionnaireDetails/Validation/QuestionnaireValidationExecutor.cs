@@ -7,7 +7,7 @@ using NCalc;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.Validation
 {
-    public class QuestionnaireValidationExecutor
+    public class QuestionnaireValidationExecutor : IQuestionnaireValidationExecutor
     {
           #region Fields
 
