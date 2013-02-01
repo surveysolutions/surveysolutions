@@ -64,13 +64,9 @@ namespace Web.Supervisor
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
-            routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
-            routes.IgnoreRoute("{wcf}/{*pathInfo}");
-
-            // routes.Add(new ServiceRoute("Person", new WebServiceHostFactory(), typeof(API)));
-
-            /*routes.IgnoreRoute("WCF/API.svc");
-            routes.IgnoreRoute("WCF/API.svc/{*pathInfo}");*/
+            
+            /*routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
+            routes.IgnoreRoute("{WCF}/{*pathInfo}");*/
 
             routes.MapRoute(
                 "Default", 
