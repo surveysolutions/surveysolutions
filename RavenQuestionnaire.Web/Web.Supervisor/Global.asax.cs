@@ -9,6 +9,7 @@
 namespace Web.Supervisor
 {
     using System;
+    using System.ServiceModel.Activation;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -16,6 +17,8 @@ namespace Web.Supervisor
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
+
+    using Web.Supervisor.WCF;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -61,6 +64,13 @@ namespace Web.Supervisor
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
+            routes.IgnoreRoute("{wcf}/{*pathInfo}");
+
+            // routes.Add(new ServiceRoute("Person", new WebServiceHostFactory(), typeof(API)));
+
+            /*routes.IgnoreRoute("WCF/API.svc");
+            routes.IgnoreRoute("WCF/API.svc/{*pathInfo}");*/
 
             routes.MapRoute(
                 "Default", 
@@ -98,6 +108,9 @@ namespace Web.Supervisor
 
             AreaRegistration.RegisterAllAreas();
 
+
+            // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
+
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
@@ -132,6 +145,12 @@ namespace Web.Supervisor
                 base.Response.Write("Sorry, Application cann't handle this!");
                 this.CompleteRequest();
             }
+
+            var context = HttpContext.Current;
+
+            var appRelativeCurrentExecutionFilePath = context.Request.AppRelativeCurrentExecutionFilePath;
+
+            var r = RouteTable.Routes.GetRouteData(new HttpContextWrapper(context));
         }
 
 

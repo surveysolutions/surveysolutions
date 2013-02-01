@@ -663,7 +663,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61978</DevelopmentServerPort>
+          <DevelopmentServerPort>30449</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:61978/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
