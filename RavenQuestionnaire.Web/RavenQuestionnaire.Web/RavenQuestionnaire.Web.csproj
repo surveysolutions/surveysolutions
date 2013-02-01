@@ -727,7 +727,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>61978</DevelopmentServerPort>
+          <DevelopmentServerPort>30449</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost/RavenQuestionnaire.Web</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

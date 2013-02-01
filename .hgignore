@@ -11,6 +11,7 @@ obj.Wpf
 *.StyleCop
 StyleCop.Cache
 *.suo
+Installation/SupervisorInstallProj/_ReSharper.Setup/*
 
 *.DotSettings.user
 *.dotCover

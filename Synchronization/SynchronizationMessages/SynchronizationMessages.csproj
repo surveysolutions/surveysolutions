@@ -119,11 +119,13 @@
     <Reference Include="System" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompleteQuestionnaire\CompleteQuestionnaireMessage.cs" />
     <Compile Include="CompleteQuestionnaire\ErrorCodes.cs" />
+    <Compile Include="CompleteQuestionnaire\IAPI.cs" />
     <Compile Include="CompleteQuestionnaire\IEventDocumentSync.cs" />
     <Compile Include="CompleteQuestionnaire\IGetAggragateRootList.cs" />
     <Compile Include="CompleteQuestionnaire\IGetEventStream.cs" />
