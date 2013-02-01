@@ -239,6 +239,7 @@ RavenQuestionnaire.Web/Main.Synchronization/obj/*
 */StyleCop.Cache
 RavenQuestionnaire.Web/Main.Synchronization.Tests/obj/*
 RavenQuestionnaire.Web/Main.Synchronization.Tests/bin/*
+Installation/SupervisorInstallProj/_ReSharper.Setup/*
 syntax: glob
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/bin/*
 RavenQuestionnaire.Core/RavenQuestionnaire.Core/obj/*
