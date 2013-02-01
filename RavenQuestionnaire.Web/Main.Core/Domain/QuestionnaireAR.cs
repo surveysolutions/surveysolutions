@@ -301,6 +301,11 @@ namespace Main.Core.Domain
             Order answerOrder, 
             Answer[] answers)
         {
+            if (stataExportCaption.Length >= 32)
+            {
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+            }
+
             this.ApplyEvent(
                 new QuestionChanged
                     {
