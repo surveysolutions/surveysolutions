@@ -82,13 +82,13 @@ namespace AndroidApp
                                               ViewModel.Chapters.FirstOrDefault().ScreenId);
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
-        
-      /*  protected override void OnResume()
+
+        protected override void OnPause()
         {
-            base.OnResume();
-            Adapter.NotifyDataSetChanged();
+            ViewModel.Recicle();
+            base.OnPause();
         }
-        */
+
         public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
         {
             var screen = p0 as IScreenChanging;

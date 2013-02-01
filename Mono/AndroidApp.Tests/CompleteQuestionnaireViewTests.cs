@@ -29,12 +29,11 @@ namespace AndroidApp.Core.Model.Tests
         {
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             var screenKEy = new ItemPublicKey(Guid.NewGuid(), null);
-            Func<IEnumerable<QuestionnaireScreenViewModel>> items = Enumerable.Empty<QuestionnaireScreenViewModel>;
             var screen = new QuestionnaireScreenViewModel(Guid.NewGuid(), "test", "test", true, screenKEy,
                                                           Enumerable.Empty<IQuestionnaireItemViewModel>(),
                                                           Enumerable.Empty<ItemPublicKey>(),
                                                           Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                          items, false);
+                                                           Enumerable.Empty<QuestionnaireScreenViewModel>());
             screens.Add(screenKEy, screen);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens);
             target.SetScreenStatus(screenKEy, false);
@@ -110,7 +109,7 @@ namespace AndroidApp.Core.Model.Tests
         [Test]
         public void PropagateGroup_TemplateISAbsent_ExeptionThrown()
         {
-            var templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            var templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens,templates);
             Assert.Throws<KeyNotFoundException>(
@@ -119,10 +118,10 @@ namespace AndroidApp.Core.Model.Tests
         [Test]
         public void PropagateGroup_TemplateISPresent_QuestionAndScreenHashAreUpdated()
         {
-            var templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            var templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
             var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
             var questionKey = Guid.NewGuid();
-            var template = new QuestionnaireScreenViewModel(Guid.NewGuid(), "t", "t", true,
+            var template = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t", true,
                                                             templateKey,
                                                             new IQuestionnaireItemViewModel[1]
                                                                 {
@@ -130,16 +129,15 @@ namespace AndroidApp.Core.Model.Tests
                                                                 new ItemPublicKey(questionKey, null), "test",
                                                                 QuestionType.Text, "t", true, "", "", false,
                                                                 false, false, "", "")
-                                                                }, Enumerable.Empty<ItemPublicKey>(),
+                                                                }, null,
                                                             Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                            Enumerable.Empty<QuestionnaireScreenViewModel>,
-                                                            false);
+                                                            Enumerable.Empty<QuestionnaireScreenViewModel>());
             var grid = new QuestionnaireGridViewModel(template.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
                                                       Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>,
+                                                      Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>);
+                                                      Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             screens.Add(templateKey, grid);
             templates.Add(templateKey.PublicKey, template);
@@ -157,7 +155,7 @@ namespace AndroidApp.Core.Model.Tests
         [Test]
         public void RemovePropagatedGroup_GRoupISAbsent_ExeptionThrown()
         {
-            var templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            var templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens, templates);
             Assert.Throws<KeyNotFoundException>(
@@ -178,23 +176,22 @@ namespace AndroidApp.Core.Model.Tests
             var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
 
 
-            var propagatedGroup = new QuestionnaireScreenViewModel(Guid.NewGuid(), "t", "t", true,
+            var propagatedGroup = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t",  true,
                                                                    new ItemPublicKey(templateKey.PublicKey,
                                                                                      propagationKey),
                                                                    new IQuestionnaireItemViewModel[1]
                                                                        {
                                                                            question
-                                                                       }, Enumerable.Empty<ItemPublicKey>(),
+                                                                       },Enumerable.Empty<ItemPublicKey>,
                                                                    Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                                   Enumerable.Empty<QuestionnaireScreenViewModel>,
-                                                                   false);
+                                                                  Enumerable.Empty<QuestionnaireScreenViewModel>());
             screens.Add(propagatedGroup.ScreenId, propagatedGroup);
             var grid = new QuestionnaireGridViewModel(propagatedGroup.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
                                                       Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>,
+                                                      Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>);
+                                                      Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
             screens.Add(templateKey, grid);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens, questions);
             target.RemovePropagatedGroup(templateKey.PublicKey, propagationKey);
@@ -209,7 +206,8 @@ namespace AndroidApp.Core.Model.Tests
         {
             this.Questions = questions;
         }
-        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents,IDictionary<Guid, QuestionnaireScreenViewModel> templates):this(screents)
+        public CompleteQuestionnaireViewTestable(IDictionary<ItemPublicKey, IQuestionnaireViewModel> screents, IDictionary<Guid, QuestionnairePropagatedScreenViewModel> templates)
+            : this(screents)
         {
             this.Templates = templates;
         }
@@ -230,11 +228,11 @@ namespace AndroidApp.Core.Model.Tests
         public CompleteQuestionnaireViewTestable(string publicKey) : base(publicKey)
         {
             this.Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
-            this.Templates=new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            this.Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
             this.Screens=new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
         }
 
-        public CompleteQuestionnaireViewTestable(CompleteQuestionnaireDocument document) : base(document)
+        public CompleteQuestionnaireViewTestable(CompleteQuestionnaireDocument document) : base(document,null)
         {
         }
         public IDictionary<ItemPublicKey, QuestionViewModel> GetQuestionHash()

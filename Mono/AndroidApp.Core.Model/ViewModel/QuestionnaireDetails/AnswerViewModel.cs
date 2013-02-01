@@ -1,5 +1,4 @@
 using System;
-
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class AnswerViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, ICloneable

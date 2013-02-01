@@ -1,5 +1,8 @@
 
+using System;
+using System.Collections.Generic;
 using Android.Content;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using Newtonsoft.Json;
 namespace AndroidApp.Core.Model.ProjectionStorage
 {
@@ -17,40 +20,61 @@ namespace AndroidApp.Core.Model.ProjectionStorage
 		}
         private string GetJsonData(object payload)
         {
-            return JsonConvert.SerializeObject(payload, Formatting.None,
-                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            var data = JsonConvert.SerializeObject(payload, Formatting.None,
+                                                   new JsonSerializerSettings
+                                                       {
+                                                           TypeNameHandling = TypeNameHandling.Objects,ContractResolver = new CriteriaContractResolver()/*,
+                                                           Converters =
+                                                               new List<JsonConverter>() {new ItemPublicKeyConverter()}*/
+                                                       });
+            Console.WriteLine(data);
+            return data;
         }
 
         private object GetObject(string json)
         {
             return JsonConvert.DeserializeObject(json,
-                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Objects,
+                    ContractResolver = new CriteriaContractResolver()/*,
+                    Converters =
+                        new List<JsonConverter>() { new ItemPublicKeyConverter() }*/
+                });
         }
         #region Implementation of IProjectionStorage
 
-        public void SaveOrUpdateProjection(IProjection projection)
+        public void SaveOrUpdateProjection(object projection, Guid publicKey)
         {
-            var data = GetJsonData(projection.SerrializeState());
-
+            var data = GetJsonData(projection);
             var values = new ContentValues();
-            values.Put("PublicKey", projection.PublicKey.ToString());
+            values.Put("PublicKey", publicKey.ToString());
             values.Put("Data", data);
 
-            _databaseHelper.WritableDatabase.Insert("Events", null, values);
+            _databaseHelper.WritableDatabase.Insert("Projections", null, values);
         }
 
-        public void RestoreProjection(IProjection projection)
+        public object RestoreProjection(Guid publicKey)
         {
             var cursor = _databaseHelper
                 .ReadableDatabase
-                .RawQuery(ProjectionQuery.SelectProjectionByGuidQuery(projection.PublicKey), null);
+                .RawQuery(ProjectionQuery.SelectProjectionByGuidQuery(publicKey), null);
             var dataIndex = cursor.GetColumnIndex("Data");
             while (cursor.MoveToNext())
             {
-                var data = GetObject(cursor.GetString(dataIndex));
-                projection.RestoreState(data);
-                return;
+                return GetObject(cursor.GetString(dataIndex));
             }
+            return null;
+        }
+
+        public void ClearStorage()
+        {
+            _databaseHelper.WritableDatabase.Delete("Projections", null, null);
+        }
+
+        public void ClearProjection(Guid prjectionKey)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

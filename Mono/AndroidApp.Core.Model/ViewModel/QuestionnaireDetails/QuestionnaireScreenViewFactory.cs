@@ -26,7 +26,9 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public CompleteQuestionnaireView Load(QuestionnaireScreenInput input)
         {
-            return Queryable.First<CompleteQuestionnaireView>(this._documentStorage.Query());
+            var result= Queryable.First<CompleteQuestionnaireView>(this._documentStorage.Query());
+            result.Restore();
+            return result;
         }
 
         #endregion

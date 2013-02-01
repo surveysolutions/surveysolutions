@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -40,6 +42,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 return string.Format("{0},{1}", PublicKey, PropagationKey);
             return PublicKey.ToString();
         }
+        public static explicit operator ItemPublicKey(string b)  // explicit byte to digit conversion operator
+        {
+            return Parse(b);
+        }
         public static ItemPublicKey Parse(string value)
         {
             if (value.Contains(','))
@@ -50,4 +56,5 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             return new ItemPublicKey(Guid.Parse(value), null);
         }
     }
+
 }

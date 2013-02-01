@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.Validation;
 using Main.Core.Documents;
@@ -11,23 +12,24 @@ using Main.Core.Entities.SubEntities.Complete;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
+    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel, IProjection
     {
         public CompleteQuestionnaireView(string publicKey)
         {
             this.PublicKey = Guid.Parse(publicKey); ;
         }
 
-        public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
+        public CompleteQuestionnaireView(CompleteQuestionnaireDocument document, IProjectionStorage projectionStorage)
         {
             this.PublicKey = document.PublicKey;
             this.Title = string.Format("{0} - {1}", document.Title,
                                        string.Concat(
-                                           (IEnumerable<string>) document.Find<ICompleteQuestion>(q => q.Featured).Select(
+                                           (IEnumerable<string>)
+                                           document.Find<ICompleteQuestion>(q => q.Featured).Select(
                                                q => q.GetAnswerString())));
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            Templates = new Dictionary<Guid, QuestionnaireScreenViewModel>();
+            Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
             List<ICompleteGroup> rout = new List<ICompleteGroup>();
             rout.Add(document);
@@ -50,23 +52,52 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             }
             this.Chapters =
                 Enumerable.OfType<QuestionnaireScreenViewModel>(document.Children.OfType<ICompleteGroup>().Select(
-                        c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
-           
+                    c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
+
             this.validator = new QuestionnaireValidationExecutor(this);
+            this.IsRestored = true;
+            this.projectionStorage = projectionStorage;
         }
 
 
         #region fields
 
+        public void Restore()
+        {
+            if(this.IsRestored)
+                return;
+            var restoredState = projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
+            if (restoredState == null)
+                return;
+            this.PublicKey = restoredState.PublicKey;
+            this.Title = restoredState.Title;
+            this.Templates = restoredState.Templates;
+            this.Screens = restoredState.Screens;
+            this.IsRestored = true;
+        }
+
+        public void Recicle()
+        {
+            var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates);
+            projectionStorage.SaveOrUpdateProjection(state, PublicKey);
+            Chapters = null;
+            Templates = null;
+            Screens = null;
+            Questions = null;
+            IsRestored = false;
+        }
         public Guid PublicKey { get; private set; }
+
         public string Title { get; private set; }
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
         public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        protected IDictionary<Guid, QuestionnaireScreenViewModel> Templates { get;  set; }
+        protected IDictionary<Guid, QuestionnairePropagatedScreenViewModel> Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
 
         protected IQuestionnaireValidationExecutor validator;
+        protected IProjectionStorage projectionStorage;
+        public bool IsRestored { get; private set; }
 
         #endregion
 
@@ -91,11 +122,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                     UpdateQuestionHash(newQuestion);
 
             }
-            var screen = new QuestionnaireScreenViewModel(PublicKey,
+            var screen = new QuestionnairePropagatedScreenViewModel(PublicKey,
                                                           template.Title, true,
                                                           key, items,
                                                           () => GetSiblings(key.PublicKey), bradCrumbs,
-                                                          () => this.Chapters, true);
+                                                          this.Chapters);
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(key, screen);
             UpdateGrid(publicKey);
@@ -164,8 +195,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             if (question == null || !question.Capital || !question.PublicKey.PropagationKey.HasValue)
                 return;
             var screens =
-                Screens.Where(q => q.Key.PropagationKey == question.PublicKey.PropagationKey).Select(
-                    q => q.Value).OfType<QuestionnaireScreenViewModel>();
+                Screens.Select(
+                    q => q.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(q => q.ScreenId.PropagationKey == question.PublicKey.PropagationKey);
             var newTitle = string.Concat(
                 Questions.Where(q => q.Key.PropagationKey == question.PublicKey.PropagationKey && q.Value.Capital).
                     Select(
@@ -206,18 +237,18 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                               key, screenItems,
                                                               BuildSiblingsForNonPropagatedGroups(rout, key),
                                                               BuildBreadCrumbs(rout, key),
-                                                              () => this.Chapters, true);
+                                                               this.Chapters);
                 this.Screens.Add(key, screen);
             }
             else if (group.PropagationPublicKey.HasValue)
             {
                 var screenItems = BuildItems(group, true);
-                var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title,
+                var screen = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title,
                                                               group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
                                                               BuildBreadCrumbs(rout, key),
-                                                              () => this.Chapters, true);
+                                                              this.Chapters);
                 this.Screens.Add(key, screen);
             }
             else
@@ -248,17 +279,17 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                         rosterKey, group.Enabled,
                                                         siblings,
                                                         breadcrumbs,
-                                                        () => this.Chapters,
+                                                        this.Chapters,
                                                         Enumerable.ToList<HeaderItem>(@group.Children.OfType<ICompleteQuestion>().Select(
                                                                 BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));
 
             breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {roster}).ToList();
-            var template = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title, group.Enabled,
-                                                            rosterKey, screenItems,
-                                                            siblings,
-                                                            breadcrumbs,
-                                                            () => this.Chapters, false);
+            var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
+                                                                      rosterKey, screenItems,
+                                                                      null,
+                                                                      breadcrumbs,
+                                                                      this.Chapters);
             Templates.Add(rosterKey.PublicKey, template);
             this.Screens.Add(rosterKey, roster);
         }
@@ -295,11 +326,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 grid.UpdateCounters();
         }
 
-        protected IEnumerable<QuestionnaireScreenViewModel> CollectPropagatedScreen(Guid publicKey)
+        protected IEnumerable<QuestionnairePropagatedScreenViewModel> CollectPropagatedScreen(Guid publicKey)
         {
             return
-                this.Screens.Where(s => s.Key.PublicKey == publicKey && s.Key.PropagationKey.HasValue).Select(
-                    s => s.Value).OfType<QuestionnaireScreenViewModel>().ToList();
+                this.Screens.Select(
+                    s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.PublicKey == publicKey).ToList();
         }
 
         protected IList<IQuestionnaireViewModel> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key)

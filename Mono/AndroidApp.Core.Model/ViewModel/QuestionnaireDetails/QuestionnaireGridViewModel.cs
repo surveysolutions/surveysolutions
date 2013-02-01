@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
@@ -14,22 +15,23 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel,IQuestionnaireViewModel
+    public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
         #region Implementation of IQuestionnaireViewModel
-        private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> chaptersValue;
-        private readonly Func<IEnumerable<QuestionnaireScreenViewModel>> rowsValue;
-        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId,bool enabled, IEnumerable<ItemPublicKey> siblings,
-            IEnumerable<IQuestionnaireViewModel> breadcrumbs, Func<IEnumerable<QuestionnaireScreenViewModel>> chapters, IList<HeaderItem> header
-            , Func<IEnumerable<QuestionnaireScreenViewModel>> rows)
+     
+        private readonly Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
+            IEnumerable<IQuestionnaireViewModel> breadcrumbs, IEnumerable<QuestionnaireScreenViewModel> chapters, IList<HeaderItem> header
+            , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
         {
             QuestionnaireId = questionnaireId;
             ScreenName = screenName;
             Title = title;
             ScreenId = screenId;
             Siblings = siblings;
-            Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
-            chaptersValue = chapters;
+            if (breadcrumbs != null)
+                Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
+            Chapters = chapters;
             rowsValue = rows;
             Header = header;
             Enabled = enabled;
@@ -41,12 +43,32 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public ItemPublicKey ScreenId { get; private set; }
         public int Total { get; private set; }
         public int Answered { get; private set; }
-        public IEnumerable<ItemPublicKey> Siblings { get; private set; }
-        public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; private set; }
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters
+        public bool Enabled { get; private set; }
+        public IList<HeaderItem> Header { get; private set; }
+        [JsonIgnore]
+        public IEnumerable<QuestionnairePropagatedScreenViewModel> Rows
         {
-            get { return chaptersValue(); }
+            get { return rowsValue(); }
         }
+        public IEnumerable<ItemPublicKey> Siblings { get; private set; }
+        [JsonIgnore]
+        public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; private set; }
+        [JsonIgnore]
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }
+        
+        public void SetEnabled(bool enabled)
+        {
+            if (Enabled == enabled)
+                return;
+            Enabled = enabled;
+            foreach (var model in Rows)
+            {
+                model.SetEnabled(enabled);
+            }
+            RaisePropertyChanged("Enabled");
+        }
+
+        #endregion
 
         public void UpdateCounters()
         {
@@ -68,27 +90,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 this.RaisePropertyChanged("Answered");
             }
         }
-
-        public bool Enabled { get; private set; }
-        public void SetEnabled(bool enabled)
-        {
-            if (Enabled == enabled)
-                return;
-            Enabled = enabled;
-            foreach (var model in Rows)
-            {
-                model.SetEnabled(enabled);
-            }
-            RaisePropertyChanged("Enabled");
-        }
-
-        public IList<HeaderItem> Header { get; private set; }
-        public IEnumerable<QuestionnaireScreenViewModel> Rows
-        {
-            get { return rowsValue(); }
-        }
-
-        #endregion
 
        
     }

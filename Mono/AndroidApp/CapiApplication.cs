@@ -13,6 +13,7 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Core.Model.Authorization;
 using AndroidApp.Core.Model.EventHandlers;
+using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
@@ -49,6 +50,11 @@ namespace AndroidApp
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
+        public static IProjectionStorage ProjectionStorage
+        {
+            get { return Kernel.Get<IProjectionStorage>(); }
+        }
+
         public static IAuthentication Membership
         {
             get { return Kernel.Get<IAuthentication>(); }
@@ -61,23 +67,18 @@ namespace AndroidApp
            
         }
 
-        public CapiApplication()
+     /*   public CapiApplication()
 		{
-		}
+		}*/
 
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
 		{
-          
-		}
-        public override void OnCreate()
-        {
-            base.OnCreate();
             CurrentContext = this;
-            
+
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
-           
-          //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
+
+            //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
             NcqrsInit.Init(Kernel);
             var eventStore = new SQLiteEventStore(this.ApplicationContext);
             eventStore.ClearDB();
@@ -87,8 +88,9 @@ namespace AndroidApp
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            ProjectionStorage.ClearStorage();
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                new CompleteQuestionnaireViewDenormalizer(Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>(), ProjectionStorage);
             bus.RegisterHandler(eventHandler, typeof(SnapshootLoaded));
             bus.RegisterHandler(eventHandler, typeof(AnswerSet));
             bus.RegisterHandler(eventHandler, typeof(CommentSet));
@@ -98,10 +100,7 @@ namespace AndroidApp
             #endregion
 
             GenerateEvents(bus);
-
-            
-        }
-
+		}
         protected void GenerateEvents(InProcessEventBus bus)
         {
 

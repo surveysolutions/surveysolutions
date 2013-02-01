@@ -1,4 +1,5 @@
 using System;
+using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
@@ -23,11 +24,13 @@ namespace AndroidApp.Core.Model.EventHandlers
         /// The _document storage.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
+        private readonly IProjectionStorage _projectionStorage;
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage,IProjectionStorage projectionStorage)
         {
             _documentStorage = documentStorage;
+            _projectionStorage = projectionStorage;
         }
 
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
@@ -35,9 +38,10 @@ namespace AndroidApp.Core.Model.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
-            var view = new CompleteQuestionnaireView(document);
+            var view = new CompleteQuestionnaireView(document, _projectionStorage);
 
             _documentStorage.Store(view, document.PublicKey);
+            view.Recicle();
         }
 
 
@@ -47,7 +51,7 @@ namespace AndroidApp.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetAnswer(new ItemPublicKey(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey),
                           evnt.Payload.AnswerKeys, evnt.Payload.AnswerString);
         }
@@ -58,7 +62,7 @@ namespace AndroidApp.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<CommentSet> evnt)
         {
-            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            var doc = GetStoredObject(evnt.EventSourceId);
             doc.SetComment(new ItemPublicKey(evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey),
                            evnt.Payload.Comments);
         }
@@ -69,7 +73,7 @@ namespace AndroidApp.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
         {
-            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            var doc = GetStoredObject(evnt.EventSourceId);
             foreach (var item in evnt.Payload.ResultQuestionsStatus)
             {
                 if (!item.Value.HasValue)
@@ -84,23 +88,13 @@ namespace AndroidApp.Core.Model.EventHandlers
             }
         }
         #endregion
-        private ItemPublicKey ParseCrap(string key)
-        {
-            Guid publicKey;
-            if (Guid.TryParse(key, out publicKey))
-                return new ItemPublicKey(publicKey, null);
-            var pkString = key.Substring(0, key.Length/2);
-            var prKey = key.Substring(key.Length/2);
-            return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
-        }
-
         
 
         #region Implementation of IEventHandler<in PropagatableGroupAdded>
 
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
-            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            var doc = GetStoredObject(evnt.EventSourceId);
                 doc.PropagateGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
             //   doc.AddScreen(rout, current);
         }
@@ -111,10 +105,30 @@ namespace AndroidApp.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
         {
-            var doc = _documentStorage.GetByGuid(evnt.EventSourceId);
+            var doc = GetStoredObject(evnt.EventSourceId);
             doc.RemovePropagatedGroup(evnt.Payload.PublicKey, evnt.Payload.PropagationKey);
         }
 
         #endregion
+
+        private CompleteQuestionnaireView GetStoredObject(Guid publicKey)
+        {
+            var doc = _documentStorage.GetByGuid(publicKey);
+        /*    if (doc == null || doc.IsRestored)
+                return doc;
+            _projectionStorage.RestoreProjection(doc);*/
+            return doc;
+        }
+
+        private ItemPublicKey ParseCrap(string key)
+        {
+            Guid publicKey;
+            if (Guid.TryParse(key, out publicKey))
+                return new ItemPublicKey(publicKey, null);
+            var pkString = key.Substring(0, key.Length / 2);
+            var prKey = key.Substring(key.Length / 2);
+            return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
+        }
+
     }
 }

@@ -24,18 +24,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
         {
             Answers = answers;
-          
-            //Answered = answers.Any(a => a.Selected);
         }
-
-     /*   public SelectebleQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
-        {
-            var typedRoaster = rosterItem as SelectableRowItem;
-            if (typedRoaster == null)
-                throw new ArgumentException();
-            this.Answers = typedRoaster.Answers;
-        }
-        */
         public IEnumerable<AnswerViewModel> Answers { get; private set; }
         public override IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
@@ -79,19 +68,5 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 RaisePropertyChanged("Status");
             }
         }
-
-        /*public void SelectAnswer(Guid publicKey)
-        {
-            foreach (var answer in Answers)
-            {
-                answer.Selected = answer.PublicKey == publicKey;
-            }
-            if (!Status.HasFlag(QuestionStatus.Answered))
-            {
-                Status = Status | QuestionStatus.Answered;
-                RaisePropertyChanged("Status");
-            }
-            RaisePropertyChanged("AnswerString");
-        }*/
     }
 }

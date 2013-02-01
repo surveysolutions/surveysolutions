@@ -9,16 +9,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             string validationMessage)
             : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, capital, answer, validationExpression, validationMessage)
         {
-           // Answer = answer;
-         
         }
-
-      /*  public ValueQuestionViewModel(AbstractQuestionRowItem rosterItem, HeaderItem headerItem) : base(rosterItem, headerItem)
-        {
-            Answer = rosterItem.Text;
-        }*/
-
-      //  public string Answer { get; private set; }
 
         #region Overrides of QuestionViewModel
 
