@@ -65,8 +65,8 @@ namespace Web.Supervisor
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
-            /*routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
-            routes.IgnoreRoute("{WCF}/{*pathInfo}");*/
+            // routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
+            /*routes.IgnoreRoute("{WCF}/{*pathInfo}");*/
 
             routes.MapRoute(
                 "Default", 
