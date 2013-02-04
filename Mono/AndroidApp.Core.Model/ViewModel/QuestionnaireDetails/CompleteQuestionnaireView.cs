@@ -73,12 +73,14 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.Title = restoredState.Title;
             this.Templates = restoredState.Templates;
             this.Screens = restoredState.Screens;
+            this.Chapters = restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
             this.IsRestored = true;
         }
 
         public void Recicle()
         {
-            var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates);
+            var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates,
+                                                           this.Chapters.Select(c => c.ScreenId));
             projectionStorage.SaveOrUpdateProjection(state, PublicKey);
             Chapters = null;
             Templates = null;

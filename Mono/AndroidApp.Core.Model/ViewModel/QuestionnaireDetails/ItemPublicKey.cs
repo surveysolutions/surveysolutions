@@ -7,6 +7,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
     public struct ItemPublicKey
     {
+        [JsonConstructor]
         public ItemPublicKey(Guid publicKey, Guid? propagationKey)
         {
             PublicKey = publicKey;
