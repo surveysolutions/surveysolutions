@@ -132,15 +132,14 @@ namespace Main.Core.Domain
             this.ApplyEvent(new UserChanged { Email = email, IsLocked = isLocked, Roles = roles });
         }
 
-        /// <summary>
-        /// The set user lock state.
-        /// </summary>
-        /// <param name="isLocked">
-        /// The is user locked.
-        /// </param>
-        public void SetUserLockState(bool isLocked)
+        public void Lock()
         {
-            this.ApplyEvent(new UserStatusChanged { IsLocked = isLocked });
+            this.ApplyEvent(new UserStatusChanged { IsLocked = true });
+        }
+
+        public void Unlock()
+        {
+            this.ApplyEvent(new UserStatusChanged { IsLocked = false });
         }
 
         #endregion

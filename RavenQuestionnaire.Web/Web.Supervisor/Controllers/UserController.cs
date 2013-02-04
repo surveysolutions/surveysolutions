@@ -87,7 +87,7 @@ namespace Web.Supervisor.Controllers
         {
             Guid key = ParseKeyOrThrow404(id);
 
-            CommandService.Execute(new ChangeUserStatusCommand(key, false));
+            CommandService.Execute(new UnlockUserCommand(key));
 
             return this.RedirectToAction("Index");
         }
@@ -105,7 +105,7 @@ namespace Web.Supervisor.Controllers
         {
             Guid key = ParseKeyOrThrow404(id);
 
-            CommandService.Execute(new ChangeUserStatusCommand(key, true));
+            CommandService.Execute(new LockUserCommand(key));
 
             return this.RedirectToAction("Index");
         }
