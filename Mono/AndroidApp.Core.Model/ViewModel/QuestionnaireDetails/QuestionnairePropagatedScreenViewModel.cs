@@ -24,13 +24,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             : base(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
         {
 
-            if (!screenId.PropagationKey.HasValue )
-            {
-                var oldBreadCrumbs = this.Breadcrumbs.ToList();
-                oldBreadCrumbs.RemoveAt(oldBreadCrumbs.Count - 1);
-                this.Breadcrumbs = oldBreadCrumbs;
-            }
-            else
+            if (screenId.PropagationKey.HasValue)
             {
                 this.sibligsValue = sibligs;
             }
