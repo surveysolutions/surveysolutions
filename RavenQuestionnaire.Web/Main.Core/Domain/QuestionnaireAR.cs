@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.CodeDom.Compiler;
+using System.Linq;
+
 namespace Main.Core.Domain
 {
     using System;
@@ -56,11 +59,12 @@ namespace Main.Core.Domain
         /// <param name="text">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text) : base(questionnaireId)
+        public QuestionnaireAR(Guid questionnaireId, string text)
+            : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
             this.questionFactory = new CompleteQuestionFactory();
-            
+
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -68,8 +72,8 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionnaireCreated
                     {
-                        PublicKey = questionnaireId, 
-                        Title = text, 
+                        PublicKey = questionnaireId,
+                        Title = text,
                         CreationDate = clock.UtcNow()
                     });
         }
@@ -88,7 +92,7 @@ namespace Main.Core.Domain
         /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() {Title = title });
+            this.ApplyEvent(new QuestionnaireUpdated() { Title = title });
         }
 
         /// <summary>
@@ -124,11 +128,11 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewGroupAdded
                     {
-                        QuestionnairePublicKey = this.innerDocument.PublicKey, 
-                        PublicKey = publicKey, 
-                        GroupText = text, 
-                        ParentGroupPublicKey = parentGroupKey, 
-                        Paropagateble = propagateble, 
+                        QuestionnairePublicKey = this.innerDocument.PublicKey,
+                        PublicKey = publicKey,
+                        GroupText = text,
+                        ParentGroupPublicKey = parentGroupKey,
+                        Paropagateble = propagateble,
                         ConditionExpression = conditionExpression,
                         Description = description
                     });
@@ -187,20 +191,20 @@ namespace Main.Core.Domain
         /// The answers.
         /// </param>
         public void AddQuestion(
-            Guid publicKey, 
-            string questionText, 
-            string stataExportCaption, 
-            QuestionType questionType, 
+            Guid publicKey,
+            string questionText,
+            string stataExportCaption,
+            QuestionType questionType,
             QuestionScope questionScope,
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            string instructions, 
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            bool featured,
+            bool mandatory,
+            Order answerOrder,
+            string instructions,
             Guid? groupPublicKey,
-            List<Guid> triggers, 
+            List<Guid> triggers,
             int maxValue,
             Answer[] answers)
         {
@@ -213,21 +217,21 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionAdded
                     {
-                        PublicKey = publicKey, 
-                        QuestionText = questionText, 
+                        PublicKey = publicKey,
+                        QuestionText = questionText,
                         StataExportCaption = stataExportCaption,
                         QuestionType = questionType,
-                        QuestionScope = questionScope, 
-                        ConditionExpression = conditionExpression, 
-                        ValidationExpression = validationExpression, 
-                        ValidationMessage = validationMessage, 
-                        Featured = featured, 
-                        Mandatory = mandatory, 
-                        AnswerOrder = answerOrder, 
-                        GroupPublicKey = groupPublicKey, 
+                        QuestionScope = questionScope,
+                        ConditionExpression = conditionExpression,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        Featured = featured,
+                        Mandatory = mandatory,
+                        AnswerOrder = answerOrder,
+                        GroupPublicKey = groupPublicKey,
                         Triggers = triggers,
                         MaxValue = maxValue,
-                        Answers = answers, 
+                        Answers = answers,
                         Instructions = instructions
                     });
         }
@@ -284,35 +288,33 @@ namespace Main.Core.Domain
         /// The answers.
         /// </param>
         public void ChangeQuestion(
-            Guid publicKey, 
-            string questionText, 
-            List<Guid> triggers, 
+            Guid publicKey,
+            string questionText,
+            List<Guid> triggers,
             int maxValue,
-            string stataExportCaption, 
-            string instructions, 
+            string stataExportCaption,
+            string instructions,
             QuestionType questionType,
-            QuestionScope questionScope, 
-            Guid? groupPublicKey, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
+            QuestionScope questionScope,
+            Guid? groupPublicKey,
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            bool featured,
+            bool mandatory,
+            Order answerOrder,
             Answer[] answers)
         {
-            if (stataExportCaption.Length >= 32)
-            {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
-            }
+            var stataCaption = ValidateStataCaption(publicKey, stataExportCaption);
 
             this.ApplyEvent(
                 new QuestionChanged
                     {
+                        PublicKey = publicKey, 
                         QuestionText = questionText, 
                         Triggers = triggers, 
                         MaxValue = maxValue,
-                        StataExportCaption = stataExportCaption, 
+                        StataExportCaption = stataCaption, 
                         QuestionType = questionType,
                         QuestionScope = questionScope, 
                         ConditionExpression = conditionExpression, 
@@ -321,10 +323,51 @@ namespace Main.Core.Domain
                         Featured = featured, 
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
-                        PublicKey = publicKey, 
                         Answers = answers, 
                         Instructions = instructions
                     });
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="publicKey">The current question public key</param>
+        /// <param name="stataExportCaption">Variable name (stataCaption)</param>
+        /// <returns></returns>
+        private string ValidateStataCaption(Guid publicKey, string stataExportCaption)
+        {
+            var stataCaption = stataExportCaption.Trim();
+
+            if (string.IsNullOrEmpty(stataCaption))
+            {
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+            }
+
+            if (stataCaption.Length >= 32)
+            {
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+            }
+
+            if (stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))))
+            {
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+            }
+
+            if (Char.IsDigit(stataCaption[0]))
+            {
+                throw new ArgumentException("Variable name shouldn't starts with digit");
+            }
+
+            var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                               .Where(q => q.PublicKey != publicKey)
+                               .Select(q => q.StataExportCaption);
+
+            if (captions.Contains(stataCaption))
+            {
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
+            }
+
+            return stataCaption;
         }
 
         /// <summary>
@@ -416,9 +459,9 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireItemMoved
                     {
-                        QuestionnaireId  = this.innerDocument.PublicKey,  
-                        AfterItemKey = afterItemKey, 
-                        GroupKey = groupKey, 
+                        QuestionnaireId = this.innerDocument.PublicKey,
+                        AfterItemKey = afterItemKey,
+                        GroupKey = groupKey,
                         PublicKey = publicKey
                     });
         }
@@ -473,10 +516,10 @@ namespace Main.Core.Domain
         /// Some exception
         /// </exception>
         public void UpdateGroup(
-            string groupText, 
-            Propagate propagateble, 
-            Guid groupPublicKey, 
-            UserLight executor, 
+            string groupText,
+            Propagate propagateble,
+            Guid groupPublicKey,
+            UserLight executor,
             string conditionExpression,
             string description)
         {
@@ -490,10 +533,10 @@ namespace Main.Core.Domain
                 new GroupUpdated
                     {
                         QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                        GroupPublicKey = groupPublicKey, 
-                        GroupText = groupText, 
-                        Propagateble = propagateble, 
-                        /*Executor = executor,*/ 
+                        GroupPublicKey = groupPublicKey,
+                        GroupText = groupText,
+                        Propagateble = propagateble,
+                        /*Executor = executor,*/
                         ConditionExpression = conditionExpression,
                         Description = description
                     });
@@ -519,7 +562,10 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new ImageUpdated
                     {
-                       Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title 
+                        Description = description,
+                        ImageKey = imageKey,
+                        QuestionKey = questionKey,
+                        Title = title
                     });
         }
 
@@ -543,7 +589,10 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new ImageUploaded
                     {
-                       Description = description, Title = title, PublicKey = publicKey, ImagePublicKey = imagePublicKey 
+                        Description = description,
+                        Title = title,
+                        PublicKey = publicKey,
+                        ImagePublicKey = imagePublicKey
                     });
         }
 
@@ -634,9 +683,9 @@ namespace Main.Core.Domain
         {
             var newImage = new Image
                 {
-                    PublicKey = e.ImagePublicKey, 
-                    Title = e.Title, 
-                    Description = e.Description, 
+                    PublicKey = e.ImagePublicKey,
+                    Title = e.Title,
+                    Description = e.Description,
                     CreationDate = DateTime.Now
                 };
 
