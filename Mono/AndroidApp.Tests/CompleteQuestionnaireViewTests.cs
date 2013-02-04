@@ -135,7 +135,7 @@ namespace AndroidApp.Core.Model.Tests
             var grid = new QuestionnaireGridViewModel(template.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
                                                       Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>(),
+                                                    //  Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
                                                       Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
@@ -189,7 +189,7 @@ namespace AndroidApp.Core.Model.Tests
             var grid = new QuestionnaireGridViewModel(propagatedGroup.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
                                                       Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                      Enumerable.Empty<QuestionnaireScreenViewModel>(),
+                                                      //Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
                                                       Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
             screens.Add(templateKey, grid);

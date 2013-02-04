@@ -8,10 +8,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
     public abstract class QuestionViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
-        public QuestionViewModel(
+        protected QuestionViewModel(
             ItemPublicKey publicKey,
             string text,
-            QuestionType type,
+            QuestionType questionType,
             bool enabled,
             string instructions,
             string comments,
@@ -26,15 +26,17 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             ValidationExpression = validationExpression;
             ValidationMessage = validationMessage;
             Text = text;
-            QuestionType = type;
+            QuestionType = questionType;
             AnswerString = answerString;
-            this.Capital = capital;
+            Capital = capital;
+            Mandatory = mandatory;
+            Instructions = instructions;
+            Comments = comments;
+
             if (enabled)
             {
                 Status = Status | QuestionStatus.Enabled;
             }
-            Instructions = instructions;
-            Comments = comments;
             if (valid)
             {
                 Status = Status | QuestionStatus.Valid;
@@ -42,9 +44,34 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var answered = !string.IsNullOrEmpty(answerString);
             if (answered)
                 Status = Status | QuestionStatus.Answered;
-            Mandatory = mandatory;
+            
         }
+        protected QuestionViewModel(
+           ItemPublicKey publicKey,
+           string text,
+           QuestionType questionType,
+           QuestionStatus status,
+           string instructions,
+           string comments,
+           bool mandatory,
+           bool capital,
+           string answerString,
+           string validationExpression,
+           string validationMessage)
+        {
+            PublicKey = publicKey;
+            ValidationExpression = validationExpression;
+            ValidationMessage = validationMessage;
+            Text = text;
+            QuestionType = questionType;
+            AnswerString = answerString;
+            Capital = capital;
+            Instructions = instructions;
+            Comments = comments;
+            Mandatory = mandatory;
 
+            Status = status;
+        }
         public ItemPublicKey PublicKey { get; private set; }
         public string Text { get; private set; }
         public QuestionType QuestionType { get; private set; }

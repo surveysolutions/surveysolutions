@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -9,8 +10,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     {
         public SelectebleQuestionViewModel(
             ItemPublicKey publicKey, 
-            string text, 
-            QuestionType type, 
+            string text,
+            QuestionType questionType, 
             IEnumerable<AnswerViewModel> answers, 
             bool enabled, 
             string instructions, 
@@ -21,7 +22,26 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             string answerString, 
             string validationExpression,
             string validationMessage)
-            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answerString, validationExpression, validationMessage)
+        {
+            Answers = answers;
+        }
+
+        [JsonConstructor]
+        public SelectebleQuestionViewModel(
+            ItemPublicKey publicKey,
+            string text,
+            QuestionType questionType,
+            IEnumerable<AnswerViewModel> answers,
+            QuestionStatus status,
+            string instructions,
+            string comments,
+            bool mandatory,
+            bool capital,
+            string answerString,
+            string validationExpression,
+            string validationMessage)
+            : base(publicKey, text, questionType, status, instructions, comments,  mandatory, capital, answerString, validationExpression, validationMessage)
         {
             Answers = answers;
         }

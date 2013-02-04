@@ -19,9 +19,9 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     {
         #region Implementation of IQuestionnaireViewModel
      
-        private readonly Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
+        private  Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
-            IEnumerable<IQuestionnaireViewModel> breadcrumbs, IEnumerable<QuestionnaireScreenViewModel> chapters, IList<HeaderItem> header
+            IEnumerable<IQuestionnaireViewModel> breadcrumbs,/* IEnumerable<QuestionnaireScreenViewModel> chapters,*/ IList<HeaderItem> header
             , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
         {
             QuestionnaireId = questionnaireId;
@@ -29,9 +29,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Title = title;
             ScreenId = screenId;
             Siblings = siblings;
-            if (breadcrumbs != null)
-                Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
-            Chapters = chapters;
+            if (breadcrumbs == null)
+                breadcrumbs = new List<IQuestionnaireViewModel>();
+            Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
+          //  Chapters = chapters;
             rowsValue = rows;
             Header = header;
             Enabled = enabled;
@@ -53,8 +54,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public IEnumerable<ItemPublicKey> Siblings { get; private set; }
         [JsonIgnore]
         public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; private set; }
-        [JsonIgnore]
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }
+     /*   [JsonIgnore]
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }*/
         
         public void SetEnabled(bool enabled)
         {
@@ -69,6 +70,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         #endregion
+        public void RestoreRowFunction(Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
+        {
+            this.rowsValue = rows;
+        }
 
         public void UpdateCounters()
         {

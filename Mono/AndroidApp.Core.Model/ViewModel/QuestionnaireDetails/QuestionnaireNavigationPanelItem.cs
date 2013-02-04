@@ -11,7 +11,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.getFullScreen = getFullScreen;
         }
 
-        private readonly Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen;
+        private Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen;
 
         public ItemPublicKey PublicKey { get; private set; }
        
@@ -59,5 +59,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         private IQuestionnaireViewModel screen;
+
+        public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
+        {
+            this.getFullScreen = getFullScreen;
+            var t = Screen;
+        }
     }
 }

@@ -1,16 +1,24 @@
 using System;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
+    
     public class ValueQuestionViewModel : QuestionViewModel
     {
-        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType type, string answer, bool enabled, string instructions, string comments, bool valid, bool capital, bool mandatory, string validationExpression,
+        
+        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType questionType, string answer, bool enabled, string instructions, string comments, bool valid, bool capital, bool mandatory, string validationExpression,
             string validationMessage)
-            : base(publicKey, text, type, enabled, instructions, comments, valid, mandatory, capital, answer, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, enabled, instructions, comments, valid, mandatory, capital, answer, validationExpression, validationMessage)
         {
         }
-
+        [JsonConstructor]
+        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType questionType, string answer, QuestionStatus status, string instructions, string comments, bool capital, bool mandatory, string validationExpression,
+          string validationMessage)
+            : base(publicKey, text, questionType, status, instructions, comments,mandatory, capital, answer, validationExpression, validationMessage)
+        {
+        }
         #region Overrides of QuestionViewModel
 
         public override IQuestionnaireItemViewModel Clone(Guid propagationKey)

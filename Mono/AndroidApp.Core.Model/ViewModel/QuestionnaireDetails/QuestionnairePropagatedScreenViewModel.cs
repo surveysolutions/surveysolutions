@@ -22,10 +22,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                       Func<IEnumerable<ItemPublicKey>> sibligs,
                                                       IEnumerable<IQuestionnaireViewModel> breadcrumbs,
                                                       IEnumerable<QuestionnaireScreenViewModel> chapters)
-            : base(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs, chapters)
+            : base(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
         {
 
-            if (!screenId.PropagationKey.HasValue && this.Breadcrumbs!=null)
+            if (!screenId.PropagationKey.HasValue )
             {
                 var oldBreadCrumbs = this.Breadcrumbs.ToList();
                 oldBreadCrumbs.RemoveAt(oldBreadCrumbs.Count - 1);

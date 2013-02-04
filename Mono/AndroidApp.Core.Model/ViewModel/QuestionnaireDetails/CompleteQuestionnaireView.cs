@@ -74,6 +74,34 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.Templates = restoredState.Templates;
             this.Screens = restoredState.Screens;
             this.Chapters = restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
+            this.Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
+            foreach (var screen in Screens.Select(s => s.Value))
+            {
+                var plainScreen = screen as QuestionnaireScreenViewModel;
+                if (plainScreen != null)
+                {
+                    foreach (var item in plainScreen.Items)
+                    {
+                        var question = item as QuestionViewModel;
+                        if (question != null)
+                        {
+                            UpdateQuestionHash(question);
+                            continue;
+                        }
+                        var group = item as QuestionnaireNavigationPanelItem;
+                        if (group != null)
+                        {
+                            group.RestoreFullScreenFunk((k) => this.Screens[k]);
+                        }
+                    }
+                    continue;
+                }
+                var roster = screen as QuestionnaireGridViewModel;
+                if(roster!=null)
+                {
+                    roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
+                }
+            }
             this.IsRestored = true;
         }
 
@@ -281,7 +309,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                         rosterKey, group.Enabled,
                                                         siblings,
                                                         breadcrumbs,
-                                                        this.Chapters,
+                                                       // this.Chapters,
                                                         Enumerable.ToList<HeaderItem>(@group.Children.OfType<ICompleteQuestion>().Select(
                                                                 BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));

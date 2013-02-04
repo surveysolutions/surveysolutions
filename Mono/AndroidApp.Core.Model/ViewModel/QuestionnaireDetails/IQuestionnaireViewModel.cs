@@ -14,7 +14,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         int Answered { get; }
         IEnumerable<ItemPublicKey> Siblings { get; }
         IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; }
-        IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
+      //  IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
         bool Enabled { get; }
         void SetEnabled(bool enabled);
     }

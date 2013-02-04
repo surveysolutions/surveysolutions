@@ -10,16 +10,17 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                            IEnumerable<QuestionnaireScreenViewModel> chapters)
+                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs/*,
+                                            IEnumerable<QuestionnaireScreenViewModel> chapters*/)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
-            if (breadcrumbs != null)
-                Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
-            Chapters = chapters;
+            if (breadcrumbs == null)
+                breadcrumbs = new List<IQuestionnaireViewModel>();
+            Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
+          //  Chapters = chapters;
             Title = title;
             Enabled = enabled;
             ScreenName = screenName;
@@ -35,7 +36,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                            IEnumerable<ItemPublicKey> siblings,
                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs,
                                            IEnumerable<QuestionnaireScreenViewModel> chapters)
-            : this(questionnaireId,screenName, title, enabled, screenId, items, breadcrumbs, chapters)
+            : this(questionnaireId,screenName, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
         {
             Siblings = siblings;
         }
@@ -52,8 +53,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         [JsonIgnore]
         public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; protected set; }
-        [JsonIgnore]
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }
+      /*  [JsonIgnore]
+        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }*/
         
 
         protected void UpdateCounters()
