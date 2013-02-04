@@ -102,6 +102,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                     roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
                 }
             }
+            this.validator = new QuestionnaireValidationExecutor(this);
             this.IsRestored = true;
         }
 
