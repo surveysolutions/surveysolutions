@@ -23,11 +23,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 {
     public class GridContentFragment : AbstractScreenChangingFragment
     {
-        public GridContentFragment(QuestionnaireGridViewModel model)
+        private readonly CompleteQuestionnaireView questionnaire;
+        public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
-            
+           
             this.Model = model;
+            this.questionnaire = questionnaire;
         }
         protected GridContentFragment()
             : base()
@@ -53,7 +55,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
             top.Orientation = Orientation.Vertical;
-            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(), OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
             top.AddView(breadcrumbs);
 

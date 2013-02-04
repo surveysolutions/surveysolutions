@@ -21,7 +21,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
      
         private  Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
-            IEnumerable<IQuestionnaireViewModel> breadcrumbs,/* IEnumerable<QuestionnaireScreenViewModel> chapters,*/ IList<HeaderItem> header
+            IEnumerable<ItemPublicKey> breadcrumbs,IList<HeaderItem> header
             , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
         {
             QuestionnaireId = questionnaireId;
@@ -30,9 +30,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             ScreenId = screenId;
             Siblings = siblings;
             if (breadcrumbs == null)
-                breadcrumbs = new List<IQuestionnaireViewModel>();
-            Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
-          //  Chapters = chapters;
+                breadcrumbs = new List<ItemPublicKey>();
+            Breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { this.ScreenId });
             rowsValue = rows;
             Header = header;
             Enabled = enabled;
@@ -52,10 +51,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             get { return rowsValue(); }
         }
         public IEnumerable<ItemPublicKey> Siblings { get; private set; }
-        [JsonIgnore]
-        public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; private set; }
-     /*   [JsonIgnore]
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }*/
+        public IEnumerable<ItemPublicKey> Breadcrumbs { get; private set; }
         
         public void SetEnabled(bool enabled)
         {
@@ -68,6 +64,15 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             }
             RaisePropertyChanged("Enabled");
         }
+
+        public QuestionnaireNavigationPanelItem GetShortVersion()
+        {
+            if (shortVersion == null)
+                shortVersion = new QuestionnaireNavigationPanelItem(this.ScreenId, (k) => this);
+            return shortVersion;
+        }
+
+        private QuestionnaireNavigationPanelItem shortVersion;
 
         #endregion
         public void RestoreRowFunction(Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)

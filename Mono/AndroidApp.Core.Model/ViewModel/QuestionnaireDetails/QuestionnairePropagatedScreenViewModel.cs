@@ -20,8 +20,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                       ItemPublicKey screenId,
                                                       IEnumerable<IQuestionnaireItemViewModel> items,
                                                       Func<IEnumerable<ItemPublicKey>> sibligs,
-                                                      IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                                      IEnumerable<QuestionnaireScreenViewModel> chapters)
+                                                      IEnumerable<ItemPublicKey> breadcrumbs)
             : base(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
         {
 

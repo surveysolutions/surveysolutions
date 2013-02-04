@@ -4,7 +4,8 @@ using System.ComponentModel;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel, INotifyPropertyChanged
+    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel,
+                                               INotifyPropertyChanged
     {
         Guid QuestionnaireId { get; }
         string Title { get; }
@@ -13,9 +14,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         int Total { get; }
         int Answered { get; }
         IEnumerable<ItemPublicKey> Siblings { get; }
-        IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; }
-      //  IEnumerable<QuestionnaireScreenViewModel> Chapters { get; }
+        IEnumerable<ItemPublicKey> Breadcrumbs { get; }
+
         bool Enabled { get; }
         void SetEnabled(bool enabled);
+        QuestionnaireNavigationPanelItem GetShortVersion();
+
     }
 }

@@ -69,12 +69,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment = new ScreenContentFragment(screenModel);
+                    fragment = new ScreenContentFragment(screenModel,questionnaire);
                 }
                 var grid = model as QuestionnaireGridViewModel;
                 if (grid != null)
                 {
-                    fragment = new GridContentFragment(grid);
+                    fragment = new GridContentFragment(grid, questionnaire);
                 }
 
             }

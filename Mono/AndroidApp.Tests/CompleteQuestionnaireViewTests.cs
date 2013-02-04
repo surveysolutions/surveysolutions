@@ -32,8 +32,7 @@ namespace AndroidApp.Core.Model.Tests
             var screen = new QuestionnaireScreenViewModel(Guid.NewGuid(), "test", "test", true, screenKEy,
                                                           Enumerable.Empty<IQuestionnaireItemViewModel>(),
                                                           Enumerable.Empty<ItemPublicKey>(),
-                                                          Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                           Enumerable.Empty<QuestionnaireScreenViewModel>());
+                                                          Enumerable.Empty<ItemPublicKey>());
             screens.Add(screenKEy, screen);
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(screens);
             target.SetScreenStatus(screenKEy, false);
@@ -130,11 +129,10 @@ namespace AndroidApp.Core.Model.Tests
                                                                 QuestionType.Text, "t", true, "", "", false,
                                                                 false, false, "", "")
                                                                 }, null,
-                                                            Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                            Enumerable.Empty<QuestionnaireScreenViewModel>());
+                                                            Enumerable.Empty<ItemPublicKey>());
             var grid = new QuestionnaireGridViewModel(template.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
-                                                      Enumerable.Empty<IQuestionnaireViewModel>(),
+                                                      Enumerable.Empty<ItemPublicKey>(),
                                                     //  Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
                                                       Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);
@@ -183,12 +181,11 @@ namespace AndroidApp.Core.Model.Tests
                                                                        {
                                                                            question
                                                                        },Enumerable.Empty<ItemPublicKey>,
-                                                                   Enumerable.Empty<IQuestionnaireViewModel>(),
-                                                                  Enumerable.Empty<QuestionnaireScreenViewModel>());
+                                                                   Enumerable.Empty<ItemPublicKey>());
             screens.Add(propagatedGroup.ScreenId, propagatedGroup);
             var grid = new QuestionnaireGridViewModel(propagatedGroup.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
-                                                      Enumerable.Empty<IQuestionnaireViewModel>(),
+                                                      Enumerable.Empty<ItemPublicKey>(),
                                                       //Enumerable.Empty<QuestionnaireScreenViewModel>(),
                                                       new List<HeaderItem>(),
                                                       Enumerable.Empty<QuestionnairePropagatedScreenViewModel>);

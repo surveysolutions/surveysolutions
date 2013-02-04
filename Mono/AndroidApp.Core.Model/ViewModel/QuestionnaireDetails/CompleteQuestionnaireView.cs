@@ -155,8 +155,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var screen = new QuestionnairePropagatedScreenViewModel(PublicKey,
                                                           template.Title, true,
                                                           key, items,
-                                                          () => GetSiblings(key.PublicKey), bradCrumbs,
-                                                          this.Chapters);
+                                                          () => GetSiblings(key.PublicKey), bradCrumbs);
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(key, screen);
             UpdateGrid(publicKey);
@@ -175,6 +174,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.Screens.Remove(key);
             UpdateGrid(publicKey);
 
+        }
+        public IEnumerable<IQuestionnaireViewModel> RestoreBreadCrumbs(IEnumerable<ItemPublicKey> breadcrumbs)
+        {
+            return breadcrumbs.Select(b => this.Screens[b]);
         }
 
         public void SetAnswer(ItemPublicKey key, List<Guid> answerKeys, string answerString)
@@ -266,8 +269,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 var screen = new QuestionnaireScreenViewModel(PublicKey, group.Title, Title, group.Enabled,
                                                               key, screenItems,
                                                               BuildSiblingsForNonPropagatedGroups(rout, key),
-                                                              BuildBreadCrumbs(rout, key),
-                                                               this.Chapters);
+                                                              BuildBreadCrumbs(rout, key));
                 this.Screens.Add(key, screen);
             }
             else if (group.PropagationPublicKey.HasValue)
@@ -277,8 +279,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                               group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
-                                                              BuildBreadCrumbs(rout, key),
-                                                              this.Chapters);
+                                                              BuildBreadCrumbs(rout, key));
                 this.Screens.Add(key, screen);
             }
             else
@@ -314,12 +315,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                                 BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));
 
-            breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {roster}).ToList();
+            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { roster.ScreenId }).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
                                                                       rosterKey, screenItems,
                                                                       null,
-                                                                      breadcrumbs,
-                                                                      this.Chapters);
+                                                                      breadcrumbs);
             Templates.Add(rosterKey.PublicKey, template);
             this.Screens.Add(rosterKey, roster);
         }
@@ -363,11 +363,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                     s => s.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(s => s.ScreenId.PublicKey == publicKey).ToList();
         }
 
-        protected IList<IQuestionnaireViewModel> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key)
+        protected IList<ItemPublicKey> BuildBreadCrumbs(IList<ICompleteGroup> rout, ItemPublicKey key)
         {
             return
                 rout.Skip(1).TakeWhile(r => r.PublicKey != key.PublicKey).Select(
-                    r => this.Screens[new ItemPublicKey(r.PublicKey, r.PropagationPublicKey)]).ToList();
+                    r => new ItemPublicKey(r.PublicKey, r.PropagationPublicKey)).ToList();
         }
 
         protected IEnumerable<ItemPublicKey> BuildSiblingsForNonPropagatedGroups(IList<ICompleteGroup> rout,

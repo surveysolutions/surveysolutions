@@ -10,17 +10,15 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<IQuestionnaireViewModel> breadcrumbs/*,
-                                            IEnumerable<QuestionnaireScreenViewModel> chapters*/)
+                                            IEnumerable<ItemPublicKey> breadcrumbs)
         {
 
             QuestionnaireId = questionnaireId;
             Items = items;
             ScreenId = screenId;
             if (breadcrumbs == null)
-                breadcrumbs = new List<IQuestionnaireViewModel>();
-            Breadcrumbs = breadcrumbs.Union(new IQuestionnaireViewModel[1] {this});
-          //  Chapters = chapters;
+                breadcrumbs = new List<ItemPublicKey>();
+            Breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { this.ScreenId });
             Title = title;
             Enabled = enabled;
             ScreenName = screenName;
@@ -34,8 +32,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                            IEnumerable<ItemPublicKey> siblings,
-                                           IEnumerable<IQuestionnaireViewModel> breadcrumbs,
-                                           IEnumerable<QuestionnaireScreenViewModel> chapters)
+                                           IEnumerable<ItemPublicKey> breadcrumbs)
             : this(questionnaireId,screenName, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
         {
             Siblings = siblings;
@@ -49,12 +46,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public int Total { get; private set; }
         public bool Enabled { get; private set; }
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
+
         public virtual IEnumerable<ItemPublicKey> Siblings { get; private set; }
 
-        [JsonIgnore]
-        public IEnumerable<IQuestionnaireViewModel> Breadcrumbs { get; protected set; }
-      /*  [JsonIgnore]
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; private set; }*/
+        
+        public IEnumerable<ItemPublicKey> Breadcrumbs { get; protected set; }
         
 
         protected void UpdateCounters()
@@ -101,6 +97,15 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Enabled = enabled;
             RaisePropertyChanged("Enabled");
         }
+
+        public QuestionnaireNavigationPanelItem GetShortVersion()
+        {
+            if (shortVersion == null)
+                shortVersion = new QuestionnaireNavigationPanelItem(this.ScreenId, (k) => this);
+            return shortVersion;
+        }
+
+        private QuestionnaireNavigationPanelItem shortVersion;
 
         void item_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
