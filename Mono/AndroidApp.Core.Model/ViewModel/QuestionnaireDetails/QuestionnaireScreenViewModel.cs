@@ -10,7 +10,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
                                             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
-                                            IEnumerable<ItemPublicKey> breadcrumbs)
+                                            IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
         {
 
             QuestionnaireId = questionnaireId;
@@ -22,6 +22,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Title = title;
             Enabled = enabled;
             ScreenName = screenName;
+            Total = total;
+            Answered = answered;
             foreach (var item in Items)
             {
                 item.PropertyChanged += item_PropertyChanged;
@@ -33,11 +35,18 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
                                            IEnumerable<ItemPublicKey> siblings,
                                            IEnumerable<ItemPublicKey> breadcrumbs)
-            : this(questionnaireId,screenName, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
+            : this(questionnaireId,screenName, title, enabled, screenId, items,siblings, breadcrumbs,0,0)
+        {
+        }
+        [JsonConstructor]
+        public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
+                                          ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                          IEnumerable<ItemPublicKey> siblings,
+                                          IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
+            : this(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs, total, answered)
         {
             Siblings = siblings;
         }
-
         public Guid QuestionnaireId { get; private set; }
         public ItemPublicKey ScreenId { get; private set; }
         public string Title { get; private set; }

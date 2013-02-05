@@ -22,7 +22,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         private  Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rowsValue;
         public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
             IEnumerable<ItemPublicKey> breadcrumbs,IList<HeaderItem> header
-            , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
+            , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows, int total, int answered)
         {
             QuestionnaireId = questionnaireId;
             ScreenName = screenName;
@@ -35,6 +35,15 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             rowsValue = rows;
             Header = header;
             Enabled = enabled;
+            Answered = answered;
+            Total = total;
+        }
+        [JsonConstructor]
+        public QuestionnaireGridViewModel(Guid questionnaireId, string screenName, string title, ItemPublicKey screenId, bool enabled, IEnumerable<ItemPublicKey> siblings,
+           IEnumerable<ItemPublicKey> breadcrumbs, IList<HeaderItem> header
+           , Func<IEnumerable<QuestionnairePropagatedScreenViewModel>> rows)
+            : this(questionnaireId, screenName, title, screenId, enabled, siblings, breadcrumbs, header, rows, 0, 0)
+        {
         }
 
         public Guid QuestionnaireId { get; private set; }
