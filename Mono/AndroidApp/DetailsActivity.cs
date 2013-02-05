@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Support.V4.App;
@@ -34,7 +35,6 @@ namespace AndroidApp
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
-    
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -58,6 +58,7 @@ namespace AndroidApp
 
         protected override void OnCreate(Bundle bundle)
         {
+            
             base.OnCreate(bundle);
             
             SetContentView(Resource.Layout.Details);
@@ -83,10 +84,13 @@ namespace AndroidApp
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
 
-        protected override void OnPause()
+  //      private bool isRotation = false;
+
+        protected override void OnStop()
         {
-            ViewModel.Recicle();
-            base.OnPause();
+            if (IsFinishing)
+                ViewModel.Recicle();
+            base.OnStop();
         }
 
         public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
