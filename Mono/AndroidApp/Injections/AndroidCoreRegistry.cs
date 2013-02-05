@@ -8,11 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AndroidApp.Core.Model.Authorization;
+using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Core.CAPI.Synchronization;
 using Main.Core;
 using Ncqrs.Eventing.Storage;
+using Ninject.Activation;
 
 namespace AndroidApp.Injections
 {
@@ -39,9 +41,17 @@ namespace AndroidApp.Injections
             base.Load();
             this.Bind<IEventStore>().To<SQLiteEventStore>();
             this.Unbind<IAuthentication>();
+            
             var membership = new AndroidAuthentication();
             this.Bind<IAuthentication>().ToConstant(membership);
-           
+
+            this.Unbind<IProjectionStorage>();
+            this.Bind<IProjectionStorage>().ToMethod(CreateStorage).
+                InScope(c => CapiApplication.Context);
+        }
+        protected IProjectionStorage CreateStorage(IContext c)
+        {
+            return new InternalProjectionStorage(CapiApplication.Context);
         }
     }
 }
