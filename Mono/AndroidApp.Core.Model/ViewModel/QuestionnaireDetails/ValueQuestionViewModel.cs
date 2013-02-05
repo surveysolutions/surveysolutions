@@ -14,9 +14,9 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
         }
         [JsonConstructor]
-        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType questionType, string answer, QuestionStatus status, string instructions, string comments, bool capital, bool mandatory, string validationExpression,
+        public ValueQuestionViewModel(ItemPublicKey publicKey, string text, QuestionType questionType, string answerString, QuestionStatus status, string instructions, string comments, bool capital, bool mandatory, string validationExpression,
           string validationMessage)
-            : base(publicKey, text, questionType, status, instructions, comments,mandatory, capital, answer, validationExpression, validationMessage)
+            : base(publicKey, text, questionType, status, instructions, comments, mandatory, capital, answerString, validationExpression, validationMessage)
         {
         }
         #region Overrides of QuestionViewModel

@@ -15,13 +15,22 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class QuestionnairePropagatedScreenViewModel : QuestionnaireScreenViewModel
     {
+        [JsonConstructor]
+        public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string screenName, string title,
+                                                      bool enabled,
+                                                      ItemPublicKey screenId,
+                                                      IEnumerable<IQuestionnaireItemViewModel> items,
+                                                      IEnumerable<ItemPublicKey> breadcrumbs)
+            : base(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs)
+        {
+        }
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                       bool enabled,
                                                       ItemPublicKey screenId,
                                                       IEnumerable<IQuestionnaireItemViewModel> items,
                                                       Func<IEnumerable<ItemPublicKey>> sibligs,
                                                       IEnumerable<ItemPublicKey> breadcrumbs)
-            : base(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs/*, chapters*/)
+            : this(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs)
         {
 
             if (screenId.PropagationKey.HasValue)
