@@ -184,7 +184,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             this.commandService.Execute(new DeleteQuestionCommand(publicKey, parentPublicKey, Guid.Parse(questionnaireId)));
             return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
-            
+
         }
 
         /// <summary>
@@ -266,13 +266,13 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             CardView source = this.viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
             return this.View(
-                "_EditCard", 
+                "_EditCard",
                 new ImageNewViewModel
                     {
-                        Desc = source.Description, 
-                        Title = source.Title, 
-                        QuestionnaireId = questionnaireId, 
-                        PublicKey = publicKey, 
+                        Desc = source.Description,
+                        Title = source.Title,
+                        QuestionnaireId = questionnaireId,
+                        PublicKey = publicKey,
                         ImageKey = imageKey
                     });
         }
@@ -374,43 +374,43 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    newItemKey, 
-                                    model.Title, 
-                                    model.StataExportCaption, 
-                                    model.QuestionType, 
+                                    model.QuestionnaireKey,
+                                    newItemKey,
+                                    model.Title,
+                                    model.StataExportCaption,
+                                    model.QuestionType,
                                     model.QuestionScope,
-                                    model.Parent, 
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
-                                    ansverItems, 
+                                    model.Parent,
+                                    model.ConditionExpression,
+                                    model.ValidationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.AnswerOrder,
+                                    ansverItems,
                                     model.MaxValue));
                         }
                         else
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    newItemKey, 
-                                    model.Title, 
-                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
-                                    model.MaxValue, 
-                                    model.StataExportCaption, 
+                                    model.QuestionnaireKey,
+                                    newItemKey,
+                                    model.Title,
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(),
+                                    model.MaxValue,
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.Parent, 
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    model.Parent,
+                                    model.ConditionExpression,
+                                    model.ValidationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.AnswerOrder,
                                     ansverItems));
                         }
                     }
@@ -422,19 +422,19 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    model.PublicKey, 
-                                    model.Title, 
-                                    model.StataExportCaption, 
+                                    model.QuestionnaireKey,
+                                    model.PublicKey,
+                                    model.Title,
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    model.ConditionExpression,
+                                    model.ValidationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.AnswerOrder,
                                     ansverItems,
                                     model.MaxValue));
                         }
@@ -442,34 +442,38 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    model.PublicKey, 
-                                    model.Title, 
-                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
+                                    model.QuestionnaireKey,
+                                    model.PublicKey,
+                                    model.Title,
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(),
                                     model.MaxValue,
-                                    model.StataExportCaption, 
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    model.ConditionExpression,
+                                    model.ValidationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.AnswerOrder,
                                     ansverItems));
                         }
                     }
                 }
+                catch (ArgumentException e)
+                {
+                    this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
+                }
                 catch (Exception e)
                 {
-                    this.ModelState.AddModelError(
-                        string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
-                    return this.PartialView("_Create", model);
+                    this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
                 }
 
-                return this.RedirectToAction(
-                    "Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
+                if (this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
+                }
             }
 
             return View("Create", model);
@@ -543,8 +547,8 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId, Guid? groupPublicKey)
         {
-            var input = questionPublicKey == Guid.Empty 
-                ? new QuestionViewInputModel(questionPublicKey, questionnaireId, groupPublicKey) 
+            var input = questionPublicKey == Guid.Empty
+                ? new QuestionViewInputModel(questionPublicKey, questionnaireId, groupPublicKey)
                 : new QuestionViewInputModel(questionPublicKey, questionnaireId);
             var source =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(input);
@@ -594,8 +598,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList =
                     new SelectList(
                         images.Items.Select(
-                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(), 
-                        "Value", 
+                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(),
+                        "Value",
                         "Text");
                 this.ViewBag.Images = imagesList;
             }

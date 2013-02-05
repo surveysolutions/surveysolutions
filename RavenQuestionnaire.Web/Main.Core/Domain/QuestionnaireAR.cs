@@ -9,6 +9,7 @@
 
 using System.CodeDom.Compiler;
 using System.Linq;
+using System.Management.Instrumentation;
 
 namespace Main.Core.Domain
 {
@@ -209,6 +210,7 @@ namespace Main.Core.Domain
             Answer[] answers)
         {
             //// performe checks before event raising
+            var stataCaption = ValidateStataCaption(publicKey, stataExportCaption);
 
             // Apply a NewQuestionAdded event that reflects the
             // creation of this instance. The state of this
@@ -219,7 +221,7 @@ namespace Main.Core.Domain
                     {
                         PublicKey = publicKey,
                         QuestionText = questionText,
-                        StataExportCaption = stataExportCaption,
+                        StataExportCaption = stataCaption,
                         QuestionType = questionType,
                         QuestionScope = questionScope,
                         ConditionExpression = conditionExpression,
@@ -305,6 +307,12 @@ namespace Main.Core.Domain
             Order answerOrder,
             Answer[] answers)
         {
+            var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
+            if (question == null)
+            {
+                throw  new ArgumentException("Question not found");
+            }
+
             var stataCaption = ValidateStataCaption(publicKey, stataExportCaption);
 
             this.ApplyEvent(
@@ -340,22 +348,22 @@ namespace Main.Core.Domain
 
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
             }
 
             if (stataCaption.Length >= 32)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
             }
 
             if (stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))))
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
             }
 
             if (Char.IsDigit(stataCaption[0]))
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit");
+                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -364,7 +372,7 @@ namespace Main.Core.Domain
 
             if (captions.Contains(stataCaption))
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
             }
 
             return stataCaption;
@@ -751,11 +759,6 @@ namespace Main.Core.Domain
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            if (question == null)
-            {
-                return;
-            }
-
             this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 
