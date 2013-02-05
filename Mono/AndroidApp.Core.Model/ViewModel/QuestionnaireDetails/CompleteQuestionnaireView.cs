@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.Validation;
@@ -64,55 +65,60 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public void Restore()
         {
-            if(this.IsRestored)
+            if (this.IsRestored)
                 return;
-           
-
-                this.IsRestored = true;
-                var restoredState =
-                    projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
-                if (restoredState == null)
-                    return;
-                this.PublicKey = restoredState.PublicKey;
-                this.Title = restoredState.Title;
-                this.Templates = restoredState.Templates;
-                this.Screens = restoredState.Screens;
-                this.Chapters =
-                    restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
-                this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-                foreach (var screen in Screens.Select(s => s.Value))
-                {
-                    var plainScreen = screen as QuestionnaireScreenViewModel;
-                    if (plainScreen != null)
-                    {
-                        foreach (var item in plainScreen.Items)
-                        {
-                            var question = item as QuestionViewModel;
-                            if (question != null)
-                            {
-                                UpdateQuestionHash(question);
-                                continue;
-                            }
-                            var group = item as QuestionnaireNavigationPanelItem;
-                            if (group != null)
-                            {
-                                group.RestoreFullScreenFunk((k) => this.Screens[k]);
-                            }
-                        }
-                       
-                        if (plainScreen is QuestionnairePropagatedScreenViewModel)
-                            plainScreen.PropertyChanged += screen_PropertyChanged;
-                        continue;
-                    }
-                    var roster = screen as QuestionnaireGridViewModel;
-                    if (roster != null)
-                    {
-                        roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
-                    }
-                   
-                }
-                this.validator = new QuestionnaireValidationExecutor(this);
+            while (isProccessing)
+            {
+                Thread.Sleep(1000);
+            }
             
+            isProccessing = true;
+
+            this.IsRestored = true;
+            var restoredState =
+                projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
+            if (restoredState == null)
+                return;
+            this.PublicKey = restoredState.PublicKey;
+            this.Title = restoredState.Title;
+            this.Templates = restoredState.Templates;
+            this.Screens = restoredState.Screens;
+            this.Chapters =
+                restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
+            this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            foreach (var screen in Screens.Select(s => s.Value))
+            {
+                var plainScreen = screen as QuestionnaireScreenViewModel;
+                if (plainScreen != null)
+                {
+                    foreach (var item in plainScreen.Items)
+                    {
+                        var question = item as QuestionViewModel;
+                        if (question != null)
+                        {
+                            UpdateQuestionHash(question);
+                            continue;
+                        }
+                        var group = item as QuestionnaireNavigationPanelItem;
+                        if (group != null)
+                        {
+                            group.RestoreFullScreenFunk((k) => this.Screens[k]);
+                        }
+                    }
+
+                    if (plainScreen is QuestionnairePropagatedScreenViewModel)
+                        plainScreen.PropertyChanged += screen_PropertyChanged;
+                    continue;
+                }
+                var roster = screen as QuestionnaireGridViewModel;
+                if (roster != null)
+                {
+                    roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
+                }
+
+            }
+            this.validator = new QuestionnaireValidationExecutor(this);
+            isProccessing = false;
         }
 
         public void Recicle()
@@ -120,6 +126,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             if (!IsRestored)
                 return;
 
+            while (isProccessing)
+            {
+                Thread.Sleep(1000);
+            }
+            
+            isProccessing = true;
             IsRestored = false;
             var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates,
                                                            this.Chapters.Select(c => c.ScreenId));
@@ -128,10 +140,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Templates = null;
             Screens = null;
             Questions = null;
-
+            
+            isProccessing = false;
         }
 
-        private object locker=new object();
+        private bool isProccessing = false;
         public Guid PublicKey { get; private set; }
 
         public string Title { get; private set; }

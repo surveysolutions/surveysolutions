@@ -47,7 +47,7 @@ namespace AndroidApp
             var lookups = base.GetViewModelViewLookup();
 
             if (!lookups.ContainsKey(typeof(CompleteQuestionnaireView)))
-                lookups.Add(typeof(CompleteQuestionnaireView), typeof(DetailsActivity));
+                lookups.Add(typeof(CompleteQuestionnaireView), typeof(LoadingActivity));
             if (!lookups.ContainsKey(typeof(DashboardModel)))
                 lookups.Add(typeof(DashboardModel), typeof(DashboardActivity));
 

@@ -58,9 +58,9 @@ namespace AndroidApp
 
         protected override void OnCreate(Bundle bundle)
         {
-            
+
             base.OnCreate(bundle);
-            
+
             SetContentView(Resource.Layout.Details);
             if (bundle != null)
             {
@@ -71,6 +71,7 @@ namespace AndroidApp
             }
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                 new QuestionnaireScreenInput(ViewModel.PublicKey));
+            ViewModel.Restore();
             this.Title = ViewModel.Title;
 
             if (bundle == null)
@@ -84,12 +85,15 @@ namespace AndroidApp
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
         }
 
-  //      private bool isRotation = false;
+        //      private bool isRotation = false;
 
         protected override void OnStop()
         {
             if (IsFinishing)
-                ViewModel.Recicle();
+            {
+                var saveTask = new Task(() => ViewModel.Recicle());
+                saveTask.Start();
+            }
             base.OnStop();
         }
 
