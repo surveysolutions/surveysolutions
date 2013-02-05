@@ -66,48 +66,61 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
             if(this.IsRestored)
                 return;
-            var restoredState = projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
-            if (restoredState == null)
-                return;
-            this.PublicKey = restoredState.PublicKey;
-            this.Title = restoredState.Title;
-            this.Templates = restoredState.Templates;
-            this.Screens = restoredState.Screens;
-            this.Chapters = restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
-            this.Questions=new Dictionary<ItemPublicKey, QuestionViewModel>();
-            foreach (var screen in Screens.Select(s => s.Value))
-            {
-                var plainScreen = screen as QuestionnaireScreenViewModel;
-                if (plainScreen != null)
+           
+
+                this.IsRestored = true;
+                var restoredState =
+                    projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
+                if (restoredState == null)
+                    return;
+                this.PublicKey = restoredState.PublicKey;
+                this.Title = restoredState.Title;
+                this.Templates = restoredState.Templates;
+                this.Screens = restoredState.Screens;
+                this.Chapters =
+                    restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
+                this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+                foreach (var screen in Screens.Select(s => s.Value))
                 {
-                    foreach (var item in plainScreen.Items)
+                    var plainScreen = screen as QuestionnaireScreenViewModel;
+                    if (plainScreen != null)
                     {
-                        var question = item as QuestionViewModel;
-                        if (question != null)
+                        foreach (var item in plainScreen.Items)
                         {
-                            UpdateQuestionHash(question);
-                            continue;
+                            var question = item as QuestionViewModel;
+                            if (question != null)
+                            {
+                                UpdateQuestionHash(question);
+                                continue;
+                            }
+                            var group = item as QuestionnaireNavigationPanelItem;
+                            if (group != null)
+                            {
+                                group.RestoreFullScreenFunk((k) => this.Screens[k]);
+                            }
                         }
-                        var group = item as QuestionnaireNavigationPanelItem;
-                        if (group != null)
-                        {
-                            group.RestoreFullScreenFunk((k) => this.Screens[k]);
-                        }
+                       
+                        if (plainScreen is QuestionnairePropagatedScreenViewModel)
+                            plainScreen.PropertyChanged += screen_PropertyChanged;
+                        continue;
                     }
-                    continue;
+                    var roster = screen as QuestionnaireGridViewModel;
+                    if (roster != null)
+                    {
+                        roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
+                    }
+                   
                 }
-                var roster = screen as QuestionnaireGridViewModel;
-                if(roster!=null)
-                {
-                    roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
-                }
-            }
-            this.validator = new QuestionnaireValidationExecutor(this);
-            this.IsRestored = true;
+                this.validator = new QuestionnaireValidationExecutor(this);
+            
         }
 
         public void Recicle()
         {
+            if (!IsRestored)
+                return;
+
+            IsRestored = false;
             var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates,
                                                            this.Chapters.Select(c => c.ScreenId));
             projectionStorage.SaveOrUpdateProjection(state, PublicKey);
@@ -115,8 +128,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Templates = null;
             Screens = null;
             Questions = null;
-            IsRestored = false;
+
         }
+
+        private object locker=new object();
         public Guid PublicKey { get; private set; }
 
         public string Title { get; private set; }
