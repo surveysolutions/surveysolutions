@@ -21,6 +21,15 @@ WHERE [PublicKey] = '{0}'";
 
             return string.Format(template, publicKey);
         }
+        internal static string SelectProjectionExistanceByGuidQuery(Guid publicKey)
+        {
+            var template =
+                @"SELECT count(PublicKey) as Count
+FROM Projections
+WHERE [PublicKey] = '{0}'";
+
+            return string.Format(template, publicKey);
+        }
 
         /*   internal static string SelectAllEventsQuery()
            {

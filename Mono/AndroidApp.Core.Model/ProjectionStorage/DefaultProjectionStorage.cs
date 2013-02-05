@@ -46,12 +46,27 @@ namespace AndroidApp.Core.Model.ProjectionStorage
 
         public void SaveOrUpdateProjection(object projection, Guid publicKey)
         {
+            var cursor = _databaseHelper
+               .ReadableDatabase
+               .RawQuery(ProjectionQuery.SelectProjectionExistanceByGuidQuery(publicKey), null);
+            var dataIndex = cursor.GetColumnIndex("Count");
+            int count=0;
+            while (cursor.MoveToNext())
+            {
+                if (!int.TryParse(cursor.GetString(dataIndex), out count))
+                    count = 0;
+                break;
+                
+            }
             var data = GetJsonData(projection);
             var values = new ContentValues();
             values.Put("PublicKey", publicKey.ToString());
             values.Put("Data", data);
-
-            _databaseHelper.WritableDatabase.Insert("Projections", null, values);
+            if (count == 0)
+                _databaseHelper.WritableDatabase.Insert("Projections", null, values);
+            else
+                _databaseHelper.WritableDatabase.Update("Projections", values, string.Format("[PublicKey] = '{0}'", publicKey),
+                                                        new string[0]);
         }
 
         public object RestoreProjection(Guid publicKey)
