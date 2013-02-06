@@ -35,7 +35,7 @@ namespace AndroidApp
         {
             base.OnCreate(bundle);
             ViewModel =
-                CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput());
+                CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput(Guid.NewGuid()));
             SetContentView(Resource.Layout.Main);
 
         }

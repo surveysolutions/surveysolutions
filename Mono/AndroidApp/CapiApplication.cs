@@ -14,6 +14,7 @@ using Android.Widget;
 using AndroidApp.Core.Model.Authorization;
 using AndroidApp.Core.Model.EventHandlers;
 using AndroidApp.Core.Model.ProjectionStorage;
+using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
@@ -97,6 +98,11 @@ namespace AndroidApp
             bus.RegisterHandler(eventHandler, typeof(ConditionalStatusChanged));
             bus.RegisterHandler(eventHandler, typeof(PropagatableGroupAdded));
             bus.RegisterHandler(eventHandler, typeof(PropagatableGroupDeleted));
+
+
+            var dashboardeventHandler =
+               new DashboardDenormalizer(Kernel.Get<IDenormalizerStorage<DashboardModel>>());
+            bus.RegisterHandler(dashboardeventHandler, typeof(SnapshootLoaded));
             #endregion
 
             GenerateEvents(bus);

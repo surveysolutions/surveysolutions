@@ -59,6 +59,7 @@
     <Compile Include="Authorization\AndroidAuthentication.cs" />
     <Compile Include="Authorization\IAuthentication.cs" />
     <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
+    <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="ProjectionStorage\CriteriaContractResolver.cs" />
     <Compile Include="ProjectionStorage\DefaultProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\InternalProjectionStorage.cs" />

@@ -25,7 +25,7 @@
       <!--android:layout_alignParentLeft="true"-->
       <TextView  android:id="@+id/tvStatus"
                android:layout_width="200px"
-               android:layout_height="fill_parent"
+               android:layout_height="wrap_content"
                android:gravity=    "center"
                android:textSize="20dp"
                local:MvxBind="{'Text':{'Path':'Status'}}"/>

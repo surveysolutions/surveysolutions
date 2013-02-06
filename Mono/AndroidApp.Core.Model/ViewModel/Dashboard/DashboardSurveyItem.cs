@@ -20,7 +20,12 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
             SurveyTitle = surveyTitle;
             Items = items;
         }
-
+        public DashboardSurveyItem(Guid publicKey, string surveyTitle)
+        {
+            PublicKey = publicKey;
+            SurveyTitle = surveyTitle;
+            Items = new List<DashboardQuestionnaireItem>();
+        }
         public Guid PublicKey { get; private set; }
         public string SurveyTitle { get; private set; }
         public IList<DashboardQuestionnaireItem> Items { get; private set; }
