@@ -27,7 +27,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                        string.Concat(
                                            (IEnumerable<string>)
                                            document.Find<ICompleteQuestion>(q => q.Featured).Select(
-                                               q => q.GetAnswerString())));
+                                               q => q.GetAnswerString()+" ")));
             this.Status = document.Status;
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();

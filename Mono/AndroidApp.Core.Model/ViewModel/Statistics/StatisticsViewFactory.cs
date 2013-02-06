@@ -19,7 +19,7 @@ namespace AndroidApp.Core.Model.ViewModel.Statistics
 
         public StatisticsViewModel Load(StatisticsInput input)
         {
-            var doc = Queryable.First<CompleteQuestionnaireView>(this._documentStorage.Query());
+            var doc = this._documentStorage.GetByGuid(input.QuestionnaireId);
             var enabledQuestion =
                 doc.FindQuestion(
                     q => q.Status.HasFlag(QuestionStatus.Enabled));
