@@ -183,8 +183,9 @@
     <Compile Include="Commands\Synchronization\RegisterNewDeviceCapiCommand.cs" />
     <Compile Include="Commands\Synchronization\RegisterNewSupervisorCommand.cs" />
     <Compile Include="Commands\User\ChangeUserCommand.cs" />
-    <Compile Include="Commands\User\ChangeUserStatusCommand.cs" />
     <Compile Include="Commands\User\CreateUserCommand.cs" />
+    <Compile Include="Commands\User\LockUserCommand.cs" />
+    <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
     <Compile Include="DenormalizerStorageProvider.cs" />
@@ -351,7 +352,8 @@
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
-    <Compile Include="Events\User\UserStatusChanged.cs" />
+    <Compile Include="Events\User\UserLocked.cs" />
+    <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\FileType.cs" />
     <Compile Include="Export\IDataExport.cs" />

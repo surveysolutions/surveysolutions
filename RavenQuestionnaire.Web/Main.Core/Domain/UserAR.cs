@@ -129,18 +129,26 @@ namespace Main.Core.Domain
         /// </param>
         public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
         {
-            this.ApplyEvent(new UserChanged { Email = email, IsLocked = isLocked, Roles = roles });
+            this.ApplyEvent(new UserChanged { Email = email, Roles = roles });
+
+            if (isLocked)
+            {
+                this.ApplyEvent(new UserLocked());
+            }
+            else
+            {
+                this.ApplyEvent(new UserUnlocked());
+            }
         }
 
-        /// <summary>
-        /// The set user lock state.
-        /// </summary>
-        /// <param name="isLocked">
-        /// The is user locked.
-        /// </param>
-        public void SetUserLockState(bool isLocked)
+        public void Lock()
         {
-            this.ApplyEvent(new UserStatusChanged { IsLocked = isLocked });
+            this.ApplyEvent(new UserLocked());
+        }
+
+        public void Unlock()
+        {
+            this.ApplyEvent(new UserUnlocked());
         }
 
         #endregion
@@ -154,7 +162,7 @@ namespace Main.Core.Domain
         /// <param name="e">
         /// The e.
         /// </param>
-        protected void OnNewQuestionnaireCreated(NewUserCreated e)
+        protected void OnNewUserCreated(NewUserCreated e)
         {
             this.userName = e.Name;
             this.email = e.Email;
@@ -164,15 +172,14 @@ namespace Main.Core.Domain
             this.supervisor = e.Supervisor;
         }
 
-        /// <summary>
-        /// The on set user lock state.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnSetUserLockState(UserStatusChanged e)
+        protected void OnUserLocked(UserLocked @event)
         {
-            this.isUserLocked = e.IsLocked;
+            this.isUserLocked = true;
+        }
+
+        protected void OnUserUnlocked(UserUnlocked @event)
+        {
+            this.isUserLocked = false;
         }
 
         /// <summary>
@@ -184,7 +191,6 @@ namespace Main.Core.Domain
         protected void OnUserChange(UserChanged e)
         {
             this.email = e.Email;
-            this.isUserLocked = e.IsLocked;
             this.roles = e.Roles;
         }
 
