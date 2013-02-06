@@ -318,6 +318,10 @@ Mono/AndroidMain.Synchronization/bin/*
 Mono/AndroidSynchronizationMessages/bin/*
 Mono/AndroidSynchronizationMessages/obj/*
 Mono/AndroidMain.Synchronization/obj/*
+Mono/AndroidSynchronizationMessages/bin/*
+Mono/AndroidSynchronizationMessages/obj/*
+Mono/AndroidMain.Synchronization/obj/*
+RavenQuestionnaire.Web/Main.Synchronization.Tests/bin/*
 RavenQuestionnaire.Web/Main.Synchronization.Tests/bin/*
 Mono/AndroidSynchronizationMessages/bin/*
 Mono/AndroidSynchronizationMessages/obj/*
