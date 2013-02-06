@@ -352,7 +352,8 @@
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />
     <Compile Include="Events\User\UserChanged.cs" />
-    <Compile Include="Events\User\UserStatusChanged.cs" />
+    <Compile Include="Events\User\UserLocked.cs" />
+    <Compile Include="Events\User\UserUnlocked.cs" />
     <Compile Include="Export\ExportManager.cs" />
     <Compile Include="Export\FileType.cs" />
     <Compile Include="Export\IDataExport.cs" />

@@ -23,7 +23,8 @@ namespace Main.Core.EventHandlers
     /// </summary>
     public class UserDenormalizer : IEventHandler<NewUserCreated>, 
                                     IEventHandler<UserChanged>, 
-                                    IEventHandler<UserStatusChanged>
+                                    IEventHandler<UserLocked>,
+                                    IEventHandler<UserUnlocked>
     {
         #region Constants and Fields
 
@@ -88,17 +89,18 @@ namespace Main.Core.EventHandlers
             item.Roles = evnt.Payload.Roles.ToList();
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        public void Handle(IPublishedEvent<UserStatusChanged> evnt)
+        public void Handle(IPublishedEvent<UserLocked> @event)
         {
-            UserDocument item = this.users.GetByGuid(evnt.EventSourceId);
+            UserDocument item = this.users.GetByGuid(@event.EventSourceId);
 
-            item.IsLocked = evnt.Payload.IsLocked;
+            item.IsLocked = true;
+        }
+
+        public void Handle(IPublishedEvent<UserUnlocked> @event)
+        {
+            UserDocument item = this.users.GetByGuid(@event.EventSourceId);
+
+            item.IsLocked = false;
         }
 
         #endregion

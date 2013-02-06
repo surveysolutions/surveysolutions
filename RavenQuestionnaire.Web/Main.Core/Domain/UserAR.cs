@@ -130,17 +130,25 @@ namespace Main.Core.Domain
         public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
         {
             this.ApplyEvent(new UserChanged { Email = email, Roles = roles });
-            this.ApplyEvent(new UserStatusChanged { IsLocked = isLocked });
+
+            if (isLocked)
+            {
+                this.ApplyEvent(new UserLocked());
+            }
+            else
+            {
+                this.ApplyEvent(new UserUnlocked());
+            }
         }
 
         public void Lock()
         {
-            this.ApplyEvent(new UserStatusChanged { IsLocked = true });
+            this.ApplyEvent(new UserLocked());
         }
 
         public void Unlock()
         {
-            this.ApplyEvent(new UserStatusChanged { IsLocked = false });
+            this.ApplyEvent(new UserUnlocked());
         }
 
         #endregion
@@ -164,15 +172,14 @@ namespace Main.Core.Domain
             this.supervisor = e.Supervisor;
         }
 
-        /// <summary>
-        /// The on set user lock state.
-        /// </summary>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        protected void OnSetUserLockState(UserStatusChanged e)
+        protected void OnUserLocked(UserLocked @event)
         {
-            this.isUserLocked = e.IsLocked;
+            this.isUserLocked = true;
+        }
+
+        protected void OnUserUnlocked(UserUnlocked @event)
+        {
+            this.isUserLocked = false;
         }
 
         /// <summary>
