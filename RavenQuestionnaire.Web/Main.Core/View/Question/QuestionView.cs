@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
@@ -79,6 +80,7 @@ namespace Main.Core.View.Question
             this.Mandatory = doc.Mandatory;
             this.Capital = doc.Capital;
             var autoQuestion = doc as IAutoPropagate;
+
             if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
                 this.Triggers = autoQuestion.Triggers;
@@ -162,6 +164,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
+        [DisplayName("Variable name")]
         public string StataExportCaption { get; set; }
 
         /// <summary>
@@ -204,6 +207,11 @@ namespace Main.Core.View.Question
         /// Gets or sets parent group title.
         /// </summary>
         public string GroupTitle { get; set; }
+
+        /// <summary>
+        /// Gets or sets parent group is propagated.
+        /// </summary>
+        public bool IsPropagated { get; set; }
 
         #endregion
       
@@ -274,7 +282,10 @@ namespace Main.Core.View.Question
             var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
             this.Parent = parent.PublicKey;
             this.GroupTitle = parent.Title;
+            this.IsPropagated = parent.Propagated != Propagate.None;
         }
+
+        
 
         /// <summary>
         /// The get question group.

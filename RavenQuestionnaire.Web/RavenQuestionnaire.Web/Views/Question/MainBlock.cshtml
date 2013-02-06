@@ -55,12 +55,15 @@
                         <label class="checkbox">@Html.CheckBoxFor(model => model.Mandatory) Yes</label>
                     </div>
                 </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.Capital, new { @class = "control-label" })
-                    <div class="controls">
-                        <label class="checkbox">@Html.CheckBoxFor(model => model.Capital) Yes</label>
+                @if (Model.IsPropagated)
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.Capital, new {@class = "control-label"})
+                        <div class="controls">
+                            <label class="checkbox">@Html.CheckBoxFor(model => model.Capital) Yes</label>
+                        </div>
                     </div>
-                </div>
+                }
                 <div class="control-group">
                     @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
                     <div class="controls">

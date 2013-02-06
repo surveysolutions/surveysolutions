@@ -387,6 +387,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Instructions,
                                     model.Featured,
                                     model.Mandatory,
+                                    model.Capital,
                                     model.AnswerOrder,
                                     ansverItems,
                                     model.MaxValue));
@@ -410,6 +411,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Instructions,
                                     model.Featured,
                                     model.Mandatory,
+                                    model.Capital,
                                     model.AnswerOrder,
                                     ansverItems));
                         }
@@ -434,6 +436,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Instructions,
                                     model.Featured,
                                     model.Mandatory,
+                                    model.Capital,
                                     model.AnswerOrder,
                                     ansverItems,
                                     model.MaxValue));
@@ -456,6 +459,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Instructions,
                                     model.Featured,
                                     model.Mandatory,
+                                    model.Capital,
                                     model.AnswerOrder,
                                     ansverItems));
                         }
