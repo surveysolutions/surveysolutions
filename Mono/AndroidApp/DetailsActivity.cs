@@ -39,7 +39,10 @@ namespace AndroidApp
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
         }
-       
+        protected Guid QuestionnaireId
+        {
+            get { return Guid.Parse(Intent.GetStringExtra("publicKey")); }
+        }
         protected ViewPager VpContent
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
@@ -58,7 +61,8 @@ namespace AndroidApp
 
         protected override void OnCreate(Bundle bundle)
         {
-
+            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+               new QuestionnaireScreenInput(QuestionnaireId));
             base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.Details);
@@ -69,9 +73,7 @@ namespace AndroidApp
                     return;
                 ScreenId = ItemPublicKey.Parse(savedScreen);
             }
-            ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
-                new QuestionnaireScreenInput(ViewModel.PublicKey));
-            ViewModel.Restore();
+           
             this.Title = ViewModel.Title;
 
             if (bundle == null)
