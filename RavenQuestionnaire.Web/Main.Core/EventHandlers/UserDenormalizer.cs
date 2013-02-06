@@ -16,6 +16,8 @@ namespace Main.Core.EventHandlers
 
     using Ncqrs.Eventing.ServiceModel.Bus;
 
+    using System.Linq;
+
     /// <summary>
     /// The user denormalizer.
     /// </summary>
@@ -83,6 +85,7 @@ namespace Main.Core.EventHandlers
             UserDocument item = this.users.GetByGuid(evnt.EventSourceId);
 
             item.Email = evnt.Payload.Email;
+            item.Roles = evnt.Payload.Roles.ToList();
         }
 
         /// <summary>
