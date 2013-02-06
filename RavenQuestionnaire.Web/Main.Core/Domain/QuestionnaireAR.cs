@@ -175,6 +175,9 @@ namespace Main.Core.Domain
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="answerOrder">
         /// The answer order.
         /// </param>
@@ -184,7 +187,9 @@ namespace Main.Core.Domain
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        /// <param name="triggers"></param>
+        /// <param name="triggers">
+        /// The triggers
+        /// </param>
         /// <param name="maxValue">
         /// The max value of autopropagate question
         /// </param>
@@ -202,6 +207,7 @@ namespace Main.Core.Domain
             string validationMessage,
             bool featured,
             bool mandatory,
+            bool capital,
             Order answerOrder,
             string instructions,
             Guid? groupPublicKey,
@@ -229,6 +235,7 @@ namespace Main.Core.Domain
                         ValidationMessage = validationMessage,
                         Featured = featured,
                         Mandatory = mandatory,
+                        Capital = capital,
                         AnswerOrder = answerOrder,
                         GroupPublicKey = groupPublicKey,
                         Triggers = triggers,
@@ -283,6 +290,9 @@ namespace Main.Core.Domain
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="answerOrder">
         /// The answer order.
         /// </param>
@@ -304,6 +314,7 @@ namespace Main.Core.Domain
             string validationMessage,
             bool featured,
             bool mandatory,
+            bool capital,
             Order answerOrder,
             Answer[] answers)
         {
@@ -318,7 +329,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionChanged
                     {
-                        PublicKey = publicKey, 
+                        PublicKey = publicKey,
                         QuestionText = questionText, 
                         Triggers = triggers, 
                         MaxValue = maxValue,
@@ -330,6 +341,7 @@ namespace Main.Core.Domain
                         ValidationMessage = validationMessage, 
                         Featured = featured, 
                         Mandatory = mandatory, 
+                        Capital = capital,
                         AnswerOrder = answerOrder, 
                         Answers = answers, 
                         Instructions = instructions

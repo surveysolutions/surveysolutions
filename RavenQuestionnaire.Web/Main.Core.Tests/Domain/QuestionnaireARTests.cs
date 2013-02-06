@@ -17,6 +17,29 @@ namespace Main.Core.Tests.Domain
     {
         #region AddQuestion tests
 
+        [Test]
+        public void AddQuestion_When_capital_parameter_is_true_Then_in_NewQuestionAdded_event_capital_property_should_be_set_in_true_too()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                bool caption = true;
+
+                // Act
+                questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
+                                          "name", QuestionType.Text,
+                                          QuestionScope.Interviewer,
+                                          "", "", "", false, false, caption, Order.AZ, "", null, new List<Guid>(), 0,
+                                          new Answer[0]);
+
+
+                // Assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual(caption, risedEvent.Capital);
+            }
+        }
+
         [TestCase("ma_name38")]
         [TestCase("__")]
         [TestCase("_123456789012345678901234567890_")]
@@ -31,7 +54,7 @@ namespace Main.Core.Tests.Domain
                 questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                           validStataExportCaption, QuestionType.Text,
                                           QuestionScope.Interviewer,
-                                          "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0,
+                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0,
                                           new Answer[0]);
 
                 // Assert
@@ -41,7 +64,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void AddQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_NewQuestionAdded_event_contains_trimed_stata_caption()
+        public void AddQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_NewQuestionAdded_event_should_contains_trimed_stata_caption()
         {
             using (var eventContext = new EventContext())
             {
@@ -53,7 +76,7 @@ namespace Main.Core.Tests.Domain
                 questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                           longStataExportCaption, QuestionType.Text,
                                           QuestionScope.Interviewer,
-                                          "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0,
+                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0,
                                           new Answer[0]);
 
                 // Assert
@@ -73,7 +96,7 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                                                longStataExportCaption, QuestionType.Text,
                                                                QuestionScope.Interviewer,
-                                                               "", "", "", false, false, Order.AZ, "", null,
+                                                               "", "", "", false, false, false, Order.AZ, "", null,
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
@@ -92,7 +115,7 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                                                stataExportCaptionWithFirstDigit, QuestionType.Text,
                                                                QuestionScope.Interviewer,
-                                                               "", "", "", false, false, Order.AZ, "", null,
+                                                               "", "", "", false, false, false, Order.AZ, "", null,
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
@@ -112,7 +135,7 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                                                emptyStataExportCaption, QuestionType.Text,
                                                                QuestionScope.Interviewer,
-                                                               "", "", "", false, false, Order.AZ, "", null,
+                                                               "", "", "", false, false, false, Order.AZ, "", null,
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
@@ -132,7 +155,7 @@ namespace Main.Core.Tests.Domain
                                                                nonValidStataExportCaptionWithBannedSymbols,
                                                                QuestionType.Text,
                                                                QuestionScope.Interviewer,
-                                                               "", "", "", false, false, Order.AZ, "", null,
+                                                               "", "", "", false, false, false, Order.AZ, "", null,
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
@@ -147,7 +170,7 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(Guid.NewGuid(), "What is your first name?", "name", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string duplicateStataExportCaption = "name";
 
@@ -155,7 +178,7 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                                                duplicateStataExportCaption, QuestionType.Text,
                                                                QuestionScope.Interviewer,
-                                                               "", "", "", false, false, Order.AZ, "", null,
+                                                               "", "", "", false, false, false, Order.AZ, "", null,
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
@@ -167,6 +190,62 @@ namespace Main.Core.Tests.Domain
         #region ChangeQuestion tests
 
         [Test]
+        public void ChangeQuestion_When_capital_parameter_is_true_Then_in_QuestionChanged_event_capital_property_should_be_set_in_true_too()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid targetQuestion = Guid.NewGuid();
+
+                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
+                                          QuestionScope.Interviewer,
+                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+
+                bool capital = true;
+
+                // Act
+                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                                             "title", "", QuestionType.Text,
+                                             QuestionScope.Interviewer, null, "", "", "", false, false, capital,
+                                             Order.AZ, new Answer[0]);
+
+
+                // Assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(capital, risedEvent.Capital);
+            }
+        }
+
+        [TestCase("ma_name38")]
+        [TestCase("__")]
+        [TestCase("_123456789012345678901234567890_")]
+        public void ChangeQuestion_When_stata_export_caption_is_valid_Then_rised_QuestionChanged_event_contains_the_same_stata_caption(string validStataExportCaption)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid targetQuestion = Guid.NewGuid();
+
+                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
+                                          QuestionScope.Interviewer,
+                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+
+                // Act
+                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                                             validStataExportCaption, "", QuestionType.Text,
+                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
+                                             Order.AZ, new Answer[0]);
+
+                // Assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(validStataExportCaption, risedEvent.StataExportCaption);
+            }
+        }
+
+
+        [Test]
         public void ChangeQuestion_When_we_updating_absent_question_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
@@ -176,51 +255,12 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.ChangeQuestion(Guid.NewGuid(), "Title", new List<Guid>(), 0,
                                                             "valid", "",
                                                             QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ,
                                                             new Answer[0]);
 
             // Assert
             Assert.Throws<ArgumentException>(act);
-        }
-
-        [Test]
-        public void ChangeQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_evend_contains_trimed_stata_caption()
-        {
-            // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            string longStataExportCaption = " my_name38  ";
-            Guid targetQuestion = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
-
-            QuestionChanged risedEvent = null;
-
-            // Act
-            using (var ctx = new EventContext())
-            {
-                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
-                                             longStataExportCaption, "",
-                                             QuestionType.Text,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false,
-                                             Order.AZ,
-                                             new Answer[0]);
-
-                foreach (UncommittedEvent item in ctx.Events)
-                {
-                    risedEvent = item.Payload as QuestionChanged;
-                    if (risedEvent != null)
-                    {
-                        continue;
-                    }
-                    break;
-                }
-            }
-
-            // Assert
-            Assert.AreEqual(longStataExportCaption.Trim(), risedEvent.StataExportCaption);
         }
 
         [Test]
@@ -233,13 +273,13 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             // Act
             TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
                                                             longStataExportCaption, "",
                                                             QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ,
                                                             new Answer[0]);
 
@@ -256,18 +296,46 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string stataExportCaptionWithFirstDigit = "1aaaa";
 
             // Act
             TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
                                                             stataExportCaptionWithFirstDigit, "", QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
 
             // Assert
             Assert.Throws<ArgumentException>(act);
+        }
+
+        [Test]
+        public void ChangeQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_QuestionChanged_evend_should_contains_trimed_stata_caption()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                string longStataExportCaption = " my_name38  ";
+                Guid targetQuestion = Guid.NewGuid();
+
+                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
+                                          QuestionScope.Interviewer,
+                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+
+                // Act
+                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                                             longStataExportCaption, "",
+                                             QuestionType.Text,
+                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
+                                             Order.AZ,
+                                             new Answer[0]);
+
+                // Assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual(longStataExportCaption.Trim(), risedEvent.StataExportCaption);
+            }
         }
 
         [Test]
@@ -279,14 +347,14 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string emptyStataExportCaption = string.Empty;
 
             // Act
             TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
                                                             emptyStataExportCaption, "", QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
 
             // Assert
@@ -302,14 +370,14 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string nonValidStataExportCaptionWithBannedSymbols = "aaa:_&b";
 
             // Act
             TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
                                                             nonValidStataExportCaptionWithBannedSymbols, "", QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
 
             // Assert
@@ -325,18 +393,18 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.AddQuestion(Guid.NewGuid(), "What is your first name?", "name", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
-                                      "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string duplicateStataExportCaption = "name";
 
             // Act
             TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "What is your last name?", new List<Guid>(), 0,
                                                             duplicateStataExportCaption, "", QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false,
+                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
 
             // Assert

@@ -55,6 +55,11 @@ namespace Main.Core.Events.Questionnaire
         public bool Mandatory { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
+        public bool Capital { get; set; }
+
+        /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
