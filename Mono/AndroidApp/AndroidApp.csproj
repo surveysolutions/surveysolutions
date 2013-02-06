@@ -242,6 +242,10 @@
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
       <Name>AndroidNCalc</Name>
+      </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
+      <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
+      <Name>AndroidMain.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>

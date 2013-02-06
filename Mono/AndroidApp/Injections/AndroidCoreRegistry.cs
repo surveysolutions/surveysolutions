@@ -53,6 +53,8 @@ namespace AndroidApp.Injections
             this.Unbind<IProjectionStorage>();
             this.Bind<IProjectionStorage>().ToMethod(CreateStorage).
                 InScope(c => CapiApplication.Context);
+
+            this.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();                
         }
         protected IProjectionStorage CreateStorage(IContext c)
         {
