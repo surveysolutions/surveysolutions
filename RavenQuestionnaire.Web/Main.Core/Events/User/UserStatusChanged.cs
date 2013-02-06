@@ -26,6 +26,11 @@ namespace Main.Core.Events.User
         /// </summary>
         public Guid PublicKey { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether is locked.
+        /// </summary>
+        public bool IsLocked { get; set; }
+
         #endregion
     }
 }

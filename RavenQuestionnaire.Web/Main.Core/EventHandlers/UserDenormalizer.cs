@@ -83,7 +83,6 @@ namespace Main.Core.EventHandlers
             UserDocument item = this.users.GetByGuid(evnt.EventSourceId);
 
             item.Email = evnt.Payload.Email;
-            item.IsLocked = evnt.Payload.IsLocked;
         }
 
         /// <summary>

@@ -30,6 +30,11 @@ namespace Main.Core.Events.User
         public string Email { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is locked.
+        /// </summary>
+        public bool IsLocked { get; set; }
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }

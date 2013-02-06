@@ -129,7 +129,8 @@ namespace Main.Core.Domain
         /// </param>
         public void ChangeUser(string email, bool isLocked, UserRoles[] roles)
         {
-            this.ApplyEvent(new UserChanged { Email = email, IsLocked = isLocked, Roles = roles });
+            this.ApplyEvent(new UserChanged { Email = email, Roles = roles });
+            this.ApplyEvent(new UserStatusChanged { IsLocked = isLocked });
         }
 
         public void Lock()
@@ -153,7 +154,7 @@ namespace Main.Core.Domain
         /// <param name="e">
         /// The e.
         /// </param>
-        protected void OnNewQuestionnaireCreated(NewUserCreated e)
+        protected void OnNewUserCreated(NewUserCreated e)
         {
             this.userName = e.Name;
             this.email = e.Email;
@@ -183,7 +184,6 @@ namespace Main.Core.Domain
         protected void OnUserChange(UserChanged e)
         {
             this.email = e.Email;
-            this.isUserLocked = e.IsLocked;
             this.roles = e.Roles;
         }
 
