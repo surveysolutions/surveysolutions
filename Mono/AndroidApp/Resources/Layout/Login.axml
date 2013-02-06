@@ -45,9 +45,11 @@
       android:layout_below="@id/header">
       <!--  Email Label -->
       <TextView android:layout_width="fill_parent"
+               
             android:layout_height="wrap_content"
             android:text="Email"/>
       <EditText android:layout_width="fill_parent"
+                  android:id="@+id/teLogin"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
@@ -58,6 +60,7 @@
             android:layout_height="wrap_content"
             android:text="Password"/>
       <EditText android:layout_width="fill_parent"
+                 android:id="@+id/tePassword"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:singleLine="true"
@@ -68,7 +71,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"
-            local:MvxBind="{'Click':{'Path':'LoginCommand'}}"
             android:text="Login"/>
       <!-- Link to Registration Screen --><!--
       <TextView android:id="@+id/link_to_register"

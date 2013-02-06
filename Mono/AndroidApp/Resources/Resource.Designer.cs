@@ -129,23 +129,23 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040003
 			public const int ScreenId = 2130968579;
 			
-			// aapt resource value: 0x7f04001d
-			public const int btnAnswered = 2130968605;
+			// aapt resource value: 0x7f04001f
+			public const int btnAnswered = 2130968607;
 			
-			// aapt resource value: 0x7f040021
-			public const int btnComplete = 2130968609;
+			// aapt resource value: 0x7f040023
+			public const int btnComplete = 2130968611;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
+			// aapt resource value: 0x7f040022
+			public const int btnInvalid = 2130968610;
+			
+			// aapt resource value: 0x7f04001c
+			public const int btnLogin = 2130968604;
+			
 			// aapt resource value: 0x7f040020
-			public const int btnInvalid = 2130968608;
-			
-			// aapt resource value: 0x7f04001a
-			public const int btnLogin = 2130968602;
-			
-			// aapt resource value: 0x7f04001e
-			public const int btnUnanswered = 2130968606;
+			public const int btnUnanswered = 2130968608;
 			
 			// aapt resource value: 0x7f04000d
 			public const int etComments = 2130968589;
@@ -165,14 +165,20 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040007
 			public const int llRoot = 2130968583;
 			
-			// aapt resource value: 0x7f04001c
-			public const int llScreen = 2130968604;
+			// aapt resource value: 0x7f04001e
+			public const int llScreen = 2130968606;
 			
 			// aapt resource value: 0x7f040009
 			public const int llWrapper = 2130968585;
 			
+			// aapt resource value: 0x7f04001d
+			public const int qGuid = 2130968605;
+			
+			// aapt resource value: 0x7f04001a
+			public const int teLogin = 2130968602;
+			
 			// aapt resource value: 0x7f04001b
-			public const int qGuid = 2130968603;
+			public const int tePassword = 2130968603;
 			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
@@ -183,8 +189,8 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f04001f
-			public const int tvErrorWarning = 2130968607;
+			// aapt resource value: 0x7f040021
+			public const int tvErrorWarning = 2130968609;
 			
 			// aapt resource value: 0x7f040016
 			public const int tvITem = 2130968598;
