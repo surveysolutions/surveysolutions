@@ -63,7 +63,6 @@
             <div class="title">
                 <button type="button" class="close" data-bind="click: closeMenu">&times</button>
                 <span data-bind="text: title"></span>. Responsible: <span data-bind="text: responsible.name"></span>. Status: <span data-bind="text: status.name"></span>
-                <input data-bind="value: title"/>
             </div>
             <div class="body">
                 <ul class="nav nav-list" data-bind="foreach: menu">
@@ -109,7 +108,7 @@
                                     <!-- ko foreach: answers -->
                                     <!-- ko if: isVisible -->
                                     <td style="width: 250px;">
-                                        <div class="cell-content">
+                                        <div class="cell-content" data-bind="click: $root.openDetails">
                                             <span data-bind="css: markerStyle()"></span><span data-bind="text: answer"></span>
                                             <div class="question-toolbar pull-right">
                                                 <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlaged() == false || isReadonly == false)}">
@@ -280,7 +279,7 @@
 
 </script>
 <script type="text/html" id="Numeric">
-    <input data-bind="value: selectedOption, disable: isReadonly" />
+    <input type="number"  data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 <script type="text/html" id="DateTime">
     <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
@@ -289,7 +288,7 @@
     <input data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 <script type="text/html" id="Text">
-    <input data-bind="value: selectedOption" />
+    <input data-bind="value: selectedOption, disable: isReadonly" />
 </script>
 @{
     Html.RequiresJs("director.min.js", "Scripts", 50);
