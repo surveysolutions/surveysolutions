@@ -278,6 +278,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
+    <EmbeddedResource Include="researchDeptSurvey.txt" />
     <EmbeddedResource Include="userEvent.txt" />
     <EmbeddedResource Include="initEvent.txt" />
     <Content Include="Properties\AndroidManifest.xml" />

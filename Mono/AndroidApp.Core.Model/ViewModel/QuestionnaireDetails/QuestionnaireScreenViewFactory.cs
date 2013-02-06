@@ -26,7 +26,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public CompleteQuestionnaireView Load(QuestionnaireScreenInput input)
         {
-            var result= Queryable.First<CompleteQuestionnaireView>(this._documentStorage.Query());
+            var result= this._documentStorage.GetByGuid(input.QuestionnaireId);
             return result;
         }
 

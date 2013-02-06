@@ -130,6 +130,7 @@ namespace AndroidApp
 
 
             CompleteQuestionnaireDocument root = DesserializeEmbededResource<CompleteQuestionnaireDocument>("initEvent.txt");
+            CompleteQuestionnaireDocument researchQ = DesserializeEmbededResource<CompleteQuestionnaireDocument>("researchDeptSurvey.txt");
             NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
             #endregion
 
@@ -139,13 +140,25 @@ namespace AndroidApp
                                                    {
                                                        Template = new Snapshot(root.PublicKey, 1, root)
                                                    }, new Version());
+
+            var rEventTempl = new UncommittedEvent(Guid.NewGuid(),
+                                             researchQ.PublicKey, 1, 0, DateTime.Now,
+                                             new SnapshootLoaded()
+                                             {
+                                                 Template = new Snapshot(researchQ.PublicKey, 1, researchQ)
+                                             }, new Version());
+
             var userEventUcmt = new UncommittedEvent(Guid.NewGuid(), userEvent.PublicKey, 1, 0, DateTime.Now, userEvent,
                                                  new Version());
-            stream.Append(eventTempl);
             stream.Append(userEventUcmt);
+            stream.Append(eventTempl);
+            stream.Append(rEventTempl);
+            
             Kernel.Get<IEventStore>().Store(stream);
-            bus.Publish(eventTempl);
             bus.Publish(userEventUcmt);
+            bus.Publish(eventTempl);
+            bus.Publish(rEventTempl);
+           
         }
         protected T DesserializeEmbededResource<T>(string fileName)
         {

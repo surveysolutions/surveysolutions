@@ -427,7 +427,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
             if (question != null)
             {
-                if (question.QuestionScope != QuestionScope.Interviewer)
+                if (question.QuestionScope != QuestionScope.Interviewer || question.Featured)
                     return null;
                 var newType = CalculateViewType(question.QuestionType);
                 QuestionViewModel questionView;
