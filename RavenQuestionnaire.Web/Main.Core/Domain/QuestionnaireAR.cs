@@ -351,7 +351,7 @@ namespace Main.Core.Domain
                 throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
             }
 
-            if (stataCaption.Length >= 32)
+            if (stataCaption.Length > 32)
             {
                 throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
             }
