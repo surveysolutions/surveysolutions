@@ -13,7 +13,10 @@ using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Core.CAPI.Synchronization;
 using Main.Core;
+using Main.Core.View.User;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
+using Ninject;
 using Ninject.Activation;
 
 namespace AndroidApp.Injections
@@ -41,8 +44,8 @@ namespace AndroidApp.Injections
             base.Load();
             this.Bind<IEventStore>().To<SQLiteEventStore>();
             this.Unbind<IAuthentication>();
-            
-            var membership = new AndroidAuthentication();
+
+            var membership = new AndroidAuthentication(Kernel.Get<IDenormalizerStorage<UserView>>());
             this.Bind<IAuthentication>().ToConstant(membership);
 
             this.Unbind<IProjectionStorage>();

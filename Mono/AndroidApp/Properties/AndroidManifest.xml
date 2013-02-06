@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" package="AndroidApp.AndroidApp">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="AndroidApp.AndroidApp">
   <uses-sdk android:targetSdkVersion="14" />
   <application android:label="CAPI" android:icon="@drawable/capi" android:theme="@android:style/Theme.DeviceDefault.Light">
   </application>

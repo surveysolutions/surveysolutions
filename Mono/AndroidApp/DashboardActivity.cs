@@ -34,8 +34,11 @@ namespace AndroidApp
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            if (CapiApplication.Membership.CurrentUser == null)
+                StartActivity(typeof (LoginActivity));
             ViewModel =
-                CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput(Guid.NewGuid()));
+                CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                    new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
             SetContentView(Resource.Layout.Main);
 
         }

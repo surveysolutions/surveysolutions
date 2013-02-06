@@ -16,9 +16,9 @@ namespace AndroidApp.Core.Model.EventHandlers
                                                      /*IEventHandler<CompleteQuestionnaireDeleted>, */
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
-                                                     IEventHandler<PropagatableGroupDeleted>/*, 
-                                                     IEventHandler<QuestionnaireAssignmentChanged>, 
-                                                     IEventHandler<QuestionnaireStatusChanged>*/
+                                                     IEventHandler<PropagatableGroupDeleted>, /*
+                                                     IEventHandler<QuestionnaireAssignmentChanged>, */
+                                                     IEventHandler<QuestionnaireStatusChanged>
     {
         /// <summary>
         /// The _document storage.
@@ -130,5 +130,16 @@ namespace AndroidApp.Core.Model.EventHandlers
             return new ItemPublicKey(Guid.Parse(pkString), Guid.Parse(prKey));
         }
 
+        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
+
+        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        {
+            var document = GetStoredObject(evnt.Payload.CompletedQuestionnaireId);
+            if(document==null)
+                return;
+            document.Status = evnt.Payload.Status;
+        }
+
+        #endregion
     }
 }

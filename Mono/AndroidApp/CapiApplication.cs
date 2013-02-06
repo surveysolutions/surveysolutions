@@ -21,7 +21,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
+using Main.Core.Events.User;
 using Main.Core.View;
+using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Commanding;
@@ -74,7 +76,7 @@ namespace AndroidApp
 
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
-		{
+        {
             CurrentContext = this;
 
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
@@ -91,22 +93,31 @@ namespace AndroidApp
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             ProjectionStorage.ClearStorage();
             var eventHandler =
-                new CompleteQuestionnaireViewDenormalizer(Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>(), ProjectionStorage);
-            bus.RegisterHandler(eventHandler, typeof(SnapshootLoaded));
-            bus.RegisterHandler(eventHandler, typeof(AnswerSet));
-            bus.RegisterHandler(eventHandler, typeof(CommentSet));
-            bus.RegisterHandler(eventHandler, typeof(ConditionalStatusChanged));
-            bus.RegisterHandler(eventHandler, typeof(PropagatableGroupAdded));
-            bus.RegisterHandler(eventHandler, typeof(PropagatableGroupDeleted));
-
+                new CompleteQuestionnaireViewDenormalizer(
+                    Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>(), ProjectionStorage);
+            bus.RegisterHandler(eventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(eventHandler, typeof (AnswerSet));
+            bus.RegisterHandler(eventHandler, typeof (CommentSet));
+            bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));
+            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupAdded));
+            bus.RegisterHandler(eventHandler, typeof (PropagatableGroupDeleted));
+            bus.RegisterHandler(eventHandler, typeof (QuestionnaireStatusChanged));
 
             var dashboardeventHandler =
-               new DashboardDenormalizer(Kernel.Get<IDenormalizerStorage<DashboardModel>>());
-            bus.RegisterHandler(dashboardeventHandler, typeof(SnapshootLoaded));
+                new DashboardDenormalizer(Kernel.Get<IDenormalizerStorage<DashboardModel>>());
+            bus.RegisterHandler(dashboardeventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
+
+
+            var usereventHandler =
+                new UserDenormalizer(Kernel.Get<IDenormalizerStorage<UserView>>());
+            bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
+
             #endregion
 
             GenerateEvents(bus);
-		}
+        }
+
         protected void GenerateEvents(InProcessEventBus bus)
         {
 
@@ -115,31 +126,39 @@ namespace AndroidApp
 
             #region init
 
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            //var data = Encoding.Default.GetString("");
-            string s = string.Empty;
-            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
-                               .GetManifestResourceStream("AndroidApp." + "initEvent.txt"))
-            using (StreamReader reader = new StreamReader(streamEmbededRes))
-            {
-                s = reader.ReadToEnd();
-            }
 
 
 
-            CompleteQuestionnaireDocument root = JsonConvert.DeserializeObject<CompleteQuestionnaireDocument>(s, settings);
+            CompleteQuestionnaireDocument root = DesserializeEmbededResource<CompleteQuestionnaireDocument>("initEvent.txt");
+            NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
             #endregion
 
-            var eventTempl = new UncommittedEvent(Guid.Parse("05c9a227-d249-41d8-9a11-99e60e0a9eda"),
-                                               Guid.Parse("488b95d8-0783-40f5-a9e0-732f5ea44286"), 1, 0, DateTime.Now,
+            var eventTempl = new UncommittedEvent(Guid.NewGuid(),
+                                               root.PublicKey, 1, 0, DateTime.Now,
                                                new SnapshootLoaded()
                                                    {
                                                        Template = new Snapshot(root.PublicKey, 1, root)
                                                    }, new Version());
+            var userEventUcmt = new UncommittedEvent(Guid.NewGuid(), userEvent.PublicKey, 1, 0, DateTime.Now, userEvent,
+                                                 new Version());
             stream.Append(eventTempl);
+            stream.Append(userEventUcmt);
             Kernel.Get<IEventStore>().Store(stream);
             bus.Publish(eventTempl);
-
+            bus.Publish(userEventUcmt);
+        }
+        protected T DesserializeEmbededResource<T>(string fileName)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            //var data = Encoding.Default.GetString("");
+            string s = string.Empty;
+            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
+                               .GetManifestResourceStream("AndroidApp." + fileName))
+            using (StreamReader reader = new StreamReader(streamEmbededRes))
+            {
+                s = reader.ReadToEnd();
+            }
+            return JsonConvert.DeserializeObject<T>(s, settings);
         }
     }
 }

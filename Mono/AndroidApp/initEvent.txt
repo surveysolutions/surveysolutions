@@ -6454,8 +6454,8 @@
             "PublicKey": "488b95d8-0783-40f5-a9e0-732f5ea44286",
             "Responsible": {
               "$type": "Main.Core.Entities.SubEntities.UserLight, Main.Core",
-              "Id": "b7662320-1d66-4529-b936-fd19481e314e",
-              "Name": "nastya"
+              "Id": "2e38c8a0-c0a7-43f8-a139-dc235eab2814",
+              "Name": "ira"
             },
             "Status": {
               "$type": "Main.Core.Entities.SubEntities.SurveyStatus, Main.Core",

@@ -28,6 +28,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                            (IEnumerable<string>)
                                            document.Find<ICompleteQuestion>(q => q.Featured).Select(
                                                q => q.GetAnswerString())));
+            this.Status = document.Status;
             Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
             Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
@@ -65,7 +66,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public void Restore()
         {
-            if (this.IsRestored)
+           /* if (this.IsRestored)
                 return;
             while (isProccessing)
             {
@@ -118,12 +119,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
             }
             this.validator = new QuestionnaireValidationExecutor(this);
-            isProccessing = false;
+            isProccessing = false;*/
         }
 
         public void Recicle()
         {
-            if (!IsRestored)
+           /* if (!IsRestored)
                 return;
 
             while (isProccessing)
@@ -141,13 +142,14 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             Screens = null;
             Questions = null;
             
-            isProccessing = false;
+            isProccessing = false;*/
         }
 
         private bool isProccessing = false;
         public Guid PublicKey { get; private set; }
 
         public string Title { get; private set; }
+        public SurveyStatus Status { get; set; }
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
         public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 

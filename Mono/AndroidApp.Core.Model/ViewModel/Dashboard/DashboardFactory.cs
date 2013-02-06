@@ -20,8 +20,8 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
 
         public DashboardModel Load(DashboardInput input)
         {
-          //  return _documentStorage.GetByGuid(input.UserId);
-            return _documentStorage.Query().First();
+            return _documentStorage.GetByGuid(input.UserId);
+           // return _documentStorage.Query().First();
         
         }
 

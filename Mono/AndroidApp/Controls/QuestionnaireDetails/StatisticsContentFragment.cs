@@ -13,6 +13,8 @@ using AndroidApp.Controls.Statistics;
 using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.Statistics;
 using Java.Interop;
+using Main.Core.Commands.Questionnaire.Completed;
+using Main.Core.Entities.SubEntities;
 using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
@@ -43,6 +45,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 return null;
             }
             containerView = inflater.Inflate(Resource.Layout.StatisticsContent, null);
+            btnComplete.Click += btnComplete_Click;
             btnAnswered.Text += string.Format(" - {0}", this.Model.AnsweredQuestions.Count);
             if (this.Model.AnsweredQuestions.Count == 0)
             {
@@ -124,6 +127,19 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
+
+        void btnComplete_Click(object sender, EventArgs e)
+        {
+            var command = new ChangeStatusCommand()
+                {
+                    CompleteQuestionnaireId = Model.QuestionnaireId,
+                    Status = Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error,
+                    Responsible = CapiApplication.Membership.CurrentUser
+                };
+            CapiApplication.CommandService.Execute(command);
+            this.Activity.StartActivity(typeof(DashboardActivity));
+        }
+
         protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)
         {
             if (invaliDilog != null && invaliDilog.IsShowing)
@@ -164,6 +180,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             get { return containerView.FindViewById<Button>(Resource.Id.btnInvalid); }
         }
+        protected Button btnComplete
+        {
+            get { return containerView.FindViewById<Button>(Resource.Id.btnComplete); }
+        }
+        
         protected TextView tvErrorWarning
         {
             get { return containerView.FindViewById<TextView>(Resource.Id.tvErrorWarning); }

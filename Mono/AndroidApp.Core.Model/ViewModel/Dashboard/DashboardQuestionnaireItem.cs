@@ -58,7 +58,7 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         /// <summary>
         /// Gets the status.
         /// </summary>
-        public string Status { get; private set; }
+        public string Status { get; set; }
 
         /// <summary>
         /// Gets the view detail command.

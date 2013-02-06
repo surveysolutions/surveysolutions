@@ -12,13 +12,14 @@ using Android.Widget;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
 namespace AndroidApp.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>
+    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>
     {
         private readonly IDenormalizerStorage<DashboardModel> _documentStorage;
 
@@ -35,29 +36,6 @@ namespace AndroidApp.Core.Model.EventHandlers
             if (document == null)
                 return;
             PropeedCompleteQuestionnaire(document);
-      //      var view = new DashboardModel();
-            /* List<DashboardQuestionnaireItem> items = new List<DashboardQuestionnaireItem>();
-       
-         for (int i = 0; i < 5; i++)
-         {
-             var properties = new List<FeaturedItem>();
-             for (int j = 0; j < 4; j++)
-             {
-                 properties.Add(new FeaturedItem(Guid.NewGuid(),"pTitle" + j,"p"+j));
-             }
-             var item = new DashboardQuestionnaireItem(Guid.NewGuid(),"status" + i, properties);
-             items.Add(item);
-
-         }
-         var retval =
-             new DashboardModel(
-                 new[]
-                     {
-                         new DashboardSurveyItem(Guid.NewGuid(), "Super Servey1", items),
-                         new DashboardSurveyItem(Guid.NewGuid(), "Super Servey2",  items),
-                          new DashboardSurveyItem(Guid.NewGuid(), "Super Servey3", items)
-                     });
-         return retval;*/
         }
 
         #endregion
@@ -85,5 +63,22 @@ namespace AndroidApp.Core.Model.EventHandlers
                                  q.GetAnswerString())).ToList());
             survey.Items.Add(item);
         }
+
+        #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
+
+        public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
+        {
+            var dashboard = _documentStorage.GetByGuid(evnt.Payload.Responsible.Id);
+            if (dashboard == null)
+                return;
+            var questionnaire =
+                dashboard.Surveys.SelectMany(s => s.Items).FirstOrDefault(
+                    q => q.PublicKey == evnt.Payload.CompletedQuestionnaireId);
+            if (questionnaire == null)
+                return;
+            questionnaire.Status = evnt.Payload.Status.Name;
+        }
+
+        #endregion
     }
 }
