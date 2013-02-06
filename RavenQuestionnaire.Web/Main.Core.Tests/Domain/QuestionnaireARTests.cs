@@ -8,6 +8,7 @@ using Main.Core.Events.Questionnaire;
 using NUnit.Framework;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
+using System.Linq;
 
 namespace Main.Core.Tests.Domain
 {
@@ -16,37 +17,49 @@ namespace Main.Core.Tests.Domain
     {
         #region AddQuestion tests
 
-        [Test]
-        public void AddQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_evend_contains_trimed_stata_caption()
+        [TestCase("ma_name38")]
+        [TestCase("__")]
+        [TestCase("_123456789012345678901234567890_")]
+        public void AddQuestion_When_stata_export_caption_is_valid_Then_rised_NewQuestionAdded_event_contains_the_same_stata_caption(string validStataExportCaption)
         {
-            // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            string longStataExportCaption = " my_name38  ";
-
-            NewQuestionAdded risedEvent = null;
-
-            // Act
-            using (var ctx = new EventContext())
+            using (var eventContext = new EventContext())
             {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+                // Act
+                questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
+                                          validStataExportCaption, QuestionType.Text,
+                                          QuestionScope.Interviewer,
+                                          "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0,
+                                          new Answer[0]);
+
+                // Assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual(validStataExportCaption, risedEvent.StataExportCaption);
+            }
+        }
+
+        [Test]
+        public void AddQuestion_When_stata_export_caption_has_trailing_spaces_and_is_valid_Then_rised_NewQuestionAdded_event_contains_trimed_stata_caption()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                string longStataExportCaption = " my_name38  ";
+
+                // Act
                 questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                           longStataExportCaption, QuestionType.Text,
                                           QuestionScope.Interviewer,
                                           "", "", "", false, false, Order.AZ, "", null, new List<Guid>(), 0,
                                           new Answer[0]);
 
-                foreach (UncommittedEvent item in ctx.Events)
-                {
-                    risedEvent = item.Payload as NewQuestionAdded;
-                    if (risedEvent != null)
-                    {
-                        continue;
-                    }
-                    break;
-                }
+                // Assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual(longStataExportCaption.Trim(), risedEvent.StataExportCaption);
             }
-
-            // Assert
-            Assert.AreEqual(longStataExportCaption.Trim(), risedEvent.StataExportCaption);
         }
 
         [Test]
@@ -152,6 +165,7 @@ namespace Main.Core.Tests.Domain
         #endregion
 
         #region ChangeQuestion tests
+
         [Test]
         public void ChangeQuestion_When_we_updating_absent_question_Then_ArgumentException_should_be_thrown()
         {
@@ -331,7 +345,12 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
-        private QuestionnaireAR CreateQuestionnaireAR()
+        private static T GetSingleEvent<T>(EventContext eventContext)
+        {
+            return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireAR()
         {
             return new QuestionnaireAR();
         }
