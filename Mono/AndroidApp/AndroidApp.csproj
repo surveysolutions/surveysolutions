@@ -163,8 +163,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="StartApplicationObject.cs" />
-    <Compile Include="Services\SimpleSyncService.cs" />
     <Compile Include="Services\SyncService.cs" />
+    <Compile Include="SyncActivity.cs" />
+    <Compile Include="SynchronizationActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -199,6 +200,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\StatisticsContent.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\sync_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -242,7 +246,7 @@
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
       <Name>AndroidNCalc</Name>
-      </ProjectReference>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
       <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
       <Name>AndroidMain.Synchronization</Name>

@@ -9,18 +9,38 @@
 
 namespace AndroidApp.Services
 {
+    using System;
+
     using Android.App;
     using Android.Content;
+    using Android.Net;
     using Android.OS;
     using Android.Util;
+
+    using AndroidMain.Synchronization;
+
+    using Main.Synchronization.SyncManager;
+    using Main.Synchronization.SyncStreamCollector;
 
     /// <summary>
     /// The sync service.
     /// </summary>
     [Service]
+    [IntentFilter(new String[] { "org.worldbank.capi.sync" })]
     public class SyncService : IntentService
     {
         #region Constants
+
+
+        private IBinder binder;
+        private bool? result;
+
+        public const string SyncFinishededAction = "SyncFinisheded";
+
+        public bool? GetResult()
+        {
+            return result;
+        }
 
         /// <summary>
         /// The sync command.
@@ -42,13 +62,16 @@ namespace AndroidApp.Services
         /// </returns>
         public override IBinder OnBind(Intent intent)
         {
-            // throw new NotImplementedException();
-            return null;
+            binder = new SyncServiceBinder(this);
+            return binder;
         }
 
         protected override void OnHandleIntent(Intent intent)
         {
-            throw new System.NotImplementedException();
+           result = this.Sync();
+           var stocksIntent = new Intent(SyncFinishededAction);
+
+           this.SendOrderedBroadcast(stocksIntent, null);
         }
 
         /// <summary>
@@ -81,7 +104,7 @@ namespace AndroidApp.Services
             base.OnStart(intent, startId);
         }
 
-        /// <summary>
+       /* /// <summary>
         /// The on start command.
         /// </summary>
         /// <param name="intent">
@@ -101,9 +124,54 @@ namespace AndroidApp.Services
             Log.Debug("Sync", "Sync started");
 
             return StartCommandResult.NotSticky;
+        }*/
+
+
+        private bool Sync()
+        {
+
+            //check network avalability
+            //ConnectivityManager cm = (ConnectivityManager)GetSystemService(Context.ConnectivityService);
+
+
+            Guid processKey = Guid.NewGuid();
+            string remoteSyncNode = "http://217.12.197.135/DEV-Supervisor/";
+            string syncMessage = "Remote sync.";
+            try
+            {
+                var streamProvider = new RemoteServiceEventStreamProvider1(CapiApplication.Kernel, processKey, remoteSyncNode);
+                var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
+
+                var manager = new SyncManager(streamProvider, collector, processKey, syncMessage, null);
+                manager.StartPush();
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
         }
 
 
         #endregion
+    }
+
+    /// <summary>
+    /// The sync service binder.
+    /// </summary>
+    public class SyncServiceBinder : Binder
+    {
+        private SyncService service;
+
+        public SyncServiceBinder(SyncService service)
+        {
+            this.service = service;
+        }
+
+        public SyncService GetSyncService()
+        {
+            return service;
+        }
     }
 }

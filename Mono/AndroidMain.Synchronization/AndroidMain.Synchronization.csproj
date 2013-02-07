@@ -36,12 +36,21 @@
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\..\MIS-dev(vs2012)\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp.MonoDroid">
+      <HintPath>..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -100,13 +109,12 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SyncStreamCollector\RemoteServiceStreamCollector.cs">
       <Link>SyncStreamCollector\RemoteServiceStreamCollector.cs</Link>
     </Compile>
+    <Compile Include="GetAggragateRootListService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Provider.cs" />
+    <Compile Include="ServiceClient.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
-      <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
-      <Name>SynchronizationMessages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
@@ -127,11 +135,18 @@
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
+      <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
+      <Name>AndroidSynchronizationMessages</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="caff029b-9fe0-4ae9-a475-c384d9022471" />
+      <UserProperties ProjectLinkReference="caff029b-9fe0-4ae9-a475-c384d9022471" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

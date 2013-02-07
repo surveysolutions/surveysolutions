@@ -39,6 +39,8 @@ using Ninject;
 
 namespace AndroidApp
 {
+    using Main.Synchronization.SycProcessRepository;
+
     [Application]
     public class CapiApplication : Application
     {
@@ -80,6 +82,10 @@ namespace AndroidApp
             CurrentContext = this;
 
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
+
+
+            Kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            //Kernel.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
 
             //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
             NcqrsInit.Init(Kernel);

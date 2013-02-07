@@ -16,28 +16,27 @@ namespace AndroidApp
     using Cirrious.MvvmCross.Binding.Droid.Simple;
     using Cirrious.MvvmCross.Droid.Views;
 
-    [Activity(Label = "Synchronization", Icon = "@drawable/capi")]
-    public class SyncActivity : MvxSimpleBindingActivity<SyncViewModel>
+    [Activity(Label = "Sync", Icon = "@drawable/capi")]
+    public class SyncActivity : Activity
     {
         bool isBound = false;
 
-        private SyncServiceBinder syncServiceBinder;
-        private SyncServiceConnection stockServiceConnection;
+        /*private SyncServiceBinder syncServiceBinder;
+        private SyncServiceConnection stockServiceConnection;*/
 
-        SyncReceiver syncReceiver;
+        //SyncReceiver syncReceiver;
         Intent syncServiceIntent;
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             syncServiceIntent = new Intent("org.worldbank.capi.sync");
-            syncReceiver = new SyncReceiver();
+            //syncReceiver = new SyncReceiver();
 
             SetContentView(Resource.Layout.sync_dialog);
 
-            Button buttonRun = FindViewById<Button>(Resource.Id.btnSync);
-            buttonRun.Click += buttonSync_Click;
-
+            /*Button buttonRun = FindViewById<Button>(Resource.Id.btnSync);
+            buttonRun.Click += buttonSync_Click;*/
         }
 
         void buttonSync_Click(object sender, EventArgs e)
@@ -74,11 +73,11 @@ namespace AndroidApp
         {
             base.OnStart();
 
-            var intentFilter = new IntentFilter(SyncService.SyncFinishededAction) { Priority = (int)IntentFilterPriority.HighPriority };
+            /*var intentFilter = new IntentFilter(SyncService.SyncFinishededAction) { Priority = (int)IntentFilterPriority.HighPriority };
             RegisterReceiver(syncReceiver, intentFilter);
-
-            stockServiceConnection = new SyncServiceConnection(this);
-            BindService(syncServiceIntent, stockServiceConnection, Bind.AutoCreate);
+*/
+            //stockServiceConnection = new SyncServiceConnection(this);
+            //BindService(syncServiceIntent, stockServiceConnection, Bind.AutoCreate);
         }
 
         protected override void OnStop()
@@ -87,12 +86,12 @@ namespace AndroidApp
 
             if (isBound)
             {
-                UnbindService(stockServiceConnection);
+                //UnbindService(stockServiceConnection);
 
                 isBound = false;
             }
 
-            UnregisterReceiver(syncReceiver);
+            //UnregisterReceiver(syncReceiver);
         }
 
         public override bool OnCreateOptionsMenu(Android.Views.IMenu menu)
@@ -102,7 +101,7 @@ namespace AndroidApp
         }
 
 
-        void DoSync()
+        /*void DoSync()
         {
             if (isBound)
             {
@@ -121,13 +120,13 @@ namespace AndroidApp
                     else
                     {
                         Log.Debug("StockService", "stocks is null");
-                    }*/
+                    }#1#
                 }
                 );
             }
-        }
+        }*/
 
-        class SyncReceiver : BroadcastReceiver
+        /*class SyncReceiver : BroadcastReceiver
         {
             public override void OnReceive(Context context, Android.Content.Intent intent)
             {
@@ -162,7 +161,7 @@ namespace AndroidApp
                 activity.isBound = false;
             }
         }
-
+        */
 
     }
 }

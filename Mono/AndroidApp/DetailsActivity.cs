@@ -1,29 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V4.App;
 using Android.Support.V4.View;
-using Android.Views;
 using Android.Widget;
-using AndroidApp.Controls.Navigation;
 using AndroidApp.Controls.QuestionnaireDetails;
-using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
-using AndroidApp.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Binders;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
-using Cirrious.MvvmCross.Binding.Droid.Simple;
-using Cirrious.MvvmCross.Binding.Interfaces;
-using Cirrious.MvvmCross.Platform;
 using Main.Core.Entities.SubEntities;
 
 /*
@@ -32,6 +17,8 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace AndroidApp
 {
+    using System.Linq;
+
     [Activity(Icon = "@drawable/capi")]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {

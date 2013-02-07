@@ -1,31 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using Android.App;
-using Android.Content;
-using Android.Graphics.Drawables;
-using Android.Graphics.Drawables.Shapes;
-using Android.Runtime;
-using Android.Text;
-using Android.Text.Method;
-using Android.Views;
-using Android.Widget;
+﻿using Android.App;
 using Android.OS;
-using AndroidApp.Controls.Navigation;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidApp.Extensions;
-using AndroidNcqrs.Eventing.Storage.SQLite;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
-using Core.CAPI.Views.Grouped;
-using Main.Core;
-using Main.Core.Events.Questionnaire.Completed;
-using Main.Core.View;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
-using Ninject;
-using Android.Graphics;
 namespace AndroidApp
 {
     [Activity(Label = "CAPI",  Icon = "@drawable/capi")]

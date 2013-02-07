@@ -7,11 +7,17 @@
         android:layout_height="fill_parent"
         android:orientation="vertical">
         <Button
-            android:id="@+id/btnSync"
+            android:id="@+id/btnPull"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10px"
-            android:text="Sync" />
+            android:layout_margin="15px"
+            android:text="Pull" />
+        <Button
+            android:id="@+id/btnPush"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:text="Push" />
         <TextView
             android:id="@+id/tvSyncResult"
             android:padding="10px"

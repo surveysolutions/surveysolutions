@@ -21,6 +21,8 @@ using Ninject.Activation;
 namespace AndroidApp.Injections
 {
     using Main.Core;
+    using Main.Synchronization.SycProcessRepository;
+
     using SynchronizationMessages.WcfInfrastructure;
     /// <summary>
     /// TODO: Update summary.
