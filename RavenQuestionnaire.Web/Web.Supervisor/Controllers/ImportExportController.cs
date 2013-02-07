@@ -100,23 +100,23 @@ namespace Web.Supervisor.Controllers
             Guid syncProcess = Guid.NewGuid();
 
             AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager, 
+                this.AsyncManager,
                 () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
-                            this.AsyncManager.Parameters["result"] =
-                                process.Export("Export DB on Supervisor in zip file");
-                        }
-                        catch (Exception e)
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                            Logger logger = LogManager.GetCurrentClassLogger();
-                            logger.Fatal("Error on export ", e);
-                        }
-                    });
+                        this.AsyncManager.Parameters["result"] =
+                            process.Export("Export DB on Supervisor in zip file");
+                    }
+                    catch (Exception e)
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on export ", e);
+                    }
+                });
 
             return syncProcess;
         }
@@ -156,8 +156,8 @@ namespace Web.Supervisor.Controllers
                     {
                         var collector = new CompressedStreamStreamCollector(syncProcessKey);
 
-                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, "Backup Request" ,null);
-                        
+                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, "Backup Request", null);
+
                         syncManager.StartPush();
 
                         var timings = syncManager.StartTime - syncManager.EndTime;
@@ -222,18 +222,18 @@ namespace Web.Supervisor.Controllers
             }
 
             AsyncQuestionnaireUpdater.Update(
-                this.AsyncManager, 
+                this.AsyncManager,
                 () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
-                        }
-                        catch
-                        {
-                            this.AsyncManager.Parameters["result"] = null;
-                        }
-                    });
+                        this.AsyncManager.Parameters["result"] = this.exporter.ExportData(id, type);
+                    }
+                    catch
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
         }
 
         /// <summary>
@@ -284,19 +284,19 @@ namespace Web.Supervisor.Controllers
             Guid syncProcess = Guid.NewGuid();
 
             WaitCallback callback = (state) =>
+            {
+                try
                 {
-                    try
-                    {
-                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
-                        process.Import(zipData, "Usb syncronization");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.Fatal("Error on import ", e);
-                    }
-                };
+                    process.Import(zipData, "Usb syncronization");
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal("Error on import ", e);
+                }
+            };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
 
             return syncProcess;
@@ -349,59 +349,44 @@ namespace Web.Supervisor.Controllers
             return 100;
         }
 
+        private ListOfAggregateRootsForImportMessage GetList()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new ListOfAggregateRootsForImportMessage();
+
+            try
+            {
+                var process =
+                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.Export("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
+        }
 
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetRootsList()
         {
-            Guid syncProcess = Guid.NewGuid();
-
-            var result = new ListOfAggregateRootsForImportMessage();
-
-            try
-            {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
-
-                result = process.Export("Supervisor export AR events");
-            }
-            catch (Exception ex)
-            {
-            }
-
-            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
-            var stream = new MemoryStream();
-            result.WriteTo(stream);
-            stream.Position = 0L;
-            return Json(stream.ToArray(), JsonRequestBehavior.AllowGet);
-            //return stream;
+            return Json(this.GetList(), JsonRequestBehavior.AllowGet);
         }
+
+
+
 
         [AcceptVerbs(HttpVerbs.Get)]
         public FileResult GetRootsList1()
         {
-            Guid syncProcess = Guid.NewGuid();
-
-            var result = new ListOfAggregateRootsForImportMessage();
-
-            try
-            {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
-
-                result = process.Export("Supervisor export AR events");
-            }
-            catch (Exception ex)
-            {
-            }
-
-            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
             var stream = new MemoryStream();
-            result.WriteTo(stream);
+            this.GetList().WriteTo(stream);
             stream.Position = 0L;
+
             return new FileStreamResult(stream, "application/json; charset=utf-8");
 
-            
-            //return stream;
         }
 
 
@@ -419,6 +404,12 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetItem(string firstEventPulicKey, string length)
+        {
+            var outResult = Json(this.GetItemInt(firstEventPulicKey, length), JsonRequestBehavior.AllowGet);
+            return outResult;
+        }
+
+        private ImportSynchronizationMessage GetItemInt(string firstEventPulicKey, string length)
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -447,16 +438,31 @@ namespace Web.Supervisor.Controllers
             {
             }
 
-            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
-            var stream = new MemoryStream();
-            result.WriteTo(stream);
-            stream.Position = 0L;
-
-            var outResult = Json(stream.ToArray(), JsonRequestBehavior.AllowGet);
-            return outResult;
-            //return stream;
+            return result;
         }
 
+        /// <summary>
+        /// The get item.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Get)]
+        public FileResult GetItem1(string firstEventPulicKey, string length)
+        {
+            var stream = new MemoryStream();
+            GetItemInt(firstEventPulicKey,length).WriteTo(stream);
+            stream.Position = 0L;
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(EventSyncMessage request)
         {
             Guid syncProcess = Guid.NewGuid();
