@@ -57,7 +57,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
             top.Orientation = Orientation.Vertical;
-            var breadcrumbs = new BreadcrumbsView(inflater.Context, questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(), OnScreenChanged);
+            var breadcrumbs = new BreadcrumbsView(inflater.Context,
+                                                  questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
+                                                  OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
             top.AddView(breadcrumbs);
 
@@ -69,12 +71,23 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
 
-          
-            for (int i = 0; i < Model.Header.Count; i = i + 2)
+            if (!Model.Rows.Any(r => r.Enabled))
             {
-                var count = Math.Min(Model.Header.Count - i, 2);
-                BuildTable(inflater.Context, ll, i, count);
+                TextView tv = new TextView(inflater.Context);
+                tv.Gravity = GravityFlags.Center;
+                tv.TextSize = 22;
+                tv.SetPadding(10, 10, 10, 10);
+                tv.Text = "Questions are absent";
+                tv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                                 ViewGroup.LayoutParams.WrapContent);
+                ll.AddView(tv);
             }
+            else
+                for (int i = 0; i < Model.Header.Count; i = i + 2)
+                {
+                    var count = Math.Min(Model.Header.Count - i, 2);
+                    BuildTable(inflater.Context, ll, i, count);
+                }
             sv.AddView(ll);
             sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
             top.AddView(sv);
@@ -194,10 +207,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             /*   var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
                if (headerItem == null)
                    return;*/
-
+            var group = Model.Rows.FirstOrDefault(r => r.ScreenId.PropagationKey == e.Model.PublicKey.PropagationKey);
+            if(group==null)
+                return;
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(this.questionViewFactory.CreateQuestionView(this.Activity, e.Model,
-                                                                               Model.QuestionnaireId));
+            setAnswerPopup.SetView(new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
+                                                        questionViewFactory));
             //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
 
