@@ -402,10 +402,16 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        [AcceptVerbs(HttpVerbs.Get)]
+        [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult GetItem(string firstEventPulicKey, string length)
         {
-            var outResult = Json(this.GetItemInt(firstEventPulicKey, length), JsonRequestBehavior.AllowGet);
+            var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var outResult = Json(item, JsonRequestBehavior.AllowGet);
             return outResult;
         }
 
@@ -453,7 +459,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        [AcceptVerbs(HttpVerbs.Get)]
+        [AcceptVerbs(HttpVerbs.Post)]
         public FileResult GetItem1(string firstEventPulicKey, string length)
         {
             var item = this.GetItemInt(firstEventPulicKey, length);
