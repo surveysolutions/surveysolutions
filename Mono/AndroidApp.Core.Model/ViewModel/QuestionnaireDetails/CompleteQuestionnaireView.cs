@@ -163,7 +163,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public string Title { get; private set; }
         public SurveyStatus Status { get; set; }
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
-        public IEnumerable<QuestionnaireScreenViewModel> Chapters { get; protected set; }
+        public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
         protected IDictionary<Guid, QuestionnairePropagatedScreenViewModel> Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }

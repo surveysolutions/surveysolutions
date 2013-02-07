@@ -48,7 +48,10 @@ namespace AndroidApp
         {
             get { return this.FindViewById<ViewPager>(Resource.Id.vpContent); }
         }
-
+        protected LinearLayout llContainer
+        {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+        }
         protected QuestionnaireNavigationFragment NavList
         {
             get
@@ -57,7 +60,7 @@ namespace AndroidApp
                     this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             }
         }
-
+        
         protected ContentFrameAdapter Adapter { get; set; }
 
         protected override void OnCreate(Bundle bundle)
@@ -77,9 +80,9 @@ namespace AndroidApp
            
             this.Title = ViewModel.Title;
 
-            if (bundle == null)
+           if (bundle == null)
             {
-                NavList.DataItems = ViewModel.Chapters;
+                NavList.Model = ViewModel;
                 NavList.SelectItem(0);
             }
 

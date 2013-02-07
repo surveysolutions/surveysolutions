@@ -20,14 +20,18 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class QuestionnaireNavigationFragment : ListFragment, IScreenChanging
     {
         #region public fields
-
         public QuestionnaireNavigationFragment()
         {
             this.RetainInstance = true;
         }
+        public QuestionnaireNavigationFragment(CompleteQuestionnaireView model):this()
+        {
+            this.RetainInstance = true;
+            this.Model = model;
+        }
 
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-        public IEnumerable<QuestionnaireScreenViewModel> DataItems { get; set; }
+        public CompleteQuestionnaireView Model { get;  set; }
         private int selectedItemIndex=0;
         #endregion
 
@@ -42,7 +46,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             base.OnResume();
             this.ListView.ChoiceMode = ChoiceMode.Single;
-            this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, DataItems, selectedItemIndex);
+            this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
         }
 
         public void SelectItem(int ind)

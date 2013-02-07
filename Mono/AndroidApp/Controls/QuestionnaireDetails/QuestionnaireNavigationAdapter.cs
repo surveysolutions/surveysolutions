@@ -11,20 +11,21 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
     public class QuestionnaireNavigationAdapter : BaseAdapter<QuestionnaireScreenViewModel>
     {
-        private readonly IList<QuestionnaireScreenViewModel> items;
+        private readonly CompleteQuestionnaireView model;
         private readonly Context context;
         private readonly int selectedItem;
-        public QuestionnaireNavigationAdapter(Context context, IEnumerable<QuestionnaireScreenViewModel> items, int selectedItem)
+        public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
             : base()
         {
             this.context = context;
             this.selectedItem = selectedItem;
-            this.items = items.ToList();
+            this.model = model;
           //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
 
@@ -56,7 +57,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
                 if (position < Count - 1)
                 {
-                    var item = items[position];
+                    var item = model.Chapters[position];
                     item.PropertyChanged += (sender,e)=>
                     {
                         if (e.PropertyName != "Answered" && e.PropertyName != "Total")
@@ -73,7 +74,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 }
                 else
                 {
-                    tvITem.Text = "Complete";
+                    tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(model.Status) ? "Summary" : "Complete";
                     tvCount.Visibility = ViewStates.Gone;
                 }
             }
@@ -91,7 +92,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public override int Count
         {
-            get { return items.Count+1; }
+            get { return model.Chapters.Count + 1; }
         }
 
         #endregion
@@ -102,7 +103,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             get
             {
-                return this.items[position];
+                return model.Chapters[position];
             }
         }
 

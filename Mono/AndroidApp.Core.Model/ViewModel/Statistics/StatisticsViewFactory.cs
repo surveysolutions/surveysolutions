@@ -41,7 +41,7 @@ namespace AndroidApp.Core.Model.ViewModel.Statistics
                                                 q.AnswerString, "")).ToList();
 
             var result = new StatisticsViewModel(input.QuestionnaireId, doc.Title,
-                                                 SurveyStatus.Initial, doc.FindQuestion(q => true).Count(), unanswered,
+                                                 doc.Status, doc.FindQuestion(q => true).Count(), unanswered,
                                                  answered, invalid);
             return result;
         }

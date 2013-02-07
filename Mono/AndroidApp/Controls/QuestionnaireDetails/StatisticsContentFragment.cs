@@ -45,6 +45,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 return null;
             }
             containerView = inflater.Inflate(Resource.Layout.StatisticsContent, null);
+            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
+            {
+                btnComplete.Text = "Reinit";
+            }
             btnComplete.Click += btnComplete_Click;
             btnAnswered.Text += string.Format(" - {0}", this.Model.AnsweredQuestions.Count);
             if (this.Model.AnsweredQuestions.Count == 0)
@@ -130,7 +134,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         void btnComplete_Click(object sender, EventArgs e)
         {
-            var status = Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
+
+            var status = SurveyStatus.IsStatusAllowCapiSync(this.Model.Status)
+                             ? SurveyStatus.Redo
+                             : Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
             status.ChangeComment = etComments.Text;
             var command = new ChangeStatusCommand()
                 {
@@ -194,6 +201,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected EditText etComments
         {
             get { return containerView.FindViewById<EditText>(Resource.Id.etComments); }
+        }
+        protected TextView tvComments
+        {
+            get { return containerView.FindViewById<TextView>(Resource.Id.tvComments); }
         }
         
     }

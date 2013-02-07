@@ -16,8 +16,10 @@ using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
 using AndroidApp.Events;
+using AndroidApp.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Java.Interop;
+using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
@@ -74,6 +76,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 BuildTable(inflater.Context, ll, i, count);
             }
             sv.AddView(ll);
+            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
             top.AddView(sv);
             return top;
         }
