@@ -39,7 +39,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Model = model;
             this.questionnaire = questionnaire;
         }
-
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -48,7 +47,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-
             LinearLayout top = new LinearLayout(inflater.Context);
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);

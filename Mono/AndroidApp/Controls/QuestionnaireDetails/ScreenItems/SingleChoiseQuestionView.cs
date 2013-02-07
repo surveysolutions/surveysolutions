@@ -25,33 +25,37 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         protected SelectebleQuestionViewModel typedMode;
         protected RadioGroup radioGroup;
-        protected RadioButton[] radioButtons;
+      //  protected RadioButton[] radioButtons;
         #region Overrides of AbstractQuestionView
 
         protected override void Initialize()
         {
             base.Initialize();
             typedMode = Model as SelectebleQuestionViewModel;
-            radioButtons = new RadioButton[typedMode.Answers.Count()];
+            RadioButton[]  radioButtons = new RadioButton[typedMode.Answers.Count()];
             radioGroup = new RadioGroup(this.Context);
             radioGroup.Orientation = Orientation.Vertical;
+            RadioButton checkedButton = null;
             int i = 0;
             foreach (var answer in typedMode.Answers)
             {
                 radioButtons[i] = new RadioButton(this.Context);
                 radioButtons[i].Text = answer.Title;
-                radioButtons[i].Checked = answer.Selected;
+                if (answer.Selected)
+                    checkedButton = radioButtons[i];
                 radioButtons[i].SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
                 radioGroup.AddView(radioButtons[i]);
                 i++;
             }
+            if (checkedButton != null)
+                radioGroup.Check(checkedButton.Id);
             radioGroup.CheckedChange += radioGroup_CheckedChange;
+           
             llWrapper.AddView(radioGroup);
         }
-
         void radioGroup_CheckedChange(object sender, RadioGroup.CheckedChangeEventArgs e)
         {
-            var selectedItem = radioButtons.FirstOrDefault(r => r.Id == e.CheckedId);
+            var selectedItem = radioGroup.FindViewById<RadioButton>(e.CheckedId);
             var answerGuid = Guid.Parse(selectedItem.GetTag(Resource.Id.AnswerId).ToString());
 
             CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,

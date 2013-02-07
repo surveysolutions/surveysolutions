@@ -67,9 +67,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             this.Model = source;
             this.QuestionnairePublicKey = questionnairePublicKey;
             this.CommandService = CapiApplication.CommandService;
-            
+
             Initialize();
-          
+
             PostInit();
         }
         

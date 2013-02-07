@@ -28,6 +28,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
+        private Fragment[] mFragments;
         public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey screenId)
             : base(fm)
         {
@@ -37,6 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.screensHolder = questionnaire.Screens[screenId].Siblings.ToList();
             this.screenId = screenId;
             this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId);
+            this.mFragments=new Fragment[this.Count];
             this.target.Adapter = this;
         }
 
@@ -56,7 +58,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public override Fragment GetItem(int position)
         {
-            Fragment fragment = null;
+            
+            Fragment fragment = this.mFragments[position];
+            if (fragment != null)
+                return fragment;
             if (position == screensHolder.Count && isRoot)
             {
                 fragment = new StatisticsContentFragment(questionnaire.PublicKey);
@@ -80,6 +85,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             if (fragment == null)
                 throw new InvalidOperationException();
+            this.mFragments[position] = fragment;
             return fragment;
         }
 
@@ -104,6 +110,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
+            this.mFragments = new Fragment[this.Count];
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
         }
