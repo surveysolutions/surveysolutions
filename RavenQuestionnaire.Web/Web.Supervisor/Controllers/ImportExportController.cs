@@ -376,6 +376,35 @@ namespace Web.Supervisor.Controllers
             //return stream;
         }
 
+        [AcceptVerbs(HttpVerbs.Get)]
+        public FileResult GetRootsList1()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new ListOfAggregateRootsForImportMessage();
+
+            try
+            {
+                var process =
+                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.Export("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
+            var stream = new MemoryStream();
+            result.WriteTo(stream);
+            stream.Position = 0L;
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+
+            
+            //return stream;
+        }
+
+
         /// <summary>
         /// The get item.
         /// </summary>
