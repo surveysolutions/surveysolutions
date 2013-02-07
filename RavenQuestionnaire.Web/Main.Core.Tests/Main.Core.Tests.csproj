@@ -133,6 +133,7 @@
     <Compile Include="Domain\QuestionnaireARTest.cs" />
     <Compile Include="Domain\QuestionnaireARTests.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
+    <Compile Include="Domain\UserARTests.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
