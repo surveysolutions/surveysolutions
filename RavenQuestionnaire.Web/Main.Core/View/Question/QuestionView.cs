@@ -164,7 +164,10 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
+        [Required(ErrorMessage = "Variable name shouldn't be empty or contains white spaces")]
         [DisplayName("Variable name")]
+        [StringLength(32, ErrorMessage = "Variable name shouldn't be longer than 32 characters")]
+        [RegularExpression(@"^[a-zA-Z_][a-zA-Z0-9_]+$", ErrorMessage = "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit")]
         public string StataExportCaption { get; set; }
 
         /// <summary>

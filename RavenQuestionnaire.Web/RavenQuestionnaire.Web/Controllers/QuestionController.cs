@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Web.Utils;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
@@ -239,8 +241,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
-            QuestionView model = this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
-                    new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            QuestionView model = this.viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            var transformator = new ExpressionReplacer(this.viewRepository);
+
+            model.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(model.ConditionExpression, questionnaireKey.Value);
+            model.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(model.ValidationExpression, questionnaireKey.Value);
+
             this.ViewBag.Group = model.Groups;
             this.ViewBag.CurrentGroup = model.Parent;
             //return this.PartialView("_Create", model);
@@ -362,6 +368,11 @@ namespace RavenQuestionnaire.Web.Controllers
                         ansverItems = answers.Select(ConvertAnswer).ToArray();
                     }
 
+                    var transformator = new ExpressionReplacer(this.viewRepository);
+
+                    var conditionExpression = transformator.ReplaceStataCaptionsWithGuids(model.ConditionExpression, model.QuestionnaireKey);
+                    var validationExpression = transformator.ReplaceStataCaptionsWithGuids(model.ValidationExpression, model.QuestionnaireKey);
+
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
@@ -381,8 +392,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionType,
                                     model.QuestionScope,
                                     model.Parent,
-                                    model.ConditionExpression,
-                                    model.ValidationExpression,
+                                    conditionExpression,
+                                    validationExpression,
                                     model.ValidationMessage,
                                     model.Instructions,
                                     model.Featured,
@@ -405,8 +416,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.QuestionType,
                                     model.QuestionScope,
                                     model.Parent,
-                                    model.ConditionExpression,
-                                    model.ValidationExpression,
+                                    conditionExpression,
+                                    validationExpression,
                                     model.ValidationMessage,
                                     model.Instructions,
                                     model.Featured,
@@ -430,8 +441,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression,
-                                    model.ValidationExpression,
+                                    conditionExpression,
+                                    validationExpression,
                                     model.ValidationMessage,
                                     model.Instructions,
                                     model.Featured,
@@ -453,8 +464,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression,
-                                    model.ValidationExpression,
+                                    conditionExpression,
+                                    validationExpression,
                                     model.ValidationMessage,
                                     model.Instructions,
                                     model.Featured,
