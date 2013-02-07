@@ -379,6 +379,7 @@
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Models\ViewDataUploadFilesResult.cs" />
+    <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -448,6 +449,8 @@
     <Content Include="Scripts\jquery.numeric.js" />
     <Content Include="Scripts\jquery.tmpl.min.js" />
     <Content Include="Scripts\jQuery.ui.datepicker.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\Question_focus.js" />
     <Content Include="Scripts\modal.js" />

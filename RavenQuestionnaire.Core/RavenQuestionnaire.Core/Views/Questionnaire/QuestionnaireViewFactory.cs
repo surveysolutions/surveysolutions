@@ -17,7 +17,8 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     /// <summary>
     /// The questionnaire view factory.
     /// </summary>
-    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>
+    public class QuestionnaireViewFactory : IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>,
+        IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>
     {
         #region Fields
 
@@ -52,15 +53,37 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView.
+        /// The QuestionnaireView.
         /// </returns>
-        public QuestionnaireView Load(QuestionnaireViewInputModel input)
+        QuestionnaireView IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>.Load(QuestionnaireViewInputModel input)
         {
-            QuestionnaireDocument doc = this.documentSession.GetByGuid(input.QuestionnaireId);
+            var doc = GetQuestionnaireDocument(input);
 
             return new QuestionnaireView(doc);
         }
 
         #endregion
+
+        /// <summary>
+        /// The load.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// The QuestionnaireStataMapView
+        /// </returns>
+        QuestionnaireStataMapView IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>.Load(QuestionnaireViewInputModel input)
+        {
+            var doc = GetQuestionnaireDocument(input);
+
+            return new QuestionnaireStataMapView(doc);
+        }
+
+        private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
+        {
+            QuestionnaireDocument doc = this.documentSession.GetByGuid(input.QuestionnaireId);
+            return doc;
+        }
     }
 }

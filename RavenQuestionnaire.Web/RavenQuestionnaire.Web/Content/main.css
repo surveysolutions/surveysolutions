@@ -627,3 +627,7 @@ a.btn {
 
 
 }
+
+.field-validation-error {
+    color: red;
+}

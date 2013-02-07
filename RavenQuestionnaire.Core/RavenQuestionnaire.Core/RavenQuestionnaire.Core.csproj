@@ -211,6 +211,7 @@
     <Compile Include="Views\Event\EventBrowseInputModel.cs" />
     <Compile Include="Views\Event\EventViewInputModel.cs" />
     <Compile Include="Views\Questionnaire\AbstractQuestionnaireView.cs" />
+    <Compile Include="Views\Questionnaire\QuestionnaireStataMapView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />

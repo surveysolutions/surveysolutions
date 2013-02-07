@@ -1,0 +1,22 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Main.Core.Documents;
+using Main.Core.Entities.Extensions;
+using Main.Core.Entities.SubEntities;
+
+namespace RavenQuestionnaire.Core.Views.Questionnaire
+{
+    public class QuestionnaireStataMapView
+    {
+        public QuestionnaireStataMapView(QuestionnaireDocument doc)
+        {
+            this.StataMap = doc.GetAllQuestions<AbstractQuestion>()
+                               .Select(q => new KeyValuePair<Guid, string>(q.PublicKey, q.StataExportCaption))
+                               .ToList();
+        }
+
+        public List<KeyValuePair<Guid, string>> StataMap = new List<KeyValuePair<Guid, string>>();
+    }
+}
