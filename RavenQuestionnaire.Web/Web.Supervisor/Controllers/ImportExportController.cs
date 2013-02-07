@@ -10,6 +10,7 @@ namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading;
     using System.Web;
     using System.Web.Mvc;
@@ -29,6 +30,8 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
+
+    using SynchronizationMessages.CompleteQuestionnaire;
 
     using Web.Supervisor.Models;
 
@@ -344,6 +347,133 @@ namespace Web.Supervisor.Controllers
 
             return stat.ProgressPercentage;*/
             return 100;
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public JsonResult GetRootsList()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new ListOfAggregateRootsForImportMessage();
+
+            try
+            {
+                var process =
+                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.Export("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
+            var stream = new MemoryStream();
+            result.WriteTo(stream);
+            stream.Position = 0L;
+            return Json(stream.ToArray(), JsonRequestBehavior.AllowGet);
+            //return stream;
+        }
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public FileResult GetRootsList1()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new ListOfAggregateRootsForImportMessage();
+
+            try
+            {
+                var process =
+                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.Export("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
+            var stream = new MemoryStream();
+            result.WriteTo(stream);
+            stream.Position = 0L;
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+
+            
+            //return stream;
+        }
+
+
+        /// <summary>
+        /// The get item.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Get)]
+        public JsonResult GetItem(string firstEventPulicKey, string length)
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            Guid key;
+            if (!Guid.TryParse(firstEventPulicKey, out key))
+            {
+                return null;
+            }
+
+            int ln;
+            if (!int.TryParse(length, out ln))
+            {
+                return null;
+            }
+
+            var result = new ImportSynchronizationMessage();
+
+            try
+            {
+                var process =
+                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.Export("Supervisor export AR events", key, ln);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            //HttpContext.Current.Response.ContentType = "application/json; charset=utf-8";
+            var stream = new MemoryStream();
+            result.WriteTo(stream);
+            stream.Position = 0L;
+
+            var outResult = Json(stream.ToArray(), JsonRequestBehavior.AllowGet);
+            return outResult;
+            //return stream;
+        }
+
+        public bool PostStream(EventSyncMessage request)
+        {
+            Guid syncProcess = Guid.NewGuid();
+            try
+            {
+                var process =
+                    (IEventSyncProcess)
+                    this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, request.SynchronizationKey);
+
+                process.Import("Direct controller syncronization", request.Command);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 
         #endregion
