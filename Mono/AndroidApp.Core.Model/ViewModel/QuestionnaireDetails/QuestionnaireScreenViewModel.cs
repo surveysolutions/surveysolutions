@@ -24,10 +24,35 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             ScreenName = screenName;
             Total = total;
             Answered = answered;
+            bool needCounts = total == 0 && answered == 0;
             foreach (var item in Items)
             {
                 item.PropertyChanged += item_PropertyChanged;
-
+                if(needCounts)
+                {
+                    var question = item as QuestionViewModel;
+                    if (question != null)
+                    {
+                        if (question.Status.HasFlag(QuestionStatus.Enabled))
+                        {
+                            Total++;
+                            if (question.Status.HasFlag(QuestionStatus.Answered))
+                                Answered++;
+                        }
+                        continue;
+                    }
+                    var group = item as QuestionnaireNavigationPanelItem;
+                    if (group != null)
+                    {
+                        Total = total + group.Total;
+                        Answered = Answered + group.Answered;
+                    }
+                }
+            }
+            if(needCounts)
+            {
+                this.RaisePropertyChanged("Total");
+                this.RaisePropertyChanged("Answered");
             }
         }
 

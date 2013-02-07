@@ -29,10 +29,24 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                            document.Find<ICompleteQuestion>(q => q.Featured).Select(
                                                q => q.GetAnswerString()+" ")));
             this.Status = document.Status;
-            Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
-            Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
+            this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
+            this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
+            this.Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
+            FillQuestionnairePostOrder(document);
+            this.Chapters =
+                Enumerable.OfType<QuestionnaireScreenViewModel>(document.Children.OfType<ICompleteGroup>().Select(
+                    c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
+
+            this.validator = new QuestionnaireValidationExecutor(this);
+            this.validator.Execute();
+         
+            this.IsRestored = true;
+            this.projectionStorage = projectionStorage;
+        }
+
+        protected void FillQuestionnairePostOrder(ICompleteGroup document)
+        {
             List<ICompleteGroup> rout = new List<ICompleteGroup>();
             rout.Add(document);
             Stack<ICompleteGroup> queue = new Stack<ICompleteGroup>(document.Children.OfType<ICompleteGroup>());
@@ -42,25 +56,23 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
                 while (rout.Count > 0 && !rout[rout.Count - 1].Children.Contains(current))
                 {
+                    this.AddScreen(rout, rout.Last());
                     rout.RemoveAt(rout.Count - 1);
                 }
                 rout.Add(current);
-                this.AddScreen(rout, current);
-
                 foreach (ICompleteGroup child in current.Children.OfType<ICompleteGroup>())
                 {
                     queue.Push(child);
                 }
             }
-            this.Chapters =
-                Enumerable.OfType<QuestionnaireScreenViewModel>(document.Children.OfType<ICompleteGroup>().Select(
-                    c => this.Screens[new ItemPublicKey(c.PublicKey, c.PropagationPublicKey)])).ToList();
-
-            this.validator = new QuestionnaireValidationExecutor(this);
-            this.IsRestored = true;
-            this.projectionStorage = projectionStorage;
+            var last = rout.Last();
+            while (!(last is CompleteQuestionnaireDocument))
+            {
+                AddScreen(rout, last);
+                rout.Remove(last);
+                last = rout.Last();
+            }
         }
-
 
         #region fields
 

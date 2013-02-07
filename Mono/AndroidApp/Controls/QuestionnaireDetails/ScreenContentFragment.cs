@@ -14,6 +14,7 @@ using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
+using AndroidApp.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Java.Interop;
 using Main.Core.Entities.SubEntities;
@@ -89,6 +90,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (itemView != null)
                     ll.AddView(itemView);
             }
+            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
             top.AddView(sv);
             return top;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);

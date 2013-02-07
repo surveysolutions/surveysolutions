@@ -24,6 +24,7 @@ using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 using Cirrious.MvvmCross.Binding.Interfaces;
 using Cirrious.MvvmCross.Platform;
+using Main.Core.Entities.SubEntities;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -85,6 +86,7 @@ namespace AndroidApp
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
                                               ViewModel.Chapters.FirstOrDefault().ScreenId);
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
+
         }
 
         //      private bool isRotation = false;

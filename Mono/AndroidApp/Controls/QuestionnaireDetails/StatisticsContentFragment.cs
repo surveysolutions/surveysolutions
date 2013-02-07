@@ -130,14 +130,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         void btnComplete_Click(object sender, EventArgs e)
         {
+            var status = Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
+            status.ChangeComment = etComments.Text;
             var command = new ChangeStatusCommand()
                 {
                     CompleteQuestionnaireId = Model.QuestionnaireId,
-                    Status = Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error,
+                    Status = status,
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
-            this.Activity.StartActivity(typeof(DashboardActivity));
+            this.Activity.StartActivity(typeof (DashboardActivity));
         }
 
         protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)
@@ -189,6 +191,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             get { return containerView.FindViewById<TextView>(Resource.Id.tvErrorWarning); }
         }
-
+        protected EditText etComments
+        {
+            get { return containerView.FindViewById<EditText>(Resource.Id.etComments); }
+        }
+        
     }
 }
