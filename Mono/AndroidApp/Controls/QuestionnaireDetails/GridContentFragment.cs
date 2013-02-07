@@ -71,7 +71,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
 
-            if (!Model.Rows.Any(r => r.Enabled))
+         /*   if (!Model.Rows.Any(r => r.Enabled))
             {
                 TextView tv = new TextView(inflater.Context);
                 tv.Gravity = GravityFlags.Center;
@@ -82,7 +82,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                                  ViewGroup.LayoutParams.WrapContent);
                 ll.AddView(tv);
             }
-            else
+            else*/
                 for (int i = 0; i < Model.Header.Count; i = i + 2)
                 {
                     var count = Math.Min(Model.Header.Count - i, 2);

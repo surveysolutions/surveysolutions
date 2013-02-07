@@ -58,35 +58,33 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public override Fragment GetItem(int position)
         {
-            
-            Fragment fragment = this.mFragments[position];
-            if (fragment != null)
-                return fragment;
+
             if (position == screensHolder.Count && isRoot)
             {
-                fragment = new StatisticsContentFragment(questionnaire.PublicKey);
+                return new StatisticsContentFragment(questionnaire.PublicKey);
             }
             else
             {
-
+                Fragment fragment = this.mFragments[position];
+                if (fragment != null)
+                    return fragment;
                 var param = screensHolder[position];
                 var model = questionnaire.Screens[param];
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment = new ScreenContentFragment(screenModel,questionnaire);
+                    fragment = new ScreenContentFragment(screenModel, questionnaire);
                 }
                 var grid = model as QuestionnaireGridViewModel;
                 if (grid != null)
                 {
                     fragment = new GridContentFragment(grid, questionnaire);
                 }
-
+                if (fragment == null)
+                    throw new InvalidOperationException();
+                this.mFragments[position] = fragment;
+                return fragment;
             }
-            if (fragment == null)
-                throw new InvalidOperationException();
-            this.mFragments[position] = fragment;
-            return fragment;
         }
 
         public override int GetItemPosition(Java.Lang.Object p0)
