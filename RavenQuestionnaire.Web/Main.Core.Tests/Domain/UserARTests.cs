@@ -41,6 +41,19 @@
             Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
         }
 
+        [Test]
+        public void Unlock_When_called_Then_raised_UserUnlocked_event()
+        {
+            // arrange
+            UserAR user = this.CreateUserAR();
+
+            // act
+            user.Unlock();
+
+            // assert
+            Assert.That(this.GetRaisedEvents<UserUnlocked>().Count(), Is.EqualTo(1));
+        }
+
         private UserAR CreateUserAR()
         {
             return new UserAR();
