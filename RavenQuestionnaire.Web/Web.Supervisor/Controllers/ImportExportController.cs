@@ -456,8 +456,14 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public FileResult GetItem1(string firstEventPulicKey, string length)
         {
+            var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
             var stream = new MemoryStream();
-            GetItemInt(firstEventPulicKey,length).WriteTo(stream);
+            item.WriteTo(stream);
             stream.Position = 0L;
             return new FileStreamResult(stream, "application/json; charset=utf-8");
         }
