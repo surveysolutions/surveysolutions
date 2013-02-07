@@ -4,6 +4,7 @@
     using System.Linq;
 
     using Main.Core.Domain;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Events.User;
 
     using NUnit.Framework;
@@ -49,6 +50,34 @@
 
             // act
             user.Unlock();
+
+            // assert
+            Assert.That(this.GetRaisedEvents<UserUnlocked>().Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ChangeUser_When_is_locked_set_to_true_Then_raised_UserLocked_event()
+        {
+            // arrange
+            UserAR user = this.CreateUserAR();
+            bool isLocked = true;
+
+            // act
+            user.ChangeUser("mail", isLocked, new UserRoles[] { });
+
+            // assert
+            Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void ChangeUser_When_is_locked_set_to_false_Then_raised_UserUnlocked_event()
+        {
+            // arrange
+            UserAR user = this.CreateUserAR();
+            bool isLocked = false;
+
+            // act
+            user.ChangeUser("mail", isLocked, new UserRoles[] { });
 
             // assert
             Assert.That(this.GetRaisedEvents<UserUnlocked>().Count(), Is.EqualTo(1));
