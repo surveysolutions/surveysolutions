@@ -26,6 +26,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class GridContentFragment : AbstractScreenChangingFragment
     {
         private readonly CompleteQuestionnaireView questionnaire;
+        protected TextView tvEmptyLabelDescription;
+        protected LinearLayout llTablesContainer;
         public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
@@ -71,27 +73,40 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
 
-         /*   if (!Model.Rows.Any(r => r.Enabled))
-            {
-                TextView tv = new TextView(inflater.Context);
-                tv.Gravity = GravityFlags.Center;
-                tv.TextSize = 22;
-                tv.SetPadding(10, 10, 10, 10);
-                tv.Text = "Questions are absent";
-                tv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                                 ViewGroup.LayoutParams.WrapContent);
-                ll.AddView(tv);
-            }
-            else*/
-                for (int i = 0; i < Model.Header.Count; i = i + 2)
-                {
-                    var count = Math.Min(Model.Header.Count - i, 2);
-                    BuildTable(inflater.Context, ll, i, count);
-                }
+            BuildEmptyLabelDescription(inflater.Context, ll);
+            BuildTabels(inflater.Context, ll);
             sv.AddView(ll);
             sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
             top.AddView(sv);
             return top;
+        }
+        protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)
+        {
+            tvEmptyLabelDescription = new TextView(context);
+            tvEmptyLabelDescription.Gravity = GravityFlags.Center;
+            tvEmptyLabelDescription.TextSize = 22;
+            tvEmptyLabelDescription.SetPadding(10, 10, 10, 10);
+            tvEmptyLabelDescription.Text = "Questions are absent";
+            tvEmptyLabelDescription.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.WrapContent);
+            if (Model.Rows.Any(r => r.Enabled))
+                tvEmptyLabelDescription.Visibility=ViewStates.Gone;
+            ll.AddView(tvEmptyLabelDescription);
+        }
+        protected void BuildTabels(Context context, LinearLayout ll)
+        {
+            llTablesContainer = new LinearLayout(context);
+            llTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+            llTablesContainer.Orientation = Orientation.Vertical;
+            for (int i = 0; i < Model.Header.Count; i = i + 2)
+            {
+                var count = Math.Min(Model.Header.Count - i, 2);
+                BuildTable(context, llTablesContainer, i, count);
+            }
+            if (!Model.Rows.Any(r => r.Enabled))
+                llTablesContainer.Visibility = ViewStates.Gone;
+            ll.AddView(llTablesContainer);
         }
 
         protected void BuildTable(Context context, LinearLayout ll, int index, int count)
@@ -167,6 +182,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
                         var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
                         th.Visibility = visibility;
+                        var tableVisible = Model.Rows.Any(r => r.Enabled);
+                        llTablesContainer.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Gone;
+                        tvEmptyLabelDescription.Visibility = !tableVisible ? ViewStates.Visible : ViewStates.Gone;
                         return;
                     }
                     if (e.PropertyName == "ScreenName")
