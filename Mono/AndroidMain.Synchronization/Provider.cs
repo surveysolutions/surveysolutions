@@ -218,7 +218,9 @@ namespace AndroidMain.Synchronization
                     
                     //ImportSynchronizationMessage item = new ImportSynchronizationMessage();
 
-                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(responseStream.Content.Substring(responseStream.Content.IndexOf("[")), new JsonSerializerSettings());
+                    var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+
+                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(responseStream.Content.Substring(responseStream.Content.IndexOf("[")), settings);
 
                     //var streamMessage = JsonConvert.DeserializeObject<ImportSynchronizationMessage>(response.Content);
                     if (evnts != null)

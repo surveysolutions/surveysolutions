@@ -6,6 +6,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical">
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/editSyncPoint"
+            android:singleLine="true" />
         <Button
             android:id="@+id/btnPull"
             android:layout_width="fill_parent"

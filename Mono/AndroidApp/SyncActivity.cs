@@ -45,7 +45,9 @@ namespace AndroidApp
 
             //builder.SetTitle("Synchronization");
             builder.SetMessage("Synchronization started");
+            
             //builder.SetPositiveButton("Sync", OkClicked);
+            
             builder.SetNegativeButton("Cancel", CancelClicked);
             builder.Create();
             builder.Show();
