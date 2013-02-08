@@ -146,7 +146,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
-            this.Activity.StartActivity(typeof (DashboardActivity));
+         /*   var m = this.Activity.GetSystemService(Context.ActivityService) as ActivityManager;
+            var tasks = m.GetRunningTasks(1);
+            var dashboard = tasks.Last();*/
+            this.Activity.OnBackPressed();
+            
         }
 
         protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)

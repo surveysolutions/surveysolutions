@@ -76,7 +76,7 @@ namespace AndroidApp.Core.Model.EventHandlers
                     q => q.PublicKey == evnt.EventSourceId);
             if (questionnaire == null)
                 return;
-            questionnaire.Status = evnt.Payload.Status.Name;
+            questionnaire.SetStatus(evnt.Payload.Status.Name);
         }
 
         #endregion
