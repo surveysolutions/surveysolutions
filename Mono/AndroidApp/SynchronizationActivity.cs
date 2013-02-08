@@ -109,7 +109,7 @@ namespace AndroidApp
         private bool Pull(string remoteSyncNode)
         {
             Guid processKey = Guid.NewGuid();
-            
+
             string syncMessage = "Remote sync.";
             try
             {
@@ -147,12 +147,12 @@ namespace AndroidApp
 
 
             var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
-            
+
 
             Uri test = null;
             bool valid = Uri.TryCreate(syncPoint.Text, UriKind.Absolute, out test) && test.Scheme == "http";
-            
-            if(!valid)
+
+            if (!valid)
             {
                 syncPoint.SetBackgroundColor(Color.Red);
                 return;
@@ -164,32 +164,27 @@ namespace AndroidApp
 
             progressDialog.SetMessage("Synchronization in progress");
             progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
-            //progressDialog.SetButton( "Cancel", new delegate  { });
             progressDialog.SetCancelable(false);
             progressDialog.Show();
 
             int i = 0;
             ThreadPool.QueueUserWorkItem(
                 state =>
-                    {
-                        i++;
-                        this.RunOnUiThread(delegate { progressDialog.IncrementProgressBy(1); });
+                {
+                    i++;
+                    this.RunOnUiThread(delegate { progressDialog.IncrementProgressBy(1); });
 
-                        this.Pull(syncPoint.Text);
-
-                        this.RunOnUiThread(delegate { progressDialog.IncrementProgressBy(98); });
-
-                        /*while (i<100)
-                    {
-                        RunOnUiThread(
-                        delegate
-                        {
-                            //progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
-                            progressDialog.IncrementProgressBy(1);
-                        });
-                    }*/
-                        RunOnUiThread(progressDialog.Hide);
-                    });
+                    bool result = this.Pull(syncPoint.Text);
+                    
+                    this.RunOnUiThread(
+                            delegate
+                            {
+                                progressDialog.IncrementProgressBy(98);
+                                var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
+                                syncResult.Text = result ? "OK" : "Error on sync!";
+                            });
+                    RunOnUiThread(progressDialog.Hide);
+                });
         }
 
         /// <summary>

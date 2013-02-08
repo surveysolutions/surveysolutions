@@ -62,10 +62,10 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private readonly string baseAddress;
 
-        /// <summary>
+       /* /// <summary>
         /// The chanel factory wrapper.
         /// </summary>
-        private readonly IChanelFactoryWrapper chanelFactoryWrapper;
+        private readonly IChanelFactoryWrapper chanelFactoryWrapper;*/
 
         #endregion
 
@@ -85,7 +85,7 @@ namespace AndroidMain.Synchronization
         /// </param>
         public RemoteServiceEventStreamProvider1(IKernel kernel, Guid processGuid, string address)
         {
-            this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
+            //this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.ProcessGuid = processGuid;
             this.baseAddress = address;
         }
