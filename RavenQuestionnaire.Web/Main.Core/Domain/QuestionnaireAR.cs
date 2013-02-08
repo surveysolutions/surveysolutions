@@ -360,22 +360,22 @@ namespace Main.Core.Domain
 
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
             }
 
             if (stataCaption.Length > 32)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
             }
 
             if (stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))))
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
             }
 
             if (Char.IsDigit(stataCaption[0]))
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
+                throw new ArgumentException("Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -384,7 +384,7 @@ namespace Main.Core.Domain
 
             if (captions.Contains(stataCaption))
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
             }
 
             return stataCaption;

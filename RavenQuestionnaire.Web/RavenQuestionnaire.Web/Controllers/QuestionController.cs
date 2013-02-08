@@ -13,6 +13,7 @@ namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -478,11 +479,18 @@ namespace RavenQuestionnaire.Web.Controllers
                 }
                 catch (ArgumentException e)
                 {
-                    this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
+                    this.AddModelErrorUsingArgumentException(model, e);
                 }
                 catch (Exception e)
                 {
-                    this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+                    if (e.InnerException is ArgumentException)
+                    {
+                        this.AddModelErrorUsingArgumentException(model, (ArgumentException) e.InnerException);
+                    }
+                    else
+                    {
+                        this.AddModelErrorUsingBasicException(model, e);
+                    }
                 }
 
                 if (this.ModelState.IsValid)
@@ -492,6 +500,16 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             return View("Create", model);
+        }
+
+        private void AddModelErrorUsingBasicException(QuestionView model, Exception e)
+        {
+            this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+        }
+
+        private void AddModelErrorUsingArgumentException(QuestionView model, ArgumentException e)
+        {
+            this.ModelState.AddModelError(string.Format("question[{0}].StataExportCaption", model.PublicKey), e.Message);
         }
 
         /// <summary>
