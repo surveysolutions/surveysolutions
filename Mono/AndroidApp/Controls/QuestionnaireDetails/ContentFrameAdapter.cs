@@ -59,9 +59,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public override Fragment GetItem(int position)
         {
 
-            Fragment fragment = this.mFragments[position];
-            if (fragment != null)
-                return fragment;
             if (position == screensHolder.Count && isRoot)
             {
                 return new StatisticsContentFragment(questionnaire.PublicKey);
