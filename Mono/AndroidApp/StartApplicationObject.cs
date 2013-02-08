@@ -55,14 +55,20 @@ namespace AndroidApp
             CompleteQuestionnaireDocument researchQ = DesserializeEmbededResource<CompleteQuestionnaireDocument>("researchDeptSurvey.txt");
             NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
 
+            for (int i = 0; i < 100; i++)
+            {
 
-            var eventTempl = new UncommittedEvent(Guid.NewGuid(),
-                                               root.PublicKey, 1, 0, DateTime.Now,
-                                               new SnapshootLoaded()
-                                               {
-                                                   Template = new Snapshot(root.PublicKey, 1, root)
-                                               }, new Version());
+                root.PublicKey = Guid.NewGuid();
 
+                var eventTempl = new UncommittedEvent(Guid.NewGuid(),
+                                                      root.PublicKey, 1, 0, DateTime.Now,
+                                                      new SnapshootLoaded()
+                                                          {
+                                                              Template = new Snapshot(root.PublicKey, 1, root)
+                                                          }, new Version());
+                stream.Append(eventTempl);
+                bus.Publish(eventTempl);
+            }
             var rEventTempl = new UncommittedEvent(Guid.NewGuid(),
                                              researchQ.PublicKey, 1, 0, DateTime.Now,
                                              new SnapshootLoaded()
@@ -74,12 +80,12 @@ namespace AndroidApp
                                                  new Version());
             #endregion
             stream.Append(userEventUcmt);
-            stream.Append(eventTempl);
+           
             stream.Append(rEventTempl);
 
             eventStore.Store(stream);
             bus.Publish(userEventUcmt);
-            bus.Publish(eventTempl);
+           
             bus.Publish(rEventTempl);
 
         }
