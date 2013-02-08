@@ -498,7 +498,7 @@ namespace RavenQuestionnaire.Web.Controllers
 
         private void AddModelErrorUsingArgumentException(QuestionView model, ArgumentException e)
         {
-            this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
+            this.ModelState.AddModelError(string.Format("question[{0}].StataExportCaption", model.PublicKey), e.Message);
         }
 
         /// <summary>
