@@ -24,7 +24,6 @@ namespace AndroidMain.Synchronization
     using RestSharp;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.WcfInfrastructure;
 
     /// <summary>
     /// The remote service event stream provider.
@@ -85,7 +84,6 @@ namespace AndroidMain.Synchronization
         /// </param>
         public RemoteServiceEventStreamProvider1(IKernel kernel, Guid processGuid, string address)
         {
-            //this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.ProcessGuid = processGuid;
             this.baseAddress = address;
         }
@@ -207,7 +205,6 @@ namespace AndroidMain.Synchronization
                     itemRequest.AddParameter("length", root.EventKeys.Count);
 
                     itemRequest.RequestFormat = DataFormat.Json;
-
                     
                     IRestResponse responseStream = restClient.Execute(itemRequest);
                     if (string.IsNullOrWhiteSpace(responseStream.Content)

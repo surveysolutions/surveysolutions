@@ -16,10 +16,7 @@ namespace AndroidApp
     using Android.Content;
     using Android.Graphics;
     using Android.OS;
-    using Android.Views;
     using Android.Widget;
-
-    using AndroidApp.Extensions;
 
     using AndroidMain.Synchronization;
 
@@ -66,8 +63,6 @@ namespace AndroidApp
         {
             base.OnCreate(bundle);
 
-            /*syncServiceIntent = new Intent("org.worldbank.capi.sync");
-            syncReceiver = new SyncReceiver();*/
             this.SetContentView(Resource.Layout.sync_dialog);
 
             var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
@@ -138,14 +133,6 @@ namespace AndroidApp
         /// </param>
         private void buttonPull_Click(object sender, EventArgs e)
         {
-            /*var builder = new AlertDialog.Builder(this);
-            builder.SetMessage("Synchronization in progress");
-            builder.SetNegativeButton("Stop", CancelClicked);
-            builder.Create();
-            builder.SetCancelable(false);
-            builder.Show();*/
-
-
             var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
 
 
