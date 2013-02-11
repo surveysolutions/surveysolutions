@@ -264,6 +264,10 @@
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidNinject.Extensions.Conventions\AndroidNinject.Extensions.Conventions.csproj">
+      <Project>{e21bc003-84b5-41be-928c-75874418acd2}</Project>
+      <Name>AndroidNinject.Extensions.Conventions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
       <Name>AndroidNinject</Name>
