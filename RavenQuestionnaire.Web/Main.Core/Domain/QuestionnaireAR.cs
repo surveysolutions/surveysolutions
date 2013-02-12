@@ -526,11 +526,7 @@ namespace Main.Core.Domain
             string description)
         #warning get rid of executor here and create a common mechanism for handling it if needed
         {
-            var group = this.innerDocument.Find<Group>(groupPublicKey);
-            if (group == null)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-            }
+            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
 
             this.ApplyEvent(
                 new GroupUpdated
@@ -780,5 +776,14 @@ namespace Main.Core.Domain
         }
 
         #endregion
+
+        private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
+        {
+            var group = this.innerDocument.Find<Group>(groupPublicKey);
+            if (group == null)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+        }
     }
 }
