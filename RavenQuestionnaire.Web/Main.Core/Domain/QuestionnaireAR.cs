@@ -54,14 +54,14 @@ namespace Main.Core.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
         /// </summary>
-        /// <param name="questionnaireId">
+        /// <param name="publicKey">
         /// The questionnaire id.
         /// </param>
-        /// <param name="text">
+        /// <param name="title">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text)
-            : base(questionnaireId)
+        public QuestionnaireAR(Guid publicKey, string title)
+            : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
             this.questionFactory = new CompleteQuestionFactory();
@@ -73,17 +73,37 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionnaireCreated
                     {
-                        PublicKey = questionnaireId,
-                        Title = text,
+                        PublicKey = publicKey,
+                        Title = title,
                         CreationDate = clock.UtcNow()
                     });
         }
 
         #endregion
 
-        // Event handler for the NewQuestionnaireCreated event. This method
-        // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The create snapshot.
+        /// </summary>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
+        /// </returns>
+        public override QuestionnaireDocument CreateSnapshot()
+        {
+            return this.innerDocument;
+        }
+
+        /// <summary>
+        /// The restore from snapshot.
+        /// </summary>
+        /// <param name="snapshot">
+        /// The snapshot.
+        /// </param>
+        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        {
+            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
+        }
 
         /// <summary>
         /// The update questionnaire.
@@ -92,6 +112,7 @@ namespace Main.Core.Domain
         /// The title.
         /// </param>
         public void UpdateQuestionnaire(string title)
+        #warning CRUD
         {
             this.ApplyEvent(new QuestionnaireUpdated() { Title = title });
         }
@@ -138,9 +159,6 @@ namespace Main.Core.Domain
                         Description = description
                     });
         }
-
-        // Event handler for the NewGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
 
         /// <summary>
         /// The add question.
@@ -400,25 +418,12 @@ namespace Main.Core.Domain
         /// The creator.
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
+        #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
-
-        /// <summary>
-        /// The create snapshot.
-        /// </summary>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
-        /// </returns>
-        public override QuestionnaireDocument CreateSnapshot()
-        {
-            return this.innerDocument;
-        }
-
-        // Event handler for the NewGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
 
         /// <summary>
         /// The delete group.
@@ -430,6 +435,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
+        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
         }
@@ -458,6 +464,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
+        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
@@ -485,31 +492,6 @@ namespace Main.Core.Domain
                         PublicKey = publicKey
                     });
         }
-
-        /// <summary>
-        /// The restore from snapshot.
-        /// </summary>
-        /// <param name="snapshot">
-        /// The snapshot.
-        /// </param>
-        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
-        {
-            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
-        }
-
-        // public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
-        // {
-        // Group group = this._innerDocument.Find<Group>(groupPublicKey);
-        // if (group == null)
-        // throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-        // ApplyEvent(new GroupUpdated()
-        // {
-        // parentGroup = groupPublicKey,
-        // GroupText = groupText,
-        // Propagateble = propagateble,
-        // Triggers = triggers
-        // });
-        // }
 
         /// <summary>
         /// The update group.
@@ -542,12 +524,9 @@ namespace Main.Core.Domain
             UserLight executor,
             string conditionExpression,
             string description)
+        #warning get rid of executor here and create a common mechanism for handling it if needed
         {
-            var group = this.innerDocument.Find<Group>(groupPublicKey);
-            if (group == null)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-            }
+            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
 
             this.ApplyEvent(
                 new GroupUpdated
@@ -797,5 +776,14 @@ namespace Main.Core.Domain
         }
 
         #endregion
+
+        private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
+        {
+            var group = this.innerDocument.Find<Group>(groupPublicKey);
+            if (group == null)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+        }
     }
 }

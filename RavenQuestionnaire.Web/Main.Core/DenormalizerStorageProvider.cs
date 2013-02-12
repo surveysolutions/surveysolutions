@@ -37,20 +37,14 @@ namespace Main.Core
         protected override IDenormalizerStorage<T> CreateInstance(IContext context)
         {
             IDenormalizerStorage<T> result;
-            try
+
+            if (this.GetWeekBinding())
             {
-                if (this.GetWeekBinding())
-                {
-                    result = context.Kernel.Get<PersistentDenormalizer<T>>();
-                }
-                else
-                {
-                    result = context.Kernel.Get<InMemoryDenormalizer<T>>();
-                }
+                result = context.Kernel.Get<PersistentDenormalizer<T>>();
             }
-            catch (Exception ex)
+            else
             {
-                throw; // new Exception(ex.Message, ex);
+                result = context.Kernel.Get<InMemoryDenormalizer<T>>();
             }
 
             return result;

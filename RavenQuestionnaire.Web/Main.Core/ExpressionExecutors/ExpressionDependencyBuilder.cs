@@ -132,8 +132,9 @@ namespace Main.Core.ExpressionExecutors
                     expression.Evaluate(new EvaluationTesterVisitor(expression.Options));
                     return tempStore;
                 }
-                catch (Exception ex)
+                catch
                 {
+                    #warning no exceptions should be ignored without at least writing to log
                     ////what must we do if expression was fault to evaluate?
                 }
             }

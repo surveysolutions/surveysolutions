@@ -12,6 +12,10 @@ using System.Linq;
 
 namespace Main.Core.Tests.Domain
 {
+    using Moq;
+
+    using Ncqrs;
+
     [TestFixture]
     public class QuestionnaireARTests
     {
@@ -413,6 +417,351 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+        [Test]
+        public void DeleteGroup_When_group_public_key_specified_Then_raised_GroupDeleted_event_with_same_group_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid groupPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteGroup(groupPublicKey, Guid.NewGuid());
+
+                // assert
+                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
+            }
+        }
+
+        [Test]
+        public void DeleteGroup_When_parent_element_public_key_specified_Then_raised_GroupDeleted_event_with_same_parent_element_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid parentElementPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteGroup(Guid.NewGuid(), parentElementPublicKey);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentElementPublicKey));
+            }
+        }
+
+        [Test]
+        public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_question_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var imageKey = Guid.NewGuid();
+                var questionKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+
+                // act
+                questionnaire.DeleteImage(questionKey, imageKey);
+
+                // assert
+                Assert.That(GetSingleEvent<ImageDeleted>(eventContext).QuestionKey, Is.EqualTo(questionKey));
+            }
+        }
+
+        [Test]
+        public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_image_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var imageKey = Guid.NewGuid();
+                var questionKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+
+                // act
+                questionnaire.DeleteImage(questionKey, imageKey);
+
+                // assert
+                Assert.That(GetSingleEvent<ImageDeleted>(eventContext).ImageKey, Is.EqualTo(imageKey));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestion_When_question_id_specified_Then_raised_QuestionDeleted_event_with_same_question_id()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var questionId = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteQuestion(questionId, Guid.NewGuid());
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestion_When_parent_element_public_key_specified_Then_raised_QuestionDeleted_event_with_same_parent_element_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var parentPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteQuestion(Guid.NewGuid(), parentPublicKey);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentPublicKey));
+            }
+        }
+
+        [Test]
+        public void MoveQuestionnaireItem_When_called_Then_raised_QuestionnaireItemMoved_event_contains_questionnaire_id()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var questionnaireId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId: questionnaireId);
+
+                // act
+                questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId));
+            }
+        }
+
+        [Test]
+        public void MoveQuestionnaireItem_When_public_key_specified_Then_raised_QuestionnaireItemMoved_event_with_same_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var publicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.MoveQuestionnaireItem(publicKey, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).PublicKey, Is.EqualTo(publicKey));
+            }
+        }
+
+        [Test]
+        public void MoveQuestionnaireItem_When_group_public_key_specified_Then_raised_QuestionnaireItemMoved_event_with_same_group_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var groupPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), groupPublicKey, null);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).GroupKey, Is.EqualTo(groupPublicKey));
+            }
+        }
+
+        [Test]
+        public void MoveQuestionnaireItem_When_public_key_of_item_to_put_after_specified_Then_raised_QuestionnaireItemMoved_event_with_same_public_key_of_item_to_put_after()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var afterItemPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), null, afterItemPublicKey);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).AfterItemKey, Is.EqualTo(afterItemPublicKey));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_does_not_exist_Then_throws_ArgumentException()
+        {
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            Guid notExistingGroupPublicKey = Guid.NewGuid();
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.UpdateGroup(null, Propagate.None, notExistingGroupPublicKey, null, null, null);
+
+            // assert
+            Assert.That(act, Throws.ArgumentException);
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_questionnaire_id()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var questionnaireId = Guid.NewGuid();
+                var existingGroupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireId, existingGroupPublicKey);
+
+                // act
+                questionnaire.UpdateGroup(null, Propagate.None, existingGroupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_group_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+
+                // act
+                questionnaire.UpdateGroup("group text", Propagate.None, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_group_text_specified_Then_raised_GroupUpdated_event_with_same_group_text()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var groupText = "new group text";
+
+                // act
+                questionnaire.UpdateGroup(groupText, Propagate.None, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupText, Is.EqualTo(groupText));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_propogatability_specified_Then_raised_GroupUpdated_event_with_same_propogatability()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var propagatability = Propagate.AutoPropagated;
+
+                // act
+                questionnaire.UpdateGroup("new text", propagatability, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(propagatability));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_condition_expression_specified_Then_raised_GroupUpdated_event_with_same_condition_expression()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var conditionExpression = "2 < 7";
+
+                // act
+                questionnaire.UpdateGroup("text of a group", Propagate.None, groupPublicKey, null, conditionExpression, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).ConditionExpression, Is.EqualTo(conditionExpression));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_description_specified_Then_raised_GroupUpdated_event_with_same_description()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var description = "hardest questionnaire in the world";
+
+                // act
+                questionnaire.UpdateGroup(null, Propagate.None, groupPublicKey, null, null, description);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));
+            }
+        }
+
+        [Test]
+        public void ctor_When_public_key_specified_Then_raised_NewQuestionnaireCreated_event_with_same_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var publicKey = Guid.NewGuid();
+
+                // act
+                new QuestionnaireAR(publicKey, null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
+            }
+        }
+
+        [Test]
+        public void ctor_When_title_specified_Then_raised_NewQuestionnaireCreated_event_with_same_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var title = "title, the";
+
+                // act
+                new QuestionnaireAR(Guid.NewGuid(), title);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
+            }
+        }
+
+        [Test]
+        public void ctor_When_called_Then_raised_NewQuestionnaireCreated_event_with_creation_date_equal_to_current_date()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var currentDate = new DateTime(2010, 10, 20, 17, 00, 00);
+                var clockStub = Mock.Of<IClock>(clock
+                    => clock.UtcNow() == currentDate);
+                NcqrsEnvironment.SetDefault(clockStub);
+
+                // act
+                new QuestionnaireAR(Guid.NewGuid(), "some title");
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
+            }
+        }
+
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
@@ -421,6 +770,34 @@ namespace Main.Core.Tests.Domain
         private static QuestionnaireAR CreateQuestionnaireAR()
         {
             return new QuestionnaireAR();
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
+        {
+            return new QuestionnaireAR(questionnaireId ?? Guid.NewGuid(), text);
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            questionnaire.AddQuestion(questionKey, "What is your middle name?", "middlename",
+                QuestionType.Text, QuestionScope.Interviewer, null, null, null,
+                false, false, false, Order.AZ, null, null,
+                new List<Guid>(), 0, new Answer[] {});
+
+            questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
+
+            return questionnaire;
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupPublicKey = null)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), null);
+
+            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), null, Propagate.None, null, null, null);
+
+            return questionnaire;
         }
     }
 }

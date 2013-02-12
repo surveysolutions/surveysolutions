@@ -69,18 +69,12 @@ namespace Main.Core
         protected override DocumentStore CreateInstance(IContext context)
         {
             DocumentStore store;
-            try
-            {
-                store = this.isEmbedded ?
-                    GetEmbededStorage() : 
-                    new DocumentStore { Url = this.storage };
+
+            store = this.isEmbedded ?
+                        this.GetEmbededStorage() : 
+                        new DocumentStore { Url = this.storage };
                 
-                store.Initialize();
-            }
-            catch (Exception ex)
-            {
-                throw; // new Exception(ex.Message, ex);
-            }
+            store.Initialize();
 
             return store;
         }

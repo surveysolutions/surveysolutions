@@ -149,8 +149,9 @@ namespace Main.Core.ExpressionExecutors
             {
                 result = (bool)e.Evaluate();
             }
-            catch (Exception exc)
+            catch
             {
+                #warning no exceptions should be ignored without at least writing to log
             }
 
             return result;
