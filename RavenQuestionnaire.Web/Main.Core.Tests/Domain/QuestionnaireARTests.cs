@@ -12,6 +12,10 @@ using System.Linq;
 
 namespace Main.Core.Tests.Domain
 {
+    using Moq;
+
+    using Ncqrs;
+
     [TestFixture]
     public class QuestionnaireARTests
     {
@@ -704,6 +708,57 @@ namespace Main.Core.Tests.Domain
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));
+            }
+        }
+
+        [Test]
+        public void ctor_When_questionnaire_id_specified_Then_raised_NewQuestionnaireCreated_event_with_same_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var questionnaireId = Guid.NewGuid();
+
+                // act
+                new QuestionnaireAR(questionnaireId, null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(questionnaireId));
+            }
+        }
+
+        [Test]
+        public void ctor_When_text_specified_Then_raised_NewQuestionnaireCreated_event_with_same_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var text = "title, the";
+
+                // act
+                new QuestionnaireAR(Guid.NewGuid(), text);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(text));
+            }
+        }
+
+        [Test]
+        public void ctor_When_called_Then_raised_NewQuestionnaireCreated_event_with_creation_date_equal_to_current_date()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var currentDate = new DateTime(2010, 10, 20, 17, 00, 00);
+                var clockStub = Mock.Of<IClock>(clock
+                    => clock.UtcNow() == currentDate);
+                NcqrsEnvironment.SetDefault(clockStub);
+
+                // act
+                new QuestionnaireAR(Guid.NewGuid(), "some title");
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
             }
         }
 
