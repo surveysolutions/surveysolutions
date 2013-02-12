@@ -600,6 +600,113 @@ namespace Main.Core.Tests.Domain
             Assert.That(act, Throws.ArgumentException);
         }
 
+        [Test]
+        public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_questionnaire_id()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var questionnaireId = Guid.NewGuid();
+                var existingGroupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireId, existingGroupPublicKey);
+
+                // act
+                questionnaire.UpdateGroup(null, Propagate.None, existingGroupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_group_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+
+                // act
+                questionnaire.UpdateGroup("group text", Propagate.None, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_group_text_specified_Then_raised_GroupUpdated_event_with_same_group_text()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var groupText = "new group text";
+
+                // act
+                questionnaire.UpdateGroup(groupText, Propagate.None, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupText, Is.EqualTo(groupText));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_propogatability_specified_Then_raised_GroupUpdated_event_with_same_propogatability()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var propagatability = Propagate.AutoPropagated;
+
+                // act
+                questionnaire.UpdateGroup("new text", propagatability, groupPublicKey, null, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(propagatability));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_condition_expression_specified_Then_raised_GroupUpdated_event_with_same_condition_expression()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var conditionExpression = "2 < 7";
+
+                // act
+                questionnaire.UpdateGroup("text of a group", Propagate.None, groupPublicKey, null, conditionExpression, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).ConditionExpression, Is.EqualTo(conditionExpression));
+            }
+        }
+
+        [Test]
+        public void UpdateGroup_When_group_exists_and_description_specified_Then_raised_GroupUpdated_event_with_same_description()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                var description = "hardest questionnaire in the world";
+
+                // act
+                questionnaire.UpdateGroup(null, Propagate.None, groupPublicKey, null, null, description);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));
+            }
+        }
+
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
@@ -610,7 +717,7 @@ namespace Main.Core.Tests.Domain
             return new QuestionnaireAR();
         }
 
-        private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text")
+        private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
         {
             return new QuestionnaireAR(questionnaireId ?? Guid.NewGuid(), text);
         }
@@ -625,6 +732,15 @@ namespace Main.Core.Tests.Domain
                 new List<Guid>(), 0, new Answer[] {});
 
             questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
+
+            return questionnaire;
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupPublicKey = null)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), null);
+
+            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), null, Propagate.None, null, null, null);
 
             return questionnaire;
         }
