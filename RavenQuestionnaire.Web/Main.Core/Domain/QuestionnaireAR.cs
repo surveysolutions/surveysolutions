@@ -54,14 +54,14 @@ namespace Main.Core.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
         /// </summary>
-        /// <param name="questionnaireId">
+        /// <param name="publicKey">
         /// The questionnaire id.
         /// </param>
-        /// <param name="text">
+        /// <param name="title">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text)
-            : base(questionnaireId)
+        public QuestionnaireAR(Guid publicKey, string title)
+            : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
             this.questionFactory = new CompleteQuestionFactory();
@@ -73,8 +73,8 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionnaireCreated
                     {
-                        PublicKey = questionnaireId,
-                        Title = text,
+                        PublicKey = publicKey,
+                        Title = title,
                         CreationDate = clock.UtcNow()
                     });
         }

@@ -712,34 +712,34 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void ctor_When_questionnaire_id_specified_Then_raised_NewQuestionnaireCreated_event_with_same_public_key()
+        public void ctor_When_public_key_specified_Then_raised_NewQuestionnaireCreated_event_with_same_public_key()
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
-                var questionnaireId = Guid.NewGuid();
+                var publicKey = Guid.NewGuid();
 
                 // act
-                new QuestionnaireAR(questionnaireId, null);
+                new QuestionnaireAR(publicKey, null);
 
                 // assert
-                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(questionnaireId));
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
             }
         }
 
         [Test]
-        public void ctor_When_text_specified_Then_raised_NewQuestionnaireCreated_event_with_same_title()
+        public void ctor_When_title_specified_Then_raised_NewQuestionnaireCreated_event_with_same_title()
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
-                var text = "title, the";
+                var title = "title, the";
 
                 // act
-                new QuestionnaireAR(Guid.NewGuid(), text);
+                new QuestionnaireAR(Guid.NewGuid(), title);
 
                 // assert
-                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(text));
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
             }
         }
 
