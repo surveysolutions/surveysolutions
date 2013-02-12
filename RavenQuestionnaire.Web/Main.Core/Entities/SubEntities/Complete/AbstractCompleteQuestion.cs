@@ -416,7 +416,12 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void SetComments(string comments, DateTime date, UserLight user)
         {
             this.LastComment = comments;
-            this.Comments.Add(new CommentDocument { CommentDate = date, Comment = comments, User = user });
+            if (this.Comments.Count > 0 && this.Comments.Last().Comment == comments)
+            {
+                return;
+            }
+
+            this.Comments.Add(new CommentDocument {CommentDate = date, Comment = comments, User = user});
         }
 
         #endregion
