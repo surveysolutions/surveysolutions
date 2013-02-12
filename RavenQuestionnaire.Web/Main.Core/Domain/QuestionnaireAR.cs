@@ -486,9 +486,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireItemMoved
                     {
-                        #warning why are we exposing privatly generated id in this method? at least it is not testable. discuss, is it corrent
                         QuestionnaireId = this.innerDocument.PublicKey,
-
                         AfterItemKey = afterItemKey,
                         GroupKey = groupKey,
                         PublicKey = publicKey
