@@ -134,6 +134,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\TestMembershipProvider.cs" />
     <Compile Include="Stubs\TestRoleProvider.cs" />
+    <Compile Include="Utils\ExpressionReplacerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -165,9 +166,7 @@
       <Name>RavenQuestionnaire.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utils\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
