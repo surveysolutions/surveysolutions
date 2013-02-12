@@ -435,6 +435,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
+        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
         }
@@ -463,6 +464,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
+        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
