@@ -8,6 +8,13 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 
+using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Utility;
+using Main.Core.View.Question;
+using RavenQuestionnaire.Core.Views.Group;
+using RavenQuestionnaire.Web.Utils;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -95,7 +102,37 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(id));
 
+            ReplaceGuidsInValidationAndComditionRules(id, model);
+
             return View(model);
+        }
+
+        private void ReplaceGuidsInValidationAndComditionRules(Guid id, QuestionnaireView model)
+        {
+            var transformator = new ExpressionReplacer(this.viewRepository);
+
+            var treeStack = new Stack<GroupView>();
+            foreach (var group in model.Children.OfType<GroupView>())
+            {
+                treeStack.Push(@group);
+            }
+
+            while (treeStack.Count > 0)
+            {
+                var group = treeStack.Pop();
+
+                foreach (var question in @group.Children.OfType<QuestionView>())
+                {
+                    question.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, id);
+                    question.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression,
+                                                                                                id);
+                }
+
+                foreach (var g in @group.Children.OfType<GroupView>())
+                {
+                    treeStack.Push(@group);
+                }
+            }
         }
 
         /// <summary>
