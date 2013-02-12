@@ -447,6 +447,42 @@ namespace Main.Core.Tests.Domain
             }
         }
 
+        [Test]
+        public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_question_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var imageKey = Guid.NewGuid();
+                var questionKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+
+                // act
+                questionnaire.DeleteImage(questionKey, imageKey);
+
+                // assert
+                Assert.That(GetSingleEvent<ImageDeleted>(eventContext).QuestionKey, Is.EqualTo(questionKey));
+            }
+        }
+
+        [Test]
+        public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_image_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var imageKey = Guid.NewGuid();
+                var questionKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+
+                // act
+                questionnaire.DeleteImage(questionKey, imageKey);
+
+                // assert
+                Assert.That(GetSingleEvent<ImageDeleted>(eventContext).ImageKey, Is.EqualTo(imageKey));
+            }
+        }
+
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
@@ -455,6 +491,20 @@ namespace Main.Core.Tests.Domain
         private static QuestionnaireAR CreateQuestionnaireAR()
         {
             return new QuestionnaireAR();
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            questionnaire.AddQuestion(questionKey, "What is your middle name?", "middlename",
+                QuestionType.Text, QuestionScope.Interviewer, null, null, null,
+                false, false, false, Order.AZ, null, null,
+                new List<Guid>(), 0, new Answer[] {});
+
+            questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
+
+            return questionnaire;
         }
     }
 }
