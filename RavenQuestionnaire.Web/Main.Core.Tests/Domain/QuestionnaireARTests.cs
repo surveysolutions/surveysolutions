@@ -585,6 +585,21 @@ namespace Main.Core.Tests.Domain
             }
         }
 
+        [Test]
+        public void UpdateGroup_When_group_does_not_exist_Then_throws_ArgumentException()
+        {
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            Guid notExistingGroupPublicKey = Guid.NewGuid();
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.UpdateGroup(null, Propagate.None, notExistingGroupPublicKey, null, null, null);
+
+            // assert
+            Assert.That(act, Throws.ArgumentException);
+        }
+
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
