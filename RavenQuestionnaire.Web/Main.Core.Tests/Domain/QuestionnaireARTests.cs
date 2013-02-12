@@ -483,6 +483,40 @@ namespace Main.Core.Tests.Domain
             }
         }
 
+        [Test]
+        public void DeleteQuestion_When_question_id_specified_Then_raised_QuestionDeleted_event_with_same_question_id()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var questionId = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteQuestion(questionId, Guid.NewGuid());
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
+            }
+        }
+
+        [Test]
+        public void DeleteQuestion_When_parent_element_public_key_specified_Then_raised_QuestionDeleted_event_with_same_parent_element_public_key()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                var parentPublicKey = Guid.NewGuid();
+
+                // act
+                questionnaire.DeleteQuestion(Guid.NewGuid(), parentPublicKey);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentPublicKey));
+            }
+        }
+
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
             return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
