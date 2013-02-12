@@ -10,6 +10,11 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     public class QuestionnaireStataMapView
     {
+        public QuestionnaireStataMapView()
+        {
+            StataMap = new List<KeyValuePair<Guid, string>>();
+        }
+
         public QuestionnaireStataMapView(QuestionnaireDocument doc)
         {
             this.StataMap = doc.GetAllQuestions<AbstractQuestion>()
@@ -17,6 +22,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                                .ToList();
         }
 
-        public List<KeyValuePair<Guid, string>> StataMap = new List<KeyValuePair<Guid, string>>();
+        public List<KeyValuePair<Guid, string>> StataMap { get; set; }
     }
 }
