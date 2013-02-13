@@ -12,36 +12,22 @@ namespace RavenQuestionnaire.Web.Tests.Utils
     [TestFixture]
     public class ExpressionReplacerTests
     {
-        private IKernel kernel;
         private Mock<IViewRepository> viewRepositoryMock;
 
         [SetUp]
         public void Init()
         {
-            this.kernel = new StandardKernel();
-
             var dummyQuestionnaireStataMapView = new QuestionnaireStataMapView
             {
                 StataMap = new List<KeyValuePair<Guid, string>>()
                 {
                     {new KeyValuePair<Guid, string>(Guid.Parse("a0d6ff6f-230e-4a1f-b940-97f93e037e08"), "caption1")}, 
                     {new KeyValuePair<Guid, string>(Guid.Parse("9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0"), "caption2")}, 
-                    {new KeyValuePair<Guid, string>(Guid.Parse("702ed23e-5e83-4c68-852c-7222c7e9ab3d"), "caption3")}, 
-                    {new KeyValuePair<Guid, string>(Guid.Parse("589d55a8-6c14-4dd3-9e79-15fa2762f2e1"), "caption4")}, 
-                    {new KeyValuePair<Guid, string>(Guid.Parse("bae427c7-c116-4327-b428-768ff26fd7a0"), "caption5")},
                 }
             };
 
             this.viewRepositoryMock = Mock.Get(Mock.Of<IViewRepository>(repository
                 => repository.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()) == dummyQuestionnaireStataMapView));
-
-            this.kernel.Bind<IViewRepository>().ToConstant(this.viewRepositoryMock.Object);
-        }
-
-        [TearDown]
-        public void Dispose()
-        {
-            this.kernel.Dispose();
         }
 
         #region Replacing stata captions
