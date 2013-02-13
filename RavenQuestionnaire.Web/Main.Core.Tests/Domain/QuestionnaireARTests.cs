@@ -28,19 +28,19 @@ namespace Main.Core.Tests.Domain
             {
                 // Arrange
                 QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                bool caption = true;
+                bool capital = true;
 
                 // Act
                 questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
                                           "name", QuestionType.Text,
                                           QuestionScope.Interviewer,
-                                          "", "", "", false, false, caption, Order.AZ, "", null, new List<Guid>(), 0,
+                                          "", "", "", false, false, capital, Order.AZ, "", null, new List<Guid>(), 0,
                                           new Answer[0]);
 
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
-                Assert.AreEqual(caption, risedEvent.Capital);
+                Assert.AreEqual(capital, risedEvent.Capital);
             }
         }
 
@@ -128,7 +128,7 @@ namespace Main.Core.Tests.Domain
 
         [Test]
         public void
-            AddQuestion_When_stata_export_caption_is_empty_contains_spaces_Then_ArgumentException_should_be_thrown()
+            AddQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -199,17 +199,13 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                Guid targetQuestion = Guid.NewGuid();
-
-                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                          QuestionScope.Interviewer,
-                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                Guid targetQuestionPublicKey;
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
                 bool capital = true;
 
                 // Act
-                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                              "title", "", QuestionType.Text,
                                              QuestionScope.Interviewer, null, "", "", "", false, false, capital,
                                              Order.AZ, new Answer[0]);
@@ -229,15 +225,11 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                Guid targetQuestion = Guid.NewGuid();
-
-                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                          QuestionScope.Interviewer,
-                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+                Guid targetQuestionPublicKey;
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
                 // Act
-                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                              validStataExportCaption, "", QuestionType.Text,
                                              QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                              Order.AZ, new Answer[0]);
@@ -271,16 +263,12 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_stata_export_caption_has_33_chars_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
             string longStataExportCaption = "".PadRight(33, 'A');
-            Guid targetQuestion = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                                             longStataExportCaption, "",
                                                             QuestionType.Text,
                                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
@@ -295,17 +283,13 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_stata_export_caption_starts_with_digit_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            Guid targetQuestion = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             string stataExportCaptionWithFirstDigit = "1aaaa";
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                                             stataExportCaptionWithFirstDigit, "", QuestionType.Text,
                                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
@@ -320,16 +304,12 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid targetQuestionPublicKey;
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
                 string longStataExportCaption = " my_name38  ";
-                Guid targetQuestion = Guid.NewGuid();
-
-                questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                          QuestionScope.Interviewer,
-                                          "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
                 // Act
-                questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+                questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                              longStataExportCaption, "",
                                              QuestionType.Text,
                                              QuestionScope.Interviewer, null, "", "", "", false, false, false,
@@ -343,20 +323,16 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void ChangeQuestion_When_stata_export_caption_is_empty_contains_spaces_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            Guid targetQuestion = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             string emptyStataExportCaption = string.Empty;
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                                             emptyStataExportCaption, "", QuestionType.Text,
                                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
@@ -369,17 +345,13 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_stata_export_caption_contains_any_non_underscore_letter_or_digit_character_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            Guid targetQuestion = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             string nonValidStataExportCaptionWithBannedSymbols = "aaa:_&b";
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "Title", new List<Guid>(), 0,
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
                                                             nonValidStataExportCaptionWithBannedSymbols, "", QuestionType.Text,
                                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
@@ -392,21 +364,17 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_questionnaire_has_another_question_with_same_stata_export_caption_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            Guid targetQuestion = Guid.NewGuid();
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             questionnaire.AddQuestion(Guid.NewGuid(), "What is your first name?", "name", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
-
-            questionnaire.AddQuestion(targetQuestion, "What is your last name?", "lastName", QuestionType.Text,
                                       QuestionScope.Interviewer,
                                       "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
 
             string duplicateStataExportCaption = "name";
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestion, "What is your last name?", new List<Guid>(), 0,
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "What is your last name?", new List<Guid>(), 0,
                                                             duplicateStataExportCaption, "", QuestionType.Text,
                                                             QuestionScope.Interviewer, null, "", "", "", false, false, false,
                                                             Order.AZ, new Answer[0]);
@@ -770,6 +738,17 @@ namespace Main.Core.Tests.Domain
         private static QuestionnaireAR CreateQuestionnaireAR()
         {
             return new QuestionnaireAR();
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid targetQuestionPublicKey)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            targetQuestionPublicKey = Guid.NewGuid();
+
+            questionnaire.AddQuestion(targetQuestionPublicKey, "What is your last name?", "lastName", QuestionType.Text,
+                                      QuestionScope.Interviewer,
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
+            return questionnaire;
         }
 
         private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")

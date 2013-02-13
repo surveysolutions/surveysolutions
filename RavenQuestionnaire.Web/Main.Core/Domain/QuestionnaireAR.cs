@@ -233,19 +233,16 @@ namespace Main.Core.Domain
             int maxValue,
             Answer[] answers)
         {
-            //// performe checks before event raising
-            var stataCaption = ValidateStataCaption(publicKey, stataExportCaption);
+            stataExportCaption = stataExportCaption.Trim();
 
-            // Apply a NewQuestionAdded event that reflects the
-            // creation of this instance. The state of this
-            // instance will be update in the handler of 
-            // this event (the OnNewQuestionAdded method).
+            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
             this.ApplyEvent(
                 new NewQuestionAdded
                     {
                         PublicKey = publicKey,
                         QuestionText = questionText,
-                        StataExportCaption = stataCaption,
+                        StataExportCaption = stataExportCaption,
                         QuestionType = questionType,
                         QuestionScope = questionScope,
                         ConditionExpression = conditionExpression,
@@ -336,76 +333,32 @@ namespace Main.Core.Domain
             Order answerOrder,
             Answer[] answers)
         {
-            var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
-            if (question == null)
-            {
-                throw  new ArgumentException("Question not found");
-            }
+            ThrowArgumentExceptionIfQuestionDoesntExist(publicKey);
 
-            var stataCaption = ValidateStataCaption(publicKey, stataExportCaption);
+            stataExportCaption = stataExportCaption.Trim();
+
+            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
                 new QuestionChanged
                     {
                         PublicKey = publicKey,
-                        QuestionText = questionText, 
-                        Triggers = triggers, 
+                        QuestionText = questionText,
+                        Triggers = triggers,
                         MaxValue = maxValue,
-                        StataExportCaption = stataCaption, 
+                        StataExportCaption = stataExportCaption,
                         QuestionType = questionType,
-                        QuestionScope = questionScope, 
-                        ConditionExpression = conditionExpression, 
-                        ValidationExpression = validationExpression, 
-                        ValidationMessage = validationMessage, 
-                        Featured = featured, 
-                        Mandatory = mandatory, 
+                        QuestionScope = questionScope,
+                        ConditionExpression = conditionExpression,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        Featured = featured,
+                        Mandatory = mandatory,
                         Capital = capital,
-                        AnswerOrder = answerOrder, 
-                        Answers = answers, 
+                        AnswerOrder = answerOrder,
+                        Answers = answers,
                         Instructions = instructions
                     });
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="publicKey">The current question public key</param>
-        /// <param name="stataExportCaption">Variable name (stataCaption)</param>
-        /// <returns></returns>
-        private string ValidateStataCaption(Guid publicKey, string stataExportCaption)
-        {
-            var stataCaption = stataExportCaption.Trim();
-
-            if (string.IsNullOrEmpty(stataCaption))
-            {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
-            }
-
-            if (stataCaption.Length > 32)
-            {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
-            }
-
-            if (stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c))))
-            {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
-            }
-
-            if (Char.IsDigit(stataCaption[0]))
-            {
-                throw new ArgumentException("Variable name shouldn't starts with digit");
-            }
-
-            var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
-                               .Where(q => q.PublicKey != publicKey)
-                               .Select(q => q.StataExportCaption);
-
-            if (captions.Contains(stataCaption))
-            {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
-            }
-
-            return stataCaption;
         }
 
         /// <summary>
@@ -464,7 +417,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
+#warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
@@ -524,7 +477,7 @@ namespace Main.Core.Domain
             UserLight executor,
             string conditionExpression,
             string description)
-        #warning get rid of executor here and create a common mechanism for handling it if needed
+#warning get rid of executor here and create a common mechanism for handling it if needed
         {
             this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
 
@@ -777,12 +730,57 @@ namespace Main.Core.Domain
 
         #endregion
 
+        private void ThrowArgumentExceptionIfQuestionDoesntExist(Guid publicKey)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
+            if (question == null)
+            {
+                throw new ArgumentException(string.Format("Question with public key {0} can't be found", publicKey));
+            }
+        }
+
         private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
         {
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+        }
+
+        private void ThrowArgumentExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
+        {
+            if (string.IsNullOrEmpty(stataCaption))
+            {
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+            }
+
+            bool isTooLong = stataCaption.Length > 32;
+            if (isTooLong)
+            {
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+            }
+
+            bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
+            if (containsInvalidCharacters)
+            {
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+            }
+
+            bool startsWithDigit = Char.IsDigit(stataCaption[0]);
+            if (startsWithDigit)
+            {
+                throw new ArgumentException("Variable name shouldn't starts with digit");
+            }
+
+            var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                               .Where(q => q.PublicKey != questionPublicKey)
+                               .Select(q => q.StataExportCaption);
+
+            bool isNotUnique = captions.Contains(stataCaption);
+            if (isNotUnique)
+            {
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
             }
         }
     }
