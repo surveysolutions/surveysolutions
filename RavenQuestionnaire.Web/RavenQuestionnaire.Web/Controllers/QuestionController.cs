@@ -377,11 +377,10 @@ namespace RavenQuestionnaire.Web.Controllers
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                        model.PublicKey = newItemKey;
 
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        
+
                         if (triggers == null || !triggers.Any())
                         {
                             commandService.Execute(
@@ -427,6 +426,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.AnswerOrder,
                                     ansverItems));
                         }
+
+                        model.PublicKey = newItemKey;
                     }
                     else
                     {
