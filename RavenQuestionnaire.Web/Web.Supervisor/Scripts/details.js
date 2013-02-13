@@ -321,6 +321,9 @@ Date.prototype.mmddyyyy = function () {
                 request = $.ajax(request);
 
                 request.done(function (msg) {
+                    if (msg.status != 'ok') {
+                        console.log("comment not saved");
+                    }
                     console.log("comment saved");
                 });
 
