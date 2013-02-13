@@ -111,28 +111,52 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             var transformator = new ExpressionReplacer(this.viewRepository);
 
-            var treeStack = new Stack<GroupView>();
-            foreach (var group in model.Children.OfType<GroupView>())
-            {
-                treeStack.Push(@group);
-            }
+            var elements = new Queue<ICompositeView>(model.Children.OfType<GroupView>());
 
-            while (treeStack.Count > 0)
+            while (elements.Count > 0)
             {
-                var group = treeStack.Pop();
+                ICompositeView element = elements.Dequeue();
 
-                foreach (var question in @group.Children.OfType<QuestionView>())
+                if (element is QuestionView)
                 {
+                    var question = (QuestionView) element;
                     question.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, id);
-                    question.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression,
-                                                                                                id);
+                    question.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression, id);
                 }
 
-                foreach (var g in @group.Children.OfType<GroupView>())
+                if (element is GroupView)
                 {
-                    treeStack.Push(@group);
+                    foreach (var child in element.Children)
+                    {
+                        elements.Enqueue(child);
+                    }
                 }
             }
+
+#warning TLK: deal with commented code here
+
+//            var treeStack = new Stack<GroupView>();
+//            foreach (var group in model.Children.OfType<GroupView>())
+//            {
+//                treeStack.Push(@group);
+//            }
+//
+//            while (treeStack.Count > 0)
+//            {
+//                var group = treeStack.Pop();
+//
+//                foreach (var question in @group.Children.OfType<QuestionView>())
+//                {
+//                    question.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, id);
+//                    question.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression,
+//                                                                                                id);
+//                }
+//
+//                foreach (var g in @group.Children.OfType<GroupView>())
+//                {
+//                    treeStack.Push(@group);
+//                }
+//            }
         }
 
         /// <summary>
