@@ -470,8 +470,9 @@ namespace Main.Core.ExpressionExecutors
             {
                 result = (bool)expression.Evaluate();
             }
-            catch (Exception ex)
+            catch
             {
+                #warning no exceptions should be ignored without at least writing to log
             }
 
             return result;
