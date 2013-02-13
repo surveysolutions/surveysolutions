@@ -2,17 +2,25 @@ function IsSetupSolution($solution) {
     return $solution.EndsWith('Setup.sln')
 }
 
-Write-Host "##teamcity[blockOpened name='Building solutions']"
-
-$foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ $_.FullName.Substring((Get-Location).Path.Length + 1) }
-
-$ignoredSolutions = $foundSolutions | ?{ IsSetupSolution($_) }
-
-if ($ignoredSolutions.Count -gt 0) {
-    Write-Host "##teamcity[message status='WARNING' text='Ignored $($ignoredSolutions.Count) solution(s): $([string]::Join(', ', $ignoredSolutions))']"
+function ShouldSolutionBeIgnored($solution) {
+    return IsSetupSolution($solution)
 }
 
-$solutionsToBuild = $foundSolutions | ?{ -not (IsSetupSolution($_)) }
+function GetSolutionsToBuild() {
+    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ $_.FullName.Substring((Get-Location).Path.Length + 1) }
+    $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored($_) }
+    $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored($_)) }
+
+    if ($solutionsToIgnore.Count -gt 0) {
+        Write-Host "##teamcity[message status='WARNING' text='Ignored $($solutionsToIgnore.Count) solution(s): $([string]::Join(', ', $solutionsToIgnore))']"
+    }
+
+    return $solutionsToBuild
+}
+
+Write-Host "##teamcity[blockOpened name='Building solutions']"
+
+$solutionsToBuild = GetSolutionsToBuild
 
 $countOfFailedSolutions = 0
 
