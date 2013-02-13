@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Main.Core.Events;
-using Main.Core.Export;
 using Main.Core.View;
-using Main.Core.View.Export;
 using Moq;
 using NUnit.Framework;
 using Ninject;
 using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Web.Tests.Export;
 using RavenQuestionnaire.Web.Utils;
 
 namespace RavenQuestionnaire.Web.Tests.Utils
@@ -92,6 +86,22 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             // Assert
             Assert.That(result, Is.EqualTo(noStataCaptionsExpression));
         }
+
+
+        [Test]
+        public void ReplaceStataCaptionsWithGuids_When_expression_contains_stata_captions_Then_all_known_should_be_replaced()
+        {
+            // Arrange
+            var replacer = CreateExpressionReplacer();
+            var expressionWithGuids = "[caption1] == 8 or [caption1] > [caption2]";
+
+            // Act
+            var result = replacer.ReplaceStataCaptionsWithGuids(expressionWithGuids, Guid.NewGuid());
+
+            // Assert
+            var expectedExpressionWithGuids = "[a0d6ff6f-230e-4a1f-b940-97f93e037e08] == 8 or [a0d6ff6f-230e-4a1f-b940-97f93e037e08] > [9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0]";
+            Assert.That(result, Is.EqualTo(expectedExpressionWithGuids));
+        }
         
         #endregion
 
@@ -155,20 +165,6 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             Assert.That(result, Is.EqualTo(guidLessExpression));
         }
 
-        [Test]
-        public void ReplaceGuidsWithStataCaptions_When_expression_contains_stata_captions_Then_all_known_should_be_replaced()
-        {
-            // Arrange
-            var replacer = CreateExpressionReplacer();
-            var expressionWithGuids = "[caption1] == 8 or [caption1] > [caption2]";
-
-            // Act
-            var result = replacer.ReplaceGuidsWithStataCaptions(expressionWithGuids, Guid.NewGuid());
-
-            // Assert
-            var expectedExpressionWithGuids = "[a0d6ff6f-230e-4a1f-b940-97f93e037e08] == 8 or [a0d6ff6f-230e-4a1f-b940-97f93e037e08] > [9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0]";
-            Assert.That(result, Is.EqualTo(expectedExpressionWithGuids));
-        }
         #endregion
 
         private ExpressionReplacer CreateExpressionReplacer()
