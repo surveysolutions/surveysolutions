@@ -15,27 +15,57 @@ using AndroidApp.Core.Model.ViewModel.Statistics;
 using Java.Interop;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
-using Fragment = Android.Support.V4.App.Fragment;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
     public class StatisticsContentFragment : AbstractScreenChangingFragment
     {
         public StatisticsViewModel Model { get; private set; }
+        protected Guid questionnaireKey;
         protected AlertDialog answeredDilog;
         protected AlertDialog unansweredDilog;
         protected AlertDialog invaliDilog;
+        protected AlertDialog.Builder popupBuilder;
         public StatisticsContentFragment(Guid questionnaireKey)
             : this()
         {
-            this.Model =
-                CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
+            this.questionnaireKey = questionnaireKey;
         }
         protected StatisticsContentFragment()
             : base()
         {
             this.RetainInstance = true;
         }
+        public override void OnResume()
+        {
+            base.OnResume();
+          
+            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
+            {
+                btnComplete.Text = "Reinit";
+            }
+
+            btnAnswered.Text += string.Format(" - {0}", this.Model.AnsweredQuestions.Count);
+            btnAnswered.Enabled = this.Model.AnsweredQuestions.Count != 0;
+
+            btnUnanswered.Text += string.Format(" - {0}", this.Model.UnansweredQuestions.Count);
+            btnUnanswered.Enabled = this.Model.UnansweredQuestions.Count != 0;
+
+            btnInvalid.Text += string.Format(" - {0}", this.Model.InvalidQuestions.Count);
+            btnInvalid.Enabled = this.Model.InvalidQuestions.Count != 0;
+            tvErrorWarning.Visibility = btnInvalid.Enabled? ViewStates.Visible : ViewStates.Gone;
+        }
+
+        public override void OnPause()
+        {
+            base.OnPause();
+            containerView.Dispose();
+            invaliDilog.Dispose();
+            answeredDilog.Dispose();
+            unansweredDilog.Dispose();
+            Model = null;
+        }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -44,88 +74,63 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+            this.Model =
+              CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
             containerView = inflater.Inflate(Resource.Layout.StatisticsContent, null);
-            if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
-            {
-                btnComplete.Text = "Reinit";
-            }
             btnComplete.Click += btnComplete_Click;
-            btnAnswered.Text += string.Format(" - {0}", this.Model.AnsweredQuestions.Count);
-            if (this.Model.AnsweredQuestions.Count == 0)
-            {
-                btnAnswered.Enabled = false;
-            }
-            else
-            {
-                var answeredPopup = new AlertDialog.Builder(this.Activity);
-                var answeredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.AnsweredQuestions,
-                                                                             OnScreenChanged
-                                                                             , new string[2] {"Question", "Answer"},
-                                                                             new Func
-                                                                                 <StatisticsQuestionViewModel, string>[2
-                                                                                 ]
+            popupBuilder = new AlertDialog.Builder(this.Activity);
+            var answeredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.AnsweredQuestions,
+                                                                         OnScreenChanged
+                                                                         , new string[2] { "Question", "Answer" },
+                                                                         new Func
+                                                                             <StatisticsQuestionViewModel, string>[2
+                                                                             ]
                                                                                  {
                                                                                      (s) => s.Text,
                                                                                      (s) => s.AnswerString
                                                                                  });
-                answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                                    ViewGroup.LayoutParams.WrapContent);
-                answeredPopup.SetView(answeredQuestionsView);
-                //  setAnswerPopup.Show();
-                answeredDilog = answeredPopup.Create();
-                btnAnswered.Click += btnAnswered_Click;
-            }
+            answeredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                                ViewGroup.LayoutParams.WrapContent);
+            popupBuilder.SetView(answeredQuestionsView);
+            //  setAnswerPopup.Show();
+            answeredDilog = popupBuilder.Create();
+            btnAnswered.Click += btnAnswered_Click;
 
-            btnUnanswered.Text += string.Format(" - {0}", this.Model.UnansweredQuestions.Count);
-            if (this.Model.UnansweredQuestions.Count == 0)
-            {
-                btnUnanswered.Enabled = false;
-            }
-            else
-            {
-                var unansweredPopup = new AlertDialog.Builder(this.Activity);
-                var unansweredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.UnansweredQuestions,
-                                                                             OnScreenChanged
-                                                                             , new string[1] { "Question"},
-                                                                             new Func
-                                                                                 <StatisticsQuestionViewModel, string>[1
-                                                                                 ]
-                                                                                 {
-                                                                                     (s) => s.Text
-                                                                                 });
-                unansweredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                                    ViewGroup.LayoutParams.WrapContent);
-                unansweredPopup.SetView(unansweredQuestionsView);
-                unansweredDilog = unansweredPopup.Create();
+            popupBuilder = new AlertDialog.Builder(this.Activity);
+            var unansweredQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.UnansweredQuestions,
+                                                                           OnScreenChanged
+                                                                           , new string[1] { "Question" },
+                                                                           new Func
+                                                                               <StatisticsQuestionViewModel, string>
+                                                                               [1
+                                                                               ]
+                                                                                   {
+                                                                                       (s) => s.Text
+                                                                                   });
+            unansweredQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent);
+            popupBuilder.SetView(unansweredQuestionsView);
+            unansweredDilog = popupBuilder.Create();
 
-                btnUnanswered.Click += btnUnanswered_Click;
-            }
-            btnInvalid.Text += string.Format(" - {0}", this.Model.InvalidQuestions.Count);
-            if (this.Model.InvalidQuestions.Count == 0)
-            {
-                tvErrorWarning.Visibility = ViewStates.Gone;
-                btnInvalid.Enabled = false;
-            }
-            else
-            {
-                var invalidPopup = new AlertDialog.Builder(this.Activity);
-                var invalidQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.InvalidQuestions,
-                                                                    OnScreenChanged, new string[3]{"Question","Answer","Error message"},new Func<StatisticsQuestionViewModel, string>[3]
-                                                                        {
-                                                                            (s)=> s.Text,
-                                                                            (s)=> s.AnswerString,
-                                                                            (s)=> s.ErrorMessage
-                                                                        } );
-                invalidQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
-                invalidPopup.SetView(invalidQuestionsView);
-                //  setAnswerPopup.Show();
-                invaliDilog = invalidPopup.Create();
-                btnInvalid.Click += btnInvalid_Click;
-            }
-
-
-           
-
+            btnUnanswered.Click += btnUnanswered_Click;
+            popupBuilder = new AlertDialog.Builder(this.Activity);
+            var invalidQuestionsView = new StatisticsTableQuestionsView(this.Activity, Model.InvalidQuestions,
+                                                                        OnScreenChanged,
+                                                                        new string[3] { "Question", "Answer", "Error message" },
+                                                                        new Func
+                                                                            <StatisticsQuestionViewModel, string>[3]
+                                                                                {
+                                                                                    (s) => s.Text,
+                                                                                    (s) => s.AnswerString,
+                                                                                    (s) => s.ErrorMessage
+                                                                                });
+            invalidQuestionsView.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                               ViewGroup.LayoutParams.WrapContent);
+            popupBuilder.SetView(invalidQuestionsView);
+            invaliDilog = popupBuilder.Create();
+            btnInvalid.Click += btnInvalid_Click;
+            popupBuilder.Dispose();
             return containerView;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
@@ -149,7 +154,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
          /*   var m = this.Activity.GetSystemService(Context.ActivityService) as ActivityManager;
             var tasks = m.GetRunningTasks(1);
             var dashboard = tasks.Last();*/
-            this.Activity.OnBackPressed();
+            this.Activity.Finish();
             
         }
 
@@ -163,7 +168,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 unansweredDilog.Hide();
             base.OnScreenChanged(evt);
         }
-
         void btnUnanswered_Click(object sender, EventArgs e)
         {
             unansweredDilog.Show();

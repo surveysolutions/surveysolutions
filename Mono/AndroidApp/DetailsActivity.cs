@@ -10,6 +10,8 @@ using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
 using Main.Core.Entities.SubEntities;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -23,6 +25,7 @@ namespace AndroidApp
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
+        protected InMemoryEventStore activitySnapshooting;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -54,6 +57,9 @@ namespace AndroidApp
         {
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                new QuestionnaireScreenInput(QuestionnaireId));
+            activitySnapshooting=new InMemoryEventStore();
+            
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);
             base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.Details);
@@ -127,6 +133,18 @@ namespace AndroidApp
             if (Adapter.IsRoot)
                 NavList.SelectItem(e.P0);
         }
-
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
+            activitySnapshooting = null;
+            GC.Collect();
+        }
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+            Console.WriteLine("Low memory Details activities");
+            GC.Collect();
+        }
     }
 }

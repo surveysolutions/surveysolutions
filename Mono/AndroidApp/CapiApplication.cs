@@ -18,6 +18,7 @@ using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
+using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
 using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
@@ -92,7 +93,7 @@ namespace AndroidApp
             var eventStore = new SQLiteEventStore(this.ApplicationContext);
             
             NcqrsEnvironment.SetDefault(eventStore);
-
+            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
 
             #region register handlers
 
@@ -114,15 +115,88 @@ namespace AndroidApp
             bus.RegisterHandler(dashboardeventHandler, typeof (SnapshootLoaded));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
 
-
+           
             var usereventHandler =
                 new UserDenormalizer(Kernel.Get<IDenormalizerStorage<UserView>>());
             bus.RegisterHandler(usereventHandler, typeof (NewUserCreated));
 
             #endregion
 
-          
+            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(this);
+
+            // initialize app if necessary
+            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
+            {
+                _setup.Initialize();
+            }
+            GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
         }
-       
+        
+        protected void GenerateEvents(InProcessEventBus bus)
+        {
+            var eventStore = CapiApplication.Kernel.Get<IEventStore>() as SQLiteEventStore;
+            /*var events = eventStore.GetAllEvents();
+            if (eventStore.GetAllEvents().Any())
+            {
+                bus.Publish(events.Select(e => e as IPublishableEvent));
+                return;
+            }*/
+            eventStore.ClearDB();
+            var stream = new UncommittedEventStream(Guid.NewGuid());
+            //  var payload = new NewCompleteQuestionnaireCreated();
+
+            #region init
+
+            CompleteQuestionnaireDocument root = DesserializeEmbededResource<CompleteQuestionnaireDocument>("initEvent.txt");
+            CompleteQuestionnaireDocument researchQ = DesserializeEmbededResource<CompleteQuestionnaireDocument>("researchDeptSurvey.txt");
+            NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
+
+            for (int i = 0; i < 10; i++)
+            {
+
+                root.PublicKey = Guid.NewGuid();
+
+                var eventTempl = new UncommittedEvent(Guid.NewGuid(),
+                                                      root.PublicKey, 1, 0, DateTime.Now,
+                                                      new SnapshootLoaded()
+                                                      {
+                                                          Template = new Snapshot(root.PublicKey, 1, root)
+                                                      }, new Version());
+                stream.Append(eventTempl);
+                bus.Publish(eventTempl);
+            }
+            var rEventTempl = new UncommittedEvent(Guid.NewGuid(),
+                                             researchQ.PublicKey, 1, 0, DateTime.Now,
+                                             new SnapshootLoaded()
+                                             {
+                                                 Template = new Snapshot(researchQ.PublicKey, 1, researchQ)
+                                             }, new Version());
+
+            var userEventUcmt = new UncommittedEvent(Guid.NewGuid(), userEvent.PublicKey, 1, 0, DateTime.Now, userEvent,
+                                                 new Version());
+            #endregion
+            stream.Append(userEventUcmt);
+
+            stream.Append(rEventTempl);
+
+            eventStore.Store(stream);
+            bus.Publish(userEventUcmt);
+
+            bus.Publish(rEventTempl);
+
+        }
+        protected T DesserializeEmbededResource<T>(string fileName)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            //var data = Encoding.Default.GetString("");
+            string s = string.Empty;
+            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
+                               .GetManifestResourceStream("AndroidApp." + fileName))
+            using (StreamReader reader = new StreamReader(streamEmbededRes))
+            {
+                s = reader.ReadToEnd();
+            }
+            return JsonConvert.DeserializeObject<T>(s, settings);
+        }
     }
 }

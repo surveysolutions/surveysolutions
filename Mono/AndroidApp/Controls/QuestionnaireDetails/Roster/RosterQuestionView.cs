@@ -14,7 +14,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
 {
     public class RosterQuestionView : LinearLayout
     {
-
+        private readonly IMvxBindingActivity _bindingActivity;
         protected QuestionViewModel Model { get; private set; }
         protected View Content { get; set; }
 
@@ -26,6 +26,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
         public RosterQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
             : base(context)
         {
+            _bindingActivity = bindingActivity;
             this.Model = source;
             Content = bindingActivity.BindingInflate(source, Resource.Layout.RosterQuestion, this);
             llWrapper.Click += rowViewItem_Click;
@@ -44,5 +45,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
         }
 
         public event EventHandler<RosterItemClickEventArgs> RosterItemsClick;
+
+
+        public void ClearBindings()
+        {
+            _bindingActivity.ClearBindings(this);
+        }
+
+        protected IMvxBindingActivity BindingActivity
+        {
+            get { return _bindingActivity; }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ClearBindings();
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }
