@@ -18,12 +18,12 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
-function BuildSolution($solution) {
+function BuildSolution($solution, $buildConfiguration) {
     $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $solution) + 1) of $($solutionsToBuild.Count) $solution"
     Write-Host "##teamcity[blockOpened name='$solution']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=Debug
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=$buildConfiguration
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
@@ -37,23 +37,27 @@ function BuildSolution($solution) {
     return $wasBuildSuccessfull
 }
 
-Write-Host "##teamcity[blockOpened name='Building solutions']"
+function BuildSolutions($buildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building solutions']"
 
-$solutionsToBuild = GetSolutionsToBuild
+    $solutionsToBuild = GetSolutionsToBuild
 
-$countOfFailedSolutions = 0
+    $countOfFailedSolutions = 0
 
-foreach ($solution in $solutionsToBuild) {
+    foreach ($solution in $solutionsToBuild) {
 
-    $wasBuildSuccessfull = BuildSolution $solution
+        $wasBuildSuccessfull = BuildSolution $solution $buildConfiguration
 
-    if (-not $wasBuildSuccessfull) {
-        $countOfFailedSolutions += 1
+        if (-not $wasBuildSuccessfull) {
+            $countOfFailedSolutions += 1
+        }
     }
+
+    if ($countOfFailedSolutions -gt 0) {
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $countOfFailedSolutions solution(s)']"
+    }
+
+    Write-Host "##teamcity[blockClosed name='Building solutions']"
 }
 
-if ($countOfFailedSolutions -gt 0) {
-    Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $countOfFailedSolutions solution(s)']"
-}
-
-Write-Host "##teamcity[blockClosed name='Building solutions']"
+BuildSolutions 'Debug'
