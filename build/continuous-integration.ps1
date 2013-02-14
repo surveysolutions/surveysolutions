@@ -18,6 +18,25 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
+function BuildSolution($solution) {
+    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $solution) + 1) of $($solutionsToBuild.Count) $solution"
+    Write-Host "##teamcity[blockOpened name='$solution']"
+    Write-Host "##teamcity[progressStart '$progressMessage']"
+
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=Debug
+
+    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+
+    if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='failed to build $solution']"
+    }
+
+    Write-Host "##teamcity[progressFinish '$progressMessage']"
+    Write-Host "##teamcity[blockClosed name='$solution']"
+
+    return $wasBuildSuccessfull
+}
+
 Write-Host "##teamcity[blockOpened name='Building solutions']"
 
 $solutionsToBuild = GetSolutionsToBuild
@@ -25,20 +44,12 @@ $solutionsToBuild = GetSolutionsToBuild
 $countOfFailedSolutions = 0
 
 foreach ($solution in $solutionsToBuild) {
-    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $solution) + 1) of $($solutionsToBuild.Count) $solution"
 
-    Write-Host "##teamcity[blockOpened name='$solution']"
-    Write-Host "##teamcity[progressStart '$progressMessage']"
+    $wasBuildSuccessfull = BuildSolution $solution
 
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=Debug
-
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host "##teamcity[message status='ERROR' text='failed to build $solution']"
+    if (-not $wasBuildSuccessfull) {
         $countOfFailedSolutions += 1
     }
-
-    Write-Host "##teamcity[progressFinish '$progressMessage']"
-    Write-Host "##teamcity[blockClosed name='$solution']"
 }
 
 if ($countOfFailedSolutions -gt 0) {
