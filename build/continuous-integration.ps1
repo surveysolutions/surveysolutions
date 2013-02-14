@@ -3,13 +3,13 @@ function IsSetupSolution($solution) {
 }
 
 function ShouldSolutionBeIgnored($solution) {
-    return IsSetupSolution($solution)
+    return IsSetupSolution $solution
 }
 
 function GetSolutionsToBuild() {
     $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ $_.FullName.Substring((Get-Location).Path.Length + 1) }
-    $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored($_) }
-    $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored($_)) }
+    $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
+    $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
 
     if ($solutionsToIgnore.Count -gt 0) {
         Write-Host "##teamcity[message status='WARNING' text='Ignored $($solutionsToIgnore.Count) solution(s): $([string]::Join(', ', $solutionsToIgnore))']"
