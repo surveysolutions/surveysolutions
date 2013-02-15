@@ -52,6 +52,7 @@ namespace Main.Core.Events.Questionnaire
         /// Gets or sets the questionnaire id.
         /// </summary>
         public string QuestionnaireId { get; set; }
+        #warning why do we use string here, not guid?
 
         /// <summary>
         /// Gets or sets Description.

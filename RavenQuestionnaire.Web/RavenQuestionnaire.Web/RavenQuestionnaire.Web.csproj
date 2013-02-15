@@ -685,7 +685,6 @@
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
     <Content Include="Views\Question\_AutoPropagateRow.cshtml" />
     <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
     <Content Include="Views\Error\Http403.cshtml" />

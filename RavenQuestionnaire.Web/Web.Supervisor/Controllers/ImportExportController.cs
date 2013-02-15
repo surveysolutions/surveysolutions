@@ -28,6 +28,8 @@ namespace Web.Supervisor.Controllers
 
     using NLog;
 
+    using Newtonsoft.Json;
+
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
 
@@ -475,16 +477,27 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public bool PostStream(EventSyncMessage request)
+        public bool PostStream(string request)
         {
             Guid syncProcess = Guid.NewGuid();
+
+            if (string.IsNullOrWhiteSpace(request))
+            {
+                return false;
+            }
+
+            var settings = new JsonSerializerSettings();
+            settings.TypeNameHandling = TypeNameHandling.Objects;
+
+            EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(request, settings);
+
             try
             {
                 var process =
                     (IEventSyncProcess)
-                    this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, request.SynchronizationKey);
+                    this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
 
-                process.Import("Direct controller syncronization", request.Command);
+                process.Import("Direct controller syncronization", message.Command);
 
                 return true;
             }
