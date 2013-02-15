@@ -23,7 +23,7 @@ function BuildSolution($solution, $buildConfiguration) {
     Write-Host "##teamcity[blockOpened name='$solution']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=$buildConfiguration
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=$buildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 

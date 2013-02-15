@@ -235,6 +235,8 @@ namespace Main.Core.Domain
         {
             stataExportCaption = stataExportCaption.Trim();
 
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+
             ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
@@ -338,6 +340,8 @@ namespace Main.Core.Domain
             stataExportCaption = stataExportCaption.Trim();
 
             ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -748,29 +752,38 @@ namespace Main.Core.Domain
             }
         }
 
+        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, Answer[] answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+            if (isQuestionWithOptions && answerOptions.Length == 0)
+            {
+                throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
+            }
+        }
+
         private void ThrowArgumentExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit");
+                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -780,7 +793,7 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
             }
         }
     }
