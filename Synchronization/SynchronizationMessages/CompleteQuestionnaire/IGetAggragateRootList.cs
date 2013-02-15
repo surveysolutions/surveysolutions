@@ -11,7 +11,6 @@ namespace SynchronizationMessages.CompleteQuestionnaire
 {
     using System.IO;
     using System.ServiceModel;
-    using System.ServiceModel.Web;
 
     /// <summary>
     /// The GetAggragateRootList interface.
