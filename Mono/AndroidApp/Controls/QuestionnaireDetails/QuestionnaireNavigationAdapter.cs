@@ -20,13 +20,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private readonly CompleteQuestionnaireView model;
         private readonly Context context;
         private readonly int selectedItem;
+        private View[] items;
         public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
             : base()
         {
             this.context = context;
             this.selectedItem = selectedItem;
             this.model = model;
-          //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
+            this.items = new View[this.Count];
+            //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
 
 
@@ -40,7 +42,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
 
-            View view = convertView;
+            View view = items[position];
             if (view == null)
             {
                 LayoutInflater layoutInflater = (LayoutInflater) context.GetSystemService(Context.LayoutInflaterService);
@@ -78,6 +80,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     tvCount.Visibility = ViewStates.Gone;
                 }
             }
+            items[position] = view;
             return view;
         }
         protected void UpdateCounter(TextView tvCount, QuestionnaireScreenViewModel item)
@@ -89,6 +92,15 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
         }
 
+        public void SelectItem(int pos)
+        {
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (items[i] == null)
+                    continue;
+                items[i].SetBackgroundColor(i == pos ? Color.LightBlue : Color.Transparent);
+            }
+        }
 
         public override int Count
         {

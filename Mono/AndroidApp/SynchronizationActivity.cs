@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
+
 namespace AndroidApp
 {
     using System;
@@ -62,8 +65,10 @@ namespace AndroidApp
         /// </param>
         protected override void OnCreate(Bundle bundle)
         {
+            if (bundle == null)
+                NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
             base.OnCreate(bundle);
-
+            
             this.SetContentView(Resource.Layout.sync_dialog);
 
             var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
@@ -81,7 +86,12 @@ namespace AndroidApp
             var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
             syncPoint.Text = remoteSyncNode;
         }
-
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
+            GC.Collect();
+        }
         /// <summary>
         /// The cancel clicked.
         /// </summary>
