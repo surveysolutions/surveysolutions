@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Web.Utils
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
-            var map = LoadMap(questionnaireKey).StataMap.ToDictionary(p=>p.Value, p=>p.Key.ToString());
+            Dictionary<string, string> map = LoadMap(questionnaireKey).StataMap.ToDictionary(p=>p.Value, p=>p.Key.ToString());
             return MakeSubstitutions(expression, map);
         }
 

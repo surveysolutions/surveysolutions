@@ -55,6 +55,13 @@ else
                 </div>
             </div>
             <div class="control-group">
+                @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
+                <div class="controls">
+                    @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
+                    @Html.ValidationMessageFor(model => model.StataExportCaption)
+                </div>
+            </div>
+            <div class="control-group">
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
                     <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
@@ -64,13 +71,6 @@ else
                 @Html.LabelFor(model => model.Mandatory, new { @class = "control-label" })
                 <div class="controls">
                     <label class="checkbox">@Html.CheckBoxFor(model => model.Mandatory) Yes</label>
-                </div>
-            </div>
-            <div class="control-group">
-                @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
-                <div class="controls">
-                    @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
-                    @Html.ValidationMessageFor(model => model.StataExportCaption)
                 </div>
             </div>
             <div class="control-group">

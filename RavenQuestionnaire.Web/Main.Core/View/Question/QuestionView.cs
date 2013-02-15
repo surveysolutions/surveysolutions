@@ -149,6 +149,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
+        [Required]
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
@@ -178,6 +179,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
+        [Required]
         public string Title { get; set; }
 
         /// <summary>
