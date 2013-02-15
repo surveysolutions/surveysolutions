@@ -235,6 +235,8 @@ namespace Main.Core.Domain
         {
             stataExportCaption = stataExportCaption.Trim();
 
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+
             ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
@@ -338,6 +340,8 @@ namespace Main.Core.Domain
             stataExportCaption = stataExportCaption.Trim();
 
             ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -745,6 +749,15 @@ namespace Main.Core.Domain
             if (group == null)
             {
                 throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+        }
+
+        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, Answer[] answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+            if (isQuestionWithOptions && answerOptions.Length == 0)
+            {
+                throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
             }
         }
 

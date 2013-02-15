@@ -20,6 +20,25 @@ namespace Main.Core.Tests.Domain
     public class QuestionnaireARTests
     {
         #region AddQuestion tests
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_ArgumentException_should_be_thrown(QuestionType questionType)
+        {
+            // Arrange
+            var emptyAnswersList = new Answer[0];
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            // Act
+            TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?", "name",
+                                                               questionType,
+                                                               QuestionScope.Interviewer, "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, 
+                                                               emptyAnswersList);
+
+            // Assert
+            Assert.Throws<ArgumentException>(act);
+        }
 
         [Test]
         public void AddQuestion_When_capital_parameter_is_true_Then_in_NewQuestionAdded_event_capital_property_should_be_set_in_true_too()
@@ -127,8 +146,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void
-            AddQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -192,6 +210,28 @@ namespace Main.Core.Tests.Domain
         #endregion
 
         #region ChangeQuestion tests
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_ArgumentException_should_be_thrown(QuestionType questionType)
+        {
+            // Arrange
+            var emptyAnswersList = new Answer[0];
+
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+            // Act
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,"name", "", 
+                                             questionType,
+                                             QuestionScope.Interviewer, null, "", "", "", false, false, false, Order.AZ, 
+                                             emptyAnswersList);
+
+            // Assert
+            Assert.Throws<ArgumentException>(act);
+        }
+
 
         [Test]
         public void ChangeQuestion_When_capital_parameter_is_true_Then_in_QuestionChanged_event_capital_property_should_be_set_in_true_too()
