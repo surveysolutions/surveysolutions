@@ -434,6 +434,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
         protected string BuildComments(IEnumerable<CommentDocument> comments)
         {
+            if (comments == null)
+                return string.Empty;
             return comments.Any() ? comments.Last().Comment : string.Empty;
         }
 
