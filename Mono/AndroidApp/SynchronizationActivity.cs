@@ -21,6 +21,7 @@ namespace AndroidApp
     using AndroidMain.Synchronization;
 
     using Main.Synchronization.SyncManager;
+    using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
 
     /// <summary>
@@ -30,7 +31,7 @@ namespace AndroidApp
     public class SynchronizationActivity : Activity
     {
 
-        private const string remoteSyncNode = "http://217.12.197.135/DEV-Supervisor/";
+        private const string remoteSyncNode = "http://10.0.2.2:8084";  // "http://217.12.197.135/DEV-Supervisor/";
 
         #region Public Methods and Operators
 
@@ -105,39 +106,58 @@ namespace AndroidApp
         {
             Guid processKey = Guid.NewGuid();
 
-            string syncMessage = "Remote sync.";
+            const string SyncMessage = "Remote sync (Pulling).";
             try
             {
                 var streamProvider = new RemoteServiceEventStreamProvider1(
                     CapiApplication.Kernel, processKey, remoteSyncNode);
                 var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
-                var manager = new SyncManager(streamProvider, collector, processKey, syncMessage, null);
+                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null);
                 manager.StartPush();
                 return true;
             }
             catch (Exception ex)
             {
+                //log
                 return false;
             }
         }
 
         /// <summary>
-        /// The button pull_ click.
+        /// The pull.
         /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void buttonPull_Click(object sender, EventArgs e)
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        private bool Push(string remoteSyncNode)
+        {
+            Guid processKey = Guid.NewGuid();
+
+            const string SyncMessage = "Remote sync (Pushing).";
+            try
+            {
+                var streamProvider = new AllIntEventsStreamProvider();
+                var collector = new RemoteCollector(remoteSyncNode, processKey);
+
+                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null);
+                manager.StartPush();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                //log
+                return false;
+            }
+        }
+
+
+        private void DoSync(bool isPush)
         {
             var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
-
-
+            
             Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint.Text, UriKind.Absolute, out test) && test.Scheme == "http";
+            bool valid = Uri.TryCreate(syncPoint.Text, UriKind.Absolute, out test) && (test.Scheme == "http" || test.Scheme == "https");
 
             if (!valid)
             {
@@ -161,8 +181,8 @@ namespace AndroidApp
                     i++;
                     this.RunOnUiThread(delegate { progressDialog.IncrementProgressBy(1); });
 
-                    bool result = this.Pull(syncPoint.Text);
-                    
+                    bool result = isPush ? this.Push(syncPoint.Text) : this.Pull(syncPoint.Text);
+
                     this.RunOnUiThread(
                             delegate
                             {
@@ -172,6 +192,20 @@ namespace AndroidApp
                             });
                     RunOnUiThread(progressDialog.Hide);
                 });
+        }
+
+        /// <summary>
+        /// The button pull_ click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void buttonPull_Click(object sender, EventArgs e)
+        {
+           this.DoSync(false);
         }
 
         /// <summary>
@@ -185,6 +219,7 @@ namespace AndroidApp
         /// </param>
         private void buttonPush_Click(object sender, EventArgs e)
         {
+            this.DoSync(true);
         }
 
         #endregion

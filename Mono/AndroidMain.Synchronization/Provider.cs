@@ -213,31 +213,21 @@ namespace AndroidMain.Synchronization
                         throw new Exception("Error stream for item " + root.EventKeys.First());
                     }
                     
-                    //ImportSynchronizationMessage item = new ImportSynchronizationMessage();
-
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
 
                     var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(responseStream.Content.Substring(responseStream.Content.IndexOf("[")), settings);
 
-                    //var streamMessage = JsonConvert.DeserializeObject<ImportSynchronizationMessage>(response.Content);
                     if (evnts != null)
                     {
                         events.AddRange(evnts);
                     }
-
-                    /*this.Invoker.Execute(
-                                new ChangeEventStatusCommand(
-                                    this.ProcessGuid, root.EventChunckPublicKey, EventState.Completed));*/
                 }
                 catch (Exception ex)
                 {
                     /*Logger logger = LogManager.GetCurrentClassLogger();
                             logger.Fatal("Import error", ex);*/
                     events = null;
-
-                    /* this.Invoker.Execute(
-                                new ChangeEventStatusCommand(
-                                    this.ProcessGuid, root.EventChunckPublicKey, EventState.Error));*/
+                    throw;
                 }
             }
 

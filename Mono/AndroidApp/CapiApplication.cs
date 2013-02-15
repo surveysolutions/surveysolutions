@@ -92,6 +92,7 @@ namespace AndroidApp
             var eventStore = new SQLiteEventStore(this.ApplicationContext);
             
             NcqrsEnvironment.SetDefault(eventStore);
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
 
 
             #region register handlers

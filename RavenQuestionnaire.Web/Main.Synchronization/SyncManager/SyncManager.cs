@@ -182,11 +182,11 @@ namespace Main.Synchronization.SyncManager
         /// </exception>
         public void StartSynchronization()
         {
-            this.StartTime = DateTime.UtcNow;
+            /*this.StartTime = DateTime.UtcNow;
             this.Push();
 
             this.Pull();
-            this.EndTime = DateTime.UtcNow;
+            this.EndTime = DateTime.UtcNow;*/
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Main.Synchronization.SyncManager
                 //Logger logger = LogManager.GetCurrentClassLogger();
                 //logger.Fatal("Import error", e);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
-
+                throw;
                 // return ErrorCodes.Fail;
             }
             finally

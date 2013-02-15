@@ -11,16 +11,48 @@ namespace AndroidMain.Synchronization
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Net;
 
     using Main.Core.Events;
     using Main.Core.View.SyncProcess;
     using Main.Synchronization.SyncStreamCollector;
 
+    using RestSharp;
+
+    using SynchronizationMessages.CompleteQuestionnaire;
+    using SynchronizationMessages.Synchronization;
+
     /// <summary>
     /// The remote collector.
     /// </summary>
-    internal class RemoteCollector : ISyncStreamCollector
+    public class RemoteCollector : ISyncStreamCollector
     {
+
+        /// <summary>
+        /// The item path.
+        /// </summary>
+        private const string pushPath = "importexport/PostStream";
+
+        /// <summary>
+        /// The item path 1.
+        /// </summary>
+        private const string pushPath1 = "importexport/PostStream1";
+
+
+        /// <summary>
+        /// The base address.
+        /// </summary>
+        private readonly string baseAddress;
+
+        /// <summary>
+        /// Gets or sets the process guid.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        protected Guid ProcessGuid { get; private set; }
+
         #region Public Properties
 
         /// <summary>
@@ -39,6 +71,14 @@ namespace AndroidMain.Synchronization
             }
         }
 
+
+        public RemoteCollector(string baseAddress, Guid processGuid)
+        {
+            this.baseAddress = baseAddress;
+            this.ProcessGuid = processGuid;
+        }
+
+
         #endregion
 
         #region Public Methods and Operators
@@ -56,7 +96,39 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
-            throw new NotImplementedException();
+            var restClient = new RestClient(this.baseAddress);
+
+            var request = new RestRequest(pushPath, Method.POST);
+            request.RequestFormat = DataFormat.Json;
+
+            try
+            {
+                var message = new EventSyncMessage { Command = chunk.ToArray(), SynchronizationKey = this.ProcessGuid };
+
+                var stream = new MemoryStream();
+                message.WriteTo(stream);
+                stream.Position = 0L;
+
+                var sr = new StreamReader(stream);
+                var item = sr.ReadToEnd();
+                
+                request.AddParameter("request", item);
+                
+                IRestResponse response = restClient.Execute(request);
+                if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (Exception exc)
+            {
+                // log
+                throw;
+                //return false;
+            }
+            
         }
 
         /// <summary>
@@ -66,7 +138,7 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public void Finish()
         {
-            throw new NotImplementedException();
+            
         }
 
         /// <summary>
@@ -79,7 +151,7 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public List<UserSyncProcessStatistics> GetStat()
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         /// <summary>
@@ -89,7 +161,7 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public void PrepareToCollect()
         {
-            throw new NotImplementedException();
+            
         }
 
         #endregion
