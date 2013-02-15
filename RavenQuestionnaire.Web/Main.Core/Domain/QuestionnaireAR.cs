@@ -765,25 +765,25 @@ namespace Main.Core.Domain
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit");
+                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -793,7 +793,7 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
             }
         }
     }
