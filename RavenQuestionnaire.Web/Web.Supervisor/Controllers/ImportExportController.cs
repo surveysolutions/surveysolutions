@@ -486,13 +486,18 @@ namespace Web.Supervisor.Controllers
                 return false;
             }
 
-            var settings = new JsonSerializerSettings();
-            settings.TypeNameHandling = TypeNameHandling.Objects;
-
-            EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(request, settings);
-
             try
             {
+                var settings = new JsonSerializerSettings();
+                settings.TypeNameHandling = TypeNameHandling.Objects;
+
+                EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(request, settings);
+
+                if (message == null)
+                {
+                    return false;
+                }
+
                 var process =
                     (IEventSyncProcess)
                     this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
@@ -503,6 +508,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
+                LogManager.GetCurrentClassLogger().Fatal("Error on Sync.", ex);
                 return false;
             }
         }
