@@ -432,6 +432,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
             return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
         }
+        protected string BuildComments(IEnumerable<CommentDocument> comments)
+        {
+            return comments.Any() ? comments.Last().Comment : string.Empty;
+        }
 
         protected IQuestionnaireItemViewModel CreateView(IComposite item)
         {
@@ -449,7 +453,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                             new ItemPublicKey(question.PublicKey, question.PropagationPublicKey), question.QuestionText,
                             newType,
                             question.GetAnswerString(),
-                            question.Enabled, question.Instructions, question.Comments,
+                            question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Capital, question.Mandatory, question.ValidationExpression,
                             question.ValidationMessage);
                 else
@@ -460,7 +464,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                             Enumerable.ToList<AnswerViewModel>(question.Answers.OfType<ICompleteAnswer>().Select(
                                     a =>
                                     new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected))),
-                            question.Enabled, question.Instructions, question.Comments,
+                            question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
                             question.ValidationExpression, question.ValidationMessage);
                 //  questionView.PropertyChanged += questionView_PropertyChanged;
