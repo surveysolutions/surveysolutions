@@ -1,9 +1,9 @@
-function IsSetupSolution($solution) {
-    return $solution.EndsWith('Setup.sln')
+function IsSetupSolution($Solution) {
+    return $Solution.EndsWith('Setup.sln')
 }
 
-function ShouldSolutionBeIgnored($solution) {
-    return IsSetupSolution $solution
+function ShouldSolutionBeIgnored($Solution) {
+    return IsSetupSolution $Solution
 }
 
 function GetSolutionsToBuild() {
@@ -18,26 +18,26 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
-function BuildSolution($solution, $buildConfiguration) {
-    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $solution) + 1) of $($solutionsToBuild.Count) $solution"
-    Write-Host "##teamcity[blockOpened name='$solution']"
+function BuildSolution($Solution, $BuildConfiguration) {
+    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $Solution) + 1) of $($solutionsToBuild.Count) $Solution"
+    Write-Host "##teamcity[blockOpened name='$Solution']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $solution /t:Rebuild /p:Configuration=$buildConfiguration | Write-Host
+    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $Solution /t:Rebuild /p:Configuration=$BuildConfiguration | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='failed to build $solution']"
+        Write-Host "##teamcity[message status='ERROR' text='failed to build $Solution']"
     }
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"
-    Write-Host "##teamcity[blockClosed name='$solution']"
+    Write-Host "##teamcity[blockClosed name='$Solution']"
 
     return $wasBuildSuccessfull
 }
 
-function BuildSolutions($buildConfiguration) {
+function BuildSolutions($BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='Building solutions']"
 
     $solutionsToBuild = GetSolutionsToBuild
@@ -46,7 +46,7 @@ function BuildSolutions($buildConfiguration) {
 
     foreach ($solution in $solutionsToBuild) {
 
-        $wasBuildSuccessfull = BuildSolution $solution $buildConfiguration
+        $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
 
         if (-not $wasBuildSuccessfull) {
             $countOfFailedSolutions += 1
