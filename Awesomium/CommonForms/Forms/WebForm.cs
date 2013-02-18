@@ -66,7 +66,6 @@ namespace Browsing.Common.Forms
                                            //ForceSingleProcess = true
                                        }, true);
 
-                var webView = new WebControl();
                 var requestProcessor = new WebRequestProcessor();
                 var urlUtils = InstantiateUrlProvider();
 
@@ -99,17 +98,17 @@ namespace Browsing.Common.Forms
 
                 AddRegistrationScreen(requestProcessor, urlUtils);
                 AddMainScreen(requestProcessor, settingsProvider, urlUtils);
-                AddBrowserScreen(webView);
+                AddBrowserScreen();
                 AddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
                 AddSettingsScreen();
 
                 this.Controls.Add(this.Holder);
+
             }
             finally
             {
                 this.stopThread = true;
             }
-
 
         }
 
@@ -132,17 +131,17 @@ namespace Browsing.Common.Forms
             splash.Hide();
         }
 
-        private void AddBrowserScreen(WebControl webView)
+        private void AddBrowserScreen()
         {
-            OnAddBrowserScreen(webView);
+            OnAddBrowserScreen();
         }
 
-        private void AddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        private void AddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             OnAddSynchronizerScreens(requestProcessor, settingsProvider, urlUtils);
         }
 
-        private void AddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        private void AddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils)
         {
             OnAddRegistrationScreen(requestProcessor, urlUtils);
         }
@@ -152,7 +151,7 @@ namespace Browsing.Common.Forms
             OnAddSettingsScreen();
         }
 
-        private void AddMainScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        private void AddMainScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             var capiMain = OnAddMainPageScreen(requestProcessor, settingsProvider, urlUtils);
 
@@ -185,11 +184,11 @@ namespace Browsing.Common.Forms
         #region Abstract
 
         protected abstract IUrlUtils InstantiateUrlProvider();
-        protected abstract Containers.Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
+        protected abstract Containers.Main OnAddMainPageScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
         protected abstract Containers.Settings OnAddSettingsScreen();
-        protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
-        protected abstract Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils);
-        protected abstract Containers.Browser OnAddBrowserScreen(WebControl webView);
+        protected abstract Containers.Synchronization OnAddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils);
+        protected abstract Containers.Registration OnAddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils);
+        protected abstract Containers.Browser OnAddBrowserScreen();
 
         #endregion
 
@@ -227,7 +226,7 @@ namespace Browsing.Common.Forms
                         if (usbWatcherScreens != null)
                         {
                             foreach (var screen in usbWatcherScreens)
-                                (screen as Common.Interfaces.IUsbWatcher).UpdateUsbList();
+                                (screen as Common.Interfaces.IUsbWatcher).UpdateUsbList(n == DBT_DEVICEARRIVAL);
                         }
                     }
 
@@ -239,4 +238,5 @@ namespace Browsing.Common.Forms
 
         #endregion
     }
+
 }

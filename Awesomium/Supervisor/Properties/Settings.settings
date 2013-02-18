@@ -9,7 +9,7 @@
       <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost</Value>
+      <Value Profile="(Default)">http://localhost:9089/</Value>
     </Setting>
     <Setting Name="EnginePathName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Engine</Value>
@@ -41,8 +41,20 @@
     <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/GetCurrentUser</Value>
     </Setting>
-    <Setting Name="GetRegistrationSupervisorPath" Type="System.String" Scope="User">
+    <Setting Name="CapiRegistrationPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Device/RegisterCapi</Value>
+    </Setting>
+    <Setting Name="AuthorizedIDsPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/GetRegisteredDevices</Value>
+    </Setting>
+    <Setting Name="SupervisorServicePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">WCF/AuthorizationService.svc/AuthorizationService</Value>
+    </Setting>
+    <Setting Name="PutAuthConfirmedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/ConfirmAuthorization</Value>
+    </Setting>
+    <Setting Name="NetworkCheckStatePath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ImportExport/ProgressInPersentage</Value>
     </Setting>
   </Settings>
 </SettingsFile>

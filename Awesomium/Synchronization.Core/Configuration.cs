@@ -3,14 +3,14 @@
 // see: http://msdn.microsoft.com/en-us/library/system.configuration.configurationmanager.aspx
 // </copyright>
 // -----------------------------------------------------------------------
-/*
+
 namespace Synchronization.Core
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
- 
+
     using System.Configuration;
     using System.Collections;
     using System.Collections.Specialized;
@@ -23,20 +23,20 @@ namespace Synchronization.Core
     //}
 
     #region
-    //*** Auxiliary Classes ***//*
+    //*** Auxiliary Classes ***//
 
     // Define a custom configuration element to be  
     // contained by the ConsoleSection. This element  
     // stores background and foreground colors that 
     // the application applies to the console window. 
-    public class RegistrationConfigElement : ConfigurationElement
+    public class ConsoleConfigElement : ConfigurationElement
     {
         // Create the element. 
-        public RegistrationConfigElement()
+        public ConsoleConfigElement()
         { }
 
         // Create the element. 
-        public RegistrationConfigElement(ConsoleColor fColor,
+        public ConsoleConfigElement(ConsoleColor fColor,
             ConsoleColor bColor)
         {
             ForegroundColor = fColor;
@@ -90,12 +90,12 @@ namespace Synchronization.Core
 
         // Set or get the ConsoleElement. 
         [ConfigurationProperty("consoleElement")]
-        public RegistrationConfigElement ConsoleElement
+        public ConsoleConfigElement ConsoleElement
         {
             get
             {
                 return (
-                  (RegistrationConfigElement)this["consoleElement"]);
+                  (ConsoleConfigElement)this["consoleElement"]);
             }
             set
             {
@@ -106,7 +106,7 @@ namespace Synchronization.Core
     #endregion
 
     #region
-    //*** ConfigurationManager Interaction Class ***//*
+    //*** ConfigurationManager Interaction Class ***//
 
     // The following code uses the ConfigurationManager class to  
     // perform the following tasks: 
@@ -259,7 +259,7 @@ namespace Synchronization.Core
 #else 
            string applicationName =
           Environment.GetCommandLineArgs()[0]+ ".exe";
-//#endif
+#endif
 
             string exePath = System.IO.Path.Combine(
                 Environment.CurrentDirectory, applicationName);
@@ -579,10 +579,10 @@ namespace Synchronization.Core
 
 
     }
-//    #endregion
+    #endregion
 
- //   #region
-    //*** User Interaction Class ***//*
+    #region
+    //*** User Interaction Class ***//
 
     // Obtain user's input and provide feedback. 
     // This class contains the application Main() function. 
@@ -699,5 +699,5 @@ namespace Synchronization.Core
             }
         }
     }
-    //#endregion
-}*/
+    #endregion
+}

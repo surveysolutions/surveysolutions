@@ -40,25 +40,29 @@ namespace Synchronization.Core.SynchronizationFlow
     public struct SyncStatus : ISyncProgressStatus
     {
         int progressPercents;
-        SynchronizationException error;
+        ServiceException error;
         SyncType actionType;
         SyncDirection direction;
+        string resultMessage;
 
         public SyncStatus(
             SyncType actionType,
             SyncDirection direction,
             int progress,
-            SynchronizationException error)
+            ServiceException error,
+            string result)
         {
             this.progressPercents = progress;
             this.error = error;
             this.actionType = actionType;
             this.direction = direction;
+            this.resultMessage = result;
         }
 
         public SyncType ActionType { get { return this.actionType; } }
         public SyncDirection Direction { get { return this.direction; } }
         public int ProgressPercents { get { return this.progressPercents; } }
-        public SynchronizationException Error { get { return this.error; } }
+        public ServiceException Error { get { return this.error; } }
+        public string Message { get { return this.resultMessage; } }
     }
 }

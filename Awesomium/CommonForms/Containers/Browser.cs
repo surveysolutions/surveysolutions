@@ -8,21 +8,42 @@ namespace Browsing.Common.Containers
 {
     public partial class Browser : Screen
     {
-        protected bool isSinglePage = false;
-        protected string rootPathString = string.Empty;
+        #region Members
 
-        public Browser()
-            : base(null, true)
-        {
-        }
+        private bool continueWebNavigation = true;
+        private bool isSinglePage = false;
+        private string rootPathString = string.Empty;
 
-        public Browser(WebControl webView, ScreenHolder holder)
-            : base(holder, true)
+        #endregion
+
+        #region C-tor
+
+        public Browser(ScreenHolder holder, bool menuIsVisible)
+            : base(holder, menuIsVisible)
         {
-            this.webView = webView;
+            this.webView = new WebControl();
 
             InitializeComponent();
+
+            this.webView.BeginNavigation += new BeginNavigationEventHandler(webView_BeginNavigation);
         }
+
+        #endregion
+
+        #region Handlers
+
+        /// <summary>
+        /// Navigates to home page when continueWebNavigation set to false
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void webView_BeginNavigation(object sender, BeginNavigationEventArgs e)
+        {
+            if (!this.continueWebNavigation)
+                GoHome();
+        }
+
+        #endregion
 
         public void SetMode(bool isSinglePageMode, string rootPath)
         {
@@ -30,8 +51,8 @@ namespace Browsing.Common.Containers
             this.progressBox.Visible = true;
             this.isSinglePage = isSinglePageMode;
 
-            MenuPanel.Visible = true;
-            
+            //MenuPanel.Visible = true;
+
             try
             {
                 this.webView.Source = new Uri(this.rootPathString);
@@ -43,9 +64,9 @@ namespace Browsing.Common.Containers
             }
         }
 
-        void homeButton_Click(object sender, System.EventArgs e)
+        protected void GoHome()
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Main));
+            this.Holder.NavigateMain();
         }
 
         #region Progress indication
@@ -53,19 +74,26 @@ namespace Browsing.Common.Containers
         void webView_BeginLoading(object sender, BeginLoadingEventArgs e)
         {
             this.progressBox.Visible = true;
-            MenuPanel.Visible = string.Compare(e.Url, this.rootPathString, true) == 0;
+            EnableHomeButton(string.Compare(e.Url, this.rootPathString, true) == 0);
         }
 
         ResourceResponse webView_ResourceRequest(object sender, ResourceRequestEventArgs e)
         {
+            this.continueWebNavigation = OnResourceRequest(e.Request);
+
             return null;
+        }
+
+        protected virtual bool OnResourceRequest(ResourceRequest resourceRequest)
+        {
+            return true;
         }
 
         void webView_LoadCompleted(object sender, EventArgs e)
         {
             this.progressBox.Visible = false;
-            if (isSinglePage && this.webView.Source.ToString() != this.rootPathString)
-                homeButton_Click(sender, e);
+            if (this.isSinglePage && string.Compare(this.webView.Source.ToString(), this.rootPathString, true) != 0)
+                GoHome();
         }
 
         #endregion
