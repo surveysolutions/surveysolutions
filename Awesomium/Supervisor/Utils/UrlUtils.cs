@@ -21,6 +21,11 @@ namespace Browsing.Supervisor.Utils
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.AuthentificationCheckPath);
         }
 
+        public string GetLoginCapabilitiesCheckUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.LoginCapabilitiesCheckPath);
+        }
+
         public string GetEnpointUrl()
         {
             return Settings.Default.EndpointExportPath;
@@ -54,6 +59,16 @@ namespace Browsing.Supervisor.Utils
         public string GetUsbPullUrl(Guid clientId)
         {
             return string.Format("{0}{1}?syncKey={2}", GetDefaultUrl(), Settings.Default.UsbImportPath, clientId);
+        }
+
+        public string GetCurrentUserGetUrl()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
+        }
+
+        public string GetRegistrationCapiPath()
+        {
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetRegistrationSupervisorPath);
         }
     }
 }

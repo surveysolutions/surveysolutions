@@ -2,12 +2,19 @@
 using System.Reflection;
 using System.Windows.Forms;
 using Browsing.Common.Controls;
+using Common;
 
 namespace Browsing.Common.Containers
 {
     public abstract partial class Settings : Screen
     {
+        #region Members
+
         private bool modified = false;
+
+        #endregion
+
+        #region c-tor
 
         public Settings(ScreenHolder holder)
             : base(holder, true)
@@ -24,13 +31,68 @@ namespace Browsing.Common.Containers
 
             BindDefaultUrl(this.labelEndPoint, this.textEndPoint);
 
+            ValidateUrl();
+
             this.btnCancel.Enabled = false;
 
         }
 
+        #endregion
+
+        #region Abstract and Virtual
+
         protected internal abstract void BindDefaultUrl(Label labelEndPoint,TextBox defaultUrlTextBox);
         protected internal abstract void ReloadSettings();
         protected internal abstract void SaveSettings();
+
+        #endregion
+
+        #region Helpers
+
+        private string CompileVersionInfo()
+        {
+            var version = GetMainAssembly().GetName().Version;
+            var time = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
+
+            return version
+                 + " "
+                 + ": " + time.Date.Year.ToString()
+                 + "/" + time.Date.Month.ToString()
+                 + "/" + time.Date.Day.ToString();
+
+            //return GetMainAssembly().GetName().Version.ToString();
+        }
+
+        private Assembly GetMainAssembly()
+        {
+            return Assembly.GetEntryAssembly();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            ReloadSettings();
+            //Properties.Settings.Default.Reload();
+
+            this.btnCancel.Enabled = false;
+            this.modified = false;
+        }
+
+        private void ValidateUrl()
+        {
+            this.textEndPoint.ForeColor =
+                (string.IsNullOrEmpty(this.textEndPoint.Text) || UrlValidator.IsValid(this.textEndPoint.Text)) ?
+                System.Drawing.Color.Black : System.Drawing.Color.Red;
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            this.modified = true;
+            this.btnCancel.Enabled = true;
+
+            ValidateUrl();
+        }
+
+        #endregion
 
         #region Assembly Attribute Accessors
 
@@ -51,31 +113,12 @@ namespace Browsing.Common.Containers
             }
         }
 
-        private string CompileVersionInfo()
-        {
-            var version = GetMainAssembly().GetName().Version;
-            var time = new DateTime(2000, 1, 1).AddDays(version.Build).AddSeconds(version.Revision * 2);
-
-            return version
-                 + " "
-                 + ": " + time.Date.Year.ToString()
-                 + "/" + time.Date.Month.ToString()
-                 + "/" + time.Date.Day.ToString();
-
-            //return GetMainAssembly().GetName().Version.ToString();
-        }
-
         public string AssemblyVersion
         {
             get
             {
                 return CompileVersionInfo();
             }
-        }
-
-        private Assembly GetMainAssembly()
-        {
-            return Assembly.GetEntryAssembly();
         }
 
         public string AssemblyDescription
@@ -132,14 +175,7 @@ namespace Browsing.Common.Containers
 
         #endregion
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            ReloadSettings();
-            //Properties.Settings.Default.Reload();
-
-            this.btnCancel.Enabled = false;
-            this.modified = false;
-        }
+        #region Overriden
 
         protected override void OnHomeButtonClick(object sender, EventArgs e)
         {
@@ -158,10 +194,6 @@ namespace Browsing.Common.Containers
             base.OnHomeButtonClick(sender, e);
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            this.modified = true;
-            this.btnCancel.Enabled = true;
-        }
+        #endregion
     }
 }

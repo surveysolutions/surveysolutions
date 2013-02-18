@@ -11,6 +11,11 @@ namespace Browsing.Common.Containers
         protected bool isSinglePage = false;
         protected string rootPathString = string.Empty;
 
+        public Browser()
+            : base(null, true)
+        {
+        }
+
         public Browser(WebControl webView, ScreenHolder holder)
             : base(holder, true)
         {

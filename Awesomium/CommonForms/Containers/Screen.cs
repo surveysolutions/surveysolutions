@@ -161,6 +161,5 @@ namespace Browsing.Common.Containers
         {
             OnValidateContent();
         }
-
     }
 }

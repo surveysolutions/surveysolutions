@@ -169,18 +169,6 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7089/")]
-        public string DefaultUrl {
-            get {
-                return ((string)(this["DefaultUrl"]));
-            }
-            set {
-                this["DefaultUrl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string EndpointExportPath {
             get {
@@ -193,6 +181,18 @@ namespace Browsing.CAPI.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7089/")]
+        public string DefaultUrl {
+            get {
+                return ((string)(this["DefaultUrl"]));
+            }
+            set {
+                this["DefaultUrl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("7089")]
         public string DefaultPort {
             get {
@@ -200,6 +200,54 @@ namespace Browsing.CAPI.Properties {
             }
             set {
                 this["DefaultPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsUserInBase")]
+        public string LoginCapabilitiesCheckPath {
+            get {
+                return ((string)(this["LoginCapabilitiesCheckPath"]));
+            }
+            set {
+                this["LoginCapabilitiesCheckPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/GetCurrentUser")]
+        public string GetCurrentUserPath {
+            get {
+                return ((string)(this["GetCurrentUserPath"]));
+            }
+            set {
+                this["GetCurrentUserPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/RegisterSupervisor")]
+        public string GetRegistrationCapiPath {
+            get {
+                return ((string)(this["GetRegistrationCapiPath"]));
+            }
+            set {
+                this["GetRegistrationCapiPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RegistrationPhaze {
+            get {
+                return ((int)(this["RegistrationPhaze"]));
+            }
+            set {
+                this["RegistrationPhaze"] = value;
             }
         }
     }

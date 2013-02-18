@@ -93,7 +93,7 @@ namespace DataEntryClientTests
             Guid? eventGuid = null;
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            var target = new CompleteQuestionnaireSync(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
 
             Guid? result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, null);
@@ -113,7 +113,7 @@ namespace DataEntryClientTests
             Guid eventGuid = Guid.NewGuid();
 
             serviceMock.Setup(x => x.Process(clientGuid)).Returns(eventGuid);
-            var target = new CompleteQuestionnaireSync(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
 
             Guid? result = target.GetLastSyncEventGuid(clientGuid);
             Assert.AreEqual(result, eventGuid);
@@ -150,7 +150,7 @@ namespace DataEntryClientTests
             eventServiceMock.Setup(
                 x => x.Process(serviceResult.Roots[0].EventKeys.First(), serviceResult.Roots[0].EventKeys.Count)).
                 Returns(new ImportSynchronizationMessage { EventStream = new AggregateRootEvent[0] });
-            var target = new CompleteQuestionnaireSync(this.Kernel, Guid.NewGuid(), string.Empty);
+            var target = new WirelessSyncProcess(this.Kernel, Guid.NewGuid(), string.Empty);
 
             target.Import(Guid.NewGuid());
 
@@ -160,42 +160,6 @@ namespace DataEntryClientTests
                 Times.Exactly(1));
 
             this.EventStore.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
-        }
-
-        /// <summary>
-        /// The upload events_2 events_ all events are delivered.
-        /// </summary>
-        [Test]
-        public void UploadEvents_2Events_AllEventsAreDelivered()
-        {
-            var serviceMock = new Mock<IEventPipe>();
-            IChanelFactoryWrapper chanelFactoryStub = new ChanelFactoryStub(serviceMock);
-            this.Kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
-
-            Guid clientGuid = Guid.NewGuid();
-            Guid? eventGuid = Guid.NewGuid();
-
-            serviceMock.Setup(x => x.Process(It.IsAny<EventSyncMessage>())).Returns(ErrorCodes.None);
-            this.EventStore.Setup(x => x.ReadEvents()).Returns(
-                new[]
-                    {
-                        new AggregateRootEvent { EventIdentifier = Guid.NewGuid() }, 
-                        new AggregateRootEvent { EventIdentifier = Guid.NewGuid() }
-                    });
-            var target = new CompleteQuestionnaireSync(this.Kernel, Guid.NewGuid(), string.Empty);
-
-            target.UploadEvents(clientGuid, eventGuid);
-
-            serviceMock.Verify(x => x.Process(It.Is<EventSyncMessage>(e => e.Command.Count() == 2)), Times.Exactly(1));
-
-            // events were pushed
-            this.CommandService.Verify(x => x.Execute(It.IsAny<PushEventsCommand>()), Times.Once());
-
-            // events were marked as started and later as completes
-            this.CommandService.Verify(x => x.Execute(It.IsAny<ChangeEventStatusCommand>()), Times.Exactly(2));
-
-            // process is finisheed
-            this.CommandService.Verify(x => x.Execute(It.IsAny<EndProcessComand>()), Times.Once());
         }
 
         #endregion

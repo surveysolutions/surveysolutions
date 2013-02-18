@@ -20,8 +20,6 @@ namespace RavenQuestionnaire.Core.Views.Group
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
 
-    using RavenQuestionnaire.Core.Views.Question;
-
     /// <summary>
     /// The abstract group view.
     /// </summary>
@@ -113,9 +111,19 @@ namespace RavenQuestionnaire.Core.Views.Group
         public string Title { get; set; }
 
         /// <summary>
+        /// Gets or sets the parent group title.
+        /// </summary>
+        public string ParentGroupTitle { get; set; }
+
+        /// <summary>
         /// Gets or sets the trigger.
         /// </summary>
         public string Trigger { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }
@@ -275,7 +283,12 @@ namespace RavenQuestionnaire.Core.Views.Group
         public GroupView(IQuestionnaireDocument doc, TGroup group)
             : base(doc, group)
         {
-            this.Parent = this.GetGroupParent(doc, group);
+            var parentGroup = this.GetGroupParent(doc, group) as IGroup;
+            if (parentGroup != null)
+            {
+                this.Parent = parentGroup.PublicKey;
+                this.ParentGroupTitle = parentGroup.Title;
+            }
         }
 
         #endregion
@@ -294,7 +307,7 @@ namespace RavenQuestionnaire.Core.Views.Group
         /// <returns>
         /// The System.Nullable`1[T -&gt; System.Guid].
         /// </returns>
-        protected Guid? GetGroupParent(IQuestionnaireDocument questionnaire, TGroup group)
+        protected IComposite GetGroupParent(IQuestionnaireDocument questionnaire, TGroup group)
         {
             if (questionnaire.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
             {
@@ -317,7 +330,7 @@ namespace RavenQuestionnaire.Core.Views.Group
 
                 if (queueItem.Children != null && queueItem.Children.Any(q => q.PublicKey.Equals(group.PublicKey)))
                 {
-                    return queueItem.PublicKey;
+                    return queueItem;
                 }
 
                 if (queueItem.Children != null)
@@ -393,6 +406,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             this.Questions = group.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
             this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
             this.ConditionExpression = group.ConditionExpression;
+            this.Description = group.Description;
         }
 
         #endregion

@@ -32,7 +32,6 @@ namespace Common.Utils
                 request.Method = method;
                 if (includeCookies)
                 {
-
                     var cookies = WebCore.GetCookies(url, false);
                     request.CookieContainer = new CookieContainer();
                     foreach (string cookie in cookies.Split(';'))

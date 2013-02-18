@@ -18,9 +18,18 @@ namespace Browsing.Supervisor.Containers
 
         #endregion
 
+        #region Override Methods
+
+        protected override void OnRefreshRegistrationButton(bool userIsLoggedIn)
+        {
+            ChangeRegistrationButton(userIsLoggedIn, null);
+        }
+
         protected override void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
             this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is SyncChoicePage));
         }
+
+        #endregion
     }
 }

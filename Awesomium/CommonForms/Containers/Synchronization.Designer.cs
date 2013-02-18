@@ -28,26 +28,26 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Synchronization));
             this.syncPanel = new Browsing.Common.Containers.SyncPanel();
             this.SuspendLayout();
             // 
-            // syncPanel1
+            // syncPanel
             // 
             this.syncPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.syncPanel.Location = new System.Drawing.Point(0, 0);
-            this.syncPanel.Name = "syncPanel1";
-            this.syncPanel.Size = new System.Drawing.Size(600, 500);
+            this.syncPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.syncPanel.Name = "syncPanel";
+            this.syncPanel.Size = new System.Drawing.Size(700, 500);
             this.syncPanel.TabIndex = 3;
             // 
-            // CAPISynchronization
+            // Synchronization
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.syncPanel);
             this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "CAPISynchronization";
-            this.Size = new System.Drawing.Size(600, 500);
+            this.Name = "Synchronization";
+            this.Size = new System.Drawing.Size(700, 500);
             this.Controls.SetChildIndex(this.syncPanel, 0);
             this.ResumeLayout(false);
 

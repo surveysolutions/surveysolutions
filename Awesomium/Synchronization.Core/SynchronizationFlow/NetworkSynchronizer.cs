@@ -17,6 +17,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         private readonly IRequesProcessor _requestProcessor;
         private readonly IUrlUtils _urlUtils;
+        private AutoResetEvent stopRequested = new AutoResetEvent(false);
 
         #endregion
 
@@ -61,7 +62,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnStop()
         {
-            // throw new NotImplementedException();
+            this.stopRequested.Set();
         }
 
         protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
@@ -69,9 +70,11 @@ namespace Synchronization.Core.SynchronizationFlow
             SynchronizationException e = null;
             try
             {
+                var netEndPoint = this._urlUtils.GetEnpointUrl();
+
                 // test if there is connection to synchronization endpoint
-                if (this._requestProcessor.Process<string>(this._urlUtils.GetEnpointUrl(), "False") == "False")
-                    e = new NetUnreachableException(this._urlUtils.GetEnpointUrl());
+                if (this._requestProcessor.Process<string>(netEndPoint, "False") == "False")
+                    e = new NetUnreachableException(netEndPoint);
             }
             catch(Exception ex)
             {
@@ -84,6 +87,14 @@ namespace Synchronization.Core.SynchronizationFlow
         protected override bool OnUpdateStatus()
         {
             return !string.IsNullOrEmpty(this._urlUtils.GetEnpointUrl());
+        }
+
+        protected override IList<SynchronizationException> OnGetInactiveErrors()
+        {
+            var errors = base.OnGetInactiveErrors();
+            errors.Add(new InactiveNetSynchronizerException());
+
+            return errors;
         }
 
         public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
@@ -101,13 +112,19 @@ namespace Synchronization.Core.SynchronizationFlow
 
             while (percentage != 100)
             {
+                if (this.stopRequested.WaitOne(100))
+                {
+                    throw new SynchronizationException("network synchronization is canceled");
+                    
+                }
+                Thread.Sleep(1000);
                 percentage = this._requestProcessor.Process<int>(this._urlUtils.GetPushCheckStateUrl(processid), -1);
                 if (percentage < 0)
                     throw new SynchronizationException("network synchronization is failed");
 
                 eventRiser(new SynchronizationEvent(new SyncStatus(syncType, direction, percentage, null)));
 
-                Thread.Sleep(1000);
+                
             }
         }
 

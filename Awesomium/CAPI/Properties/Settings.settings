@@ -38,14 +38,26 @@
     <Setting Name="LoginPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Account/LogOn</Value>
     </Setting>
-    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:7089/</Value>
-    </Setting>
     <Setting Name="EndpointExportPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="DefaultUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">http://localhost:7089/</Value>
+    </Setting>
     <Setting Name="DefaultPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">7089</Value>
+    </Setting>
+    <Setting Name="LoginCapabilitiesCheckPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Account/IsUserInBase</Value>
+    </Setting>
+    <Setting Name="GetCurrentUserPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Account/GetCurrentUser</Value>
+    </Setting>
+    <Setting Name="GetRegistrationCapiPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Device/RegisterSupervisor</Value>
+    </Setting>
+    <Setting Name="RegistrationPhaze" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>
