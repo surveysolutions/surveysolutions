@@ -6,13 +6,11 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core;
 using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Question;
 using RavenQuestionnaire.Core.Views.Questionnaire;
 using RavenQuestionnaire.Web.Controllers;
 
@@ -40,10 +38,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             Guid key = Guid.NewGuid();
             innerDocument.PublicKey= key;
          //   Core.Entities.Questionnaire entity = new Core.Entities.Questionnaire(innerDocument);
-            var question = new SingleQuestion(Guid.NewGuid(),"question");
-            var questionView = new QuestionView(innerDocument, question);
-
-
+            
             ViewRepositoryMock.Setup(
                 x =>
                 x.Load<QuestionnaireViewInputModel, QuestionnaireView>(

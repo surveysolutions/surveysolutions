@@ -11,21 +11,16 @@
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
         </td>
-       @* <td>
-            @Html.DisplayFor(modelItem => item.LastEntryDate)
-        </td>*@
         <td class="buttons">
-            @Html.ActionLink("Rename", "Edit", new { id = item.Id }, new { @class = "btn small " })
-            @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
-            @Html.ActionLink("Flow", "Edit", "FlowGraph", new { id = item.Id }, new { @class = "btn small " })
-            @*@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn small danger" })*@
-            @Html.ActionLink("Participate", "Participate", "CompleteQuestionnaire", new { id = item.Id }, new { @class = "btn small btn-primary" })
-        </td>
+            @Html.ActionLink("Flow", "Flow", "Questionnaire", new { id = item.Id }, new { @class = "btn small " })
         <td class="buttons">    
-            @Html.ActionLink("View", "Details", "Status", new { Qid = item.Id }, new { @class = "btn small " })
+            @Html.ActionLink("Manage", "Details", new { id = item.Id }, new { @class = "btn small " })
         </td>
         <td class="buttons">    
             @Html.ActionLink("Export", "Export", new { id = item.Id }, new { @class = "btn small btn-primary" })
+        </td>
+        <td class="buttons">    
+            @Html.ActionLink("Download", "ExportTemplates", "ImportExport", new { id = item.Id }, new { @class = "btn small btn-primary" })
         </td>
     </tr>
 }

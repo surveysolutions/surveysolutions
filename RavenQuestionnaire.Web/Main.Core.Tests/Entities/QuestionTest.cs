@@ -11,6 +11,7 @@ namespace RavenQuestionnaire.Core.Tests.Entities
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     using Main.Core.AbstractFactories;
@@ -38,30 +39,28 @@ namespace RavenQuestionnaire.Core.Tests.Entities
         public void ExplicitConversion_ValidQuestion_AllFieldAreConverted()
         {
             // List<IGroup> groups = new List<IGroup>() { new Group("test") };
-            var answers = new List<IComposite> { new Answer(), new Answer(), new Answer() };
+            var answers = new List<IAnswer> { new Answer(), new Answer(), new Answer() };
 
-            var triggers = new List<Guid> { Guid.NewGuid() };
             var question = new SingleQuestion(Guid.NewGuid(), "test")
                 {
                     ConditionExpression = "expr", 
                     Instructions = "instructions", 
                     AnswerOrder = Order.Random, 
                     StataExportCaption = "stata", 
-                    Triggers = triggers, 
-                    Children = answers
+                    Answers = answers
                 };
             var target = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
             PropertyInfo[] propertiesForCheck = typeof(IQuestion).GetPublicPropertiesExcept(
-                "PublicKey", "Children", "Parent");
+                "PublicKey", "Children", "Parent", "Answers");
             foreach (PropertyInfo publicProperty in propertiesForCheck)
             {
                 Assert.AreEqual(publicProperty.GetValue(question, null), publicProperty.GetValue(target, null));
             }
 
-            Assert.AreEqual(question.Children.Count, target.Children.Count);
-            for (int i = 0; i < question.Children.Count; i++)
+            Assert.AreEqual(question.Answers.Count, target.Answers.Count);
+            for (int i = 0; i < question.Answers.Count; i++)
             {
-                var answer = target.Find<ICompleteAnswer>(question.Children[i].PublicKey);
+                var answer = target.Answers.FirstOrDefault(q => q.PublicKey == question.Answers[i].PublicKey);
                 Assert.IsTrue(answer != null);
             }
         }

@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionStatisticDocument.cs" company="">
-//   
+// <copyright file="QuestionStatisticDocument.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The question statistic document.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Documents.Statistics
 {
     using System;
@@ -53,7 +54,7 @@ namespace Main.Core.Documents.Statistics
             this.QuestionText = question.QuestionText;
             this.QuestionType = question.QuestionType;
 
-            if (question.GetAnswerObject() != null)
+            if (question.IsAnswered())
             {
                 // AnswerValue = answer.AnswerText?? answer.AnswerValue;
                 this.AnswerDate = question.AnswerDate;

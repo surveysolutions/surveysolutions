@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Core.Supervisor.Synchronization;
-using Main.Core.Denormalizers;
 using Main.Core.View;
 using Moq;
 using NUnit.Framework;
@@ -11,7 +10,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
-
+using Main.DenormalizerStorage;
 namespace Core.Supervisor.Tests
 {
     [TestFixture]
@@ -272,6 +271,40 @@ namespace Core.Supervisor.Tests
             var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
             Assert.IsTrue(result.Count==1);
             Assert.IsTrue(result[0].Payload is SnapshootLoaded);
+
+        }
+
+
+        [Test]
+        public void GetEventStreamById_StoredEventAndReturnedEvent_EventsHasTheSameUtsTime()
+        {
+            DummyAR aggreagateRoot = new DummyAR();
+            var aggregateRootId = Guid.NewGuid();
+            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
+            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
+
+            unitOfworkMock.Setup(x => x.GetById(typeof(DummyAR), aggregateRootId, null)).Returns(aggreagateRoot);
+
+            var eventId = Guid.NewGuid();
+            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
+                                                 int.MinValue, int.MaxValue)).Returns(
+                                                     new CommittedEventStream(aggregateRootId,
+                                                                              new CommittedEvent(Guid.NewGuid(),
+                                                                                                 eventId,
+                                                                                                 aggregateRootId, 1,
+                                                                                                 DateTime.Now,
+                                                                                                 new object(),
+                                                                                                 new Version())));
+
+            SupervisorEventSync target = new SupervisorEventSync(denormalizerMock.Object);
+            var result = target.GetEventStreamById(aggregateRootId, typeof(DummyAR));
+            Assert.IsTrue(result.Count == 1);
+            var offset = TimeZoneInfo.Utc.GetUtcOffset(result[0].EventTimeStamp);
+            Assert.IsTrue(offset.Ticks==0);
+
+            eventStoreMock.Verify(
+                x => x.Store(It.Is<UncommittedEventStream>(e => e.First().EventTimeStamp == result[0].EventTimeStamp)),
+                Times.Once());
 
         }
     }

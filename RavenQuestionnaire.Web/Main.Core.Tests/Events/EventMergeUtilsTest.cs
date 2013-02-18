@@ -79,6 +79,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result.First().EventSequence, 2);
             Assert.AreEqual(result.Last().EventSequence, 3);
         }
+
         [Test]
         public void CreateUncommittedEventStream_RemoteStreamDontHaveAllHistoryOnlyLastEventFromBaseStreamOnFirstPalce_EverithingAfterFirstEventIsCopiedInTail()
         {
@@ -185,7 +186,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
             Assert.AreEqual(result.Last().EventSequence, 100502);
         }*/
         [Test]
-        public void FindDivergentSequenceNumber_RemoteStreamDontStartsFrom1_StreamsDesntCross_ZeroISReturned()
+        public void FindDivergentSequenceNumber_RemoteStreamDontStartsFrom1_StreamsDoesntCross_NullIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             var stream = new List<AggregateRootEvent>
@@ -197,15 +198,38 @@ namespace RavenQuestionnaire.Core.Tests.Events
                 eventSourceId,
                 new CommittedEvent(
                     Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 0);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, null);
         }
+        [Test]
+        public void FindDivergentSequenceNumber_RemoteStreamDontStartsFrom1_StreamsAreCrossed_NLastSharedEventGuidIsReturned()
+        {
+            Guid eventSourceId = Guid.NewGuid();
+            Guid sharedEvent = Guid.NewGuid();
+            var stream = new List<AggregateRootEvent>
+                {
+                    new AggregateRootEvent {EventSequence = 2, EventIdentifier = sharedEvent, Payload = new object()},
+                    new AggregateRootEvent {EventSequence = 3, EventIdentifier = Guid.NewGuid(), Payload = new object()}
 
+                };
+
+            var baseStream = new CommittedEventStream(
+                eventSourceId,
+                  new CommittedEvent(
+                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()),
+                new CommittedEvent(
+                    Guid.NewGuid(), sharedEvent, eventSourceId, 2, DateTime.Now, new object(), new Version()),
+
+                    new CommittedEvent(
+                    Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 3, DateTime.Now, new object(), new Version()));
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, sharedEvent);
+        }
         /// <summary>
         /// The find divergent sequence number_ base event stream and new event contains do crossed_ zero returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoNotCrossed_EventSequenseForNewStreamWillBeStartetFromLastInBaseStream()
+        public void FindDivergentSequenceNumber_BaseEventStreamAndNewEventContainsDoNotCrossed_NullIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             var stream = new List<AggregateRootEvent>
@@ -217,15 +241,15 @@ namespace RavenQuestionnaire.Core.Tests.Events
                 eventSourceId, 
                 new CommittedEvent(
                     Guid.NewGuid(), Guid.NewGuid(), eventSourceId, 1, DateTime.Now, new object(), new Version()));
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 0);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, null);
         }
 
         /// <summary>
         /// The find divergent sequence number_ base event stream changed l ess then new stream changed_1 returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamChangedLEssThenNewStreamChanged_1Returned()
+        public void FindDivergentSequenceNumber_BaseEventStreamChangedLEssThenNewStreamChanged_SharedEventGuidIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             Guid sharedEventid = Guid.NewGuid();
@@ -243,15 +267,15 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { EventSequence = 3, Payload = new object(), EventIdentifier = Guid.NewGuid() }
                 };
 
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 1);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, sharedEventid);
         }
 
         /// <summary>
         /// The find divergent sequence number_ base event stream changed more then new stream changed_1 returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamChangedMoreThenNewStreamChanged_1Returned()
+        public void FindDivergentSequenceNumber_BaseEventStreamChangedMoreThenNewStreamChanged_SharedEventGuidIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             Guid sharedEventid = Guid.NewGuid();
@@ -270,15 +294,15 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { EventSequence = 2, Payload = new object(), EventIdentifier = Guid.NewGuid() }
                 };
 
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 1);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, sharedEventid);
         }
 
         /// <summary>
         /// The find divergent sequence number_ base event stream changed new stream changed_1 returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamChangedNewStreamChanged_1Returned()
+        public void FindDivergentSequenceNumber_BaseEventStreamChangedNewStreamChanged_SharedEventGuidIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             Guid sharedEventid = Guid.NewGuid();
@@ -295,30 +319,30 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { EventSequence = 2, Payload = new object(), EventIdentifier = Guid.NewGuid() }
                 };
 
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 1);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, sharedEventid);
         }
 
         /// <summary>
         /// The find divergent sequence number_ base event stream is empty_ zero returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamIsEmpty_ZeroReturned()
+        public void FindDivergentSequenceNumber_BaseEventStreamIsEmpty_NullIsReturned()
         {
             var stream = new List<AggregateRootEvent>
                 {
                    new AggregateRootEvent { EventSequence = 1, Payload = new object() } 
                 };
             var baseStream = new CommittedEventStream(Guid.NewGuid());
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 0);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, null);
         }
 
         /// <summary>
         /// The find divergent sequence number_ base event stream not changed_1 returned.
         /// </summary>
         [Test]
-        public void FindDivergentSequenceNumber_BaseEventStreamNotChanged_1Returned()
+        public void FindDivergentSequenceNumber_BaseEventStreamNotChanged_SharedEventGuidIsReturned()
         {
             Guid eventSourceId = Guid.NewGuid();
             var baseStream = new CommittedEventStream(
@@ -337,8 +361,8 @@ namespace RavenQuestionnaire.Core.Tests.Events
                     new AggregateRootEvent { EventSequence = 2, Payload = new object() }
                 };
 
-            var result = stream.FindDivergentSequenceNumber(baseStream);
-            Assert.AreEqual(result, 1);
+            var result = stream.FindDivergentEventGuid(baseStream);
+            Assert.AreEqual(result, baseStream.First().EventIdentifier);
         }
 
         /// <summary>
@@ -348,7 +372,7 @@ namespace RavenQuestionnaire.Core.Tests.Events
         public void FindDivergentSequenceNumber_EventStreamIsEmpty_ExeptionisThrowed()
         {
             var stream = new List<AggregateRootEvent>();
-            Assert.Throws<ArgumentException>(() => stream.FindDivergentSequenceNumber(null));
+            Assert.Throws<ArgumentException>(() => stream.FindDivergentEventGuid(null));
         }
 
         #endregion

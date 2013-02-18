@@ -73,6 +73,15 @@
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main-Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Deploy-Main-Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
@@ -108,12 +117,14 @@
     <Compile Include="Helpers\EntityNames.cs" />
     <Compile Include="Helpers\GlobalInfo.cs" />
     <Compile Include="Helpers\GlobalInfoProvider.cs" />
+    <Compile Include="Helpers\GridFormExtensions.cs" />
     <Compile Include="Helpers\Html5Extensions.cs" />
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
+    <Compile Include="Register\RegisterData.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />
@@ -132,9 +143,17 @@
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
+      <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
+      <Name>Core.Supervisor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

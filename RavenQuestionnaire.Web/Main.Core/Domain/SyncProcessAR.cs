@@ -79,8 +79,7 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("process is finished, events can't be modifyed");
             }
 
-            this.ApplyEvent(
-                new AggregateRootStatusChanged { EventChunckPublicKey = eventChunckPublicKey, Status = status });
+            this.ApplyEvent(new AggregateRootStatusChanged { EventChunckPublicKey = eventChunckPublicKey, Status = status });
         }
 
         /// <summary>
@@ -205,7 +204,7 @@ namespace Main.Core.Domain
             this.innerDocument.Handled = EventState.InProgress;
             this.innerDocument.Chunks = e.AggregateRoots.ToList();
         }
-
+        
         #endregion
     }
 }

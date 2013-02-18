@@ -1,14 +1,10 @@
 using System;
-using System.Web.Security;
+
 using Moq;
 using NUnit.Framework;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
-using RavenQuestionnaire.Core.Commands;
-using RavenQuestionnaire.Core.Entities.SubEntities;
-using RavenQuestionnaire.Core.Views.User;
 
 namespace RavenQuestionnaire.Web.Tests.Membership
 {

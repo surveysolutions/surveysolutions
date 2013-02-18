@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Commands;
 using Main.Core.Services;
+using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping;
@@ -240,6 +241,11 @@ namespace Main.Core
         /// </param>
         private static void RegisterEventHandlers(InProcessEventBus bus, IKernel kernel)
         {
+
+            /*  if (typeof (T).GetCustomAttributes(typeof (SmartDenormalizerAttribute), true).Length > 0)
+            {
+                return this.container.Get<WeakReferenceDenormalizer<T>>();
+            }*/
 
             foreach (Type type in AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(ImplementsAtLeastOneIEventHandlerInterface))
             {

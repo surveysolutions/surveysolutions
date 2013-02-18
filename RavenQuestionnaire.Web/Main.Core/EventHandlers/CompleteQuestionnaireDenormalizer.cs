@@ -7,7 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.Extensions;
@@ -15,11 +14,16 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.ExpressionExecutors;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
 
 namespace Main.Core.EventHandlers
 {
+    using System;
+
+    using Main.Core.Events.Questionnaire;
+
     /// <summary>
     /// The complete questionnaire denormalizer.
     /// </summary>
@@ -80,11 +84,9 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<CommentSeted> evnt)
         {
-            CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.Payload.CompleteQuestionnaireId);
 
-            GroupHash.CompleteQuestionWrapper questionWrapper =
-                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
+            CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(evnt.Payload.QuestionPublickey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
             {
@@ -92,7 +94,7 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetComments(evnt.Payload.Comments);
-            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
         }
 
         /// <summary>
@@ -116,8 +118,8 @@ namespace Main.Core.EventHandlers
         {
             CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
 
-            GroupHash.CompleteQuestionWrapper questionWrapper =
-                item.QuestionHash.GetQuestion(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
+            CompleteQuestionWrapper questionWrapper =
+                item.GetQuestionWrapper(evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
             ICompleteQuestion question = questionWrapper.Question;
             if (question == null)
             {
@@ -125,15 +127,8 @@ namespace Main.Core.EventHandlers
             }
 
             question.SetAnswer(evnt.Payload.AnswerKeys, evnt.Payload.AnswerValue);
-
-            ICompleteGroup group = item.FindGroupByKey(questionWrapper.GroupKey, question.PropogationPublicKey);
-            var executor = new CompleteQuestionnaireConditionExecutor(item.QuestionHash);
-            executor.Execute(group);
-
-            var validator = new CompleteQuestionnaireValidationExecutor(item.QuestionHash);
-            validator.Execute(group);
-
-            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
+            
+            item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
         }
 
         /// <summary>
@@ -151,7 +146,6 @@ namespace Main.Core.EventHandlers
 
             var newGroup = new CompleteGroup(template, evnt.Payload.PropagationKey);
             item.Add(newGroup, null);
-            item.QuestionHash.AddGroup(newGroup);
         }
 
         /// <summary>
@@ -169,7 +163,6 @@ namespace Main.Core.EventHandlers
             try
             {
                 item.Remove(group);
-                item.QuestionHash.RemoveGroup(group);
             }
             catch (CompositeException)
             {
@@ -199,14 +192,19 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
+            item.StatusChangeComments.Add(new ChangeStatusDocument
+                {
+                    Status = evnt.Payload.Status, 
+                    Responsible = evnt.Payload.Responsible
+                });
         }
 
         #endregion
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
+
 
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {

@@ -17,14 +17,9 @@ namespace Main.Core.Events.User
     /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:UserStatusChanged")]
-    public class UserStatusChanged
+    public class UserStatusChanged : UserBaseEvent
     {
         #region Public Properties
-
-        /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.

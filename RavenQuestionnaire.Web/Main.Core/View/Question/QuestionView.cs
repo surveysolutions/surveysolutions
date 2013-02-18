@@ -13,6 +13,7 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
 using Main.Core.View.Card;
 
@@ -69,13 +70,14 @@ namespace Main.Core.View.Question
             this.ValidationMessage = doc.ValidationMessage;
             this.StataExportCaption = doc.StataExportCaption;
             this.Instructions = doc.Instructions;
-            this.Comments = doc.Comments;
+            ////this.Comments = doc.Comments;
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
-            if (doc.Triggers.Count > 0)
+            var autoQuestion = doc as IAutoPropagate;
+            if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
-                this.TargetGroupKey = doc.Triggers.First();
+                this.Triggers = autoQuestion.Triggers;
             }
         }
 
@@ -168,6 +170,26 @@ namespace Main.Core.View.Question
         /// </summary>
         public string ValidationMessage { get; set; }
 
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+        /// <summary>
+        /// Gets or sets MaxValue
+        /// </summary>
+        public int MaxValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets Groups.
+        /// </summary>
+        public Dictionary<string, Guid> Groups { get; set; }
+
+        /// <summary>
+        /// Gets or sets parent group title.
+        /// </summary>
+        public string GroupTitle { get; set; }
+
         #endregion
     }
 
@@ -197,6 +219,8 @@ namespace Main.Core.View.Question
         {
             this.Answers = new T[0];
             this.Cards = new CardView[0];
+            this.Triggers = new List<Guid>();
+            this.Groups = new Dictionary<string, Guid>();
         }
 
         /// <summary>
@@ -229,8 +253,61 @@ namespace Main.Core.View.Question
         {
             this.Answers = new T[0];
             this.Cards = new CardView[0];
+            this.Triggers = new List<Guid>();
+            this.Groups = new Dictionary<string, Guid>();
+            var parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
+            this.Parent = parent.PublicKey;
+            this.GroupTitle = parent.Title;
         }
 
+        /// <summary>
+        /// The get question group.
+        /// </summary>
+        /// <param name="questionnaire">
+        /// The questionnaire.
+        /// </param>
+        /// <param name="questionKey">
+        /// The question key.
+        /// </param>
+        /// <returns>
+        /// Parent group
+        /// </returns>
+        /// <exception cref="ArgumentException">
+        /// </exception>
+        protected IGroup GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
+        {
+            if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
+            {
+                return null;
+            }
+
+            var group = new Queue<IComposite>();
+            foreach (IComposite child in questionnaire.Children)
+            {
+                group.Enqueue(child);
+            }
+
+            while (group.Count != 0)
+            {
+                IComposite queueItem = group.Dequeue();
+                if (queueItem.Children != null)
+                {
+                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
+                    {
+                        return queueItem as IGroup;
+                    }
+
+                    foreach (IComposite child in queueItem.Children)
+                    {
+                        /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
+                         if(childWithQuestion!=null)*/
+                        group.Enqueue(child);
+                    }
+                }
+            }
+
+            throw new ArgumentException("group does not exist");
+        }
         #endregion
 
         #region Public Properties
@@ -316,7 +393,6 @@ namespace Main.Core.View.Question
         public QuestionView(IQuestionnaireDocument questionnaire, TQuestion doc)
             : base(questionnaire, doc)
         {
-            this.Parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
         }
 
         /// <summary>
@@ -338,56 +414,75 @@ namespace Main.Core.View.Question
         #region Methods
 
         /// <summary>
-        /// The get question group.
+        /// LoadAllGroups
         /// </summary>
-        /// <param name="questionnaire">
-        /// The questionnaire.
+        /// <param name="questionnaireId">
+        /// The questionnaire id.
         /// </param>
-        /// <param name="questionKey">
-        /// The question key.
-        /// </param>
-        /// <returns>
-        /// The System.Nullable`1[T -&gt; System.Guid].
-        /// </returns>
-        /// <exception cref="ArgumentException">
-        /// </exception>
-        protected Guid? GetQuestionGroup(IQuestionnaireDocument questionnaire, Guid questionKey)
+        protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? questionPublicKey, Guid? groupPublicKey)
         {
-            if (questionnaire.Children.Any(q => q.PublicKey.Equals(questionKey)))
+            try
+            {
+                var excludedGroups = new List<Guid>();
+                if (questionPublicKey != null)
+                    groupPublicKey = this.GetQuestionGroup(questionnaire, questionPublicKey.Value).PublicKey;
+                if (groupPublicKey != null)
+                {
+                    excludedGroups.Add(groupPublicKey.Value);
+                }
+
+                var groups = new Dictionary<string, Guid>();
+                if (questionnaire != null)
+                {
+                    foreach (var group in questionnaire.Children.Where(t => t is IGroup))
+                    {
+                        this.SelectAll(group, groups, excludedGroups);
+                    }
+                }
+
+                return groups;
+            }
+            catch (Exception e)
             {
                 return null;
             }
+        }
 
-            var group = new Queue<IComposite>();
-            foreach (IComposite child in questionnaire.Children)
+
+        /// <summary>
+        /// Select all groups
+        /// </summary>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="groups">
+        /// The groups.
+        /// </param>
+        /// <param name="excludedGroups">
+        /// The excluded Groups.
+        /// </param>
+        private void SelectAll(IComposite currentGroup, Dictionary<string, Guid> groups, List<Guid> excludedGroups)
+        {
+            var s = excludedGroups.Where(t => t == currentGroup.PublicKey).FirstOrDefault();
+            if (excludedGroups.Count > 0 && s == Guid.Empty
+                && (currentGroup as IGroup).Propagated == Propagate.AutoPropagated)
             {
-                group.Enqueue(child);
+                groups.Add(
+                    string.Format("{0}-{1}", (currentGroup as IGroup).Title, currentGroup.PublicKey),
+                    currentGroup.PublicKey);
             }
 
-            while (group.Count != 0)
+            if (currentGroup.Children.Where(t => t is IGroup).Count() > 0)
             {
-                IComposite queueItem = group.Dequeue();
-                if (queueItem.Children != null)
+                foreach (var childGroup in currentGroup.Children.Where(t => t is IGroup))
                 {
-                    if (queueItem.Children.Any(q => q.PublicKey.Equals(questionKey)))
-                    {
-                        return queueItem.PublicKey;
-                    }
-
-                    foreach (IComposite child in queueItem.Children)
-                    {
-                        /* var childWithQuestion = child as IGroup<IGroup, TQuestion>;
-                         if(childWithQuestion!=null)*/
-                        group.Enqueue(child);
-                    }
+                    this.SelectAll(childGroup, groups, excludedGroups);
                 }
             }
-
-            throw new ArgumentException("group does not exist");
         }
 
         #endregion
-    }
+   }
 
     /// <summary>
     /// The question view.
@@ -417,6 +512,11 @@ namespace Main.Core.View.Question
         {
         }
 
+        public QuestionView(IQuestionnaireDocument questionnaire, Guid? groupPublicKey)
+        {
+            this.Groups = this.LoadGroups(questionnaire, null, groupPublicKey);
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionView"/> class.
         /// </summary>
@@ -430,12 +530,32 @@ namespace Main.Core.View.Question
             : base(questionnaire, doc)
         {
             this.Answers =
-                doc.Children.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
+                doc.Answers.Where(a => a is IAnswer).Select(a => new AnswerView(doc.PublicKey, a as IAnswer)).ToArray();
             if (doc.Cards != null)
             {
                 this.Cards =
                     doc.Cards.Select(c => new CardView(doc.PublicKey, c)).OrderBy(a => Guid.NewGuid()).ToArray();
             }
+
+
+            var autoQuestion = doc as IAutoPropagate;
+            if (autoQuestion != null)
+            {
+                this.MaxValue = autoQuestion.MaxValue;
+                if (autoQuestion.Triggers != null)
+                {
+                    this.Triggers = autoQuestion.Triggers.ToList();
+                }
+            }
+
+/*
+            if (doc.Triggers != null)
+            {
+                this.Triggers = doc.Triggers.ToList();
+            }
+*/
+            
+            this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
 
         #endregion

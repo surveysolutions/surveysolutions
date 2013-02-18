@@ -60,10 +60,9 @@ namespace Main.Core.View.Question
             this.QuestionnaireKey = questionnaire.PublicKey;
             this.Valid = doc.Valid;
             this.Enabled = doc.Enabled;
-            this.Answers =
-                doc.Children.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
+            this.Answers = doc.Answers.OfType<ICompleteAnswer>().Select(a => new CompleteAnswerView(doc.PublicKey, a)).ToArray();
             this.Answer = doc.GetAnswerString();
-            this.Answered = doc.GetAnswerObject() != null;
+            this.Answered = doc.IsAnswered();
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
             this.Comments = doc.Comments;

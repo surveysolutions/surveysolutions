@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Browsing.Common.Controls;
+using Browsing.Common.Interfaces;
 using Common.Utils;
-using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Events;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
-
 namespace Browsing.Common.Containers
 {
-    public abstract partial class Synchronization : Screen
+    public abstract partial class Synchronization : Screen, IUsbWatcher
     {
-        IRequesProcessor requestProcessor;
         IUrlUtils utils;
 
         private bool isPushPossible = false;
@@ -27,7 +26,6 @@ namespace Browsing.Common.Containers
         {
             InitializeComponent();
 
-            this.requestProcessor = requestProcessor;
             this.utils = utils;
 
             this.syncPanel.Parent = ContentPanel;
@@ -35,7 +33,7 @@ namespace Browsing.Common.Containers
             this.syncPanel.PullPressed += btnPull_Click;
             this.syncPanel.PushPressed += btnPush_Click;
             this.syncPanel.CancelPressed += btnCancel_Click;
-            this.syncPanel.UsbPressed += usb_Click;
+            this.syncPanel.usbStatusPanel.UsbPressed += usb_Click;
 
             this.SyncManager = DoInstantiateSyncManager(this.syncPanel, clientSettings, requestProcessor, utils, this.syncPanel);
 
@@ -78,8 +76,12 @@ namespace Browsing.Common.Containers
 
         private void CheckSync()
         {
+            string status = string.Empty;
+
             try
             {
+                this.syncPanel.ShowError("Looking for available data points ...");
+
                 // assume sync possibility by default
                 this.isPullPossible = true;
                 this.isPushPossible = true;
@@ -96,24 +98,23 @@ namespace Browsing.Common.Containers
                     this.isPullPossible = false;
                     this.isPushPossible = false;
 
-                    this.syncPanel.ShowError(ex.Message);
+                    status = ex.Message;
 
                     return; // fatal
                 }
 
-                string status = string.Empty;
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException);
+                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException || x is InactiveNetSynchronizerException);
                 if (ex != null)
                 {
                     status = ex.Message;
 
-                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnaccebleException);
+                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnacceptableException);
                     if (ex != null)
                     {
                         this.isPullPossible = false;
                         this.isPushPossible = false;
 
-                        this.syncPanel.ShowError(status + "\n" + ex.Message);
+                        status += "\n" + ex.Message;
 
                         return; // fatal
                     }
@@ -127,11 +128,11 @@ namespace Browsing.Common.Containers
 
                     status += "\n" + ex.Message;
                 }
-
-                this.syncPanel.ShowError(status);
             }
             finally
             {
+                this.syncPanel.ShowError(status);
+
                 EnablePull(this.isPullPossible);
                 EnablePush(this.isPushPossible);
             }
@@ -232,9 +233,11 @@ namespace Browsing.Common.Containers
         {
             base.OnLoad(e);
 
-            this.syncPanel.UpdateLook();
+            this.syncPanel.SetIdleState();
+            
             EnablePush(false);
             EnablePull(false);
+            
             this.syncPanel.ShowError("Looking for available data points ...");
 
         }
@@ -252,7 +255,7 @@ namespace Browsing.Common.Containers
 
         public void UpdateUsbList()
         {
-            this.syncPanel.UpdateUsbList();
+            this.syncPanel.UpdateUsbStatus();
 
             CheckSyncPossibilities();
         }

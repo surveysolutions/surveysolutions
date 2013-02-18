@@ -1,18 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionnaireValidationExecutor.cs" company="">
-//   
+// <copyright file="CompleteQuestionnaireValidationExecutor.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The complete questionnaire validation executor.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.ExpressionExecutors
 {
     using System;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors.ExpressionExtentions;
 
     using NCalc;
 
@@ -26,7 +29,7 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// The hash.
         /// </summary>
-        private readonly GroupHash hash;
+        private readonly ICompleteQuestionnaireDocument doc;
 
         #endregion
 
@@ -35,12 +38,12 @@ namespace Main.Core.ExpressionExecutors
         /// <summary>
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireValidationExecutor"/> class.
         /// </summary>
-        /// <param name="hash">
+        /// <param name="doc">
         /// The hash.
         /// </param>
-        public CompleteQuestionnaireValidationExecutor(GroupHash hash)
+        public CompleteQuestionnaireValidationExecutor(ICompleteQuestionnaireDocument doc)
         {
-            this.hash = hash;
+            this.doc = doc;
         }
 
         #endregion
@@ -57,7 +60,7 @@ namespace Main.Core.ExpressionExecutors
         {
             foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
             {
-                completeQuestion.Valid = Execute(completeQuestion);
+                completeQuestion.Valid = this.Execute(completeQuestion);
             }
         }
 
@@ -70,9 +73,9 @@ namespace Main.Core.ExpressionExecutors
         public bool Execute()
         {
             bool isValid = true;
-            foreach (ICompleteQuestion completeQuestion in this.hash.Questions)
+            foreach (ICompleteQuestion completeQuestion in this.doc.Questions)
             {
-                completeQuestion.Valid = Execute(completeQuestion);
+                completeQuestion.Valid = this.Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
             }
 
@@ -95,7 +98,7 @@ namespace Main.Core.ExpressionExecutors
                 return true;
             }
 
-            if (question.GetAnswerObject() == null)
+            if (!question.IsAnswered())
             {
                 return !question.Mandatory;
             }
@@ -108,26 +111,27 @@ namespace Main.Core.ExpressionExecutors
             var e = new Expression(question.ValidationExpression);
             e.EvaluateParameter += (name, args) =>
                 {
-                    Guid nameGuid;
-                    if (string.Compare("this", name, true) == 0)
-                    {
-                        nameGuid = question.PublicKey;
-                    }
-                    else
-                    {
-                        nameGuid = Guid.Parse(name);
-                    }
+                    Guid nameGuid = string.Compare("this", name, StringComparison.OrdinalIgnoreCase) == 0 ? question.PublicKey : Guid.Parse(name);
 
-                    Guid? propagationKey = question.PropogationPublicKey;
-                    object value = this.hash[nameGuid, propagationKey].GetAnswerObject();
-                    args.Result = value;
+                    Guid? propagationKey = question.PropagationPublicKey;
+                    var targetQuestion = this.doc.GetQuestion(nameGuid, propagationKey);
+                    if (targetQuestion == null || !targetQuestion.Enabled)
+                    {
+                        args.Result = null;
+                        return;
+                    }
+                    
+                    args.Result = targetQuestion.GetAnswerObject();
                 };
+
+            e.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+
             bool result = false;
             try
             {
                 result = (bool)e.Evaluate();
             }
-            catch (Exception)
+            catch (Exception exc)
             {
             }
 

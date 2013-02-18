@@ -11,8 +11,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
@@ -33,13 +33,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
         [Test]
         public void CheckConversion_AnswersAreConverted()
         {
-            var answers = new List<IComposite> { new CompleteAnswer() };
-            var question = new DateTimeCompleteQuestion { Children = answers };
+            var answers = new List<IAnswer> { new CompleteAnswer() };
+            var question = new DateTimeCompleteQuestion { Answers = answers };
             var completeQuestion = question;
-            Assert.AreEqual(question.Children.Count, completeQuestion.Children.Count);
-            for (int i = 0; i < question.Children.Count; i++)
+            Assert.AreEqual(question.Answers.Count, completeQuestion.Answers.Count);
+            for (int i = 0; i < question.Answers.Count; i++)
             {
-                var answer = completeQuestion.Find<ICompleteAnswer>(question.Children[i].PublicKey);
+                var answer = completeQuestion.Answers.FirstOrDefault(q => q.PublicKey == question.Answers[i].PublicKey);
                 Assert.IsTrue(answer != null);
             }
         }
@@ -60,7 +60,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             completeQuestion.QuestionType = QuestionType.DateTime;
             completeQuestion.StataExportCaption = "some stata export caption";
             completeQuestion.ValidationExpression = "some validation expression";
-            completeQuestion.Triggers = new List<Guid> { Guid.NewGuid() };
             Assert.AreEqual(completeQuestion.AnswerDate, DateTime.Today);
             Assert.AreEqual(completeQuestion.AnswerOrder, Order.MaxMin);
             Assert.AreEqual(completeQuestion.Cards.Count, 1);
@@ -72,7 +71,6 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             Assert.AreEqual(completeQuestion.QuestionType, QuestionType.DateTime);
             Assert.AreEqual(completeQuestion.StataExportCaption, "some stata export caption");
             Assert.AreEqual(completeQuestion.ValidationExpression, "some validation expression");
-            Assert.AreEqual(completeQuestion.Triggers.Count, 1);
         }
 
         #endregion

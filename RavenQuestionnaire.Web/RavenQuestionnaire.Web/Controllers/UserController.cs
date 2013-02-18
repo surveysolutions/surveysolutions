@@ -1,37 +1,182 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Main.Core.View;
-using Main.Core.View.User;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core;
-using Main.Core.Commands.User;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="UserController.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   The user controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Controllers
 {
-    //[QuestionnaireAuthorize(UserRoles.Administrator)]
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Main.Core.Commands.User;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Utility;
+    using Main.Core.View;
+    using Main.Core.View.User;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using Questionnaire.Core.Web.Security;
+
+    /// <summary>
+    /// The user controller.
+    /// </summary>
     public class UserController : Controller
     {
-        private IViewRepository viewRepository;
+        #region Constants and Fields
+
+        /// <summary>
+        /// The view repository.
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="viewRepository">
+        /// The view repository.
+        /// </param>
         public UserController(IViewRepository viewRepository)
         {
-            
             this.viewRepository = viewRepository;
         }
-        protected void AddSupervisorListToViewBag()
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The create.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public ActionResult Create()
         {
-            var supervisors =
-                viewRepository.Load<UserBrowseInputModel, UserBrowseView>(new UserBrowseInputModel(UserRoles.Supervisor)
-                                                                              {PageSize = 100}).Items;
-            List<UserBrowseItem> list = supervisors.ToList();
-            list.Insert(0, new UserBrowseItem(Guid.Empty, "", null, DateTime.MinValue, false, null, null));
-            ViewBag.Supervisors = list;
+            this.AddSupervisorListToViewBag();
+            this.AddLocationsListToViewBag();
+            return this.View("Manage", UserView.New());
         }
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public ActionResult Delete(string id)
+        {
+            // commandInvoker.Execute(new DeleteUserCommand(id, GlobalInfo.GetCurrentUser()));
+            return this.RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public ActionResult Index(UserBrowseInputModel input)
+        {
+            UserBrowseView model = this.viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
+            return View(model);
+        }
+
+        /// <summary>
+        /// The manage.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        /// <exception cref="HttpException">
+        /// </exception>
+        public ActionResult Manage(Guid id)
+        {
+            if (id == null || id == Guid.Empty)
+            {
+                throw new HttpException(404, "Invalid quesry string parameters");
+            }
+
+            UserView model = this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
+            this.AddSupervisorListToViewBag();
+            this.AddLocationsListToViewBag();
+            return View(model);
+        }
+
+        /// <summary>
+        /// The save.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        [HttpPost]
+        public ActionResult Save(UserView model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (model.PublicKey == Guid.Empty)
+                {
+                    Guid publicKey = Guid.NewGuid();
+
+                    if (model.Supervisor.Id != Guid.Empty)
+                    {
+                        UserView super =
+                            this.viewRepository.Load<UserViewInputModel, UserView>(
+                                new UserViewInputModel(model.Supervisor.Id));
+                        model.Supervisor.Name = super.UserName;
+                        model.Supervisor.Id = super.PublicKey;
+                    }
+
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(
+                        new CreateUserCommand(
+                            publicKey, 
+                            model.UserName, 
+                            SimpleHash.ComputeHash(model.Password), 
+                            model.Email, 
+                            new[] { model.PrimaryRole }, 
+                            model.IsLocked, 
+                            model.Supervisor));
+                }
+                else
+                {
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    commandService.Execute(
+                        new ChangeUserCommand(model.PublicKey, model.Email, new[] { model.PrimaryRole }, model.IsLocked));
+                }
+
+                return this.RedirectToAction("Index");
+            }
+
+            return View("Manage", model);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The add locations list to view bag.
+        /// </summary>
         protected void AddLocationsListToViewBag()
         {
             /*var locations =
@@ -41,64 +186,19 @@ namespace RavenQuestionnaire.Web.Controllers
             ViewBag.AllLocations = locations;*/
         }
 
-        public ActionResult Index(UserBrowseInputModel input)
+        /// <summary>
+        /// The add supervisor list to view bag.
+        /// </summary>
+        protected void AddSupervisorListToViewBag()
         {
-            var model = viewRepository.Load<UserBrowseInputModel, UserBrowseView>(input);
-            return View(model);
-        }
-        public ActionResult Manage(Guid id)
-        {
-            if (id == null || id == Guid.Empty)
-                throw new HttpException(404, "Invalid quesry string parameters");
-            var model = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
-            AddSupervisorListToViewBag();
-            AddLocationsListToViewBag();
-            return View(model);
-        }
-        public ActionResult Delete(string id)
-        {
-            //commandInvoker.Execute(new DeleteUserCommand(id, GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Index");
+            IEnumerable<UserBrowseItem> supervisors =
+                this.viewRepository.Load<UserBrowseInputModel, UserBrowseView>(
+                    new UserBrowseInputModel(UserRoles.Supervisor) { PageSize = 100 }).Items;
+            List<UserBrowseItem> list = supervisors.ToList();
+            list.Insert(0, new UserBrowseItem(Guid.Empty, string.Empty, null, DateTime.MinValue, false, null, null));
+            this.ViewBag.Supervisors = list;
         }
 
-        [HttpPost]
-        public ActionResult Save(UserView model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (model.PublicKey == Guid.Empty)
-                {
-                    var publicKey = Guid.NewGuid();
-
-                    if (model.Supervisor.Id != Guid.Empty )
-                    {
-                        var super = viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(model.Supervisor.Id));
-                        model.Supervisor.Name = super.UserName;
-                        model.Supervisor.Id = super.PublicKey;
-                    }
-
-                    var commandService = NcqrsEnvironment.Get<ICommandService>();
-                    commandService.Execute(new CreateUserCommand(publicKey, model.UserName, SimpleHash.ComputeHash(model.Password), model.Email,
-                        new UserRoles[] { model.PrimaryRole }, model.IsLocked, model.Supervisor));
-                }
-                else
-                {
-                    var commandService = NcqrsEnvironment.Get<ICommandService>();
-                    commandService.Execute(new ChangeUserCommand(model.PublicKey, model.Email,
-                        new UserRoles[] { model.PrimaryRole }, model.IsLocked));
-
-
-                }
-                return RedirectToAction("Index");
-
-            }
-            return View("Manage", model);
-        }
-        public ActionResult Create()
-        {
-            AddSupervisorListToViewBag();
-            AddLocationsListToViewBag();
-            return View("Manage", UserView.New());
-        }
+        #endregion
     }
 }

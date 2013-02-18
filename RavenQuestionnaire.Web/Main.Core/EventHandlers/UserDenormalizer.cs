@@ -9,10 +9,10 @@
 
 using System;
 using System.Collections.Generic;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.User;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Main.Core.EventHandlers

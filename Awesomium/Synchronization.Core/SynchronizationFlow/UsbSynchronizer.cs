@@ -33,7 +33,7 @@ namespace Synchronization.Core.SynchronizationFlow
 
         protected override void OnPush(SyncDirection direction)
         {
-            var drive = GetDrive(); // accept driver to flush on
+            var drive = GetDrive(); // accept driver to flash on
 
             try
             {
@@ -126,7 +126,7 @@ namespace Synchronization.Core.SynchronizationFlow
         /// <param name="direction"></param>
         protected override void OnPull(SyncDirection direction)
         {
-            var drive = GetDrive(); // accept driver to flush on
+            var drive = GetDrive(); // accept driver to flash on
 
             try
             {
@@ -235,7 +235,7 @@ namespace Synchronization.Core.SynchronizationFlow
             }
             catch (Exception ex)
             {
-                return new List<SynchronizationException>() { new UsbUnaccebleException(ex.Message) };
+                return new List<SynchronizationException>() { new UsbUnacceptableException(ex.Message) };
             }
         }
 
@@ -259,9 +259,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
             if (drive == null)
                 if (this.usbProvider.IsAnyAvailable)
-                    throw new UsbUnaccebleException("Usb flush memory device has not been choozen");
+                    throw new UsbNotChoozenException();
                 else
-                    throw new UsbUnaccebleException("Usb flush memory device has not been plugged");
+                    throw new UsbNotPluggedException();
 
             return drive;
         }

@@ -1,26 +1,73 @@
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Events;
+using Main.Core.View.Questionnaire;
+using Main.DenormalizerStorage;
 
 namespace Core.HQ.Synchronization
 {
-    public class HQEventSync : AbstractEventSync
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Main.Core.Documents;
+    using Main.Core.Domain;
+    using Main.Core.Events;
+    using Ncqrs;
+    using Ncqrs.Eventing.Storage;
+
+    public class HQEventSync : AbstractSnapshotableEventSync
     {
-     //   private DocumentStore store;
-        public HQEventSync()
+
+        #region Fields
+
+        /// <summary>
+        /// ViewRepository  object
+        /// </summary>
+        private readonly IDenormalizer denormalizer;
+
+        /// <summary>
+        /// myEventStore object
+        /// </summary>
+        private readonly IEventStore myEventStore;
+
+        #endregion
+
+        #region Constructor
+
+        public HQEventSync(IDenormalizer denormalizer)
         {
-           // this.store = store;
+            this.denormalizer = denormalizer;
+            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (myEventStore == null)
+                throw new Exception("IEventStore is not correct.");
         }
 
-        #region Overrides of AbstractEventSync
+        #endregion
+
+        #region OverrideMethods
 
         public override IEnumerable<AggregateRootEvent> ReadEvents()
         {
-          /*  var myEventStore = NcqrsEnvironment.Get<IEventStore>();
+            var retval = new List<AggregateRootEvent>();
+            this.AddQuestionnairesTemplates(retval);
+            return retval.OrderBy(x => x.EventTimeStamp).ToList();
+        }
 
-            if (myEventStore == null)
-                throw new Exception("IEventStore is not correct.");*/
-            return Enumerable.Empty<AggregateRootEvent>();
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Responsible for added questionnaire templates
+        /// </summary>
+        /// <param name="retval">
+        /// The retval.
+        /// </param>
+        private void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
+        {
+            var model = this.denormalizer.Query<QuestionnaireBrowseItem>();
+
+            foreach (var item in model)
+            {
+                retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+            }
         }
 
         #endregion

@@ -6,6 +6,7 @@
 //   The i complete group extensions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.Extensions
 {
     using System;
@@ -19,9 +20,23 @@ namespace Main.Core.Entities.Extensions
     /// <summary>
     /// The i complete group extensions.
     /// </summary>
-    public static class ICompleteGroupExtensions
+    public static class CompleteGroupExtensions
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The is group propagation template.
+        /// </summary>
+        /// <param name="entity">
+        /// The entity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public static bool IsGroupPropagationTemplate(this ICompleteGroup entity)
+        {
+            return entity.Propagated != Propagate.None && !entity.PropagationPublicKey.HasValue;
+        }
 
         /// <summary>
         /// The find group by key.
@@ -46,24 +61,6 @@ namespace Main.Core.Entities.Extensions
             }
 
             return entity.GetPropagatedGroupsByKey(propagationKey.Value).FirstOrDefault(g => g.PublicKey.Equals(key));
-        }
-
-        /// <summary>
-        /// The get all binded questions.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="questionKey">
-        /// The question key.
-        /// </param>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; Main.Core.Entities.SubEntities.Complete.BindedCompleteQuestion].
-        /// </returns>
-        public static IEnumerable<BindedCompleteQuestion> GetAllBindedQuestions(
-            this ICompleteGroup group, Guid questionKey)
-        {
-            return group.Find<BindedCompleteQuestion>(q => q.ParentPublicKey.Equals(questionKey));
         }
 
         /// <summary>
@@ -117,7 +114,7 @@ namespace Main.Core.Entities.Extensions
         public static IEnumerable<ICompleteGroup> GetPropagatedGroupsByKey(
             this ICompleteGroup entity, Guid propagationKey)
         {
-            return entity.Find<ICompleteGroup>(g => g.PropogationPublicKey.Equals(propagationKey));
+            return entity.Find<ICompleteGroup>(g => g.PropagationPublicKey.Equals(propagationKey));
         }
 
         /// <summary>
@@ -193,8 +190,20 @@ namespace Main.Core.Entities.Extensions
         {
             var dependency =
                 entity.FirstOrDefault<ICompleteQuestion>(
-                    q => q.PublicKey.Equals(target) && !q.PropogationPublicKey.HasValue);
+                    q => q.PublicKey.Equals(target) && !q.PropagationPublicKey.HasValue);
             return dependency;
+        }
+
+        public static string GetGroupTitle(this ICompleteGroup doc, Guid propagationKey)
+        {
+
+            return
+                string.Concat(doc.GetPropagatedGroupsByKey(propagationKey).
+                                  SelectMany(q => q.Children).
+                                  OfType
+                                  <ICompleteQuestion>().Where(q => q.Capital).Select(
+                                      q => q.GetAnswerString() + " "));
+
         }
 
         #endregion

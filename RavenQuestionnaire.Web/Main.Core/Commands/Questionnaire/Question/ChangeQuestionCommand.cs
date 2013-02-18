@@ -9,6 +9,7 @@
 namespace Main.Core.Commands.Questionnaire.Question
 {
     using System;
+    using System.Collections.Generic;
 
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
@@ -109,8 +110,11 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="questionText">
         /// The question text.
         /// </param>
-        /// <param name="TargetGroupKey">
-        /// The target group key.
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        /// <param name="maxValue">
+        /// The max value
         /// </param>
         /// <param name="stataExportCaption">
         /// The stata export caption.
@@ -146,7 +150,8 @@ namespace Main.Core.Commands.Questionnaire.Question
             Guid questionnaireId, 
             Guid publicKey, 
             string questionText, 
-            Guid TargetGroupKey, 
+            List<Guid> triggers, 
+            int maxValue,
             string stataExportCaption, 
             QuestionType questionType, 
             string conditionExpression, 
@@ -160,7 +165,8 @@ namespace Main.Core.Commands.Questionnaire.Question
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
-            this.TargetGroupKey = TargetGroupKey;
+            this.Triggers = triggers;
+            this.MaxValue = maxValue;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
             this.ConditionExpression = conditionExpression;
@@ -240,11 +246,6 @@ namespace Main.Core.Commands.Questionnaire.Question
         public string StataExportCaption { get; set; }
 
         /// <summary>
-        /// Gets or sets the target group key.
-        /// </summary>
-        public Guid TargetGroupKey { get; set; }
-
-        /// <summary>
         /// Gets or sets the validation expression.
         /// </summary>
         public string ValidationExpression { get; set; }
@@ -253,6 +254,16 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets Triggers.
+        /// </summary>
+        public List<Guid> Triggers { get; set; }
+
+        /// <summary>
+        /// Gets or sets MaxValue.
+        /// </summary>
+        public int MaxValue { get; set; }
 
         #endregion
     }

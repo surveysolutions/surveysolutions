@@ -7,10 +7,10 @@
 using System;
 using System.Linq;
 using Core.CAPI.Synchronization;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View.CompleteQuestionnaire;
+using Main.DenormalizerStorage;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;

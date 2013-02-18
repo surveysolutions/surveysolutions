@@ -7,35 +7,30 @@
         @Html.Partial("~/Views/Survey/Group/_PropagatebleGroup.cshtml", Model)
         @if (Model.Propagated != Propagate.AutoPropagated)
         {
-            @RenderAddButton(Model.PublicKey)
+            var requestParams = new
+            {
+                publicKey = Model.PublicKey,
+                questionnaireId = ViewBag.QuestionnaireId,
+                parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+                salt = (new Random()).NextDouble()
+            };
+
+            string templateId = "groupTemplate" + Model.PublicKey;
+
+            using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
+            {
+            <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
+            @Html.ValidationMessage("PublicKey")
+            }
+
+            <script id="@templateId"  type="text/x-jsrender">
+                @Html.Partial("~/Views/Survey/Group/_PropagatedGrooup.cshtml", Model.PropagateTemplate)
+            </script>
+            
         }
     </div>
 }
 else
 {
     @Html.Partial("~/Views/Survey/Group/_SimpleGroup.cshtml", Model)
-}
-
-
-@helper RenderAddButton(Guid currentGroupPublicKey)
-{
-    var requestParams = new
-                            {
-                                publicKey = currentGroupPublicKey,
-                                questionnaireId = ViewBag.QuestionnaireId,
-                                parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
-                                salt = (new Random()).NextDouble()
-                            };
-    string templateId = "groupTemplate" + currentGroupPublicKey;
-
-    using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
-    {
-        <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
-
-        @Html.ValidationMessage("PublicKey")
-    }
-
-    <script id="@templateId"  type="text/x-jsrender">
-        @Html.Partial("~/Views/Survey/Group/_PropagatedGrooup.cshtml", Model.PropagateTemplate)
-    </script>
 }

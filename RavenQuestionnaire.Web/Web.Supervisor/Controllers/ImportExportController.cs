@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImportExportController.cs" company="The World Bank">
+// <copyright file="ImportExportController.cs" company="">
 //   2012
 // </copyright>
 // <summary>
@@ -12,6 +12,7 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web;
     using System.Web.Mvc;
+
     using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Threading;
 
@@ -54,20 +55,19 @@ namespace Web.Supervisor.Controllers
         /// </param>
         public void ExportAsync(Guid syncKey)
         {
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] =
-                        exportimportEvents.Export(syncKey);
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-                AsyncManager.OutstandingOperations.Decrement();
-            });
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager, 
+                () =>
+                    {
+                        try
+                        {
+                            this.AsyncManager.Parameters["result"] = this.exportimportEvents.Export(syncKey);
+                        }
+                        catch
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                        }
+                    });
         }
 
         /// <summary>
@@ -81,7 +81,8 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ExportCompleted(byte[] result)
         {
-            return this.File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+            return this.File(
+                result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
         /// <summary>
@@ -105,16 +106,17 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public void ImportAsync(HttpPostedFileBase myfile)
         {
-            if (myfile == null && Request.Files.Count > 0)
-                myfile = Request.Files[0];
-            if (myfile == null || myfile.ContentLength == 0) return;
-            this.AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(
-                () =>
-                    {
-                        this.exportimportEvents.Import(myfile);
-                        this.AsyncManager.OutstandingOperations.Decrement();
-                    });
+            if (myfile == null && this.Request.Files.Count > 0)
+            {
+                myfile = this.Request.Files[0];
+            }
+
+            if (myfile == null || myfile.ContentLength == 0)
+            {
+                return;
+            }
+
+            AsyncQuestionnaireUpdater.Update(this.AsyncManager, () => this.exportimportEvents.Import(myfile));
         }
 
         /// <summary>

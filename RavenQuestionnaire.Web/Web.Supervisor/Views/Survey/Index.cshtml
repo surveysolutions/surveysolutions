@@ -1,46 +1,82 @@
-﻿
+﻿@using Core.Supervisor.Views.Index
 @using Web.Supervisor.Models
-@using Main.Core.Entities.SubEntities
-@model Core.Supervisor.Views.Survey.SurveyBrowseView
+@model IndexView
 @{
-    ViewBag.Title = "Surveys";
+    this.ViewBag.Title = "Surveys";
 }
-<script>
+<script type="text/javascript">
+    var sortData = undefined;
+    var pageSize = @Model.PageSize;
+    
     $(document).ready(function() {
-        $("#questionnaireTable").tablesorter({
-                order: "@Model.Order",
+        document.filterUser = "";
+        $('#filter').editable().on('update', function(e, editable) {
+            document.filterUser = editable.value;
+            sortData = [{ Field: "Title", Direction: "Asc" }];
+            getTablePage(sortData, 1);
+        });
+
+        makeSortable();
+        onPagingClick();
+        
+    });
+
+    function makeSortable() {
+        $("#questionnaireTable table").tablesorter({
                 send: function(data) {
-                    $.ajax({
-                            type: "POST",
-                            url: "@Url.Action("TableData", "Survey")",
-                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize } }),
-                            contentType: 'application/json, charset=utf-8',
-                            statusCode: {
-                                200: function(response) {
-                                    $("#questionnaireTable tbody").html(response);
-                                }
-                            }
-                        });
+                    sortData = JSON.parse(JSON.stringify(data));
+                    getTablePage(data, 1);
+                }
+        });
+    }
+
+    function onPagingClick() {
+        $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
+            getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
+            return false;
+        });
+    }
+
+    function getTablePage(data, page) {
+        $.ajax({
+                type: "POST",
+                url: "@Url.Action("TableData", "Survey")",
+                data: JSON.stringify({ UserId: document.filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+                contentType: 'application/json, charset=utf-8',
+                statusCode: {
+                    200: function(response) {
+                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
+                        $('#paging').html($(response).find('#paging').html());
+                        
+                        onPagingClick();
+                    }
                 }
             });
-    });
+    }
+
+    function getParameterByName(ref, name) {
+        name = name.replace( /[\[]/ , "\\\[").replace( /[\]]/ , "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(ref);
+        if (results == null)
+            return "";
+        else
+            return decodeURIComponent(results[1].replace( /\+/g , " "));
+    }
 </script>
-<h2>Surveys</h2>
-<table  id="questionnaireTable" class="table table-striped table-bordered table-condensed">
-    <thead>
-        <tr>
-        <th class="sorting" sorter='{"key":"Title"}'><span>Survey</span></th>
-        <th class="sorting" sorter='{"key":"StartDate"}'><span>Initial date</span></th>
-            @foreach (var item in Model.Headers)
-            {
-                <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span></th>
-            }
-        </tr>
-    </thead>
-<tbody>
-@Html.Partial("_Table", Model)
-</tbody>
-</table>
-<div class="pagination">
-    @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })
+<h2>Surveys by <a href="#" id="filter" 
+                  data-placement="bottom" 
+                  data-type="select" 
+                  data-source="@Url.Action("UsersJson", "User")"
+                  data-prepend='All'             
+                  data-original-title="Select user">@this.Model.User.Name</a> </h2>
+<div id="questionnaireTable">
+    @this.Html.Partial("_Table", this.Model)
 </div>
+
+@this.Html.Action("Chart", Model)
+
+
+
+

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Restoring.EventStapshoot;
+using Main.Core.Entities.SubEntities.Complete.Question;
 
 namespace Main.Core.Domain
 {
@@ -23,8 +23,7 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire.Completed;
 
     using Ncqrs;
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// CompleteQuestionnaire Aggregate Root.
@@ -53,12 +52,13 @@ namespace Main.Core.Domain
         /// Initializes a new instance of the <see cref="CompleteQuestionnaireAR"/> class.
         /// </summary>
         /// <param name="completeQuestionnaireId">
-        /// The complete questionnaire id.
+        ///   The complete questionnaire id.
         /// </param>
         /// <param name="questionnaire">
-        /// The questionnaire.
+        ///   The questionnaire.
         /// </param>
-        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire)
+        /// <param name="creator"></param>
+        public CompleteQuestionnaireAR(Guid completeQuestionnaireId, QuestionnaireDocument questionnaire, UserLight creator)
             : base(completeQuestionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -69,7 +69,7 @@ namespace Main.Core.Domain
             var document = (CompleteQuestionnaireDocument)questionnaire;
 
             document.PublicKey = completeQuestionnaireId;
-            document.Creator = null;
+            document.Creator = creator;
             document.Status = SurveyStatus.Initial;
             document.Responsible = null;
 
@@ -82,7 +82,7 @@ namespace Main.Core.Domain
                     {
                         Questionnaire = document, 
                         CreationDate = clock.UtcNow(), 
-                        TotalQuestionCount = document.Find<ICompleteQuestion>(q => !(q is IBinded)).Count()
+                        TotalQuestionCount = document.Find<ICompleteQuestion>(q => true).Count()
                     });
         }
 
@@ -223,7 +223,7 @@ namespace Main.Core.Domain
             Guid questionPublicKey, Guid? propogationPublicKey, string completeAnswerValue, List<Guid> completeAnswers)
         {
             ////performe check before event raising!!
-            ICompleteQuestion question = this.doc.QuestionHash[questionPublicKey, propogationPublicKey];
+            ICompleteQuestion question = this.doc.GetQuestion(questionPublicKey, propogationPublicKey);
 
             ////it's not a great idea to build here answer text
             string answerString;
@@ -236,7 +236,7 @@ namespace Main.Core.Domain
                 var answerList = new List<string>();
                 foreach (Guid answerGuid in completeAnswers)
                 {
-                    var answer = question.Find<ICompleteAnswer>(answerGuid);
+                    var answer = question.Answers.FirstOrDefault(q => q.PublicKey == answerGuid);
                     if (answer != null)
                     {
                         answerList.Add(answer.AnswerText);
@@ -244,6 +244,28 @@ namespace Main.Core.Domain
                 }
 
                 answerString = string.Join(", ", answerList.ToArray());
+            }
+            var propagatedQuestion = question as IAutoPropagate;
+            ////handle group propagation
+            ////to store events with guids
+            if (propagatedQuestion != null)
+            {
+                int count;
+                if (!int.TryParse(completeAnswerValue, out count))
+                {
+                    throw new ArgumentException("value is not a number");
+                }
+                if (string.IsNullOrWhiteSpace(completeAnswerValue))
+                {
+                    completeAnswerValue = "0";
+                }
+                if (count < 0)
+                {
+                    throw new ArgumentException("count can't be bellow zero");
+                }
+                if (count > propagatedQuestion.MaxValue)
+                    throw new ArgumentException(string.Format("value can't be greater than {0}", propagatedQuestion.MaxValue));
+                this.AddRemovePropagatedGroup(question, count);
             }
 
             // Apply a NewGroupAdded event that reflects the
@@ -263,24 +285,6 @@ namespace Main.Core.Domain
                         QuestionText = question.QuestionText, 
                         AnswerString = answerString
                     });
-
-            ////handle group propagation
-            ////to store events with guids
-            if (question is IAutoPropagate)
-            {
-                int count;
-                if (!int.TryParse(completeAnswerValue, out count))
-                {
-                    return;
-                }
-
-                if (count < 0)
-                {
-                    throw new InvalidOperationException("count can't be bellow zero");
-                }
-
-                this.AddRemovePropagatedGroup(question, count);
-            }
         }
 
         /// <summary>
@@ -324,7 +328,9 @@ namespace Main.Core.Domain
         /// </exception>
         protected void AddRemovePropagatedGroup(ICompleteQuestion question, int count)
         {
-            if (!(question is IAutoPropagate))
+            var autoQuestion = question as AutoPropagateCompleteQuestion;
+            var currentAnswer = autoQuestion.Answer ?? 0;
+            if (autoQuestion == null)
             {
                 return;
             }
@@ -334,9 +340,49 @@ namespace Main.Core.Domain
                 throw new InvalidOperationException("count can't be bellow zero");
             }
 
-            foreach (Guid trigger in question.Triggers)
+            if (currentAnswer == count)
             {
-                this.MultiplyGroup(trigger, count);
+                return;
+            }
+
+            if (currentAnswer < count)
+            {
+                for (int i = 0; i < count - currentAnswer; i++)
+                {
+                    var propagationKey = Guid.NewGuid();
+                    foreach (Guid trigger in autoQuestion.Triggers)
+                    {
+                        this.ApplyEvent(
+                            new PropagatableGroupAdded
+                                {
+                                    CompletedQuestionnaireId = this.doc.PublicKey,
+                                    PublicKey = trigger,
+                                    PropagationKey = propagationKey
+                                });
+                    }
+                }
+            }
+            else
+            {
+                for (int i = count; i < currentAnswer; i++)
+                {
+                    foreach (Guid trigger in autoQuestion.Triggers)
+                    {
+                        Guid trigger1 = trigger;
+                        var lastGroup =
+                            this.doc.Find<ICompleteGroup>(
+                                g => g.PublicKey == trigger1 && g.PropagationPublicKey.HasValue).LastOrDefault();
+                        if (lastGroup == null)
+                            break;
+                        this.ApplyEvent(
+                            new PropagatableGroupDeleted
+                                {
+                                    CompletedQuestionnaireId = this.doc.PublicKey,
+                                    PublicKey = trigger,
+                                    PropagationKey = lastGroup.PropagationPublicKey.Value
+                                });
+                    }
+                }
             }
         }
 
@@ -366,66 +412,27 @@ namespace Main.Core.Domain
         /// <param name="status">
         /// The status.
         /// </param>
-        protected void ChangeStatus(SurveyStatus status)
+        /// <param name="responsible">
+        /// The responsible.
+        /// </param>
+        protected void ChangeStatus(SurveyStatus status, UserLight responsible)
         {
+            var prevStatus = this.doc.Status;
+
             this.ApplyEvent(
-                new QuestionnaireStatusChanged { CompletedQuestionnaireId = this.doc.PublicKey, Status = status });
-        }
-
-        /// <summary>
-        /// The multiply group.
-        /// </summary>
-        /// <param name="groupKey">
-        /// The group key.
-        /// </param>
-        /// <param name="count">
-        /// The count.
-        /// </param>
-        protected void MultiplyGroup(Guid groupKey, int count)
-        {
-            List<ICompleteGroup> groups =
-                this.doc.Find<ICompleteGroup>(g => g.PublicKey == groupKey && g.PropogationPublicKey.HasValue).ToList();
-
-            if (groups.Count == count)
-            {
-                return;
-            }
-
-            if (groups.Count < count)
-            {
-                for (int i = 0; i < count - groups.Count; i++)
-                {
-                    this.ApplyEvent(
-                        new PropagatableGroupAdded
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = groupKey, 
-                                PropagationKey = Guid.NewGuid()
-                            });
-                }
-            }
-            else
-            {
-                for (int i = count; i < groups.Count; i++)
-                {
-                    if (!groups[i].PropogationPublicKey.HasValue)
+                new QuestionnaireStatusChanged
                     {
-                        continue;
-                    }
-
-                    this.ApplyEvent(
-                        new PropagatableGroupDeleted
-                            {
-                                CompletedQuestionnaireId = this.doc.PublicKey, 
-                                PublicKey = groupKey, 
-                                PropagationKey = groups[i].PropogationPublicKey.Value
-                            });
-                }
-            }
+                        CompletedQuestionnaireId = this.doc.PublicKey, 
+                        Status = status,
+                        PreviousStatus = prevStatus,
+                        Responsible = responsible
+                    });
         }
+        
 
         // Event handler for the AnswerSet event. This method
         // is automaticly wired as event handler based on convension.
+
         /// <summary>
         /// The on answer set.
         /// </summary>
@@ -434,12 +441,10 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnAnswerSet(AnswerSet e)
         {
-            GroupHash.CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
-                e.QuestionPublicKey, e.PropogationPublicKey);
-            ICompleteQuestion question = questionWrapper.Question;
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublicKey, e.PropogationPublicKey);
             if (question == null)
             {
-                return;
+                return; ////is it good or exception is better decision
             }
 
             question.SetAnswer(e.AnswerKeys, e.AnswerValue);
@@ -495,10 +500,10 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
-        /// On Propagatable Group Added.
+        /// The on propagatable group added.
         /// </summary>
-        /// The e.
         /// <param name="e">
+        /// The e.
         /// </param>
         protected void OnPropagatableGroupAdded(PropagatableGroupAdded e)
         {
@@ -506,7 +511,6 @@ namespace Main.Core.Domain
 
             var newGroup = new CompleteGroup(template, e.PropagationKey);
             this.doc.Add(newGroup, null);
-            this.doc.QuestionHash.AddGroup(newGroup);
         }
 
         /// <summary>
@@ -521,7 +525,6 @@ namespace Main.Core.Domain
             try
             {
                 this.doc.Remove(group);
-                this.doc.QuestionHash.RemoveGroup(group);
             }
             catch (CompositeException)
             {
@@ -537,17 +540,13 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnSetCommentCommand(CommentSeted e)
         {
-            GroupHash.CompleteQuestionWrapper questionWrapper = this.doc.QuestionHash.GetQuestion(
-                e.QuestionPublickey, e.PropogationPublicKey);
-            ICompleteQuestion question = questionWrapper.Question;
+            ICompleteQuestion question = this.doc.GetQuestion(e.QuestionPublickey, e.PropogationPublicKey);
             if (question == null)
             {
                 return;
             }
 
             question.SetComments(e.Comments);
-
-            //// _doc.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropogationPublicKey);
         }
 
         #endregion

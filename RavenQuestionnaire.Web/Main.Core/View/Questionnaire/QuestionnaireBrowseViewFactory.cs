@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Denormalizers;
 using Main.Core.Documents;
+using Main.DenormalizerStorage;
 
 namespace Main.Core.View.Questionnaire
 {
@@ -25,7 +25,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireDocument> documentGroupSession;
+        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.View.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireBrowseViewFactory(IDenormalizerStorage<QuestionnaireDocument> documentGroupSession)
+        public QuestionnaireBrowseViewFactory(IDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
@@ -57,10 +57,10 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
-            IQueryable<QuestionnaireDocument> query = this.documentGroupSession.Query();
+            
 
             // Adjust the model appropriately
-            int count = query.Count();
+            int count = this.documentGroupSession.Count();
             if (count == 0)
             {
                 return new QuestionnaireBrowseView(
@@ -83,12 +83,13 @@ namespace Main.Core.View.Questionnaire
                                 ? query.ThenBy(order.Field)
                                 : query.ThenByDescending(order.Field);
                 }*/
-            List<QuestionnaireDocument> page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            IQueryable<QuestionnaireBrowseItem> query = this.documentGroupSession.Query();
+            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
 
             // And enact this query
-            QuestionnaireBrowseItem[] items =
-                page.Select(x => new QuestionnaireBrowseItem(x.PublicKey, x.Title, DateTime.Now, DateTime.Now)).
-                    ToArray();
+            QuestionnaireBrowseItem[] items = page.ToArray();
+          /*      page.Select(x => new QuestionnaireBrowseItem(x.PublicKey, x.Title, DateTime.Now, DateTime.Now)).
+                    ToArray();*/
 
             return new QuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
         }

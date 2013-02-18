@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GroupHash.cs" company="">
-//   
+// <copyright file="GroupHash.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The group hash.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.Extensions
 {
     using System;
@@ -13,7 +14,6 @@ namespace Main.Core.Entities.Extensions
     using System.Linq;
 
     using Main.Core.Entities.Composite;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
@@ -26,7 +26,7 @@ namespace Main.Core.Entities.Extensions
         /// <summary>
         /// The _hash.
         /// </summary>
-        private readonly IDictionary<string, CompleteQuestionWrapper> _hash;
+        private readonly IDictionary<string, CompleteQuestionWrapper> hash;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.Entities.Extensions
         /// </summary>
         public GroupHash()
         {
-            this._hash = new Dictionary<string, CompleteQuestionWrapper>();
+            this.hash = new Dictionary<string, CompleteQuestionWrapper>();
         }
 
         /// <summary>
@@ -46,22 +46,15 @@ namespace Main.Core.Entities.Extensions
         /// <param name="root">
         /// The root.
         /// </param>
-        public GroupHash(ICompleteGroup root)
-            : this()
+        public GroupHash(ICompleteGroup root) : this()
         {
-            this.PublicKey = root.PublicKey;
             this.ProcessTree(root);
         }
 
         #endregion
 
         #region Public Properties
-
-        /// <summary>
-        /// Gets the public key.
-        /// </summary>
-        public Guid PublicKey { get; private set; }
-
+       
         /// <summary>
         /// Gets the questions.
         /// </summary>
@@ -69,7 +62,7 @@ namespace Main.Core.Entities.Extensions
         {
             get
             {
-                return this._hash.Values.Select(v => v.Question);
+                return this.hash.Values.Select(v => v.Question);
             }
         }
 
@@ -80,10 +73,21 @@ namespace Main.Core.Entities.Extensions
         {
             get
             {
-                return this._hash.Values;
+                return this.hash.Values;
             }
         }
 
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
+        {
+                return this.hash.Values.Select(v => v.Question).Where(q => q.Featured);
+        }
+        
         #endregion
 
         #region Public Indexers
@@ -100,31 +104,11 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The Main.Core.Entities.SubEntities.Complete.ICompleteQuestion.
         /// </returns>
-        public ICompleteQuestion this[Guid publicKey, Guid? propagationKey]
+        public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            get
-            {
-                return this.GetQuestion(publicKey, propagationKey).Question;
-            }
+            return this.GetQuestionWrapper(publicKey, propagationKey).Question;
         }
-
-        /// <summary>
-        /// The this.
-        /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.SubEntities.Complete.ICompleteQuestion.
-        /// </returns>
-        public ICompleteQuestion this[ICompleteQuestion index]
-        {
-            get
-            {
-                return this.GetQuestion(index).Question;
-            }
-        }
-
+       
         #endregion
 
         #region Public Methods and Operators
@@ -139,9 +123,14 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void AddGroup(ICompleteGroup group)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (group == null)
             {
-                throw new ArgumentException("only propagated group can uppdate hash");
+                return;
+            }
+
+            if (!group.PropagationPublicKey.HasValue)
+            {
+                throw new ArgumentException("Only propagated group can uppdate hash.");
             }
 
             this.ProcessTree(group);
@@ -159,18 +148,18 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The Main.Core.Entities.Extensions.GroupHash+CompleteQuestionWrapper.
         /// </returns>
-        public CompleteQuestionWrapper GetQuestion(Guid publicKey, Guid? propagationKey)
+        public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
         {
-            if (this._hash.ContainsKey(this.GetQuestionKey(publicKey, null))
-                && !this._hash.ContainsKey(this.GetQuestionKey(publicKey, propagationKey)))
+            if (this.hash.ContainsKey(this.GetQuestionKey(publicKey, null))
+                && !this.hash.ContainsKey(this.GetQuestionKey(publicKey, propagationKey)))
             {
-                return this._hash[this.GetQuestionKey(publicKey, null)];
+                return this.hash[this.GetQuestionKey(publicKey, null)];
             }
 
-            return this._hash[this.GetQuestionKey(publicKey, propagationKey)];
+            return this.hash[this.GetQuestionKey(publicKey, propagationKey)];
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The get question screen.
         /// </summary>
         /// <param name="publicKey">
@@ -180,12 +169,12 @@ namespace Main.Core.Entities.Extensions
         /// The propagation key.
         /// </param>
         /// <returns>
-        /// The System.Guid.
+        /// The <see cref="Guid"/>.
         /// </returns>
         public Guid GetQuestionScreen(Guid publicKey, Guid? propagationKey)
         {
             return this.GetQuestion(publicKey, propagationKey).GroupKey;
-        }
+        }*/
 
         /// <summary>
         /// The remove group.
@@ -197,16 +186,22 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void RemoveGroup(ICompleteGroup group)
         {
-            if (!group.PropogationPublicKey.HasValue)
+            if (group == null)
             {
-                throw new ArgumentException("only propagated group can uppdate hash");
+                return;
             }
 
-            foreach (string key in this._hash.Keys.ToArray())
+
+            if (!group.PropagationPublicKey.HasValue)
             {
-                if (key.EndsWith(group.PropogationPublicKey.ToString()))
+                throw new ArgumentException("Only propagated group can uppdate hash.");
+            }
+
+            foreach (string key in this.hash.Keys.ToArray())
+            {
+                if (key.EndsWith(group.PropagationPublicKey.ToString()))
                 {
-                    this._hash.Remove(key);
+                    this.hash.Remove(key);
                 }
             }
         }
@@ -214,27 +209,7 @@ namespace Main.Core.Entities.Extensions
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// The get question.
-        /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.Extensions.GroupHash+CompleteQuestionWrapper.
-        /// </returns>
-        protected CompleteQuestionWrapper GetQuestion(ICompleteQuestion index)
-        {
-            if (this._hash.ContainsKey(this.GetQuestionKey(index.PublicKey, null))
-                && !this._hash.ContainsKey(this.GetQuestionKey(index.PublicKey, index.PropogationPublicKey)))
-            {
-                return this._hash[this.GetQuestionKey(index.PublicKey, null)];
-            }
-
-            return this._hash[this.GetQuestionKey(index.PublicKey, index.PropogationPublicKey)];
-        }
-
+        
         /// <summary>
         /// The get question key.
         /// </summary>
@@ -246,7 +221,7 @@ namespace Main.Core.Entities.Extensions
         /// </returns>
         private string GetQuestionKey(ICompleteQuestion question)
         {
-            return this.GetQuestionKey(question.PublicKey, question.PropogationPublicKey);
+            return this.GetQuestionKey(question.PublicKey, question.PropagationPublicKey);
         }
 
         /// <summary>
@@ -283,15 +258,11 @@ namespace Main.Core.Entities.Extensions
         private void ProcessIComposite(CompositeWrapper node, Queue<CompositeWrapper> nodes)
         {
             var question = node.Node as ICompleteQuestion;
-            if (node is IBinded)
-            {
-                return;
-            }
 
             if (question == null)
             {
                 var group = node.Node as ICompleteGroup;
-                if (group.Propagated != Propagate.None && !group.PropogationPublicKey.HasValue)
+                if (group.IsGroupPropagationTemplate())
                 {
                     return;
                 }
@@ -305,9 +276,9 @@ namespace Main.Core.Entities.Extensions
             }
 
             string questionKey = this.GetQuestionKey(question);
-            if (!this._hash.ContainsKey(questionKey))
+            if (!this.hash.ContainsKey(questionKey))
             {
-                this._hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
+                this.hash.Add(questionKey, new CompleteQuestionWrapper(question, node.ParentKey.Value));
             }
         }
 
@@ -319,8 +290,6 @@ namespace Main.Core.Entities.Extensions
         /// </param>
         private void ProcessTree(ICompleteGroup root)
         {
-            /* foreach (IComposite composite in root.Children)
-             {*/
             var nodes = new Queue<CompositeWrapper>(new[] { new CompositeWrapper(root, null) });
             while (nodes.Count > 0)
             {
@@ -328,88 +297,8 @@ namespace Main.Core.Entities.Extensions
 
                 this.ProcessIComposite(node, nodes);
             }
-
-            // }
         }
 
         #endregion
-
-        /// <summary>
-        /// The complete question wrapper.
-        /// </summary>
-        public class CompleteQuestionWrapper
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CompleteQuestionWrapper"/> class.
-            /// </summary>
-            /// <param name="question">
-            /// The question.
-            /// </param>
-            /// <param name="screenGuid">
-            /// The screen guid.
-            /// </param>
-            public CompleteQuestionWrapper(ICompleteQuestion question, Guid screenGuid)
-            {
-                this.Question = question;
-                this.GroupKey = screenGuid;
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>
-            /// Gets the group key.
-            /// </summary>
-            public Guid GroupKey { get; private set; }
-
-            /// <summary>
-            /// Gets the question.
-            /// </summary>
-            public ICompleteQuestion Question { get; private set; }
-
-            #endregion
-        }
-
-        /// <summary>
-        /// The composite wrapper.
-        /// </summary>
-        protected class CompositeWrapper
-        {
-            #region Constructors and Destructors
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="CompositeWrapper"/> class.
-            /// </summary>
-            /// <param name="node">
-            /// The node.
-            /// </param>
-            /// <param name="parentKey">
-            /// The parent key.
-            /// </param>
-            public CompositeWrapper(IComposite node, Guid? parentKey)
-            {
-                this.Node = node;
-                this.ParentKey = parentKey;
-            }
-
-            #endregion
-
-            #region Public Properties
-
-            /// <summary>
-            /// Gets the node.
-            /// </summary>
-            public IComposite Node { get; private set; }
-
-            /// <summary>
-            /// Gets the parent key.
-            /// </summary>
-            public Guid? ParentKey { get; private set; }
-
-            #endregion
-        }
     }
 }

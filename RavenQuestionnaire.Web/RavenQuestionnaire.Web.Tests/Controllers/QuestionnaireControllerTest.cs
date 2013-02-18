@@ -8,9 +8,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.Core.View;
-using Main.Core.View.Questionnaire;
-
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -19,6 +16,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Documents;
+    using Main.Core.View;
 
     using Moq;
 
@@ -27,14 +25,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
-    using RavenQuestionnaire.Core;
     using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Controllers;
 
     /// <summary>
-    ///This is a test class for QuestionnaireControllerTest and is intended
-    ///to contain all QuestionnaireControllerTest Unit Tests
-    ///</summary>
+    /// This is a test class for QuestionnaireControllerTest and is intended
+    /// to contain all QuestionnaireControllerTest Unit Tests
+    /// </summary>
     [TestFixture]
     public class QuestionnaireControllerTest
     {
@@ -150,21 +147,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
                         output);
 
             ViewResult result = this.Controller.Details(output.PublicKey);
-            Assert.AreEqual(output, result.ViewData.Model);
-        }
-
-        /// <summary>
-        /// The when_ get questionnaire is executed model is returned.
-        /// </summary>
-        [Test]
-        public void When_GetQuestionnaireIsExecutedModelIsReturned()
-        {
-            var input = new QuestionnaireBrowseInputModel();
-            var output = new QuestionnaireBrowseView(0, 10, 0, new QuestionnaireBrowseItem[0], string.Empty);
-            this.ViewRepositoryMock.Setup(x => x.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input)).
-                Returns(output);
-
-            ViewResult result = this.Controller.ItemList(input);
             Assert.AreEqual(output, result.ViewData.Model);
         }
 

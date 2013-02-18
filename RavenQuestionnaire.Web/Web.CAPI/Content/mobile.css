@@ -10,6 +10,7 @@ textarea{ resize: none;}
 .ui-header.bradcrumbs h1{ position: absolute;top: 0px;}
 .answered{ border-color: green;border-width: 2px;}
 .answered.error_block{ border-color: red;}
+.key_grid{ top: 0 !important;left: auto !important;right: 0 !important;}
 .ui-no-corners .ui-btn-corner-all
 {
 	border-radius: 0;
@@ -286,7 +287,7 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 	background: -moz-linear-gradient(#444444, #222222) repeat scroll 0 0 #222222
 }
 
-.question-frame{position: relative;}
+.question-frame{position: relative; margin-bottom: 15px;}
 .question-frame .question-main-content{float: left; width: 90%;  min-height: 90px;overflow: visible;}
 .question-frame .question-arrow{width: 6%; border: 1px solid #aaa; position: absolute; right: 0; top: 0;bottom: 0;z-index: 100;}
 .ui-disabled-opacity{ opacity: 1;}
@@ -294,3 +295,23 @@ body.ui-mobile-viewport, div.ui-mobile-viewport {
 @media screen and (orientation: landscape){
 .ui-mobile, .ui-mobile .ui-page { min-height: 100px !important; }
 }
+
+table.survey-grid{ width: 100%;border-spacing: 0px;}
+table.survey-grid tr th{ padding: 10px 0 10px 10px;
+                         	background: 			#fff9df /*{e-body-background-color}*/;
+	background-image: -webkit-gradient(linear, left top, left bottom, from( #fffadf /*{e-body-background-start}*/), to( #fff3a5 /*{e-body-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #fffadf /*{e-body-background-start}*/, #fff3a5 /*{e-body-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #fffadf /*{e-body-background-start}*/, #fff3a5 /*{e-body-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #fffadf /*{e-body-background-start}*/, #fff3a5 /*{e-body-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #fffadf /*{e-body-background-start}*/, #fff3a5 /*{e-body-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #fffadf /*{e-body-background-start}*/, #fff3a5 /*{e-body-background-end}*/);
+                         }
+table.survey-grid tr td{ padding: 0px 0 0px 10px;}
+table.survey-grid tr{ 	background-image: -webkit-gradient(linear, left top, left bottom, from( #fff /*{c-bup-background-start}*/), to( #f1f1f1 /*{c-bup-background-end}*/)); /* Saf4+, Chrome */
+	background-image: -webkit-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* Chrome 10+, Saf5.1+ */
+	background-image:    -moz-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* FF3.6 */
+	background-image:     -ms-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* IE10 */
+	background-image:      -o-linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/); /* Opera 11.10+ */
+	background-image:         linear-gradient( #fff /*{c-bup-background-start}*/, #f1f1f1 /*{c-bup-background-end}*/);}
+	
+/*	table.survey-grid tr td.status{ width: 50px;table-layout:fixed;overflow:hidden; word-wrap:break-word;  }*/

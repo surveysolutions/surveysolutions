@@ -159,10 +159,6 @@
     <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Backup, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Backup.exe</HintPath>
-    </Reference>
     <Reference Include="Raven.Client.Embedded, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
@@ -227,12 +223,12 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
-    <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Controllers\StatisticController.cs" />
+    <Compile Include="Export\TemplateExporter.cs" />
     <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
@@ -286,6 +282,7 @@
     <Content Include="Scripts\jquery-ui-1.8.16.custom.min.js" />
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
+    <Compile Include="Models\ViewDataUploadFilesResult.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -474,6 +471,10 @@
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
       <Name>Questionnaire.Core.Web</Name>
@@ -537,7 +538,6 @@
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Questionnaire\ItemList.cshtml" />
     <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
@@ -558,7 +558,6 @@
     <Content Include="Views\Resource\Upload.cshtml" />
     <Content Include="Views\Resource\Index.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Image.cshtml" />
-    <Content Include="Views\CompleteQuestionnaire\QuestionHtml5.cshtml" />
     <Content Include="Views\Group\_ScreenHtml5.cshtml" />
     <Content Include="Views\Shared\_LayputHtml5.cshtml" />
     <Content Include="Views\Question\_TakeRowHtml5.cshtml" />
@@ -579,7 +578,6 @@
     <Content Include="Views\Group\Mobile\_SimpleGroup.cshtml" />
     <Content Include="Views\Group\Mobile\_PropagatebleGroup.cshtml" />
     <Content Include="Views\Answer\_EditCollectionItem.cshtml" />
-    <Content Include="Views\Shared\MobileGroupNavigation.cshtml" />
     <Content Include="Views\Shared\MobileProgressBar.cshtml" />
     <Content Include="Views\Collection\Index.cshtml" />
     <Content Include="Views\Collection\Edit.cshtml" />
@@ -613,11 +611,28 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
-    <Content Include="Views\Shared\_Layout1.cshtml" />
+    <Content Include="Views\Question\_AutoPropagateRow.cshtml" />
+    <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
+    <Content Include="Views\Error\Http403.cshtml" />
+    <Content Include="Views\Error\General.cshtml" />
+    <Content Include="Views\Questionnaire\Flow.cshtml" />
+    <None Include="Web.Deploy-Main-Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main-Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
@@ -637,7 +652,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>38447</DevelopmentServerPort>
+          <DevelopmentServerPort>45841</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:38447/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Threading.Tasks;
+using System.Web.Mvc.Async;
+using NLog;
+
 namespace Questionnaire.Core.Web.Threading
 {
     using System;
@@ -37,11 +41,13 @@ namespace Questionnaire.Core.Web.Threading
         /// <returns>
         /// The System.IAsyncResult.
         /// </returns>
-        public static IAsyncResult Update(SaveSingleResult resp)
+        public static IAsyncResult Update(AsyncManager manager, SaveSingleResult resp)
         {
-            return new AsyncViewResult(resp);
+            manager.OutstandingOperations.Increment();
+            return new AsyncViewResult(manager,resp);
+            
         }
-
+     
         #endregion
 
         /// <summary>
@@ -75,6 +81,10 @@ namespace Questionnaire.Core.Web.Threading
             /// The update questionnare.
             /// </summary>
             private readonly SaveSingleResult updateQuestionnare;
+            /// <summary>
+            /// The logger.
+            /// </summary>
+            private  Logger logger = LogManager.GetCurrentClassLogger();
 
             #endregion
 
@@ -86,7 +96,7 @@ namespace Questionnaire.Core.Web.Threading
             /// <param name="updateQuestionnare">
             /// The update questionnare.
             /// </param>
-            public AsyncViewResult(SaveSingleResult updateQuestionnare)
+            public AsyncViewResult(AsyncManager manager, SaveSingleResult updateQuestionnare)
             {
                 this.updateQuestionnare = updateQuestionnare;
 
@@ -97,12 +107,17 @@ namespace Questionnaire.Core.Web.Threading
                 this.mThread = new Thread(
                     () =>
                         {
-                            // some very long operation. OK sleeping ;)
-                            Thread.Sleep(TimeSpan.FromMilliseconds(5000));
+                            try
+                            {
+                                // notify that the long operation is complete:
+                                this.updateQuestionnare();
+                            }
+                            catch (Exception e)
+                            {
+                                logger.ErrorException(e.Message, e);
 
-                            // notify that the long operation is complete:
-                            this.updateQuestionnare();
-
+                            }
+                            manager.OutstandingOperations.Decrement();
                             this.mWait.Set();
                         });
 

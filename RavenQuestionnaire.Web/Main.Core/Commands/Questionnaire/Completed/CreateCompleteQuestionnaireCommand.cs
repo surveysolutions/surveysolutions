@@ -11,6 +11,7 @@ namespace Main.Core.Commands.Questionnaire.Completed
     using System;
 
     using Main.Core.Domain;
+    using Main.Core.Entities.SubEntities;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
@@ -33,10 +34,14 @@ namespace Main.Core.Commands.Questionnaire.Completed
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public CreateCompleteQuestionnaireCommand(Guid completedQuestionnaireId, Guid questionnaireId)
+        /// <param name="creator">
+        /// Person, who created survey
+        /// </param>
+        public CreateCompleteQuestionnaireCommand(Guid completedQuestionnaireId, Guid questionnaireId, UserLight creator)
         {
             this.CompleteQuestionnaireId = completedQuestionnaireId;
             this.QuestionnaireId = questionnaireId;
+            this.Creator = creator;
         }
 
         #endregion
@@ -53,6 +58,11 @@ namespace Main.Core.Commands.Questionnaire.Completed
         /// </summary>
         [AggregateRootId]
         public Guid QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Creator.
+        /// </summary>
+        public UserLight Creator { get; set; }
 
         #endregion
     }

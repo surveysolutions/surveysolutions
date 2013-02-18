@@ -49,7 +49,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 
             /*  this.PublicKey = answer.PublicKey;
             this.QuestionPublicKey = questionPublicKey;*/
-            // this.CustomAnswer = answer.AnswerText;
+            //// this.CustomAnswer = answer.AnswerText;
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 };
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -184,14 +184,15 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </exception>
         public void Add(IComposite c, Guid? parent)
         {
+            throw new NotImplementedException();
+
             var answer = c as CompleteAnswer;
             if (answer == null)
             {
                 throw new CompositeException("answer wasn't found");
             }
 
-            if (answer.PublicKey == this.PublicKey
-                &&
+            if (answer.PublicKey == this.PublicKey &&
                 ((!answer.PropogationPublicKey.HasValue && !this.PropogationPublicKey.HasValue)
                  || answer.PropogationPublicKey == this.PropogationPublicKey))
             {
@@ -200,9 +201,9 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             throw new CompositeException("answer wasn't found");
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The find.
         /// </summary>
         /// <param name="publicKey">
@@ -278,9 +279,9 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             return null;
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -316,7 +317,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             throw new CompositeException("answer wasn't found");
-        }
+        }*/
 
         #endregion
 

@@ -1,5 +1,4 @@
 ﻿@using Questionnaire.Core.Web.Helpers
-
 @model Main.Core.View.Question.CompleteQuestionView
 @{
     Guid answerGuid = Model.Answers.Length > 0 ? Model.Answers[0].PublicKey : Guid.NewGuid();
@@ -9,10 +8,10 @@
 @using (Html.BeginCollectionItem("Answers", true, answerGuid))
 {
     <fieldset><legend>@Html.Raw(Model.Title)</legend>
-    @Html.Hidden("Parent", Model.PublicKey)
-    @Html.Hidden("PublicKey", answerGuid)
-    @Html.Hidden("Selected", true)
-    @{ string id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue"); }
-    @Html.TextBox("AnswerValue", Model.Answer ?? string.Empty, settings)
+        @Html.Hidden("Parent", Model.PublicKey)
+        @Html.Hidden("PublicKey", answerGuid)
+        @Html.Hidden("Selected", true)
+        @{ string id = ViewData.TemplateInfo.GetFullHtmlFieldId("AnswerValue"); }
+        @Html.TextBox("AnswerValue", Model.Answer ?? string.Empty, settings)
     </fieldset>
 }

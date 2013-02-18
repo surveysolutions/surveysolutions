@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireParametersParser.cs" company="">
-//   
+// <copyright file="QuestionnaireParametersParser.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The questionnaire parameters parser.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.ExpressionExecutors
 {
     using System;

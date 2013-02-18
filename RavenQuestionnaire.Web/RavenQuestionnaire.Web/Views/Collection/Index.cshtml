@@ -4,8 +4,10 @@
 @{
     ViewBag.Title = "Index";
 }
-
-@Html.ActionLink("Add new Collection", "AddNewCollection")
+<h2>Collections</h2>
+<p>
+@Html.ActionLink("Add new Collection", "AddNewCollection", new {},new {@class="btn btn-primary"})
+</p>
 <div style="height: 10px;"></div>
 <table class="table table-striped table-bordered">
     <thead>
@@ -31,7 +33,7 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td class="span2">
-                    @using (Html.BeginForm("Edit", "Collection", FormMethod.Get, new {@style="float: left;width: 10%;"} ))
+                    @using (Html.BeginForm("Edit", "Collection", FormMethod.Get, new { @style = "float: left;width: 10%;" }))
                     {
                         @Html.Hidden("CollectionId", item.Id)
                         <input type="submit" class="btn btn-primary" name="change" value="Edit" />

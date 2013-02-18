@@ -15,6 +15,15 @@ namespace Synchronization.Core.SynchronizationFlow
             this.SettingsProvider = clientSettingsprovider;
         }
 
+        #region Helpers
+
+        private IList<SynchronizationException> GetInactiveErrors()
+        {
+            return OnGetInactiveErrors();
+        }
+
+        #endregion
+
         #region Abstract and Virtual
 
         protected abstract void OnPush(SyncDirection direction);
@@ -36,6 +45,11 @@ namespace Synchronization.Core.SynchronizationFlow
         }
 
         protected abstract bool OnUpdateStatus();
+
+        protected virtual IList<SynchronizationException> OnGetInactiveErrors()
+        {
+            return new List<SynchronizationException>();
+        }
 
         #endregion
 
@@ -90,6 +104,9 @@ namespace Synchronization.Core.SynchronizationFlow
 
         public IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction)
         {
+            if (!IsActive)
+                return GetInactiveErrors();
+
             return OnCheckSyncIssues(syncAction, direction);
         }
 

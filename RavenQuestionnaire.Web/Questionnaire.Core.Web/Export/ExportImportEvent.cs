@@ -92,8 +92,9 @@ namespace Questionnaire.Core.Web.Export
         /// </returns>
         public byte[] Export(Guid clientGuid)
         {
-            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents);
+            return this.ExportInternal(clientGuid, this.synchronizer.ReadEvents(), "backup.txt");
         }
+
 
         /// <summary>
         /// Import data from *.capi file
@@ -135,31 +136,32 @@ namespace Questionnaire.Core.Web.Export
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        /// <param name="action">
-        /// The action.
+        /// <param name="events">
+        /// The events.
+        /// </param>
+        /// <param name="fileName">
+        /// The file Name.
         /// </param>
         /// <returns>
         /// Zip file as array of bytes
         /// </returns>
-        protected byte[] ExportInternal(Guid clientGuid, Func<IEnumerable<AggregateRootEvent>> action)
+        protected byte[] ExportInternal(Guid? clientGuid, IEnumerable<AggregateRootEvent> events, string fileName)
         {
-            var data = new ZipFileData { ClientGuid = clientGuid, Events = action() };
-
+            var data = new ZipFileData { ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value, Events = events };
             var outputStream = new MemoryStream();
-
             using (var zip = new ZipFile())
             {
                 var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                zip.CompressionLevel = CompressionLevel.None;
-                zip.AddEntry("backup.txt", JsonConvert.SerializeObject(data, Formatting.Indented, settings));
+                zip.CompressionLevel = CompressionLevel.BestCompression;
+                zip.AddEntry(fileName, JsonConvert.SerializeObject(data, Formatting.Indented, settings));
                 zip.Save(outputStream);
             }
 
             outputStream.Seek(0, SeekOrigin.Begin);
-
             return outputStream.ToArray();
         }
 
+        
         #endregion
     }
 }

@@ -104,10 +104,6 @@ namespace Core.CAPI.Views.Json
         /// </summary>
         public SurveyStatus Status { get; set; }
 
-        /// <summary>
-        /// Gets or sets the totals.
-        /// </summary>
-        public Counter Totals { get; set; }
 
         #endregion
 
@@ -124,53 +120,13 @@ namespace Core.CAPI.Views.Json
             List<ICompleteGroup> groups = doc.Children.OfType<ICompleteGroup>().ToList();
 
             this.Menu = new CompleteGroupHeaders[groups.Count];
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
             for (int i = 0; i < groups.Count; i++)
             {
-                this.Menu[i] = new CompleteGroupHeaders
-                    {
-                        PublicKey = groups[i].PublicKey, 
-                        GroupText = groups[i].Title, 
-                        Enabled = executor.Execute(groups[i])
-                    };
-                this.Menu[i].Totals = this.CalcProgress(groups[i]);
+                this.Menu[i] = new CompleteGroupHeaders(groups[i]);
             }
         }
 
-        /// <summary>
-        /// The calc progress.
-        /// </summary>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Counter.
-        /// </returns>
-        private Counter CalcProgress(ICompleteGroup @group)
-        {
-            var total = new Counter();
-            if (@group.PropogationPublicKey.HasValue)
-            {
-                total = total + this.CountQuestions(@group.Children.Select(q => q as ICompleteQuestion).ToList());
-                return total;
-            }
-
-            var complete = @group as CompleteGroup;
-            if (complete != null && complete.Propagated != Propagate.None)
-            {
-                return total;
-            }
-
-            List<ICompleteGroup> gruoSubGroup = @group.Children.OfType<ICompleteGroup>().ToList();
-            List<ICompleteQuestion> gruoSubQuestions = @group.Children.OfType<ICompleteQuestion>().ToList();
-            total = total + this.CountQuestions(gruoSubQuestions);
-            foreach (ICompleteGroup g in gruoSubGroup)
-            {
-                total = total + this.CalcProgress(g);
-            }
-
-            return total;
-        }
+       
 
         /// <summary>
         /// The collect all.
@@ -188,16 +144,16 @@ namespace Core.CAPI.Views.Json
             while (queue.Count != 0)
             {
                 ICompleteGroup item = queue.Dequeue();
-                if (!item.PropogationPublicKey.HasValue && item.Propagated == Propagate.Propagated)
+                if (item.IsGroupPropagationTemplate())
                 {
                     continue;
                 }
 
                 Guid parentKey = item.PublicKey;
                 bool propagatable = false;
-                if (item.PropogationPublicKey.HasValue)
+                if (item.PropagationPublicKey.HasValue)
                 {
-                    parentKey = item.PropogationPublicKey.Value;
+                    parentKey = item.PropagationPublicKey.Value;
                     propagatable = true;
                 }
 
@@ -211,40 +167,14 @@ namespace Core.CAPI.Views.Json
                 foreach (CompleteGroup g in innerGroups)
                 {
                     queue.Enqueue(g);
-                    this.InnerGroups.Add(new CompleteGroupMobileView(doc, g, null));
+                    this.InnerGroups.Add(new CompleteGroupMobileView(doc, g));
                 }
             }
 
             this.InitGroups(doc);
-            this.Totals = this.CalcProgress(doc);
         }
 
-        /// <summary>
-        /// The count questions.
-        /// </summary>
-        /// <param name="questions">
-        /// The questions.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.CompleteQuestionnaire.Counter.
-        /// </returns>
-        private Counter CountQuestions(List<ICompleteQuestion> questions)
-        {
-            if (questions == null || questions.Count == 0)
-            {
-                return new Counter();
-            }
-
-            List<ICompleteQuestion> enabled = questions.Where(q => q.Enabled).ToList();
-            var total = new Counter
-                {
-                    Total = questions.Count, 
-                    Enablad = enabled.Count(), 
-                    Answered = enabled.Count(question => question.GetAnswerObject() != null)
-                };
-            return total;
-        }
-
+      
         #endregion
     }
 }

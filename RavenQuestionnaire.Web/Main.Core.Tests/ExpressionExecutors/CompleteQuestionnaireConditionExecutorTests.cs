@@ -42,8 +42,8 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsEmpty_ReturnsTrue()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
-            bool result = executor.Execute(new SingleCompleteQuestion());
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
+            bool? result = executor.Execute(new SingleCompleteQuestion());
             Assert.AreEqual(result, true);
         }
 
@@ -61,21 +61,32 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             var question = new SingleCompleteQuestion(string.Empty);
             question.ConditionExpression = "[" + question.PublicKey + "]==3";
             doc.Children.Add(question);
-            question.Children.Add(answer);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
-            bool result = executor.Execute(question);
+            question.AddAnswer(answer);
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            bool? result = executor.Execute(question);
             Assert.AreEqual(result, false);
         }
 
         /// <summary>
-        /// The evaluate condition_ condition is invalid_ returns false.
+        /// The evaluate condition_ condition is invalid_ returns null.
         /// </summary>
         [Test]
-        public void EvaluateCondition_ConditionIsInvalid_ReturnsFalse()
+        public void EvaluateCondition_ConditionIsInvalid_ReturnsNull()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
-            bool result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "invalid condition" });
-            Assert.AreEqual(result, false);
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
+            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "invalid condition" });
+            Assert.AreEqual(result, null);
+        }
+
+        /// <summary>
+        /// The evaluate condition_ condition is invalid_ returns true.
+        /// </summary>
+        [Test]
+        public void EvaluateCondition_ConditionIsAbsent_ReturnsTrue()
+        {
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireStoreDocument());
+            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = string.Empty });
+            Assert.AreEqual(result, true);
         }
 
         /// <summary>
@@ -84,9 +95,9 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
         [Test]
         public void EvaluateCondition_ConditionIsValidParamsAreEmpty_ReturnsTrue()
         {
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash());
+            var executor = new CompleteQuestionnaireConditionExecutor(new CompleteQuestionnaireDocument());
 
-            bool result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "5>3" });
+            bool? result = executor.Execute(new SingleCompleteQuestion { ConditionExpression = "5>3" });
             Assert.AreEqual(result, true);
         }
 
@@ -105,9 +116,66 @@ namespace RavenQuestionnaire.Core.Tests.ExpressionExecutors
             completeAnswer.AnswerType = AnswerType.Select;
             completeAnswer.AnswerValue = "3";
             completeAnswer.Selected = true;
-            question.Children.Add(completeAnswer);
-            var executor = new CompleteQuestionnaireConditionExecutor(new GroupHash(doc));
-            bool result = executor.Execute(question);
+            question.Answers.Add(completeAnswer);
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            bool? result = executor.Execute(question);
+            Assert.AreEqual(result, true);
+        }
+
+        /// <summary>
+        /// The evaluate condition_ condition is valid params are not empty_ returns false.
+        /// </summary>
+        [Test]
+        public void EvaluateCondition_ConditionIsNotValidParamsAreNotEmpty_ReturnsFalse()
+        {
+            var doc = new CompleteQuestionnaireDocument();
+            var question = new SingleCompleteQuestion(string.Empty);
+            var question1 = new SingleCompleteQuestion(string.Empty);
+            question1.ConditionExpression = "[" + question.PublicKey + "]==1";
+            doc.Children.Add(question);
+            doc.Children.Add(question1);
+
+            var completeAnswer = new CompleteAnswer(new Answer());
+            completeAnswer.AnswerType = AnswerType.Select;
+            completeAnswer.AnswerValue = "3";
+            completeAnswer.Selected = true;
+            question.Answers.Add(completeAnswer);
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            bool? result = executor.Execute(question1);
+            Assert.AreEqual(result, false);
+        }
+
+        /// <summary>
+        /// The evaluate condition_ condition is valid params are not empty_ returns true.
+        /// </summary>
+        [Test]
+        public void EvaluateCondition_GroupConditionWithNestedIsValidParamsAreNotEmpty_ReturnsTrue()
+        {
+            var doc = new CompleteQuestionnaireDocument();
+            var question = new SingleCompleteQuestion(string.Empty);
+            var question1 = new SingleCompleteQuestion(string.Empty);
+            var group = new CompleteGroup();
+            group.ConditionExpression = "[" + question.PublicKey + "]==3";
+            question.ConditionExpression = "[" + question1.PublicKey + "]==1";
+
+            doc.Children.Add(group);
+            doc.Children.Add(question);
+            doc.Children.Add(question1);
+
+            var completeAnswer = new CompleteAnswer(new Answer());
+            completeAnswer.AnswerType = AnswerType.Select;
+            completeAnswer.AnswerValue = "3";
+            completeAnswer.Selected = true;
+            question.Answers.Add(completeAnswer);
+
+            var completeAnswer1 = new CompleteAnswer(new Answer());
+            completeAnswer1.AnswerType = AnswerType.Select;
+            completeAnswer1.AnswerValue = "1";
+            completeAnswer1.Selected = true;
+            question1.Answers.Add(completeAnswer1);
+
+            var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            bool? result = executor.Execute(group);
             Assert.AreEqual(result, true);
         }
 

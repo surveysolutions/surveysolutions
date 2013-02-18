@@ -1,20 +1,20 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteQuestionFactory.cs" company="">
-//   
+// <copyright file="CompleteQuestionFactory.cs" company="The World Bank">
+//   2012
 // </copyright>
-// <summary>
-//   Defines the CompleteQuestionFactory type.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.AbstractFactories
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
     using Main.Core.Entities.SubEntities.Question;
+    using Main.Core.Events.Questionnaire;
     using Main.Core.Utility.OrderStrategy;
 
     /// <summary>
@@ -35,18 +35,6 @@ namespace Main.Core.AbstractFactories
         /// </returns>
         public ICompleteQuestion ConvertToCompleteQuestion(IQuestion question)
         {
-            var bindedQuestion = question as BindedQuestion;
-            if (bindedQuestion != null)
-            {
-                return (BindedCompleteQuestion)bindedQuestion;
-            }
-
-            var template = question as IBinded;
-            if (template != null)
-            {
-                return new BindedCompleteQuestion(question.PublicKey, template);
-            }
-
             AbstractCompleteQuestion completeQuestion;
             if (question is IMultyOptionsQuestion)
             {
@@ -78,39 +66,41 @@ namespace Main.Core.AbstractFactories
             }
 
             completeQuestion.PublicKey = question.PublicKey;
-            completeQuestion.ConditionExpression = question.ConditionExpression;
-            completeQuestion.QuestionText = question.QuestionText;
-            completeQuestion.QuestionType = question.QuestionType;
-            completeQuestion.StataExportCaption = question.StataExportCaption;
-            completeQuestion.Instructions = question.Instructions;
-            completeQuestion.Comments = question.Comments;
-            completeQuestion.Triggers = question.Triggers;
-            completeQuestion.ValidationExpression = question.ValidationExpression;
-            completeQuestion.ValidationMessage = question.ValidationMessage;
-            completeQuestion.AnswerOrder = question.AnswerOrder;
+            this.UpdateQuestion(
+                completeQuestion, 
+                question.QuestionType, 
+                question.QuestionText, 
+                question.StataExportCaption, 
+                question.ConditionExpression, 
+                question.ValidationExpression, 
+                question.ValidationMessage, 
+                question.AnswerOrder, 
+                question.Featured, 
+                question.Mandatory, 
+                question.Capital, 
+                question.Instructions, 
+                null,
+                int.MaxValue);
+            ////completeQuestion.Comments = question.Comments;
             completeQuestion.Valid = true;
-            completeQuestion.Featured = question.Featured;
-            completeQuestion.Capital = question.Capital;
-            completeQuestion.Mandatory = question.Mandatory;
 
-            IEnumerable<IComposite> ansersToCopy =
-                new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Children);
-            if (ansersToCopy != null)
+            IEnumerable<IAnswer> answersToCopy = new OrderStrategyFactory().Get(completeQuestion.AnswerOrder).Reorder(question.Answers);
+            
+            if (answersToCopy != null)
             {
-                foreach (IAnswer composite in ansersToCopy)
+                foreach (IAnswer composite in answersToCopy)
                 {
-                    IComposite newAnswer;
+                    IAnswer newAnswer;
                     if (question is ICompleteQuestion)
                     {
-                        newAnswer = new CompleteAnswer(
-                            composite as CompleteAnswer, ((ICompleteQuestion)question).PropogationPublicKey);
+                        newAnswer = new CompleteAnswer(composite as CompleteAnswer, ((ICompleteQuestion)question).PropagationPublicKey);
                     }
                     else
                     {
                         newAnswer = (CompleteAnswer)(composite as Answer);
                     }
 
-                    completeQuestion.Children.Add(newAnswer);
+                    completeQuestion.AddAnswer(newAnswer);
                 }
             }
 
@@ -128,37 +118,232 @@ namespace Main.Core.AbstractFactories
         /// <summary>
         /// The create.
         /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        /// <returns>
+        /// The <see cref="AbstractQuestion"/>.
+        /// </returns>
+        public AbstractQuestion Create(NewQuestionAdded e)
+        {
+            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+
+            q.PublicKey = e.PublicKey;
+
+            this.UpdateQuestion(
+               q,
+               e.QuestionType,
+               e.QuestionText,
+               e.StataExportCaption,
+               e.ConditionExpression,
+               e.ValidationExpression,
+               e.ValidationMessage,
+               e.AnswerOrder,
+               e.Featured,
+               e.Mandatory,
+               false,
+               e.Instructions,
+               e.Triggers,
+               e.MaxValue);
+
+            this.UpdateAnswerList(e.Answers, q);
+
+            return q;
+        }
+
+        /// <summary>
+        /// The update question by event.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
+        {
+            //AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+
+            //q.PublicKey = question.PublicKey;
+
+            this.UpdateQuestion(
+                question,
+                e.QuestionType,
+                e.QuestionText,
+                e.StataExportCaption,
+                e.ConditionExpression,
+                e.ValidationExpression,
+                e.ValidationMessage,
+                e.AnswerOrder,
+                e.Featured,
+                e.Mandatory,
+                false,
+                e.Instructions,
+                e.Triggers,
+                e.MaxValue);
+
+            this.UpdateAnswerList(e.Answers, question);
+
+            //question = q;
+        }
+
+        /// <summary>
+        /// The create question.
+        /// </summary>
         /// <param name="type">
         /// The type.
         /// </param>
         /// <returns>
-        /// The Main.Core.Entities.SubEntities.AbstractQuestion.
+        /// The <see cref="AbstractQuestion"/>.
         /// </returns>
-        public AbstractQuestion Create(QuestionType type)
+        private AbstractQuestion CreateQuestion(QuestionType type)
         {
+            AbstractQuestion q = null;
             switch (type)
             {
                 case QuestionType.MultyOption:
-                    return new MultyOptionsQuestion();
+                    q = new MultyOptionsQuestion();
+                    break;
                 case QuestionType.DropDownList:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.SingleOption:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.YesNo:
-                    return new SingleQuestion();
+                    q = new SingleQuestion();
+                    break;
                 case QuestionType.Text:
-                    return new TextQuestion();
+                    q = new TextQuestion();
+                    break;
                 case QuestionType.DateTime:
-                    return new DateTimeQuestion();
+                    q = new DateTimeQuestion();
+                    break;
                 case QuestionType.Numeric:
-                    return new NumericQuestion();
+                    q = new NumericQuestion();
+                    break;
                 case QuestionType.AutoPropagate:
-                    return new AutoPropagateQuestion();
+                    q = new AutoPropagateQuestion();
+                    break;
                 case QuestionType.GpsCoordinates:
-                    return new GpsCoordinateQuestion();
+                    q = new GpsCoordinateQuestion();
+                    break;
             }
 
-            return new TextQuestion();
+            return q;
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The update answer list.
+        /// </summary>
+        /// <param name="answers">
+        /// The answers.
+        /// </param>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        private void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
+        {
+            List<Answer> enumerable = answers != null ? answers.ToList() : new List<Answer>();
+            
+            if (answers != null && enumerable.Any())
+            {
+                question.Answers.Clear();
+                foreach (Answer answer in enumerable)
+                {
+                    question.AddAnswer(answer);
+                }
+            }
+        }
+
+        /// <summary>
+        /// The update question.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <param name="questionType">
+        /// The question type.
+        /// </param>
+        /// <param name="questionText">
+        /// The question text.
+        /// </param>
+        /// <param name="stataExportCaption">
+        /// The Stata export caption.
+        /// </param>
+        /// <param name="conditionExpression">
+        /// The condition expression.
+        /// </param>
+        /// <param name="validationExpression">
+        /// The validation expression.
+        /// </param>
+        /// <param name="validationMessage">
+        /// The validation message.
+        /// </param>
+        /// <param name="answerOrder">
+        /// The answer order.
+        /// </param>
+        /// <param name="featured">
+        /// The featured.
+        /// </param>
+        /// <param name="mandatory">
+        /// The mandatory.
+        /// </param>
+        /// <param name="capital">
+        /// The capital.
+        /// </param>
+        /// <param name="instructions">
+        /// The instructions.
+        /// </param>
+        /// <param name="triggers">
+        /// The triggers.
+        /// </param>
+        /// <param name="maxValue">
+        /// The max value
+        /// </param>
+        private void UpdateQuestion(
+            IQuestion question, 
+            QuestionType questionType, 
+            string questionText, 
+            string stataExportCaption, 
+            string conditionExpression, 
+            string validationExpression, 
+            string validationMessage, 
+            Order answerOrder, 
+            bool featured, 
+            bool mandatory, 
+            bool capital, 
+            string instructions, 
+            IEnumerable<Guid> triggers,
+            int maxValue)
+        {
+            question.QuestionType = questionType;
+            question.QuestionText = questionText;
+            question.StataExportCaption = stataExportCaption;
+            question.ConditionExpression = conditionExpression;
+            question.ValidationExpression = validationExpression;
+            question.ValidationMessage = validationMessage;
+            question.AnswerOrder = answerOrder;
+            question.Featured = featured;
+            question.Mandatory = mandatory;
+            question.Instructions = instructions;
+            question.Capital = capital;
+
+            var autoQuestion = question as IAutoPropagate;
+            if (autoQuestion != null && triggers != null)
+            {
+                autoQuestion.Triggers = new List<Guid>();
+                foreach (var guid in triggers)
+                {
+                    autoQuestion.Triggers.Add(guid);
+                }
+
+                autoQuestion.MaxValue = maxValue;
+            }
         }
 
         #endregion

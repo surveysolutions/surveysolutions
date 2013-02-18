@@ -1,63 +1,85 @@
 ﻿using System.Web.Security;
+using Ninject;
+using Questionnaire.Core.Web.Helpers;
 
 namespace RavenQuestionnaire.Web.Tests.Stubs
 {
-    public class TestRoleProvider:RoleProvider
+    public interface IRoleProviderMock
     {
+        bool IsUserInRole(string username, string roleName);
+        string[] GetRolesForUser(string username);
+        void CreateRole(string roleName);
+        bool DeleteRole(string roleName, bool throwOnPopulatedRole);
+        bool RoleExists(string roleName);
+        void AddUsersToRoles(string[] usernames, string[] roleNames);
+        void RemoveUsersFromRoles(string[] usernames, string[] roleNames);
+        string[] GetUsersInRole(string roleName);
+        string[] GetAllRoles();
+        string[] FindUsersInRole(string roleName, string usernameToMatch);
+        string ApplicationName { get; set; }
+    }
+
+    public class TestRoleProvider : RoleProvider
+    {
+        protected IRoleProviderMock LogicMockObject
+        {
+            get { return KernelLocator.Kernel.Get<IRoleProviderMock>(); }
+        }
+
         public override bool IsUserInRole(string username, string roleName)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.IsUserInRole(username, roleName);
         }
 
         public override string[] GetRolesForUser(string username)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.GetRolesForUser(username);
         }
 
         public override void CreateRole(string roleName)
         {
-            throw new System.NotImplementedException();
+            LogicMockObject.CreateRole(roleName);
         }
 
         public override bool DeleteRole(string roleName, bool throwOnPopulatedRole)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.DeleteRole(roleName, throwOnPopulatedRole);
         }
 
         public override bool RoleExists(string roleName)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.RoleExists(roleName);
         }
 
         public override void AddUsersToRoles(string[] usernames, string[] roleNames)
         {
-            throw new System.NotImplementedException();
+            LogicMockObject.AddUsersToRoles(usernames, roleNames);
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)
         {
-            throw new System.NotImplementedException();
+            LogicMockObject.RemoveUsersFromRoles(usernames, roleNames);
         }
 
         public override string[] GetUsersInRole(string roleName)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.GetUsersInRole(roleName);
         }
 
         public override string[] GetAllRoles()
         {
-            return new string[]{};
+            return LogicMockObject.GetAllRoles();
         }
 
         public override string[] FindUsersInRole(string roleName, string usernameToMatch)
         {
-            throw new System.NotImplementedException();
+            return LogicMockObject.FindUsersInRole(roleName, usernameToMatch);
         }
 
         public override string ApplicationName
         {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
+            get { return LogicMockObject.ApplicationName; }
+            set { LogicMockObject.ApplicationName = value; }
         }
     }
 }

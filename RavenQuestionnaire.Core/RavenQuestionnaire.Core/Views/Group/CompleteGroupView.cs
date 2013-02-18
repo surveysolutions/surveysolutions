@@ -17,8 +17,6 @@ namespace RavenQuestionnaire.Core.Views.Group
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities.Complete;
 
-    using RavenQuestionnaire.Core.Views.Question;
-
     /// <summary>
     /// The complete group view.
     /// </summary>
@@ -50,6 +48,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group)
         {
+            this.Description = group.Description;
             this.ConditionExpression = doc.ConditionExpression;
             this.Questions =
                 group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
@@ -80,7 +79,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
         {
             //// PropagatableCompleteGroup propagatableGroup = group as PropagatableCompleteGroup;
-            if (group.PropogationPublicKey.HasValue)
+            if (group.PropagationPublicKey.HasValue)
             {
                 return new PropagatableCompleteGroupView(doc, group, groupFactory);
             }

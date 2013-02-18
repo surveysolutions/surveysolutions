@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -62,8 +63,14 @@
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main-Debug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Deploy-Main-Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Moq">
@@ -87,7 +94,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Configuration.cs">
+    <Compile Include="AbstractFactories\QuestionFactoryTest.cs" />
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\when_creating_a_new_questionnaire.cs">
@@ -95,18 +102,18 @@
     </Compile>
     <Compile Include="Domain\when_serializing_NewGroupAdded.cs">
       <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
     <Compile Include="Domain\when_updating_image.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\when_uploading_new_image.cs">
-      <SubType>Code</SubType>
+    <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     </Compile>
     <Compile Include="Entities\CompleteGroupTest.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\GroupTest.cs">
-      <SubType>Code</SubType>
+    <Compile Include="GroupWithRoutTests.cs" />
     </Compile>
     <Compile Include="Entities\QuestionTest.cs">
       <SubType>Code</SubType>
@@ -155,6 +162,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>

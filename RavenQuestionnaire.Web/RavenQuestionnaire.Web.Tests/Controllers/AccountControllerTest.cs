@@ -1,44 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web.Security;
-using Main.Core.View;
-using Main.Core.View.User;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Ninject;
 using Questionnaire.Core.Web.Helpers;
 using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core;
-using Main.Core.Commands;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
+
 using RavenQuestionnaire.Web.Controllers;
 using RavenQuestionnaire.Web.Models;
+using RavenQuestionnaire.Web.Tests.Stubs;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     public class AccountControllerTest
     {
         //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
-        public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+      //  public Mock<IViewRepository> ViewRepositoryMock { get; set; }
+        public Mock<IRoleProviderMock> RoleProviderMock { get; set; }
         public Mock<IFormsAuthentication> Authentication { get; set; }
         public AccountController Controller { get; set; }
+        /*public Mock<RoleProvider> RoleProvider { get; set; }*/
 
         [SetUp]
         public void CreateObjects()
         {
             //CommandInvokerMock = new Mock<ICommandInvoker>();
-            ViewRepositoryMock = new Mock<IViewRepository>();
+            RoleProviderMock = new Mock<IRoleProviderMock>();
             Authentication = new Mock<IFormsAuthentication>();
+            //RoleProvider = new Mock<RoleProvider>();
             IKernel kernel = new StandardKernel();
             //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
-            kernel.Bind<IViewRepository>().ToConstant(ViewRepositoryMock.Object);
+            kernel.Bind<IRoleProviderMock>().ToConstant(RoleProviderMock.Object);
+            //kernel.Bind<RoleProvider>().ToConstant(RoleProvider.Object);
             KernelLocator.SetKernel(kernel);
             Controller = new AccountController(Authentication.Object);
-
         }
+
         [Test]
         public void WhenNewUserIsSubmittedWIthValidModel_UserIsCreatedAndLoggedIn()
         {
@@ -58,15 +53,22 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         public void WhenLogINWIthValidModel_UserIsLoggedIn()
         {
             // "mRqHIYxgUmCNXh1JIRItig==" is hash from "1234"
-            UserView userView = new UserView(Guid.Empty, "test", "mRqHIYxgUmCNXh1JIRItig==", "test@bank.com", DateTime.Now,
-                                             new[] { UserRoles.User }, false, null, Guid.Empty);
-            Authentication.Setup(x => x.SignIn("test", false));
+
+
+       /*     UserView userView = new UserView(Guid.Empty, "test", "mRqHIYxgUmCNXh1JIRItig==", "test@bank.com",
+                                             DateTime.Now,
+                                             new[] {UserRoles.Administrator}, false, null, Guid.Empty);
+
+            */
+            RoleProviderMock.Setup(x => x.IsUserInRole("test", "Administrator"))
+                .Returns(true);
+
+          //  Authentication.Setup(x => x.SignIn("test", false));
             Controller.LogOn(new LogOnModel()
-            {
-                Password = "1234",
-                RememberMe = false,
-                UserName = "test"
-            }, "~/");
+                {
+                    Password = "1234",
+                    UserName = "test"
+                }, "~/");
             Authentication.Verify(x => x.SignIn("test", false), Times.Once());
         }
     }

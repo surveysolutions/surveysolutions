@@ -9,12 +9,18 @@
 
 namespace Web.Supervisor.Controllers
 {
+    using System;
+    using System.Linq;
     using System.Web.Mvc;
     using System.Web.Security;
+
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events;
+    using Main.Core.Utility;
+
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Security;
-    using Main.Core.Entities.SubEntities;
-    using Main.Core.Utility;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -34,6 +40,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IGlobalInfoProvider globalProvider;
 
+        /// <summary>
+        /// Users info
+        /// </summary>
+        private IUserEventSync _userEventSync;
+
         #endregion
 
         #region Constructror
@@ -47,10 +58,11 @@ namespace Web.Supervisor.Controllers
         /// <param name="globalProvider">
         /// The global provider.
         /// </param>
-        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider)
+        public AccountController(IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
         {
             this.authentication = auth;
             this.globalProvider = globalProvider;
+            this._userEventSync = userEventSync;
         }
 
         #endregion
@@ -94,11 +106,13 @@ namespace Web.Supervisor.Controllers
                         this.authentication.SignIn(model.UserName, false);
                         return this.Redirect("~/");
                     }
+
                     ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
                 }
                 else 
                     ModelState.AddModelError(string.Empty, "The user name or password provided is incorrect.");
             }
+
             return this.View(model);
         }
 
@@ -123,6 +137,30 @@ namespace Web.Supervisor.Controllers
         {
             this.authentication.SignOut();
             return this.Redirect("~/");
+        }
+
+        /// <summary>
+        /// Count of available users in database
+        /// </summary>
+        /// <returns>whether users</returns>
+        public bool IsUserInBase()
+        {
+            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.Supervisor);
+            if (count == null) return false;
+            return count.ToList().Count > 0;
+
+        }
+
+        /// <summary>
+        /// Generate guid of current user
+        /// </summary>
+        /// <returns>
+        /// Guid of current user
+        /// </returns>
+        public Guid GetCurrentUser()
+        {
+            var currentUser = this.globalProvider.GetCurrentUser();
+            return currentUser != null ? currentUser.Id : Guid.Empty;
         }
 
         #endregion

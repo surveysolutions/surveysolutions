@@ -26,6 +26,8 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public AutoPropagateQuestion()
         {
+            MaxValue = int.MaxValue;
+            this.Triggers = new List<Guid>();
         }
 
         /// <summary>
@@ -37,6 +39,8 @@ namespace Main.Core.Entities.SubEntities.Question
         public AutoPropagateQuestion(string text)
             : base(text)
         {
+            MaxValue = int.MaxValue;
+            this.Triggers = new List<Guid>();
         }
 
         #endregion
@@ -68,16 +72,42 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public int IntAttr { get; set; }
 
+        #endregion
+
+        #region Implementation of ITriggerable
+
         /// <summary>
-        /// Gets or sets the target group key.
+        /// Gets or sets Triggers.
         /// </summary>
-        public Guid TargetGroupKey { get; set; }
+        public List<Guid> Triggers { get; set; }
+
+        #endregion
+
+        #region Implementation of IAutoPropagate
+
+        /// <summary>
+        /// Gets or sets MaxValue.
+        /// </summary>
+        public int MaxValue { get; set; }
 
         #endregion
 
         #region Public Methods and Operators
 
         /// <summary>
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public override void AddAnswer(IAnswer answer)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -91,7 +121,7 @@ namespace Main.Core.Entities.SubEntities.Question
         public override void Add(IComposite c, Guid? parent)
         {
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -141,7 +171,7 @@ namespace Main.Core.Entities.SubEntities.Question
             return null;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -165,8 +195,9 @@ namespace Main.Core.Entities.SubEntities.Question
         public override void Remove(Guid publicKey)
         {
             throw new CompositeException();
-        }
+        }*/
 
         #endregion
+
     }
 }

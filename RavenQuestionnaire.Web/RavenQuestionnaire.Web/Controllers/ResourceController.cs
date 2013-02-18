@@ -1,191 +1,323 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Web;
-using System.Web.Mvc;
-using Kaliko.ImageLibrary;
-using Kaliko.ImageLibrary.Filters;
-using Main.Core.Services;
-using Main.Core.View;
-using NLog;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using Questionnaire.Core.Web.Helpers;
-using RavenQuestionnaire.Core;
-using Main.Core.Commands.File;
-using Main.Core.Commands.Questionnaire;
-using Main.Core.Utility;
-
-using LogManager = NLog.LogManager;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ResourceController.cs" company="World bank">
+//   2012
+// </copyright>
+// <summary>
+//   The view data upload files result.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Controllers
 {
-    using RavenQuestionnaire.Core.Views.Event.File;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
+    using System.IO;
+    using System.Web;
+    using System.Web.Mvc;
 
-    public class ViewDataUploadFilesResult
-    {
-        public string name { get; set; }
-        public int size { get; set; }
-        public string type { get; set; }
-        public string url { get; set; }
-        public string thumbnail_url { get; set; }
-        public string title { get; set; }
-        public string desc { get; set; }
-    }
-    public class FileBrowseItemClient
-    {
-        public string Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-    }
+    using Kaliko.ImageLibrary;
+    using Kaliko.ImageLibrary.Filters;
+
+    using Main.Core.Commands.File;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Services;
+    using Main.Core.View;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using NLog;
+
+    using Questionnaire.Core.Web.Security;
+
+    using RavenQuestionnaire.Core.Views.Event.File;
+    using RavenQuestionnaire.Web.Models;
+
+    using LogManager = NLog.LogManager;
+
+    /// <summary>
+    /// The resource controller.
+    /// </summary>
     public class ResourceController : Controller
     {
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-       // private ICommandInvoker commandInvoker;
-        private ICommandService commandService;
-        private IViewRepository viewRepository;
-        private IFileStorageService fileStorageService;
+        #region Constants and Fields
 
-        public ResourceController(IFileStorageService fileStorageService/*, ICommandInvoker commandInvoker*/, IViewRepository viewRepository)
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
+        // private ICommandInvoker commandInvoker;
+
+        /// <summary>
+        /// The command service.
+        /// </summary>
+        private readonly ICommandService commandService;
+
+        /// <summary>
+        /// The file storage service.
+        /// </summary>
+        private readonly IFileStorageService fileStorageService;
+
+        /// <summary>
+        /// The view repository.
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResourceController"/> class.
+        /// </summary>
+        /// <param name="fileStorageService">
+        /// The file storage service.
+        /// </param>
+        /// <param name="viewRepository">
+        /// The view repository.
+        /// </param>
+        public ResourceController(IFileStorageService fileStorageService, IViewRepository viewRepository)
         {
-           // this.commandInvoker = commandInvoker;
+            // this.commandInvoker = commandInvoker;
             this.viewRepository = viewRepository;
             this.fileStorageService = fileStorageService;
             this.commandService = NcqrsEnvironment.Get<ICommandService>();
         }
 
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Delete view
+        /// </returns>
+        [HttpGet]
+        public ActionResult Delete(string id)
+        {
+            // var filename = id;
+            try
+            {
+                this.commandService.Execute(new DeleteFileCommand(Guid.Parse(id)));
+            }
+            catch (Exception exception)
+            {
+                Logger.Error("Can't delete image. " + exception.Message);
+            }
+
+            return this.RedirectToAction("Index", "Resource", new FileBrowseInputModel());
+        }
+
+        /// <summary>
+        /// The images.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Image file
+        /// </returns>
         [HttpGet]
         public ActionResult Images(string id)
         {
-            var fileBytes = fileStorageService.RetrieveFile(id).Content;
-            return File(fileBytes, "image/png");
+            Stream fileBytes = this.fileStorageService.RetrieveFile(id).Content;
+            return this.File(fileBytes, "image/png");
         }
+
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// File browse view
+        /// </returns>
+        public ActionResult Index(FileBrowseInputModel input)
+        {
+            FileBrowseView model = this.viewRepository.Load<FileBrowseInputModel, FileBrowseView>(input);
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// The thumb.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// Thumbnail image
+        /// </returns>
         [HttpGet]
         public ActionResult Thumb(string id)
         {
-            var fileBytes = fileStorageService.RetrieveThumb(id).Content;
-            return File(fileBytes, "image/png");
+            Stream fileBytes = this.fileStorageService.RetrieveThumb(id).Content;
+            return this.File(fileBytes, "image/png");
         }
-        public ActionResult Index(FileBrowseInputModel input)
-        {
-            var model = viewRepository.Load<FileBrowseInputModel, FileBrowseView>(input);
-            return View(model);
-        }
+
+        /// <summary>
+        /// The update desc.
+        /// </summary>
+        /// <param name="meta">
+        /// The meta.
+        /// </param>
+        /// <returns>
+        /// Update status in JSON format
+        /// </returns>
         [HttpPost]
         public ActionResult UpdateDesc(FileBrowseItemClient meta)
         {
             try
             {
                 var command = new UpdateFileMetaCommand(Guid.Parse(meta.Id), meta.Title, meta.Description);
-                commandService.Execute(command);
-                return Json(new { message = "saved" });
+                this.commandService.Execute(command);
+                return this.Json(new { message = "saved" });
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Json(new { message = ex.Message });
+                return this.Json(new { message = ex.Message });
             }
         }
 
+        /// <summary>
+        /// The upload.
+        /// </summary>
+        /// <returns>
+        /// Upload file view
+        /// </returns>
         public ActionResult Upload()
         {
-            return View();
+            return this.View();
         }
 
-        //DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
-        [HttpGet]
-        public ActionResult Delete(string id)
-        {
-       //     var filename = id;
+        // DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
 
-            try
-            {
-
-                commandService.Execute(new DeleteFileCommand(Guid.Parse(id)));
-            }
-            catch (Exception exception)
-            {
-                logger.Error("Can't delete image. "+exception.Message);
-            }
-            return RedirectToAction("Index", "Resource", new FileBrowseInputModel());
-        }
-
-        //DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
+        /// <summary>
+        /// The upload files.
+        /// </summary>
+        /// <returns>
+        /// Upload file status
+        /// </returns>
+        /// <exception cref="HttpRequestValidationException">
+        /// Ecception if file size is too big
+        /// </exception>
         [HttpPost]
         public ActionResult UploadFiles()
         {
             var r = new List<ViewDataUploadFilesResult>();
 
-            foreach (string file in Request.Files)
+            foreach (string file in this.Request.Files)
             {
                 var statuses = new List<ViewDataUploadFilesResult>();
-                var headers = Request.Headers;
+                NameValueCollection headers = this.Request.Headers;
 
                 if (string.IsNullOrEmpty(headers["X-File-Name"]))
                 {
-                    UploadWholeFile(Request, statuses);
+                    this.UploadWholeFile(this.Request, statuses);
                 }
                 else
                 {
                     throw new HttpRequestValidationException("Attempt to upload too big file");
                 }
 
-                JsonResult result = Json(statuses);
+                JsonResult result = this.Json(statuses);
                 result.ContentType = "text/plain";
 
                 return result;
             }
 
-            return Json(r);
-        }
-       
-
-        //DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
-        private void UploadWholeFile(HttpRequestBase request, List<ViewDataUploadFilesResult> statuses)
-        {
-            for (int i = 0; i < request.Files.Count; i++)
-            {
-                var title = request["title"];
-                var desc = request["desc"];
-                var file = request.Files[i];
-                var command = new UploadFileCommand(Guid.NewGuid(), title, desc,
-                                                    file.InputStream);
-           
-                commandService.Execute(command);
-
-                file.InputStream.Position = 0;
-                var image = new KalikoImage(file.InputStream);
-                int thumbWidth, thumbHeight;
-                var thumbData = ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
-                var bytes = new byte[thumbData.Length];
-                thumbData.Read(bytes, 0, (int)thumbData.Length);
-                statuses.Add(new ViewDataUploadFilesResult
-                                 {
-                                     name = file.FileName,
-                                     size = (int)thumbData.Length,
-                                     type = file.ContentType,
-                                     thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(bytes),
-                                     title = title,
-                                     desc = desc
-                                 });
-            }
+            return this.Json(r);
         }
 
+        #endregion
+
+        // DONT USE THIS IF YOU NEED TO ALLOW LARGE FILES UPLOADS
+        #region Methods
+
+        /// <summary>
+        /// The resize image.
+        /// </summary>
+        /// <param name="image">
+        /// The image.
+        /// </param>
+        /// <param name="width">
+        /// The width.
+        /// </param>
+        /// <param name="height">
+        /// The height.
+        /// </param>
+        /// <param name="newWidth">
+        /// The new width.
+        /// </param>
+        /// <param name="newHeight">
+        /// The new height.
+        /// </param>
+        /// <returns>
+        /// Resize and crop image
+        /// </returns>
         private MemoryStream ResizeImage(KalikoImage image, int width, int height, out int newWidth, out int newHeight)
         {
-            var thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
+            KalikoImage thumb = image.GetThumbnailImage(width, height, ThumbnailMethod.Fit);
             thumb.ApplyFilter(new UnsharpMaskFilter(1.4, 0.32));
 
             var ms = new MemoryStream();
             thumb.SavePng(ms, 80);
             ms.Position = 0;
 
-        //    var thumbData = new byte[ms.Length];
-        //    ms.Read(thumbData, 0, thumbData.Length);
-
+            // var thumbData = new byte[ms.Length];
+            // ms.Read(thumbData, 0, thumbData.Length);
             newHeight = thumb.Height;
             newWidth = thumb.Width;
 
             return ms;
         }
+
+        /// <summary>
+        /// The upload whole file.
+        /// </summary>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <param name="statuses">
+        /// The statuses.
+        /// </param>
+        private void UploadWholeFile(HttpRequestBase request, List<ViewDataUploadFilesResult> statuses)
+        {
+            for (int i = 0; i < request.Files.Count; i++)
+            {
+                string title = request["title"];
+                string desc = request["desc"];
+                HttpPostedFileBase file = request.Files[i];
+                var command = new UploadFileCommand(Guid.NewGuid(), title, desc, file.InputStream);
+
+                this.commandService.Execute(command);
+
+                file.InputStream.Position = 0;
+                var image = new KalikoImage(file.InputStream);
+                int thumbWidth, thumbHeight;
+                MemoryStream thumbData = this.ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
+                var bytes = new byte[thumbData.Length];
+                thumbData.Read(bytes, 0, (int)thumbData.Length);
+                statuses.Add(
+                    new ViewDataUploadFilesResult
+                        {
+                            name = file.FileName, 
+                            size = (int)thumbData.Length, 
+                            type = file.ContentType, 
+                            thumbnail_url = @"data:image/png;base64," + Convert.ToBase64String(bytes), 
+                            title = title, 
+                            desc = desc
+                        });
+            }
+        }
+
+        #endregion
     }
 }

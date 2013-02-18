@@ -7,21 +7,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Entities.SubEntities.Complete.Question;
-using Main.Core.Events.Questionnaire.Completed;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.View.Question;
-using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
-
 namespace Main.Core.EventHandlers
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.Events.Questionnaire.Completed;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.Question;
+    using Main.DenormalizerStorage;
+    using Ncqrs.Eventing.ServiceModel.Bus;
+    using Ncqrs.Restoring.EventStapshoot;
+
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
@@ -215,7 +215,7 @@ namespace Main.Core.EventHandlers
                     featuredQuestions, 
                     @group.Children.OfType<ICompleteQuestion>(), 
                     group.PublicKey, 
-                    group.PropogationPublicKey, 
+                    group.PropagationPublicKey, 
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
@@ -232,7 +232,7 @@ namespace Main.Core.EventHandlers
                     featuredQuestions, 
                     group.Children.OfType<ICompleteQuestion>(), 
                     group.PublicKey, 
-                    group.PropogationPublicKey, 
+                    group.PropagationPublicKey, 
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {

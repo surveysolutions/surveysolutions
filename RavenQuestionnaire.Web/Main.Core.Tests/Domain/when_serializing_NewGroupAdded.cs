@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace RavenQuestionnaire.Core.Tests.Domain
+namespace Main.Core.Tests.Domain
 {
     using System;
 
@@ -37,7 +37,8 @@ namespace RavenQuestionnaire.Core.Tests.Domain
                     GroupText = "text", 
                     ParentGroupPublicKey = Guid.NewGuid(), 
                     Paropagateble = Propagate.None, 
-                    ConditionExpression = string.Empty
+                    ConditionExpression = string.Empty,
+                    Description = string.Empty
                 };
         }
 

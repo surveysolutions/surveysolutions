@@ -203,14 +203,14 @@ namespace Web.Supervisor.Models
             if (pageNumber == 1)
             {
                 pageLinkValueDictionary = new RouteValueDictionary(this.linkWithoutPageValuesDictionary);
-                if (routeDataValues.ContainsKey("page"))
+                if (routeDataValues.ContainsKey("pager.page"))
                 {
-                    routeDataValues.Remove("page");
+                    routeDataValues.Remove("pager.page");
                 }
             }
             else
             {
-                pageLinkValueDictionary = new RouteValueDictionary(this.linkWithoutPageValuesDictionary) { { "page", pageNumber } };
+                pageLinkValueDictionary = new RouteValueDictionary(this.linkWithoutPageValuesDictionary) { { "pager.page", pageNumber } };
             }
 
             // To be sure we get the right route, ensure the controller and action are specified.

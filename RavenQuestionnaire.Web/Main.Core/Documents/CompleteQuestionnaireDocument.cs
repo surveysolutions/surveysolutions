@@ -94,6 +94,11 @@ namespace Main.Core.Documents
         public DateTime LastEntryDate { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets or sets the last visited group.
         /// </summary>
         public VisitedGroup LastVisitedGroup { get; set; }
@@ -125,10 +130,11 @@ namespace Main.Core.Documents
             }
         }
 
+
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
-        public Guid? PropogationPublicKey
+        public Guid? PropagationPublicKey
         {
             get
             {
@@ -146,10 +152,79 @@ namespace Main.Core.Documents
         public Guid PublicKey { get; set; }
 
         /// <summary>
+        /// Gets the wrapped questions.
+        /// </summary>
+        [JsonIgnore]
+        public IEnumerable<CompleteQuestionWrapper> WrappedQuestions
+        {
+            get
+            {
+                return this.QuestionHash.WrapedQuestions;
+            }
+        }
+
+        /// <summary>
+        /// The get question.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ICompleteQuestion"/>.
+        /// </returns>
+        public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
+        {
+            return this.QuestionHash.GetQuestion(publicKey, propagationKey);
+        }
+
+        /// <summary>
+        /// The get question wrapper.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
+        {
+            return this.QuestionHash.GetQuestionWrapper(publicKey, propagationKey);
+        }
+
+        /// <summary>
+        /// The get featured questions.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
+        {
+            return this.QuestionHash.GetFeaturedQuestions();
+        }
+
+        /// <summary>
+        /// Gets the questions.
+        /// </summary>
+        [JsonIgnore]
+        public IEnumerable<ICompleteQuestion> Questions
+        {
+            get
+            {
+                return this.QuestionHash.Questions;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the question hash.
         /// </summary>
         [JsonIgnore]
-        public GroupHash QuestionHash
+        private GroupHash QuestionHash
         {
             get
             {
@@ -229,7 +304,8 @@ namespace Main.Core.Documents
                     TemplateId = doc.PublicKey, 
                     Title = doc.Title, 
                     Triggers = doc.Triggers, 
-                    ConditionExpression = doc.ConditionExpression
+                    ConditionExpression = doc.ConditionExpression, 
+                    Description = doc.Description
                 };
             foreach (IComposite child in doc.Children)
             {
@@ -249,15 +325,6 @@ namespace Main.Core.Documents
 
                 throw new InvalidOperationException("unknown children type");
             }
-
-            /*   foreach (IQuestion question in doc.Questions)
-            {
-                result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
-            }
-            foreach (IGroup group in doc.Groups)
-            {
-                result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
-            }**/
             return result;
         }
 
@@ -277,7 +344,7 @@ namespace Main.Core.Documents
         /// </exception>
         public virtual void Add(IComposite c, Guid? parent)
         {
-            if (c is ICompleteGroup && ((ICompleteGroup)c).PropogationPublicKey.HasValue && !parent.HasValue)
+            if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parent.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
@@ -286,12 +353,12 @@ namespace Main.Core.Documents
                 }
             }
 
-            // }
             foreach (IComposite completeGroup in this.Children)
             {
                 try
                 {
                     completeGroup.Add(c, parent);
+                    this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
                 catch (CompositeException)
@@ -374,15 +441,29 @@ namespace Main.Core.Documents
         /// </exception>
         public void Remove(IComposite c)
         {
+            this.RemoveInt(c);
+            this.QuestionHash.RemoveGroup(c as ICompleteGroup);
+        }
+
+        /// <summary>
+        /// The remove int.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        private void RemoveInt(IComposite c)
+        {
             var propogate = c as ICompleteGroup;
-            if (propogate != null && propogate.PropogationPublicKey.HasValue)
+            if (propogate != null && propogate.PropagationPublicKey.HasValue)
             {
                 bool isremoved = false;
                 List<IComposite> propagatedGroups =
                     this.Children.Where(
                         g =>
                         g.PublicKey.Equals(propogate.PublicKey)
-                        && ((ICompleteGroup)g).PropogationPublicKey == propogate.PropogationPublicKey).ToList();
+                        && ((ICompleteGroup)g).PropagationPublicKey == propogate.PropagationPublicKey).ToList();
                 foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
                 {
                     this.Children.Remove(propagatableCompleteGroup);
@@ -423,7 +504,7 @@ namespace Main.Core.Documents
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropogationPublicKey.HasValue)
+                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;

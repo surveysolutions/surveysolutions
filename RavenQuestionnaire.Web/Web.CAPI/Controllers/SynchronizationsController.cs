@@ -1,222 +1,422 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
-using System.Web.Mvc;
-using Core.CAPI.Synchronization;
-using Core.CAPI.Views.Synchronization;
-using DataEntryClient.CompleteQuestionnaire;
-using Main.Core.View;
-using NLog;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-
-using Questionnaire.Core.Web.Export;
-using Questionnaire.Core.Web.Helpers;
-using Questionnaire.Core.Web.Threading;
-using Questionnaire.Core.Web.WCF;
-using Main.Core.Commands.Synchronization;
-using Main.Core.Documents;
-using LogManager = NLog.LogManager;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SynchronizationsController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The synchronizations controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.CAPI.Controllers
 {
-    using Main.Core.Events;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Web;
+    using System.Web.Mvc;
 
+    using Core.CAPI.Views.ExporStatistics;
+    using Core.CAPI.Views.Synchronization;
+
+    using DataEntryClient;
+    using DataEntryClient.CompleteQuestionnaire;
+
+    using Ionic.Zip;
+
+    using Main.Core.Commands.Synchronization;
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Events;
+    using Main.Core.View;
+    using Main.Core.View.SyncProcess;
+    using Main.Core.View.User;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using NLog;
+
+    using Questionnaire.Core.Web.Export;
+    using Questionnaire.Core.Web.Helpers;
+    using Questionnaire.Core.Web.Threading;
+    using Questionnaire.Core.Web.WCF;
+
+    using LogManager = NLog.LogManager;
+
+    /// <summary>
+    /// The synchronizations controller.
+    /// </summary>
     [AsyncTimeout(20000000)]
     public class SynchronizationsController : AsyncController
     {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The _global provider.
+        /// </summary>
         private readonly IGlobalInfoProvider _globalProvider;
-        private readonly IViewRepository viewRepository;
-        private readonly IExportImport exportimportEvents ;
+
+        /// <summary>
+        /// The synchronizer.
+        /// </summary>
         private readonly IEventSync synchronizer;
-        public SynchronizationsController( IViewRepository viewRepository,
-                                          IGlobalInfoProvider globalProvider, IExportImport exportImport, IEventSync synchronizer)
+
+        /// <summary>
+        /// The view repository.
+        /// </summary>
+        private readonly IViewRepository viewRepository;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynchronizationsController"/> class.
+        /// </summary>
+        /// <param name="viewRepository">
+        /// The view repository.
+        /// </param>
+        /// <param name="globalProvider">
+        /// The global provider.
+        /// </param>
+        /// <param name="synchronizer">
+        /// The synchronizer.
+        /// </param>
+        public SynchronizationsController(
+            IViewRepository viewRepository,
+            IGlobalInfoProvider globalProvider,
+            IEventSync synchronizer)
         {
-            this.exportimportEvents = exportImport;
             this.viewRepository = viewRepository;
-            _globalProvider = globalProvider;
+            this._globalProvider = globalProvider;
             this.synchronizer = synchronizer;
         }
 
-       
+        #endregion
 
-        #region export implementations
+        #region Public Methods and Operators
 
+        /// <summary>
+        /// The check is there something to push.
+        /// </summary>
+        /// <returns>
+        /// The check is there something to push.
+        /// </returns>
         public bool CheckIsThereSomethingToPush()
         {
             return this.synchronizer.ReadEvents().Any();
         }
 
-        public Guid? Push(string url, Guid syncKey)
+        /// <summary>
+        /// Export process summary
+        /// </summary>
+        /// <returns>
+        /// Json with sync process infor for current logged in user
+        /// </returns>
+        public JsonResult ExportStatistics()
         {
-            Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess,SynchronizationType.Push));
-
-            WaitCallback callback = (state) =>
-                                        {
-                                            try
-                                            {
-
-                                                var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
-                                                                                            syncProcess, url);
-                                                process.Export(syncKey);
-
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                Logger logger = LogManager.GetCurrentClassLogger();
-                                                logger.Fatal(e);
-                                            }
-                                        };
-            ThreadPool.QueueUserWorkItem(callback, syncProcess);
-            return syncProcess;
-
+            var events = this.synchronizer.ReadEvents();
+            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
+            var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
+                  new ExporStatisticsInputModel(keys));
+          
+            return this.Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
-        public void ExportAsync(Guid syncKey)
-        {
-            AsyncManager.OutstandingOperations.Increment();
-            AsyncQuestionnaireUpdater.Update(() =>
-                                                 {
-                                                     try
-                                                     {
-                                                         AsyncManager.Parameters["result"] =
-                                                             exportimportEvents.Export(syncKey);
-                                                     }
-                                                     catch
-                                                     {
-                                                         AsyncManager.Parameters["result"] = null;
-                                                     }
-                                                     AsyncManager.OutstandingOperations.Decrement();
-                                                 });
-        }
 
-        public FileResult ExportCompleted(byte[] result)
-        {
-            return File(result, "application/zip",
-                        string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
-        }
-        #endregion
-
-        #region import
-
-        public Guid Pull(string url, Guid syncKey)
-        {
-            Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(
-                new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
-            WaitCallback callback = (state) =>
-            {
-                try
-                {
-
-                    var process = new CompleteQuestionnaireSync(KernelLocator.Kernel,
-                                                                syncProcess, url);
-                    process.Import(syncKey);
-
-                }
-                catch (Exception e)
-                {
-                    Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.Fatal("Error on import ", e);
-                }
-            };
-            ThreadPool.QueueUserWorkItem(callback, syncProcess);
-            return syncProcess;
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile == null && Request.Files.Count > 0)
-                myfile = Request.Files[0];
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                AsyncManager.OutstandingOperations.Increment();
-                AsyncQuestionnaireUpdater.Update(() =>
-                {
-                    exportimportEvents.Import(myfile);
-                    AsyncManager.OutstandingOperations.Decrement();
-                });
-            }
-        }
-
-        public ActionResult ImportCompleted()
-        {
-            return RedirectToAction("Dashboard", "Survey");
-        }
-
-       #endregion
-        
-        #region Progress
-
-        public int ProgressInPersentage(Guid id)
-        {
-            var stat = viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
-            if (stat == null)
-                return -1;
-            return
-                stat.ProgressPercentage;
-        }
-
-        public ActionResult Progress(Guid id)
-        {
-            return View(viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
-        }
-
-        public ActionResult ProgressPartial(Guid id)
-        {
-            return PartialView("_ProgressContent",
-                               viewRepository.Load<SyncProgressInputModel, SyncProgressView>(
-                                   new SyncProgressInputModel(id)));
-        }
-
-        #endregion
-        
-        #region discovery
-
-        public ActionResult DiscoverPage()
-        {
-            return View("Scaning");
-        }
-
+        /// <summary>
+        /// The discover async.
+        /// </summary>
         public void DiscoverAsync()
         {
-            AsyncManager.OutstandingOperations.Increment();
-            var user = _globalProvider.GetCurrentUser();
-            AsyncQuestionnaireUpdater.Update(() =>
-                                                 {
-                                                     try
-                                                     {
-                                                         AsyncManager.Parameters["result"] =
-                                                             new ServiceDiscover().DiscoverChannels();
-
-                                                     }
-                                                     catch
-                                                     {
-                                                         AsyncManager.Parameters["result"] = null;
-                                                     }
-                                                     AsyncManager.OutstandingOperations.Decrement();
-                                                 });
+            UserLight user = this._globalProvider.GetCurrentUser();
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        this.AsyncManager.Parameters["result"] = new ServiceDiscover().DiscoverChannels();
+                    }
+                    catch
+                    {
+                        this.AsyncManager.Parameters["result"] = null;
+                    }
+                });
         }
 
+        /// <summary>
+        /// The discover completed.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// Discover Completed view
+        /// </returns>
         public ActionResult DiscoverCompleted(IEnumerable<ServiceDiscover.SyncSpot> result)
         {
-
-            return PartialView("Spots", result.ToArray());
+            return this.PartialView("Spots", result.ToArray());
         }
 
-        #endregion
+        /// <summary>
+        /// The discover page.
+        /// </summary>
+        /// <returns>
+        /// Discover Page
+        /// </returns>
+        public ActionResult DiscoverPage()
+        {
+            return this.View("Scaning");
+        }
 
+        /// <summary>
+        /// The export async.
+        /// </summary>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        /// <returns>
+        /// The export async key.
+        /// </returns>
+        public Guid? ExportAsync(Guid syncKey)
+        {
+            Guid syncProcess = Guid.NewGuid();
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
+                () =>
+                {
+                    byte[] file;
+                    try
+                    {
+                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        file = process.Export(syncKey);
+                    }
+                    catch (Exception e)
+                    {
+                        file = null;
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal(e);
+                    }
+
+                    this.AsyncManager.Parameters["result"] = file;
+                });
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// The export completed.
+        /// </summary>
+        /// <param name="result">
+        /// The result.
+        /// </param>
+        /// <returns>
+        /// File for export
+        /// </returns>
+        public FileResult ExportCompleted(byte[] result)
+        {
+            return this.File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
+        }
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <returns>
+        /// Import view
+        /// </returns>
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
-            return View("ViewTestUploadFile");
+            return this.View("ViewTestUploadFile");
         }
+
+        /// <summary>
+        /// The import completed.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public ActionResult ImportCompleted()
+        {
+            return this.RedirectToAction("Dashboard", "Survey");
+        }
+
+        /// <summary>
+        /// The progress.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public ActionResult Progress(Guid id)
+        {
+            return this.View(this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+        }
+
+        /// <summary>
+        /// The progress in persentage.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The progress in persentage.
+        /// </returns>
+        public int ProgressInPersentage(Guid id)
+        {
+            SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+            if (stat == null)
+            {
+                return -1;
+            }
+
+            return stat.ProgressPercentage;
+        }
+
+        /// <summary>
+        /// The progress partial.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// </returns>
+        public ActionResult ProgressPartial(Guid id)
+        {
+            return this.PartialView(
+                "_ProgressContent",
+                this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+        }
+
+        /// <summary>
+        /// The pull.
+        /// </summary>
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        /// <returns>
+        /// Process guid
+        /// </returns>
+        public Guid Pull(string url, Guid syncKey)
+        {
+            //syncKey = Guid.Parse("2e38c8a0-c0a7-43f8-a139-dc235eab2814");
+            Guid syncProcess = Guid.NewGuid();
+            var commandService = NcqrsEnvironment.Get<ICommandService>();
+           // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+            WaitCallback callback = (state) =>
+                {
+                    try
+                    {
+                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
+                        process.Import(syncKey);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on import ", e);
+                    }
+                };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// The import async.
+        /// </summary>
+        /// <param name="uploadFile">
+        /// Uploaded file
+        /// </param>
+        /// <returns>
+        /// The import async.
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public Guid? ImportAsync(HttpPostedFileBase uploadFile)
+        {
+            if (uploadFile == null && this.Request.Files.Count > 0)
+            {
+                uploadFile = this.Request.Files[0];
+            }
+
+            if (uploadFile == null || uploadFile.ContentLength == 0)
+            {
+                return null;
+            }
+
+            if (!ZipFile.IsZipFile(uploadFile.InputStream, false))
+            {
+                return null;
+            }
+
+            uploadFile.InputStream.Position = 0;
+
+            var zip = ZipFile.Read(uploadFile.InputStream);
+
+            Guid syncProcess = Guid.NewGuid();
+            AsyncQuestionnaireUpdater.Update(AsyncManager,
+                () =>
+                {
+                    try
+                    {
+                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
+                        process.Import(new Guid(), zip);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal("Error on import ", e);
+                    }
+                });
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// The push.
+        /// </summary>
+        /// <param name="url">
+        /// The url.
+        /// </param>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        /// <returns>
+        /// Process guid
+        /// </returns>
+        public Guid? Push(string url, Guid syncKey)
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            WaitCallback callback = (state) =>
+                {
+                    try
+                    {
+                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
+                        process.Export(syncKey);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger logger = LogManager.GetCurrentClassLogger();
+                        logger.Fatal(e);
+                    }
+                };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// Sync process summary
+        /// </summary>
+        /// <returns>
+        /// Json with sync process infor for current logged in user
+        /// </returns>
+        public JsonResult Statistics()
+        {
+            var user = this._globalProvider.GetCurrentUser();
+            var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
+                    new SyncProcessInputModel(user == null ? Guid.Empty : user.Id));
+            return this.Json(model, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
     }
 }

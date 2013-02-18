@@ -7,27 +7,37 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Core.Supervisor.Views.Assign;
-using Core.Supervisor.Views.Interviewer;
-using Core.Supervisor.Views.Survey;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.View.CompleteQuestionnaire.Statistics;
-using Main.Core.View.Group;
-using Main.Core.View.Question;
-using Main.Core.View.User;
-
 namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
-    using Main.Core.Commands.Questionnaire.Completed;   
+
+    using Core.Supervisor.Views.Assign;
+    using Core.Supervisor.Views.Assignment;
+    using Core.Supervisor.Views.Index;
+    using Core.Supervisor.Views.Interviewer;
+
+    using Main.Core.Commands.Questionnaire.Completed;
+    using Main.Core.Commands.Synchronization;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.Events.Synchronization;
+    using Main.Core.Services;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+    using Main.Core.View.CompleteQuestionnaire.Statistics;
+    using Main.Core.View.Group;
+    using Main.Core.View.Question;
+    using Main.Core.View.Questionnaire;
+    using Main.Core.View.User;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
+
     using Questionnaire.Core.Web.Helpers;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -80,10 +90,19 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return index page
         /// </returns>
-        public ActionResult Index(SurveyViewInputModel input)
+        public ActionResult Index(IndexInputModel input)
         {
-            var model = this.viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.View(model);
+        }
+
+        public ActionResult Templates()
+        {
+            var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel()
+                {
+                    PageSize = int.MaxValue
+                });
+            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -92,10 +111,13 @@ namespace Web.Supervisor.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
+        /// <param name="userId">
+        /// The user Id.
+        /// </param>
         /// <param name="input">
         /// The input.
         /// </param>
-        /// <param name="statusId">
+        /// <param name="status">
         /// The status.
         /// </param>
         /// <param name="isNotAssigned">
@@ -104,13 +126,25 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Return Assigments page
         /// </returns>
-        public ActionResult Assigments(Guid id, SurveyGroupInputModel input, string status, bool? isNotAssigned)
+        public ActionResult Assigments(Guid id, Guid? userId, AssignmentInputModel input, ICollection<string> status, bool? isNotAssigned)
         {
             var inputModel = input == null
-                                 ? new SurveyGroupInputModel() { Id = id, StatusId = status }
-                                 : new SurveyGroupInputModel(id, input.Page, input.PageSize, input.Orders, status, isNotAssigned ?? false);
+                                 ? new AssignmentInputModel()
+                                     {
+                                         Id = id,
+                                         Statuses = status,
+                                         UserId = userId.HasValue ? userId.Value : Guid.Empty
+                                     }
+                                 : new AssignmentInputModel(
+                                       id,
+                                       userId.HasValue ? userId.Value : Guid.Empty,
+                                       input.Page,
+                                       input.PageSize,
+                                       input.Orders,
+                                       status,
+                                       isNotAssigned ?? false);
             var user = this.globalInfo.GetCurrentUser();
-            var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(inputModel);
+            var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(inputModel);
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             return this.View(model);
@@ -132,21 +166,104 @@ namespace Web.Supervisor.Controllers
         }
 
         /// <summary>
+        /// Display change state
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="template">
+        /// The template.
+        /// </param>
+        /// <returns>
+        /// Return Approve Page
+        /// </returns>
+        public ActionResult ChangeState(Guid id, string template)
+        {
+
+            var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+         new CompleteQuestionnaireStatisticViewInputModel(id));
+            return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
+        }
+
+
+        public ActionResult StatusHistory(Guid id)
+        {
+            var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+         new CompleteQuestionnaireStatisticViewInputModel(id));
+            return this.PartialView("_StatusHistory", stat.StatusHistory);
+        }
+        /// <summary>
+        /// Save change state in database
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// Return view
+        /// </returns>
+        [HttpPost]
+        public ActionResult ChangeState(ApproveRedoModel model, int state, string cancel)
+        {
+            if (state == 2)
+            {
+                if (cancel != null)
+                    return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+                if (ModelState.IsValid)
+                {
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    var status = SurveyStatus.Redo;
+                    status.ChangeComment = model.Comment;
+                    commandService.Execute(
+                        new ChangeStatusCommand()
+                            {
+                                CompleteQuestionnaireId = model.Id,
+                                Status = status,
+                                Responsible = this.globalInfo.GetCurrentUser()
+                            });
+                    return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+                }
+
+                var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var commandService = NcqrsEnvironment.Get<ICommandService>();
+                    var status = SurveyStatus.Approve;
+                    status.ChangeComment = model.Comment;
+                    commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
+                    return this.RedirectToAction("Assigments", new { id = model.TemplateId });
+                }
+
+                var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
+                        new CompleteQuestionnaireStatisticViewInputModel(model.Id));
+                return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
+            }
+        }
+
+
+        /// <summary>
         /// Display assign form
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
+        /// <param name="tmptId">
+        /// The tmpt Id.
+        /// </param>
         /// <returns>
         /// Return Assign form
         /// </returns>
-        public ActionResult AssignPerson(Guid id,Guid tmptId)
+        public ActionResult AssignPerson(Guid id, Guid tmptId)
         {
             var user = this.globalInfo.GetCurrentUser();
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             var model = this.viewRepository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
-            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false, 0, 0, 0));
+            r.Insert(0, new InterviewersItem(Guid.Empty, string.Empty, string.Empty, DateTime.MinValue, false));
             var options = r.Select(item => new SelectListItem
             {
                 Value = item.Id.ToString(),
@@ -156,6 +273,7 @@ namespace Web.Supervisor.Controllers
             ViewBag.userId = options;
             return this.View(model);
         }
+
         /// <summary>
         /// Display approve page
         /// </summary>
@@ -171,7 +289,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Approve(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
@@ -192,12 +310,12 @@ namespace Web.Supervisor.Controllers
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 var status = SurveyStatus.Approve;
                 status.ChangeComment = model.Comment;
-                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
@@ -226,7 +344,7 @@ namespace Web.Supervisor.Controllers
         {
             //if (id)
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id) { CurrentGroupPublicKey = group, PropagationKey = propagationKey });
             ViewBag.CurrentQuestion = question.HasValue ? question.Value : new Guid();
             ViewBag.TemplateId = template;
@@ -252,7 +370,7 @@ namespace Web.Supervisor.Controllers
         {
             //if (string.IsNullOrEmpty(id))
             //    throw new HttpException(404, "Invalid query string parameters");
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteGroupMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id, group, propagationKey));
             ViewBag.CurrentQuestion = new Guid();
             ViewBag.PagePrefix = "";
@@ -289,6 +407,7 @@ namespace Web.Supervisor.Controllers
             {
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
+
             if (Request.IsAjaxRequest())
                 return Json(new { status = "ok", userId = responsible.Id, userName = responsible.Name, cqId = cqId }, JsonRequestBehavior.AllowGet);
             return this.RedirectToAction("Assigments", "Survey", new { id = tmptId });
@@ -368,13 +487,14 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult TableData(GridDataRequestModel data)
         {
-            var input = new SurveyViewInputModel
+            var input = new IndexInputModel
                             {
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
-                                Orders = data.SortOrder
+                                Orders = data.SortOrder,
+                                UserId = data.UserId
                             };
-            var model = this.viewRepository.Load<SurveyViewInputModel, SurveyBrowseView>(input);
+            var model = this.viewRepository.Load<IndexInputModel, IndexView>(input);
             return this.PartialView("_Table", model);
         }
 
@@ -392,8 +512,8 @@ namespace Web.Supervisor.Controllers
             var user = this.globalInfo.GetCurrentUser();
             var users = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Supervisor = user });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            var input = new SurveyGroupInputModel(data.Id, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
-            var model = this.viewRepository.Load<SurveyGroupInputModel, SurveyGroupView>(input);
+            var input = new AssignmentInputModel(data.Id, data.UserId, data.Pager.Page, data.Pager.PageSize, data.SortOrder);
+            var model = this.viewRepository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);
         }
 
@@ -411,7 +531,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ShowComments(Guid id, string template)
         {
-            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, CompleteQuestionnaireMobileView>(
+            var model = this.viewRepository.Load<CompleteQuestionnaireViewInputModel, ScreenGroupView>(
                 new CompleteQuestionnaireViewInputModel(id));
             ViewBag.TemplateId = template;
             return this.View("Comments", model);
@@ -432,7 +552,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Redo(Guid id, string template)
         {
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(id));
             return this.View(new ApproveRedoModel() { Id = id, TemplateId = template, Statistic = stat, StatusId = SurveyStatus.Redo.PublicId });
         }
 
@@ -454,23 +574,44 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Redo(ApproveRedoModel model, string redo, string cancel)
         {
-            if (cancel != null) 
+            if (cancel != null)
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             if (ModelState.IsValid)
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 var status = SurveyStatus.Redo;
                 status.ChangeComment = model.Comment;
-                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status });
+                commandService.Execute(new ChangeStatusCommand() { CompleteQuestionnaireId = model.Id, Status = status, Responsible = this.globalInfo.GetCurrentUser() });
                 return this.RedirectToAction("Assigments", new { id = model.TemplateId });
             }
 
             var stat = this.viewRepository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
-                    new CompleteQuestionnaireStatisticViewInputModel(model.Id.ToString()));
+                    new CompleteQuestionnaireStatisticViewInputModel(model.Id));
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
+        /// <summary>
+        /// Action for preparing data for visual chart
+        /// </summary>
+        /// <param name="view">
+        /// The view.
+        /// </param>
+        /// <returns>
+        /// return Partial View with visual chart
+        /// </returns>
+        public PartialViewResult Chart(IndexView view)
+        {
+            var data = new ChartDataModel("Chart");
+            if (view.Items.Count > 0)
+            {
+                foreach (var item in view.Items)
+                    data.Data.Add(new ChartDataItem(item.Title, item.Total, item.Approve));
+            }
+
+            return this.PartialView(data);
+        }
 
         #endregion
+
     }
 }

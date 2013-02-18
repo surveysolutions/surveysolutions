@@ -1,19 +1,16 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireAR.cs" company="">
-//   
+// <copyright file="QuestionnaireAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Questionnaire Aggregate Root.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Restoring.EventStapshoot;
-
 namespace Main.Core.Domain
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
@@ -22,8 +19,7 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire;
 
     using Ncqrs;
-    using Ncqrs.Domain;
-    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Restoring.EventStapshoot;
 
     /// <summary>
     /// Questionnaire Aggregate Root.
@@ -37,7 +33,7 @@ namespace Main.Core.Domain
         /// The _inner document.
         /// </summary>
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-
+        private readonly ICompleteQuestionFactory questionFactory;
         #endregion
 
         #region Constructors and Destructors
@@ -47,6 +43,7 @@ namespace Main.Core.Domain
         /// </summary>
         public QuestionnaireAR()
         {
+            this.questionFactory = new CompleteQuestionFactory();
         }
 
 
@@ -59,11 +56,11 @@ namespace Main.Core.Domain
         /// <param name="text">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text)
-            : base(questionnaireId)
+        public QuestionnaireAR(Guid questionnaireId, string text) : base(questionnaireId)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
-
+            this.questionFactory = new CompleteQuestionFactory();
+            
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -77,9 +74,16 @@ namespace Main.Core.Domain
         // Event handler for the NewQuestionnaireCreated event. This method
         // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The update questionnaire.
+        /// </summary>
+        /// <param name="title">
+        /// The title.
+        /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() {PublicKey = this.EventSourceId, Title = title});
+            this.ApplyEvent(new QuestionnaireUpdated() { PublicKey = this.EventSourceId, Title = title });
         }
 
         /// <summary>
@@ -101,7 +105,7 @@ namespace Main.Core.Domain
         /// The condition expression.
         /// </param>
         public void AddGroup(
-            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression)
+            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
         {
             //// performe checka before event raising
 
@@ -117,7 +121,8 @@ namespace Main.Core.Domain
                         GroupText = text, 
                         ParentGroupPublicKey = parentGroupKey, 
                         Paropagateble = propagateble, 
-                        ConditionExpression = conditionExpression
+                        ConditionExpression = conditionExpression,
+                        Description = description
                     });
         }
 
@@ -125,39 +130,50 @@ namespace Main.Core.Domain
         // is automaticly wired as event handler based on convension.
 
         /// <summary>
-        /// Handler method for adding question.
+        /// The add question.
         /// </summary>
         /// <param name="publicKey">
-        /// The public Key.
+        /// The public key.
         /// </param>
         /// <param name="questionText">
+        /// The question text.
         /// </param>
         /// <param name="stataExportCaption">
+        /// The stata export caption.
         /// </param>
         /// <param name="questionType">
+        /// The question type.
         /// </param>
         /// <param name="conditionExpression">
+        /// The condition expression.
         /// </param>
         /// <param name="validationExpression">
+        /// The validation expression.
         /// </param>
         /// <param name="validationMessage">
-        /// The validation Message.
+        /// The validation message.
         /// </param>
         /// <param name="featured">
+        /// The featured.
         /// </param>
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
         /// <param name="answerOrder">
+        /// The answer order.
         /// </param>
         /// <param name="instructions">
+        /// The instructions.
         /// </param>
         /// <param name="groupPublicKey">
+        /// The group public key.
         /// </param>
-        /// <param name="targetGroupKey">
-        /// The Target Group Key.
+        /// <param name="triggers"></param>
+        /// <param name="maxValue">
+        /// The max value of autopropagate question
         /// </param>
         /// <param name="answers">
+        /// The answers.
         /// </param>
         public void AddQuestion(
             Guid publicKey, 
@@ -171,8 +187,9 @@ namespace Main.Core.Domain
             bool mandatory, 
             Order answerOrder, 
             string instructions, 
-            Guid? groupPublicKey, 
-            Guid targetGroupKey, 
+            Guid? groupPublicKey,
+            List<Guid> triggers, 
+            int maxValue,
             Answer[] answers)
         {
             //// performe checks before event raising
@@ -195,7 +212,8 @@ namespace Main.Core.Domain
                         Mandatory = mandatory, 
                         AnswerOrder = answerOrder, 
                         GroupPublicKey = groupPublicKey, 
-                        TargetGroupKey = targetGroupKey, 
+                        Triggers = triggers,
+                        MaxValue = maxValue,
                         Answers = answers, 
                         Instructions = instructions
                     });
@@ -210,8 +228,11 @@ namespace Main.Core.Domain
         /// <param name="questionText">
         /// The question text.
         /// </param>
-        /// <param name="targetGroupKey">
-        /// The target group key.
+        /// <param name="triggers">
+        /// List of triggers for autopropagate question
+        /// </param>
+        /// <param name="maxValue">
+        /// The max value of autopropagate question
         /// </param>
         /// <param name="stataExportCaption">
         /// The stata export caption.
@@ -249,7 +270,8 @@ namespace Main.Core.Domain
         public void ChangeQuestion(
             Guid publicKey, 
             string questionText, 
-            Guid targetGroupKey, 
+            List<Guid> triggers, 
+            int maxValue,
             string stataExportCaption, 
             string instructions, 
             QuestionType questionType, 
@@ -266,7 +288,8 @@ namespace Main.Core.Domain
                 new QuestionChanged
                     {
                         QuestionText = questionText, 
-                        TargetGroupKey = targetGroupKey, 
+                        Triggers = triggers, 
+                        MaxValue = maxValue,
                         StataExportCaption = stataExportCaption, 
                         QuestionType = questionType, 
                         ConditionExpression = conditionExpression, 
@@ -287,10 +310,10 @@ namespace Main.Core.Domain
         /// <param name="completeQuestionnaireId">
         /// The complete questionnaire id.
         /// </param>
-        public void CreateCompletedQ(Guid completeQuestionnaireId)
+        public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
             //// TODO: check is it good to create new AR form another?
-            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument);
+            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
         /// <summary>
@@ -411,7 +434,8 @@ namespace Main.Core.Domain
             Propagate propagateble, 
             Guid groupPublicKey, 
             UserLight executor, 
-            string conditionExpression)
+            string conditionExpression,
+            string description)
         {
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
@@ -422,11 +446,13 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new GroupUpdated
                     {
+                        QuestionnaireId = this.innerDocument.PublicKey.ToString(),
                         GroupPublicKey = groupPublicKey, 
                         GroupText = groupText, 
                         Propagateble = propagateble, 
                         Executor = executor, 
-                        ConditionExpression = conditionExpression
+                        ConditionExpression = conditionExpression,
+                        Description = description
                     });
         }
 
@@ -481,6 +507,13 @@ namespace Main.Core.Domain
         #endregion
 
         #region Methods
+
+        /// <summary>
+        /// The on questionnaire updated.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
@@ -513,6 +546,7 @@ namespace Main.Core.Domain
                 //// if(e.Triggers!=null)
                 // group.Triggers = e.Triggers;
                 group.ConditionExpression = e.ConditionExpression;
+                group.Description = e.Description;
                 group.Update(e.GroupText);
             }
         }
@@ -539,6 +573,10 @@ namespace Main.Core.Domain
         protected void OnImageUpdated(ImageUpdated e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.QuestionKey);
+            if (question == null)
+            {
+                return;
+            }
 
             question.UpdateCard(e.ImageKey, e.Title, e.Description);
         }
@@ -576,6 +614,7 @@ namespace Main.Core.Domain
             group.Title = e.GroupText;
             group.Propagated = e.Paropagateble;
             group.PublicKey = e.PublicKey;
+            group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
             this.innerDocument.Add(group, e.ParentGroupPublicKey);
         }
@@ -588,22 +627,13 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnNewQuestionAdded(NewQuestionAdded e)
         {
-            AbstractQuestion result = new CompleteQuestionFactory().Create(e.QuestionType);
-            result.QuestionType = e.QuestionType;
-            result.QuestionText = e.QuestionText;
-            result.StataExportCaption = e.StataExportCaption;
-            result.ConditionExpression = e.ConditionExpression;
-            result.ValidationExpression = e.ValidationExpression;
-            result.ValidationMessage = e.ValidationMessage;
-            result.AnswerOrder = e.AnswerOrder;
-            result.Featured = e.Featured;
-            result.Mandatory = e.Mandatory;
-            result.Instructions = e.Instructions;
-            result.PublicKey = e.PublicKey;
-            result.Triggers.Add(e.TargetGroupKey);
-            this.UpdateAnswerList(e.Answers, result);
+            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            if (question == null)
+            {
+                return;
+            }
 
-            this.innerDocument.Add(result, e.GroupPublicKey);
+            this.innerDocument.Add(question, e.GroupPublicKey);
         }
 
         /// <summary>
@@ -617,6 +647,7 @@ namespace Main.Core.Domain
             this.innerDocument.Title = e.Title;
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
+            this.innerDocument.LastEntryDate = e.CreationDate;
         }
 
         /// <summary>
@@ -633,18 +664,7 @@ namespace Main.Core.Domain
                 return;
             }
 
-            question.QuestionText = e.QuestionText;
-            question.StataExportCaption = e.StataExportCaption;
-            question.QuestionType = e.QuestionType;
-            this.UpdateAnswerList(e.Answers, question);
-            question.ConditionExpression = e.ConditionExpression;
-            question.ValidationExpression = e.ValidationExpression;
-            question.ValidationMessage = e.ValidationMessage;
-            question.Instructions = e.Instructions;
-            question.Featured = e.Featured;
-            question.Mandatory = e.Mandatory;
-            question.Triggers.Add(e.TargetGroupKey);
-            question.AnswerOrder = e.AnswerOrder;
+            this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 
         /// <summary>
@@ -667,28 +687,6 @@ namespace Main.Core.Domain
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
             this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
-        }
-
-        /// <summary>
-        /// The update answer list.
-        /// </summary>
-        /// <param name="answers">
-        /// The answers.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        protected void UpdateAnswerList(IEnumerable<Answer> answers, AbstractQuestion question)
-        {
-            //// List<Answer> enumerable = answers as List<Answer> ?? answers.ToList();
-            if (answers != null && answers.Any())
-            {
-                question.Children.Clear();
-                foreach (Answer answer in answers)
-                {
-                    question.Add(answer, question.PublicKey);
-                }
-            }
         }
 
         #endregion

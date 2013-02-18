@@ -46,9 +46,9 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
         {
-            this.executor = new CompleteQuestionnaireConditionExecutor(doc.QuestionHash);
+            this.executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-            this.validator = new CompleteQuestionnaireValidationExecutor(doc.QuestionHash);
+            this.validator = new CompleteQuestionnaireValidationExecutor(doc);
 
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
@@ -58,12 +58,19 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.Creator = doc.Creator;
             this.Status = doc.Status;
             this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
+            this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status)).ToList();
+            this.StatusHistory.Reverse();
             this.HandleQuestionTree(doc);
         }
 
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets StatusHistory.
+        /// </summary>
+        public List<ChangeStatusHistoryView> StatusHistory { get; set; }
 
         /// <summary>
         /// Gets or sets the answered questions.
@@ -169,7 +176,10 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.AnsweredQuestions = new List<QuestionStatisticView>();
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
-            foreach (var question in target.QuestionHash.WrapedQuestions)
+
+            this.executor.Execute(target);
+
+            foreach (var question in target.WrappedQuestions)
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }
@@ -188,7 +198,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </param>
         protected void ProccessQuestions(ICompleteQuestion question, Guid gropPublicKey)
         {
-            question.Enabled = this.executor.Execute(question);
+            ////question.Enabled = this.executor.Execute(question) ?? true;
 
             if (!question.Enabled)
             {
@@ -208,7 +218,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
                 this.InvalidQuestions.Add(statItem);
             }
 
-            if (question.GetAnswerObject() != null)
+            if (question.IsAnswered())
             {
                 this.AnsweredQuestions.Add(statItem);
             }

@@ -15,9 +15,15 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web;
     using System.Web.Mvc;
+
+    using Main.Core.Commands.Synchronization;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Questionnaire.Completed;
+
+    using Questionnaire.Core.Web.Helpers;
+    using Questionnaire.Core.Web.Register;
 
     /// <summary>
     /// Show Statistics
@@ -32,6 +38,11 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private IViewRepository viewRepository;
 
+        /// <summary>
+        /// The _global provider.
+        /// </summary>
+        private readonly IGlobalInfoProvider _globalProvider;
+
         #endregion
         
         #region Constructor
@@ -42,9 +53,10 @@ namespace Web.Supervisor.Controllers
         /// <param name="viewRepository">
         /// The view repository.
         /// </param>
-        public DashboardController(IViewRepository viewRepository)
+        public DashboardController(IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
         {
             this.viewRepository = viewRepository;
+            this._globalProvider = globalProvider;
         }
 
         #endregion
@@ -85,10 +97,9 @@ namespace Web.Supervisor.Controllers
                 throw new HttpException("404");
             var newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key));
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
             return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
-
         #endregion
     }
 }

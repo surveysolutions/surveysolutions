@@ -39,6 +39,7 @@ namespace Main.Core.Entities.SubEntities
             this.Name = name;
         }
 
+
         #endregion
 
         #region Public Properties
@@ -52,6 +53,68 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Equals  method
+        /// </summary>
+        /// <param name="obj">
+        /// The obj.
+        /// </param>
+        /// <returns>
+        /// True if Equals
+        /// </returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            return obj.GetType() == typeof(UserLight) && this.Equals((UserLight)obj);
+        }
+
+        /// <summary>
+        /// Equals method
+        /// </summary>
+        /// <param name="other">
+        /// The other.
+        /// </param>
+        /// <returns>
+        /// True if Equals
+        /// </returns>
+        public bool Equals(UserLight other)
+        {
+            if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
+            return other.Id.Equals(this.Id) && other.Name == this.Name;
+        }
+
+        /// <summary>
+        /// GetHashCode  method
+        /// </summary>
+        /// <returns>
+        /// Get Hash Code
+        /// </returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (this.Id.GetHashCode() * 39) ^ (this.Name != null ? this.Name.GetHashCode() : 0);
+            }
+        }
 
         #endregion
     }

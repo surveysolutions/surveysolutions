@@ -1,12 +1,14 @@
 ﻿@using RavenQuestionnaire.Web.Utils
 @using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Question
 @model Main.Core.View.Question.QuestionView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <script charset="utf-8" type="text/javascript" language="javascript">
+
+
     $(function () {
+
         var questionType = $("[customName=questionName] option:selected").text();
         if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
@@ -19,6 +21,7 @@
             }
             else
                 $("#fromDB").css('display', 'none');
+            if (questionType == "AutoPropagate") $("#apguid").show(); else $("#apguid").hide();
         });
     });
 </script>
@@ -31,15 +34,13 @@
 }
 @if (Model.PublicKey != Guid.Empty)
 {
-    <h3>
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
-            <i class="icon-arrow-left"></i></a>Edit Question</h3>
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey, qid = Model.PublicKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3>
 }
 else
 {
-    <h3>
-        <a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey})" class="btn">
-            <i class="icon-arrow-left"></i></a>Edit Question</h3> 
+    <h3><a href="@Url.Action("Details", "Questionnaire", new { id = Model.QuestionnaireKey })" class="btn">
+        <i class="icon-arrow-left"></i></a>Edit Question in @Model.GroupTitle</h3> 
 }
 @using (Html.BeginForm("Save", "Question"))
 {
@@ -55,20 +56,10 @@ else
                     @Html.ValidationMessageFor(model => model.Title)
                 </div>
             </div>
-            @if (Model.PublicKey == Guid.Empty || Model.TargetGroupKey!=Guid.Empty) 
-            {
-            <div class="control-group">
-                <label class="control-label"> Propagateble GUID</label>
-                <div class="controls">
-                    @Html.EditorFor(model => Model.TargetGroupKey)
-                </div>
-            </div>
-            }
             <div class="control-group">
                 @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
                 <div class="controls">
-                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes
-                    </label>
+                    <label class="checkbox">@Html.CheckBoxFor(model => model.Featured) Yes </label>
                 </div>
             </div>
             <div class="control-group">
@@ -85,8 +76,7 @@ else
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">
-                    Type</label>
+                <label class="control-label">Type</label>
                 <div class="controls">
                     @{
         IDictionary<string, object> html = new Dictionary<string, object>();
@@ -97,10 +87,9 @@ else
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label">
-                    Answer order</label>
+                <label class="control-label">Answer order</label>
                 <div class="controls">
-                    @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>(){ { "class","span12"}} )
+                    @Html.EnumDropDownListFor(model => Model.AnswerOrder, new Dictionary<string, object>() { { "class", "span12" } })
                 </div>
             </div>
             <div class="control-group">
@@ -127,7 +116,7 @@ else
             <div class="control-group">
                 @Html.LabelFor(model => model.Instructions, new { @class = "control-label" })
                 <div class="controls">
-                    @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class="span12" })
+                    @Html.TextAreaFor(model => model.Instructions, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                     @Html.ValidationMessageFor(model => model.Instructions)
                 </div>
             </div>
@@ -142,6 +131,7 @@ else
             </div>
         </div>
         <div class="span7">
+            @Html.Partial("_EditAutoPropagates", Model)
             @if (Model.PublicKey != Guid.Empty)
             {
                 @Html.HiddenFor(model => model.PublicKey)
@@ -151,10 +141,8 @@ else
             @Html.Partial("~/Views/Answer/_EditAnswers.cshtml", Model)
         </div>
     </div>
-    
-        
-
     }
+
     <div class="form-actions">
         <input type="submit" value="Save" class="btn btn-primary btn-large" />
         @if (Model.PublicKey != Guid.Empty)

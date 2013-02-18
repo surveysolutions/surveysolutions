@@ -45,7 +45,7 @@ namespace RavenQuestionnaire.Core.Views.Group
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup group, ICompleteGroupFactory groupFactory)
             : base(doc, group, groupFactory)
         {
-            this.PropogationPublicKey = group.PropogationPublicKey.Value;
+            this.PropogationPublicKey = group.PropagationPublicKey.Value;
             this.AutoPropagate = group.Propagated == Propagate.AutoPropagated;
         }
 

@@ -40,8 +40,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// <param name="text">
         /// The text.
         /// </param>
-        public SingleQuestion(Guid qid, string text)
-            : base(text)
+        public SingleQuestion(Guid qid, string text) : base(text)
         {
             this.PublicKey = qid;
             this.Children = new List<IComposite>();
@@ -66,6 +65,29 @@ namespace Main.Core.Entities.SubEntities.Question
         #region Public Methods and Operators
 
         /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="DuplicateNameException">
+        /// </exception>
+        public override void AddAnswer(IAnswer answer)
+        {
+            if (answer == null)
+            {
+                return;
+            }
+
+            if (this.Answers.Any(a => a.PublicKey.Equals(answer.PublicKey)))
+            {
+                throw new DuplicateNameException("answer with current publick key already exist");
+            }
+
+            this.Answers.Add(answer);
+        }
+        
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -80,7 +102,9 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </exception>
         public override void Add(IComposite c, Guid? parent)
         {
-            if (!parent.HasValue || parent.Value == this.PublicKey)
+            throw new NotImplementedException();
+
+            /*if (!parent.HasValue || parent.Value == this.PublicKey)
             {
                 var answer = c as IAnswer;
                 if (answer != null)
@@ -96,8 +120,10 @@ namespace Main.Core.Entities.SubEntities.Question
                 }
             }
 
-            throw new CompositeException();
-        }
+            throw new CompositeException();#1#
+        }*/
+
+
 
         /// <summary>
         /// The find.
@@ -112,11 +138,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override T Find<T>(Guid publicKey)
         {
-            if (typeof(T).IsAssignableFrom(typeof(IAnswer)))
-            {
-                return this.Children.FirstOrDefault(a => a.PublicKey.Equals(publicKey)) as T;
-            }
-
             return null;
         }
 
@@ -133,7 +154,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override IEnumerable<T> Find<T>(Func<T, bool> condition)
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T);
+            return Enumerable.Empty<T>();
         }
 
         /// <summary>
@@ -149,10 +170,10 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </returns>
         public override T FirstOrDefault<T>(Func<T, bool> condition)
         {
-            return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault();
+            return null;
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -160,7 +181,8 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </param>
         public override void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
+            throw new NotImplementedException();
+            //this.Remove(c.PublicKey);
         }
 
         /// <summary>
@@ -173,13 +195,15 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </exception>
         public override void Remove(Guid publicKey)
         {
-            if (this.Children.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
+            throw new NotImplementedException();
+
+            /*if (this.Children.RemoveAll(a => a.PublicKey.Equals(publicKey)) > 0)
             {
                 return;
             }
 
-            throw new CompositeException();
-        }
+            throw new CompositeException();#1#
+        }*/
 
         #endregion
     }

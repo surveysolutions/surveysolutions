@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ICompleteQuestion.cs" company="">
-//   
+// <copyright file="ICompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The CompleteQuestion interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
@@ -14,29 +15,24 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// <summary>
     /// The CompleteQuestion interface.
     /// </summary>
-    public interface ICompleteQuestion : IQuestion
+    public interface ICompleteQuestion : IQuestion, ICompleteItem
     {
         #region Public Properties
 
+        /// <summary>
+        /// Gets or sets a value indicating whether valid.
+        /// </summary>
+        bool Valid { get; set; }
+        
         /// <summary>
         /// Gets or sets the answer date.
         /// </summary>
         DateTime? AnswerDate { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether enabled.
+        /// Gets or sets the comments.
         /// </summary>
-        bool Enabled { get; set; }
-
-        /// <summary>
-        /// Gets or sets the propogation public key.
-        /// </summary>
-        Guid? PropogationPublicKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether valid.
-        /// </summary>
-        bool Valid { get; set; }
+        string Comments { get; set; }
 
         #endregion
 
@@ -49,6 +45,14 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The System.Object.
         /// </returns>
         object GetAnswerObject();
+
+        /// <summary>
+        /// The is answered.
+        /// </summary>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        bool IsAnswered();
 
         /// <summary>
         /// The get answer string.
@@ -76,7 +80,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The comments.
         /// </param>
         void SetComments(string comments);
-
-        #endregion
+        
+       #endregion
     }
 }

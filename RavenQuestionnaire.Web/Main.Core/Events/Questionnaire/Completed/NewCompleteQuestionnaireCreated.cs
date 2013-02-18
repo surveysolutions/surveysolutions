@@ -9,9 +9,7 @@
 namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
-
     using Main.Core.Documents;
-
     using Ncqrs.Eventing.Storage;
 
     /// <summary>

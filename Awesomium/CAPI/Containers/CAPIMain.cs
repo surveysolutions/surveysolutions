@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Awesomium.Core;
-using Common.Utils;
-using Synchronization.Core.Interface;
 using Browsing.Common.Containers;
 using Browsing.Common.Controls;
+using Common.Utils;
+using Synchronization.Core.Interface;
 
 namespace Browsing.CAPI.Containers
 {
@@ -16,5 +15,11 @@ namespace Browsing.CAPI.Containers
             InitializeComponent();
         }
 
+        protected override void OnRefreshRegistrationButton(bool userIsLoggedIn)
+        {
+            var regScreen = this.Holder.LoadedScreens.FirstOrDefault(s => s is CAPIRegistration) as CAPIRegistration;
+
+            ChangeRegistrationButton(true, "Registration", regScreen == null ? null : regScreen.CurrentRegistrationStatus);
+        }
     }
 }

@@ -7,19 +7,20 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Denormalizers;
-using Main.Core.Documents;
-using Main.Core.Entities.Extensions;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.Core.View.Group;
+using Main.DenormalizerStorage;
 
 namespace Core.CAPI.Views.Json
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Main.Core.Documents;
+    using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.Group;
+
     /// <summary>
     /// The complete questionnaire json view factory.
     /// </summary>

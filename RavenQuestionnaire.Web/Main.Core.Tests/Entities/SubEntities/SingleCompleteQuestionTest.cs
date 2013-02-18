@@ -11,8 +11,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Entities.SubEntities.Complete.Question;
@@ -36,13 +36,13 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             var completeAnswer = new CompleteAnswer { AnswerValue = 5, AnswerText = "5", Selected = true };
             var question = new SingleCompleteQuestion
                 {
-                   Children = new List<IComposite> { completeAnswer, new CompleteAnswer() } 
+                   Answers = new List<IAnswer> { completeAnswer, new CompleteAnswer() } 
                 };
             var completeQuestion = question;
-            Assert.AreEqual(question.Children.Count, completeQuestion.Children.Count);
-            for (int i = 0; i < question.Children.Count; i++)
+            Assert.AreEqual(question.Answers.Count, completeQuestion.Answers.Count);
+            for (int i = 0; i < question.Answers.Count; i++)
             {
-                var answer = completeQuestion.Find<ICompleteAnswer>(question.Children[i].PublicKey);
+                var answer = completeQuestion.Answers.FirstOrDefault(q => q.PublicKey == question.Answers[i].PublicKey);
                 Assert.IsNotNull(answer);
             }
 
@@ -66,9 +66,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
                     StataExportCaption = "some stata export caption", 
                     ValidationExpression = "some validation expression"
                 };
-            completeQuestion.Triggers = new List<Guid> { Guid.NewGuid() };
-            var children = new List<IComposite> { new Answer { AnswerText = "some text" }, new Answer(), new Answer() };
-            completeQuestion.Children = children;
+            var children = new List<IAnswer> { new Answer { AnswerText = "some text" }, new Answer(), new Answer() };
+            completeQuestion.Answers = children;
             Assert.AreEqual(completeQuestion.AnswerDate, DateTime.Today);
             Assert.AreEqual(completeQuestion.AnswerOrder, Order.MaxMin);
             Assert.AreEqual(completeQuestion.ConditionExpression, "some expression");
@@ -77,9 +76,8 @@ namespace RavenQuestionnaire.Core.Tests.Entities.SubEntities
             Assert.AreEqual(completeQuestion.QuestionType, QuestionType.SingleOption);
             Assert.AreEqual(completeQuestion.StataExportCaption, "some stata export caption");
             Assert.AreEqual(completeQuestion.ValidationExpression, "some validation expression");
-            Assert.AreEqual(completeQuestion.Triggers.Count, 1);
-            Assert.AreEqual(completeQuestion.Children.Count, 3);
-            Assert.AreEqual(((Answer)completeQuestion.Children[0]).AnswerText, "some text");
+            Assert.AreEqual(completeQuestion.Answers.Count, 3);
+            Assert.AreEqual(((Answer)completeQuestion.Answers[0]).AnswerText, "some text");
         }
 
         #endregion

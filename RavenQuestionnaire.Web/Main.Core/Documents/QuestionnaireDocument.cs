@@ -6,6 +6,9 @@
 //   The QuestionnaireDocument interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.DenormalizerStorage;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -20,6 +23,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The questionnaire document.
     /// </summary>
+    [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
         #region Fields
@@ -112,6 +116,7 @@ namespace Main.Core.Documents
             }
         }
 
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
@@ -121,6 +126,11 @@ namespace Main.Core.Documents
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets the triggers.
@@ -159,7 +169,6 @@ namespace Main.Core.Documents
                 this.Children.Add(c);
                 return;
             }
-
             foreach (IComposite child in this.Children)
             {
                 try
@@ -171,9 +180,9 @@ namespace Main.Core.Documents
                 {
                 }
 
-                /* if (child.Add(c, parent))
-                     return true;*/
             }
+
+
 
             throw new CompositeException();
         }

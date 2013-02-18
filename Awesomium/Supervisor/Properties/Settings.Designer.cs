@@ -85,18 +85,6 @@ namespace Browsing.Supervisor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool RunClient {
-            get {
-                return ((bool)(this["RunClient"]));
-            }
-            set {
-                this["RunClient"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ImportExport/Import")]
         public string UsbImportPath {
             get {
@@ -152,6 +140,54 @@ namespace Browsing.Supervisor.Properties {
             }
             set {
                 this["DefaultPort"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool RunClient {
+            get {
+                return ((bool)(this["RunClient"]));
+            }
+            set {
+                this["RunClient"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/IsUserInBase")]
+        public string LoginCapabilitiesCheckPath {
+            get {
+                return ((string)(this["LoginCapabilitiesCheckPath"]));
+            }
+            set {
+                this["LoginCapabilitiesCheckPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Account/GetCurrentUser")]
+        public string GetCurrentUserPath {
+            get {
+                return ((string)(this["GetCurrentUserPath"]));
+            }
+            set {
+                this["GetCurrentUserPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Device/RegisterCapi")]
+        public string GetRegistrationSupervisorPath {
+            get {
+                return ((string)(this["GetRegistrationSupervisorPath"]));
+            }
+            set {
+                this["GetRegistrationSupervisorPath"] = value;
             }
         }
     }

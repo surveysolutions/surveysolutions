@@ -1,7 +1,7 @@
 ﻿@using Core.CAPI.Views.Grouped
 @using Main.Core.Entities.SubEntities
 @using Main.Core.View.CompleteQuestionnaire
-
+@using Main.Core.View.Question
 @model Core.CAPI.Views.Grouped.CQGroupedBrowseView
 <div data-role="panel" data-id="main" id="dashboard-page">
     <!-- Start of second page -->
@@ -21,63 +21,65 @@
                         {
                             isDashboardEmpty = false;
 
-                        <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider"><a>
-                            @group.SurveyTitle's assigments <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span></a>
-                            @* @Html.ActionLink("New", "Participate", "Survey", new { id = group.SurveyId, mode = "Html5" }, new
-                                                                                                        {
-                                                                                                            @class = "splited-button",
-                                                                                                            data_inline = "true",
-                                                                                                            data_icon = "plus",
-                                                                                                            data_iconpos = "left",
-                                                                                                            data_role = "button",
-                                                                                                            data_theme = "b",
-                                                                                                            data_mini="true",
-                                                                                                            rel = "external",
-                                                                                                            disable_after_click = "true"
-                                                                                                        })*@
-                            @*  <span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>*@
+                        <li data-role="list-divider" data-theme="b" name="@group.SurveyId" class="divider">
+                            @group.SurveyTitle<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@group.TotalCount</span>
                         </li>
+                        <li>
+                            <table class="survey-grid">
+                                <col width="10%" />
+                                @{
+                                    var questionCount = group.Items.First().FeaturedQuestions.Count();
 
-
-                        <li data-theme="c" class="grid-header"><span class="ui-li-count ui-btn-up-c ui-btn-corner-all"
-                            style="visibility: hidden">@group.TotalCount</span> </li>
-
-
-                            foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
-                            {
-                        <li>@* <h1>@survey.Status.Name</h1>*@
-                            @{
-                                string style = string.Empty;
-                                if (survey.Status.PublicId == SurveyStatus.Error.PublicId)
-                                {
-                                    style = "color:red";
+                                    double colWidth = 0;
+                                    if (questionCount > 0)
+                                    {
+                                        colWidth = 90/questionCount;
+                                    }
                                 }
-                                else if (survey.Status.PublicId == SurveyStatus.Complete.PublicId)
+                                 @foreach (CompleteQuestionView featured in group.Items.First().FeaturedQuestions)
+                                    {
+                                        <col width="@colWidth%"/>
+                                    }
+                                <tr>
+                                    <th >
+                                        Status
+                                    </th>
+                                    @foreach (CompleteQuestionView featured in group.Items.First().FeaturedQuestions)
+                                    {
+                                        <th>@featured.Title
+                                        </th>
+                                    }
+                                </tr>
+                                @foreach (CompleteQuestionnaireBrowseItem survey in group.Items)
                                 {
-                                    style = "color:green";
+
+                                    <tr @*onclick="document.location='@Url.Action("Index", "Survey", new { id = survey.CompleteQuestionnaireId })'"*@>
+                                        <td >
+                                            <a class="nav-link" rel="external"  href="@Url.Action("Index", "Survey", new { id = survey.CompleteQuestionnaireId })" 
+                                               data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">
+                                                @survey.Status.Name</a>
+                                        </td>
+                                        @foreach (CompleteQuestionView featured in survey.FeaturedQuestions)
+                                        {
+                                            <td>@featured.Answer
+                                            </td>
+                                        }
+                                    </tr>
                                 }
-                            }
-                            @Html.ActionLink(" " + string.Concat(survey.FeaturedQuestions.Select(f => f.Title + " " + f.Answer + " ")), "Index", "Survey", new { id = survey.CompleteQuestionnaireId }, new
-                                            {
-                                                data_theme = "b",
-                                                rel = "external",
-                                                style = style
-                                            })
-                            @*<span class="ui-li-count ui-btn-up-c ui-btn-corner-all">@survey.AnsweredQuestionCount/@survey.TotalQuestionCount</span>*@
+                            </table>
                         </li>
-                            }
                         }
 
                     }
                     @if (isDashboardEmpty)
                     {
                         <li>
-                            <h1>No assignments was found.</h1>
+                            <h1>
+                                No assignments was found.</h1>
                         </li>
                     }
                 </ul>
             </div>
-
         </div>
     </div>
     <div id="dialogContainer">

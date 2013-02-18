@@ -7,14 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Main.Core.Conventions;
-using Main.Core.Denormalizers;
 using Main.Core.ExpressionExecutors;
 using Main.Core.View;
+using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ninject;
+using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 
@@ -70,7 +73,7 @@ namespace Main.Core
 
         public virtual IEnumerable<Assembly> GetAssweblysForRegister()
         {
-            return new[] {(typeof (CoreRegistry)).Assembly};
+            return new[] {(typeof (CoreRegistry)).Assembly, typeof(IDenormalizer).Assembly};
 
         }
 
@@ -94,15 +97,9 @@ namespace Main.Core
                 x =>
                 x.From(GetAssweblysForRegister()).SelectAllClasses().BindWith(
                     new RegisterGenericTypesOfInterface(typeof(IExpressionExecutor<,>))));
-           
-            this.Kernel.Bind(
-                x =>
-                 x.From(GetAssweblysForRegister()).Select(
-                    t =>
-                    t.GetInterfaces().FirstOrDefault(
-                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDenormalizerStorage<>)) != null)
-                    .BindAllInterfaces().Configure(binding => binding.InSingletonScope()));
 
+           
+            RegisterDenormalizers();
             this.Kernel.Bind(
                 x =>
                 x.From(GetAssweblysForRegister()).Select(
@@ -117,5 +114,46 @@ namespace Main.Core
         }
 
         #endregion
+
+        protected  void RegisterDenormalizers()
+        {
+            /*  if (typeof (T).GetCustomAttributes(typeof (SmartDenormalizerAttribute), true).Length > 0)
+            {
+                return this.container.Get<WeakReferenceDenormalizer<T>>();
+            }*/
+            this.Kernel.Bind(
+                 x =>
+                  x.From(GetAssweblysForRegister()).Select(
+                   t =>
+                   t.GetInterfaces().FirstOrDefault(
+                       i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDenormalizerStorage<>)) != null).BindToSelf().Configure(binding => binding.InSingletonScope()));
+            this.Kernel.Bind(
+                 x =>
+                  x.From(GetAssweblysForRegister()).Select(
+                   t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(DenormalizerStorageProvider<>)).BindToSelf().Configure(binding => binding.InSingletonScope()));
+           /* var denormalizerImpls = GetAssweblysForRegister().SelectMany(ProcessDenormalizer);
+            foreach (Type denormalizerImpl in denormalizerImpls)
+            {*/
+            Bind(typeof(IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider); 
+              /*  this.Kernel.Bind(denormalizerImpl).To(typeof (WeakReferenceDenormalizer<>)).When(
+                    f => GetWeekBinding(f.Target.Type));
+                this.Kernel.Bind(denormalizerImpl).To(typeof(InMemoryDenormalizer<>)).When(
+                 f => !GetWeekBinding(f.Target.Type));*/
+         //   }
+           
+
+        }
+        protected IEnumerable<Type> ProcessDenormalizer(Assembly assembly)
+        {
+            return assembly.GetTypes().Where(t => t.GetInterfaces().FirstOrDefault(
+                i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) != null);
+        }
+        protected object ActivteDenormalizerFromProvider(IContext ctx)
+        {
+            return
+                (ctx.Kernel.Get(
+                    typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments))
+                 as IProvider).Create(ctx);
+        }
     }
 }

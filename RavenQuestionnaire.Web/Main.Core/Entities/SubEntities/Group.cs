@@ -32,6 +32,8 @@ namespace Main.Core.Entities.SubEntities
             this.Children = new List<IComposite>();
             this.Triggers = new List<Guid>();
             this.ConditionExpression = string.Empty;
+            this.Description = string.Empty;
+            this.Enabled = true;
         }
 
         /// <summary>
@@ -66,6 +68,11 @@ namespace Main.Core.Entities.SubEntities
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Gets the parent.
         /// </summary>
         /// <exception cref="NotImplementedException">
@@ -89,6 +96,7 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
+
 
         /// <summary>
         /// Gets or sets the public key.
@@ -231,7 +239,7 @@ namespace Main.Core.Entities.SubEntities
                 }
                 else
                 {
-                    this.Children.Add(c);
+                    this.Children.Insert(0, c);
                     return;
                 }
             }

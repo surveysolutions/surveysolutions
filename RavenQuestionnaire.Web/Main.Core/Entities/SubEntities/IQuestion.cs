@@ -1,24 +1,31 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IQuestion.cs" company="">
-//   
+// <copyright file="IQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The Question interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
+    using System;
     using System.Collections.Generic;
 
     using Main.Core.Entities.Composite;
-    using Main.Core.Entities.Observers;
+    
 
     /// <summary>
     /// The Question interface.
     /// </summary>
-    public interface IQuestion : IComposite, ITriggerable
+    public interface IQuestion : IComposite, IConditional
     {
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the children.
+        /// </summary>
+        List<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets the answer order.
@@ -34,17 +41,7 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the cards.
         /// </summary>
         List<Image> Cards { get; set; }
-
-        /// <summary>
-        /// Gets or sets the comments.
-        /// </summary>
-        string Comments { get; set; }
-
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
-        string ConditionExpression { get; set; }
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether featured.
         /// </summary>
@@ -68,10 +65,10 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
-        QuestionType QuestionType { get; set; }
+        QuestionType QuestionType { get; set; } ////must be deleted
 
         /// <summary>
-        /// Gets or sets the stata export caption.
+        /// Gets or sets the Stata export caption.
         /// </summary>
         string StataExportCaption { get; set; }
 
@@ -84,7 +81,23 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the validation message.
         /// </summary>
         string ValidationMessage { get; set; }
-
+        
         #endregion
+
+        /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        void AddAnswer(IAnswer answer);
+
+        /*/// <summary>
+        /// The remove answer.
+        /// </summary>
+        /// <param name="answerKey">
+        /// The answer key.
+        /// </param>
+        void RemoveAnswer(Guid answerKey);*/
     }
 }
