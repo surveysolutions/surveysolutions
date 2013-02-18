@@ -18,7 +18,7 @@
           android:orientation=    "horizontal"
           android:layout_width=    "fill_parent"
           android:layout_height=    "wrap_content"
-          android:background="@android:drawable/list_selector_background"
+          android:background="?android:attr/selectableItemBackground"
           android:padding="10dip"
           android:clickable="true"
           local:MvxBind="{'Click':{'Path':'ViewDetailCommand'}}" >

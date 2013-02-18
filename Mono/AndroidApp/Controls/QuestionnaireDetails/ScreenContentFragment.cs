@@ -11,27 +11,32 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
+using AndroidApp.Core;
 using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Java.Interop;
 using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class ScreenContentFragment : Fragment
+    public class ScreenContentFragment : AbstractScreenChangingFragment
     {
         private readonly IQuestionViewFactory questionViewFactory;
-        public static ScreenContentFragment NewInstance(QuestionnaireScreenViewModel model)
+
+        protected ScreenContentFragment()
         {
-            ScreenContentFragment f = new ScreenContentFragment(model);
-
-
-            return f;
+            this.questionViewFactory = new DefaultQuestionViewFactory();
+            this.RetainInstance = true;
+            this.questionViewFactory = new DefaultQuestionViewFactory();
         }
-        public ScreenContentFragment(QuestionnaireScreenViewModel model):base()
+
+        public ScreenContentFragment(QuestionnaireScreenViewModel model)
+            : this()
         {
+           
             this.Model = model;
-            this.questionViewFactory=new DefaultQuestionViewFactory();
+            
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -42,16 +47,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-            ScrollView sv=new ScrollView(inflater.Context);
+        
+           
+            ScrollView sv = new ScrollView(inflater.Context);
             sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
-            LinearLayout ll=new LinearLayout(inflater.Context);
+            LinearLayout ll = new LinearLayout(inflater.Context);
             ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
-            ll.SetPadding(0, 10, 0, 0);
-            
+
             sv.AddView(ll);
+
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            ll.AddView(breadcrumbs);
+
             foreach (var item in Model.Items)
             {
                 var question = item as QuestionViewModel;
@@ -75,21 +86,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-        void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
+       
+        private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);
         }
 
 
         public QuestionnaireScreenViewModel Model { get; private set; }
-        protected void OnScreenChanged(ScreenChangedEventArgs evt)
-        {
-            var handler = ScreenChanged;
-            if (handler != null)
-                handler(this, evt);
-        }
-
-        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
 
     }
 }

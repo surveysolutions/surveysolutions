@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
+using Android.Views.InputMethods;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
@@ -36,13 +37,35 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            etAnswer=new EditText(this.Context);
-
+            etAnswer = new EditText(this.Context);
+            etAnswer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                                   ViewGroup.LayoutParams.WrapContent);
             etAnswer.Text = Model.AnswerString;
+            etAnswer.SetSelectAllOnFocus(true);
+            etAnswer.ImeOptions = ImeAction.Done;
+            etAnswer.SetSingleLine(true);
+            etAnswer.EditorAction += etAnswer_EditorAction;
+            this.Click += TextQuestionView_Click;
             llWrapper.AddView(etAnswer);
+        }
+
+        void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            etAnswer.ClearFocus();
+            InputMethodManager imm
+                = (InputMethodManager) this.Context.GetSystemService(
+                    Context.InputMethodService);
+            imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
+        }
+
+        void TextQuestionView_Click(object sender, EventArgs e)
+        {
+            etAnswer.RequestFocus();
         }
 
 
         protected EditText etAnswer { get; set; }
+
+       
     }
 }

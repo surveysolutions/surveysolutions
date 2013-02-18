@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System.Reflection;
+using AndroidApp.Authorization;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Core.CAPI.Synchronization;
 using Main.Core;
@@ -38,8 +39,12 @@ namespace AndroidApp.Injections
         }
         public override void Load()
         {
-            this.Bind<IEventStore>().To<SQLiteEventStore>();
             base.Load();
+            this.Bind<IEventStore>().To<SQLiteEventStore>();
+            this.Unbind<IAuthentication>();
+            var membership = new AndroidAuthentication();
+            this.Bind<IAuthentication>().ToConstant(membership);
+           
         }
     }
 }

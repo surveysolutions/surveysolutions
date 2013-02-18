@@ -1,16 +1,14 @@
-﻿// -----------------------------------------------------------------------
+// -----------------------------------------------------------------------
 // <copyright file="DashboardSurveyItem.cs" company="">
 // TODO: Update copyright text.
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace AndroidApp.ViewModel.Model
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+using System;
+using System.Collections.Generic;
 
+namespace AndroidApp.ViewModel.Dashboard
+{
     /// <summary>
     /// TODO: Update summary.
     /// </summary>

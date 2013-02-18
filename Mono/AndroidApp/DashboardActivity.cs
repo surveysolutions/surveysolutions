@@ -11,9 +11,10 @@ using Android.Text.Method;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using AndroidApp.Controls.Navigation;
+using AndroidApp.Extensions;
 using AndroidApp.Injections;
-using AndroidApp.ViewModel.Input;
-using AndroidApp.ViewModel.Model;
+using AndroidApp.ViewModel.Dashboard;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 using Core.CAPI.Views.Grouped;
@@ -28,8 +29,8 @@ using Ninject;
 using Android.Graphics;
 namespace AndroidApp
 {
-    [Activity(Label = "CAPI", MainLauncher = true, Icon = "@drawable/capi")]
-    public class Activity1 : MvxSimpleBindingActivity<DashboardModel>
+    [Activity(Label = "CAPI",  Icon = "@drawable/capi")]
+    public class DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)
         {
@@ -38,6 +39,11 @@ namespace AndroidApp
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(new DashboardInput());
             SetContentView(Resource.Layout.Main);
 
+        }
+        public override bool OnCreateOptionsMenu(Android.Views.IMenu menu)
+        {
+            this.CreateActionBar();
+            return base.OnCreateOptionsMenu(menu);
         }
     }
 }

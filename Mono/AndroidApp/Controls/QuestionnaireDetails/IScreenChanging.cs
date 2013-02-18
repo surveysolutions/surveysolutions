@@ -9,10 +9,12 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AndroidApp.Events;
 
-namespace AndroidApp.ViewModel.Input
+namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class DashboardInput
+    public interface IScreenChanging
     {
+         event EventHandler<ScreenChangedEventArgs> ScreenChanged;
     }
 }

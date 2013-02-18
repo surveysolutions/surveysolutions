@@ -12,22 +12,29 @@ using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.Roster;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
+using AndroidApp.Core;
 using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
-using Fragment = Android.Support.V4.App.Fragment;
+using Java.Interop;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
-    public class GridContentFragment : Fragment
+    public class GridContentFragment : AbstractScreenChangingFragment
     {
         public GridContentFragment(QuestionnaireGridViewModel model)
-            : base()
+            : this()
         {
+            
             this.Model = model;
         }
-
+        protected GridContentFragment()
+            : base()
+        {
+            this.questionViewFactory = new DefaultQuestionViewFactory();
+            this.RetainInstance = true;
+        }
         public override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -49,8 +56,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             ll.Orientation = Orientation.Vertical;
-            ll.SetPadding(0, 10, 0, 0);
 
+            var breadcrumbs = new BreadcrumbsView(inflater.Context, Model.Breadcrumbs, OnScreenChanged);
+            breadcrumbs.SetPadding(0, 0, 0, 10);
+            ll.AddView(breadcrumbs);
 
             TableLayout tl = new TableLayout(inflater.Context);
             tl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent);
@@ -155,7 +164,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                    return;*/
 
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(new DefaultQuestionViewFactory().CreateQuestionView(this.Activity, e.Model /*,
+            setAnswerPopup.SetView(this.questionViewFactory.CreateQuestionView(this.Activity, e.Model /*,
                                                                                        headerItem*/));
             //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
@@ -189,14 +198,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             OnScreenChanged(new ScreenChangedEventArgs(publicKey));
             
         }
-        protected void OnScreenChanged(ScreenChangedEventArgs evt)
-        {
-            var handler = ScreenChanged;
-            if (handler != null)
-                handler(this, evt);
-        }
-
-        public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
+       
 
         protected void AssignHeaderStyles(TextView tv)
         {
@@ -206,7 +208,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             tv.TextSize = 20;
             
         }
-
+        protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
 
        

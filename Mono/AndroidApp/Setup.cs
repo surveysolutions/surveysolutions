@@ -10,7 +10,10 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Bindings;
+using AndroidApp.ViewModel.Dashboard;
+using AndroidApp.ViewModel.Login;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Application;
 using Cirrious.MvvmCross.Binding.Bindings.Target.Construction;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
 
@@ -22,6 +25,10 @@ namespace AndroidApp
         public Setup(Context applicationContext)
             : base(applicationContext)
         {
+        }
+        protected override MvxApplication CreateApp()
+        {
+            return new App();
         }
         protected override IEnumerable<Type> ValueConverterHolders
         {
@@ -40,6 +47,11 @@ namespace AndroidApp
 
             if (!lookups.ContainsKey(typeof (QuestionnaireScreenViewModel)))
                 lookups.Add(typeof (QuestionnaireScreenViewModel), typeof (DetailsActivity));
+            if (!lookups.ContainsKey(typeof(DashboardModel)))
+                lookups.Add(typeof(DashboardModel), typeof(DashboardActivity));
+
+            if (!lookups.ContainsKey(typeof(LoginViewModel)))
+                lookups.Add(typeof(LoginViewModel), typeof(LoginActivity));
             return lookups;
         }
     }
