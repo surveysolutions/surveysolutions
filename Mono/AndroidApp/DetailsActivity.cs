@@ -104,6 +104,13 @@ namespace AndroidApp
 
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
+            var index = Adapter.GetScreenIndex(e.ScreenId);
+
+            if (index >= 0)
+            {
+                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
+                return;
+            }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
               new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
             Adapter.UpdateScreenData(firstScreen, e.ScreenId);
@@ -119,23 +126,6 @@ namespace AndroidApp
         {
             if (Adapter.IsRoot)
                 NavList.SelectItem(e.P0);
-        }
-
-
-        private void navList_ItemClick(object sender, ScreenChangedEventArgs e)
-        {
-            var index = Adapter.GetScreenIndex(e.ScreenId);
-
-            if (index >= 0)
-            {
-                VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
-                return;
-            }
-            var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
-            Adapter.UpdateScreenData(firstScreen,e.ScreenId);
-           /* Adapter = new ContentFrameAdapter(this.SupportFragmentManager, firstScreen, VpContent);
-            Adapter.NotifyDataSetChanged();*/
         }
 
     }
