@@ -235,6 +235,17 @@ RavenQuestionnaire.Web/Main.DenormalizerStorage.Tests/bin/*
 RavenQuestionnaire.Web/Main.DenormalizerStorage.Tests/obj/*
 RavenQuestionnaire.Web/Main.DenormalizerStorage/bin/*
 RavenQuestionnaire.Web/Main.DenormalizerStorage/obj/*
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/success.marker
+RavenQuestionnaire.Web/Web.Supervisor/success.marker
+RavenQuestionnaire.Web/RavenQuestionnaire.Web/App_Data/success.marker
+RavenQuestionnaire.Web/Web.Headquarter/App_Data/success.marker
+RavenQuestionnaire.Web/Main.Core.Tests/bin/
+RavenQuestionnaire.Web/Main.Core.Tests/obj/*
+*.StyleCop
+RavenQuestionnaire.Web/Main.Synchronization/bin/*
+RavenQuestionnaire.Web/Main.Synchronization/obj/*
+*/StyleCop.Cache
+RavenQuestionnaire.Web/Main.Synchronization.Tests/obj/*
 Mono/AndroidNCalc/bin/*
 Mono/AndroidNCalc/obj/*
 Mono/Antlr3.Runtime/_ReSharper*
@@ -493,7 +504,6 @@ Externals/Framework/src/Ncqrs/bin/*
 Externals/Framework/src/Ncqrs.Spec/bin/*
 Externals/Extentions/Ncqrs.Eventing.Storage.RavenDB/bin/*
 
-RavenQuestionnaire.Web/Main.Core.Tests/*
 RavenQuestionnaire.Web/Main.Core/bin/*
 RavenQuestionnaire.Web/Main.Core/obj/Debug/*.*
 RavenQuestionnaire.Web/Web.Supervisor/Bin/*.*
