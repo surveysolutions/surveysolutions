@@ -147,7 +147,7 @@ namespace Main.Core.AbstractFactories
                 e.AnswerOrder,
                 e.Featured,
                 e.Mandatory,
-                false,
+                e.Capital,
                 e.Instructions,
                 e.Triggers,
                 e.MaxValue);
@@ -184,7 +184,7 @@ namespace Main.Core.AbstractFactories
                 e.AnswerOrder,
                 e.Featured,
                 e.Mandatory,
-                false,
+                e.Capital,
                 e.Instructions,
                 e.Triggers,
                 e.MaxValue);

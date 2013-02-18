@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 using Main.Core.Documents;
@@ -80,7 +81,9 @@ namespace Main.Core.View.Question
             this.AnswerOrder = doc.AnswerOrder;
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
+            this.Capital = doc.Capital;
             var autoQuestion = doc as IAutoPropagate;
+
             if (autoQuestion != null && autoQuestion.Triggers.Any())
             {
                 this.Triggers = autoQuestion.Triggers;
@@ -142,11 +145,11 @@ namespace Main.Core.View.Question
         public bool Mandatory { get; set; }
 
         /// <summary>
-        /// Gets or sets MaxValue
+        /// Gets or sets a value indicating whether Capital.
         /// </summary>
-        /*[Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]*/
-        public int MaxValue { get; set; }
+        public bool Capital { get; set; }
 
+        /// <summary>
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
@@ -160,7 +163,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets question scope.
         /// </summary>
-        public QuestionScope QuestionScope { get; set; }
+        [Required]
 
         /// <summary>
         /// Gets or sets the question type.
@@ -175,6 +178,10 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
+        [Required(ErrorMessage = "Variable name shouldn't be empty or contains white spaces")]
+        [DisplayName("Variable name")]
+        [StringLength(32, ErrorMessage = "Variable name shouldn't be longer than 32 characters")]
+        [RegularExpression(@"^[a-zA-Z_][a-zA-Z0-9_]*$", ErrorMessage = "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit")]
         public string StataExportCaption { get; set; }
 
         /// <summary>
@@ -185,6 +192,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
+        [Required]
         public string Title { get; set; }
 
         /// <summary>
@@ -201,6 +209,11 @@ namespace Main.Core.View.Question
         /// Gets or sets the validation message.
         /// </summary>
         public string ValidationMessage { get; set; }
+
+        /// <summary>
+        /// Gets or sets parent group is propagated.
+        /// </summary>
+        public bool IsPropagated { get; set; }
 
         #endregion
     }
@@ -270,7 +283,10 @@ namespace Main.Core.View.Question
             IGroup parent = this.GetQuestionGroup(questionnaire, doc.PublicKey);
             this.Parent = parent.PublicKey;
             this.GroupTitle = parent.Title;
+            this.IsPropagated = parent.Propagated != Propagate.None;
         }
+
+        
 
         #endregion
 

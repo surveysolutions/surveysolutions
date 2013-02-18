@@ -77,7 +77,7 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="maxValue">
         /// The max Value.
         /// </param>
-        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers, int maxValue)
+        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, bool capital, Order answerOrder, Answer[] answers, int maxValue)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
@@ -90,6 +90,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.Instructions = instructions;
             this.Featured = featured;
             this.Mandatory = mandatory;
+            this.Capital = capital;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
             this.Answers = answers;
@@ -145,13 +146,16 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="mandatory">
         ///   The mandatory.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="answerOrder">
         ///   The answer order.
         /// </param>
         /// <param name="answers">
         ///   The answers.
         /// </param>
-        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, List<Guid> triggers, int maxValue, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
+        public AddQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, List<Guid> triggers, int maxValue, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, Guid? groupPublicKey, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, bool capital, Order answerOrder, Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
@@ -166,6 +170,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.Instructions = instructions;
             this.Featured = featured;
             this.Mandatory = mandatory;
+            this.Capital = capital;
             this.AnswerOrder = answerOrder;
             this.GroupPublicKey = groupPublicKey;
             this.Answers = answers;
@@ -215,6 +220,11 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// Gets or sets a value indicating whether mandatory.
         /// </summary>
         public bool Mandatory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether capital.
+        /// </summary>
+        public bool Capital { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.

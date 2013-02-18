@@ -18,11 +18,6 @@ namespace Main.Core.Events.User
     /// </summary>
     public class UserBaseEvent
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether is locked.
-        /// </summary>
-        public bool IsLocked { get; set; }
-
         public bool IsAssignedRole(UserRoles role)
         {
             return DoCheckIsAssignedRole(role);

@@ -65,7 +65,7 @@ namespace Main.Core.View.Question
             this.Answered = doc.IsAnswered();
             this.Featured = doc.Featured;
             this.Mandatory = doc.Mandatory;
-            this.Comments = doc.Comments;
+            this.Comments = doc.LastComment;
             if (doc.Cards != null)
             {
                 this.Cards =

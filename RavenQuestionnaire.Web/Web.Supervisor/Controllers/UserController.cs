@@ -67,6 +67,11 @@ namespace Web.Supervisor.Controllers
 
         #endregion
 
+        private static ICommandService CommandService
+        {
+            get { return NcqrsEnvironment.Get<ICommandService>(); }
+        }
+
         #region PublicActions
 
         /// <summary>
@@ -80,7 +85,11 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult UnlockUser(string id)
         {
-            return this.SetUserLock(id, false);
+            Guid key = ParseKeyOrThrow404(id);
+
+            CommandService.Execute(new UnlockUserCommand(key));
+
+            return this.RedirectToAction("Index");
         }
 
         /// <summary>
@@ -94,7 +103,11 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult LockUser(string id)
         {
-            return this.SetUserLock(id, true);
+            Guid key = ParseKeyOrThrow404(id);
+
+            CommandService.Execute(new LockUserCommand(key));
+
+            return this.RedirectToAction("Index");
         }
 
         /// <summary>
@@ -270,29 +283,16 @@ namespace Web.Supervisor.Controllers
 
         #region Private
 
-        /// <summary>
-        /// Change user lock status
-        /// </summary>
-        /// <param name="id">
-        /// User public key
-        /// </param>
-        /// <param name="status">
-        /// Lock status
-        /// </param>
-        /// <returns>
-        /// Redirects to index view if everything is ok
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// Throws 404 exception if can not parse string guid
-        /// </exception>
-        private ActionResult SetUserLock(string id, bool status)
+        private static Guid ParseKeyOrThrow404(string id)
         {
             Guid key;
+
             if (!Guid.TryParse(id, out key))
+            {
                 throw new HttpException("404");
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new ChangeUserStatusCommand(key, status));
-            return this.RedirectToAction("Index");
+            }
+
+            return key;
         }
 
         #endregion

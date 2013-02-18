@@ -114,6 +114,7 @@ namespace Main.Core.Tests.Domain
                 List<Guid> triggers = null;
                 int maxValue = 3;
                 Answer[] answers = null;
+                bool capital = false;
 
                 questionnaire.AddQuestion(
                     publicKey, 
@@ -125,7 +126,8 @@ namespace Main.Core.Tests.Domain
                     validationExpression, 
                     validationMessage, 
                     featured, 
-                    mandatory, 
+                    mandatory,
+                    capital,
                     answerOrder, 
                     instructions, 
                     groupPublicKey, 

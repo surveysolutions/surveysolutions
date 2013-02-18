@@ -62,7 +62,7 @@ namespace Core.Supervisor.Views.Status
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
             if (status == SurveyStatus.Unknown)
             {
-                status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
+                status = new SurveyStatus { PublicId = Guid.Empty, Name = "All" };
             }
 
             var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
@@ -111,6 +111,11 @@ namespace Core.Supervisor.Views.Status
             if (field == "Title")
             {
                 return item.User.Name;
+            }
+
+            if (field == "Total")
+            {
+                return item.Total;
             }
 
             Guid templateId;

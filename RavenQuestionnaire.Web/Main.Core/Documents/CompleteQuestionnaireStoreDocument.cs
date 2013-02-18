@@ -56,6 +56,7 @@ namespace Main.Core.Documents
             //// this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
             this.StatusChangeComments = new List<ChangeStatusDocument>();
+            
         }
 
         #endregion

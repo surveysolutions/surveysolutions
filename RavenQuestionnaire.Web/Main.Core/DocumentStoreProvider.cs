@@ -72,8 +72,8 @@ namespace Main.Core
 			DocumentStore store;
 			try
 			{
-                store = this.isEmbedded ?
-                    GetEmbededStorage() : 
+            store = this.isEmbedded ?
+                        this.GetEmbededStorage() : 
 					new DocumentStore { Url = this.storage };
                 
 				store.Initialize();

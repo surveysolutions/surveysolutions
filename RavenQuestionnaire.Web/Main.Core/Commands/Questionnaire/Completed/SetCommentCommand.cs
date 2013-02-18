@@ -11,6 +11,7 @@ namespace Main.Core.Commands.Questionnaire.Completed
     using System;
 
     using Main.Core.Domain;
+    using Main.Core.Entities.SubEntities;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
@@ -39,15 +40,19 @@ namespace Main.Core.Commands.Questionnaire.Completed
         /// <param name="propogationPublicKey">
         /// The propogation public key.
         /// </param>
+        /// <param name="user">
+        /// The user.
+        /// </param>
         public SetCommentCommand(
             Guid completeQuestionnaireId,
             Guid questionPublicKey,
             string questionComments,
-            Guid? propogationPublicKey)
+            Guid? propogationPublicKey,
+            UserLight user)
         {
             this.CompleteQuestionnaireId = completeQuestionnaireId;
 
-            //// this.Executor = executor;
+            this.User = user;
             this.QuestionPublickey = questionPublicKey;
             this.PropogationPublicKey = propogationPublicKey;
             this.Comments = questionComments;
@@ -56,6 +61,11 @@ namespace Main.Core.Commands.Questionnaire.Completed
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets User.
+        /// </summary>
+        public UserLight User { get; set; }
 
         /// <summary>
         /// Gets or sets the comments.
