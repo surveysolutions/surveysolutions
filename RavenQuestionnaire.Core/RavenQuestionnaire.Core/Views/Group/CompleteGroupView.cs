@@ -50,10 +50,6 @@ namespace RavenQuestionnaire.Core.Views.Group
         {
             this.Description = group.Description;
             this.ConditionExpression = doc.ConditionExpression;
-            this.Questions =
-                group.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
-            this.Groups =
-                group.Children.OfType<ICompleteGroup>().Select(g => CreateGroup(doc, g, groupFactory)).ToArray();
         }
 
         #endregion

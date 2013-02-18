@@ -56,9 +56,6 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
                     this.Children.Add(new GroupView(doc, g));
                 }
             }
-
-            this.Questions = doc.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
-            this.Groups = doc.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
         }
 
         #endregion
