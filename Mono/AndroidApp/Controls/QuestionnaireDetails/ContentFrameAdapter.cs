@@ -29,9 +29,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
         private Fragment[] mFragments;
+        private FragmentManager fm;
         public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey screenId)
             : base(fm)
         {
+            this.fm = fm;
             this.questionnaire = questionnaire;
           //  this.questionnaireId = questionnaire.PublicKey;
             this.target = target;
@@ -58,16 +60,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public override Fragment GetItem(int position)
         {
-
+            Fragment fragment = this.mFragments[position];
+            if (fragment != null)
+                return fragment;
             if (position == screensHolder.Count && isRoot)
             {
-                return new StatisticsContentFragment(questionnaire.PublicKey);
+                fragment = new StatisticsContentFragment(questionnaire.PublicKey);
             }
             else
             {
-                Fragment fragment = this.mFragments[position];
-                if (fragment != null)
-                    return fragment;
+
                 var param = screensHolder[position];
                 var model = questionnaire.Screens[param];
                 var screenModel = model as QuestionnaireScreenViewModel;
@@ -80,13 +82,14 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 {
                     fragment = new GridContentFragment(grid, questionnaire);
                 }
-                if (fragment == null)
-                    throw new InvalidOperationException();
-                this.mFragments[position] = fragment;
-                return fragment;
-            }
-        }
+              
 
+            }
+            if (fragment == null)
+                throw new InvalidOperationException();
+            this.mFragments[position] = fragment;
+            return fragment;
+        }
         public override int GetItemPosition(Java.Lang.Object p0)
         {
             return PositionNone;
@@ -108,6 +111,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
+           
             this.mFragments = new Fragment[this.Count];
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);

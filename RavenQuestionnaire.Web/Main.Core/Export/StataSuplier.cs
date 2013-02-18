@@ -113,7 +113,7 @@ namespace Main.Core.Export
                         this.doContent.AppendFormat(string.Format("label define {0} ", labelName));
                         foreach (var label in headerItem.Labels)
                         {
-                            this.doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, label.Value.Title);
+                            this.doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, label.Value.Title.Replace(System.Environment.NewLine, string.Empty));
                         }
 
                         this.doContent.AppendLine();
@@ -125,7 +125,7 @@ namespace Main.Core.Export
                 }
 
                 this.doContent.AppendLine(
-                    string.Format("label var {0} `\"{1}\"'", headerItem.Caption, headerItem.Title));
+                    string.Format("label var {0} `\"{1}\"'", headerItem.Caption, headerItem.Title.Replace(System.Environment.NewLine, string.Empty)));
             }
         }
 

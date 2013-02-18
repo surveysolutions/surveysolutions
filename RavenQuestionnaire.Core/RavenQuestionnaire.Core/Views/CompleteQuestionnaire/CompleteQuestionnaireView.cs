@@ -57,8 +57,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         {
             this.Status = doc.Status;
             this.Responsible = doc.Responsible;
-            this.Questions =
-                doc.Children.OfType<ICompleteQuestion>().Select(q => new CompleteQuestionView(doc, q)).ToArray();
+          
             this.TemplateId = doc.TemplateId;
         }
 

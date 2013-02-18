@@ -7,10 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using RavenQuestionnaire.Web.Utils;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -184,7 +187,7 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             this.commandService.Execute(new DeleteQuestionCommand(publicKey, parentPublicKey, Guid.Parse(questionnaireId)));
             return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
-            
+
         }
 
         /// <summary>
@@ -239,8 +242,12 @@ namespace RavenQuestionnaire.Web.Controllers
             }
 
             this.LoadImages();
-            QuestionView model = this.viewRepository.Load<QuestionViewInputModel, QuestionView>(
-                    new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            QuestionView model = this.viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
+            var transformator = new ExpressionReplacer(this.viewRepository);
+
+            model.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(model.ConditionExpression, questionnaireKey.Value);
+            model.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(model.ValidationExpression, questionnaireKey.Value);
+
             this.ViewBag.Group = model.Groups;
             this.ViewBag.CurrentGroup = model.Parent;
             //return this.PartialView("_Create", model);
@@ -266,13 +273,13 @@ namespace RavenQuestionnaire.Web.Controllers
         {
             CardView source = this.viewRepository.Load<CardViewInputModel, CardView>(new CardViewInputModel(publicKey, questionnaireId, imageKey));
             return this.View(
-                "_EditCard", 
+                "_EditCard",
                 new ImageNewViewModel
                     {
-                        Desc = source.Description, 
-                        Title = source.Title, 
-                        QuestionnaireId = questionnaireId, 
-                        PublicKey = publicKey, 
+                        Desc = source.Description,
+                        Title = source.Title,
+                        QuestionnaireId = questionnaireId,
+                        PublicKey = publicKey,
                         ImageKey = imageKey
                     });
         }
@@ -362,57 +369,65 @@ namespace RavenQuestionnaire.Web.Controllers
                         ansverItems = answers.Select(ConvertAnswer).ToArray();
                     }
 
+                    var transformator = new ExpressionReplacer(this.viewRepository);
+
+                    var conditionExpression = transformator.ReplaceStataCaptionsWithGuids(model.ConditionExpression, model.QuestionnaireKey);
+                    var validationExpression = transformator.ReplaceStataCaptionsWithGuids(model.ValidationExpression, model.QuestionnaireKey);
+
                     if (model.PublicKey == Guid.Empty)
                     {
                         Guid newItemKey = Guid.NewGuid();
-                        model.PublicKey = newItemKey;
 
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
-                        
+
                         if (triggers == null || !triggers.Any())
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    newItemKey, 
-                                    model.Title, 
-                                    model.StataExportCaption, 
-                                    model.QuestionType, 
+                                    model.QuestionnaireKey,
+                                    newItemKey,
+                                    model.Title,
+                                    model.StataExportCaption,
+                                    model.QuestionType,
                                     model.QuestionScope,
-                                    model.Parent, 
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
-                                    ansverItems, 
+                                    model.Parent,
+                                    conditionExpression,
+                                    validationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.Capital,
+                                    model.AnswerOrder,
+                                    ansverItems,
                                     model.MaxValue));
                         }
                         else
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    newItemKey, 
-                                    model.Title, 
-                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
-                                    model.MaxValue, 
-                                    model.StataExportCaption, 
+                                    model.QuestionnaireKey,
+                                    newItemKey,
+                                    model.Title,
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(),
+                                    model.MaxValue,
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.Parent, 
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    model.Parent,
+                                    conditionExpression,
+                                    validationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.Capital,
+                                    model.AnswerOrder,
                                     ansverItems));
                         }
+
+                        model.PublicKey = newItemKey;
                     }
                     else
                     {
@@ -422,19 +437,20 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    model.PublicKey, 
-                                    model.Title, 
-                                    model.StataExportCaption, 
+                                    model.QuestionnaireKey,
+                                    model.PublicKey,
+                                    model.Title,
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    conditionExpression,
+                                    validationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.Capital,
+                                    model.AnswerOrder,
                                     ansverItems,
                                     model.MaxValue));
                         }
@@ -442,37 +458,59 @@ namespace RavenQuestionnaire.Web.Controllers
                         {
                             commandService.Execute(
                                 new ChangeQuestionCommand(
-                                    model.QuestionnaireKey, 
-                                    model.PublicKey, 
-                                    model.Title, 
-                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
+                                    model.QuestionnaireKey,
+                                    model.PublicKey,
+                                    model.Title,
+                                    triggers.Where(t => t != Guid.Empty).Distinct().ToList(),
                                     model.MaxValue,
-                                    model.StataExportCaption, 
+                                    model.StataExportCaption,
                                     model.QuestionType,
                                     model.QuestionScope,
-                                    model.ConditionExpression, 
-                                    model.ValidationExpression, 
-                                    model.ValidationMessage, 
-                                    model.Instructions, 
-                                    model.Featured, 
-                                    model.Mandatory, 
-                                    model.AnswerOrder, 
+                                    conditionExpression,
+                                    validationExpression,
+                                    model.ValidationMessage,
+                                    model.Instructions,
+                                    model.Featured,
+                                    model.Mandatory,
+                                    model.Capital,
+                                    model.AnswerOrder,
                                     ansverItems));
                         }
                     }
                 }
+                catch (ArgumentException e)
+                {
+                    this.AddModelErrorUsingArgumentException(model, e);
+                }
                 catch (Exception e)
                 {
-                    this.ModelState.AddModelError(
-                        string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
-                    return this.PartialView("_Create", model);
+                    if (e.InnerException is ArgumentException)
+                    {
+                        this.AddModelErrorUsingArgumentException(model, (ArgumentException) e.InnerException);
+                    }
+                    else
+                    {
+                        this.AddModelErrorUsingBasicException(model, e);
+                    }
                 }
 
-                return this.RedirectToAction(
-                    "Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
+                if (this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction("Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
+                }
             }
 
             return View("Create", model);
+        }
+
+        private void AddModelErrorUsingBasicException(QuestionView model, Exception e)
+        {
+            this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+        }
+
+        private void AddModelErrorUsingArgumentException(QuestionView model, ArgumentException e)
+        {
+            this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
         }
 
         /// <summary>
@@ -543,8 +581,8 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult CreatePropagateGroup(Guid questionPublicKey, Guid questionnaireId, Guid? groupPublicKey)
         {
-            var input = questionPublicKey == Guid.Empty 
-                ? new QuestionViewInputModel(questionPublicKey, questionnaireId, groupPublicKey) 
+            var input = questionPublicKey == Guid.Empty
+                ? new QuestionViewInputModel(questionPublicKey, questionnaireId, groupPublicKey)
                 : new QuestionViewInputModel(questionPublicKey, questionnaireId);
             var source =
                 this.viewRepository.Load<QuestionViewInputModel, QuestionView>(input);
@@ -594,8 +632,8 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList =
                     new SelectList(
                         images.Items.Select(
-                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(), 
-                        "Value", 
+                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(),
+                        "Value",
                         "Text");
                 this.ViewBag.Images = imagesList;
             }

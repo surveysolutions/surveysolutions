@@ -72,8 +72,18 @@ namespace SynchronizationMessages.WcfInfrastructure
                 baseAdress = baseAdress.TrimEnd(new[] { '/' });
             }
 
+            var binding = new BasicHttpBinding(BasicHttpSecurityMode.None);
+            binding.MaxReceivedMessageSize = 2147483647;
+            binding.MaxBufferSize = 2147483647;
+
+            binding.ReaderQuotas.MaxArrayLength = 2147483647;
+            binding.ReaderQuotas.MaxBytesPerRead = 2147483647;
+            binding.ReaderQuotas.MaxNameTableCharCount = 2147483647;
+            binding.ReaderQuotas.MaxStringContentLength = 2147483647;
+
+
             var channelFactory = new ChannelFactory<T>(
-                new BasicHttpBinding("basicBindingDiscovery"), 
+                binding,
                 string.Format("{0}/WCF/{1}Service.svc", baseAdress, typeof(T).Name.Substring(1)));
             return channelFactory.CreateChannel();
         }

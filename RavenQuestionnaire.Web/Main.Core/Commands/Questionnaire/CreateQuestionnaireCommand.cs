@@ -43,8 +43,8 @@ namespace Main.Core.Commands.Questionnaire
         public CreateQuestionnaireCommand(Guid questionnaireId, string text)
             : base(questionnaireId)
         {
-            this.QuestionnaireId = questionnaireId;
-            this.Text = text;
+            this.PublicKey = questionnaireId;
+            this.Title = text;
         }
 
         #endregion
@@ -54,12 +54,12 @@ namespace Main.Core.Commands.Questionnaire
         /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>
-        public Guid QuestionnaireId { get; set; }
+        public Guid PublicKey { get; set; }
 
         /// <summary>
         /// Gets or sets the text.
         /// </summary>
-        public string Text { get; set; }
+        public string Title { get; set; }
 
         #endregion
     }

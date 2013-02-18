@@ -33,7 +33,7 @@ namespace AndroidApp
     {
         public void Start()
         {
-            GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
+           // GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
                 RequestNavigate<LoginViewModel>();
         }
 
@@ -42,59 +42,6 @@ namespace AndroidApp
             get { return false; }
         }
 
-        protected void GenerateEvents(InProcessEventBus bus)
-        {
-            var eventStore = CapiApplication.Kernel.Get<IEventStore>() as SQLiteEventStore;
-            eventStore.ClearDB();
-            var stream = new UncommittedEventStream(Guid.NewGuid());
-            //  var payload = new NewCompleteQuestionnaireCreated();
-
-            #region init
-
-            CompleteQuestionnaireDocument root = DesserializeEmbededResource<CompleteQuestionnaireDocument>("initEvent.txt");
-            CompleteQuestionnaireDocument researchQ = DesserializeEmbededResource<CompleteQuestionnaireDocument>("researchDeptSurvey.txt");
-            NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
-
-
-            var eventTempl = new UncommittedEvent(Guid.NewGuid(),
-                                               root.PublicKey, 1, 0, DateTime.Now,
-                                               new SnapshootLoaded()
-                                               {
-                                                   Template = new Snapshot(root.PublicKey, 1, root)
-                                               }, new Version());
-
-            var rEventTempl = new UncommittedEvent(Guid.NewGuid(),
-                                             researchQ.PublicKey, 1, 0, DateTime.Now,
-                                             new SnapshootLoaded()
-                                             {
-                                                 Template = new Snapshot(researchQ.PublicKey, 1, researchQ)
-                                             }, new Version());
-
-            var userEventUcmt = new UncommittedEvent(Guid.NewGuid(), userEvent.PublicKey, 1, 0, DateTime.Now, userEvent,
-                                                 new Version());
-            #endregion
-            stream.Append(userEventUcmt);
-            stream.Append(eventTempl);
-            stream.Append(rEventTempl);
-
-            eventStore.Store(stream);
-            bus.Publish(userEventUcmt);
-            bus.Publish(eventTempl);
-            bus.Publish(rEventTempl);
-
-        }
-        protected T DesserializeEmbededResource<T>(string fileName)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            //var data = Encoding.Default.GetString("");
-            string s = string.Empty;
-            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
-                               .GetManifestResourceStream("AndroidApp." + fileName))
-            using (StreamReader reader = new StreamReader(streamEmbededRes))
-            {
-                s = reader.ReadToEnd();
-            }
-            return JsonConvert.DeserializeObject<T>(s, settings);
-        }
+      
     }
 }

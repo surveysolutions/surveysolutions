@@ -20,9 +20,9 @@ namespace Main.Synchronization.SyncManager
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
-    using NLog;
+    //using NLog;
 
-    using LogManager = NLog.LogManager;
+    //using LogManager = NLog.LogManager;
 
     /// <summary>
     /// The sync manager.
@@ -182,11 +182,11 @@ namespace Main.Synchronization.SyncManager
         /// </exception>
         public void StartSynchronization()
         {
-            this.StartTime = DateTime.UtcNow;
+            /*this.StartTime = DateTime.UtcNow;
             this.Push();
 
             this.Pull();
-            this.EndTime = DateTime.UtcNow;
+            this.EndTime = DateTime.UtcNow;*/
         }
 
         /// <summary>
@@ -230,12 +230,15 @@ namespace Main.Synchronization.SyncManager
         /// </summary>
         private void Push()
         {
+            if (streamCollector == null)
+                throw new Exception("StreamCollector is not set");
+
             this.Invoker.Execute(
                 new CreateNewSynchronizationProcessCommand(
                     this.ProcessGuid, 
                     Guid.Empty, 
                     this.eventStreamProvider.SyncType, 
-                    string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider)));
+                    string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
 
             this.streamCollector.PrepareToCollect();
 
@@ -280,10 +283,10 @@ namespace Main.Synchronization.SyncManager
             }
             catch (Exception e)
             {
-                Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error", e);
+                //Logger logger = LogManager.GetCurrentClassLogger();
+                //logger.Fatal("Import error", e);
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
-
+                throw;
                 // return ErrorCodes.Fail;
             }
             finally

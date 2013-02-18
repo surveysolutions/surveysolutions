@@ -20,7 +20,9 @@ namespace Main.Synchronization.SyncStreamCollector
 
     using Newtonsoft.Json;
 
-    using Questionnaire.Core.Web.Export;
+    using SynchronizationMessages.Export;
+
+    using SynchronizationMessages.Export;
 
     /// <summary>
     /// The compressed stream stream collector.

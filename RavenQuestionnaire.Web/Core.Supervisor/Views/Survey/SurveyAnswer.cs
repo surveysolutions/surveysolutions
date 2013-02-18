@@ -6,11 +6,10 @@
 
 namespace Core.Supervisor.Views.Survey
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.View.Answer;
@@ -23,9 +22,11 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyAnswer"/> class.
         /// </summary>
-        /// <param name="unknown"></param>
+        /// <param name="group">
+        /// The group.
+        /// </param>
         /// <param name="question">
-        ///   The question.
+        /// The question.
         /// </param>
         public SurveyAnswer(ICompleteGroup group, ICompleteQuestion question)
         {
@@ -78,7 +79,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Comments.
         /// </summary>
-        public string Comments { get; set; }
+        public List<CommentDocument> Comments { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsReadOnly.

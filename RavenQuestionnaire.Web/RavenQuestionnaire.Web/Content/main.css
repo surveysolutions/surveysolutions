@@ -627,3 +627,8 @@ a.btn {
 
 
 }
+
+.field-validation-error,
+.control-label span  {
+    color: red;
+}

@@ -138,15 +138,6 @@ namespace RavenQuestionnaire.Core.Views.Group
     public abstract class AbstractGroupView<TGroup, TQuestion> : AbstractGroupView
         where TGroup : AbstractGroupView where TQuestion : AbstractQuestionView
     {
-        #region Fields
-
-        /// <summary>
-        /// The _questions.
-        /// </summary>
-        private TQuestion[] _questions;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -154,8 +145,6 @@ namespace RavenQuestionnaire.Core.Views.Group
         /// </summary>
         public AbstractGroupView()
         {
-            this.Questions = new TQuestion[] { };
-            this.Groups = new TGroup[] { };
         }
 
         /// <summary>
@@ -195,35 +184,6 @@ namespace RavenQuestionnaire.Core.Views.Group
             else
             {
                 this.Trigger = null;
-            }
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the groups.
-        /// </summary>
-        public TGroup[] Groups { get; set; }
-
-        /// <summary>
-        /// Gets or sets the questions.
-        /// </summary>
-        public TQuestion[] Questions
-        {
-            get
-            {
-                return this._questions;
-            }
-
-            set
-            {
-                this._questions = value;
-                for (int i = 0; i < this._questions.Length; i++)
-                {
-                    this._questions[i].Index = i + 1;
-                }
             }
         }
 
@@ -404,9 +364,7 @@ namespace RavenQuestionnaire.Core.Views.Group
                     this.Children.Add(new GroupView(doc, g));
                 }
             }
-
-            this.Questions = group.Children.OfType<IQuestion>().Select(q => new QuestionView(doc, q)).ToArray();
-            this.Groups = group.Children.OfType<IGroup>().Select(g => new GroupView(doc, g)).ToArray();
+            
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
         }

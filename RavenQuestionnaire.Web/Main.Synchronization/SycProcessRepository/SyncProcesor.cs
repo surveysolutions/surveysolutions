@@ -118,9 +118,7 @@ namespace Main.Synchronization.SycProcessRepository
         /// </returns>
         public List<UserSyncProcessStatistics> CalculateStatistics()
         {
-            foreach (
-                UncommittedEvent uncommittedEvent in
-                    this.IncomeEvents.SelectMany(uncommittedEventStream => uncommittedEventStream))
+            foreach (UncommittedEvent uncommittedEvent in this.IncomeEvents.SelectMany(uncommittedEventStream => uncommittedEventStream))
             {
                 this.ProcessEvent(uncommittedEvent);
             }
@@ -142,7 +140,7 @@ namespace Main.Synchronization.SycProcessRepository
             foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
             {
                 this.eventStore.Store(uncommittedEventStream);
-                myEventBus.Publish(uncommittedEventStream);
+                myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
             }
         }
 
@@ -157,6 +155,12 @@ namespace Main.Synchronization.SycProcessRepository
             if (stream != null)
             {
                 this.IncomeEvents.AddRange(this.BuildEventStreams(stream));
+            }
+
+            // check for events with null Payload
+            if (this.IncomeEvents.SelectMany(eventStream => eventStream).Any(c => c.Payload == null))
+            {
+                throw new Exception("Event is wrong");
             }
         }
 

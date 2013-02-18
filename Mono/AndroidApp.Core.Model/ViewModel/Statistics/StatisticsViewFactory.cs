@@ -40,7 +40,7 @@ namespace AndroidApp.Core.Model.ViewModel.Statistics
                 new StatisticsQuestionViewModel(q.PublicKey, CalculateScreen(doc, q.PublicKey), q.Text,
                                                 q.AnswerString, "")).ToList();
 
-            var result = new StatisticsViewModel(input.QuestionnaireId, doc.Title,
+            var result = new StatisticsViewModel(doc.PublicKey, doc.Title,
                                                  doc.Status, doc.FindQuestion(q => true).Count(), unanswered,
                                                  answered, invalid);
             return result;

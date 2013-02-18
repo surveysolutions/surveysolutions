@@ -3,6 +3,7 @@ using AndroidApp.Core.Model.Authorization;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Commands;
+
 namespace AndroidApp.Core.Model.ViewModel.Login
 {
     public class LoginViewModel : MvxViewModel

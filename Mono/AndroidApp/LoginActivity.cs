@@ -1,64 +1,132 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.Graphics;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-using AndroidApp.Controls.Navigation;
-using AndroidApp.Core.Model.ViewModel.Login;
-using AndroidApp.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Simple;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="LoginActivity.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The login activity.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace AndroidApp
 {
-    [Activity(Label = "CAPI", NoHistory = true, Icon = "@drawable/capi")]
+    using System;
+
+    using Android.App;
+    using Android.Graphics;
+    using Android.OS;
+    using Android.Views;
+    using Android.Widget;
+
+    using AndroidApp.Core.Model.ViewModel.Login;
+    using AndroidApp.Extensions;
+
+    using Cirrious.MvvmCross.Binding.Droid.Simple;
+
+    /// <summary>
+    /// The login activity.
+    /// </summary>
+    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
-        protected override void OnCreate(Bundle bundle)
-        {
-            base.OnCreate(bundle);
-            ViewModel = new LoginViewModel();
-            if (CapiApplication.Membership.IsLoggedIn)
-                StartActivity(typeof (DashboardActivity));
-            SetContentView(Resource.Layout.Login);
-            btnLogin.Click += btnLogin_Click;
-        }
+        #region Properties
 
-        void btnLogin_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Gets the btn login.
+        /// </summary>
+        protected Button btnLogin
         {
-            var result = CapiApplication.Membership.LogOn(teLogin.Text, tePassword.Text);
-            if (result)
+            get
             {
-                StartActivity(typeof (DashboardActivity));
-                return;
+                return this.FindViewById<Button>(Resource.Id.btnLogin);
             }
-            teLogin.SetBackgroundColor(Color.Red);
-            tePassword.SetBackgroundColor(Color.Red);
         }
 
-        public override bool OnCreateOptionsMenu(Android.Views.IMenu menu)
+        /// <summary>
+        /// Gets the te login.
+        /// </summary>
+        protected EditText teLogin
+        {
+            get
+            {
+                return this.FindViewById<EditText>(Resource.Id.teLogin);
+            }
+        }
+
+        /// <summary>
+        /// Gets the te password.
+        /// </summary>
+        protected EditText tePassword
+        {
+            get
+            {
+                return this.FindViewById<EditText>(Resource.Id.tePassword);
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The on create options menu.
+        /// </summary>
+        /// <param name="menu">
+        /// The menu.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
+        public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.CreateActionBar();
             return base.OnCreateOptionsMenu(menu);
         }
 
-        protected EditText teLogin
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The on create.
+        /// </summary>
+        /// <param name="bundle">
+        /// The bundle.
+        /// </param>
+        protected override void OnCreate(Bundle bundle)
         {
-            get { return FindViewById<EditText>(Resource.Id.teLogin); }
+            base.OnCreate(bundle);
+            this.ViewModel = new LoginViewModel();
+            if (CapiApplication.Membership.IsLoggedIn)
+            {
+                this.StartActivity(typeof(DashboardActivity));
+            }
+
+            this.SetContentView(Resource.Layout.Login);
+            this.btnLogin.Click += this.btnLogin_Click;
         }
-        protected EditText tePassword
+
+        /// <summary>
+        /// The btn login_ click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void btnLogin_Click(object sender, EventArgs e)
         {
-            get { return FindViewById<EditText>(Resource.Id.tePassword); }
+            bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
+            if (result)
+            {
+                this.StartActivity(typeof(DashboardActivity));
+                return;
+            }
+
+            this.teLogin.SetBackgroundColor(Color.Red);
+            this.tePassword.SetBackgroundColor(Color.Red);
         }
-        protected Button btnLogin
-        {
-            get { return FindViewById<Button>(Resource.Id.btnLogin); }
-        }
+
+        #endregion
     }
 }

@@ -22,10 +22,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 handler(this, evt);
         }
 
-        public override void OnDetach()
+        public override void OnDestroy()
         {
             ScreenChanged = null;
-            base.OnDetach();
+            base.OnDestroy();
         }
 
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;

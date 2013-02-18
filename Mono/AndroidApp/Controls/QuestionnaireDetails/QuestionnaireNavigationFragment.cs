@@ -33,6 +33,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
         public CompleteQuestionnaireView Model { get;  set; }
         private int selectedItemIndex=0;
+        private QuestionnaireNavigationAdapter adapter;
         #endregion
 
         protected void OnItemClick(ItemPublicKey? groupKey)
@@ -46,26 +47,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             base.OnResume();
             this.ListView.ChoiceMode = ChoiceMode.Single;
-            this.ListAdapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
+            adapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
+            this.ListAdapter = adapter;
+
         }
 
         public void SelectItem(int ind)
         {
             selectedItemIndex = ind;
-            for (int idx = 0; idx < this.ListView.ChildCount; idx++)
-            {
-                if (idx == ind)
-                {
-                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.LightBlue);
-                }
-                else
-                    this.ListView.GetChildAt(idx).SetBackgroundColor(Color.Transparent);
-                //  EnableDisableView(group.GetChildAt(idx), enabled);
-            }
+            adapter.SelectItem(selectedItemIndex);
         }
 
         public override void OnListItemClick(ListView l, View v, int pos, long id)
         {
+            
             SelectItem(pos);
             var tag = v.GetTag(Resource.Id.ScreenId);
             ItemPublicKey? screenId = null;

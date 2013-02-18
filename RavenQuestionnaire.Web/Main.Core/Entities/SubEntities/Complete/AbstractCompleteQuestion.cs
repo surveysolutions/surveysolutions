@@ -13,6 +13,7 @@ namespace Main.Core.Entities.SubEntities.Complete
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.Composite;
 
     using Newtonsoft.Json;
@@ -38,6 +39,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.Answers = new List<IAnswer>();
             this.ConditionalDependentQuestions = new List<Guid>();
             this.ConditionalDependentGroups = new List<Guid>();
+            this.Comments = new List<CommentDocument>();
         }
 
         /// <summary>
@@ -105,7 +107,12 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the comments.
         /// </summary>
-        public string Comments { get; set; }
+        public string LastComment { get; set; }
+
+        /// <summary>
+        /// Gets or sets Comments.
+        /// </summary>
+        public List<CommentDocument> Comments { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsFlaged.
@@ -398,11 +405,23 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The set comments.
         /// </summary>
         /// <param name="comments">
-        /// The comments.
+        ///   The comments.
         /// </param>
-        public void SetComments(string comments)
+        /// <param name="date">
+        ///   The date
+        /// </param>
+        /// <param name="user">
+        /// The user
+        /// </param>
+        public void SetComments(string comments, DateTime date, UserLight user)
         {
-            this.Comments = comments;
+            this.LastComment = comments;
+            if (this.Comments.Count > 0 && this.Comments.Last().Comment == comments)
+            {
+                return;
+            }
+
+            this.Comments.Add(new CommentDocument {CommentDate = date, Comment = comments, User = user});
         }
 
         #endregion

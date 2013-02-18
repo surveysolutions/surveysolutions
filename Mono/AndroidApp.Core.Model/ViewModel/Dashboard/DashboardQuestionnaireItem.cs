@@ -58,7 +58,7 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         /// <summary>
         /// Gets the status.
         /// </summary>
-        public string Status { get; set; }
+        public string Status { get; private set; }
 
         /// <summary>
         /// Gets the view detail command.
@@ -76,5 +76,12 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         }
 
         #endregion
+        public void SetStatus(string newStatus)
+        {
+            if (newStatus == this.Status)
+                return;
+            this.Status = newStatus;
+            this.RaisePropertyChanged("Status");
+        }
     }
 }

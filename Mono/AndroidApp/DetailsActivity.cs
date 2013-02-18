@@ -1,30 +1,17 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
 using Android.Content.PM;
 using Android.OS;
-using Android.Runtime;
-using Android.Support.V4.App;
 using Android.Support.V4.View;
-using Android.Views;
 using Android.Widget;
-using AndroidApp.Controls.Navigation;
 using AndroidApp.Controls.QuestionnaireDetails;
-using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
 using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
-using AndroidApp.Extensions;
-using Cirrious.MvvmCross.Binding.Droid.Binders;
-using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
-using Cirrious.MvvmCross.Binding.Droid.Simple;
-using Cirrious.MvvmCross.Binding.Interfaces;
-using Cirrious.MvvmCross.Platform;
 using Main.Core.Entities.SubEntities;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -32,10 +19,13 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace AndroidApp
 {
+    using System.Linq;
+
     [Activity(Icon = "@drawable/capi")]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
+        protected InMemoryEventStore activitySnapshooting;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -67,6 +57,9 @@ namespace AndroidApp
         {
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                new QuestionnaireScreenInput(QuestionnaireId));
+            activitySnapshooting=new InMemoryEventStore();
+            
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);
             base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.Details);
@@ -83,7 +76,7 @@ namespace AndroidApp
            if (bundle == null)
             {
                 NavList.Model = ViewModel;
-                NavList.SelectItem(0);
+                //NavList.SelectItem();
             }
 
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
@@ -137,9 +130,22 @@ namespace AndroidApp
         }
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
+            
             if (Adapter.IsRoot)
                 NavList.SelectItem(e.P0);
         }
-
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
+            activitySnapshooting = null;
+            GC.Collect();
+        }
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+            Console.WriteLine("Low memory Details activities");
+            GC.Collect();
+        }
     }
 }

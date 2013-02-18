@@ -42,12 +42,13 @@ namespace Core.Supervisor.Views.Survey
 
             this.Title = node.Group.Title;
 
-            this.Captions = new List<string>();
+            this.Captions = new Dictionary<string, string>();
             if (node.Group.PropagationPublicKey.HasValue)
             {
-                this.Captions.Add(string.Concat(
-                    doc.GetPropagatedGroupsByKey(node.Group.PropagationPublicKey.Value)
-                    .SelectMany(q => q.Children)
+                this.Captions.Add(
+                    node.Group.PropagationPublicKey.Value.ToString(),
+                    string.Concat(
+                        doc.GetPropagatedGroupsByKey(node.Group.PropagationPublicKey.Value).SelectMany(q => q.Children)
                     .OfType<ICompleteQuestion>()
                     .Where(q => q.Capital)
                     .Select(q => q.GetAnswerString() + " ")).Trim());
@@ -86,7 +87,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets Captions.
         /// </summary>
-        public List<string> Captions { get; set; }
+        public Dictionary<string, string> Captions { get; set; }
 
         /// <summary>
         /// Gets or sets ChildrenKeys.

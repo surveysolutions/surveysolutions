@@ -16,8 +16,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Awesomium", "Core\C\Awesomi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.Core", "Synchronization.Core\Synchronization.Core.csproj", "{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synchronization.Core.Tests", "Synchronization.Core.Tests\Synchronization.Core.Tests.csproj", "{E236D683-1934-4AEC-AC01-6F4026AB6BC3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{909BB739-A0F7-4F79-BD54-698EEB959B7E}"
 	ProjectSection(SolutionItems) = preProject
 		Awesomium.NET Browser.vsmdi = Awesomium.NET Browser.vsmdi
@@ -92,24 +90,6 @@ Global
 		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|Win32.ActiveCfg = Release|Any CPU
 		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C}.Release|x86.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|Any CPU.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|Any CPU.Build.0 = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|Mixed Platforms.Build.0 = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|Win32.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release (Packed)|x86.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|Win32.ActiveCfg = Release|Any CPU
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3}.Release|x86.ActiveCfg = Release|Any CPU
 		{233E6FAF-9130-45A8-A199-2DFFDC76EABD}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{233E6FAF-9130-45A8-A199-2DFFDC76EABD}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{233E6FAF-9130-45A8-A199-2DFFDC76EABD}.Debug|Mixed Platforms.Build.0 = Debug|x86
@@ -189,7 +169,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3A48D819-0341-4643-8125-5412B3B08874} = {3C4BD159-B434-41EB-90DC-4284533D5D5F}
 		{C51F08B6-C30E-4BBC-8291-BA1A60F4EB9C} = {465C567D-1668-48AD-B2EC-5BEEF27DD329}
-		{E236D683-1934-4AEC-AC01-6F4026AB6BC3} = {465C567D-1668-48AD-B2EC-5BEEF27DD329}
 		{909BB739-A0F7-4F79-BD54-698EEB959B7E} = {465C567D-1668-48AD-B2EC-5BEEF27DD329}
 		{844AF18A-53EA-4038-A240-F4BC3CCEFC95} = {3A48D819-0341-4643-8125-5412B3B08874}
 		{7007869B-B637-4134-83E7-24F176C6469A} = {182E9661-46F6-4B25-B757-CFC73DB42C9E}

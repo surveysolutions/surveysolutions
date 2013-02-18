@@ -55,10 +55,10 @@
 -->
 
         <PropertyRef Id="IISMAJORVERSION"/>
-        <Condition Message="This product requires installed IIS 6 or 7. Please turn IIS feature on and restart this installation.">
-            <![CDATA[Installed OR (IISMAJORVERSION AND (IISMAJORVERSION = "#6" OR IISMAJORVERSION = "#7"))]]>
-        </Condition>
-
+        <Condition Message="This product requires installed IIS 6, 7 or 8. Please turn IIS feature on and restart this installation.">
+            <![CDATA[Installed OR (IISMAJORVERSION AND (IISMAJORVERSION = "#6" OR IISMAJORVERSION = "#7" OR IISMAJORVERSION = "#8"))]]>
+         </Condition>
+		 
         <SetDirectory Id="WINDOWSVOLUME" Value="[WindowsVolume]"/>
 
         <Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />

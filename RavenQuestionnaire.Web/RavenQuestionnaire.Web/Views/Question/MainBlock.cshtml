@@ -16,7 +16,7 @@
             <div class="span5">
                 @Html.BootstrapValidationSummary("")
                 <div class="control-group">
-                    <label class="control-label">Type</label>
+                    <label class="control-label">Type <span>*</span></label>
                     <div class="controls">
                         @{
                             IDictionary<string, object> html = new Dictionary<string, object>();
@@ -24,24 +24,32 @@
                             html.Add("class", "span12");
                             @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                         }
+                        @Html.ValidationMessageFor(model => model.QuestionType)
                     </div>
                 </div>
                 <div class="control-group">
-                    @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+                    <label class="control-label">Title <span>*</span></label>
                     <div class="controls">
                         @Html.TextAreaFor(model => model.Title, 7, 10, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
                         @Html.ValidationMessageFor(model => model.Title)
                     </div>
-                </div>                
+                </div>         
+                <div class="control-group">
+                    <label class="control-label">Variable name <span>*</span></label>
+                    <div class="controls">
+                        @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
+                        @Html.ValidationMessageFor(model => model.StataExportCaption)
+                    </div>
+                </div>          
                 <div class="control-group">
                     <label class="control-label">Who should answer this question?</label>
-                        <div class="controls">
-                            @{
-                                IDictionary<string, object> scope = new Dictionary<string, object>();
-                                scope.Add("class", "span12");
-                                @Html.EnumDropDownListFor(model => Model.QuestionScope, scope)
-                            }
-                        </div>
+                    <div class="controls">
+                        @{
+                            IDictionary<string, object> scope = new Dictionary<string, object>();
+                            scope.Add("class", "span12");
+                            @Html.EnumDropDownListFor(model => Model.QuestionScope, scope)
+                        }
+                    </div>
                 </div>                              
                 <div class="control-group">
                     @Html.LabelFor(model => model.Featured, new { @class = "control-label" })
@@ -55,13 +63,15 @@
                         <label class="checkbox">@Html.CheckBoxFor(model => model.Mandatory) Yes</label>
                     </div>
                 </div>
-                <div class="control-group">
-                    @Html.LabelFor(model => model.StataExportCaption, new { @class = "control-label" })
-                    <div class="controls">
-                        @Html.TextBoxFor(model => model.StataExportCaption, new { placeholder = ViewData.ModelMetadata.Watermark, @class = "span12" })
-                        @Html.ValidationMessageFor(model => model.StataExportCaption)
+                @if (Model.IsPropagated)
+                {
+                    <div class="control-group">
+                        @Html.LabelFor(model => model.Capital, new {@class = "control-label"})
+                        <div class="controls">
+                            <label class="checkbox">@Html.CheckBoxFor(model => model.Capital) Yes</label>
+                        </div>
                     </div>
-                </div>                
+                }
                 <div class="control-group">
                     @Html.LabelFor(model => model.ConditionExpression, new { @class = "control-label" })
                     <div class="controls">

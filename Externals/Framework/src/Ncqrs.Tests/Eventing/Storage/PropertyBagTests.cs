@@ -5,6 +5,8 @@ using NUnit.Framework;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {
+    using System.Linq;
+
     [TestFixture]
     public class PropertyBagTests
     {
@@ -38,7 +40,7 @@ namespace Ncqrs.Tests.Eventing.Storage
             var bag = new PropertyBag("testing");
             bag.AddPropertyValue(thePropName, thePropValue);
 
-            bag.Properties.Should().Contain(p => p.Key == thePropName && (String)p.Value == thePropValue);
+            bag.Properties.Count(p => p.Key == thePropName && (String)p.Value == thePropValue).Should().Equals(1);
         }
 
         [Test]
