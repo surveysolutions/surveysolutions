@@ -95,7 +95,7 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            question.SetComments(evnt.Payload.Comments);
+            question.SetComments(evnt.Payload.Comments, evnt.EventTimeStamp, evnt.Payload.User);
             item.LastVisitedGroup = new VisitedGroup(questionWrapper.GroupKey, question.PropagationPublicKey);
             item.LastEntryDate = evnt.EventTimeStamp;
             this._documentStorage.Store(item, item.PublicKey);

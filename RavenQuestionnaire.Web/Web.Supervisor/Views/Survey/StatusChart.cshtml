@@ -1,7 +1,6 @@
 ﻿@using System.Web.Script.Serialization
 @using Core.Supervisor.Views.Status
 @using Web.Supervisor.Models.Chart
-@using ClientDependency.Core.Mvc
 @model StatusView
 @{
     var r = new JavaScriptSerializer();
@@ -16,7 +15,6 @@
         <button id="pie" class="btn">Pie</button>
     </div>
 </p>
-@{ Html.RequiresJs("plotSettings.js", "Scripts", 70); }
 <script type="text/javascript">
     barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
     pieData = [

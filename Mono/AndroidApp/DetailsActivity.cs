@@ -76,7 +76,7 @@ namespace AndroidApp
            if (bundle == null)
             {
                 NavList.Model = ViewModel;
-                NavList.SelectItem(0);
+                //NavList.SelectItem();
             }
 
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
@@ -130,6 +130,7 @@ namespace AndroidApp
         }
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
+            
             if (Adapter.IsRoot)
                 NavList.SelectItem(e.P0);
         }

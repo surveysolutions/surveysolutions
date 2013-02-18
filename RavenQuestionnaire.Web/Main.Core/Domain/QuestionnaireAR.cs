@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.CodeDom.Compiler;
+using System.Linq;
+
 namespace Main.Core.Domain
 {
     using System;
@@ -50,17 +53,18 @@ namespace Main.Core.Domain
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
         /// </summary>
-        /// <param name="questionnaireId">
+        /// <param name="publicKey">
         /// The questionnaire id.
         /// </param>
-        /// <param name="text">
+        /// <param name="title">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid questionnaireId, string text) : base(questionnaireId)
+        public QuestionnaireAR(Guid publicKey, string title)
+            : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
             this.questionFactory = new CompleteQuestionFactory();
-            
+
             // Apply a NewQuestionnaireCreated event that reflects the
             // creation of this instance. The state of this
             // instance will be update in the handler of 
@@ -68,17 +72,37 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionnaireCreated
                     {
-                        PublicKey = questionnaireId, 
-                        Title = text, 
+                        PublicKey = publicKey,
+                        Title = title,
                         CreationDate = clock.UtcNow()
                     });
         }
 
         #endregion
 
-        // Event handler for the NewQuestionnaireCreated event. This method
-        // is automaticly wired as event handler based on convension.
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The create snapshot.
+        /// </summary>
+        /// <returns>
+        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
+        /// </returns>
+        public override QuestionnaireDocument CreateSnapshot()
+        {
+            return this.innerDocument;
+        }
+
+        /// <summary>
+        /// The restore from snapshot.
+        /// </summary>
+        /// <param name="snapshot">
+        /// The snapshot.
+        /// </param>
+        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+        {
+            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
+        }
 
         /// <summary>
         /// The update questionnaire.
@@ -87,8 +111,9 @@ namespace Main.Core.Domain
         /// The title.
         /// </param>
         public void UpdateQuestionnaire(string title)
+        #warning CRUD
         {
-            this.ApplyEvent(new QuestionnaireUpdated() {Title = title });
+            this.ApplyEvent(new QuestionnaireUpdated() { Title = title });
         }
 
         /// <summary>
@@ -124,18 +149,15 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewGroupAdded
                     {
-                        QuestionnairePublicKey = this.innerDocument.PublicKey, 
-                        PublicKey = publicKey, 
-                        GroupText = text, 
-                        ParentGroupPublicKey = parentGroupKey, 
-                        Paropagateble = propagateble, 
+                        QuestionnairePublicKey = this.innerDocument.PublicKey,
+                        PublicKey = publicKey,
+                        GroupText = text,
+                        ParentGroupPublicKey = parentGroupKey,
+                        Paropagateble = propagateble,
                         ConditionExpression = conditionExpression,
                         Description = description
                     });
         }
-
-        // Event handler for the NewGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
 
         /// <summary>
         /// The add question.
@@ -170,6 +192,9 @@ namespace Main.Core.Domain
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="answerOrder">
         /// The answer order.
         /// </param>
@@ -179,7 +204,9 @@ namespace Main.Core.Domain
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        /// <param name="triggers"></param>
+        /// <param name="triggers">
+        /// The triggers
+        /// </param>
         /// <param name="maxValue">
         /// The max value of autopropagate question
         /// </param>
@@ -187,47 +214,49 @@ namespace Main.Core.Domain
         /// The answers.
         /// </param>
         public void AddQuestion(
-            Guid publicKey, 
-            string questionText, 
-            string stataExportCaption, 
-            QuestionType questionType, 
+            Guid publicKey,
+            string questionText,
+            string stataExportCaption,
+            QuestionType questionType,
             QuestionScope questionScope,
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            string instructions, 
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            bool featured,
+            bool mandatory,
+            bool capital,
+            Order answerOrder,
+            string instructions,
             Guid? groupPublicKey,
-            List<Guid> triggers, 
+            List<Guid> triggers,
             int maxValue,
             Answer[] answers)
         {
-            //// performe checks before event raising
+            stataExportCaption = stataExportCaption.Trim();
 
-            // Apply a NewQuestionAdded event that reflects the
-            // creation of this instance. The state of this
-            // instance will be update in the handler of 
-            // this event (the OnNewQuestionAdded method).
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
             this.ApplyEvent(
                 new NewQuestionAdded
                     {
-                        PublicKey = publicKey, 
-                        QuestionText = questionText, 
+                        PublicKey = publicKey,
+                        QuestionText = questionText,
                         StataExportCaption = stataExportCaption,
                         QuestionType = questionType,
-                        QuestionScope = questionScope, 
-                        ConditionExpression = conditionExpression, 
-                        ValidationExpression = validationExpression, 
-                        ValidationMessage = validationMessage, 
-                        Featured = featured, 
-                        Mandatory = mandatory, 
-                        AnswerOrder = answerOrder, 
-                        GroupPublicKey = groupPublicKey, 
+                        QuestionScope = questionScope,
+                        ConditionExpression = conditionExpression,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        Featured = featured,
+                        Mandatory = mandatory,
+                        Capital = capital,
+                        AnswerOrder = answerOrder,
+                        GroupPublicKey = groupPublicKey,
                         Triggers = triggers,
                         MaxValue = maxValue,
-                        Answers = answers, 
+                        Answers = answers,
                         Instructions = instructions
                     });
         }
@@ -277,6 +306,9 @@ namespace Main.Core.Domain
         /// <param name="mandatory">
         /// The mandatory.
         /// </param>
+        /// <param name="capital">
+        /// The capital
+        /// </param>
         /// <param name="answerOrder">
         /// The answer order.
         /// </param>
@@ -284,40 +316,50 @@ namespace Main.Core.Domain
         /// The answers.
         /// </param>
         public void ChangeQuestion(
-            Guid publicKey, 
-            string questionText, 
-            List<Guid> triggers, 
+            Guid publicKey,
+            string questionText,
+            List<Guid> triggers,
             int maxValue,
-            string stataExportCaption, 
-            string instructions, 
+            string stataExportCaption,
+            string instructions,
             QuestionType questionType,
-            QuestionScope questionScope, 
-            Guid? groupPublicKey, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
+            QuestionScope questionScope,
+            Guid? groupPublicKey,
+            string conditionExpression,
+            string validationExpression,
+            string validationMessage,
+            bool featured,
+            bool mandatory,
+            bool capital,
+            Order answerOrder,
             Answer[] answers)
         {
+            ThrowArgumentExceptionIfQuestionDoesntExist(publicKey);
+
+            stataExportCaption = stataExportCaption.Trim();
+
+            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
+            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+
             this.ApplyEvent(
                 new QuestionChanged
                     {
-                        QuestionText = questionText, 
-                        Triggers = triggers, 
+                        PublicKey = publicKey,
+                        QuestionText = questionText,
+                        Triggers = triggers,
                         MaxValue = maxValue,
-                        StataExportCaption = stataExportCaption, 
+                        StataExportCaption = stataExportCaption,
                         QuestionType = questionType,
-                        QuestionScope = questionScope, 
-                        ConditionExpression = conditionExpression, 
-                        ValidationExpression = validationExpression, 
-                        ValidationMessage = validationMessage, 
-                        Featured = featured, 
-                        Mandatory = mandatory, 
-                        AnswerOrder = answerOrder, 
-                        PublicKey = publicKey, 
-                        Answers = answers, 
+                        QuestionScope = questionScope,
+                        ConditionExpression = conditionExpression,
+                        ValidationExpression = validationExpression,
+                        ValidationMessage = validationMessage,
+                        Featured = featured,
+                        Mandatory = mandatory,
+                        Capital = capital,
+                        AnswerOrder = answerOrder,
+                        Answers = answers,
                         Instructions = instructions
                     });
         }
@@ -332,25 +374,12 @@ namespace Main.Core.Domain
         /// The creator.
         /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
+        #warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
-
-        /// <summary>
-        /// The create snapshot.
-        /// </summary>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Documents.QuestionnaireDocument.
-        /// </returns>
-        public override QuestionnaireDocument CreateSnapshot()
-        {
-            return this.innerDocument;
-        }
-
-        // Event handler for the NewGroupAdded event. This method
-        // is automaticly wired as event handler based on convension.
 
         /// <summary>
         /// The delete group.
@@ -362,6 +391,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
+        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
         }
@@ -390,6 +420,7 @@ namespace Main.Core.Domain
         /// The parent Public Key.
         /// </param>
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
+#warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
             this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
@@ -411,37 +442,12 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireItemMoved
                     {
-                        QuestionnaireId  = this.innerDocument.PublicKey,  
-                        AfterItemKey = afterItemKey, 
-                        GroupKey = groupKey, 
+                        QuestionnaireId = this.innerDocument.PublicKey,
+                        AfterItemKey = afterItemKey,
+                        GroupKey = groupKey,
                         PublicKey = publicKey
                     });
         }
-
-        /// <summary>
-        /// The restore from snapshot.
-        /// </summary>
-        /// <param name="snapshot">
-        /// The snapshot.
-        /// </param>
-        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
-        {
-            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
-        }
-
-        // public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
-        // {
-        // Group group = this._innerDocument.Find<Group>(groupPublicKey);
-        // if (group == null)
-        // throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-        // ApplyEvent(new GroupUpdated()
-        // {
-        // parentGroup = groupPublicKey,
-        // GroupText = groupText,
-        // Propagateble = propagateble,
-        // Triggers = triggers
-        // });
-        // }
 
         /// <summary>
         /// The update group.
@@ -468,27 +474,24 @@ namespace Main.Core.Domain
         /// Some exception
         /// </exception>
         public void UpdateGroup(
-            string groupText, 
-            Propagate propagateble, 
-            Guid groupPublicKey, 
-            UserLight executor, 
+            string groupText,
+            Propagate propagateble,
+            Guid groupPublicKey,
+            UserLight executor,
             string conditionExpression,
             string description)
+#warning get rid of executor here and create a common mechanism for handling it if needed
         {
-            var group = this.innerDocument.Find<Group>(groupPublicKey);
-            if (group == null)
-            {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
-            }
+            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
 
             this.ApplyEvent(
                 new GroupUpdated
                     {
                         QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                        GroupPublicKey = groupPublicKey, 
-                        GroupText = groupText, 
-                        Propagateble = propagateble, 
-                        /*Executor = executor,*/ 
+                        GroupPublicKey = groupPublicKey,
+                        GroupText = groupText,
+                        Propagateble = propagateble,
+                        /*Executor = executor,*/
                         ConditionExpression = conditionExpression,
                         Description = description
                     });
@@ -514,7 +517,10 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new ImageUpdated
                     {
-                       Description = description, ImageKey = imageKey, QuestionKey = questionKey, Title = title 
+                        Description = description,
+                        ImageKey = imageKey,
+                        QuestionKey = questionKey,
+                        Title = title
                     });
         }
 
@@ -538,7 +544,10 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new ImageUploaded
                     {
-                       Description = description, Title = title, PublicKey = publicKey, ImagePublicKey = imagePublicKey 
+                        Description = description,
+                        Title = title,
+                        PublicKey = publicKey,
+                        ImagePublicKey = imagePublicKey
                     });
         }
 
@@ -629,9 +638,9 @@ namespace Main.Core.Domain
         {
             var newImage = new Image
                 {
-                    PublicKey = e.ImagePublicKey, 
-                    Title = e.Title, 
-                    Description = e.Description, 
+                    PublicKey = e.ImagePublicKey,
+                    Title = e.Title,
+                    Description = e.Description,
                     CreationDate = DateTime.Now
                 };
 
@@ -697,11 +706,6 @@ namespace Main.Core.Domain
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            if (question == null)
-            {
-                return;
-            }
-
             this.questionFactory.UpdateQuestionByEvent(question, e);
         }
 
@@ -728,5 +732,68 @@ namespace Main.Core.Domain
         }
 
         #endregion
+
+        private void ThrowArgumentExceptionIfQuestionDoesntExist(Guid publicKey)
+        {
+            var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
+            if (question == null)
+            {
+                throw new ArgumentException(string.Format("Question with public key {0} can't be found", publicKey));
+            }
+        }
+
+        private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
+        {
+            var group = this.innerDocument.Find<Group>(groupPublicKey);
+            if (group == null)
+            {
+                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+            }
+        }
+
+        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, Answer[] answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+            if (isQuestionWithOptions && answerOptions.Length == 0)
+            {
+                throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
+            }
+        }
+
+        private void ThrowArgumentExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
+        {
+            if (string.IsNullOrEmpty(stataCaption))
+            {
+                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
+            }
+
+            bool isTooLong = stataCaption.Length > 32;
+            if (isTooLong)
+            {
+                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
+            }
+
+            bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
+            if (containsInvalidCharacters)
+            {
+                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
+            }
+
+            bool startsWithDigit = Char.IsDigit(stataCaption[0]);
+            if (startsWithDigit)
+            {
+                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
+            }
+
+            var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
+                               .Where(q => q.PublicKey != questionPublicKey)
+                               .Select(q => q.StataExportCaption);
+
+            bool isNotUnique = captions.Contains(stataCaption);
+            if (isNotUnique)
+            {
+                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
+            }
+        }
     }
 }

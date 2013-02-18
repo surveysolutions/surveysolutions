@@ -1,4 +1,5 @@
 /*global ko, crossroads */
+var viewModel = null;
 ko.bindingHandlers.datepicker = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         //initialize datepicker with some optional options
@@ -25,6 +26,30 @@ ko.bindingHandlers.datepicker = {
     }
 };
 
+ko.bindingHandlers.popover = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var cssSelectorForPopoverTemplate = ko.utils.unwrapObservable(valueAccessor());
+            var popOverTemplate = "<div id='my-knockout-popver'>" + $(cssSelectorForPopoverTemplate).html() + "</div>";
+            $(element).popover({ content: popOverTemplate, html:true, trigger: 'manual' });
+
+            $(element).click(function() {
+                $(this).popover('toggle');
+                var thePopover = document.getElementById("my-knockout-popver");
+                ko.applyBindings(viewModel, thePopover);
+            });  
+        }
+};
+
+ko.bindingHandlers.date = {
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = valueAccessor(),
+            allBindings = allBindingsAccessor();
+        var valueUnwrapped = ko.utils.unwrapObservable(value);
+        var pattern = allBindings.datePattern || 'MM/dd/yyyy';
+        $(element).text(valueUnwrapped.toString(pattern));
+    }
+};
+
 Date.prototype.mmddyyyy = function () {
     var yyyy = this.getFullYear().toString();
     var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
@@ -40,6 +65,7 @@ Date.prototype.mmddyyyy = function () {
     var empty = "00000000-0000-0000-0000-000000000000";
     var answerMap = [];
     var questionMap = [];
+    var currentUser = undefined;
 
     var Key = function (publicKey, propagatekey, isPropagated) {
         var self = this;
@@ -78,8 +104,18 @@ Date.prototype.mmddyyyy = function () {
         self.isCurrent = ko.observable(false);
         self.level = level * 1;
         self.totals = totals;
+        self.getHref = function() {
+            return '#/group/' + self.key.publicKey + '/' + self.key.propagatekey;
+        };
     };
 
+    var ScreenCaption = function(key, title) {
+        var self = this;
+        self.key = key;
+        self.title = title;
+        self.isVisible = ko.observable(true);
+    };
+    
     var Screen = function (model, key, title, questions, childScreenKeys, captions) {
         var self = this;
         var model = model;
@@ -89,12 +125,19 @@ Date.prototype.mmddyyyy = function () {
         self.questions = questions;
         self.isVisible = ko.observable(true);
         self.childScreenKeys = childScreenKeys;
-        self.hasQuestions = !(childScreenKeys.length > 0);
+        self.hasQuestions = (self.questions().length > 0);
         self.captions = captions;
 
-        self.setVisible = function (key) {
+        self.setVisible = function(key) {
             self.isVisible(true);
-            self.filterAnswers(key);
+            ko.utils.arrayForEach(self.captions, function(item) {
+                    item.isVisible(true);
+                });
+            if (!!key) {
+                ko.utils.arrayForEach(self.captions, function(item) {
+                    item.isVisible(key.propagatekey == item.key.propagatekey);
+                });
+            }
 
             for (var i = 0; i < self.childScreenKeys.length; i++) {
                 var child = self.childScreenKeys[i];
@@ -103,29 +146,13 @@ Date.prototype.mmddyyyy = function () {
                     child = new Key(child.publicKey, empty, false);
                 }
 
-                var s = ko.utils.arrayFirst(model.screens(), function (screen) {
+                var s = ko.utils.arrayFirst(model.screens(), function(screen) {
                     return screen.key.id == child.id;
                 });
 
                 if (s != null) {
                     s.setVisible();
-                    s.filterAnswers(key);
                 }
-            }
-        }
-
-        self.filterAnswers = function (key) {
-            if (!key)
-                return;
-
-            if (key.isPropagated == false) {
-                return
-            }
-
-            if (self.hasQuestions) {
-                ko.utils.arrayForEach(self.questions(), function (item) {
-                    item.filterAnswers(key);
-                });
             }
         };
 
@@ -184,6 +211,7 @@ Date.prototype.mmddyyyy = function () {
         self.title = title;
         self.answers = answers;
         self.isVisible = ko.observable(true);
+        self.isActive = ko.observable(false);
         self.visibleCount = ko.computed(function () {
             var count = 0;
             ko.utils.arrayForEach(self.answers(), function (item) {
@@ -239,18 +267,6 @@ Date.prototype.mmddyyyy = function () {
             return count;
         });
 
-        self.height = ko.observable();
-        self.filterAnswers = function (key) {
-            if (!key)
-                return;
-
-            if (self.answers().length > 0) {
-                ko.utils.arrayForEach(self.answers(), function (item) {
-                    if (item.key.propagatekey != key.propagatekey)
-                        item.isVisible(false);
-                });
-            }
-        };
         questionMap.push(self);
     };
 
@@ -270,6 +286,18 @@ Date.prototype.mmddyyyy = function () {
         self.isEnabled = ko.observable(isEnabled);
         self.isReadonly = isReadonly;
         self.isFlaged = ko.observable(isFlaged);
+        
+        self.markerStyle = function() {
+            var style = "question-marker ";
+            if (self.isValid()==false) {
+                return style + "invalid";
+            }
+            if (self.isReadonly == false) {
+                 return style + "supervisor";
+            }
+            return '';
+        };
+        
         self.type = type;
         self.comments = ko.observableArray(comments || []);
         self.isAnswered = ko.observable(isAnswered);
@@ -279,7 +307,7 @@ Date.prototype.mmddyyyy = function () {
         self.addComment = function () {
             var current = self.currentComment().trim();
             if (current) {
-                self.comments.push(new Comment(current));
+                self.comments.push(new Comment(current, currentUser, new Date()));
                 self.currentComment('', undefined, new Date());
 
                 var request = dataHelper.createAddCommentRequest();
@@ -293,6 +321,9 @@ Date.prototype.mmddyyyy = function () {
                 request = $.ajax(request);
 
                 request.done(function (msg) {
+                    if (msg.status != 'ok') {
+                        console.log("comment not saved");
+                    }
                     console.log("comment saved");
                 });
 
@@ -411,20 +442,19 @@ Date.prototype.mmddyyyy = function () {
                 }
                 break;
             case "Numeric":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "Text":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "AutoPropagate":
-                self.selectedOption(self.answer);
+                self.selectedOption(self.answer());
                 break;
             case "DateTime":
-                    //parse date
-                if (!!self.answer() == false ) {
+                //parse date
+                if (!!self.answer() == false) {
                     self.selectedOption(new Date());
-                    }
-                else {
+                } else {
                     var date = new Date(Date.parse(self.answer()));
                     self.answer(date.mmddyyyy());
                     date = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
@@ -456,13 +486,16 @@ Date.prototype.mmddyyyy = function () {
         answerMap.push(self);
     };
 
-    var AnswerOption = function(key, value, title, isSelected, image) {
+    var AnswerOption = function(key, parentKey, value, title, isSelected, image) {
         var self = this;
         self.key = key;
+        self.parentKey = parentKey;
         self.value = value;
         self.title = title;
         self.image = "/Resource/Thumb/" + image;
         self.isSelected = isSelected;
+        self.optionFor = "optionFor" + parentKey.id + "_" + key;
+        self.groupName = 'optionFor' + parentKey.id;
     };
 
     var Comment = function(text, user, date) {
@@ -477,19 +510,52 @@ Date.prototype.mmddyyyy = function () {
         self.key = key;
         self.name = name;
     };
+    
+    var Status = function(key, name, comment) {
+        var self = this;
+        self.key = key;
+        self.name = name;
+        self.comment = comment;
+    };
 
+    var StatusHistory = function (user, status, date, comment) {
+        var self = this;
+        self.user = user;
+        self.status = status;
+        self.date = parseDate(date);
+        self.comment = comment;
+    };
+
+    var parseDate = function(date) {
+        return new Date(parseInt(date.substr(6)));
+    };
+    
     // our main view model
     var SurveyModel = function (questionnaire) {
+
         var self = this;
 
+        self.statusHistory = ko.utils.arrayMap(questionnaire.StatusHistory, function (history) {
+            return new StatusHistory(history.UserName, history.StatusName, history.ChangeDate, history.Comment);
+        });
+        
         self.showMode = ko.observable('all');
         self.isMenuHidden = ko.observable(false);
 
         self.title = questionnaire.Title;
 
         self.user = new User(questionnaire.User.Id, questionnaire.User.Name);
+        if (!!questionnaire.Responsible) {
+            self.responsible = new User(questionnaire.Responsible.Id, questionnaire.Responsible.Name);
+        } else {
+            self.responsible = new User(empty, 'nobody');
+        }
+        
+        
+        currentUser = self.user;
+        
+        self.status = new Status(questionnaire.Status.PublicId, questionnaire.Status.Name, questionnaire.ChangeComment);
 
-        // map array of passed in todos to an observableArray of Todo objects
         self.menu = ko.observableArray(ko.utils.arrayMap(questionnaire.Navigation.Menu, function (item) {
             return new MenuItem(new Key(item.Key.PublicKey, item.Key.PropagationKey, item.Key.IsPropagated),
                                 item.GroupText,
@@ -502,13 +568,16 @@ Date.prototype.mmddyyyy = function () {
             var questions = ko.observableArray(ko.utils.arrayMap(screen.Questions, function (question) {
 
                 var answers = ko.observableArray(ko.utils.arrayMap(question.Answers, function (answer) {
-
-                    var comments = (answer.Comments == null || answer.Comments.trim() == '') ? [] : [new Comment(answer.Comments)];
+                    var answerKey = new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated);
+                    
+                    var comments = ko.utils.arrayMap(answer.Comments, function(comment) {
+                        return new Comment(comment.Comment, new User(comment.User.Id,comment.User.Name), comment.CommentDate);
+                    });
 
                     var isImageType = false;
                     var options = ko.utils.arrayMap(answer.AnswerOptions, function(option) {
                         isImageType = isImageType || (option.AnswerType == 1);
-                        return new AnswerOption(option.PublicKey, option.AnswerValue, option.Title, option.Selected, option.AnswerImage);
+                        return new AnswerOption(option.PublicKey, answerKey, option.AnswerValue, option.Title, option.Selected, option.AnswerImage);
                     });
 
                     var type = answer.Type;
@@ -521,7 +590,7 @@ Date.prototype.mmddyyyy = function () {
                         }
                     }
                     return new Answer(
-                        new Key(answer.Key.PublicKey, answer.Key.PropagationKey, answer.Key.IsPropagated),
+                        answerKey,
                         questionnaire.PublicKey,
                         new Key(answer.ParentKey.PublicKey, answer.ParentKey.PropagationKey, answer.ParentKey.IsPropagated),
                         type,
@@ -544,12 +613,9 @@ Date.prototype.mmddyyyy = function () {
             });
 
             var captions = [];
-            if (screen.Captions.length > 0) {
-                captions.push('');
-                ko.utils.arrayForEach(screen.Captions, function (item) {
-                    captions.push(item);
-                });
-            }
+            for(var key in screen.Captions) {
+                captions.push(new ScreenCaption(new Key(screen.Key.PublicKey, key, true), screen.Captions[key]));
+            };
 
             return new Screen(self, new Key(screen.Key.PublicKey, screen.Key.PropagationKey, screen.Key.IsPropagated), screen.Title, questions, childScreenKeys, captions);
         }));
@@ -561,6 +627,9 @@ Date.prototype.mmddyyyy = function () {
 
             ko.utils.arrayForEach(self.screens(), function (item) {
                 item.isVisible(false);
+                ko.utils.arrayForEach(item.captions, function (caption) {
+                    caption.isVisible(true);
+                });
             });
 
             ko.utils.arrayForEach(answerMap, function (item) {
@@ -575,8 +644,6 @@ Date.prototype.mmddyyyy = function () {
                 ko.utils.arrayForEach(self.menu(), function (item) {
                     item.isCurrent(false);
                 });
-
-                //self.currentScreenKey(undefined);
             }
 
             switch (self.showMode()) {
@@ -601,10 +668,6 @@ Date.prototype.mmddyyyy = function () {
                     });
 
                 case 'flaged':
-                    ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isFlaged() ? true : false);
-                    });
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.flagedCount() > 0);
                     });
@@ -613,10 +676,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.flagedCount() > 0;
                     });
                 case 'answered':
-                    ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isAnswered() ? true : false);
-                    });
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.answeredCount() > 0);
                     });
@@ -625,10 +684,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.answeredCount() > 0;
                     });
                 case 'invalid':
-                    ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isValid() ? true : false);
-                    });
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.invalidCount() > 0);
                     });
@@ -637,10 +692,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.invalidCount() > 0;
                     });
                 case 'supervisor':
-                    ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(!item.isReadonly ? true : false);
-                    });
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.editableCount() > 0);
                     });
@@ -649,10 +700,6 @@ Date.prototype.mmddyyyy = function () {
                         return screen.editableCount() > 0;
                     });
                 case 'enabled':
-                    ko.utils.arrayForEach(answerMap, function (item) {
-                        item.isVisible(item.isEnabled ? true : false);
-                    });
-
                     ko.utils.arrayForEach(questionMap, function (item) {
                         item.isVisible(item.enabledCount() > 0);
                     });
@@ -666,18 +713,6 @@ Date.prototype.mmddyyyy = function () {
                     });
             }
         });
-
-        self.selectMenuItem = function (menuItem) {
-            ko.utils.arrayForEach(this.menu(), function (item) {
-                item.isCurrent(false);
-            });
-
-            self.currentScreenKey(menuItem.key);
-
-            menuItem.isCurrent(true);
-
-            self.showMode('group');
-        } .bind(self);
 
         self.flagAnswer = function (answer, event) {
             answer.isFlaged(!answer.isFlaged());
@@ -744,11 +779,20 @@ Date.prototype.mmddyyyy = function () {
         });
 
         self.openDetails = function (answer, event) {
+            if (!!self.currentAnswer()) {
+                $('#question-' + self.currentAnswer().key.publicKey).removeClass('active');
+            }
+            
             self.currentAnswer(answer);
+            
+            $('#question-' + answer.key.publicKey).addClass('active');
+            
             $('#stacks').addClass('detail-visible');
             event.stopPropagation();
 
             $('#details .body').css('top', ($('#details .title').outerHeight() + 'px'));
+
+           $('[data-toggle="dropdown"]').parent().removeClass('open');
         };
 
         self.closeDetails = function (answer, event) {
@@ -770,7 +814,7 @@ Date.prototype.mmddyyyy = function () {
 
     $(document).ready(function () {
         // bind a new instance of our view model to the page
-        var viewModel = new SurveyModel(questionnaire || {});
+        viewModel = new SurveyModel(questionnaire || {});
         ko.applyBindings(viewModel);
 
         $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
@@ -780,7 +824,32 @@ Date.prototype.mmddyyyy = function () {
         });
 
         // set up filter routing
-        Router({ '/:filter': viewModel.showMode }).init();
+        Router({
+            '/:filter': viewModel.showMode,
+            '/group/:groupId/:propId': function (groupId, propId) {
+                console.log('group was selected');
+                
+                ko.utils.arrayForEach(viewModel.menu(), function (item) {
+                    item.isCurrent(false);
+                });
+
+                var key = groupId + propId;
+                
+                if (keyMap[key] != undefined) {
+                    var id = keyMap[key];
+                    
+                    var menuItem = ko.utils.arrayFirst(viewModel.menu(), function(item) {
+                        return item.key.id == id;
+                    });
+                    
+                    viewModel.currentScreenKey(menuItem.key);
+                    
+                    menuItem.isCurrent(true);
+                    
+                    viewModel.showMode('group');
+                }
+            }
+        }).init();
     });
 
 } ());

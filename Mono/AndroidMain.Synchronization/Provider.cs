@@ -214,8 +214,8 @@ namespace AndroidMain.Synchronization
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                    
-                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(responseStream.Content.Substring(responseStream.Content.IndexOf("[")), settings);
+                    var str = responseStream.Content.Substring(responseStream.Content.IndexOf("["));
+                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
                     if (evnts != null)
                     {

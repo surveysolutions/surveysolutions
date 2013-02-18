@@ -22,6 +22,8 @@ namespace Main.Synchronization.SyncStreamCollector
 
     using SynchronizationMessages.Export;
 
+    using SynchronizationMessages.Export;
+
     /// <summary>
     /// The compressed stream stream collector.
     /// </summary>

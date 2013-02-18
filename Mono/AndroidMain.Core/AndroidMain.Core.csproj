@@ -195,9 +195,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\ChangeUserCommand.cs">
       <Link>Commands\User\ChangeUserCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\ChangeUserStatusCommand.cs">
-      <Link>Commands\User\ChangeUserStatusCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\CreateUserCommand.cs">
       <Link>Commands\User\CreateUserCommand.cs</Link>
     </Compile>
@@ -224,6 +221,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CollectionDocument.cs">
       <Link>Documents\CollectionDocument.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CommentDocument.cs">
+      <Link>Documents\CommentDocument.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Documents\CompleteQuestionnaireDocument.cs">
       <Link>Documents\CompleteQuestionnaireDocument.cs</Link>
@@ -752,8 +752,11 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserChanged.cs">
       <Link>Events\User\UserChanged.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserStatusChanged.cs">
-      <Link>Events\User\UserStatusChanged.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserLocked.cs">
+      <Link>Events\User\UserLocked.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\User\UserUnlocked.cs">
+      <Link>Events\User\UserUnlocked.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Export\ExportManager.cs">
       <Link>Export\ExportManager.cs</Link>

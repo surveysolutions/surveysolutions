@@ -9,12 +9,13 @@
 
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
+    using System.IO;
     using System.ServiceModel;
 
     /// <summary>
     /// The GetAggragateRootList interface.
     /// </summary>
-    [JsonNewSerializerContractBehavior]
+    /*[JsonNewSerializerContractBehavior]*/
     [ServiceContract]
     public interface IGetAggragateRootList
     {

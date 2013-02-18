@@ -123,6 +123,12 @@ namespace AndroidApp
 
             #endregion
 
+          
+            GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
+        }
+        
+        protected void GenerateEvents(InProcessEventBus bus)
+        {
             var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(this);
 
             // initialize app if necessary
@@ -130,11 +136,6 @@ namespace AndroidApp
             {
                 _setup.Initialize();
             }
-            GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
-        }
-        
-        protected void GenerateEvents(InProcessEventBus bus)
-        {
             var eventStore = CapiApplication.Kernel.Get<IEventStore>() as SQLiteEventStore;
             /*var events = eventStore.GetAllEvents();
             if (eventStore.GetAllEvents().Any())
@@ -142,8 +143,12 @@ namespace AndroidApp
                 bus.Publish(events.Select(e => e as IPublishableEvent));
                 return;
             }*/
-            eventStore.ClearDB();
-            var stream = new UncommittedEventStream(Guid.NewGuid());
+            var events = eventStore.GetAllEvents();
+            foreach (CommittedEvent committedEvent in events)
+            {
+                bus.Publish(committedEvent);
+            }
+         /*   var stream = new UncommittedEventStream(Guid.NewGuid());
             //  var payload = new NewCompleteQuestionnaireCreated();
 
             #region init
@@ -183,7 +188,7 @@ namespace AndroidApp
             eventStore.Store(stream);
             bus.Publish(userEventUcmt);
 
-            bus.Publish(rEventTempl);
+            bus.Publish(rEventTempl);*/
 
         }
         protected T DesserializeEmbededResource<T>(string fileName)

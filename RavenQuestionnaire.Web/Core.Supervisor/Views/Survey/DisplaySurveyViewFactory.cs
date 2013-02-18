@@ -93,9 +93,7 @@ namespace Core.Supervisor.Views.Survey
             var screenView = new ScreenNavigationView(rout.MenuItems, rout.Navigation);
 
             var result = this.surveyScreenSupplier.BuildView(doc, rout.Group, screenView);
-
-            result.Title = doc.Title;
-
+            
             result.User = input.User;
 
             return result;

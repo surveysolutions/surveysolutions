@@ -182,7 +182,7 @@ namespace Main.Core.Tests.Domain
             {
                 string commentText = "test comment";
 
-                completeQuestionnaire.SetComment(this.configurator.QuestionKey, commentText, null);
+                completeQuestionnaire.SetComment(this.configurator.QuestionKey, commentText, null, new UserLight(Guid.NewGuid(), "User"));
 
                 Assert.True(ctx.Events.Count() == 1);
 

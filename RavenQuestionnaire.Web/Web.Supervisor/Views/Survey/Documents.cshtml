@@ -1,15 +1,17 @@
 ﻿@using Core.Supervisor.Views.Assignment
 @using Main.Core.Entities.SubEntities
+@using ClientDependency.Core.Mvc
 @model AssignmentView
-<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type = "text/javascript"> </script>
 @{
     ViewBag.Title = "Surveys";
     var statuses = SurveyStatus.GetAllStatuses().Where(s => s.PublicId != SurveyStatus.Unknown.PublicId).Aggregate("{", (current, status) => current + string.Format("'{0}':'{1}',", status.PublicId, status.Name));
     statuses = statuses.Substring(0, statuses.Length - 1);
     statuses += "}";
 }
-<script src="../../Scripts/sorter.js" type="text/javascript"></script>
-<script src="../../Scripts/grid.js" type="text/javascript"></script>
+@{
+    Html.RequiresJs("sorter.js", "Scripts", 90);
+    Html.RequiresJs("grid.js", "Scripts", 100);
+}
 <script type="text/javascript">
     var sortData = undefined;
     var userFilter = "@(Model.User.Id)", 

@@ -230,6 +230,9 @@ namespace Main.Synchronization.SyncManager
         /// </summary>
         private void Push()
         {
+            if (streamCollector == null)
+                throw new Exception("StreamCollector is not set");
+
             this.Invoker.Execute(
                 new CreateNewSynchronizationProcessCommand(
                     this.ProcessGuid, 

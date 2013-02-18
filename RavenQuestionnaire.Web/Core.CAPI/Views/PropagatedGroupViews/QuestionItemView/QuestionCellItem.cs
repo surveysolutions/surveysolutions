@@ -31,7 +31,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
                 AnswerPublicKeys = string.Join(";", answerKeys);
             Enabled = question.Enabled;
             Valid = question.Valid;
-            Comments = question.Comments;
+            Comments = question.LastComment;
         }
 
         public Guid PublicKey { get; set; }

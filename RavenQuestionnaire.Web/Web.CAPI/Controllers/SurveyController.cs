@@ -616,6 +616,7 @@ namespace Web.CAPI.Controllers
         {
             try
             {
+                var user = this._globalProvider.GetCurrentUser();
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
                 Guid questionnaireKey = questionnaireId;
                 commandService.Execute(
@@ -623,7 +624,8 @@ namespace Web.CAPI.Controllers
                         questionnaireKey,
                         publicKey,
                         comment,
-                        propogationPublicKey));
+                        propogationPublicKey,
+                        user));
             }
             catch (Exception e)
             {
@@ -660,13 +662,15 @@ namespace Web.CAPI.Controllers
             try
             {
                 var commandService = NcqrsEnvironment.Get<ICommandService>();
+                var user = this._globalProvider.GetCurrentUser();
                 Guid questionnaireKey = settings[0].QuestionnaireId;
                 commandService.Execute(
                     new SetCommentCommand(
                         questionnaireKey,
                         question.PublicKey,
                         question.Comments, 
-                        settings[0].PropogationPublicKey));
+                        settings[0].PropogationPublicKey,
+                        user));
             }
             catch (Exception e)
             {
