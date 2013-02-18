@@ -30,10 +30,10 @@ namespace AndroidApp
     [Activity(Icon = "@drawable/capi")]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<QuestionnaireScreenViewModel>
     {
-        protected Guid QuestionnaireId
+       /* protected Guid QuestionnaireId
         {
             get { return Guid.Parse(Intent.GetStringExtra("questionnaireId")); }
-        }
+        }*/
 
         protected Guid? ScreenId
         {
@@ -98,7 +98,7 @@ namespace AndroidApp
         private void Adapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
+                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, e.ScreenId));
             Adapter.UpdateScreenData(firstScreen);
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
@@ -113,7 +113,7 @@ namespace AndroidApp
                 return;
             }
             var firstScreen = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
-                new QuestionnaireScreenInput(QuestionnaireId, e.ScreenId));
+                new QuestionnaireScreenInput(ViewModel.QuestionnaireId, e.ScreenId));
             Adapter.UpdateScreenData(firstScreen);
             VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
         }
