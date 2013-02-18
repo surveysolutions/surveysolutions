@@ -33,7 +33,7 @@ namespace AndroidApp
     {
         public void Start()
         {
-            GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
+           // GenerateEvents(NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus);
                 RequestNavigate<LoginViewModel>();
         }
 

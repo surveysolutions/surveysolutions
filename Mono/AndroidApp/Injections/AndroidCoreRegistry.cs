@@ -12,7 +12,6 @@ using AndroidApp.Core.Model.ProjectionStorage;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Core.CAPI.Synchronization;
-using Main.Core;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.Storage;
@@ -21,6 +20,10 @@ using Ninject.Activation;
 
 namespace AndroidApp.Injections
 {
+    using Main.Core;
+    using Main.Synchronization.SycProcessRepository;
+
+    using SynchronizationMessages.WcfInfrastructure;
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -48,9 +51,12 @@ namespace AndroidApp.Injections
             var membership = new AndroidAuthentication(Kernel.Get<IDenormalizerStorage<UserView>>());
             this.Bind<IAuthentication>().ToConstant(membership);
 
+            this.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();
             this.Unbind<IProjectionStorage>();
             this.Bind<IProjectionStorage>().ToMethod(CreateStorage).
                 InScope(c => CapiApplication.Context);
+
+            this.Bind<IChanelFactoryWrapper>().To<ChanelFactoryWrapper>();                
         }
         protected IProjectionStorage CreateStorage(IContext c)
         {

@@ -1,167 +1,268 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Android.Content;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
-using Newtonsoft.Json;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SQLiteEventStore.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The sq lite event store.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-    public class SQLiteEventStore : IEventStore
-	{
-		private readonly Context _context;
-		private readonly SQLiteContext _sqLiteContext;
-		private readonly DataBaseHelper _databaseHelper;
-		//private readonly IPropertyBagConverter _propertyBagConverter;
+    using System;
+    using System.Collections.Generic;
 
-		public SQLiteEventStore(Context context)
-		{
-			_context = context;
+    using Android.Content;
+    using Android.Database;
 
-			_databaseHelper = new DataBaseHelper(context);
+    using Ncqrs.Eventing;
+    using Ncqrs.Eventing.Storage;
 
-			_sqLiteContext = new SQLiteContext(_databaseHelper);
+    using Newtonsoft.Json;
 
-			//_propertyBagConverter = new PropertyBagConverter();
-		}
+    /// <summary>
+    /// The sq lite event store.
+    /// </summary>
+    public class SQLiteEventStore : IStreamableEventStore
+    {
+        #region Fields
 
-		#region Public methods
-		public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
-		{
-			var cursor = _databaseHelper
-				.ReadableDatabase
-				.RawQuery(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion), null);
+        /// <summary>
+        /// The _context.
+        /// </summary>
+        private readonly Context _context;
 
-			var events = new List<CommittedEvent>();
+        /// <summary>
+        /// The _database helper.
+        /// </summary>
+        private readonly DataBaseHelper _databaseHelper;
 
-			var eventIdIndex = cursor.GetColumnIndex("EventId");
-			var sequenceIndex = cursor.GetColumnIndex("Sequence");
-			var timestampIndex = cursor.GetColumnIndex("TimeStamp");
-			var dataIndex = cursor.GetColumnIndex("Data");
+        /// <summary>
+        /// The _sq lite context.
+        /// </summary>
+        private readonly SQLiteContext _sqLiteContext;
 
-			while (cursor.MoveToNext())
-			{
-				var eventId = Guid.Parse(cursor.GetString(eventIdIndex));
-				var sequenceId = cursor.GetLong(sequenceIndex);
-				var eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-				var data = GetObject(cursor.GetString(dataIndex));
+        #endregion
 
-				var @event = new CommittedEvent(Guid.Empty,
-				                                eventId,
-				                                id,
-				                                sequenceId,
-				                                eventTimeStamp,
-				                                data,
-				                                new Version(1, 0));
+        // private readonly IPropertyBagConverter _propertyBagConverter;
+        #region Constructors and Destructors
 
-				events.Add(@event);
-			}
-			return new CommittedEventStream(id, events);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQLiteEventStore"/> class.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        public SQLiteEventStore(Context context)
+        {
+            this._context = context;
 
-		public void Store(UncommittedEventStream events)
-		{
-			_sqLiteContext.ExecuteWithTransaction(() => SaveEvents(events));
-		}
+            this._databaseHelper = new DataBaseHelper(context);
+
+            this._sqLiteContext = new SQLiteContext(this._databaseHelper);
+
+            // _propertyBagConverter = new PropertyBagConverter();
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The clear db.
+        /// </summary>
         public void ClearDB()
         {
-            _sqLiteContext.ExecuteWithTransaction(() => _databaseHelper.WritableDatabase.Delete("Events", null, null));
+            this._sqLiteContext.ExecuteWithTransaction(
+                () => this._databaseHelper.WritableDatabase.Delete("Events", null, null));
         }
-		public IEnumerable<CommittedEvent> GetAllEvents()
-		{
-			var cursor = _databaseHelper
-				.ReadableDatabase
-				.RawQuery(Query.SelectAllEventsQuery(), null);
 
-			var events = new List<CommittedEvent>();
+        /// <summary>
+        /// The get all events.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<CommittedEvent> GetAllEvents()
+        {
+            ICursor cursor = this._databaseHelper.ReadableDatabase.RawQuery(Query.SelectAllEventsQuery(), null);
 
-			var eventIdIndex = cursor.GetColumnIndex("EventId");
-			var eventSourceIndex = cursor.GetColumnIndex("EventSourceId");
-			var sequenceIndex = cursor.GetColumnIndex("Sequence");
-			var timestampIndex = cursor.GetColumnIndex("TimeStamp");
-			var dataIndex = cursor.GetColumnIndex("Data");
+            var events = new List<CommittedEvent>();
 
-			while (cursor.MoveToNext())
-			{
-				var eventSourceId = Guid.Parse(cursor.GetString(eventSourceIndex));
-				var eventId = Guid.Parse(cursor.GetString(eventIdIndex));
-				var sequenceId = cursor.GetLong(sequenceIndex);
-				var eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-				var data = GetObject(cursor.GetString(dataIndex));
+            int commitIdIndex = cursor.GetColumnIndex("CommitId");
+            int eventIdIndex = cursor.GetColumnIndex("EventId");
+            int eventSourceIndex = cursor.GetColumnIndex("EventSourceId");
+            int sequenceIndex = cursor.GetColumnIndex("Sequence");
+            int timestampIndex = cursor.GetColumnIndex("TimeStamp");
+            int dataIndex = cursor.GetColumnIndex("Data");
 
-				var @event = new CommittedEvent(Guid.Empty,
-												eventId,
-												eventSourceId,
-												sequenceId,
-												eventTimeStamp,
-												data,
-												new Version(1, 0));
+            while (cursor.MoveToNext())
+            {
+                Guid commitId = Guid.Parse(cursor.GetString(commitIdIndex));
+                Guid eventSourceId = Guid.Parse(cursor.GetString(eventSourceIndex));
+                Guid eventId = Guid.Parse(cursor.GetString(eventIdIndex));
+                long sequenceId = cursor.GetLong(sequenceIndex);
+                DateTime eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
+                object data = this.GetObject(cursor.GetString(dataIndex));
 
-				events.Add(@event);
-			}
-			return @events;
-		}
-		#endregion
+                var @event = new CommittedEvent(
+                    commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1, 0));
 
-		#region Private methods
-		private void SaveEvents(UncommittedEventStream events)
-		{
-			foreach (var @event in events)
-			{
-				var data = GetJsonData(@event.Payload);
+                events.Add(@event);
+            }
 
-				var values = new ContentValues();
-				values.Put("EventSourceId", @event.EventSourceId.ToString());
-				values.Put("EventId", @event.EventIdentifier.ToString());
-				values.Put("Sequence", @event.EventSequence);
-				values.Put("Timestamp", @event.EventTimeStamp.Ticks);
-				values.Put("Data", data);
-				values.Put("Name", @event.Payload.GetType().FullName);
+            return @events;
+        }
 
-				_databaseHelper.WritableDatabase.Insert("Events", null, values);
-			}
-		}
-        
+        /// <summary>
+        /// The get event stream.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        public IEnumerable<CommittedEvent> GetEventStream()
+        {
+            return this.GetAllEvents();
+        }
 
-	    #region DataConverter
+        /// <summary>
+        /// The read from.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="minVersion">
+        /// The min version.
+        /// </param>
+        /// <param name="maxVersion">
+        /// The max version.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CommittedEventStream"/>.
+        /// </returns>
+        public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
+        {
+            ICursor cursor =
+                this._databaseHelper.ReadableDatabase.RawQuery(
+                    Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion), null);
 
-		private string GetJsonData(object payload)
-		{
-			return JsonConvert.SerializeObject(payload, Formatting.None, 
-				new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects});
-		}
+            var events = new List<CommittedEvent>();
 
-		private object GetObject(string json)
-		{
-			return JsonConvert.DeserializeObject(json,
-				new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
-		}
+            int commitIdIndex = cursor.GetColumnIndex("CommitId");
+            int eventIdIndex = cursor.GetColumnIndex("EventId");
+            int sequenceIndex = cursor.GetColumnIndex("Sequence");
+            int timestampIndex = cursor.GetColumnIndex("TimeStamp");
+            int dataIndex = cursor.GetColumnIndex("Data");
 
-		//private byte[] GetBinaryData(object payload)
-		//{
-		//    var bag = _propertyBagConverter.Convert(payload);
-		//    using (var stream = new MemoryStream())
-		//    {
-		//        var formatter = new BinaryFormatter();
-		//        formatter.Serialize(stream, bag);
-		//        stream.Position = 0;
-		//        return stream.ToArray();
-		//    }
-		//}
+            while (cursor.MoveToNext())
+            {
+                Guid commitId = Guid.Parse(cursor.GetString(commitIdIndex));
+                Guid eventId = Guid.Parse(cursor.GetString(eventIdIndex));
+                long sequenceId = cursor.GetLong(sequenceIndex);
+                DateTime eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
+                object data = this.GetObject(cursor.GetString(dataIndex));
 
-		//private object GetObject(byte[] data)
-		//{
-		//    using (var stream = new MemoryStream(data))
-		//    {
-		//        var formatter = new BinaryFormatter();
-		//        var bag = (PropertyBag)formatter.Deserialize(stream);
-		//        return _propertyBagConverter.Convert(bag);
-		//    }
-		//}
-		#endregion
+                var @event = new CommittedEvent(
+                    commitId, eventId, id, sequenceId, eventTimeStamp, data, new Version(1, 0));
 
-		#endregion
-	}
+                events.Add(@event);
+            }
+
+            return new CommittedEventStream(id, events);
+        }
+
+        /// <summary>
+        /// The store.
+        /// </summary>
+        /// <param name="events">
+        /// The events.
+        /// </param>
+        public void Store(UncommittedEventStream events)
+        {
+            this._sqLiteContext.ExecuteWithTransaction(() => this.SaveEvents(events));
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The get json data.
+        /// </summary>
+        /// <param name="payload">
+        /// The payload.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        private string GetJsonData(object payload)
+        {
+            return JsonConvert.SerializeObject(
+                payload, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+        }
+
+        /// <summary>
+        /// The get object.
+        /// </summary>
+        /// <param name="json">
+        /// The json.
+        /// </param>
+        /// <returns>
+        /// The <see cref="object"/>.
+        /// </returns>
+        private object GetObject(string json)
+        {
+            return JsonConvert.DeserializeObject(
+                json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+        }
+
+        /// <summary>
+        /// The save events.
+        /// </summary>
+        /// <param name="events">
+        /// The events.
+        /// </param>
+        private void SaveEvents(UncommittedEventStream events)
+        {
+            foreach (UncommittedEvent @event in events)
+            {
+                string data = this.GetJsonData(@event.Payload);
+
+                var values = new ContentValues();
+                values.Put("CommitId", @event.CommitId.ToString());
+                values.Put("EventSourceId", @event.EventSourceId.ToString());
+                values.Put("EventId", @event.EventIdentifier.ToString());
+                values.Put("Sequence", @event.EventSequence);
+                values.Put("Timestamp", @event.EventTimeStamp.Ticks);
+                values.Put("Data", data);
+                values.Put("Name", @event.Payload.GetType().FullName);
+
+                this._databaseHelper.WritableDatabase.Insert("Events", null, values);
+            }
+        }
+
+        #endregion
+
+        // private byte[] GetBinaryData(object payload)
+        // {
+        // var bag = _propertyBagConverter.Convert(payload);
+        // using (var stream = new MemoryStream())
+        // {
+        // var formatter = new BinaryFormatter();
+        // formatter.Serialize(stream, bag);
+        // stream.Position = 0;
+        // return stream.ToArray();
+        // }
+        // }
+
+        // private object GetObject(byte[] data)
+        // {
+        // using (var stream = new MemoryStream(data))
+        // {
+        // var formatter = new BinaryFormatter();
+        // var bag = (PropertyBag)formatter.Deserialize(stream);
+        // return _propertyBagConverter.Convert(bag);
+        // }
+        // }
+    }
 }

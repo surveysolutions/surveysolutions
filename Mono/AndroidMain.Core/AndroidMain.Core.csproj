@@ -177,6 +177,21 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushEventsCommand.cs">
       <Link>Commands\Synchronization\PushEventsCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\PushStatisticsCommand.cs">
+      <Link>Commands\Synchronization\PushStatisticsCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterDeviceCommand.cs">
+      <Link>Commands\Synchronization\RegisterDeviceCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterNewDeviceCapiCommand.cs">
+      <Link>Commands\Synchronization\RegisterNewDeviceCapiCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\RegisterNewSupervisorCommand.cs">
+      <Link>Commands\Synchronization\RegisterNewSupervisorCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Synchronization\UpdateRegisterDeviceCommand.cs">
+      <Link>Commands\Synchronization\UpdateRegisterDeviceCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\User\ChangeUserCommand.cs">
       <Link>Commands\User\ChangeUserCommand.cs</Link>
     </Compile>
@@ -281,6 +296,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\CompleteQuestionnaireAR.cs">
       <Link>Domain\CompleteQuestionnaireAR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\DeviceAR.cs">
+      <Link>Domain\DeviceAR.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>

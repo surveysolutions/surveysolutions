@@ -41,18 +41,9 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Channels" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,10 +67,6 @@
     <Compile Include="SyncStreamCollector\RemoteServiceStreamCollector.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
-      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
@@ -99,10 +86,6 @@
     <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>
-      <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

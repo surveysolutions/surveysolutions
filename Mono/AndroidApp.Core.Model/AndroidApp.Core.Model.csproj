@@ -98,6 +98,7 @@
     <Compile Include="ViewModel\Statistics\StatisticsQuestionViewModel.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsViewFactory.cs" />
     <Compile Include="ViewModel\Statistics\StatisticsViewModel.cs" />
+    <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">

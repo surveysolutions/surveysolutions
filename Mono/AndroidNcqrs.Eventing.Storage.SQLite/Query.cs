@@ -6,16 +6,16 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 	{
 		internal static string InsertNewEventQuery()
 		{
-			return 
+			return
 @"INSERT INTO [Events]
-([EventSourceId], [EventId], [Name], [Data], [Sequence], [TimeStamp]) 
-VALUES (?, ?, ?, ?, ?, ?)";
+([CommitId] [EventSourceId], [EventId], [Name], [Data], [Sequence], [TimeStamp]) 
+VALUES (?, ?, ?, ?, ?, ?, ?)";
 		}
 
 		internal static string SelectAllEventsByGuidQuery(Guid id, long minVersion, long maxVersion)
 		{
-			var template = 
-@"SELECT TimeStamp, EventId, Data, Sequence
+			var template =
+@"SELECT TimeStamp, EventId, Data, Sequence, CommitId
 FROM Events
 WHERE [EventSourceId] = '{0}'
 AND Sequence >= {1}
@@ -28,14 +28,15 @@ ORDER BY Sequence";
 		internal static string SelectAllEventsQuery()
 		{
 			return
-@"SELECT EventSourceId, EventId, TimeStamp, Data, Sequence
+@"SELECT CommitId, EventSourceId, EventId, TimeStamp, Data, Sequence
 FROM Events";
 		}
 		
 		internal static string CreateTables()
 		{
-			return 
+			return
 @"CREATE TABLE Events (
+CommitId TEXT NOT NULL,
 EventSourceId TEXT NOT NULL,
 EventId TEXT  NOT NULL,
 Sequence INTEGER  NOT NULL,
