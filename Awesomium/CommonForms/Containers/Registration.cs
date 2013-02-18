@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,34 +8,74 @@ using Browsing.Common.Controls;
 using Browsing.Common.Interfaces;
 using Common.Utils;
 using Synchronization.Core.Errors;
+using Synchronization.Core.Events;
 using Synchronization.Core.Registration;
 using Synchronization.Core.Interface;
 
 namespace Browsing.Common.Containers
 {
-    public abstract partial class Registration : Screen, IUsbWatcher, IUsbProvider
+    public abstract partial class Registration : Screen, IUsbWatcher
     {
-        private bool isRegistrationPossible;
+        private class ServiceTimer : Timer
+        {
+            private bool isBusy;
+            private Registration parentRegistration;
+
+            internal ServiceTimer(Registration parentRegistration)
+                : base()
+            {
+                this.parentRegistration = parentRegistration;
+                this.Interval = 5000;
+            }
+
+            protected override void OnTick(EventArgs e)
+            {
+                base.OnTick(e);
+
+                this.parentRegistration.TreatServiceWatcherTick(this, EventArgs.Empty);
+            }
+        }
+
+        #region Members
+
+        private bool isFirstPhaseRegistrationPossible;
+        private bool isSecondPhaseRegistrationPossible;
+        private ServiceTimer serviceWatcher;
+
+        #endregion
 
         #region C-tor
 
-        public Registration(IRequesProcessor requestProcessor, IUrlUtils urlUtils,
-                            ScreenHolder holder, bool registrationListVisible, string registerButtonText)
+        public Registration(
+            IRequestProcessor requestProcessor,
+            IUrlUtils urlUtils,
+            ScreenHolder holder,
+            bool isRegistrationListVisible,
+            string registerFirstPhaseButtonText,
+            string registerSecondPhaseButtonText,
+            bool isSecondPhaseWork)
             : base(holder, true)
         {
             InitializeComponent();
 
-            this.registrationPanel.Parent = ContentPanel;
-            
-            this.registrationButton.Text = registerButtonText;
+            this.regContent.Parent = ContentPanel;
 
-            this.usbStatusPanel.UsbPressed += usb_Click;
+            this.regPanel.FirstPhaseButton.Text = registerFirstPhaseButtonText;
+            this.regPanel.FirstPhaseButton.Click += registrationButton1stPhase_Click;
+            this.regPanel.SecondPhaseButton.Click += registrationButton2ndPhase_Click;
 
-            this.RegistrationManager = DoInstantiateRegistrationManager(requestProcessor, urlUtils, this);
+            this.regPanel.UsbChoosen += usb_Click;
 
-            EnableRegistrationList(registrationListVisible);
+            RegistrationManager = DoInstantiateRegistrationManager(requestProcessor, urlUtils, this.regPanel);
+            Debug.Assert(RegistrationManager != null);
 
-            System.Diagnostics.Debug.Assert(this.RegistrationManager != null);
+            RegistrationManager.FirstPhaseAccomplished += new EventHandler<RegistrationEventArgs>(FirstRegistrationPhaseAccomplished);
+            RegistrationManager.SecondPhaseAccomplished += new EventHandler<RegistrationEventArgs>(SecondRegistrationPhaseAccomplished);
+
+            this.authorizedGroupBox.Visible = isRegistrationListVisible;
+            this.regPanel.SecondPhaseButton.Visible = !isRegistrationListVisible;
+
+            this.serviceWatcher = new ServiceTimer(this);
         }
 
         #endregion
@@ -42,27 +83,74 @@ namespace Browsing.Common.Containers
         #region Propeties
 
         protected internal RegistrationManager RegistrationManager { get; private set; }
+        protected ListView AuthorizationList { get { return this.authorizationList; } }
 
         #endregion
 
-        #region Abstract
+        #region Abstract and Virtual
 
-        protected abstract RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider);
-
-        protected abstract bool OnRegistrationButtonClicked(out string message);
+        protected abstract RegistrationManager DoInstantiateRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider);
 
         protected abstract string OnGetCurrentRegistrationStatus();
+
+        protected virtual void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)
+        {
+            MakeDefaultAccomplishment(true, args);
+        }
+
+        protected virtual void OnSecondRegistrationPhaseAccomplished(RegistrationEventArgs args)
+        {
+            MakeDefaultAccomplishment(false, args);
+        }
 
         #endregion
 
         #region Helpers
 
-        private void EnableRegistrationList(bool visible)
+        private void MakeDefaultAccomplishment(bool firstPhase, RegistrationEventArgs args)
         {
-            this.authorizatonGroupBox.Visible = visible;
+            var isPassed = args.IsPassed;
+
+            if (isPassed)
+            {
+                EnableFirstPhaseRegistration(!firstPhase);
+                EnableSecondPhaseRegistration(firstPhase);
+            }
+
+            ShowError(args.ErrorMessage);
+            ShowResult(args.ResultMessage, !isPassed);
         }
 
-        private void CheckRegchannel() 
+        private void TreatServiceWatcherTick(object sender, EventArgs e)
+        {
+            new System.Threading.Thread(RegistrationManager.CollectAllAuthorizationPackets).Start();
+        }
+
+        void FirstRegistrationPhaseAccomplished(object sender, RegistrationEventArgs args)
+        {
+            try
+            {
+                OnFirstRegistrationPhaseAccomplished(args);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex.Message);
+            }
+        }
+
+        void SecondRegistrationPhaseAccomplished(object sender, RegistrationEventArgs args)
+        {
+            try
+            {
+                OnSecondRegistrationPhaseAccomplished(args);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex.Message);
+            }
+        }
+
+        private void CheckRegistrationChannel()
         {
             string status = string.Empty;
 
@@ -71,45 +159,71 @@ namespace Browsing.Common.Containers
                 ShowError("Checking registration status ...");
 
                 // assume sync possibility by default
-                this.isRegistrationPossible = true;
+                this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = true;
 
-                IList<SynchronizationException> issues = this.RegistrationManager.CheckIssues();
+                IList<ServiceException> issues = this.RegistrationManager.CheckRegIssues();
                 if (issues == null || issues.Count == 0)
                     return;
 
-                SynchronizationException ex = issues.FirstOrDefault<SynchronizationException>(x => x is LocalHosUnreachableException);
+                ServiceException ex = issues.FirstOrDefault<ServiceException>(x => x is LocalHosUnreachableException);
                 if (ex != null)
                 {
-                    this.isRegistrationPossible = false;
+                    this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = false;
 
                     status += "\n" + ex.Message;
 
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnacceptableException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is EndpointNotSetException || x is NetIssueException);
                 if (ex != null)
                 {
-                    this.isRegistrationPossible = false;
+                    status = ex.Message;
 
-                    status += "\n" + ex.Message;
+                    ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
+                    if (ex != null)
+                    {
+                        this.isFirstPhaseRegistrationPossible = this.isSecondPhaseRegistrationPossible = false;
 
-                    return;
+                        status += "\n" + ex.Message;
+
+                        return; // fatal
+                    }
                 }
-
             }
             finally
             {
                 ShowError(status);
                 ShowRegStatus();
 
-                EnableRegistration(this.isRegistrationPossible);
+                EnableFirstPhaseRegistration(this.isFirstPhaseRegistrationPossible);
+                EnableSecondPhaseRegistration(this.isFirstPhaseRegistrationPossible);
             }
+        }
+
+        private void EnableFirstPhaseRegistration(bool enable)
+        {
+            OnEnableFirstPhaseRegistration(enable);
+        }
+
+        protected virtual void OnEnableFirstPhaseRegistration(bool enable)
+        {
+            this.regPanel.EnableRegistration(enable && this.isSecondPhaseRegistrationPossible, true);
+        }
+
+        private void EnableSecondPhaseRegistration(bool enable)
+        {
+            OnEnableSecondPhaseRegistration(enable);
+        }
+
+        protected virtual void OnEnableSecondPhaseRegistration(bool enable)
+        {
+            this.regPanel.EnableRegistration(enable && this.isSecondPhaseRegistrationPossible, false);
         }
 
         private void ShowRegStatus()
         {
-            ShowResult(GetCurrentRegistrationStatus(), false);
+            ShowResult(GetCurrentRegistrationStatus());
         }
 
         private string GetCurrentRegistrationStatus()
@@ -117,101 +231,85 @@ namespace Browsing.Common.Containers
             return OnGetCurrentRegistrationStatus();
         }
 
-        private void ShowError(string status)
+        private void ShowError(string error)
         {
-            this.usbStatusPanel.SetStatus(status, true);
+            this.regPanel.ShowError(error);
         }
 
         private void ShowResult(string text, bool error = false)
         {
-            this.usbStatusPanel.SetResult(text, error);
+            this.regPanel.ShowResult(text, error);
         }
 
-        private void EnableRegistration(bool enable)
+        private void CheckRegistractionPossibilities()
         {
-            if (this.registrationButton.InvokeRequired)
-                this.registrationButton.Invoke(new MethodInvoker(() => this.registrationButton.Enabled = enable));
-            else
-                this.registrationButton.Enabled = enable;
-        }
-
-        private void CheckRegistractionPossibilities(bool background = true)
-        {
-            if (background)
-                new System.Threading.Thread(CheckRegchannel).Start();
-            else
-                CheckRegchannel();
+            new System.Threading.Thread(CheckRegistrationChannel).Start();
         }
 
         private void usb_Click(object sender, EventArgs e)
         {
-            try
-            {
-                CheckRegistractionPossibilities();
-            }
-            catch
-            {
-            }
+            CheckRegistractionPossibilities();
         }
 
-        private void registrationButton_Click(object sender, EventArgs e)
+        private void Register(bool asFirstPhase)
         {
-            string statusMessage = "Registration failed";
-            bool isError = true;
-
             try
             {
-                isError = OnRegistrationButtonClicked(out statusMessage);
+                RegistrationManager.DoRegistration(asFirstPhase);
             }
             catch (Exception ex)
             {
-                statusMessage = "Registration failed: " + ex.Message;
+                ShowError("Registration failed: " + ex.Message);
             }
-            finally
-            {
-                ShowResult(statusMessage, isError);
-            }
+        }
+
+        private void registrationButton1stPhase_Click(object sender, EventArgs e)
+        {
+            Register(true);
+        }
+
+        private void registrationButton2ndPhase_Click(object sender, EventArgs e)
+        {
+            Register(false);
         }
 
         #endregion
 
         #region Protected Methods
 
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             CheckRegistractionPossibilities();
+
+            this.serviceWatcher.Start();
+        }
+
+        protected override void OnLeaveScreen()
+        {
+            this.serviceWatcher.Stop();
+
+            base.OnLeaveScreen();
         }
 
         protected void SetUsbStatusText(string text)
         {
-            this.usbStatusPanel.SetGroupText(text);
+            this.regPanel.SetUsbStatusText(text);
         }
 
         #endregion
 
         #region IUsbWatcher
 
-        public void UpdateUsbList()
+        public void UpdateUsbList(bool driverAvailable)
         {
-            this.usbStatusPanel.UpdateUsbList();
+            this.regPanel.UpdateUsbStatus();
+
+            if (!driverAvailable)
+                RegistrationManager.RemoveUsbChannelPackets();
 
             CheckRegistractionPossibilities();
-        }
-
-        #endregion
-
-        #region IUsbProvider Memebers
-
-        public DriveInfo ActiveUsb
-        {
-            get { return this.usbStatusPanel.ChosenUsb; }
-        }
-
-        public bool IsAnyAvailable
-        {
-            get { return usbStatusPanel.ReviewDriversList().Count > 0; }
         }
 
         #endregion

@@ -24,9 +24,9 @@ namespace Browsing.CAPI.Utils
             return GetDefaultUrl() + Settings.Default.LoginPath;
         }
         
-        public  string GetAuthentificationCheckUrl()
+        public  string GetLoggedStatusCheckUrl()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.AuthentificationCheckPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.LoggedStatusCheckPath);
         }
 
         public string GetLoginCapabilitiesCheckUrl()
@@ -65,14 +65,49 @@ namespace Browsing.CAPI.Utils
             return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CheckEventPath);
         }
 
-        public string GetCurrentUserGetUrl()
+        public string GetWhoIsCurrentUserUrl()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetCurrentUserPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.CurrentUserPath);
         }
 
-        public string GetRegistrationCapiPath()
+        public string GetRegistrationUrl()
         {
-            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.GetRegistrationCapiPath);
+            return string.Format("{0}{1}", GetDefaultUrl(), Settings.Default.SupervisorRegistrationLocalPath);
+        }
+
+        public string GetAuthorizationUrl()
+        {
+            return string.Format("{0}{1}?url={2}{3}", GetDefaultUrl(), Settings.Default.AuthServiceLocalPath, GetEnpointUrl(), Settings.Default.SupervisorServicePath);
+        }
+
+        public string GetCheckConfirmedAuthorizationUrl(Guid registrationId)
+        {
+            return string.Format("{0}{1}?url={2}{3}&id={4}", GetDefaultUrl(), Settings.Default.CheckAuthConfirmedPath, GetEnpointUrl(), Settings.Default.SupervisorServicePath, registrationId);
+        }
+
+        public string GetEndProcessUrl(Guid syncProcessId)
+        {
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.EndProcessCapiPath, syncProcessId);
+        }
+
+        public string GetPushStatisticUrl(Guid syncProcessId)
+        {
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.PushStatisticCapiPath, syncProcessId);
+        }
+
+        public string GetPullStatisticUrl(Guid syncProcessId)
+        {
+            return string.Format("{0}{1}?id={2}", GetDefaultUrl(), Settings.Default.PullStatisticCapiPath, syncProcessId);
+        }
+     
+        public string GetAuthorizedIDsUrl(Guid tabletId)
+        {
+            return string.Format("{0}{1}?tabletId={2}", GetDefaultUrl(), Settings.Default.AuthorizedIDsPath, tabletId);
+        }
+
+        public string GetAuthServiceUrl()
+        {
+            throw new NotImplementedException();
         }
     }
 }

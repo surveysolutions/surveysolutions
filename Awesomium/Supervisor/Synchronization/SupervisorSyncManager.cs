@@ -1,6 +1,6 @@
 ﻿using Common.Utils;
-using System.Threading;
 using System.Collections.Generic;
+using Synchronization.Core.Events;
 using global::Synchronization.Core;
 using global::Synchronization.Core.Errors;
 using global::Synchronization.Core.Interface;
@@ -17,7 +17,7 @@ namespace Browsing.Supervisor.Synchronization
     {
         #region C-tor
 
-        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        public SupervisorSyncManager(ISyncProgressObserver pleaseWait, ISettingsProvider provider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
             : base(pleaseWait, provider, requestProcessor, urlUtils, usbProvider)
         {
         }
@@ -42,7 +42,12 @@ namespace Browsing.Supervisor.Synchronization
 
         protected override void OnAddSynchronizers(IList<ISynchronizer> syncChain, ISettingsProvider settingsProvider)
         {
-            syncChain.Add(new UsbSynchronizer(settingsProvider, this.UrlUtils, this.UsbProvider));
+            syncChain.Add(new UsbSynchronizer(settingsProvider, RequestProcessor, this.UrlUtils, this.UsbProvider));
+        }
+
+        protected override SynchronizationStatisticEventArgs OnGetStatisticsAfterSyncronization(SyncType action, Guid syncProcessId)
+        {
+            return null;
         }
     }
 }

@@ -3,6 +3,7 @@ using Browsing.Common.Containers;
 using Browsing.Common.Controls;
 using Common.Utils;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Registration;
 
 namespace Browsing.Supervisor.Containers
 {
@@ -10,7 +11,7 @@ namespace Browsing.Supervisor.Containers
     {
         #region Constructor
 
-        public SupervisorMain(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public SupervisorMain(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(clientSettings, requestProcessor, urlUtils, holder)
         {
             InitializeComponent();
@@ -31,5 +32,22 @@ namespace Browsing.Supervisor.Containers
         }
 
         #endregion
+
+        protected override void OnLoad(System.EventArgs e)
+        {
+            base.OnLoad(e);
+            new System.Threading.Thread(ForceDiscoveryService).Start();
+        }
+
+        private void ForceDiscoveryService()
+        {
+            try
+            {
+                // just push the service to run
+                var host = new AuthorizationServiceClient(UrlUtils.GetAuthServiceUrl()).GetPath(); 
+            }
+            catch
+            { }
+        }
     }
 }

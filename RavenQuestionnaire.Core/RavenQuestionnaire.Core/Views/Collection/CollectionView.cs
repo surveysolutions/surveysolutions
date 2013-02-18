@@ -24,11 +24,6 @@ namespace RavenQuestionnaire.Core.Views.Collection
         #region Fields
 
         /// <summary>
-        /// The _collection id.
-        /// </summary>
-        private string _collectionId;
-
-        /// <summary>
         /// The _items.
         /// </summary>
         private List<CollectionItemView> _items;
@@ -70,18 +65,7 @@ namespace RavenQuestionnaire.Core.Views.Collection
         /// <summary>
         /// Gets or sets the collection id.
         /// </summary>
-        public string CollectionId
-        {
-            get
-            {
-                return IdUtil.ParseId(this._collectionId);
-            }
-
-            set
-            {
-                this._collectionId = value;
-            }
-        }
+        public string CollectionId { get; set; }
 
         /// <summary>
         /// Gets or sets the items.

@@ -6,9 +6,9 @@ using Synchronization.Core.SynchronizationFlow;
 
 namespace Synchronization.Core.Events
 {
-    public class SynchronizationEvent : EventArgs
+    public class SynchronizationEventArgs : EventArgs
     {
-        public SynchronizationEvent(SyncStatus syncStatus)
+        public SynchronizationEventArgs(SyncStatus syncStatus)
         {
             Status = syncStatus;
         }

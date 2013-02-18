@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using Synchronization.Core.Errors;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
@@ -96,7 +97,7 @@ namespace Synchronization.Core.SynchronizationFlow
             this.downFlowDirection = downFlowDirection;
 
             if (this.usbDriver == null)
-                throw new Exception(string.Format("USB driver with name {0} not found", driver));
+                throw new SynchronizationException(string.Format("USB driver with name {0} not found", driver));
         }
 
         public string ArchiveFileName

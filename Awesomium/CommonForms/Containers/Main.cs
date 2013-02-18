@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using Awesomium.Core;
@@ -18,13 +17,13 @@ namespace Browsing.Common.Containers
         
         #region C-tor
 
-        public Main(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+        public Main(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
             : base(holder, false)
         {
             InitializeComponent();
             this.clientSettings = clientSettings;
             this.requestProcessor = requestProcessor;
-            this.urlUtils = urlUtils;
+            this.UrlUtils = urlUtils;
 
             IntitLogControls(false, false);
 
@@ -62,7 +61,6 @@ namespace Browsing.Common.Containers
 
         #endregion
         
-
         #region Helpers
 
         /// <summary>
@@ -169,6 +167,9 @@ namespace Browsing.Common.Containers
                             this.isDatabaseContainsUsers = null; // reset
                         };
                     }
+                    catch
+                    {
+                    }
                     finally
                     {
                         this.checkIsRunning = false;
@@ -182,11 +183,10 @@ namespace Browsing.Common.Containers
         #region Private Members
 
         private ISettingsProvider clientSettings;
-        private IRequesProcessor requestProcessor;
+        private IRequestProcessor requestProcessor;
         private bool? isUserLoggedIn;
         private bool? isDatabaseContainsUsers;
         private Guid? currentUser;
-        protected IUrlUtils urlUtils;
 
         #endregion
 
@@ -199,7 +199,7 @@ namespace Browsing.Common.Containers
                 if (this.isUserLoggedIn.HasValue)
                     return this.isUserLoggedIn.Value;
 
-                this.isUserLoggedIn = this.requestProcessor.Process<bool>(urlUtils.GetAuthentificationCheckUrl(), "GET", true, false);
+                this.isUserLoggedIn = this.requestProcessor.Process<bool>(UrlUtils.GetLoggedStatusCheckUrl(), "GET", true, false);
                 return isUserLoggedIn.Value;
             }
         }
@@ -211,7 +211,8 @@ namespace Browsing.Common.Containers
                 if (this.isDatabaseContainsUsers.HasValue)
                     return this.isDatabaseContainsUsers.Value;
 
-                this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(urlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+                this.isDatabaseContainsUsers = this.requestProcessor.Process<bool>(UrlUtils.GetLoginCapabilitiesCheckUrl(), "GET", false, false);
+
                 return this.isDatabaseContainsUsers.Value;
             }
         }
@@ -223,11 +224,17 @@ namespace Browsing.Common.Containers
                 if (this.currentUser.HasValue)
                     return this.currentUser.Value;
 
-                this.currentUser = this.requestProcessor.Process<Guid>(urlUtils.GetCurrentUserGetUrl(), "GET", true, Guid.Empty);
+                this.currentUser = this.requestProcessor.Process<Guid>(UrlUtils.GetWhoIsCurrentUserUrl(), "GET", true, Guid.Empty);
                 
                 return this.currentUser.Value;
             }
         }
+
+        #endregion
+
+        #region Properties
+
+        protected IUrlUtils UrlUtils { get; private set; }
 
         #endregion
 
@@ -276,14 +283,12 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnSynchronizationClicked(object sender, System.EventArgs e)
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Synchronization));
+            this.Holder.NavigateSynchronization();
         }
 
         protected virtual void OnLoginClicked(object sender, System.EventArgs e)
         {
-            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is Browser) as Browser;
-            browser.SetMode(true, urlUtils.GetLoginUrl());
-            this.Holder.Redirect(browser);
+            this.Holder.NavigateBrowser(true, UrlUtils.GetLoginUrl());
         }
 
         protected virtual void OnLogoutClicked(object sender, System.EventArgs e)
@@ -294,21 +299,17 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnDashboardClicked(object sender, System.EventArgs e)
         {
-            var browser = this.Holder.LoadedScreens.FirstOrDefault(s => s is Browser) as Browser;
-            browser.SetMode(false, urlUtils.GetDefaultUrl());
-            this.Holder.Redirect(browser);
+            this.Holder.NavigateBrowser(false, UrlUtils.GetDefaultUrl());
         }
 
         protected virtual void OnSettingsClicked(object sender, System.EventArgs e)
         {
-            var settings = this.Holder.LoadedScreens.FirstOrDefault(s => s is Settings) as Settings;
-            this.Holder.Redirect(settings);
+            this.Holder.NavigateSettings();
         }
 
         protected virtual void OnRegistrationClicked(object sender, System.EventArgs e)
         {
-            var registration = this.Holder.LoadedScreens.FirstOrDefault(s => s is Registration) as Registration;
-            this.Holder.Redirect(registration);
+            this.Holder.NavigateRegistration();
         }
       
         protected virtual void OnExitClicked(object sender, EventArgs e)
@@ -322,9 +323,9 @@ namespace Browsing.Common.Containers
 
         #region Overloading
 
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             RefreshAuthentificationInfo();
         }

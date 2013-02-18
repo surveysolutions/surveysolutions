@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Browsing.Common.Controls;
 using Synchronization.Core.Interface;
 using Synchronization.Core.SynchronizationFlow;
 
@@ -91,12 +88,12 @@ namespace Browsing.Common.Containers
                 CancelPressed(sender, e);
         }
 
-        internal void ShowResult(string log)
+        /*internal void ShowResult(string log, bool highlight)
         {
-            this.usbStatusPanel.SetResult(log);
-        }
+            this.usbStatusPanel.SetResult(log, highlight);
+        }*/
 
-        internal void ShowError(string log)
+        internal void ShowProcessingStatus(string log)
         {
             this.usbStatusPanel.SetStatus(log, true);
         }
@@ -148,7 +145,7 @@ namespace Browsing.Common.Containers
             SetProgress(0);
 
             this.usbStatusPanel.SetStatus(string.Format("{0} data is being processed. Please wait...", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing"));
-            this.usbStatusPanel.SetResult(null);
+            this.usbStatusPanel.SetResult(null, false);
 
             this.usbStatusPanel.InactiveStatus.WaitOne(5000);
 
@@ -167,17 +164,42 @@ namespace Browsing.Common.Containers
 
         public void SetCompleted(ISyncProgressStatus status)
         {
-            var error = status.Error != null;
+            var isError = status.Error != null;
 
-            var statusText = error ?
+            var statusText = isError ?
                 status.Error.Message :
                 string.Format("{0} data has been completed successfully", status.ActionType == SyncType.Pull ? "Pulling" : "Pushing");
 
             MakeInvisibleProgressBar(0);
-            this.usbStatusPanel.SetStatus(statusText, error);
+
+            this.usbStatusPanel.SetStatus(statusText, isError);
+            this.usbStatusPanel.SetResult(status.Message, isError);
+
             this.usbStatusPanel.Deactivate(false);
         }
 
+        public void SetStatistics(List<string> info)
+        {
+            if (this.usbStatusPanel.InvokeRequired)
+            {
+                this.usbStatusPanel.Invoke(new MethodInvoker(() => this.usbStatusPanel.ClearStatisticList()));
+            }
+            else
+                this.usbStatusPanel.ClearStatisticList();
+
+            foreach (var line in info)
+            {
+                if (this.usbStatusPanel.InvokeRequired)
+                {
+                    var temp = line;
+                    this.usbStatusPanel.Invoke(new MethodInvoker(() => this.usbStatusPanel.AddLineToStatistic(temp)));
+                }
+                else
+                    this.usbStatusPanel.AddLineToStatistic(line);
+                
+            }
+            
+        }
         #endregion
 
         #region IUsbProvider Memebers
@@ -189,7 +211,7 @@ namespace Browsing.Common.Containers
 
         public bool IsAnyAvailable
         {
-            get { return usbStatusPanel.ReviewDriversList().Count > 0; }
+            get { return this.usbStatusPanel.ReviewDriversList().Count > 0; }
         }
 
         #endregion
