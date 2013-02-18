@@ -83,7 +83,7 @@ namespace SynchronizationMessages.WcfInfrastructure
 
 
             var channelFactory = new ChannelFactory<T>(
-                binding, 
+                binding,
                 string.Format("{0}/WCF/{1}Service.svc", baseAdress, typeof(T).Name.Substring(1)));
             return channelFactory.CreateChannel();
         }
