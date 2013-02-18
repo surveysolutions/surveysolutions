@@ -1,0 +1,65 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BackupController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the BackupController type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+
+
+namespace Web.Supervisor.Controllers
+{
+    using System;
+    using System.Web.Mvc;
+
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
+
+    using NLog;
+
+    using Questionnaire.Core.Web.Threading;
+
+    /// <summary>
+    /// The backup controller.
+    /// </summary>
+    public class BackupController : AsyncController
+    {
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// The create backup async.
+        /// </summary>
+        /// <param name="syncKey">
+        /// The sync key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        public string CreateBackupAsync(Guid syncKey)
+        {
+            return "Started";
+        }
+
+        /// <summary>
+        /// The create backup completed.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult CreateBackupCompleted ()
+        {
+            return null;
+        }
+    }
+}

@@ -1,17 +1,16 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="QuestionnaireUpdated.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="QuestionnaireUpdated.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Ncqrs.Eventing.Storage;
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Events.Questionnaire
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+
+    using Ncqrs.Eventing.Storage;
 
     /// <summary>
     /// TODO: Update summary.
@@ -25,6 +24,7 @@ namespace Main.Core.Events.Questionnaire
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
+        [Obsolete]
         public Guid PublicKey { get; set; }
 
         /// <summary>

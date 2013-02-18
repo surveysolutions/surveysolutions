@@ -18,6 +18,7 @@ namespace Core.Supervisor.Views.Interviewer
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
 
+
     /// <summary>
     /// The interviewers view factory.
     /// </summary>

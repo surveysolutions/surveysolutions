@@ -123,12 +123,8 @@ namespace Main.Core.Entities.Extensions
         /// </exception>
         public void AddGroup(ICompleteGroup group)
         {
-            if (group == null)
-            {
-                return;
-            }
-
-            if (!group.PropagationPublicKey.HasValue)
+            
+            if (group == null || !group.PropagationPublicKey.HasValue)
             {
                 throw new ArgumentException("Only propagated group can uppdate hash.");
             }
@@ -157,6 +153,20 @@ namespace Main.Core.Entities.Extensions
             }
 
             return this.hash[this.GetQuestionKey(publicKey, propagationKey)];
+        }
+
+        /// <summary>
+        /// The get question by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        public CompleteQuestionWrapper GetQuestionByKey(string key)
+        {
+            return this.hash.ContainsKey(key) ? this.hash[key] : null;
         }
 
         /*/// <summary>
@@ -190,7 +200,6 @@ namespace Main.Core.Entities.Extensions
             {
                 return;
             }
-
 
             if (!group.PropagationPublicKey.HasValue)
             {

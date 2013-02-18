@@ -1,24 +1,25 @@
 ﻿@using Core.Supervisor.Views.Index
-@using Web.Supervisor.Models
 @model IndexView
 @{
     this.ViewBag.Title = "Surveys";
 }
+
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    
+    var chart;
+    var filterUser = '@Model.User.Id';
     $(document).ready(function() {
-        document.filterUser = "";
-        $('#filter').editable().on('update', function(e, editable) {
-            document.filterUser = editable.value;
+        $('#filterUser').editable().on('save', function(e, params) {
+            filterUser = params.newValue;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });
 
         makeSortable();
         onPagingClick();
-        
+
+        init();
     });
 
     function makeSortable() {
@@ -32,7 +33,8 @@
 
     function onPagingClick() {
         $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
-            getTablePage(sortData, getParameterByName($(this).attr('href'), "pager.page"));
+            var page = getParameterByName($(this).attr('href'), "page");
+            getTablePage(sortData, page === "" ? 1 : page * 1);
             return false;
         });
     }
@@ -41,13 +43,20 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("TableData", "Survey")",
-                data: JSON.stringify({ UserId: document.filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+                data: JSON.stringify({ UserId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
+                        debugger;
                         $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
                         $('#paging').html($(response).find('#paging').html());
-                        
+                        var parsedHTML = response.replace(/script/gi, 'rickscript'); 
+                        $(parsedHTML).find('rickscript').each(function (index, domEle) {
+                            if (!$(this).attr('src')) {
+                                eval($(this).text()); //feeling lucky execute it
+                            }
+                        });
+                        init();
                         onPagingClick();
                     }
                 }
@@ -64,8 +73,9 @@
         else
             return decodeURIComponent(results[1].replace( /\+/g , " "));
     }
+    
 </script>
-<h2>Surveys by <a href="#" id="filter" 
+<h2>Summary by Interviewers. Items by <a href="#" id="filterUser" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("UsersJson", "User")"
@@ -75,7 +85,6 @@
     @this.Html.Partial("_Table", this.Model)
 </div>
 
-@this.Html.Action("Chart", Model)
 
 
 

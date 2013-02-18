@@ -56,7 +56,10 @@ namespace Main.Core.EventHandlers
         {
             var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
             if (document == null)
+            {
                 return;
+            }
+
             // getting all featured questions
             var browseItem = this.documentStorage.GetByGuid(document.PublicKey);
             if (browseItem == null)

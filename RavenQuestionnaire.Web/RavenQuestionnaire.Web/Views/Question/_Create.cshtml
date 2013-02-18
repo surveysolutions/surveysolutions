@@ -6,9 +6,7 @@
 }
 <script charset="utf-8" type="text/javascript" language="javascript">
 
-
     $(function () {
-
         var questionType = $("[customName=questionName] option:selected").text();
         if (questionType == "SingleOption" || questionType == "DropDownList" || questionType == "MultyOption") {
             $("#fromDB").removeAttr('style');
@@ -83,6 +81,16 @@ else
         html.Add("customName", "questionName");
         html.Add("class", "span12");
                         @Html.EnumDropDownListFor(model => Model.QuestionType, html)
+                    }
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">Who should answer this question?</label>
+                <div class="controls">
+                    @{
+        IDictionary<string, object> scope = new Dictionary<string, object>();
+        scope.Add("class", "span12");
+                        @Html.EnumDropDownListFor(model => Model.QuestionScope, scope)
                     }
                 </div>
             </div>

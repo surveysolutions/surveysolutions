@@ -1,9 +1,8 @@
 ﻿@using Main.Core.View.Group
 @using Main.Core.View.Question
 @using Questionnaire.Core.Web.Helpers
-
 @using Main.Core.Entities.SubEntities
-@model Main.Core.View.Group.CompleteGroupMobileView
+@model CompleteGroupMobileView
 @using (var enumerator = Model.Children.GetEnumerator())
 {
     if (enumerator.MoveNext())
@@ -16,32 +15,36 @@
             {
                 if ((item as CompleteQuestionView) != null)
                 {
-                    var question = item as CompleteQuestionView;                    
-                   
+                    var question = item as CompleteQuestionView;
+                    if (question.Editable)
+                    { 
     <div class="ui-body ui-body-c @(!question.Valid ? "error_block" : "")" id="elem-@(question.PublicKey)">
-        <div class="ui-grid-a question-content">
-            <div class="ui-block-a">
-                @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
-                {
-                    using (Html.BeginCollectionItem("questions", true, question.PublicKey))
-                    {
-                        Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", question);
-                    }
-                    using (Html.BeginCollectionItem("settings", true, question.PublicKey))
-                    {
-                    @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
-                    @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
+        @using (Ajax.BeginFormHtml5("SaveAnswer", "Survey", ViewBag.AjaxOptions as AjaxOptions))
+        {
+            using (Html.BeginCollectionItem("questions", true, question.PublicKey))
+            {
+                Html.RenderPartial("~/Views/Survey/Question/_Question.cshtml", question);
+            }
+            using (Html.BeginCollectionItem("settings", true, question.PublicKey))
+            {
+            @Html.Hidden("ParentGroupPublicKey", (Guid)ViewBag.CurrentGroupPublicKey)
+            @Html.Hidden("QuestionnaireId", Model.QuestionnairePublicKey)
 
-                        if (Model is PropagatedGroupMobileView)
-                        {
-                    @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
-                        }
-                    }
+                if (Model is PropagatedGroupMobileView)
+                {
+            @Html.Hidden("PropogationPublicKey", ((PropagatedGroupMobileView)Model).PropogationKey)
                 }
-            </div>
-        </div>
+            }
+        }
     </div>
-    
+                       
+                    }
+                    else
+                    {
+                    <li class="line-wrap"></li>
+                    }
+
+
                 }
                 else
                 {

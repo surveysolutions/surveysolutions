@@ -55,7 +55,7 @@ namespace Main.Core.View.SyncProcess
         /// </returns>
         public SyncProcessView Load(SyncProcessInputModel input)
         {
-            SyncProcessStatisticsDocument process = this.docs.GetByGuid(Guid.Empty);
+            SyncProcessStatisticsDocument process = this.docs.GetByGuid(input.SyncKey);
 
             if (process == null || !process.IsEnded)
             {

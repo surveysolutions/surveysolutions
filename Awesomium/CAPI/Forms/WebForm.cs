@@ -31,7 +31,8 @@ namespace Browsing.CAPI.Forms
 
             #if DEBUG__
                         Properties.Settings.Default.RunClient = false;
-                        Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-CAPI/";
+                        Properties.Settings.Default.DefaultUrl = "http://localhost:8083/";
+                        //Properties.Settings.Default.DefaultUrl = "http://192.168.3.113/DevKharkiv-CAPI/";
                         Properties.Settings.Default.Save();
             #endif
         }
@@ -40,7 +41,7 @@ namespace Browsing.CAPI.Forms
 
         #region Overloaded
 
-        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequesProcessor requestProcessor, IUrlUtils urlUtils)
+        protected override Common.Containers.Registration OnAddRegistrationScreen(IRequestProcessor requestProcessor, IUrlUtils urlUtils)
         {
             return new CAPIRegistration(requestProcessor,urlUtils, Holder)
             {
@@ -48,15 +49,15 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Browser OnAddBrowserScreen(WebControl webView)
+        protected override Browser OnAddBrowserScreen()
         {
-            return new CAPIBrowser(webView, Holder)
+            return new CAPIBrowser(Holder)
                         {
                             Name = "capiBrowser1"
                         };
         }
 
-        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Common.Containers.Synchronization OnAddSynchronizerScreens(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             return new CAPISynchronization(settingsProvider, requestProcessor, urlUtils, Holder)
             {
@@ -64,7 +65,7 @@ namespace Browsing.CAPI.Forms
             };
         }
 
-        protected override Main OnAddMainPageScreen(IRequesProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
+        protected override Main OnAddMainPageScreen(IRequestProcessor requestProcessor, ISettingsProvider settingsProvider, IUrlUtils urlUtils)
         {
             return new CAPIMain(settingsProvider, requestProcessor, urlUtils, Holder)
             {

@@ -33,19 +33,19 @@ namespace Main.Core.View.Answer
         /// <param name="questionPublicKey">
         /// The question public key.
         /// </param>
-        /// <param name="doc">
+        /// <param name="answer">
         /// The doc.
         /// </param>
-        public AnswerView(Guid questionPublicKey, IAnswer doc)
+        public AnswerView(Guid questionPublicKey, IAnswer answer)
         {
-            this.PublicKey = doc.PublicKey;
-            this.Title = doc.AnswerText;
-            this.AnswerValue = this.GetAnswerValue(doc.AnswerValue);
-            this.AnswerImage = doc.AnswerImage;
-            this.Mandatory = doc.Mandatory;
-            this.AnswerType = doc.AnswerType;
+            this.PublicKey = answer.PublicKey;
+            this.Title = answer.AnswerText;
+            this.AnswerValue = answer.AnswerValue;
+            this.AnswerImage = answer.AnswerImage;
+            this.Mandatory = answer.Mandatory;
+            this.AnswerType = answer.AnswerType;
             this.Parent = questionPublicKey;
-            this.NameCollection = doc.NameCollection;
+            this.NameCollection = answer.NameCollection;
         }
 
         /// <summary>
@@ -112,37 +112,6 @@ namespace Main.Core.View.Answer
         /// Gets or sets the title.
         /// </summary>
         public string Title { get; set; }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The get answer value.
-        /// </summary>
-        /// <param name="value">
-        /// The value.
-        /// </param>
-        /// <returns>
-        /// The System.String.
-        /// </returns>
-        protected string GetAnswerValue(object value)
-        {
-            if (value == null || string.IsNullOrEmpty(value.ToString()))
-            {
-                return string.Empty;
-            }
-
-            /*   try
-            {
-                return DateTime.Parse(value.ToString()).ToString(@"MM/dd/yyyy", DateTimeFormatInfo.InvariantInfo);
-            }
-            catch (FormatException)
-            {*/
-            return value.ToString();
-
-            // }
-        }
 
         #endregion
     }

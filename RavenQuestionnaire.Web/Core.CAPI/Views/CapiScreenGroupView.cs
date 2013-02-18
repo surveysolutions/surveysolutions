@@ -6,6 +6,7 @@
 
 namespace Core.CAPI.Views
 {
+    using System;
     using System.Linq;
 
     using Core.CAPI.Views.PropagatedGroupViews.QuestionItemView;
@@ -22,12 +23,24 @@ namespace Core.CAPI.Views
     /// </summary>
     public class CapiScreenGroupView : ScreenGroupView
     {
-        public CapiScreenGroupView(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup,
-                                   ScreenNavigation navigation) : base(doc, currentGroup,
-                                                                       new ScreenNavigationView(
-                                                                           doc.Children.OfType<ICompleteGroup>().Select(
-                                                                               g => new CompleteGroupHeaders(g)),
-                                                                           navigation))
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CapiScreenGroupView"/> class.
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
+        /// <param name="navigation">
+        /// The navigation.
+        /// </param>
+        public CapiScreenGroupView(
+            CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
+            : base(doc,
+                currentGroup,
+                new ScreenNavigationView(
+                    doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
         {
             this.BuildGridContent(doc, currentGroup);
         }
@@ -35,15 +48,24 @@ namespace Core.CAPI.Views
 
         public PropagatedGroupGridContainer Grid { get; set; }
 
+        /// <summary>
+        /// Build Grid Content
+        /// </summary>
+        /// <param name="doc">
+        /// The doc.
+        /// </param>
+        /// <param name="currentGroup">
+        /// The current group.
+        /// </param>
         protected void BuildGridContent(CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup)
         {
             if (currentGroup.Propagated != Propagate.None /* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
-                var executor = new CompleteQuestionnaireConditionExecutor(doc);
+               /* var executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-                executor.ExecuteAndChangeStateRecursive(doc);
+                executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);*/
 
-                var validator = new CompleteQuestionnaireValidationExecutor(doc);
+                var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
 
                 this.Grid = new PropagatedGroupGridContainer(doc, currentGroup);
                 

@@ -12,27 +12,32 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web.Mvc;
 
-    using Main.Core.Commands.Synchronization;
+    using Main.Core.Entities;
     using Main.Core.View;
     using Main.Core.View.Device;
 
-    using Ncqrs;
-    using Ncqrs.Commanding.ServiceModel;
+    using Questionnaire.Core.Web.Helpers;
+    using Questionnaire.Core.Web;
 
-    using Questionnaire.Core.Web.Register;
+    using Web.Supervisor.Models;
 
     /// <summary>
     /// The device controller.
     /// </summary>
-    public class DeviceController : Controller
+    public class DeviceController : RegistrationController
     {
         #region Fields
 
         /// <summary>
-        /// ViewRepository field
+        /// Field of deviceRegister
+        /// </summary>
+        private readonly IGlobalInfoProvider globalInfo;
+
+        /// <summary>
+        /// View repository
         /// </summary>
         private readonly IViewRepository viewRepository;
-
+        
         #endregion
 
         #region Constructor
@@ -40,17 +45,39 @@ namespace Web.Supervisor.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceController"/> class.
         /// </summary>
-        /// <param name="repository">
-        /// The repository.
+        /// <param name="register">
+        /// The register.
         /// </param>
-        public DeviceController(IViewRepository repository)
+        /// <param name="viewRepository">
+        /// The view Repository.
+        /// </param>
+        /// <param name="globalInfo">
+        /// The global Info.
+        /// </param>
+        public DeviceController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
+            : base(viewRepository)
         {
-            this.viewRepository = repository;
+            this.viewRepository = viewRepository;
+            this.globalInfo = globalInfo;
         }
 
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        /// Page with list of registred devices
+        /// </summary>
+        /// <returns>
+        /// Index page
+        /// </returns>
+        public ActionResult Index()
+        {
+            var user = this.globalInfo.GetCurrentUser();
+            ViewBag.ActivePage = MenuItem.Administration;
+            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(user.Id));
+            return this.View(model);
+        }
 
         /// <summary>
         /// Register CAPI device in supervisor db
@@ -63,32 +90,49 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public bool RegisterCapi(RegisterData data)
         {
-            try
-            {
-                var commandService = NcqrsEnvironment.Get<ICommandService>();
-                commandService.Execute(new RegisterDeviceCommand(data.Description, data.SecretKey, data.TabletId));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
+            return this.SaveRegistration(data);
         }
 
         /// <summary>
         /// Select from database publickey of capi
         /// </summary>
-        /// <param name="tabletId">
-        /// The tablet Id.
+        /// <param name="registrator">
+        /// The registrator.
         /// </param>
         /// <returns>
         /// Return PublicKey of Capi
         /// </returns>
-        public JsonResult GetPublicKey(Guid tabletId)
+        public ActionResult GetRegisteredDevices(Guid supervisorId)
         {
-            var model = this.viewRepository.Load<DeviceViewInputModel, DeviceView>(new DeviceViewInputModel(tabletId));
-            return this.Json(new { PublicKey = model.SecretKey }, JsonRequestBehavior.AllowGet);
+            //var currentSupervisor = this.globalInfo.GetCurrentUser();
+            //System.Diagnostics.Debug.Assert(supervisorId == currentSupervisor.Id);
+
+            var model = this.GetRegisteredData(supervisorId);
+            return Json(model.Items, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Confirms made authorization to CAPI
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <remarks>At the moment the only action is to update respective authorization request</remarks>
+        public bool ConfirmAuthorization(RegisterData data)
+        {
+            try
+            {
+                return Supervisor.WCF.AuthorizationService.ConfirmAuthorizedRequest(data);
+            }
+            catch 
+            { 
+            }
+
+            return false;
+        }
+
+        protected override Guid GetARPublicKey(RegisterData data)
+        {
+            return data.RegistrationId;
         }
 
         #endregion

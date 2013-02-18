@@ -1,31 +1,39 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ChangeStatusDocument.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ChangeStatusDocument.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Documents
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
     using Main.Core.Entities.SubEntities;
 
     /// <summary>
-    /// TODO: Update summary.
+    /// The change status document.
     /// </summary>
     public class ChangeStatusDocument
     {
+        #region Public Properties
+
         /// <summary>
-        /// Gets or sets Status.
+        /// Gets or sets ChangeDate.
         /// </summary>
-        public SurveyStatus Status { get; set; }
+        public DateTime ChangeDate { get; set; }
 
         /// <summary>
         /// Gets or sets Responsible.
         /// </summary>
         public UserLight Responsible { get; set; }
+
+        /// <summary>
+        /// Gets or sets Status.
+        /// </summary>
+        public SurveyStatus Status { get; set; }
+
+        #endregion
     }
 }

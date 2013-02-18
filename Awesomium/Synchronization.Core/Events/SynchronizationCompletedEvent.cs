@@ -7,14 +7,11 @@ using Synchronization.Core.SynchronizationFlow;
 
 namespace Synchronization.Core.Events
 {
-    public class SynchronizationCompletedEvent : SynchronizationEvent
+    public class SynchronizationCompletedEventArgs : SynchronizationEventArgs
     {
-        public SynchronizationCompletedEvent(SyncStatus status, string log) :
+        public SynchronizationCompletedEventArgs(SyncStatus status) :
             base(status)
         {
-            Log = log;
         }
-
-        public string Log { get; private set; }
     }
 }

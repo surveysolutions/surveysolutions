@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CompleteAnswer.cs" company="">
-//   
+// <copyright file="CompleteAnswer.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The CompleteAnswer interface.
@@ -9,7 +9,6 @@
 namespace Main.Core.Entities.SubEntities.Complete
 {
     using System;
-    using System.Collections.Generic;
 
     using Main.Core.Entities.Composite;
 
@@ -59,7 +58,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The answer.
         /// </param>
         /// <param name="propogationPublicKey">
-        /// The propogation public key.
+        /// The propagation public key.
         /// </param>
         public CompleteAnswer(ICompleteAnswer answer, Guid? propogationPublicKey)
             : this(answer)
@@ -90,22 +89,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the answer value.
         /// </summary>
-        public object AnswerValue { get; set; }
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }
+        public string AnswerValue { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether mandatory.
@@ -132,7 +116,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         }
 
         /// <summary>
-        /// Gets or sets the propogation public key.
+        /// Gets or sets the propagation public key.
         /// </summary>
         public Guid? PropogationPublicKey { get; set; }
 
@@ -153,171 +137,35 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// The op_ explicit.
         /// </summary>
-        /// <param name="doc">
+        /// <param name="answer">
         /// The doc.
         /// </param>
         /// <returns>
         /// </returns>
-        public static explicit operator CompleteAnswer(Answer doc)
+        public static explicit operator CompleteAnswer(Answer answer)
         {
             return new CompleteAnswer
                 {
-                    PublicKey = doc.PublicKey, 
-                    AnswerText = doc.AnswerText, 
-                    AnswerValue = doc.AnswerValue, 
-                    Mandatory = doc.Mandatory, 
-                    AnswerType = doc.AnswerType, 
-                    AnswerImage = doc.AnswerImage
+                    PublicKey = answer.PublicKey, 
+                    AnswerText = answer.AnswerText, 
+                    AnswerValue = answer.AnswerValue, 
+                    Mandatory = answer.Mandatory, 
+                    AnswerType = answer.AnswerType, 
+                    AnswerImage = answer.AnswerImage
                 };
         }
 
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-            var answer = c as CompleteAnswer;
-            if (answer == null)
-            {
-                throw new CompositeException("answer wasn't found");
-            }
-
-            if (answer.PublicKey == this.PublicKey &&
-                ((!answer.PropogationPublicKey.HasValue && !this.PropogationPublicKey.HasValue)
-                 || answer.PropogationPublicKey == this.PropogationPublicKey))
-            {
-                this.Set(answer.AnswerValue);
-                return;
-            }
-
-            throw new CompositeException("answer wasn't found");
-        }*/
-
-        /*/// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public T Find<T>(Guid publicKey) where T : class, IComposite
-        {
-            if (!typeof(T).IsAssignableFrom(this.GetType()))
-            {
-                return null;
-            }
-
-            if (publicKey == this.PublicKey)
-            {
-                return this as T;
-            }
-
-            return null;
-        }
-
         /// <summary>
-        /// The find.
+        /// The clone.
         /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
         /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
+        /// The <see cref="IAnswer"/>.
         /// </returns>
-        public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
+        public IAnswer Clone()
         {
-            if (!typeof(T).IsAssignableFrom(this.GetType()))
-            {
-                return new T[0];
-            }
-
-            if (condition(this as T))
-            {
-                return new[] { this as T };
-            }
-
-            return new T[0];
+            CompleteAnswer answer = this.MemberwiseClone() as CompleteAnswer;
+            return answer;
         }
-
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
-        public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
-        {
-            if (!typeof(T).IsAssignableFrom(this.GetType()))
-            {
-                return null;
-            }
-
-            if (condition(this as T))
-            {
-                return this as T;
-            }
-
-            return null;
-        }*/
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(IComposite c)
-        {
-            if (c.PublicKey == this.PublicKey)
-            {
-                this.Reset();
-                return;
-            }
-
-            throw new CompositeException("answer wasn't found");
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey)
-        {
-            if (publicKey == this.PublicKey)
-            {
-                this.Reset();
-                return;
-            }
-
-            throw new CompositeException("answer wasn't found");
-        }*/
 
         #endregion
 
@@ -343,9 +191,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         protected void Set(object text)
         {
             this.Selected = true;
-
-            // if (this.AnswerType == AnswerType.Text)
-            // this.AnswerValue = text;
         }
 
         #endregion

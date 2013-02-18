@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImportExportController.cs" company="World bank">
-//   2012
+// <copyright file="ImportExportController.cs" company="The World Bank">
+//   Import-Export Controller
 // </copyright>
 // <summary>
 //   The import export controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using RavenQuestionnaire.Web.Export;
 
 namespace RavenQuestionnaire.Web.Controllers
 {
@@ -15,43 +13,39 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using Questionnaire.Core.Web.Export;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
+
+    using Ionic.Zip;
+
+    using NLog;
+
+    using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
 
     /// <summary>
     /// The import export controller.
     /// </summary>
+    [NoAsyncTimeout]
     public class ImportExportController : AsyncController
     {
-        #region Constants and Fields
-
-        /// <summary>
-        /// The exportimport events.
-        /// </summary>
-        private readonly IExportImport exportimportEvents;
-
-        /// <summary>
-        /// exporter templates
-        /// </summary>
-        private readonly ITemplateExporter exporterTemplates;
-
-        #endregion
-
         #region Constructors and Destructors
+
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ImportExportController"/> class.
         /// </summary>
-        /// <param name="exportImport">
-        /// The export import.
+        /// <param name="syncProcessFactory">
+        /// The sync Process Factory.
         /// </param>
-        /// <param name="exporterTemplates">
-        /// The exporter Templates.
-        /// </param>
-        public ImportExportController(IExportImport exportImport, ITemplateExporter exporterTemplates)
+        public ImportExportController(ISyncProcessFactory syncProcessFactory)
         {
-            this.exportimportEvents = exportImport;
-            this.exporterTemplates = exporterTemplates;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -64,21 +58,28 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="clientGuid">
         /// The client guid.
         /// </param>
-        public void ExportAsync(Guid clientGuid)
+        public Guid? ExportAsync(Guid clientGuid)
         {
-            AsyncQuestionnaireUpdater.Update(AsyncManager,
+            Guid syncProcess = Guid.NewGuid();
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager, 
                 () =>
                     {
                         try
                         {
-                            this.AsyncManager.Parameters["result"] = this.exportimportEvents.Export(clientGuid);
+                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+
+                            this.AsyncManager.Parameters["result"] = process.Export("Export DB on HQ in zip file");
                         }
-                        catch
+                        catch (Exception e)
                         {
                             this.AsyncManager.Parameters["result"] = null;
+                            Logger logger = LogManager.GetCurrentClassLogger();
+                            logger.Fatal("Error on export ", e);
                         }
-
                     });
+            return syncProcess;
         }
 
         /// <summary>
@@ -91,45 +92,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </returns>
         public ActionResult ExportCompleted(byte[] result)
         {
-            return File(
-                result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
-        }
-
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult Import()
-        {
-            return this.View("ViewTestUploadFile");
-        }
-
-        /// <summary>
-        /// The import async.
-        /// </summary>
-        /// <param name="myfile">
-        /// The myfile.
-        /// </param>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public void ImportAsync(HttpPostedFileBase myfile)
-        {
-            if (myfile != null && myfile.ContentLength != 0)
-            {
-                AsyncQuestionnaireUpdater.Update(AsyncManager,
-                    () => this.exportimportEvents.Import(myfile));
-            }
-        }
-
-        /// <summary>
-        /// The import completed.
-        /// </summary>
-        /// <returns>
-        /// </returns>
-        public ActionResult ImportCompleted()
-        {
-            return this.RedirectToAction("Index", "Questionnaire");
+            return this.File(result, "application/zip", string.Format("backup-{0}.zip", DateTime.Now.ToString().Replace(" ", "_")));
         }
 
         /// <summary>
@@ -138,19 +101,29 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="id">
         /// The id.
         /// </param>
-        public void ExportTemplatesAsync(Guid? id, Guid? clientGuid)
+        /// <param name="clientGuid">
+        /// The client Guid.
+        /// </param>
+        public Guid? ExportTemplatesAsync(Guid? id, Guid? clientGuid)
         {
-            AsyncQuestionnaireUpdater.Update(AsyncManager,() =>
-            {
-                try
-                {
-                    AsyncManager.Parameters["result"] = exporterTemplates.ExportTemplate(id, clientGuid);
-                }
-                catch
-                {
-                    AsyncManager.Parameters["result"] = null;
-                }
-            });
+            Guid syncProcess = Guid.NewGuid();
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager, 
+                () =>
+                    {
+                        try
+                        {
+                            var process = (ITemplateExportSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Template, syncProcess, null);
+
+                            this.AsyncManager.Parameters["result"] = process.Export("Export questionnaire template in zip file", id, clientGuid);
+                        }
+                        catch
+                        {
+                            this.AsyncManager.Parameters["result"] = null;
+                        }
+                    });
+
+            return syncProcess;
         }
 
         /// <summary>
@@ -167,6 +140,66 @@ namespace RavenQuestionnaire.Web.Controllers
             return this.File(result, "application/zip", "template.zip");
         }
 
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Import()
+        {
+            return this.View("ViewTestUploadFile");
+        }
+
+        /// <summary>
+        /// The import async.
+        /// </summary>
+        /// <param name="uploadFile">
+        /// The upload File.
+        /// </param>
+        /// <returns>
+        /// The import async.
+        /// </returns>
+        [AcceptVerbs(HttpVerbs.Post)]
+        public Guid? ImportAsync(HttpPostedFileBase uploadFile)
+        {
+            var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
+
+            if (zipData == null)
+            {
+                return null;
+            }
+
+            Guid syncProcess = Guid.NewGuid();
+
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager, 
+                () =>
+                    {
+                        try
+                        {
+                            var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                            process.Import(zipData, "Usb syncronization");
+                        }
+                        catch (Exception e)
+                        {
+                            Logger logger = LogManager.GetCurrentClassLogger();
+                            logger.Fatal("Error on import ", e);
+                        }
+                    });
+
+            return syncProcess;
+        }
+
+        /// <summary>
+        /// The import completed.
+        /// </summary>
+        /// <returns>
+        /// </returns>
+        public ActionResult ImportCompleted()
+        {
+            return this.RedirectToAction("Index", "Questionnaire");
+        }
 
         #endregion
     }

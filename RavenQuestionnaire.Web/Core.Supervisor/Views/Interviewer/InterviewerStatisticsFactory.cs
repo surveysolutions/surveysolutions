@@ -20,6 +20,8 @@ using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Interviewer
 {
+    using Core.Supervisor.Views.Survey;
+
     /// <summary>
     /// Interviewer statistics factory
     /// </summary>

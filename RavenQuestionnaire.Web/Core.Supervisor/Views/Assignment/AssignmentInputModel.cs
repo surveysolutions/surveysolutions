@@ -52,15 +52,15 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
         /// </summary>
-        /// <param name="id">
-        /// The id.
+        /// <param name="templateId">
+        /// The template Id.
         /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid questionnaireId)
+        public AssignmentInputModel(Guid templateId, Guid questionnaireId)
         {
-            this.Id = id;
+            this.TemplateId = templateId;
             this.QuestionnaireId = questionnaireId;
         }
 
@@ -79,9 +79,9 @@ namespace Core.Supervisor.Views.Assignment
         /// <param name="statuses">
         /// The statistic filter.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid userId, Guid questionnaireId, ICollection<string> statuses)
+        public AssignmentInputModel(Guid id, Guid userId, Guid questionnaireId, ICollection<Guid> statuses)
         {
-            this.Id = id;
+            this.TemplateId = id;
             this.QuestionnaireId = questionnaireId;
             this.Statuses = statuses;
             this.UserId = userId;
@@ -113,9 +113,9 @@ namespace Core.Supervisor.Views.Assignment
         /// <param name="isNotAssigned">
         /// The isNotAssigned.
         /// </param>
-        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<string> statuses, bool isNotAssigned)
+        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<Guid> statuses, bool isNotAssigned)
         {
-            this.Id = id;
+            this.TemplateId = id;
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
@@ -144,7 +144,7 @@ namespace Core.Supervisor.Views.Assignment
         /// </param>
         public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders)
         {
-            this.Id = id;
+            this.TemplateId = id;
             this.Page = page;
             this.PageSize = pageSize;
             this.Orders = orders;
@@ -162,14 +162,14 @@ namespace Core.Supervisor.Views.Assignment
         {
             get
             {
-                return x => x.TemplateId == this.Id;
+                return x => x.TemplateId == this.TemplateId;
             }
         }
 
         /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets UserId.
@@ -248,7 +248,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Gets or sets Statuses.
         /// </summary>
-        public ICollection<string> Statuses { get; set; }
+        public ICollection<Guid> Statuses { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsNotAssigned.

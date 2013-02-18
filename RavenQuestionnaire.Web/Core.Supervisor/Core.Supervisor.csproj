@@ -70,11 +70,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DenormalizerStorageItem\HistoryStatusStatistics.cs" />
+    <Compile Include="DenormalizerStorageItem\StatisticsItemKeysHash.cs" />
+    <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
+    <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
+    <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="Views\Survey\ScreenKey.cs" />
+    <Compile Include="Views\Survey\SurveyAnswer.cs" />
+    <Compile Include="Views\Survey\SurveyQuestion.cs" />
+    <Compile Include="Views\Survey\SurveyScreen.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synchronization\SupervisorEventSync.cs" />
+    <Compile Include="Synchronization\SupervisorEventStreamReader.cs" />
     <Compile Include="Views\Assign\AssignSurveyInputModel.cs" />
     <Compile Include="Views\Assign\AssignSurveyView.cs" />
     <Compile Include="Views\Assign\AssignSurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\DetailsMenuItem.cs" />
+    <Compile Include="Views\Survey\DisplayViewInputModel.cs" />
+    <Compile Include="Views\Survey\ScreenWithRout.cs" />
+    <Compile Include="Views\Survey\SupervisorScreenSupplier.cs" />
+    <Compile Include="Views\Survey\DisplaySurveyViewFactory.cs" />
+    <Compile Include="Views\Survey\ISurveyScreenSupplier.cs" />
+    <Compile Include="Views\Survey\SurveyScreenView.cs" />
+    <Compile Include="Views\Survey\ScreenNavigationView.cs" />
+    <Compile Include="Views\Survey\ChangeStatusHistoryView.cs" />
+    <Compile Include="Views\Survey\QuestionStatisticView.cs" />
+    <Compile Include="Views\Device\DeviceView.cs" />
+    <Compile Include="Views\Device\DeviceViewFactory.cs" />
+    <Compile Include="Views\Device\DeviceViewInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewerGroupView.cs" />
     <Compile Include="Views\Interviewer\InterviewerInputModel.cs" />
     <Compile Include="Views\Interviewer\InterviewerItemView.cs" />
@@ -99,13 +122,23 @@
     <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
-    <Compile Include="Views\Register\RegisterInputModel.cs" />
-    <Compile Include="Views\Register\RegisterView.cs" />
-    <Compile Include="Views\Register\RegisterViewFactory.cs" />
+    <Compile Include="Views\Status\StatusView.cs" />
+    <Compile Include="Views\Status\StatusViewFactory.cs" />
+    <Compile Include="Views\Status\StatusViewInputModel.cs" />
+    <Compile Include="Views\Status\StatusViewItem.cs" />
     <Compile Include="Views\Summary\SummaryFactory.cs" />
     <Compile Include="Views\Summary\SummaryInputModel.cs" />
     <Compile Include="Views\Summary\SummaryView.cs" />
     <Compile Include="Views\Summary\SummaryViewItem.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogViewItem.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
+    <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
+    <Compile Include="Views\Timeline\TimelineEvent.cs" />
+    <Compile Include="Views\Timeline\TimelineQuestion.cs" />
+    <Compile Include="Views\Timeline\TimelineView.cs" />
+    <Compile Include="Views\Timeline\TimelineViewFactory.cs" />
+    <Compile Include="Views\Timeline\TimelineViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

@@ -53,10 +53,10 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         Text, 
 
-        /// <summary>
-        /// The percentage.
-        /// </summary>
-        Percentage, 
+        ///// <summary>
+        ///// The percentage.
+        ///// </summary>
+        //Percentage, 
 
         /// <summary>
         /// The auto propagate.

@@ -8,6 +8,7 @@ namespace Main.Core.Commands.Synchronization
 {
     using System;
     using Main.Core.Domain;
+
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
@@ -32,13 +33,16 @@ namespace Main.Core.Commands.Synchronization
         /// <param name="tabletId">
         /// The tablet id.
         /// </param>
-        public RegisterDeviceCommand(string description, byte[] secretKey, Guid tabletId)
+        /// <param name="guidSupervisor">
+        /// The guid Supervisor.
+        /// </param>
+        public RegisterDeviceCommand(string description, Guid publicKey, byte[] secretKey, Guid idForRegistration, Guid registrator)
         {
-            this.RegisterGuid = tabletId;
+            this.PublicKey =  publicKey;
+            this.Registrator = registrator;
+            this.IdForRegistration = idForRegistration;
             this.Description = description;
             this.SecretKey = secretKey;
-            this.TabletId = tabletId;
-            this.RegisteredDate = DateTime.Today;
         }
 
         #endregion
@@ -46,10 +50,19 @@ namespace Main.Core.Commands.Synchronization
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets RegisterGuid.
+        /// Gets or sets public Key.
         /// </summary>
-        [AggregateRootId]
-        public Guid RegisterGuid { get; set; }
+        public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets TabletId.
+        /// </summary>
+        public Guid IdForRegistration { get; set; }
+
+        /// <summary>
+        /// Gets or sets Supervisor.
+        /// </summary>
+        public Guid Registrator { get; set; }
 
         /// <summary>
         /// Gets or sets Description.
@@ -60,16 +73,6 @@ namespace Main.Core.Commands.Synchronization
         /// Gets or sets PublicKey.
         /// </summary>
         public byte[] SecretKey { get; set; }
-
-        /// <summary>
-        /// Gets or sets RegisteredDate.
-        /// </summary>
-        public DateTime RegisteredDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets TabletId.
-        /// </summary>
-        public Guid TabletId { get; set; }
 
         #endregion
     }

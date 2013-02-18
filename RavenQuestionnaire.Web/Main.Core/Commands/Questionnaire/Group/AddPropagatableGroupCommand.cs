@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AddPropagatableGroupCommand.cs" company="">
-//   
+// <copyright file="AddPropagatableGroupCommand.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The add propagatable group command.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Commands.Questionnaire.Group
 {
     using System;
@@ -16,7 +17,7 @@ namespace Main.Core.Commands.Questionnaire.Group
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
     /// <summary>
-    /// The add propagatable group command.
+    /// The add propagate group command.
     /// </summary>
     [Serializable]
     [MapsToAggregateRootMethod(typeof(CompleteQuestionnaireAR), "AddPropagatableGroup")]
@@ -38,9 +39,11 @@ namespace Main.Core.Commands.Questionnaire.Group
         /// </param>
         public AddPropagatableGroupCommand(Guid completeQuestionnaireId, Guid propagationKey, Guid publicKey)
         {
-            this.CompleteQuestionnaireId = completeQuestionnaireId;
+            throw new InvalidOperationException("Is not supported."); 
+
+/*            this.CompleteQuestionnaireId = completeQuestionnaireId;
             this.PublicKey = publicKey;
-            this.PropagationKey = propagationKey;
+            this.PropagationKey = propagationKey;*/
         }
 
         #endregion

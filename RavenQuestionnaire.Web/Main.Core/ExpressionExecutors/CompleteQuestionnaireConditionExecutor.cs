@@ -23,6 +23,7 @@ namespace Main.Core.ExpressionExecutors
     /// <summary>
     /// The complete questionnaire condition executor.
     /// </summary>
+    [Obsolete]
     public class CompleteQuestionnaireConditionExecutor
     {
         #region Fields
@@ -62,27 +63,33 @@ namespace Main.Core.ExpressionExecutors
         /// <param name="group">
         /// The group.
         /// </param>
-        public void ExecuteAndChangeStateRecursive(ICompleteGroup group)
+        public void ExecuteAndChangeStateRecursive(ICompleteGroup group, DateTime timeMarker)
         {
+            if (group.EnableStateCalculated == timeMarker)
+            {
+                return;
+            }
 
             bool? value = this.Execute(group);
             bool result = value ?? true; //// treat null as success 
 
             group.Enabled = result;
-
+            group.EnableStateCalculated = timeMarker;
+            
             foreach (IComposite child in group.Children)
             {
                 var question = child as ICompleteQuestion;
                 if (question != null)
                 {
-                    question.Enabled = result && (this.ExecuteAndChangeInternal(question, 1) ?? true); ////method could not be executed if result is false
+                    question.Enabled = result && (this.ExecuteAndChangeInternal(question, 1, timeMarker) ?? true); ////method could not be executed if result is false
+                    question.EnableStateCalculated = timeMarker;
                     continue;
                 }
 
                 var gr = child as ICompleteGroup;
                 if (gr != null && !gr.IsGroupPropagationTemplate())
                 {
-                    this.ExecuteAndChangeStateRecursive(gr);
+                    this.ExecuteAndChangeStateRecursive(gr, timeMarker);
                     ////gr.Enabled = result && (this.Execute(gr) ?? true); ////method could not be executed if result is false
                 }
             }
@@ -105,7 +112,8 @@ namespace Main.Core.ExpressionExecutors
             }
 
             const int StackDepth = 1;
-            return this.ExecuteAndChangeInternal(question, StackDepth);
+            DateTime timeMarker = DateTime.UtcNow;
+            return this.ExecuteAndChangeInternal(question, StackDepth, timeMarker);
         }
 
         /// <summary>
@@ -123,26 +131,38 @@ namespace Main.Core.ExpressionExecutors
         }
 
         /// <summary>
-        /// The execute intternal.
+        /// The execute and change internal.
         /// </summary>
         /// <param name="question">
         /// The question.
+        /// </param>
+        /// <param name="currentStack">
+        /// The current stack.
+        /// </param>
+        /// <param name="timeMarker">
+        /// The time marker.
         /// </param>
         /// <returns>
         /// The <see cref="bool?"/>.
         /// </returns>
         /// <exception cref="Exception">
         /// </exception>
-        private bool? ExecuteAndChangeInternal(IConditional question, int currentStack)
+        private bool? ExecuteAndChangeInternal(IConditional question, int currentStack, DateTime timeMarker)
         {
             if (string.IsNullOrEmpty(question.ConditionExpression))
             {
                 return true;
             }
 
+            var q = question as ICompleteItem;
+            if (q != null && q.EnableStateCalculated == timeMarker)
+            {
+                return q.Enabled;
+            }
+
             if (currentStack++ >= StackDepthLimit)
             {
-                throw new Exception("Unsupported depth of expression call.");
+                throw new Exception("Unsupported depth of expression.");
             }
 
             var expression = new Expression(question.ConditionExpression);
@@ -156,8 +176,9 @@ namespace Main.Core.ExpressionExecutors
 
                 if (targetQuestion != null && !string.IsNullOrWhiteSpace(targetQuestion.ConditionExpression))
                 {
-                    bool? value = this.ExecuteAndChangeInternal(targetQuestion, currentStack);
+                    bool? value = this.ExecuteAndChangeInternal(targetQuestion, currentStack, timeMarker);
                     targetQuestion.Enabled = value ?? true;
+                    targetQuestion.EnableStateCalculated = timeMarker;
                 }
 
                 if (targetQuestion == null || !targetQuestion.Enabled)
@@ -169,9 +190,9 @@ namespace Main.Core.ExpressionExecutors
                 args.Result = targetQuestion.GetAnswerObject();
             };
 
-            expression.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+            expression.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains; ////support for multioption
 
-            //// if condition is failed to execute question or group have to be active to avoid impossible to complete syrvey 
+            //// if condition is failed to execute question or group have to be active to avoid impossible to complete survey 
             //// we could treat null as success
             bool? result = null; 
             try

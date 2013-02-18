@@ -44,6 +44,9 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
@@ -68,25 +71,16 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// <param name="answers">
         /// The answers.
         /// </param>
-        public ChangeQuestionCommand(
-            Guid questionnaireId, 
-            Guid publicKey, 
-            string questionText, 
-            string stataExportCaption, 
-            QuestionType questionType, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            string instructions, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            Answer[] answers)
+        /// <param name="maxValue">
+        /// The max Value.
+        /// </param>
+        public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers, int maxValue)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
+            this.QuestionScope = questionScope;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
@@ -96,72 +90,61 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.AnswerOrder = answerOrder;
             this.PublicKey = publicKey;
             this.Answers = answers;
+            this.MaxValue = maxValue;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ChangeQuestionCommand"/> class.
         /// </summary>
         /// <param name="questionnaireId">
-        /// The questionnaire id.
+        ///   The questionnaire id.
         /// </param>
         /// <param name="publicKey">
-        /// The public key.
+        ///   The public key.
         /// </param>
         /// <param name="questionText">
-        /// The question text.
+        ///   The question text.
         /// </param>
         /// <param name="triggers">
-        /// The triggers.
+        ///   The triggers.
         /// </param>
         /// <param name="maxValue">
-        /// The max value
+        ///   The max value
         /// </param>
         /// <param name="stataExportCaption">
-        /// The stata export caption.
+        ///   The stata export caption.
         /// </param>
         /// <param name="questionType">
-        /// The question type.
+        ///   The question type.
+        /// </param>
+        /// <param name="questionScope">
+        ///  The question scope.
         /// </param>
         /// <param name="conditionExpression">
-        /// The condition expression.
+        ///   The condition expression.
         /// </param>
         /// <param name="validationExpression">
-        /// The validation expression.
+        ///   The validation expression.
         /// </param>
         /// <param name="validationMessage">
-        /// The validation message.
+        ///   The validation message.
         /// </param>
         /// <param name="instructions">
-        /// The instructions.
+        ///   The instructions.
         /// </param>
         /// <param name="featured">
-        /// The featured.
+        ///   The featured.
         /// </param>
         /// <param name="mandatory">
-        /// The mandatory.
+        ///   The mandatory.
         /// </param>
         /// <param name="answerOrder">
-        /// The answer order.
+        ///   The answer order.
         /// </param>
         /// <param name="answers">
-        /// The answers.
+        ///   The answers.
         /// </param>
-        public ChangeQuestionCommand(
-            Guid questionnaireId, 
-            Guid publicKey, 
-            string questionText, 
-            List<Guid> triggers, 
-            int maxValue,
-            string stataExportCaption, 
-            QuestionType questionType, 
-            string conditionExpression, 
-            string validationExpression, 
-            string validationMessage, 
-            string instructions, 
-            bool featured, 
-            bool mandatory, 
-            Order answerOrder, 
-            Answer[] answers)
+        public ChangeQuestionCommand(Guid questionnaireId, Guid publicKey, string questionText, List<Guid> triggers, int maxValue, string stataExportCaption, QuestionType questionType, QuestionScope questionScope, string conditionExpression, string validationExpression, string validationMessage, string instructions, bool featured, bool mandatory, Order answerOrder, Answer[] answers)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionText = questionText;
@@ -169,6 +152,7 @@ namespace Main.Core.Commands.Questionnaire.Question
             this.MaxValue = maxValue;
             this.StataExportCaption = stataExportCaption;
             this.QuestionType = questionType;
+            this.QuestionScope = questionScope;
             this.ConditionExpression = conditionExpression;
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
@@ -264,6 +248,11 @@ namespace Main.Core.Commands.Questionnaire.Question
         /// Gets or sets MaxValue.
         /// </summary>
         public int MaxValue { get; set; }
+
+        /// <summary>
+        /// Gets or sets QuestionScope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
 
         #endregion
     }

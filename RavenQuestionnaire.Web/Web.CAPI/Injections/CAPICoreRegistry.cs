@@ -6,7 +6,6 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.CAPI.Injections
 {
     using System.Collections.Generic;
@@ -14,11 +13,14 @@ namespace Web.CAPI.Injections
     using System.Reflection;
 
     using Core.CAPI.Synchronization;
-using Core.CAPI.Views;
+    using Core.CAPI.Views;
+
+    using DataEntryClient.SycProcessFactory;
+
     using Main.Core;
     using Main.Core.Events;
-using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
-    using Questionnaire.Core.Web.Export;
+    using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
+
     using Questionnaire.Core.Web.Security;
 
     /// <summary>
@@ -50,12 +52,13 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
         /// The get assweblys for register.
         /// </summary>
         /// <returns>
+        /// The <see cref="IEnumerable"/>.
         /// </returns>
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
                 base.GetAssweblysForRegister().Concat(
-                    new[] { typeof(ClientEventSync).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
+                    new[] { typeof(ClientEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
         }
 
         /// <summary>
@@ -64,12 +67,14 @@ using Main.Core.View.CompleteQuestionnaire.ScreenGroup;
         public override void Load()
         {
             base.Load();
-    
+
             this.Unbind<IScreenViewSupplier>();
             this.Bind<IScreenViewSupplier>().To<CapiScreenViewSupplier>();
 
-            this.Unbind<IEventSync>();
-            this.Bind<IEventSync>().To<ClientEventSync>();
+            this.Unbind<IEventStreamReader>();
+            this.Bind<IEventStreamReader>().To<ClientEventStreamReader>();
+
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
 
         #endregion

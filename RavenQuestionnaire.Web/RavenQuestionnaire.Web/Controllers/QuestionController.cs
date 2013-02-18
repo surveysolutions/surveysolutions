@@ -15,7 +15,6 @@ namespace RavenQuestionnaire.Web.Controllers
     using System.Linq;
     using System.Web;
     using System.Web.Mvc;
-    using System.Xml;
 
     using Kaliko.ImageLibrary;
     using Kaliko.ImageLibrary.Filters;
@@ -23,7 +22,6 @@ namespace RavenQuestionnaire.Web.Controllers
     using Main.Core.Commands.File;
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Commands.Questionnaire.Question;
-    using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.Answer;
@@ -37,7 +35,6 @@ namespace RavenQuestionnaire.Web.Controllers
 
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Core.Views.Group;
-    using RavenQuestionnaire.Core.Views.Questionnaire;
     using RavenQuestionnaire.Web.Models;
 
     /// <summary>
@@ -126,7 +123,45 @@ namespace RavenQuestionnaire.Web.Controllers
                     new GroupViewInputModel(groupPublicKey.Value, questionnaireKey));
             this.LoadImages();
             var question = new QuestionView(id, groupPublicKey) { Parent = group.PublicKey, GroupTitle = group.Title };
-            return this.View("_Create", question);
+            //return this.View("_Create", question);
+            return this.View("Create", question);
+        }
+
+        /// <summary>
+        /// Display partial view for question type
+        /// </summary>
+        /// <param name="type">
+        /// The type.
+        /// </param>
+        /// <param name="questionId">
+        /// The question id.
+        /// </param>
+        /// <param name="QuestionnaireId">
+        /// The questionnaire id.
+        /// </param>
+        /// <param name="groupPublicKey">
+        /// The group public key.
+        /// </param>
+        /// <returns>
+        /// PartialView for question type
+        /// </returns>
+        public ActionResult ShowBlock(string type, Guid questionId, string QuestionnaireId, Guid? groupPublicKey)
+        {
+            var typeOfEnum = (QuestionType)Enum.Parse(typeof(QuestionType), type);
+            var view = questionId == Guid.Empty ? new QuestionView(QuestionnaireId, groupPublicKey) : this.viewRepository.Load<QuestionViewInputModel, QuestionView>(new QuestionViewInputModel(questionId, Guid.Parse(QuestionnaireId)));
+            switch (typeOfEnum)
+            {
+                case QuestionType.DropDownList: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.MultyOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.SingleOption: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.YesNo: return this.PartialView("MultiSelectBlock", new MultyOptionsQuestionView(view));
+                case QuestionType.AutoPropagate:
+                    this.ViewBag.Group = view.Groups;
+                    this.ViewBag.CurrentGroup = view.Parent;
+                    return this.PartialView("_EditAutoPropagates", new AutoPropagateQuestionView(view));
+                default:
+                    return Content("<div id=\"additionalInfo\"></div>");
+            }
         }
 
         /// <summary>
@@ -135,15 +170,19 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="publicKey">
         /// The public key.
         /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
         /// <returns>
+        /// The <see cref="ActionResult"/>.
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Delete(Guid publicKey, string questionnaireId)
+        public ActionResult Delete(Guid publicKey, Guid parentPublicKey, string questionnaireId)
         {
-            this.commandService.Execute(new DeleteQuestionCommand(publicKey, Guid.Parse(questionnaireId)));
+            this.commandService.Execute(new DeleteQuestionCommand(publicKey, parentPublicKey, Guid.Parse(questionnaireId)));
             return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
             
         }
@@ -204,7 +243,8 @@ namespace RavenQuestionnaire.Web.Controllers
                     new QuestionViewInputModel(publicKey.Value, questionnaireKey.Value));
             this.ViewBag.Group = model.Groups;
             this.ViewBag.CurrentGroup = model.Parent;
-            return this.PartialView("_Create", model);
+            //return this.PartialView("_Create", model);
+            return this.PartialView("Create", model);
         }
 
         /// <summary>
@@ -330,7 +370,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         // new fw
                         var commandService = NcqrsEnvironment.Get<ICommandService>();
                         
-                        if (triggers == null || triggers.ToList().Count == 0)
+                        if (triggers == null || !triggers.Any())
                         {
                             commandService.Execute(
                                 new AddQuestionCommand(
@@ -339,6 +379,7 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Title, 
                                     model.StataExportCaption, 
                                     model.QuestionType, 
+                                    model.QuestionScope,
                                     model.Parent, 
                                     model.ConditionExpression, 
                                     model.ValidationExpression, 
@@ -347,7 +388,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Featured, 
                                     model.Mandatory, 
                                     model.AnswerOrder, 
-                                    ansverItems));
+                                    ansverItems, 
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -359,7 +401,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
                                     model.MaxValue, 
                                     model.StataExportCaption, 
-                                    model.QuestionType, 
+                                    model.QuestionType,
+                                    model.QuestionScope,
                                     model.Parent, 
                                     model.ConditionExpression, 
                                     model.ValidationExpression, 
@@ -383,7 +426,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.PublicKey, 
                                     model.Title, 
                                     model.StataExportCaption, 
-                                    model.QuestionType, 
+                                    model.QuestionType,
+                                    model.QuestionScope,
                                     model.ConditionExpression, 
                                     model.ValidationExpression, 
                                     model.ValidationMessage, 
@@ -391,7 +435,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     model.Featured, 
                                     model.Mandatory, 
                                     model.AnswerOrder, 
-                                    ansverItems));
+                                    ansverItems,
+                                    model.MaxValue));
                         }
                         else
                         {
@@ -403,7 +448,8 @@ namespace RavenQuestionnaire.Web.Controllers
                                     triggers.Where(t => t != Guid.Empty).Distinct().ToList(), 
                                     model.MaxValue,
                                     model.StataExportCaption, 
-                                    model.QuestionType, 
+                                    model.QuestionType,
+                                    model.QuestionScope,
                                     model.ConditionExpression, 
                                     model.ValidationExpression, 
                                     model.ValidationMessage, 
@@ -426,7 +472,7 @@ namespace RavenQuestionnaire.Web.Controllers
                     "Details", "Questionnaire", new { id = model.QuestionnaireKey, qid = model.PublicKey });
             }
 
-            return View("_Create", model);
+            return View("Create", model);
         }
 
         /// <summary>
@@ -529,7 +575,9 @@ namespace RavenQuestionnaire.Web.Controllers
             answer.PublicKey = a.PublicKey;
             answer.AnswerImage = a.AnswerImage;
 
-            // answer.Image=new Image(){};
+            // on designer value is not set
+            // answer.AnswerValue = a.AnswerValue;
+
             return answer;
         }
 
@@ -546,8 +594,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 var imagesList =
                     new SelectList(
                         images.Items.Select(
-                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(
-                                ), 
+                            i => new SelectListItem { Selected = false, Text = i.FileName, Value = i.FileName }).ToList(), 
                         "Value", 
                         "Text");
                 this.ViewBag.Images = imagesList;

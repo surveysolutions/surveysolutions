@@ -12,7 +12,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace SynchronizationMessages.Handshake
+namespace SynchronizationMessages.Synchronization
 {
     using System;
     using System.ServiceModel;

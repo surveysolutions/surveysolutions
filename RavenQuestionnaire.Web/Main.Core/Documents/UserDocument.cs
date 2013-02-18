@@ -85,6 +85,17 @@ namespace Main.Core.Documents
         /// </summary>
         public string UserName { get; set; }
 
+        /// <summary>
+        /// Gets user's light info
+        /// </summary>
+        /// <returns>
+        /// UserLight object
+        /// </returns>
+        public UserLight GetUseLight()
+        {
+            return new UserLight(this.PublicKey, this.UserName);
+        }
+
         #endregion
     }
 }

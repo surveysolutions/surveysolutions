@@ -17,11 +17,11 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         /// <summary>
         /// The none.
         /// </summary>
-        None, 
+        None = 1, 
 
         /// <summary>
         /// The fail.
         /// </summary>
-        Fail
+        Fail = 2
     }
 }

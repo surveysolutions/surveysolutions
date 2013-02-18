@@ -104,11 +104,15 @@
     <Reference Include="ClientDependency.Core.Mvc">
       <HintPath>..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\Web.Headquarter\Bin\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
@@ -136,7 +140,10 @@
     <Reference Include="Raven.Storage.Esent">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
     </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data.Services" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activation" />
     <Reference Include="System.ServiceModel.Web" />
@@ -148,7 +155,6 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Configuration" />
     <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
@@ -157,6 +163,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BackupController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -172,8 +179,14 @@
     <Compile Include="Models\AssigmentModel.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
+    <Compile Include="Models\Chart\ChartModelBase.cs" />
+    <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
+    <Compile Include="Models\StringExtension.cs" />
+    <Compile Include="Models\Chart\SurveyChartModel.cs" />
     <Compile Include="Models\GridDataRequestModel.cs" />
+    <Compile Include="Models\Chart\InterviewerChartModel.cs" />
+    <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,43 +203,71 @@
     <Compile Include="WCF\SpotSyncService.svc.cs">
       <DependentUpon>SpotSyncService.svc</DependentUpon>
     </Compile>
+    <Compile Include="WCF\AuthorizationService.svc.cs">
+      <DependentUpon>AuthorizationService.svc</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap\bootstrap-editable.css" />
+    <Content Include="Content\bootstrap-editable.css" />
     <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\datepicker.css" />
+    <Content Include="Content\details.css" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\img\details_bg.jpg" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
+    <Content Include="Content\img\loading.gif" />
     <Content Include="Content\img\sort_asc.png" />
     <Content Include="Content\img\sort_asc_disabled.png" />
     <Content Include="Content\img\sort_both.png" />
     <Content Include="Content\img\sort_desc.png" />
     <Content Include="Content\img\sort_desc_disabled.png" />
+    <Content Include="Content\jquery.dataTables.css" />
+    <Content Include="Content\TimelineJS\css\loading.gif" />
+    <Content Include="Content\TimelineJS\css\timeline.css" />
+    <Content Include="Content\TimelineJS\css\timeline.png" />
+    <Content Include="Content\TimelineJS\js\locale\en.js" />
+    <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
+    <Content Include="Content\TimelineJS\js\timeline-min.js" />
+    <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\details.js" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
+    <Content Include="Scripts\bootstrap-editable-inline.js" />
+    <Content Include="Scripts\bootstrap-editable-inline.min.js" />
     <Content Include="Scripts\bootstrap-editable.js" />
     <Content Include="Scripts\bootstrap-editable.min.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\director.min.js" />
+    <Content Include="Scripts\FixedHeader.min.js" />
     <Content Include="Scripts\grid.js" />
-    <Content Include="Scripts\exporting.js" />
     <Content Include="Scripts\highcharts.js" />
     <Content Include="Scripts\jquery-1.7.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.2.js" />
-    <Content Include="Scripts\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\jquery-1.9.0-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.9.0.js" />
+    <Content Include="Scripts\jquery-1.9.0.min.js" />
     <Content Include="Scripts\jquery-latest.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.js" />
     <Content Include="Scripts\jquery-ui-1.8.22.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.tablesorter.js" />
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout.validation.debug.js" />
+    <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\plotSettings.js" />
+    <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />
     <Content Include="WCF\SpotSyncService.svc" />
+    <Content Include="WCF\AuthorizationService.svc" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -249,7 +290,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
   </ItemGroup>
@@ -268,6 +308,10 @@
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\DataEntryClient\DataEntryClient.csproj">
+      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
+      <Name>DataEntryClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -279,6 +323,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
+      <Name>Main.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
@@ -302,7 +350,7 @@
     <Content Include="Views\Survey\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Survey\Assigments.cshtml" />
+    <Content Include="Views\Survey\Documents.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
@@ -411,6 +459,17 @@
     <Content Include="Views\Survey\_StatusHistory.cshtml" />
     <Content Include="Views\User\Summary.cshtml" />
     <Content Include="Views\User\_SummaryTable.cshtml" />
+    <Content Include="Views\Device\Index.cshtml" />
+    <Content Include="Views\Survey\IndexChart.cshtml" />
+    <Content Include="Views\Survey\Status.cshtml" />
+    <Content Include="Views\Survey\_StatusTable.cshtml" />
+    <Content Include="Views\User\SummaryChart.cshtml" />
+    <Content Include="Views\Survey\StatusChart.cshtml" />
+    <Content Include="Views\ImportExport\Index.cshtml" />
+    <Content Include="Views\Survey\Timeline.cshtml" />
+    <Content Include="Views\Backup\Index.cshtml" />
+    <Content Include="Views\Survey\Timeline1.cshtml" />
+    <None Include="Scripts\jquery-1.9.0.min.map" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

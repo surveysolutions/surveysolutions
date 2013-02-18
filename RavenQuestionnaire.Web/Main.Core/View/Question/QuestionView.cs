@@ -19,6 +19,8 @@ using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
+    using System.ComponentModel.DataAnnotations;
+
     /// <summary>
     /// The abstract question view.
     /// </summary>
@@ -64,6 +66,7 @@ namespace Main.Core.View.Question
             this.PublicKey = doc.PublicKey;
             this.Title = doc.QuestionText;
             this.QuestionType = doc.QuestionType;
+            this.QuestionScope = doc.QuestionScope;
             this.QuestionnaireKey = questionnaire.PublicKey;
             this.ConditionExpression = doc.ConditionExpression;
             this.ValidationExpression = doc.ValidationExpression;
@@ -141,6 +144,11 @@ namespace Main.Core.View.Question
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the questionnaire key.
         /// </summary>
         public Guid QuestionnaireKey { get; set; }
@@ -178,6 +186,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets MaxValue
         /// </summary>
+        [Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]
         public int MaxValue { get; set; }
 
         /// <summary>
@@ -191,6 +200,7 @@ namespace Main.Core.View.Question
         public string GroupTitle { get; set; }
 
         #endregion
+      
     }
 
     /// <summary>
@@ -442,7 +452,7 @@ namespace Main.Core.View.Question
 
                 return groups;
             }
-            catch (Exception e)
+            catch 
             {
                 return null;
             }
@@ -507,8 +517,7 @@ namespace Main.Core.View.Question
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public QuestionView(string questionnaireId, Guid? groupPublicKey)
-            : base(questionnaireId, groupPublicKey)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey) : base(questionnaireId, groupPublicKey)
         {
         }
 
@@ -547,13 +556,6 @@ namespace Main.Core.View.Question
                     this.Triggers = autoQuestion.Triggers.ToList();
                 }
             }
-
-/*
-            if (doc.Triggers != null)
-            {
-                this.Triggers = doc.Triggers.ToList();
-            }
-*/
             
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }

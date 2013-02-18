@@ -101,6 +101,7 @@ namespace RavenQuestionnaire.Web.Controllers
         /// The question id.
         /// </param>
         /// <returns>
+        /// The <see cref="ActionResult"/>.
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult FillAnswers(string NameCollection, Guid questionId)

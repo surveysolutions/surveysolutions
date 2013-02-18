@@ -36,6 +36,7 @@ namespace Main.Core.View.Group
             this.Enabled = group.Enabled;
             this.Description = group.Description;
             this.Totals = this.CalcProgress(group);
+            this.Propagated = group.Propagated;
         }
 
         /// <summary>
@@ -83,6 +84,11 @@ namespace Main.Core.View.Group
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets Propagated.
+        /// </summary>
+        public Propagate Propagated { get; set; }
 
         #endregion
 
@@ -163,5 +169,7 @@ namespace Main.Core.View.Group
         }
 
         #endregion
+
+       
     }
 }

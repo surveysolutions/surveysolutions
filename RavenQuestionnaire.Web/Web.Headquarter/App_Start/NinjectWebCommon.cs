@@ -44,6 +44,7 @@ namespace Web.Headquarter.App_Start
         public static void Stop()
         {
             bootstrapper.ShutDown();
+            SuccessMarker.Stop();
         }
         
         /// <summary>
@@ -67,8 +68,8 @@ namespace Web.Headquarter.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             RegisterServices(kernel);
-            NCQRSInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
-          
+            NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"], */kernel);
+            SuccessMarker.Start(kernel);
             return kernel;
         }
 

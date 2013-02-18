@@ -12,6 +12,7 @@ namespace Browsing.Common.Containers
         private TableLayoutPanel tableLayoutPanel1;
         private Panel contentPanel;
         private Browsing.Common.Controls.FlatButton homeButton;
+        private bool menuIsVisible;
 
         #region C-tor
 
@@ -23,11 +24,12 @@ namespace Browsing.Common.Containers
         {
             InitializeComponent();
 
-            this.menuPanel.Visible = menuIsVisible;
+            this.menuIsVisible = menuIsVisible;
+            EnableHomeButton(menuIsVisible);
 
             this.holder = holder;
             if (this.holder != null)
-                this.holder.LoadedScreens.Add(this);
+                this.holder.AddScreen(this);
         }
 
         #endregion
@@ -39,10 +41,10 @@ namespace Browsing.Common.Containers
             get { return this.holder; }
         }
 
-        protected Panel MenuPanel
+        /*protected Panel MenuPanel
         {
             get { return this.menuPanel; }
-        }
+        }*/
 
         protected Panel ContentPanel
         {
@@ -57,9 +59,9 @@ namespace Browsing.Common.Containers
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Screen));
             this.menuPanel = new System.Windows.Forms.Panel();
-            this.homeButton = new Browsing.Common.Controls.FlatButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.contentPanel = new System.Windows.Forms.Panel();
+            this.homeButton = new Browsing.Common.Controls.FlatButton();
             this.menuPanel.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -72,25 +74,6 @@ namespace Browsing.Common.Containers
             this.menuPanel.Name = "menuPanel";
             this.menuPanel.Size = new System.Drawing.Size(1440, 50);
             this.menuPanel.TabIndex = 1;
-            // 
-            // homeButton
-            // 
-            this.homeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.homeButton.BackColor = System.Drawing.Color.Transparent;
-            this.homeButton.FlatAppearance.BorderSize = 0;
-            this.homeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.homeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel, ((byte)(0)));
-            this.homeButton.Image = ((System.Drawing.Image)(resources.GetObject("homeButton.Image")));
-            this.homeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.homeButton.Location = new System.Drawing.Point(2, 2);
-            this.homeButton.Margin = new System.Windows.Forms.Padding(0);
-            this.homeButton.Name = "homeButton";
-            this.homeButton.Size = new System.Drawing.Size(100, 44);
-            this.homeButton.TabIndex = 0;
-            this.homeButton.Text = "Back";
-            this.homeButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.homeButton.UseVisualStyleBackColor = false;
-            this.homeButton.Click += new System.EventHandler(this.homeButton_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -115,11 +98,31 @@ namespace Browsing.Common.Containers
             this.contentPanel.Size = new System.Drawing.Size(1434, 572);
             this.contentPanel.TabIndex = 2;
             // 
+            // homeButton
+            // 
+            this.homeButton.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.homeButton.BackColor = System.Drawing.Color.Transparent;
+            this.homeButton.FlatAppearance.BorderSize = 0;
+            this.homeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.homeButton.Font = new System.Drawing.Font("Cambria", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.homeButton.Image = ((System.Drawing.Image)(resources.GetObject("homeButton.Image")));
+            this.homeButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.homeButton.Location = new System.Drawing.Point(2, 2);
+            this.homeButton.Margin = new System.Windows.Forms.Padding(0);
+            this.homeButton.Name = "homeButton";
+            this.homeButton.Size = new System.Drawing.Size(117, 44);
+            this.homeButton.TabIndex = 0;
+            this.homeButton.Text = "Home";
+            this.homeButton.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.homeButton.UseVisualStyleBackColor = false;
+            this.homeButton.Click += new System.EventHandler(this.homeButton_Click);
+            // 
             // Screen
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoSize = true;
             this.Controls.Add(this.tableLayoutPanel1);
+            this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "Screen";
             this.Size = new System.Drawing.Size(1440, 628);
             this.menuPanel.ResumeLayout(false);
@@ -148,18 +151,29 @@ namespace Browsing.Common.Containers
 
         protected virtual void OnHomeButtonClick(object sender, EventArgs e)
         {
-            this.Holder.Redirect(this.Holder.LoadedScreens.FirstOrDefault(s => s is Main));
+            this.Holder.NavigateMain();
         }
 
         protected virtual void OnUpdateConfigDependencies() { }
 
-        protected virtual void OnValidateContent() { }
+        protected virtual void OnLeaveScreen() { }
+        protected virtual void OnEnterScreen() { }
 
         #endregion
 
-        internal void ValidateContent()
+        internal void EnterScreen()
         {
-            OnValidateContent();
+            OnEnterScreen();
+        }
+
+        internal void LeaveScreen()
+        {
+            OnLeaveScreen();
+        }
+
+        protected void EnableHomeButton(bool enable)
+        {
+            this.menuPanel.Visible = this.menuIsVisible && enable;
         }
     }
 }

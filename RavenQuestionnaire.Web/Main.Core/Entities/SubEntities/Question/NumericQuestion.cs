@@ -48,22 +48,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// Gets or sets the add numeric attr.
         /// </summary>
         public string AddNumericAttr { get; set; }
-
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
@@ -149,33 +134,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             return null;
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            throw new CompositeException();
-        }*/
-
+        
         #endregion
     }
 }

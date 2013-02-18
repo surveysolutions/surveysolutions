@@ -22,7 +22,7 @@ namespace RavenQuestionnaire.Web.Injections
         public override void Load()
         {
             base.Load();
-            this.Bind<IEventSync>().To<HQEventSync>();
+            this.Bind<IEventStreamReader>().To<HqEventStreamReader>();
         }
     }
 }

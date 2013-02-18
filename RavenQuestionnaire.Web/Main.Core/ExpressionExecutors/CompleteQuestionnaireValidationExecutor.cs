@@ -14,6 +14,7 @@ namespace Main.Core.ExpressionExecutors
 
     using Main.Core.Documents;
     using Main.Core.Entities.Extensions;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors.ExpressionExtentions;
 
@@ -31,6 +32,11 @@ namespace Main.Core.ExpressionExecutors
         /// </summary>
         private readonly ICompleteQuestionnaireDocument doc;
 
+        /// <summary>
+        /// Question filter
+        /// </summary>
+        private readonly QuestionScope scope;
+
         #endregion
 
         #region Constructors and Destructors
@@ -41,9 +47,13 @@ namespace Main.Core.ExpressionExecutors
         /// <param name="doc">
         /// The hash.
         /// </param>
-        public CompleteQuestionnaireValidationExecutor(ICompleteQuestionnaireDocument doc)
+        /// <param name="scope">
+        /// The scope.
+        /// </param>
+        public CompleteQuestionnaireValidationExecutor(ICompleteQuestionnaireDocument doc, QuestionScope scope)
         {
             this.doc = doc;
+            this.scope = scope;
         }
 
         #endregion
@@ -58,7 +68,10 @@ namespace Main.Core.ExpressionExecutors
         /// </param>
         public void Execute(ICompleteGroup group)
         {
-            foreach (ICompleteQuestion completeQuestion in group.Children.Where(c => c is ICompleteQuestion))
+            foreach (ICompleteQuestion completeQuestion in
+                    group.Children.Where(c => c is ICompleteQuestion)
+                    .Select(q => q as ICompleteQuestion)
+                    .Where(q => q.QuestionScope <= this.scope))
             {
                 completeQuestion.Valid = this.Execute(completeQuestion);
             }
@@ -73,7 +86,7 @@ namespace Main.Core.ExpressionExecutors
         public bool Execute()
         {
             bool isValid = true;
-            foreach (ICompleteQuestion completeQuestion in this.doc.Questions)
+            foreach (ICompleteQuestion completeQuestion in this.doc.Questions.Where(q => q.QuestionScope <= this.scope))
             {
                 completeQuestion.Valid = this.Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
@@ -93,6 +106,11 @@ namespace Main.Core.ExpressionExecutors
         /// </returns>
         public bool Execute(ICompleteQuestion question)
         {
+            if (question.QuestionScope > this.scope)
+            {
+                return true;
+            }
+
             if (!question.Enabled)
             {
                 return true;
@@ -120,11 +138,11 @@ namespace Main.Core.ExpressionExecutors
                         args.Result = null;
                         return;
                     }
-                    
+
                     args.Result = targetQuestion.GetAnswerObject();
                 };
 
-            e.EvaluateFunction += ExtentionFunctions.EvaluateFunctionContains; ////support for multioption
+            e.EvaluateFunction += ExtensionFunctions.EvaluateFunctionContains; ////support for multioption
 
             bool result = false;
             try
@@ -139,5 +157,6 @@ namespace Main.Core.ExpressionExecutors
         }
 
         #endregion
+
     }
 }

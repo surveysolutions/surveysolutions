@@ -45,7 +45,7 @@ namespace Main.Core.View.Group
         /// The navigation.
         /// </param>
         public CompleteGroupMobileView(
-            CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup)
+            CompleteQuestionnaireStoreDocument doc, CompleteGroup currentGroup, QuestionScope scope)
             : this()
         {
             this.QuestionnairePublicKey = doc.PublicKey;
@@ -57,7 +57,7 @@ namespace Main.Core.View.Group
             this.IsQuestionnaireActive = !SurveyStatus.IsStatusAllowCapiSync(doc.Status);
             if (currentGroup.Propagated != Propagate.None)
             {
-                this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup);
+                this.PropagateTemplate = new PropagatedGroupMobileView(doc, currentGroup, scope);
             }
             else
             {
@@ -66,22 +66,25 @@ namespace Main.Core.View.Group
                     if ((composite as ICompleteQuestion) != null)
                     {
                         var q = composite as ICompleteQuestion;
-                        var question = new CompleteQuestionView(doc, q);
-                        this.Children.Add(question);
+                        if (q.QuestionScope <= scope)
+                        {
+                            var question = new CompleteQuestionView(doc, q);
+                            this.Children.Add(question);
+                        }
                     }
                     else
                     {
                         var g = composite as CompleteGroup;
                         if (g.Propagated == Propagate.None || !g.PropagationPublicKey.HasValue)
                         {
-                            this.Children.Add(new CompleteGroupMobileView(doc, g));
+                            this.Children.Add(new CompleteGroupMobileView(doc, g, scope));
                         }
                         else
                         {
                             ICompositeView template =
                                 this.Children.FirstOrDefault(
                                     parent => parent.PublicKey == g.PublicKey && !(parent is PropagatedGroupMobileView));
-                            template.Children.Add(new PropagatedGroupMobileView(doc, g));
+                            template.Children.Add(new PropagatedGroupMobileView(doc, g, scope));
                         }
                     }
 
@@ -94,9 +97,6 @@ namespace Main.Core.View.Group
         #endregion
 
         #region Public Properties
-
-        
-
      
         /// <summary>
         /// Gets or sets the propagate template.

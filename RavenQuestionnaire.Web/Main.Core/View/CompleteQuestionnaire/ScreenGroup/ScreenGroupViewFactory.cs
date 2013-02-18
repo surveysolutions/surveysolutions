@@ -10,8 +10,10 @@
 namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
 {
     using System;
+    using System.Linq;
 
     using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.ExpressionExecutors;
     using Main.Core.Utility;
     using Main.DenormalizerStorage;
@@ -80,13 +82,12 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             }
 
             this.UpdateInputData(doc, input);
+            /*var executor = new CompleteQuestionnaireConditionExecutor(doc);
+            executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);*/
 
-            var executor = new CompleteQuestionnaireConditionExecutor(doc);
-            executor.ExecuteAndChangeStateRecursive(doc);
+            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey, input.Scope);
 
-            GroupWithRout rout = new GroupWithRout(doc, input.CurrentGroupPublicKey, input.PropagationKey);
-
-            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation);
+            return this.screenViewSupplier.BuildView(doc, rout.Group, rout.Navigation, input.Scope);
         }
 
         #endregion
@@ -115,6 +116,5 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
             input.CurrentGroupPublicKey = doc.LastVisitedGroup.GroupKey;
             input.PropagationKey = doc.LastVisitedGroup.PropagationKey;
         }
-
     }
 }

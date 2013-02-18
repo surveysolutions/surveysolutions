@@ -1,66 +1,106 @@
 ﻿@using ClientDependency.Core
 @using ClientDependency.Core.Mvc
+@using Web.Supervisor.Models
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>@ViewBag.Title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
-        @MvcHtmlString.Create(Html.RenderCssHere(new List<IClientDependencyPath>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
+    @MvcHtmlString.Create(Html.RenderCssHere(new List<IClientDependencyPath>
                                                        {
                                                            new BasicPath("Content", "~/Content"),
                                                            new BasicPath("Bootstrap", "~/Content/bootstrap")
                                                        }))
-        @MvcHtmlString.Create(Html.RenderJsHere(new List<IClientDependencyPath>
+    @MvcHtmlString.Create(Html.RenderJsHere(new List<IClientDependencyPath>
                                                       {
                                                           new BasicPath("Scripts", "~/Scripts"),
                                                       }))
-        @{
-            Html.RequiresCss("bootstrap.min.css", "Bootstrap", 10);
-            Html.RequiresCss("bootstrap-responsive.min.css", "Bootstrap", 20);
-            Html.RequiresCss("datepicker.css", "Content", 21);
-            Html.RequiresCss("bootstrap-editable.css", "Bootstrap", 22);
-            Html.RequiresCss("main.css", "Content", 40);
+    @{
+        Html.RequiresCss("bootstrap.min.css", "Bootstrap", 10);
+        Html.RequiresCss("bootstrap-responsive.min.css", "Bootstrap", 20);
+        Html.RequiresCss("datepicker.css", "Content", 21);
+        Html.RequiresCss("bootstrap-editable.css", "Content", 22);
+        Html.RequiresCss("main.css", "Content", 40);
 
-            Html.RequiresJs("jquery-1.7.2.min.js", "Scripts", 10);
-            Html.RequiresJs("jquery-ui-1.8.22.min.js", "Scripts", 20);
-            Html.RequiresJs("bootstrap.min.js", "Scripts", 30);
-            Html.RequiresJs("bootstrap-datepicker.js", "Scripts", 31);
-            Html.RequiresJs("bootstrap-editable.js", "Scripts", 32);
-            Html.RequiresJs("sorter.js", "Scripts", 50);
-        }
-    </head>
-    <body>
-        <div class="navbar  navbar-fixed-top">
-            <div class="navbar-inner">
-                <div class="container-fluid">
-                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
-                                                                                                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                    </a><a href="@Url.Action("Index", "Survey")" class="brand">Surveys</a>
-                    <div class="nav-collapse ">
-                        <ul id="menu" class="nav">
-                            <li>@Html.ActionLink("Interviewers", "Index", "User")</li>
-                            <li>@Html.ActionLink("Summary", "Summary", "User")</li>
-                         @*   <li>@Html.ActionLink("Take new", "Questionnaires", "Dashboard")</li>*@
+        Html.RequiresJs("jquery-1.9.0.min.js", "Scripts", 10);
+        Html.RequiresJs("jquery-ui-1.8.22.min.js", "Scripts", 20);
+        Html.RequiresJs("bootstrap.min.js", "Scripts", 30);
+        Html.RequiresJs("bootstrap-datepicker.js", "Scripts", 31);
+        Html.RequiresJs("bootstrap-editable.js", "Scripts", 32);
+        //Html.RequiresJs("bootstrap-editable-inline.js", "Scripts", 32);
+        Html.RequiresJs("highcharts.js", "Scripts", 40);
+        Html.RequiresJs("sorter.js", "Scripts", 50);
+        Html.RequiresJs("shorten.js", "Scripts", 60);
+        var page = ViewBag.ActivePage ?? MenuItem.Logon;
+    }
+    
+</head>
+<body>
+    <div class="navbar  navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand" href="@Url.Action("GotoBrowser", "Survey")">Home</a> <a class="btn btn-navbar"
+                    data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
+                    <span class="icon-bar"></span><span class="icon-bar"></span></a>
+                <div class="nav-collapse ">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <ul id="menu" class="nav" role="menu">
+                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
+                                <i class="icon-filter"></i>by Interviewers</a> </li>
+                            <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "User")">
+                                <i class="icon-filter"></i>by Surveys</a> </li>
+                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
+                                <i class="icon-filter"></i>by Statuses</a> </li>
+                            <li class="@(page == MenuItem.Docs ? "active" : "")">
+                                @Html.ActionLink("Documents", "Documents", "Survey")
+                            </li>
                         </ul>
-                        @Html.Partial("_LogOnPartial")
-                    </div>
+                    }
+                    @if (Request.IsAuthenticated)
+                    {
+                        <div class="pull-right">
+                            <ul class="nav pull-right" role="menu">
+                                <li class="navbar-text">@User.Identity.Name</li>
+                                <li class="divider-vertical"></li>
+                                <li class="@(page == MenuItem.Administration ? "active" : "")" class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
+                                    </b></a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Users", "Index", "User")</li>
+                                        <li>@Html.ActionLink("Devices", "Index", "Device")</li>
+                                        <li>@Html.ActionLink("Syncronization", "Index", "ImportExport")</li>
+                                        <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-        <div id="page" class="container-fluid">
-            <div id="main">
-                @RenderBody()
-            </div>
+    </div>
+    <div id="page" class="container-fluid">
+        <div id="main">
+            @RenderBody()
         </div>
-        <script type="text/javascript">
-        $('.dropdown-toggle').dropdown();
-        $("a[rel=popover]")
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[rel=tooltip]').tooltip();
+            $('.dropdown-toggle').dropdown();
+            $("a[rel=popover]")
             .popover()
             .click(function (e) {
                 e.preventDefault();
             });
-
+        });
+        $.expander.defaults.slicePoint = 150;
+        $.expander.defaults.expandEffect = 'show';
+        $.expander.defaults.collapseEffect = 'hide';
+        $.expander.defaults.collapseSpeed = 0;
+        $.expander.defaults.expandSpeed = 0;
     </script>
-    </body>
+</body>
 </html>

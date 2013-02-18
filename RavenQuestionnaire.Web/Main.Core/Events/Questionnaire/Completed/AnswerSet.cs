@@ -1,23 +1,21 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AnswerSet.cs" company="">
-//   
+// <copyright file="AnswerSet.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The answer set.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Events.Questionnaire.Completed
 {
     using System;
     using System.Collections.Generic;
 
-    using Ncqrs.Eventing.Storage;
-
     /// <summary>
     /// The answer set.
     /// </summary>
     [Serializable]
-    [EventName("RavenQuestionnaire.Core:Events:AnswerSet")]
     public class AnswerSet
     {
         #region Public Properties
@@ -38,8 +36,14 @@ namespace Main.Core.Events.Questionnaire.Completed
         public string AnswerValue { get; set; }
 
         /// <summary>
+        /// Gets or sets AnswerDate.
+        /// </summary>
+        public DateTime AnswerDate { get; set; }
+
+        /// <summary>
         /// Gets or sets the completed questionnaire id.
         /// </summary>
+        [Obsolete]
         public Guid CompletedQuestionnaireId { get; set; }
 
         /// <summary>
@@ -48,7 +52,7 @@ namespace Main.Core.Events.Questionnaire.Completed
         public bool Featured { get; set; }
 
         /// <summary>
-        /// Gets or sets the propogation public key.
+        /// Gets or sets the propagation public key.
         /// </summary>
         public Guid? PropogationPublicKey { get; set; }
 

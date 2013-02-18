@@ -54,7 +54,37 @@ namespace Core.Supervisor.Views.Assignment
                 this.FeatureadValue.Add(header.Key, question == null ? string.Empty : question.Answer.ToString());
             }
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssignmentViewItem"/> class.
+        /// </summary>
+        /// <param name="it">
+        /// The it.
+        /// </param>
+        public AssignmentViewItem(CompleteQuestionnaireBrowseItem it)
+            : this()
+        {
+            this.Title = it.QuestionnaireTitle;
+            this.Id = it.CompleteQuestionnaireId;
+            this.Responsible = it.Responsible;
+            this.TemplateId = it.TemplateId;
+            this.LastEntryDate = it.LastEntryDate;
+            this.Status = it.Status;
+            if (it.FeaturedQuestions != null && it.FeaturedQuestions.Count() == 0)
+            {
+                this.FeatureadValue.Add(Guid.Empty, string.Empty);
+            }
+            else
+            {
+                this.FeatureadValue.Add(
+                    Guid.Empty,
+                    string.Join(
+                        ", ",
+                        it.FeaturedQuestions.Select(q => string.Format("{0} : {1}", q.Title, q.Answer.ToString())).
+                            ToList()));
+            }
+        }
+
         #endregion
 
         #region Public Properties

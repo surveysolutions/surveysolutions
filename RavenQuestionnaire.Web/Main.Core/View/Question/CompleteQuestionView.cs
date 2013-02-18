@@ -107,6 +107,11 @@ namespace Main.Core.View.Question
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether Editable.
+        /// </summary>
+        public bool Editable { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent group public key.
         /// </summary>
         public Guid ParentGroupPublicKey { get; set; }

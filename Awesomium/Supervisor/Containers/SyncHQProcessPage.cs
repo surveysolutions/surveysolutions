@@ -9,7 +9,7 @@ namespace Browsing.Supervisor.Containers
     {
         public SyncHQProcessPage(
             ISettingsProvider clientSettings, 
-            IRequesProcessor requestProcessor, 
+            IRequestProcessor requestProcessor, 
             IUrlUtils utils, 
             ScreenHolder holder)
             : base(clientSettings, requestProcessor, utils, holder)
@@ -19,7 +19,7 @@ namespace Browsing.Supervisor.Containers
             ContentPanel.Enabled = false;
         }
 
-        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
+        protected override ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider)
         {
             return new SupervisorSyncManager(progressObserver, clientSettings, requestProcessor, utils, usbProvider);
         }

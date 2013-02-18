@@ -37,17 +37,24 @@ namespace Core.CAPI.Views
         /// <param name="navigation">
         /// The navigation.
         /// </param>
+        /// <param name="scope">
+        /// The question scope
+        /// </param>
         /// <returns>
         /// The <see cref="ScreenGroupView"/>.
         /// </returns>
-        public override ScreenGroupView BuildView( CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
+        public override ScreenGroupView BuildView(
+            CompleteQuestionnaireStoreDocument doc,
+            ICompleteGroup currentGroup,
+            ScreenNavigation navigation,
+            QuestionScope scope)
         {
             if (currentGroup.Propagated != Propagate.None && !currentGroup.PropagationPublicKey.HasValue)
             {
                 return new CapiScreenGroupView(doc, currentGroup, navigation);
             }
 
-            var baseResult = base.BuildView(doc, currentGroup, navigation);
+            var baseResult = base.BuildView(doc, currentGroup, navigation, scope);
             
             foreach (CompleteGroupMobileView completeGroupMobileView in
                     baseResult.Group.Children.OfType<CompleteGroupMobileView>().Where(

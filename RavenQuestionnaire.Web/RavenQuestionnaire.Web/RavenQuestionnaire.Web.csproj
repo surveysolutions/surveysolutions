@@ -23,7 +23,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -100,9 +100,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="CsvHelper">
-      <HintPath>..\packages\CsvHelper.1.1.0\lib\CsvHelper.dll</HintPath>
-    </Reference>
     <Reference Include="dotless.Core, Version=1.3.0.0, Culture=neutral, PublicKeyToken=96b446c9e63eae34, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\dotless.1.3.0.0\lib\dotless.Core.dll</HintPath>
@@ -112,6 +109,9 @@
     </Reference>
     <Reference Include="ICSharpCode.NRefactory, Version=3.0.0.3800, Culture=neutral, PublicKeyToken=efe927acf176eea2, processorArchitecture=MSIL">
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip">
+      <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
@@ -228,7 +228,6 @@
     <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
-    <Compile Include="Export\TemplateExporter.cs" />
     <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />
     <Compile Include="Models\GridDataRequest.cs" />
@@ -446,6 +445,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Export\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -459,6 +459,10 @@
       <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
       <Name>RavenQuestionnaire.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\DataEntryClient\DataEntryClient.csproj">
+      <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
+      <Name>DataEntryClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
@@ -470,6 +474,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{CAFF029B-9FE0-4AE9-A475-C384D9022471}</Project>
+      <Name>Main.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
@@ -616,6 +624,9 @@
     <Content Include="Views\Error\Http403.cshtml" />
     <Content Include="Views\Error\General.cshtml" />
     <Content Include="Views\Questionnaire\Flow.cshtml" />
+    <Content Include="Views\Question\Create.cshtml" />
+    <Content Include="Views\Question\MainBlock.cshtml" />
+    <Content Include="Views\Question\MultiSelectBlock.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
@@ -652,9 +663,9 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>45841</DevelopmentServerPort>
+          <DevelopmentServerPort>61978</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:38447/</IISUrl>
+          <IISUrl>http://localhost:61978/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

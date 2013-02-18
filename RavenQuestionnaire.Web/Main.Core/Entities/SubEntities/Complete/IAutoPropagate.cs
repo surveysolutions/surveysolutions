@@ -18,6 +18,9 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// </summary>
     public interface IAutoPropagate : ITriggerable
     {
+        /// <summary>
+        /// Gets or sets the max value.
+        /// </summary>
         int MaxValue { get; set; }
     }
 }

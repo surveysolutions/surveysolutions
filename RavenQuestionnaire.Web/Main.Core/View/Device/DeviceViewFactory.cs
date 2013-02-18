@@ -6,8 +6,11 @@
 
 namespace Main.Core.View.Device
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Main.Core.Documents;
+    using Main.Core.Entities;
     using Main.DenormalizerStorage;
 
     /// <summary>
@@ -52,11 +55,20 @@ namespace Main.Core.View.Device
         /// </returns>
         public DeviceView Load(DeviceViewInputModel input)
         {
-            int count = devices.Count();
-            if (count == 0) 
-                return new DeviceView();
-            var dev = devices.Query().Where(t =>t.TabletId == input.TabletId).FirstOrDefault();
-            return new DeviceView(dev.Description, dev.CreationDate, dev.SecretKey, dev.TabletId);
+            int count =
+                this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(
+                    d => d.Registrator == input.RegistratorId).Count();
+
+            if (count == 0)
+            {
+                return new DeviceView(0, 0, 0, new List<RegisterData>(), string.Empty);
+            }
+
+            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
+            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var items = page.ToList();
+            var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.CreationDate, RegistrationId = item.PublicKey, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
+            return new DeviceView(input.Page, input.PageSize, count, devices, input.Order);
         }
 
         #endregion

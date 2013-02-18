@@ -12,20 +12,170 @@ using Browsing.Supervisor.Registration;
 using Common.Utils;
 using Synchronization.Core.Registration;
 using Synchronization.Core.Interface;
+using Synchronization.Core.Events;
 
 namespace Browsing.Supervisor.Containers
 {
     public partial class SupervisorRegistration : Browsing.Common.Containers.Registration
     {
-        private readonly static string RegisterButtonText = "Authorize";
+        private class AuthListViewItem : ListViewItem
+        {
+            private Color defaultBackColor;
+            private Color defaultForeColor;
+            private DateTime? pastAuthorization = null;
 
-        public SupervisorRegistration(IRequesProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
-            : base(requestProcessor, urlUtils, holder, true, RegisterButtonText)
+            private static string DeviceDescriptionContent(IRegisterData data)
+            {
+                return string.Format("{0} ({1})", data.Description, data.RegistrationId);
+            }
+
+            public AuthListViewItem(IRegisterData data)
+                : base(new string[] { DeviceDescriptionContent(data), data.RegisterDate.ToLocalTime().ToString(), string.Empty })
+            {
+                this.defaultForeColor = ForeColor;
+                this.defaultBackColor = BackColor;
+            }
+
+            public AuthListViewItem(IAuthorizationPacket packet, DateTime? pastAuthorization)
+                : this(packet.Data)
+            {
+                this.pastAuthorization = pastAuthorization;
+                Tag = packet;
+                Selected = packet.IsMarkedToAuthorize;
+                UpdateSelection();
+            }
+
+            internal void UpdateSelection()
+            {
+                var packet = Tag as IAuthorizationPacket;
+                if (packet == null)
+                    return;
+
+                BackColor = Color.Yellow;
+                SubItems[1].Text = this.Selected ?
+                    (this.pastAuthorization.HasValue ? "Marked to repeat authorization" : "Marked to authorize") :
+                    (this.pastAuthorization.HasValue ? this.pastAuthorization.Value.ToLocalTime().ToString() : "Not yet ...");
+
+                SubItems[2].Text = packet.Channel.ToString();
+
+                packet.MarkToAuthorize(this.Selected);
+            }
+        }
+
+        private readonly static string RegisterButtonText = "Authorize";
+        private bool isReadingAuthorizationList = false;
+        private IList<IAuthorizationPacket> requestPackets = new List<IAuthorizationPacket>();
+
+        public SupervisorRegistration(IRequestProcessor requestProcessor, IUrlUtils urlUtils, ScreenHolder holder)
+            : base(requestProcessor, urlUtils, holder, true, RegisterButtonText, string.Empty, false)
         {
             InitializeComponent();
 
             SetUsbStatusText("CAPI device authorization status");
+
+            AuthorizationList.HeaderStyle = ColumnHeaderStyle.Nonclickable;
+            AuthorizationList.MultiSelect = true;
+            AuthorizationList.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(AuthorizationList_ItemSelectionChanged);
+
+            RegistrationManager.PacketsAvailable += new NewPacketsAvailableHandler(RegistrationManager_PacketsAvailable);
         }
+
+        void AuthorizationList_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var item = e.Item as AuthListViewItem;
+            item.UpdateSelection();
+        }
+
+        void RegistrationManager_PacketsAvailable(object sender, IList<IAuthorizationPacket> packets)
+        {
+            lock (this.requestPackets)
+            {
+                this.requestPackets = packets;
+            }
+
+            UpdateAuthorizationList();
+        }
+
+        #region Helpers
+
+        private ListViewItem CreateListItem(IAuthorizationPacket packet, DateTime? pastAuthorization)
+        {
+            return new AuthListViewItem(packet, pastAuthorization);
+        }
+
+        private ListViewItem CreateListItem(IRegisterData data)
+        {
+            return new AuthListViewItem(data);
+        }
+
+        private void CleanAuthorizedrequests()
+        {
+            lock (this.requestPackets)
+            {
+                this.requestPackets = this.requestPackets.Where(p => !p.IsAuthorized).ToList();
+            }
+        }
+
+        private void UpdateListView(IEnumerable<RegisterData> source)
+        {
+            AuthorizationList.Items.Clear();
+
+            // fix actual registration date in according to old registration date for repeating reqistration
+            Dictionary<Guid, DateTime> alreadyRegisteredDevices = new Dictionary<Guid, DateTime>();
+
+            foreach (var item in source)
+            {
+                alreadyRegisteredDevices[item.RegistrationId] = item.RegisterDate;
+                AuthorizationList.Items.Add(CreateListItem(item));
+            }
+
+            lock (this.requestPackets)
+            {
+                foreach (var packet in this.requestPackets)
+                {
+                    DateTime? pastAuthorization = alreadyRegisteredDevices.ContainsKey(packet.Data.RegistrationId) ? alreadyRegisteredDevices[packet.Data.RegistrationId] : (DateTime?)null;
+                    AuthorizationList.Items.Add(CreateListItem(packet, pastAuthorization));
+                }
+            }
+
+            AuthorizationList.AutoResizeColumn(0, ColumnHeaderAutoResizeStyle.ColumnContent);
+            AuthorizationList.AutoResizeColumn(1, ColumnHeaderAutoResizeStyle.ColumnContent);
+        }
+
+        private void UpdateAuthorizationList()
+        {
+            if (this.isReadingAuthorizationList)
+                return;
+
+            CleanAuthorizedrequests();
+
+            try
+            {
+                if (this.isReadingAuthorizationList)
+                    return;
+
+                this.isReadingAuthorizationList = true;
+
+                var data = RegistrationManager.GetAuthorizedIds();
+
+                if (data != null && !this.IsDisposed)
+                {
+                    if (this.InvokeRequired)
+                        this.Invoke(new Action<IEnumerable<RegisterData>>(UpdateListView), data);
+                    else
+                        UpdateListView(data);
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                this.isReadingAuthorizationList = false;
+            }
+        }
+
+        #endregion
 
         #region Override Methods
 
@@ -34,22 +184,35 @@ namespace Browsing.Supervisor.Containers
             return string.Empty;
         }
 
-        protected override RegistrationManager DoInstantiateRegistrationManager(IRequesProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+        protected override RegistrationManager DoInstantiateRegistrationManager(IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
         {
             return new SupervisorRegistrationManager(requestProcessor, urlUtils, usbProvider);
         }
 
-        protected override bool OnRegistrationButtonClicked(out string statusMessage)
+        protected override void OnEnableSecondPhaseRegistration(bool enable)
         {
-            RegisterData registeredData;
-            if (RegistrationManager.StartRegistration(out registeredData))
+            base.OnEnableSecondPhaseRegistration(false);
+        }
+
+        protected override void OnFirstRegistrationPhaseAccomplished(RegistrationEventArgs args)
+        {
+            if (args.IsPassed)
             {
-                statusMessage = string.Format("CAPI device '{0}' has been authorized", registeredData.Description);
-                return true;
+                foreach (var packet in args.Packets)
+                    args.AppendResultMessage(string.Format("CAPI device {0} has been authorized", packet.Data.Description));
             }
 
-            statusMessage = "Authorization of CAPI device failed";
-            return false;
+            base.OnFirstRegistrationPhaseAccomplished(args);
+
+            if (args.IsPassed)
+                UpdateAuthorizationList();
+        }
+
+        protected override void OnEnterScreen()
+        {
+            base.OnEnterScreen();
+
+            UpdateAuthorizationList();
         }
 
         #endregion

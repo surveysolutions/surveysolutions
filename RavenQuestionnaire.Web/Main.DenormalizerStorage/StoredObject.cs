@@ -1,34 +1,56 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="StoredObject.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
+// <summary>
+//   The stored object.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Main.DenormalizerStorage
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-
     /// <summary>
-    /// TODO: Update summary.
+    /// The stored object.
     /// </summary>
     public class StoredObject
     {
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoredObject"/> class.
+        /// </summary>
         public StoredObject()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StoredObject"/> class.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <param name="id">
+        /// The id.
+        /// </param>
         public StoredObject(object data, string id)
         {
-            Data = data;
-            Id = id;
+            this.Data = data;
+            this.Id = id;
         }
 
-        public object Data { get; set; }
-        public string Id { get; set; }
-    
-    }
+        #endregion
 
+        #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the data.
+        /// </summary>
+        public object Data { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public string Id { get; set; }
+
+        #endregion
+    }
 }

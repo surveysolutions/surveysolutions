@@ -78,20 +78,25 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Discovery" />
-    <Reference Include="System.Web.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompleteQuestionnaire\EventPipeCollector.cs" />
-    <Compile Include="CompleteQuestionnaire\WirelessSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\AbstractSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\UsbSyncProcess.cs" />
-    <Compile Include="CompleteQuestionnaire\ICompleteQuestionnaireSync.cs" />
-    <Compile Include="ExportStatisticsCalculator.cs" />
-    <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
+    <Compile Include="EventPipeCollector.cs" />
+    <Compile Include="SycProcess\EventSyncProcess.cs" />
+    <Compile Include="SycProcessFactory\ISyncProcessFactory.cs" />
+    <Compile Include="SycProcess\Interfaces\IEventSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\IWirelessSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\IUsbSyncProcess.cs" />
+    <Compile Include="SycProcessFactory\SyncProcessFactory.cs" />
+    <Compile Include="SycProcessFactory\SyncProcessType.cs" />
+    <Compile Include="SycProcess\ITemplateExportSyncProcess.cs" />
+    <Compile Include="SycProcess\TemplateExportSyncProcess.cs" />
+    <Compile Include="SycProcess\WirelessSyncProcess.cs" />
+    <Compile Include="SycProcess\AbstractSyncProcess.cs" />
+    <Compile Include="SycProcess\UsbSyncProcess.cs" />
+    <Compile Include="SycProcess\Interfaces\ISyncProcess.cs" />
     <Compile Include="WcfInfrastructure\ServiceDiscover.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="CompleteQuestionnaire\SyncProcess.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -99,16 +104,24 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7E143353-A648-4435-819F-93A748A90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
+      <Name>Main.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
+      <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>
       <Name>Questionnaire.Core.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">

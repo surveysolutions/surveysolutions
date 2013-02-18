@@ -11,6 +11,7 @@ namespace Main.Core.Documents
 {
     using System;
 
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
 
     /// <summary>
@@ -40,6 +41,58 @@ namespace Main.Core.Documents
         /// Gets or sets the open date.
         /// </summary>
         DateTime? OpenDate { get; set; }
+
+        /// <summary>
+        /// The add.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        /// <param name="parentKey">
+        /// The parent key.
+        /// </param>
+        /// <param name="parentPropagationKey">
+        /// The parent propagation key.
+        /// </param>
+        void Add(IComposite c, Guid? parentKey, Guid? parentPropagationKey);
+
+        /*/// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
+        void Remove(IComposite c);*/
+
+        /*/// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        void Remove(Guid publicKey, Guid? propagationKey);*/
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="itemKey">
+        /// The item key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation Key.
+        /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
+        /// <param name="parentPropagationKey">
+        /// The parent propagation key.
+        /// </param>
+        void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey);
+
+
 
         #endregion
     }

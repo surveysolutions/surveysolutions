@@ -95,15 +95,19 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="publicKey">
         /// The public key.
         /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
         /// <param name="questionnaireId">
         /// The questionnaire id.
         /// </param>
         /// <returns>
+        /// The <see cref="ActionResult"/>.
         /// </returns>
         [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Delete(Guid publicKey, string questionnaireId)
+        public ActionResult Delete(Guid publicKey, Guid? parentPublicKey, string questionnaireId)
         {
-            this.commandService.Execute(new DeleteGroupCommand(publicKey, Guid.Parse(questionnaireId)));
+            this.commandService.Execute(new DeleteGroupCommand(publicKey, parentPublicKey, Guid.Parse(questionnaireId)));
             return this.RedirectToAction("Details", "Questionnaire", new { id = questionnaireId });
         }
 
