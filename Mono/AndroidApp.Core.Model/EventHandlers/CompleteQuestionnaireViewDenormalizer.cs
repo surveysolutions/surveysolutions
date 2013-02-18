@@ -134,7 +134,7 @@ namespace AndroidApp.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var document = GetStoredObject(evnt.Payload.CompletedQuestionnaireId);
+            var document = GetStoredObject(evnt.EventSourceId);
             if(document==null)
                 return;
             document.Status = evnt.Payload.Status;

@@ -25,11 +25,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     {
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly CompleteQuestionnaireView questionnaire;
+        protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
+        protected LinearLayout top;
         protected ScreenContentFragment()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
+            this.bindableElements = new List<AbstractQuestionView>();
             this.RetainInstance = true;
-            this.questionViewFactory = new DefaultQuestionViewFactory();
         }
 
         public ScreenContentFragment(QuestionnaireScreenViewModel model, CompleteQuestionnaireView questionnaire)
@@ -47,7 +49,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-            LinearLayout top = new LinearLayout(inflater.Context);
+            top = new LinearLayout(inflater.Context);
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
             top.Orientation = Orientation.Vertical;
@@ -75,8 +77,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
+                    var questionView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
                                                                            Model.QuestionnaireId);
+                    this.bindableElements.Add(questionView);
+                    itemView = questionView;
                 }
                 var group = item as QuestionnaireNavigationPanelItem;
                 if (group != null)
@@ -90,12 +94,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
             top.AddView(sv);
+            
             return top;
             /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
             this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
             //  return retval;
         }
-
+        public override void OnDestroy()
+        {
+           
+            base.OnDestroy();
+            foreach (AbstractQuestionView abstractQuestionView in bindableElements)
+            {
+                abstractQuestionView.Dispose();
+            }
+            bindableElements=new List<AbstractQuestionView>();
+        }
         private void groupView_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
             OnScreenChanged(e);

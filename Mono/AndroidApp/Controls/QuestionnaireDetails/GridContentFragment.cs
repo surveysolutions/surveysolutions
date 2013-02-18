@@ -28,6 +28,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private readonly CompleteQuestionnaireView questionnaire;
         protected TextView tvEmptyLabelDescription;
         protected LinearLayout llTablesContainer;
+        protected LinearLayout top;
+        protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
+        protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
         public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
@@ -38,14 +41,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected GridContentFragment()
             : base()
         {
+            this.rowEventHandlers = new Dictionary<ItemPublicKey, IList<PropertyChangedEventHandler>>();
+            this.rosterQuestionViews=new List<RosterQuestionView>();
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.RetainInstance = true;
-        }
-        public override void OnCreate(Bundle savedInstanceState)
-        {
-            base.OnCreate(savedInstanceState);
-
-            // Create your fragment here
         }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -55,7 +54,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-            LinearLayout top = new LinearLayout(inflater.Context);
+            top = new LinearLayout(inflater.Context);
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
             top.Orientation = Orientation.Vertical;
@@ -80,6 +79,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             top.AddView(sv);
             return top;
         }
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            foreach (var row in Model.Rows)
+            {
+                var handlers = rowEventHandlers[row.ScreenId];
+                foreach (PropertyChangedEventHandler propertyChangedEventHandler in handlers)
+                {
+                    row.PropertyChanged -= propertyChangedEventHandler;
+                }
+
+            }
+            foreach (RosterQuestionView rosterQuestionView in rosterQuestionViews)
+            {
+                rosterQuestionView.Dispose();
+            }
+            rosterQuestionViews = new List<RosterQuestionView>();
+            
+        }
+
         protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)
         {
             tvEmptyLabelDescription = new TextView(context);
@@ -163,7 +182,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
             foreach (var rosterItem in Model.Rows)
             {
-                
+               
                 TableRow th = new TableRow(context);
                 if (!rosterItem.Enabled)
                     th.Visibility = ViewStates.Gone;
@@ -172,26 +191,18 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 first.SetTag(Resource.Id.PrpagationKey, rosterItem.ScreenId.ToString());
                 first.Click += new EventHandler(first_Click);
                 first.Text = rosterItem.ScreenName;
-                rosterItem.PropertyChanged += (s, e) =>
-                {
-                    var item = s as QuestionnaireScreenViewModel;
-                    if (item == null)
-                        return;
-                    if (e.PropertyName == "Enabled")
-                    {
+                IList<PropertyChangedEventHandler> handlers;
 
-                        var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
-                        th.Visibility = visibility;
-                        var tableVisible = Model.Rows.Any(r => r.Enabled);
-                        llTablesContainer.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Gone;
-                        tvEmptyLabelDescription.Visibility = !tableVisible ? ViewStates.Visible : ViewStates.Gone;
-                        return;
-                    }
-                    if (e.PropertyName == "ScreenName")
-                    {
-                        first.Text = item.ScreenName;
-                    }
-                };
+                if(!rowEventHandlers.ContainsKey(rosterItem.ScreenId))
+                {
+                    handlers = new List<PropertyChangedEventHandler>();
+                    rowEventHandlers.Add(rosterItem.ScreenId,handlers);
+                }
+                else
+                    handlers = rowEventHandlers[rosterItem.ScreenId];
+                PropertyChangedEventHandler handler = new StatusChangedHandlerClosure(th, Model, first, tvEmptyLabelDescription, llTablesContainer).StatusChangedHandler;
+                handlers.Add(handler);
+                rosterItem.PropertyChanged += handler;
                 AlignTableCell(first);
                 th.AddView(first);
 
@@ -202,6 +213,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                                                                             abstractRowItem as QuestionViewModel);
                     AlignTableCell(rowViewItem);
                     rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
+                    rosterQuestionViews.Add(rowViewItem);
                     th.AddView(rowViewItem);
                 }
 
@@ -239,6 +251,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     if (evt.PropertyName == "AnswerString")
                     {
                         dialog.Dismiss();
+                        dialog.Dispose();
+                        setAnswerPopup.Dispose();
                     }
                 };
             
@@ -295,6 +309,44 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
 
-       
+        protected class StatusChangedHandlerClosure
+        {
+            private readonly TableRow th;
+            private readonly QuestionnaireGridViewModel model;
+            private readonly Button first;
+            private readonly TextView tvEmptyLabelDescription;
+            private readonly LinearLayout llTablesContainer;
+
+            public StatusChangedHandlerClosure(TableRow th, QuestionnaireGridViewModel model, Button first, TextView tvEmptyLabelDescription, LinearLayout llTablesContainer)
+            {
+                this.th = th;
+                this.model = model;
+                this.first = first;
+                this.tvEmptyLabelDescription = tvEmptyLabelDescription;
+                this.llTablesContainer = llTablesContainer;
+            }
+
+            public void StatusChangedHandler(object sender, PropertyChangedEventArgs e)
+            {
+
+                var item = sender as QuestionnaireScreenViewModel;
+                if (item == null)
+                    return;
+                if (e.PropertyName == "Enabled")
+                {
+
+                    var visibility = item.Enabled ? ViewStates.Visible : ViewStates.Gone;
+                    th.Visibility = visibility;
+                    var tableVisible = model.Rows.Any(r => r.Enabled);
+                    llTablesContainer.Visibility = tableVisible ? ViewStates.Visible : ViewStates.Gone;
+                    tvEmptyLabelDescription.Visibility = !tableVisible ? ViewStates.Visible : ViewStates.Gone;
+                    return;
+                }
+                if (e.PropertyName == "ScreenName")
+                {
+                    first.Text = item.ScreenName;
+                }
+            }
+        }
     }
 }

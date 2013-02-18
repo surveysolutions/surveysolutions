@@ -73,10 +73,10 @@ namespace AndroidApp.Core.Model.EventHandlers
                 return;
             var questionnaire =
                 dashboard.Surveys.SelectMany(s => s.Items).FirstOrDefault(
-                    q => q.PublicKey == evnt.Payload.CompletedQuestionnaireId);
+                    q => q.PublicKey == evnt.EventSourceId);
             if (questionnaire == null)
                 return;
-            questionnaire.Status = evnt.Payload.Status.Name;
+            questionnaire.SetStatus(evnt.Payload.Status.Name);
         }
 
         #endregion
