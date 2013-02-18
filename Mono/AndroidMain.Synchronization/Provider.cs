@@ -175,7 +175,7 @@ namespace AndroidMain.Synchronization
             IRestResponse response = restClient.Execute(request);
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                return null;
+                throw new Exception("Event list is empty");
             }
 
             var listOfAggregateRootsForImportMessage =
@@ -214,7 +214,7 @@ namespace AndroidMain.Synchronization
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-
+                    
                     var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(responseStream.Content.Substring(responseStream.Content.IndexOf("[")), settings);
 
                     if (evnts != null)

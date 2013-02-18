@@ -255,7 +255,11 @@ namespace Main.Synchronization.SyncManager
 
                     if (counter == currentChunkSize)
                     {
-                        this.streamCollector.Collect(chunk);
+                        if (!this.streamCollector.Collect(chunk))
+                        {
+                            throw new Exception("Target refused stream");
+                        }
+
                         chunk = new List<AggregateRootEvent>();
                         counter = 0;
                     }
@@ -264,7 +268,10 @@ namespace Main.Synchronization.SyncManager
                 // process partial completed chunk
                 if (counter > 0)
                 {
-                    this.streamCollector.Collect(chunk);
+                    if (!this.streamCollector.Collect(chunk))
+                    {
+                        throw new Exception("Target refused stream");
+                    }
                 }
 
                 // write stat for sync
