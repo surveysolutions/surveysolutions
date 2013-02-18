@@ -83,7 +83,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip">
+    <Reference Include="CsvHelper">
+      <HintPath>..\packages\CsvHelper.1.12.1\lib\net40-client\CsvHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -111,7 +115,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Binding\GenericBinderResolver.cs" />
-    <Compile Include="Export\ExportImportEvent.cs" />
+    <Compile Include="Export\csv\CSVExporter.cs" />
+    <Compile Include="Export\DataExport.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
@@ -124,7 +129,9 @@
     <Compile Include="Helpers\InputExtensions.cs" />
     <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
-    <Compile Include="Register\RegisterData.cs" />
+    <Compile Include="Helpers\SuccessMarker.cs" />
+    <Compile Include="RegistrationController.cs" />
+    <Compile Include="Helpers\ZipHelper.cs" />
     <Compile Include="Security\FormsAuthentication.cs" />
     <Compile Include="Security\IFormsAuthentication.cs" />
     <Compile Include="Security\QuestionnaireAuthorizeAttribute.cs" />
@@ -165,7 +172,9 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Register\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

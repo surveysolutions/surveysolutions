@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="LocationAR.cs" company="">
-//   
+// <copyright file="LocationAR.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   Defines the LocationAR type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Domain
 {
     using System;
@@ -16,7 +17,7 @@ namespace Main.Core.Domain
     using Ncqrs.Domain;
 
     /// <summary>
-    /// The location ar.
+    /// The location AR.
     /// </summary>
     public class LocationAR : AggregateRootMappedByConvention
     {

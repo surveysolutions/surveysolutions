@@ -56,11 +56,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The group.
         /// </param>
         /// <param name="propogationPublicKey">
-        /// The propogation public key.
+        /// The propagation public key.
         /// </param>
         /// <exception cref="InvalidOperationException">
         /// </exception>
-        public CompleteGroup(ICompleteGroup group, Guid propogationPublicKey)
+        public CompleteGroup(ICompleteGroup group, Guid? propogationPublicKey)
             : this()
         {
             this.Title = group.Title;
@@ -68,6 +68,8 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.PublicKey = group.PublicKey;
             this.ConditionExpression = group.ConditionExpression;
             this.Description = group.Description;
+            this.PropagationPublicKey = propogationPublicKey;
+
             for (int i = 0; i < group.Children.Count; i++)
             {
                 var question = group.Children[i] as ICompleteQuestion;
@@ -76,33 +78,27 @@ namespace Main.Core.Entities.SubEntities.Complete
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
 
-                        foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
+                    /*foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
                     {
                         completeAnswer.PropogationPublicKey = propogationPublicKey;
-                    }
+                    }*/
 
+                    newQuestion.Parent = this;
                     this.Children.Add(newQuestion);
-
-
                     continue;
                 }
 
                 var groupChild = group.Children[i] as ICompleteGroup;
                 if (groupChild != null)
                 {
-                    this.Children.Add(new CompleteGroup(groupChild, propogationPublicKey));
+                    IComposite groupItem = new CompleteGroup(groupChild, propogationPublicKey);
+                    groupItem.Parent = this;
+                    this.Children.Add(group);
                     continue;
                 }
 
-                throw new InvalidOperationException("uncnown children type");
+                throw new InvalidOperationException("Unknown child type.");
             }
-
-            /* for (int i = 0; i < groupWithQuestion.Groups.Count; i++)
-                {
-                    this.Groups.Add(new PropagatableCompleteGroup(groupWithQuestion.Groups[i], propogationPublicKey));
-                   
-                }*/
-            this.PropagationPublicKey = propogationPublicKey;
         }
 
         #endregion
@@ -125,23 +121,20 @@ namespace Main.Core.Entities.SubEntities.Complete
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the enable state calculated.
+        /// </summary>
+        public DateTime EnableStateCalculated { get; set; }
+
+        /// <summary>
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the propagated.
@@ -152,6 +145,22 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the propogation public key.
         /// </summary>
         public Guid? PropagationPublicKey { get; set; }
+
+        /// <summary>
+        /// False if group is empty or has hidden items, true overwise
+        /// </summary>
+        /// <param name="questionScope">
+        /// The question scope.
+        /// </param>
+        /// <returns>
+        /// False or true
+        /// </returns>
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            var count = this.Children.OfType<ICompleteGroup>().Where(g => g.HasVisibleItemsForScope(questionScope)).Count()
+                + this.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= questionScope).Count();
+            return count != 0 || this.Children.Count == 0;
+        }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -193,29 +202,24 @@ namespace Main.Core.Entities.SubEntities.Complete
                     ConditionExpression = doc.ConditionExpression,
                     Description = doc.Description
                 };
-
-            /* foreach (IComposite question in doc.Children)
-            {
-              //  result.Questions.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
-                throw new NotImplementedException();
-            }
-            foreach (IGroup group in doc.Groups)
-            {
-                result.Groups.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
-            }*/
+            
             foreach (IComposite child in doc.Children)
             {
                 var question = child as IQuestion;
                 if (question != null)
                 {
-                    result.Children.Add(new CompleteQuestionFactory().ConvertToCompleteQuestion(question));
+                    IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
+                    questionItem.Parent = result;
+                    result.Children.Add(questionItem);
                     continue;
                 }
 
                 var group = child as IGroup;
                 if (group != null)
                 {
-                    result.Children.Add(new CompleteGroupFactory().ConvertToCompleteGroup(group));
+                    IComposite groupItem = new CompleteGroupFactory().ConvertToCompleteGroup(group);
+                    groupItem.Parent = result;
+                    result.Children.Add(groupItem);
                     continue;
                 }
 
@@ -227,7 +231,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 
         // private IIteratorContainer iteratorContainer;
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -238,7 +242,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public virtual void Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             if (!parent.HasValue || parent.Value == this.PublicKey)
             {
@@ -253,25 +257,18 @@ namespace Main.Core.Entities.SubEntities.Complete
                                 g =>
                                 g.PublicKey == propogateGroup.PublicKey &&
                                 g.PropagationPublicKey == propogateGroup.PropagationPublicKey))
+                        {
+                            propogateGroup.Parent = this;
                             this.Children.Add(propogateGroup);
+                        }
+
                         return;
                     }
                 }
             }
 
-            /* foreach (IComposite child in this.Children)
-            {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }*/
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -294,8 +291,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 }
             }
 
-            T resultInsideGroups =
-                this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
+            T resultInsideGroups = this.Children.Select(answer => answer.Find<T>(publicKey)).FirstOrDefault(result => result != null);
             if (resultInsideGroups != null)
             {
                 return resultInsideGroups;
@@ -339,7 +335,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -380,19 +376,20 @@ namespace Main.Core.Entities.SubEntities.Complete
                 catch (CompositeException)
                 {
                 }
-            }*/
+            }#1#
             throw new CompositeException();
-        }
-
-        /// <summary>
+        }*/
+        
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public virtual void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public virtual void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (forRemove != null && forRemove is ICompleteGroup
@@ -406,7 +403,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             {
                 try
                 {
-                    completeGroup.Remove(publicKey);
+                    completeGroup.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -415,6 +412,44 @@ namespace Main.Core.Entities.SubEntities.Complete
             }
 
             throw new CompositeException();
+        }*/
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var group = this.MemberwiseClone() as CompleteGroup;
+
+            if (this.Triggers != null)
+            {
+                this.Triggers = new List<Guid>(this.Triggers);
+            }
+
+            group.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                var item = composite.Clone();
+                item.Parent = group;
+                group.Children.Add(composite.Clone());
+            }
+
+            return group;
         }
 
         #endregion

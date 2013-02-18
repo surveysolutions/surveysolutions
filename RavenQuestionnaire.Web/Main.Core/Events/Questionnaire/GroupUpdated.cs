@@ -28,10 +28,10 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public string ConditionExpression { get; set; }
 
-        /// <summary>
+        /*/// <summary>
         /// Gets or sets the executor.
         /// </summary>
-        public UserLight Executor { get; set; }
+        public UserLight Executor { get; set; }*/
 
         /// <summary>
         /// Gets or sets the group public key.
@@ -48,7 +48,6 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public Propagate Propagateble { get; set; }
 
-        // public List<Guid> Triggers { get; set; }
         /// <summary>
         /// Gets or sets the questionnaire id.
         /// </summary>

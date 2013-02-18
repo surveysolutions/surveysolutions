@@ -8,6 +8,8 @@ namespace Main.Core.Documents
 {
     using System;
 
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
@@ -26,6 +28,11 @@ namespace Main.Core.Documents
         public DateTime CreationDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the modification date.
+        /// </summary>
+        public DateTime ModificationDate { get; set; }
+
+        /// <summary>
         /// Gets or sets TabletId.
         /// </summary>
         public Guid TabletId { get; set; }
@@ -39,6 +46,11 @@ namespace Main.Core.Documents
         /// Gets or sets Description.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets Registrator.
+        /// </summary>
+        public Guid Registrator { get; set; }
 
         #endregion
     }

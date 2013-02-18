@@ -14,6 +14,8 @@ using Main.Core.View.CompleteQuestionnaire;
 
 namespace Core.Supervisor.Views.Interviewer
 {
+    using Core.Supervisor.Views.Survey;
+
     /// <summary>
     /// The interviewer group view.
     /// </summary>

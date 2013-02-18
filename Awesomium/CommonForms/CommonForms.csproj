@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -50,6 +51,12 @@
     </Compile>
     <Compile Include="Containers\Browser.Designer.cs">
       <DependentUpon>Browser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Containers\RegPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Containers\RegPanel.Designer.cs">
+      <DependentUpon>RegPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Containers\Main.cs">
       <SubType>UserControl</SubType>
@@ -129,6 +136,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Containers\Browser.resx">
       <DependentUpon>Browser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Containers\RegPanel.resx">
+      <DependentUpon>RegPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Containers\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>

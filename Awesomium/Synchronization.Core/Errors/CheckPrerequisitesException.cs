@@ -6,7 +6,7 @@ using Synchronization.Core.SynchronizationFlow;
 
 namespace Synchronization.Core.Errors
 {
-    public class CheckPrerequisitesException : SynchronizationException
+    public class CheckPrerequisitesException : ServiceException
     {
         public SyncType SychronizationType { get; private set; }
 

@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.DenormalizerStorage;
-
 namespace Main.Core.Documents
 {
     using System;
@@ -21,14 +19,14 @@ namespace Main.Core.Documents
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
+    using Main.DenormalizerStorage;
 
     using Newtonsoft.Json;
-    
 
     /// <summary>
     /// The complete questionnaire store document.
     /// </summary>
-    //[SmartDenormalizer]
+    [SmartDenormalizer]
     public class CompleteQuestionnaireStoreDocument : ICompleteQuestionnaireDocument
     {
         #region Fields
@@ -100,6 +98,11 @@ namespace Main.Core.Documents
         public bool Enabled { get; set; }
 
         /// <summary>
+        /// Gets or sets the enable state calculated.
+        /// </summary>
+        public DateTime EnableStateCalculated { get; set; }
+
+        /// <summary>
         /// Gets or sets the forcing propagation public key.
         /// </summary>
         public Guid? ForcingPropagationPublicKey
@@ -165,6 +168,11 @@ namespace Main.Core.Documents
             set
             {
             }
+        }
+
+        public bool HasVisibleItemsForScope(QuestionScope questionScope)
+        {
+            return true;
         }
 
         /// <summary>
@@ -246,7 +254,7 @@ namespace Main.Core.Documents
         /// Gets or sets the question hash.
         /// </summary>
         [JsonIgnore]
-        private GroupHash QuestionHash
+        public GroupHash QuestionHash
         {
             get
             {
@@ -386,17 +394,31 @@ namespace Main.Core.Documents
                     PropagationPublicKey = doc.PropagationPublicKey, 
                     Description = doc.Description 
                };
-            if (doc.Status != null)
-            {
-                result.StatusChangeComments.Add(new ChangeStatusDocument
+
+            result.StatusChangeComments.Add(new ChangeStatusDocument
                     {
                         Status = doc.Status, 
-                        Responsible = doc.Creator
+                        Responsible = doc.Creator,
+                        ChangeDate = doc.CreationDate // not sure it's correct
                     });
-            }
+            
 
             result.Children.AddRange(doc.Children.ToList());
             return result;
+        }
+
+        /// <summary>
+        /// The get question by key.
+        /// </summary>
+        /// <param name="key">
+        /// The key.
+        /// </param>
+        /// <returns>
+        /// The <see cref="CompleteQuestionWrapper"/>.
+        /// </returns>
+        public CompleteQuestionWrapper GetQuestionByKey(string key)
+        {
+            return this.questionHash.GetQuestionByKey(key);
         }
 
         ////  public List<IObserver<CompositeInfo>> Observers { get; set; }
@@ -413,12 +435,39 @@ namespace Main.Core.Documents
         /// <exception cref="CompositeException">
         /// Raises CompositeException.
         /// </exception>
-        public virtual void Add(IComposite c, Guid? parent)
+        public virtual void Add(IComposite c, Guid? parentKey, Guid? parentPropagationKey)
         {
-            if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parent.HasValue)
+            var group = c as ICompleteGroup;
+
+            if (group == null || !group.PropagationPublicKey.HasValue)
+            {
+                throw new ArgumentException("Only propagated group can be added.");
+            }
+
+            IComposite itemToadd = null;
+
+            if (parentKey == null || this.PublicKey == parentKey)
+            {
+                itemToadd = this;
+            }
+            else
+            {
+                itemToadd = this.Find<ICompleteGroup>(
+                    g => g.PublicKey == parentKey && g.PropagationPublicKey == parentPropagationKey).FirstOrDefault();
+            }
+
+            if (itemToadd != null)
+            {
+                itemToadd.Children.Add(c);
+                this.QuestionHash.AddGroup(group);
+                return;
+            }
+
+            /*if (c is ICompleteGroup && ((ICompleteGroup)c).PropagationPublicKey.HasValue && !parent.HasValue)
             {
                 if (this.Children.Count(g => g.PublicKey.Equals(c.PublicKey)) > 0)
                 {
+                    c.Parent = this;
                     this.Children.Add(c);
                     return;
                 }
@@ -428,14 +477,15 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    completeGroup.Add(c, parent);
+                    //// c.Parent = completeGroup;
+                    completeGroup.Add(c, parent, null);
                     this.QuestionHash.AddGroup(c as ICompleteGroup);
                     return;
                 }
                 catch (CompositeException)
                 {
                 }
-            }
+            }*/
 
             throw new CompositeException();
         }
@@ -501,7 +551,7 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -514,9 +564,9 @@ namespace Main.Core.Documents
         {
             this.RemoveInt(c);
             this.QuestionHash.RemoveGroup(c as ICompleteGroup);
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove int.
         /// </summary>
         /// <param name="c">
@@ -560,22 +610,21 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// Raises CompositeException.
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
+            if (forRemove != null && forRemove is ICompleteGroup && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
             {
                 this.Children.Remove(forRemove);
                 return;
@@ -585,7 +634,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    completeGroup.Remove(publicKey);
+                    completeGroup.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -594,6 +643,52 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
+        }*/
+
+        public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
+        {
+            // only propagate group is allowed to be remove
+
+
+            if (!parentPublicKey.HasValue)
+            {
+                throw new ArgumentException("Parent was not set.");
+            }
+
+            ICompleteGroup parent = this.Find<ICompleteGroup>(g => g.PublicKey == parentPublicKey && g.PropagationPublicKey == parentPropagationKey).FirstOrDefault();
+
+            var itemToDelete =
+                parent.Children.Where(i => i.PublicKey == itemKey).Select(a => a as ICompleteGroup).FirstOrDefault(
+                    b => b.PropagationPublicKey == propagationKey);
+
+
+            parent.Children.Remove(itemToDelete);
+            this.QuestionHash.RemoveGroup(itemToDelete);
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public IComposite Clone()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

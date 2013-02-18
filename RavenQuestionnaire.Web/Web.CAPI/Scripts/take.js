@@ -150,9 +150,9 @@ function UpdateQuestion(question) {
 
 
 function SetErrorToQuestion(questionPublicKey, key, error) {
-    var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + questionPublicKey) : $('#elem-' + questionPublicKey);
+  //  var questionElement = key ? $('#propagatedGroup' + key + ' #elem-' + questionPublicKey) : $('#elem-' + questionPublicKey);
 
-    questionElement.find('[data-valmsg-replace=true]').text(error);
+  //  questionElement.find('[data-valmsg-replace=true]').text(error);
     if (error + "" != "") {
         //   element.addClass("error_block");
 

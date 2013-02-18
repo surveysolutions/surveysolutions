@@ -87,7 +87,7 @@ namespace Core.CAPI.Views.Grouped
 
             set
             {
-                this._templateQuestionanireId = IdUtil.CreateQuestionnaireId(value);
+                this._templateQuestionanireId = value;
             }
         }
 

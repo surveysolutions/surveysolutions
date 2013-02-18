@@ -33,7 +33,7 @@ namespace Main.Core.Events
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent]].
         /// </returns>
         public static IEnumerable<IEnumerable<AggregateRootEvent>> ReadEventsByChunks(
-            this IEventSync source, int chunksize = 2048)
+            this IEventStreamReader source, int chunksize = 2048)
         {
             IEnumerable<AggregateRootEvent> events = source.ReadEvents();
 

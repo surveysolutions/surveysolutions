@@ -63,31 +63,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDenormalizer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDenormalizerStorage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IPersistentStorage.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="DenormalizerFactory.cs" />
+    <Compile Include="IDenormalizer.cs" />
+    <Compile Include="IDenormalizerStorage.cs" />
+    <Compile Include="RavenPersistentStorage.cs" />
+    <Compile Include="SmartDenormalizerAttribute.cs" />
+    <Compile Include="SolidDenormalizer\SolidPersistentDenormalizer.cs" />
+    <Compile Include="StoredObject.cs" />
+    <Compile Include="IPersistentStorage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PersistentDenormalizer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RavenPersistentStorage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SmartDenormalizerAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="StoredObject.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="WeakReferenceSnapshotStore.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="WeakReferenceSnapshotStore.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

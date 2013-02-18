@@ -73,7 +73,7 @@ namespace Main.Core.Commands.Questionnaire.Group
         public Guid? ParentGroupKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the propagateble.
+        /// Gets or sets the propagatable.
         /// </summary>
         public Propagate Propagateble { get; set; }
 

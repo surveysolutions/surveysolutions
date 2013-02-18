@@ -1,20 +1,21 @@
-﻿// -----------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="SnapshootLoaded.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Eventing.Storage;
-
+// <summary>
+//   The snapshoot loaded.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Ncqrs.Restoring.EventStapshoot
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
 
+    using Ncqrs.Eventing.Sourcing.Snapshotting;
+    using Ncqrs.Eventing.Storage;
 
+    /// <summary>
+    /// The snapshoot loaded.
+    /// </summary>
     [Serializable]
     [EventName("Ncqrs.Restoring.EventStapshoot:SnapshootLoaded")]
     public class SnapshootLoaded
@@ -28,5 +29,4 @@ namespace Ncqrs.Restoring.EventStapshoot
 
         #endregion
     }
-
 }

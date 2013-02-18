@@ -54,6 +54,11 @@ namespace Web.Supervisor.Models
         /// Gets or sets TemplateId.
         /// </summary>
         public Guid TemplateId { get; set; }
+
+        /// <summary>
+        /// Gets or sets StatusId.
+        /// </summary>
+        public Guid StatusId { get; set; }
     }
 
     /// <summary>
@@ -61,6 +66,14 @@ namespace Web.Supervisor.Models
     /// </summary>
     public class PagerData
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PagerData"/> class.
+        /// </summary>
+        public PagerData()
+        {
+            this.Page = 1;
+            this.PageSize = 20;
+        }
         /// <summary>
         /// Gets or sets Page.
         /// </summary>

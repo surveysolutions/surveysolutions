@@ -44,6 +44,14 @@ namespace Main.Core.Conventions
             kernel.Bind(type).To(matchedType);
           //  registry.For(type).Use(matchedType);
         }*/
+
+        public RegisterFirstInstanceOfInterface(IEnumerable<Assembly> assemblyes)
+        {
+            this.assemblyes = assemblyes;
+        }
+
+        private readonly IEnumerable<Assembly> assemblyes;
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -69,7 +77,6 @@ namespace Main.Core.Conventions
                 return y;
             }
 
-            Assembly containingAssembly = type.Assembly;
 
             if (type.IsGenericType)
             {
@@ -77,8 +84,8 @@ namespace Main.Core.Conventions
             }
 
             Type matchedType =
-                containingAssembly.GetTypes().FirstOrDefault(
-                    x => x.Namespace == type.Namespace && !x.IsAbstract && x.GetInterface(type.FullName) != null);
+                assemblyes.SelectMany(a=>a.GetTypes()).FirstOrDefault(
+                    x => !x.IsAbstract && x.GetInterface(type.FullName) != null);
             if (matchedType == null)
             {
                 return y;

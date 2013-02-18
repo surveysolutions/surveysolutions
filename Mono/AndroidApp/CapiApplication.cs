@@ -75,7 +75,7 @@ namespace AndroidApp
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
            
           //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
-            NCQRSInit.Init(Kernel);
+            NcqrsInit.Init(Kernel);
             var eventStore = new SQLiteEventStore(this.ApplicationContext);
             eventStore.ClearDB();
             NcqrsEnvironment.SetDefault(eventStore);

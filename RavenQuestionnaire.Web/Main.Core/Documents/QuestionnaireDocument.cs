@@ -1,13 +1,11 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireDocument.cs" company="">
-//   
+// <copyright file="QuestionnaireDocument.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The QuestionnaireDocument interface.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Main.DenormalizerStorage;
 
 namespace Main.Core.Documents
 {
@@ -17,6 +15,7 @@ namespace Main.Core.Documents
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
+    using Main.DenormalizerStorage;
 
     using Newtonsoft.Json;
 
@@ -86,19 +85,10 @@ namespace Main.Core.Documents
         public DateTime? OpenDate { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// Raises NotImplementedException.
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the propagated.
@@ -115,8 +105,7 @@ namespace Main.Core.Documents
             {
             }
         }
-
-
+        
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
@@ -162,28 +151,24 @@ namespace Main.Core.Documents
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
-            if (!parent.HasValue)
+            if (!parent.HasValue || this.PublicKey == parent)
             {
+                ////add to the root
+                c.Parent = this;
                 this.Children.Add(c);
                 return;
             }
-            foreach (IComposite child in this.Children)
+            
+            var group = this.Find<Group>(parent.Value);
+            if (@group != null)
             {
-                try
-                {
-                    child.Add(c, parent);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-
+                @group.Children.Add(c);
+                return;
             }
 
-
-
+            //// leave legacy for awhile
             throw new CompositeException();
         }
 
@@ -233,24 +218,6 @@ namespace Main.Core.Documents
             return
                 this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).Union(
                     this.Children.SelectMany(q => q.Find(condition)));
-
-            /*   foreach (Group child in innerDocument.Groups)
-               {
-                   if (child is T && condition(child))
-                       return child as T;
-                   T subNodes = child.Find<T>(condition);
-                   if (subNodes != null)
-                       return subNodes;
-               }
-               foreach (Question child in innerDocument.Questions)
-               {
-                   if (child is T && condition(child))
-                       return child as T;
-                   T subNodes = child.Find<T>(condition);
-                   if (subNodes != null)
-                       return subNodes;
-               }
-               return null;*/
         }
 
         /// <summary>
@@ -270,7 +237,7 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -278,20 +245,32 @@ namespace Main.Core.Documents
         /// </param>
         public void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
+            // this.Remove(c.PublicKey, null);
+        }*/
+        
+       /* /// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
-            IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+
+            if (this.PublicKey == publicKey)
+            {
+                IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
+                if (group != null)
+                {
+                    this.Children.Remove(group);
+                    return;
+                }
+            }
+
+            var group1 = this.Find<IComposite>(g => g.PublicKey == publicKey);
             if (group != null)
             {
                 this.Children.Remove(group);
@@ -302,7 +281,7 @@ namespace Main.Core.Documents
             {
                 try
                 {
-                    child.Remove(publicKey);
+                    child.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -311,7 +290,100 @@ namespace Main.Core.Documents
             }
 
             throw new CompositeException();
+        }*/
+
+        /// <summary>
+        /// The remove.
+        /// </summary>
+        /// <param name="itemKey">
+        /// The item key.
+        /// </param>
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <param name="parentPublicKey">
+        /// The parent public key.
+        /// </param>
+        /// <param name="parentPropagationKey">
+        /// The parent propagation key.
+        /// </param>
+        public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
+        {
+            // we could delete group from the root of Questionnaire
+            if (parentPublicKey == null || parentPublicKey == Guid.Empty || this.PublicKey == parentPublicKey)
+            {
+                this.Children.RemoveAll(i => i.PublicKey == itemKey);
+            }
+            else
+            {
+                IGroup parent = this.Find<IGroup>(g => g.PublicKey == parentPublicKey).FirstOrDefault();
+                if (parent != null)
+                {
+                    parent.Children.RemoveAll(i => i.PublicKey == itemKey);
+                }
+            }
         }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+/*
+            var doc = new QuestionnaireDocument
+                {
+                    CreationDate = this.CreationDate,
+                    LastEntryDate = this.LastEntryDate,
+                    PublicKey = this.PublicKey,
+                    ConditionExpression = this.ConditionExpression,
+                    Title = this.Title,
+                    OpenDate = this.OpenDate,
+                    Propagated = this.Propagated,
+                    Parent = this.Parent,
+                    Triggers = new List<Guid>(this.Triggers)
+                };
+*/
+
+            var doc = this.MemberwiseClone() as QuestionnaireDocument;
+
+            doc.Triggers = new List<Guid>(this.Triggers);
+            doc.Parent = null;
+
+            doc.Children = new List<IComposite>();
+            foreach (var composite in this.Children)
+            {
+                doc.Children.Add(composite.Clone());
+            }
+
+            return doc;
+        }
+
+        /*/// <summary>
+        /// The on deserializing.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        [OnDeserialized]
+        void OnDeserialized(StreamingContext context)
+        {
+            this.ConnectChildsWithParent();
+        }*/
 
         #endregion
     }

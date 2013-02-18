@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateQuestion.cs" company="">
-//   
+// <copyright file="AutoPropagateQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The auto propagate question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Question
 {
     using System;
@@ -26,7 +27,6 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public AutoPropagateQuestion()
         {
-            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
@@ -39,7 +39,6 @@ namespace Main.Core.Entities.SubEntities.Question
         public AutoPropagateQuestion(string text)
             : base(text)
         {
-            MaxValue = int.MaxValue;
             this.Triggers = new List<Guid>();
         }
 
@@ -52,22 +51,7 @@ namespace Main.Core.Entities.SubEntities.Question
         /// </summary>
         public string AddNumericAttr { get; set; }
 
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>(0);
-            }
-
-            set
-            {
-            }
-        }
-
-        /// <summary>
+       /// <summary>
         /// Gets or sets the int attr.
         /// </summary>
         public int IntAttr { get; set; }
@@ -105,7 +89,7 @@ namespace Main.Core.Entities.SubEntities.Question
         {
             throw new NotImplementedException();
         }
-
+        
 
         /*/// <summary>
         /// The add.
@@ -171,6 +155,24 @@ namespace Main.Core.Entities.SubEntities.Question
             return null;
         }
 
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public override IComposite Clone()
+        {
+            var question = base.Clone() as AutoPropagateQuestion;
+
+            if (this.Triggers != null)
+            {
+                question.Triggers = new List<Guid>(this.Triggers);
+            }
+
+            return question;
+        }
+
         /*/// <summary>
         /// The remove.
         /// </summary>
@@ -197,7 +199,6 @@ namespace Main.Core.Entities.SubEntities.Question
             throw new CompositeException();
         }*/
 
-        #endregion
-
+        #endregion 
     }
 }

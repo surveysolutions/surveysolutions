@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -95,7 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractFactories\QuestionFactoryTest.cs" />
+    <Compile Include="Documents\CompleteQuestionnaireDocumentTest.cs" />
+    <Compile Include="Domain\CompleteQuestionnaireARTest.cs" />
     <Compile Include="Domain\Configuration.cs" />
+    <Compile Include="Domain\QuestionnaireARTest.cs" />
+    <Compile Include="Domain\TestDataConfigurator.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
     <Compile Include="Entities\GroupTest.cs" />
     <Compile Include="Entities\QuestionTest.cs" />
@@ -105,8 +108,14 @@
     <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
+    <Compile Include="Export\HeaderCollectionTests.cs" />
+    <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecuteCollectorTest.cs" />
+    <Compile Include="Export\HeaderItemTests.cs" />
+    <Compile Include="Export\StataSuplierTests.cs" />
+    <Compile Include="Export\ValueCollectionTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireConditionExecutorTests.cs" />
     <Compile Include="ExpressionExecutors\CompleteQuestionnaireValidationExecutorTests.cs" />
+    <Compile Include="ExpressionExecutors\ExpressionDependencyBuilderTest.cs" />
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
     <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />
@@ -140,6 +149,7 @@
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

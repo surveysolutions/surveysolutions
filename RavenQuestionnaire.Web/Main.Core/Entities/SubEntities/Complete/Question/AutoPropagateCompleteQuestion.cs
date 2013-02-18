@@ -1,23 +1,24 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AutoPropagateCompleteQuestion.cs" company="">
-//   
+// <copyright file="AutoPropagateCompleteQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The auto propagate complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
+
+    using Main.Core.Entities.Composite;
 
     /// <summary>
     /// The auto propagate complete question.
     /// </summary>
     public sealed class AutoPropagateCompleteQuestion : AbstractCompleteQuestion, IAutoPropagate, ICompelteValueQuestion<int?>
     {
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -56,56 +57,23 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
         #region Public Properties
 
-        /*/// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }*/
-
         /// <summary>
         /// Gets or sets the target group key.
         /// </summary>
         public Guid TargetGroupKey { get; set; }
 
         #endregion
-
-        // {
-        // get { return new List<IComposite>(); }
-        // set { }
-        // }
+        
         #region Public Methods and Operators
 
-        /*/// <summary>
-        /// The add.
+        /// <summary>
+        /// The add answer.
         /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
+        /// <param name="answer">
+        /// The answer.
         /// </param>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public override void Add(IComposite c, Guid? parent)
-        {
-            throw new NotImplementedException();
-
-            /*var question = c as ICompleteQuestion;
-            if (question == null || question.PublicKey != this.PublicKey)
-                throw new CompositeException();
-            this.Answer = question.Answer;
-            this.AnswerDate = DateTime.Now;#1#
-        }*/
-
         public override void AddAnswer(IAnswer answer)
         {
             throw new NotImplementedException();
@@ -145,34 +113,23 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return this.Answer.HasValue ? this.Answer.Value.ToString() : string.Empty;
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-
         /// <summary>
-        /// The remove.
+        /// The clone.
         /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public override IComposite Clone()
         {
-            if (publicKey != this.PublicKey)
+            var question = base.Clone() as AutoPropagateCompleteQuestion;
+
+            if (this.Triggers != null)
             {
-                throw new CompositeException();
+                question.Triggers = new List<Guid>(this.Triggers);
             }
 
-            this.Answer = null;
-        }*/
+            return question;
+        }
 
         /// <summary>
         /// The set answer.
@@ -185,10 +142,21 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            var answerVal = Convert.ToInt32(answerValue);
-            if (answerVal > this.MaxValue)
-                throw new ArgumentException("max value is reached");
-            this.Answer = answerVal;
+            if (string.IsNullOrWhiteSpace(answerValue))
+            {
+                this.Answer = null;
+            }
+            else
+            {
+                int value;
+                if (int.TryParse(answerValue.Trim(), out value))
+                {
+                    if (value > this.MaxValue)
+                        throw new ArgumentException("max value is reached");
+                    
+                    this.Answer = value;
+                }
+            }
         }
 
         #endregion

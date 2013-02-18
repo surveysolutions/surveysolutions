@@ -8,7 +8,6 @@
         @{
     var settings = (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings;
     settings.Add("readonly","readonly");
-    settings.Add("onchange", "$(this.form).submit();");
     settings.Add("class", "datepicker-" + Model.PublicKey);
     string dateValue = Model.Answer == null ? DateTime.Now.ToString("MM/dd/yyyy") : Model.Answer.ToString()==String.Empty?DateTime.Now.ToString("MM/dd/yyyy"): Model.Answer.ToString();
         }
@@ -22,7 +21,7 @@
             $(function() {
                 $(".datepicker-@(Model.PublicKey)").datepicker({
                         format: 'mm/dd/yyyy'
-                    }).on('hide', function(e) {
+                    }).on('changeDate', function (e) {
                         $(this.form).submit();
                     });
 

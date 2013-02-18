@@ -14,14 +14,10 @@ namespace Web.CAPI
     using System.Web.Configuration;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using Main.Core;
-    using Ninject;
 
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using Raven.Client.Document;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -81,7 +77,10 @@ namespace Web.CAPI
         /// </summary>
         protected void Application_Error()
         {
-            this.logger.Fatal(this.Server.GetLastError());
+            var lastError = this.Server.GetLastError();
+            this.logger.Fatal(lastError);
+            if (lastError.InnerException != null)
+                this.logger.Fatal(lastError.InnerException);
         }
 
         /// <summary>
@@ -89,17 +88,50 @@ namespace Web.CAPI
         /// </summary>
         protected void Application_Start()
         {
+            AppDomain current = AppDomain.CurrentDomain;
+            current.UnhandledException += this.CurrentUnhandledException;
+
             AreaRegistration.RegisterAllAreas();
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
-            NCQRSInit.RebuildReadLayer(KernelLocator.Kernel.Get<DocumentStore>());
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
 
-            AppDomain current = AppDomain.CurrentDomain;
-            current.UnhandledException += this.CurrentUnhandledException;
+            try
+            {
+                SuccessMarker.Start(KernelLocator.Kernel);
+                correctlyInitialyzed = true;
+            }
+            catch (Exception e)
+            {
+                this.logger.Fatal("Initialization failed", e);
+                correctlyInitialyzed = false;
+
+                // due to the bug in iis7 moved to Application_BeginRequest
+                /*this.BeginRequest += (sender, args) =>
+                {
+                    base.Response.Write("Sorry, Application cann't handle your request!");
+                    this.CompleteRequest();
+                };*/
+
+                // throw;
+            }
         }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            if (!correctlyInitialyzed)
+            {
+                base.Response.Write("Sorry, Application cann't handle your request!");
+                this.CompleteRequest();
+            }
+        }
+
+        /// <summary>
+        /// The correctly initialyzed.
+        /// </summary>
+        private static bool correctlyInitialyzed;
 
         /// <summary>
         /// The host services.

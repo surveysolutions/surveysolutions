@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractQuestion.cs" company="">
-//   
+// <copyright file="AbstractQuestion.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The abstract question.
@@ -21,7 +21,6 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public abstract class AbstractQuestion : IQuestion
     {
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -32,6 +31,8 @@ namespace Main.Core.Entities.SubEntities
             // PublicKey = Guid.NewGuid();
             this.Cards = new List<Image>();
             this.Answers = new List<IAnswer>();
+            this.ConditionalDependentGroups = new List<Guid>();
+            this.ConditionalDependentQuestions = new List<Guid>();
         }
 
         /// <summary>
@@ -40,7 +41,8 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="text">
         /// The text.
         /// </param>
-        protected AbstractQuestion(string text) : this()
+        protected AbstractQuestion(string text)
+            : this()
         {
             this.QuestionText = text;
         }
@@ -50,14 +52,14 @@ namespace Main.Core.Entities.SubEntities
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the answers.
-        /// </summary>
-        public List<IAnswer> Answers { get; set; }
-
-        /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
         public Order AnswerOrder { get; set; }
+
+        /// <summary>
+        /// Gets or sets the answers.
+        /// </summary>
+        public List<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether capital.
@@ -72,7 +74,18 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the children.
         /// </summary>
-        public abstract List<IComposite> Children { get; set; }
+        public List<IComposite> Children
+        {
+            get
+            {
+                return new List<IComposite>(0);
+            }
+
+            set
+            {
+                // do nothing
+            }
+        }
 
         /// <summary>
         /// Gets or sets the comments.
@@ -83,6 +96,16 @@ namespace Main.Core.Entities.SubEntities
         /// Gets or sets the condition expression.
         /// </summary>
         public string ConditionExpression { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent groups.
+        /// </summary>
+        public List<Guid> ConditionalDependentGroups { get; set; }
+
+        /// <summary>
+        /// Gets or sets the conditional dependent questions.
+        /// </summary>
+        public List<Guid> ConditionalDependentQuestions { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether featured.
@@ -100,23 +123,20 @@ namespace Main.Core.Entities.SubEntities
         public bool Mandatory { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
         public Guid PublicKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
 
         /// <summary>
         /// Gets or sets the question text.
@@ -143,18 +163,15 @@ namespace Main.Core.Entities.SubEntities
         /// </summary>
         public string ValidationMessage { get; set; }
 
-        public abstract void AddAnswer(IAnswer answer);
-        
+        #endregion
+
         /*/// <summary>
         /// Gets or sets Triggers.
         /// </summary>
         public List<Guid> Triggers { get; set; }*/
-
-        #endregion
-
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -163,10 +180,18 @@ namespace Main.Core.Entities.SubEntities
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             throw new CompositeException();
-        }
+        }*/
+
+        /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        public abstract void AddAnswer(IAnswer answer);
 
         /// <summary>
         /// The add card.
@@ -182,6 +207,50 @@ namespace Main.Core.Entities.SubEntities
             }
 
             this.Cards.Add(card);
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public virtual IComposite Clone()
+        {
+            var question = this.MemberwiseClone() as IQuestion;
+
+            question.Parent = null;
+            if (this.Cards != null)
+            {
+                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            }
+
+            if (this.ConditionalDependentGroups != null)
+            {
+                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            }
+
+            if (this.ConditionalDependentQuestions != null)
+            {
+                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+            }
+
+            // handle reference part
+            question.Answers = new List<IAnswer>();
+            foreach (IAnswer answer in this.Answers)
+            {
+                question.Answers.Add(answer.Clone());
+            }
+
+            return question;
+        }
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            //// do nothing
         }
 
         /// <summary>
@@ -223,7 +292,7 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -232,18 +301,23 @@ namespace Main.Core.Entities.SubEntities
         public void Remove(IComposite c)
         {
             throw new CompositeException();
-        }
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <exception cref="CompositeException">
+        /// </exception>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The remove card.

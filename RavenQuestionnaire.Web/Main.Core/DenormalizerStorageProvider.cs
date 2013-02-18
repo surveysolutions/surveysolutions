@@ -1,27 +1,39 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DenormalizerStorageProvider.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DenormalizerStorageProvider.cs" company="The World Bank">
+//   The World Bank
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.DenormalizerStorage;
-using Ninject;
-using Ninject.Activation;
-
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
+
+    using Main.DenormalizerStorage;
+
+    using Ninject;
+    using Ninject.Activation;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DenormalizerStorageProvider<T> : Provider<IDenormalizerStorage<T>> where T : class
+    /// <typeparam name="T">
+    /// </typeparam>
+    public class DenormalizerStorageProvider<T> : Provider<IDenormalizerStorage<T>>
+        where T : class
     {
-        #region Overrides of Provider<T>
+        #region Methods
 
+        /// <summary>
+        /// The create instance.
+        /// </summary>
+        /// <param name="context">
+        /// The context.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IDenormalizerStorage"/>.
+        /// </returns>
         protected override IDenormalizerStorage<T> CreateInstance(IContext context)
         {
             IDenormalizerStorage<T> result;
@@ -29,7 +41,9 @@ namespace Main.Core
             {
                 #if !MONODROID
                 if (GetWeekBinding())
+                {
                     result = context.Kernel.Get<PersistentDenormalizer<T>>();
+                }
                 else
                 {
                     result = context.Kernel.Get<InMemoryDenormalizer<T>>();
@@ -46,11 +60,17 @@ namespace Main.Core
             return result;
         }
 
-        #endregion
-
+        /// <summary>
+        /// The get week binding.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         protected bool GetWeekBinding()
         {
-            return typeof (T).GetCustomAttributes(typeof (SmartDenormalizerAttribute), true).Length > 0;
+            return typeof(T).GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0;
         }
+
+        #endregion
     }
 }

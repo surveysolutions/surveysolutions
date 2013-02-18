@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
-	public class SQLiteEventStore : IEventStore
+    public class SQLiteEventStore : IEventStore
 	{
 		private readonly Context _context;
 		private readonly SQLiteContext _sqLiteContext;

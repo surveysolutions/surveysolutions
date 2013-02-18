@@ -15,7 +15,7 @@ namespace Main.Core.Entities.Composite
     /// <summary>
     /// The Composite interface.
     /// </summary>
-    public interface IComposite
+    public interface IComposite /*: ICloneable*/
     {
         #region Public Properties
 
@@ -25,9 +25,9 @@ namespace Main.Core.Entities.Composite
         List<IComposite> Children { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        IComposite Parent { get; }
+        IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets the public key.
@@ -37,18 +37,7 @@ namespace Main.Core.Entities.Composite
         #endregion
 
         #region Public Methods and Operators
-
-        /// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        void Add(IComposite c, Guid? parent);
-
+        
         /// <summary>
         /// The find.
         /// </summary>
@@ -88,21 +77,23 @@ namespace Main.Core.Entities.Composite
         /// </returns>
         T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
 
+        
         /// <summary>
-        /// The remove.
+        /// The connect childs with parent.
         /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        void Remove(IComposite c);
+        void ConnectChildsWithParent();
+
+
+        // Could be created as a separate interface
+        // but we need cast an object every time 
 
         /// <summary>
-        /// The remove.
+        /// The clone.
         /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        void Remove(Guid publicKey);
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        IComposite Clone();
 
         #endregion
     }

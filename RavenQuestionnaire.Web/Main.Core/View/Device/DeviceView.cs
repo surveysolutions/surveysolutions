@@ -6,43 +6,53 @@
 
 namespace Main.Core.View.Device
 {
-    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class DeviceView
     {
+
+        #region Fields
+
+        /// <summary>
+        /// The _order.
+        /// </summary>
+        private string _order = string.Empty;
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviceView"/> class.
         /// </summary>
-        public DeviceView()
+        /// <param name="page">
+        /// The page.
+        /// </param>
+        /// <param name="pageSize">
+        /// The page size.
+        /// </param>
+        /// <param name="totalCount">
+        /// The total count.
+        /// </param>
+        /// <param name="items">
+        /// The items.
+        /// </param>
+        /// <param name="order">
+        /// The order.
+        /// </param>
+        public DeviceView(
+            int page, int pageSize, int totalCount, List<RegisterData> items, string order)
         {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceView"/> class.
-        /// </summary>
-        /// <param name="description">
-        /// The description.
-        /// </param>
-        /// <param name="registerDate">
-        /// The register date.
-        /// </param>
-        /// <param name="secretKey">
-        /// The secret key.
-        /// </param>
-        /// <param name="tabletId">
-        /// The tablet id.
-        /// </param>
-        public DeviceView(string description, DateTime registerDate, byte[] secretKey, Guid tabletId)
-        {
-            this.Description = description;
-            this.RegisterDate = registerDate;
-            this.SecretKey = secretKey;
-            this.TabletId = tabletId;
+            this.Page = page;
+            this.TotalCount = totalCount;
+            this.PageSize = pageSize;
+            this.Items = items;
+            this.Order = order;
         }
 
         #endregion
@@ -50,25 +60,40 @@ namespace Main.Core.View.Device
         #region Properties
 
         /// <summary>
-        /// Gets or sets Description.
+        /// Gets Items.
         /// </summary>
-        public string Description { get; set; }
+        public List<RegisterData> Items { get; private set; }
 
         /// <summary>
-        /// Gets or sets RegisterDate.
+        /// Gets or sets the order.
         /// </summary>
-        public DateTime RegisterDate { get; set; }
+        public string Order
+        {
+            get
+            {
+                return this._order;
+            }
+
+            set
+            {
+                this._order = value;
+            }
+        }
 
         /// <summary>
-        /// Gets or sets SecretKey.
+        /// Gets the page.
         /// </summary>
-        public byte[] SecretKey { get; set; }
+        public int Page { get; private set; }
 
         /// <summary>
-        /// Gets or sets TabletId.
+        /// Gets the page size.
         /// </summary>
-        public Guid TabletId { get; set; }
+        public int PageSize { get; private set; }
 
+        /// <summary>
+        /// Gets the total count.
+        /// </summary>
+        public int TotalCount { get; private set; }
 
         #endregion
     }

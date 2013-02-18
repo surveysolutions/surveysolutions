@@ -1,41 +1,90 @@
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="MainCoreRegistry.cs" company="">
-// TODO: Update copyright text.
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
-using System.Linq;
-using System.Reflection;
-using Core.HQ.Synchronization;
-using Main.Core;
-using Main.Core.Events;
-using Questionnaire.Core.Web.Export;
-using Questionnaire.Core.Web.Security;
-using RavenQuestionnaire.Core.Views.Questionnaire;
-using RavenQuestionnaire.Web.Export;
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace RavenQuestionnaire.Web.Injections
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+
+    using global::Core.HQ.Synchronization;
+
+    using DataEntryClient.SycProcessFactory;
+
+    using Main.Core;
+    using Main.Core.Events;
+    using Main.Core.Export;
+    using Main.Core.View.Export;
+    using Main.Synchronization.SycProcessRepository;
+
+    using Questionnaire.Core.Web.Export.csv;
+    using Questionnaire.Core.Web.Security;
+
+    using RavenQuestionnaire.Core.Views.Questionnaire;
+
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
     public class MainCoreRegistry : CoreRegistry
     {
-        public MainCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainCoreRegistry"/> class.
+        /// </summary>
+        /// <param name="repositoryPath">
+        /// The repository path.
+        /// </param>
+        /// <param name="isEmbeded">
+        /// The is embeded.
+        /// </param>
+        public MainCoreRegistry(string repositoryPath, bool isEmbeded)
+            : base(repositoryPath, isEmbeded)
         {
         }
-        public override System.Collections.Generic.IEnumerable<System.Reflection.Assembly> GetAssweblysForRegister()
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get assweblys for register.
+        /// </summary>
+        /// <returns>
+        /// List of assemblies
+        /// </returns>
+        public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
-                base.GetAssweblysForRegister().Concat(new Assembly[] { typeof(HQEventSync).Assembly, typeof(QuestionnaireView).Assembly, typeof(QuestionnaireMembershipProvider).Assembly });
+                base.GetAssweblysForRegister().Concat(
+                    new[]
+                        {
+                            typeof(HqEventStreamReader).Assembly, 
+                            typeof(QuestionnaireView).Assembly, 
+                            typeof(QuestionnaireMembershipProvider).Assembly
+                        });
         }
+
+        /// <summary>
+        /// The load.
+        /// </summary>
         public override void Load()
         {
-            base.Load();   this.Unbind<IEventSync>();
-            this.Bind<IEventSync>().To<HQEventSync>();
-            this.Unbind<IExportImport>();
-            this.Bind<IExportImport>().To<TemplateExporter>();
-            this.Bind<ITemplateExporter>().To<TemplateExporter>();
+            base.Load();
+            this.Unbind<IEventStreamReader>();
+            this.Bind<IEventStreamReader>().To<HqEventStreamReader>();
+            this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
+            this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
+            this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
+
+        #endregion
     }
 }

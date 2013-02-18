@@ -53,22 +53,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// Gets or sets the add date time attr.
         /// </summary>
         public string AddDateTimeAttr { get; set; }
-
-        /*/// <summary>
-        /// Gets or sets the children.
-        /// </summary>
-        public override List<IComposite> Children
-        {
-            get
-            {
-                return new List<IComposite>();
-            }
-
-            set
-            {
-            }
-        }*/
-
+        
         /// <summary>
         /// Gets or sets the date time attr.
         /// </summary>
@@ -147,35 +132,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
                        ? Convert.ToString(this.Answer.Value, CultureInfo.InvariantCulture)
                        : string.Empty;
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (publicKey != this.PublicKey)
-            {
-                throw new CompositeException();
-            }
-
-            this.Answer = null;
-        }*/
 
         /// <summary>
         /// The set answer.

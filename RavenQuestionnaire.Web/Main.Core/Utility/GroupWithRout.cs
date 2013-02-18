@@ -13,6 +13,7 @@ namespace Main.Core.Utility
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.View.Group;
 
@@ -30,10 +31,11 @@ namespace Main.Core.Utility
         /// <param name="group">
         /// The group.
         /// </param>
-        public GroupWithRout(IEnumerable<NodeWithLevel> currentRout, ICompleteGroup group)
+        public GroupWithRout(IEnumerable<NodeWithLevel> currentRout, ICompleteGroup group, QuestionScope scope)
         {
             this.CurrentRout = currentRout;
             this.Group = group;
+            this.Scope = scope;
         }
 
         /// <summary>
@@ -48,8 +50,9 @@ namespace Main.Core.Utility
         /// <param name="propagationKey">
         /// The propagation key.
         /// </param>
-        public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey)
+        public GroupWithRout(ICompleteGroup doc, Guid? publicKey, Guid? propagationKey, QuestionScope scope)
         {
+            this.Scope = scope;
             var rout = new List<NodeWithLevel>();
 
             ICompleteGroup group = null;
@@ -62,7 +65,7 @@ namespace Main.Core.Utility
                 {
                     NodeWithLevel node = treeStack.Pop();
                     group = this.ProceedGroup(node.Group, publicKey.Value, propagationKey);
-                    
+
                     this.UpdateNavigation(rout, node);
 
                     if (group != null)
@@ -73,6 +76,12 @@ namespace Main.Core.Utility
                     ICompleteGroup[] subGroups = node.Group.Children.OfType<ICompleteGroup>().ToArray();
                     for (int i = subGroups.Length - 1; i >= 0; i--)
                     {
+                        // questions exists, but they are hidden 
+                        if (!subGroups[i].HasVisibleItemsForScope(this.Scope))
+                        {
+                            continue;
+                        }
+
                         treeStack.Push(new NodeWithLevel(subGroups[i], node.Level + 1));
                     }
                 }
@@ -85,7 +94,7 @@ namespace Main.Core.Utility
                 group = doc.Children.OfType<ICompleteGroup>().First();
                 rout.Add(new NodeWithLevel(group, 1));
             }
-            
+
             this.CurrentRout = rout;
             this.Group = group;
         }
@@ -144,9 +153,8 @@ namespace Main.Core.Utility
         /// </returns>
         protected ScreenNavigation CompileNavigation()
         {
-            var temtNavigation = new ScreenNavigation
-                { PublicKey = this.Group.PublicKey, CurrentScreenTitle = this.Group.Title };
-            
+            var temtNavigation = new ScreenNavigation { PublicKey = this.Group.PublicKey, CurrentScreenTitle = this.Group.Title };
+
             var rout = this.CurrentRout.Take(this.CurrentRout.Count() - 1).ToList();
             temtNavigation.BreadCumbs = rout.Select(n => new CompleteGroupHeaders(n.Group)).ToList();
             NodeWithLevel parent = rout.Last();
@@ -164,22 +172,25 @@ namespace Main.Core.Utility
             }
             else
             {
-                groupNeighbors =
-                    parent.Group.Children.OfType<ICompleteGroup>().Where(g => !g.PropagationPublicKey.HasValue).ToList();
+                groupNeighbors = parent.Group.Children.OfType<ICompleteGroup>()
+                    .Where(g => !g.PropagationPublicKey.HasValue)
 
+                    // filter all empty groups or groups with any visible question
+                    .Where(g => g.HasVisibleItemsForScope(this.Scope)).ToList(); 
 
                 groupNeighbors = groupNeighbors.Where(g => g.Enabled).ToList();
                 indexOfTarget = groupNeighbors.FindIndex(0, g => g.PublicKey == this.Group.PublicKey);
             }
-          /*  if (indexOfTarget < 0)
-                throw new InvalidOperationException("groups wasn't founded");*/
+
+            /*  if (indexOfTarget < 0)
+                  throw new InvalidOperationException("groups wasn't founded");*/
             if (indexOfTarget > 0)
             {
                 temtNavigation.PrevScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget - 1]);
             }
 
             if (indexOfTarget < groupNeighbors.Count - 1)
-            { 
+            {
                 temtNavigation.NextScreen = new CompleteGroupHeaders(groupNeighbors[indexOfTarget + 1]);
             }
 
@@ -213,5 +224,10 @@ namespace Main.Core.Utility
         /// Gets the group.
         /// </summary>
         public ICompleteGroup Group { get; private set; }
+
+        /// <summary>
+        /// Gets or sets Scope.
+        /// </summary>
+        public QuestionScope Scope { get; set; }
     }
 }

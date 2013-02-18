@@ -8,11 +8,23 @@ namespace Synchronization.Core.Interface
 {
     public interface ISynchronizer
     {
-        void Push(SyncDirection direction = SyncDirection.Up);
-        void Pull(SyncDirection direction = SyncDirection.Down);
+        /// <summary>
+        /// Push synchronization
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns>Synchronization process identifier</returns>
+        Guid Push(SyncDirection direction = SyncDirection.Up);
+
+        /// <summary>
+        /// Pull synchronization
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns>Synchronization process identifier</returns>
+        Guid Pull(SyncDirection direction = SyncDirection.Down);
+
         void Stop();
 
-        event EventHandler<SynchronizationEvent> SyncProgressChanged;
+        event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
 
         /// <summary>
         /// Formates a message about successfull completing the sync operation
@@ -28,7 +40,7 @@ namespace Synchronization.Core.Interface
         /// <param name="syncAction"></param>
         /// <param name="direction"></param>
         /// <returns></returns>
-        IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
+        IList<ServiceException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
 
         /// <summary>
         /// Defines availabiltiy for the synchronizer

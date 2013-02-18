@@ -9,7 +9,7 @@ using Awesomium.Core;
 
 namespace Common.Utils
 {
-    public class WebRequestProcessor : IRequesProcessor
+    public class WebRequestProcessor : IRequestProcessor
     {
         #region Implementation of IRequesProcessor
 
@@ -43,13 +43,16 @@ namespace Common.Utils
                         request.CookieContainer.Add(new Cookie(name.Trim(), value.Trim(), path, domain));
                     }
                 }
+
+                //request.BeginGetRequestStream(
+
                 // Get the response.
                 using (WebResponse response = request.GetResponse())
                 {
                     // Get the stream containing content returned by the server.
                     var dataStream = response.GetResponseStream();
                     // Open the stream using a StreamReader for easy access.
-                    StreamReader reader = new StreamReader(dataStream);
+                    StreamReader reader = new StreamReader(dataStream);                  
                     // Read the content.
                     string responseFromServer = reader.ReadToEnd();
 

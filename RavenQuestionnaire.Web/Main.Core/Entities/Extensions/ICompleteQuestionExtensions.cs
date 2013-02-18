@@ -1,28 +1,37 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="ICompleteQuestionExtensions.cs" company="">
-// TODO: Update copyright text.
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ICompleteQuestionExtensions.cs" company="The World Bank">
+//   2012
 // </copyright>
-// -----------------------------------------------------------------------
-
-using Main.Core.Entities.SubEntities.Complete;
+// <summary>
+//   
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Main.Core.Entities.Extensions
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
+
+    using Main.Core.Entities.SubEntities.Complete;
 
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public static class ICompleteQuestionExtensions
+    public static class CompleteQuestionExtensions
     {
+        /// <summary>
+        /// The is value question.
+        /// </summary>
+        /// <param name="question">
+        /// The question.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>.
+        /// </returns>
         public static bool IsValueQuestion(this ICompleteQuestion question)
         {
             return question.GetType().GetInterfaces().Any(x => x.IsGenericType &&
-                                                               x.GetGenericTypeDefinition() ==
-                                                               typeof (ICompelteValueQuestion<>));
+                                                               x.GetGenericTypeDefinition()
+                                                               == typeof(ICompelteValueQuestion<>));
         }
     }
 }

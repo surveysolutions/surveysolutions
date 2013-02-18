@@ -21,7 +21,7 @@ namespace Browsing.Common.Containers
 
         #region C-tor
 
-        public Synchronization(ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
+        public Synchronization(ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, ScreenHolder holder)
             : base(holder, true)
         {
             InitializeComponent();
@@ -39,8 +39,8 @@ namespace Browsing.Common.Containers
 
             System.Diagnostics.Debug.Assert(this.SyncManager != null);
 
-            this.SyncManager.EndOfSync += new EventHandler<SynchronizationCompletedEvent>(sync_EndOfSync);
-            this.SyncManager.BgnOfSync += new EventHandler<SynchronizationEvent>(sync_BgnOfSync);
+            this.SyncManager.EndOfSync += new EventHandler<SynchronizationCompletedEventArgs>(sync_EndOfSync);
+            this.SyncManager.BgnOfSync += new EventHandler<SynchronizationEventArgs>(sync_BgnOfSync);
         }
 
 
@@ -48,7 +48,7 @@ namespace Browsing.Common.Containers
 
         #region Virtual and Abstract
 
-        protected abstract ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequesProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider);
+        protected abstract ISyncManager DoInstantiateSyncManager(ISyncProgressObserver progressObserver, ISettingsProvider clientSettings, IRequestProcessor requestProcessor, IUrlUtils utils, IUsbProvider usbProvider);
         protected abstract void OnPushClicked();
         protected abstract void OnPullClicked();
 
@@ -80,39 +80,36 @@ namespace Browsing.Common.Containers
 
             try
             {
-                this.syncPanel.ShowError("Looking for available data points ...");
+                this.syncPanel.ShowProcessingStatus("Looking for available data points ...");
 
                 // assume sync possibility by default
-                this.isPullPossible = true;
-                this.isPushPossible = true;
+                this.isPullPossible = this.isPushPossible = true;
 
                 //return;
 
-                IList<SynchronizationException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
+                IList<ServiceException> issues = this.SyncManager.CheckSyncIssues(SyncType.Push, SyncDirection.Up);
                 if (issues == null || issues.Count == 0)
                     return;
 
-                SynchronizationException ex = issues.FirstOrDefault<SynchronizationException>(x => x is LocalHosUnreachableException);
+                ServiceException ex = issues.FirstOrDefault<ServiceException>(x => x is LocalHosUnreachableException);
                 if (ex != null)
                 {
-                    this.isPullPossible = false;
-                    this.isPushPossible = false;
+                    this.isPullPossible = this.isPushPossible = false;
 
                     status = ex.Message;
 
                     return; // fatal
                 }
 
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is NetUnreachableException || x is InactiveNetSynchronizerException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is NetUnreachableException || x is EndpointNotSetException || x is NetIssueException);
                 if (ex != null)
                 {
                     status = ex.Message;
 
-                    ex = issues.FirstOrDefault<SynchronizationException>(x => x is UsbUnacceptableException);
+                    ex = issues.FirstOrDefault<ServiceException>(x => x is UsbNotAccessableException);
                     if (ex != null)
                     {
-                        this.isPullPossible = false;
-                        this.isPushPossible = false;
+                        this.isPullPossible = this.isPushPossible = false;
 
                         status += "\n" + ex.Message;
 
@@ -120,7 +117,7 @@ namespace Browsing.Common.Containers
                     }
                 }
 
-                ex = issues.FirstOrDefault<SynchronizationException>(x => x is CheckPrerequisitesException);
+                ex = issues.FirstOrDefault<ServiceException>(x => x is CheckPrerequisitesException);
                 if (ex != null)
                 {
                     this.isPullPossible = true;
@@ -131,7 +128,7 @@ namespace Browsing.Common.Containers
             }
             finally
             {
-                this.syncPanel.ShowError(status);
+                this.syncPanel.ShowProcessingStatus(status);
 
                 EnablePull(this.isPullPossible);
                 EnablePush(this.isPushPossible);
@@ -142,7 +139,7 @@ namespace Browsing.Common.Containers
 
         #region Event Handlers
 
-        private void sync_BgnOfSync(object sender, SynchronizationEvent e)
+        private void sync_BgnOfSync(object sender, SynchronizationEventArgs e)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
@@ -155,12 +152,11 @@ namespace Browsing.Common.Containers
                 }));
         }
 
-        private void sync_EndOfSync(object sender, SynchronizationCompletedEvent e)
+        private void sync_EndOfSync(object sender, SynchronizationCompletedEventArgs e)
         {
             if (this.InvokeRequired)
                 this.Invoke(new MethodInvoker(() =>
                 {
-                    this.syncPanel.ShowResult(e.Log);
                     this.syncPanel.State = SyncState.Idle;
 
                     EnablePush(true);
@@ -234,17 +230,17 @@ namespace Browsing.Common.Containers
             base.OnLoad(e);
 
             this.syncPanel.SetIdleState();
-            
+
             EnablePush(false);
             EnablePull(false);
-            
-            this.syncPanel.ShowError("Looking for available data points ...");
+
+            this.syncPanel.ShowProcessingStatus("Looking for available data points ...");
 
         }
 
-        protected override void OnValidateContent()
+        protected override void OnEnterScreen()
         {
-            base.OnValidateContent();
+            base.OnEnterScreen();
 
             CheckSyncPossibilities();
         }
@@ -253,7 +249,22 @@ namespace Browsing.Common.Containers
 
         #region Operations
 
-        public void UpdateUsbList()
+        public void AddLineToStatistic(string line)
+        {
+            this.syncPanel.usbStatusPanel.AddLineToStatistic(line);
+        }
+
+        public void ClearStatisticList()
+        {
+            this.syncPanel.usbStatusPanel.ClearStatisticList();
+        }
+
+        public void MakeStatisticListVisible(bool value)
+        {
+            this.syncPanel.usbStatusPanel.MakeStatisticListVisible(value);
+        }
+
+        public void UpdateUsbList(bool driverAvailable)
         {
             this.syncPanel.UpdateUsbStatus();
 

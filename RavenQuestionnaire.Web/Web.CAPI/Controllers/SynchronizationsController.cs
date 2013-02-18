@@ -19,25 +19,21 @@ namespace Web.CAPI.Controllers
     using Core.CAPI.Views.ExporStatistics;
     using Core.CAPI.Views.Synchronization;
 
-    using DataEntryClient;
-    using DataEntryClient.CompleteQuestionnaire;
-
-    using Ionic.Zip;
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
-    using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
     using Main.Core.View;
     using Main.Core.View.SyncProcess;
-    using Main.Core.View.User;
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
     using NLog;
 
-    using Questionnaire.Core.Web.Export;
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
     using Questionnaire.Core.Web.WCF;
@@ -47,7 +43,7 @@ namespace Web.CAPI.Controllers
     /// <summary>
     /// The synchronizations controller.
     /// </summary>
-    [AsyncTimeout(20000000)]
+    [NoAsyncTimeout]
     public class SynchronizationsController : AsyncController
     {
         #region Constants and Fields
@@ -60,12 +56,17 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// The synchronizer.
         /// </summary>
-        private readonly IEventSync synchronizer;
+        private readonly IEventStreamReader synchronizer;
 
         /// <summary>
         /// The view repository.
         /// </summary>
         private readonly IViewRepository viewRepository;
+
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
 
         #endregion
 
@@ -83,14 +84,19 @@ namespace Web.CAPI.Controllers
         /// <param name="synchronizer">
         /// The synchronizer.
         /// </param>
+        /// <param name="syncProcessFactory">
+        /// The syncs process factory
+        /// </param>
         public SynchronizationsController(
             IViewRepository viewRepository,
             IGlobalInfoProvider globalProvider,
-            IEventSync synchronizer)
+            IEventStreamReader synchronizer,
+            ISyncProcessFactory syncProcessFactory)
         {
             this.viewRepository = viewRepository;
             this._globalProvider = globalProvider;
             this.synchronizer = synchronizer;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
@@ -114,13 +120,13 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult ExportStatistics()
+        public JsonResult PushStatistics()
         {
             var events = this.synchronizer.ReadEvents();
-            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key);
+            var keys = events.GroupBy(x => x.EventSourceId).Select(g => g.Key).ToList();
             var model = this.viewRepository.Load<ExporStatisticsInputModel, ExportStatisticsView>(
                   new ExporStatisticsInputModel(keys));
-          
+
             return this.Json(model.Items, JsonRequestBehavior.AllowGet);
         }
 
@@ -130,8 +136,8 @@ namespace Web.CAPI.Controllers
         /// </summary>
         public void DiscoverAsync()
         {
-            UserLight user = this._globalProvider.GetCurrentUser();
-            AsyncQuestionnaireUpdater.Update(AsyncManager,
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
                 () =>
                 {
                     try
@@ -182,14 +188,16 @@ namespace Web.CAPI.Controllers
         public Guid? ExportAsync(Guid syncKey)
         {
             Guid syncProcess = Guid.NewGuid();
-            AsyncQuestionnaireUpdater.Update(AsyncManager,
+            AsyncQuestionnaireUpdater.Update(
+                this.AsyncManager,
                 () =>
-                {
+                    {
                     byte[] file;
                     try
                     {
-                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
-                        file = process.Export(syncKey);
+                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+
+                        file = process.Export("Export DB on CAPI in zip file");
                     }
                     catch (Exception e)
                     {
@@ -264,6 +272,7 @@ namespace Web.CAPI.Controllers
         public int ProgressInPersentage(Guid id)
         {
             SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+
             if (stat == null)
             {
                 return -1;
@@ -273,18 +282,38 @@ namespace Web.CAPI.Controllers
         }
 
         /// <summary>
-        /// The progress partial.
+        /// The progress in persentage.
         /// </summary>
         /// <param name="id">
         /// The id.
         /// </param>
         /// <returns>
+        /// The progress in persentage.
         /// </returns>
-        public ActionResult ProgressPartial(Guid id)
+        public bool ProgressEnding(Guid id)
         {
-            return this.PartialView(
-                "_ProgressContent",
-                this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id)));
+            var invoker = NcqrsEnvironment.Get<ICommandService>();
+
+            try
+            {
+                SyncProgressView stat = this.viewRepository.Load<SyncProgressInputModel, SyncProgressView>(new SyncProgressInputModel(id));
+
+                if (stat == null)
+                {
+                    return false;
+                }
+
+                if (stat.ProgressPercentage < 100 && stat.ProgressPercentage > 0)
+                {
+                    invoker.Execute(new EndProcessComand(id, EventState.Error, "Process was canceled"));
+                }
+
+                return true;
+            }
+            catch (InvalidOperationException e)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -301,16 +330,15 @@ namespace Web.CAPI.Controllers
         /// </returns>
         public Guid Pull(string url, Guid syncKey)
         {
-            //syncKey = Guid.Parse("2e38c8a0-c0a7-43f8-a139-dc235eab2814");
             Guid syncProcess = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-           // commandService.Execute(new CreateNewSynchronizationProcessCommand(syncProcess, SynchronizationType.Pull));
+
             WaitCallback callback = (state) =>
                 {
                     try
                     {
-                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
-                        process.Import(syncKey);
+                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
+
+                        process.Import("Network syncronization", url);
                     }
                     catch (Exception e)
                     {
@@ -329,47 +357,39 @@ namespace Web.CAPI.Controllers
         /// Uploaded file
         /// </param>
         /// <returns>
-        /// The import async.
+        /// The import async
         /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public Guid? ImportAsync(HttpPostedFileBase uploadFile)
+        public Guid? Import(HttpPostedFileBase uploadFile)
         {
-            if (uploadFile == null && this.Request.Files.Count > 0)
-            {
-                uploadFile = this.Request.Files[0];
-            }
+            var zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
 
-            if (uploadFile == null || uploadFile.ContentLength == 0)
+            if (zipData.Count == 0)
             {
                 return null;
             }
-
-            if (!ZipFile.IsZipFile(uploadFile.InputStream, false))
-            {
-                return null;
-            }
-
-            uploadFile.InputStream.Position = 0;
-
-            var zip = ZipFile.Read(uploadFile.InputStream);
 
             Guid syncProcess = Guid.NewGuid();
-            AsyncQuestionnaireUpdater.Update(AsyncManager,
-                () =>
+
+            WaitCallback callback = (state) =>
+            {
+                try
                 {
-                    try
-                    {
-                        var process = new UsbSyncProcess(KernelLocator.Kernel, syncProcess);
-                        process.Import(new Guid(), zip);
-                    }
-                    catch (Exception e)
-                    {
-                        Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.Fatal("Error on import ", e);
-                    }
-                });
+                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                    process.Import(zipData, "Usb syncronization");
+                }
+                catch (Exception e)
+                {
+                    Logger logger = LogManager.GetCurrentClassLogger();
+                    logger.Fatal("Error on import ", e);
+                }
+            };
+            ThreadPool.QueueUserWorkItem(callback, syncProcess);
+          
             return syncProcess;
         }
+
+
 
         /// <summary>
         /// The push.
@@ -391,8 +411,9 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = new WirelessSyncProcess(KernelLocator.Kernel, syncProcess, url);
-                        process.Export(syncKey);
+                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
+
+                        process.Export("Network export on CAPI", url);
                     }
                     catch (Exception e)
                     {
@@ -410,13 +431,14 @@ namespace Web.CAPI.Controllers
         /// <returns>
         /// Json with sync process infor for current logged in user
         /// </returns>
-        public JsonResult Statistics()
+        public JsonResult PullStatistics(Guid id)
         {
             var user = this._globalProvider.GetCurrentUser();
             var model = this.viewRepository.Load<SyncProcessInputModel, SyncProcessView>(
-                    new SyncProcessInputModel(user == null ? Guid.Empty : user.Id));
-            return this.Json(model, JsonRequestBehavior.AllowGet);
+                    new SyncProcessInputModel(id, user == null ? Guid.Empty : user.Id));
+            return this.Json(model.Messages, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
     }
 }

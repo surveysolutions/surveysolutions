@@ -7,16 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.ExpressionExecutors;
-
 namespace Main.Core.View.CompleteQuestionnaire.Statistics
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
+    using Main.Core.ExpressionExecutors;
+
     /// <summary>
     /// The complete questionnaire statistic view.
     /// </summary>
@@ -24,10 +25,10 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
     {
         #region Fields
 
-        /// <summary>
+        /*/// <summary>
         /// The executor.
         /// </summary>
-        protected readonly CompleteQuestionnaireConditionExecutor executor;
+        protected readonly CompleteQuestionnaireConditionExecutor executor;*/
 
         /// <summary>
         /// The validator.
@@ -44,11 +45,12 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="doc">
         /// The doc.
         /// </param>
-        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc)
+        public CompleteQuestionnaireStatisticView(CompleteQuestionnaireStoreDocument doc, QuestionScope scope)
         {
-            this.executor = new CompleteQuestionnaireConditionExecutor(doc);
+            // moved to the wright layer
+            // this.executor = new CompleteQuestionnaireConditionExecutor(doc);
 
-            this.validator = new CompleteQuestionnaireValidationExecutor(doc);
+            this.validator = new CompleteQuestionnaireValidationExecutor(doc, scope);
 
             this.Id = doc.PublicKey.ToString();
             this.Title = doc.Title;
@@ -58,9 +60,9 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             this.Creator = doc.Creator;
             this.Status = doc.Status;
             this.LastScreenPublicKey = doc.Children.OfType<ICompleteGroup>().Last().PublicKey;
-            this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status)).ToList();
+            this.StatusHistory = doc.StatusChangeComments.Select(s => new ChangeStatusHistoryView(s.Responsible, s.Status, s.ChangeDate)).ToList();
             this.StatusHistory.Reverse();
-            this.HandleQuestionTree(doc);
+            this.HandleQuestionTree(doc, scope);
         }
 
         #endregion
@@ -90,6 +92,11 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <summary>
         /// Gets or sets the end date.
         /// </summary>
+        public DateTime StartDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the end date.
+        /// </summary>
         public DateTime? EndDate { get; set; }
 
         /// <summary>
@@ -112,10 +119,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </summary>
         public Guid LastScreenPublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the start date.
-        /// </summary>
-        public DateTime StartDate { get; set; }
+
 
         /// <summary>
         /// Gets or sets the status.
@@ -170,16 +174,17 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="target">
         /// The target.
         /// </param>
-        protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target)
+        protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target, QuestionScope scope)
         {
             this.InvalidQuestions = new List<QuestionStatisticView>();
             this.AnsweredQuestions = new List<QuestionStatisticView>();
             this.FeaturedQuestions = new List<QuestionStatisticView>();
             this.UnansweredQuestions = new List<QuestionStatisticView>();
 
-            this.executor.Execute(target);
+            // moved to the write layer
+            // this.executor.Execute(target);
 
-            foreach (var question in target.WrappedQuestions)
+            foreach (var question in target.WrappedQuestions.Where(q=>q.Question.QuestionScope <= scope))
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }

@@ -166,7 +166,7 @@
     if (!string.IsNullOrEmpty(question.ConditionExpression))
     {
         <script type="text/javascript">
-            addCondition('@Html.Raw(question.ConditionExpression)');
+            addCondition('@Html.Raw(question.ConditionExpression)', '@(question.PublicKey)' );
         </script>
     }
     <div id="@question.PublicKey" scope="@question.Parent" class="w display-question">

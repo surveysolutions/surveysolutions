@@ -34,12 +34,12 @@ namespace Web.CAPI.Controllers
         /// <summary>
         /// The _global provider.
         /// </summary>
-        private readonly IGlobalInfoProvider _globalProvider;
+        private readonly IGlobalInfoProvider globalProvider;
 
         /// <summary>
         /// The _user event sync.
         /// </summary>
-        private readonly IUserEventSync _userEventSync;
+        private readonly IUserEventSync userEventSync;
 
         /// <summary>
         /// The authentication.
@@ -66,8 +66,8 @@ namespace Web.CAPI.Controllers
             IFormsAuthentication auth, IGlobalInfoProvider globalProvider, IUserEventSync userEventSync)
         {
             this.authentication = auth;
-            this._globalProvider = globalProvider;
-            this._userEventSync = userEventSync;
+            this.globalProvider = globalProvider;
+            this.userEventSync = userEventSync;
         }
 
         #endregion
@@ -76,14 +76,14 @@ namespace Web.CAPI.Controllers
         #region Public Methods and Operators
 
         /// <summary>
-        /// Generate guid of current user
+        /// The get current user.
         /// </summary>
         /// <returns>
-        /// Guid of current user
+        /// The <see cref="Guid"/>.
         /// </returns>
         public Guid GetCurrentUser()
         {
-            UserLight currentUser = this._globalProvider.GetCurrentUser();
+            UserLight currentUser = this.globalProvider.GetCurrentUser();
             return currentUser != null ? currentUser.Id : Guid.Empty;
         }
 
@@ -91,28 +91,30 @@ namespace Web.CAPI.Controllers
         /// The is logged in.
         /// </summary>
         /// <returns>
-        /// The is logged in.
+        /// The <see cref="bool"/>.
         /// </returns>
         public bool IsLoggedIn()
         {
-            return this._globalProvider.GetCurrentUser() != null;
+            return this.globalProvider.GetCurrentUser() != null;
         }
 
         /// <summary>
         /// The is user in base.
         /// </summary>
         /// <returns>
-        /// The is user in base.
+        /// The <see cref="bool"/>.
         /// </returns>
         public bool IsUserInBase()
         {
-            IEnumerable<AggregateRootEvent> count = this._userEventSync.GetUsers(UserRoles.Operator);
+            IEnumerable<AggregateRootEvent> count = this.userEventSync.GetUsers(UserRoles.Operator);
             if (count == null)
             {
                 return false;
             }
 
             return count.ToList().Count > 0;
+
+            // return this._globalProvider.IsAnyUserExist();
         }
 
         /// <summary>

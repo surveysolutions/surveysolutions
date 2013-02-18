@@ -13,9 +13,9 @@ namespace DataEntryClientTests.Stubs
     using System.Collections.Generic;
     using System.Linq;
 
-    using DataEntryClient.WcfInfrastructure;
-
     using Moq;
+
+    using SynchronizationMessages.WcfInfrastructure;
 
     /// <summary>
     /// The chanel factory stub.

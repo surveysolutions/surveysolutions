@@ -7,17 +7,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Main.DenormalizerStorage;
-
 namespace Core.Supervisor.Views.Assignment
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Main.Core.Documents;
     using Main.Core.Entities;
+    using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire;
+    using Main.Core.View.Questionnaire;
+
+    using Main.DenormalizerStorage;
 
     /// <summary>
     /// The survey group view factory.
@@ -29,7 +33,17 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+
+        /// <summary>
+        /// The templates.
+        /// </summary>
+        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> templates;
+
+        /// <summary>
+        /// The users.
+        /// </summary>
+        private readonly IDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -38,12 +52,17 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Initializes a new instance of the <see cref="AssignmentViewFactory"/> class.
         /// </summary>
-        /// <param name="documentItemSession">
+        /// <param name="surveys">
         /// The document item session.
         /// </param>
-        public AssignmentViewFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public AssignmentViewFactory(
+            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IDenormalizerStorage<QuestionnaireBrowseItem> templates,
+            IDenormalizerStorage<UserDocument> users)
         {
-            this.documentItemSession = documentItemSession;
+            this.surveys = surveys;
+            this.templates = templates;
+            this.users = users;
         }
 
         #endregion
@@ -61,24 +80,36 @@ namespace Core.Supervisor.Views.Assignment
         /// </returns>
         public AssignmentView Load(AssignmentInputModel input)
         {
-            int count;
+            var view = new AssignmentView(input.Page, input.PageSize, 0);
+            view.Template = input.TemplateId == Guid.Empty
+                            ? new TemplateLight(Guid.Empty, "Any")
+                            : this.templates.GetByGuid(input.TemplateId).GetTemplateLight();
 
-            string title = string.Empty;
-            CompleteQuestionnaireBrowseItem template =
-                this.documentItemSession.Query().Where(v => v.TemplateId == input.Id).FirstOrDefault();
-            if (template != null)
+            view.User = input.UserId == Guid.Empty
+                            ? new UserLight(Guid.Empty, "Anyone")
+                            : this.users.GetByGuid(input.UserId).GetUseLight();
+
+            view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
+
+            if (input.Statuses != null && input.Statuses.Count > 0)
             {
-                title = template.QuestionnaireTitle;
+                var status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
+                if (status != SurveyStatus.Unknown)
+                {
+                    view.Status = status;
+                }
             }
-            
-            var statuses = input.Statuses == null
-                               ? new List<Guid>()
-                               : input.Statuses.Select(Guid.Parse).ToList();
-            IQueryable<CompleteQuestionnaireBrowseItem> items =
-                statuses.Count == 0
-                ? this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id)).OrderByDescending(t => t.CreationDate)
-                : this.documentItemSession.Query().Where(x => (x.TemplateId == input.Id))
-                                                  .Where(v => statuses.Contains(v.Status.PublicId)).OrderByDescending(t => t.CreationDate);
+           
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == Guid.Empty
+                ? this.surveys.Query()
+                : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
+                .OrderByDescending(t => t.CreationDate);
+
+            if (input.TemplateId != Guid.Empty)
+            {
+                items = items.Where(x => (x.TemplateId == input.TemplateId));
+            }
+
             if (input.IsNotAssigned)
             {
                 items = items.Where(t => t.Responsible == null);
@@ -93,20 +124,16 @@ namespace Core.Supervisor.Views.Assignment
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             }
 
-            count = items.Count();
-            if (count == 0)
-            {
-                return new AssignmentView(
-                    input.Page, input.PageSize, title, 0, new CompleteQuestionnaireBrowseItem[0], input.Id, input.UserId);
-            }
+            view.TotalCount = items.Count();
 
             if (input.Orders.Count > 0)
             {
                 items = this.DefineOrderBy(items, input);
             }
-            
-            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            return new AssignmentView(input.Page, input.PageSize, title, count, items, input.Id, input.UserId);
+
+            view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
+
+            return view;
         }
 
         #endregion

@@ -78,9 +78,9 @@ namespace Core.Supervisor.Views.Index
                             { "Unassigned", "Unassigned" },
                             { "Initial", SurveyStatus.Initial.Name },
                             { "Redo", SurveyStatus.Redo.Name },
-                            { "Complete", SurveyStatus.Complete.Name },
+                            { "Completed", SurveyStatus.Complete.Name },
                             { "Error", SurveyStatus.Error.Name },
-                            { "Approve", SurveyStatus.Approve.Name },
+                            { "Approved", SurveyStatus.Approve.Name },
                             { "Total", "Total" },
                         });
 
@@ -94,8 +94,8 @@ namespace Core.Supervisor.Views.Index
                         item.Total,
                         item.Initial,
                         item.Error,
-                        item.Complete,
-                        item.Approve,
+                        item.Completed,
+                        item.Approved,
                         item.Redo));
             }
         }

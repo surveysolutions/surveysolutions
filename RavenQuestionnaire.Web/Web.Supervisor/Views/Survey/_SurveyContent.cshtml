@@ -1,12 +1,10 @@
-﻿@using Main.Core.View.Card
-@using Main.Core.View.Group
+﻿@using Main.Core.View.Group
+@using Core.Supervisor.Views.Survey
 @using Main.Core.View.Question
-@model Main.Core.View.CompleteQuestionnaire.ScreenGroup.ScreenGroupView
+@model SurveyScreenView
 @{
     var questionKey = (Guid)ViewBag.CurrentQuestion;
     ViewBag.CurrentQuestion = questionKey;
-}
-@{
     ViewBag.AjaxOptions = new AjaxOptions
     {
         OnComplete = "JsonResults"
@@ -14,75 +12,109 @@
     ViewBag.CurrentGroupPublicKey = Model.PublicKey;
     ViewBag.QuestionnaireId = Model.QuestionnairePublicKey;
 }
-<!-- Start of second page -->
+<script type="text/javascript">
+var questionnaire = @Html.Raw(Json.Encode(Model)) ;
+</script>
 <div data-role="page" id="screen-@Model.PublicKey" class="@(ViewBag.PagePrefix) page">
-    @RenderNavigation(Model.Navigation.NavigationContent)
-    <!-- /header -->
-    <div data-role="content" class="dummy-scroll">
-        <div class="scroller-@(Model.PublicKey)" id="scroller">
-            <div>           
-                @Html.Partial("~/Views/Survey/Group/_CompleteGroup.cshtml", Model.Group)
-                 <div style="width: 100%; height: 50px;text-align: center"><strong>End of Section</strong></div>
+    <div class="body">
+        @foreach (var screen in Model.Screens)
+        {
+            <h2 class="heading">
+                @screen.Title
+            </h2>
+            <div class="questions">
+                <table class="table table-bordered table-condensed" style="width: @(300 + 200 * (screen.Captions.Count == 0 ? 1 : screen.Captions.Count))px">
+                    <colgroup width="@(300)px"></colgroup>
+                    @if (screen.Captions.Count > 0)
+                    {
+                        
+                        for (int index = 0; index < screen.Captions.Count; index++)
+                        {
+                        <colgroup width="@(200)px"></colgroup>
+                        }
+                        <thead>
+                            <tr>
+                                <th></th>
+                                @foreach (var caption in screen.Captions)
+                                {
+                                    <th>@caption</th>
+                                }
+                            </tr>
+                        </thead>
+                    }
+                    else
+                    {
+                        <colgroup width="@(200)px"></colgroup>
+                    }
+                    <tbody>
+                        @foreach (var question in screen.Questions)
+                        {
+                            <tr>
+                                <td class="question-title @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">@question.Title
+                                </td>
+                                @foreach (var answer in question.Answers)
+                                {
+                                    <td class="question-answer @(answer.Enabled ? "" : "disabled") @(answer.Valid ? "" : "invalid") 
+                                     @(question.Featured ? "featured" : "") @(question.Capital ? "capital" : "")">
+                                        <div class="cell-content">@answer.Answer &nbsp;
+                                        @if (answer.Enabled)
+                                        {
+                                            <div class="question-toolbar btn-group pull-right">
+                                                @if (!answer.IsReadOnly)
+                                                {
+                                                    <a class="btn btn-primary btn-mini answer-btn" href="#">answer</a>
+                                                }
+                                                <a class="btn btn-mini"><i class="icon-flag"></i></a>
+                                                <a class="btn btn-mini"><i class="icon-comment"></i></a>
+                                            </div>
+                                        }
+                                        </div>
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+               
+            </div>
+        }
+    </div>
+    <div class="bottom">
+        <div class="inner">
+            <div class="btn-group pull-right">
+                <a href="#" class="btn "><i class="icon-flag"></i>flagged</a> <a href="#" class="btn ">
+                    <i class="icon-ok"></i>answered</a> <a href="#" class="btn "><i class="icon-warning-sign">
+                    </i>invalid</a> <a href="#" class="btn "><i class="icon-pencil"></i>supervisor's</a>
             </div>
         </div>
-    </div>    
-    @RenderFooter(Model.Navigation.NavigationContent)
-    <!-- /content -->
+    </div>
 </div>
-<!-- /page -->
-<!-- other main panel pages here -->
 @helper RenderNavigation(ScreenNavigation screen)
     {
         List<CompleteGroupHeaders> crumbs = screen.BreadCumbs.Skip(1).ToList();
-    <ul class="breadcrumb" >
+    <ul class="breadcrumb">
         @for (int i = 0; i < crumbs.Count; i++)
         {
             CompleteGroupHeaders breadCumb = crumbs[i];
             if (i == 0)
             {
             <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })" class=" nav-link" data-inline="true" data-role="button"
-                data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a> <span class="divider">/</span></li>
+                data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a>
+                <span class="divider">/</span></li>
             }
             else
             {
-            <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class=" nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a><span class="divider">/</span></li>
+            <li><a href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = breadCumb.PublicKey })"  class=" nav-link" data-inline="true" data-role="button" data-corners="false" data-icon="arrow-r" data-iconpos="right">@breadCumb.GroupText</a><span
+                class="divider">/</span></li>
             }
         }
         <li class="active">
-            @screen.CurrentScreenTitle  
+            @screen.CurrentScreenTitle
             @if (!string.IsNullOrEmpty(Model.Description))
             {
-                <div>Description: @Model.Description</div>
+                <div>
+                    Description: @Model.Description</div>
             }
         </li>
-    </ul>
-}
-@helper RenderFooter(ScreenNavigation screen)
-    {
-    <ul  data-role="footer" data-theme="b" class="pager">
-        @if (screen.PrevScreen != null)
-        {
-            <li><a class="previous nav-link ui-btn-left" href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.PrevScreen.PublicKey, propagationKey = screen.PrevScreen.PropagationKey })" data-corners = "false" data-theme = "b" data-icon = "arrow-l" iconpos = "notext">
-               &larr;  Prev Group</a></li>
-            
-        }
-        else
-        {
-            <li><b class="previous previous-screen disabled  nav-link" href="#" data-icon="arrow-l" data-theme="b"
-                iconpos="notext" data-corners="false">&larr; Prev Group</b></li>
-        }
-
-        @if (screen.NextScreen != null)
-        {
-           
-            <li><a class="next nav-link ui-btn-right " href="@Url.Action("Screen", new { Id = Model.QuestionnairePublicKey, group = screen.NextScreen.PublicKey, propagationKey = screen.NextScreen.PropagationKey })"  data-icon="arrow-r" data-iconpos="right" data-corners="false" >
-                Next Group &rarr;</a></li>
-            
-        }
-        else
-        {
-            <li  class="disabled"><b class="next next-screen disabled   nav-link" href="#" data-icon="arrow-r" data-iconpos="right"
-                data-theme="b" data-corners="false">Next Group &rarr;</b></li>
-        }
     </ul>
 }

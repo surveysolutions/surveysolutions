@@ -1,30 +1,95 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Events;
-using SynchronizationMessages.CompleteQuestionnaire;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="GetEventStreamService.svc.cs" company="The World Bank">
+//   Get Event Stream Service
+// </copyright>
+// <summary>
+//   The get event stream service.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.WCF
 {
+    using System;
+
+    using DataEntryClient.SycProcess;
+    using DataEntryClient.SycProcess.Interfaces;
+    using DataEntryClient.SycProcessFactory;
+
+    using Main.Core.Events;
+
+    using Questionnaire.Core.Web.Helpers;
+
+    using SynchronizationMessages.CompleteQuestionnaire;
+
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "GetEventStreamService" in code, svc and config file together.
+
+    /// <summary>
+    /// The get event stream service.
+    /// </summary>
     public class GetEventStreamService : IGetEventStream
     {
-        private readonly IEventSync eventStore;
+        #region Constants and Fields
 
-        #region Implementation of IGetEventStream
+        /// <summary>
+        /// The event store.
+        /// </summary>
+        private readonly IEventStreamReader eventStore;
 
-        public ImportSynchronizationMessage Process(Guid firstEventPulicKey, int length)
+        /// <summary>
+        /// The syncs process factory
+        /// </summary>
+        private readonly ISyncProcessFactory syncProcessFactory;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetEventStreamService"/> class.
+        /// </summary>
+        /// <param name="eventStore">
+        /// The event store.
+        /// </param>
+        /// <param name="syncProcessFactory">
+        /// The sync Process Factory.
+        /// </param>
+        public GetEventStreamService(IEventStreamReader eventStore, ISyncProcessFactory syncProcessFactory)
         {
-            AggregateRootEvent[] stream =
-                eventStore.ReadEvents().SkipWhile(e => e.EventIdentifier != firstEventPulicKey).Take(length).ToArray();
-            //var index=stream
-            return new ImportSynchronizationMessage {EventStream = stream};
+            this.eventStore = eventStore;
+            this.syncProcessFactory = syncProcessFactory;
         }
 
         #endregion
 
-        public GetEventStreamService(IEventSync eventStore)
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The process.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// List of AR events
+        /// </returns>
+        public ImportSynchronizationMessage Process(Guid firstEventPulicKey, int length)
         {
-            this.eventStore = eventStore;
+            Guid syncProcess = Guid.NewGuid();
+            try
+            {
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                return process.Export("Supervisor export AR events", firstEventPulicKey, length);
+            }
+            catch (Exception ex)
+            {
+                return new ImportSynchronizationMessage();
+            }
         }
+
+        #endregion
     }
 }

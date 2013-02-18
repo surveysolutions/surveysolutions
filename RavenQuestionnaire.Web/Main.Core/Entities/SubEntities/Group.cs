@@ -1,11 +1,12 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Group.cs" company="">
-//   
+// <copyright file="Group.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The propagate.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 namespace Main.Core.Entities.SubEntities
 {
     using System;
@@ -73,25 +74,11 @@ namespace Main.Core.Entities.SubEntities
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets the parent.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the parent group.
+        /// Gets or sets the parent.
         /// </summary>
         [JsonIgnore]
-        public IComposite ParentGroup { get; set; }
-
+        public IComposite Parent { get; set; }
+        
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
@@ -117,7 +104,7 @@ namespace Main.Core.Entities.SubEntities
 
         #region Public Methods and Operators
 
-        /// <summary>
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -128,28 +115,24 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         /// <exception cref="CompositeException">
         /// </exception>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
-            if ((parent.HasValue && parent.Value == this.PublicKey) || !parent.HasValue)
+            if (!parent.HasValue || this.PublicKey == parent)
             {
+                c.Parent = this;
                 this.Children.Add(c);
-                return;
             }
-
-            foreach (IComposite child in this.Children)
+            else
             {
-                try
+                var group = this.Find<Group>(parent.Value);
+                if (group != null)
                 {
-                    child.Add(c, parent);
-                    return;
+                    group.Add(c, null, null);
                 }
-                catch (CompositeException)
-                {
-                }
+                //// leave legacy for awhile
+                throw new CompositeException();
             }
-
-            throw new CompositeException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -237,11 +220,9 @@ namespace Main.Core.Entities.SubEntities
                     this.Children.Insert(index + 1, c);
                     return;
                 }
-                else
-                {
-                    this.Children.Insert(0, c);
-                    return;
-                }
+                
+                this.Children.Insert(0, c);
+                return;
             }
             catch (CompositeException)
             {
@@ -250,7 +231,7 @@ namespace Main.Core.Entities.SubEntities
             throw new CompositeException();
         }
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -258,18 +239,19 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public void Remove(IComposite c)
         {
-            this.Remove(c.PublicKey);
-        }
-
-        /// <summary>
+            this.Remove(c.PublicKey, null);
+        }*/
+        
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
             if (group != null)
@@ -282,7 +264,7 @@ namespace Main.Core.Entities.SubEntities
             {
                 try
                 {
-                    child.Remove(publicKey);
+                    child.Remove(publicKey, null);
                     return;
                 }
                 catch (CompositeException)
@@ -291,6 +273,45 @@ namespace Main.Core.Entities.SubEntities
             }
 
             throw new CompositeException();
+        }*/
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.Parent = this;
+                item.ConnectChildsWithParent();
+            }
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public IComposite Clone()
+        {
+            var newGroup = new Group
+                {
+                    ConditionExpression = this.ConditionExpression,
+                    Description = this.Description,
+                    Enabled = this.Enabled,
+                    Propagated = this.Propagated,
+                    PublicKey = this.PublicKey,
+                    Title = this.Title,
+                    Triggers = new List<Guid>(this.Triggers)
+                };
+
+            foreach (var composite in this.Children)
+            {
+                newGroup.Children.Add(composite.Clone());
+            }
+
+            return newGroup;
         }
 
         /// <summary>

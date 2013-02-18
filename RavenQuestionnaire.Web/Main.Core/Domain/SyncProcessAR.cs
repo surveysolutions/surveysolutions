@@ -14,6 +14,7 @@ namespace Main.Core.Domain
 
     using Main.Core.Documents;
     using Main.Core.Events.Synchronization;
+    using Main.Core.View.SyncProcess;
 
     using Ncqrs.Domain;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -50,10 +51,16 @@ namespace Main.Core.Domain
         /// <param name="synckType">
         /// The synck type.
         /// </param>
-        public SyncProcessAR(Guid publicKey, SynchronizationType synckType)
+        public SyncProcessAR(Guid publicKey, Guid? parentProcessKey, SynchronizationType synckType, string description)
             : base(publicKey)
         {
-            this.ApplyEvent(new NewSynchronizationProcessCreated { ProcessGuid = publicKey, SynckType = synckType });
+            this.ApplyEvent(new NewSynchronizationProcessCreated
+                {
+                    ProcessGuid = publicKey,
+                    ParentProcessKey = parentProcessKey,
+                    SynckType = synckType, 
+                    Description = description
+                });
         }
 
         #endregion
@@ -99,17 +106,41 @@ namespace Main.Core.Domain
         /// <param name="status">
         /// The status.
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         /// <exception cref="InvalidOperationException">
         /// Raises InvalidOperationException.
         /// </exception>
-        public void EndProcess(EventState status)
+        public void EndProcess(EventState status, string description)
         {
             if (this.innerDocument.EndDate.HasValue)
             {
                 throw new InvalidOperationException("process is already finished");
             }
 
-            this.ApplyEvent(new ProcessEnded { Status = status });
+            this.ApplyEvent(new ProcessEnded
+                {
+                    ProcessKey = this.innerDocument.PublicKey, 
+                    Status = status,
+                    Description = description
+                });
+        }
+
+        /// <summary>
+        /// Push statistics
+        /// </summary>
+        /// <param name="statistics">
+        /// The statistics.
+        /// </param>
+        public void PushStatistics(List<UserSyncProcessStatistics> statistics)
+        {
+            if (this.innerDocument.EndDate.HasValue)
+            {
+                throw new InvalidOperationException("process is already finished");
+            }
+
+            this.ApplyEvent(new ProcessStatisticsCalculated { ProcessKey = this.innerDocument.PublicKey, Statistics = statistics });
         }
 
         /// <summary>
@@ -147,6 +178,17 @@ namespace Main.Core.Domain
         #region Methods
 
         /// <summary>
+        /// The on process ended.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnPushStatistics(ProcessStatisticsCalculated e)
+        {
+            this.innerDocument.Statistics = e.Statistics;
+        }
+
+        /// <summary>
         /// The on change aggregate root status.
         /// </summary>
         /// <param name="e">
@@ -177,7 +219,11 @@ namespace Main.Core.Domain
         {
             this.innerDocument = new SyncProcessDocument
                 {
-                   PublicKey = e.ProcessGuid, StartDate = DateTime.UtcNow, Handled = EventState.Initial 
+                   PublicKey = e.ProcessGuid, 
+                   ParentProcessKey = e.ParentProcessKey,
+                   StartDate = DateTime.UtcNow, 
+                   Handled = EventState.Initial,
+                   Description = e.Description
                 };
         }
 
@@ -191,6 +237,7 @@ namespace Main.Core.Domain
         {
             this.innerDocument.EndDate = DateTime.UtcNow;
             this.innerDocument.Handled = e.Status;
+            this.innerDocument.ExitDescription = e.Description;
         }
 
         /// <summary>

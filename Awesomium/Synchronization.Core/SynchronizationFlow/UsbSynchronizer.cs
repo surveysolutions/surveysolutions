@@ -8,37 +8,44 @@ using Common.Utils;
 using Synchronization.Core.Interface;
 using Synchronization.Core.Events;
 using Synchronization.Core.Errors;
+using System.ComponentModel;
 
 namespace Synchronization.Core.SynchronizationFlow
 {
     public class UsbSynchronizer : AbstractSynchronizer
     {
-        public UsbSynchronizer(ISettingsProvider settingsprovider, IUrlUtils urlUtils, IUsbProvider usbProvider)
-            : base(settingsprovider)
+        public UsbSynchronizer(ISettingsProvider settingsprovider, IRequestProcessor requestProcessor, IUrlUtils urlUtils, IUsbProvider usbProvider)
+            : base(settingsprovider, requestProcessor, urlUtils)
         {
-            this.urlUtils = urlUtils;
             this.usbProvider = usbProvider;
         }
 
         #region Private Members
 
         private readonly IUsbProvider usbProvider;
-        private IUrlUtils urlUtils;
         private string lastUsbArchiveName;
-        private AutoResetEvent stopRequested = new AutoResetEvent(false);
+        private ManualResetEvent stopUsbAccessRequested = new ManualResetEvent(false);
 
         #endregion
 
         #region Overrides of AbstractSynchronizer
 
-        protected override void OnPush(SyncDirection direction)
+        protected override void OnWaitForEndProcess(Action<SynchronizationEventArgs> eventRiser, SyncType syncType, SyncDirection direction)
+        {
+            if (syncType == SyncType.Push)
+                return;
+
+            base.OnWaitForEndProcess(eventRiser, syncType, direction);
+        }
+
+        protected override Guid OnPush(SyncDirection direction)
         {
             var drive = GetDrive(); // accept driver to flash on
 
+            this.stopUsbAccessRequested.Reset();
+
             try
             {
-                this.stopRequested.Reset();
-
                 var usbArchive = new UsbFileArchive(drive, direction == SyncDirection.Down);
                 var usbArchiveName = usbArchive.ArchiveFileName;
 
@@ -46,7 +53,7 @@ namespace Synchronization.Core.SynchronizationFlow
                 {
                     using (var webClient = new WebClient())
                     {
-                        SynchronizationException error = null;
+                        ServiceException error = null;
 
                         webClient.DownloadProgressChanged +=
                             (s, e) =>
@@ -54,9 +61,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToReceive == 0 ? 100 :
                                     e.BytesReceived * 100 / e.TotalBytesToReceive;
 
-                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null);
+                                var status = new SyncStatus(SyncType.Push, direction, (int)percents, null, "Downloading data ..");
 
-                                OnSyncProgressChanged(new SynchronizationEvent(status));
+                                OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
 
                         webClient.DownloadDataCompleted +=
@@ -71,7 +78,7 @@ namespace Synchronization.Core.SynchronizationFlow
                                     this.lastUsbArchiveName = string.Empty;
 
                                     if (cancelled)
-                                        error = new CancelledSynchronizationException("Push to usb is cancelled", error);
+                                        error = new CancelledServiceException("Push to usb is cancelled", error);
                                     else if (errornous)
                                         error = new SynchronizationException("Push to usb is failed", e.Error);
                                     else
@@ -80,9 +87,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                         this.lastUsbArchiveName = usbArchiveName;
                                     }
 
-                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents, error, error == null ? "Completed .." : null);
 
-                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                    OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
                                 finally
                                 {
@@ -90,13 +97,13 @@ namespace Synchronization.Core.SynchronizationFlow
                                 }
                             };
 
-                        var url = new Uri(this.urlUtils.GetUsbPushUrl(this.SettingsProvider.Settings.ClientId));
+                        var url = new Uri(this.UrlUtils.GetUsbPushUrl(this.SettingsProvider.Settings.ClientId));
 
                         webClient.DownloadDataAsync(url);
 
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
-                            if (this.stopRequested.WaitOne(100))
+                            if (this.stopUsbAccessRequested.WaitOne(100))
                             {
                                 webClient.CancelAsync();
                                 break;
@@ -110,7 +117,7 @@ namespace Synchronization.Core.SynchronizationFlow
                     }
                 }
             }
-            catch (SynchronizationException)
+            catch (ServiceException)
             {
                 throw;
             }
@@ -118,29 +125,33 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 throw new SynchronizationException("Push to usb is failed", e);
             }
+
+            return Guid.Empty;
         }
 
         /// <summary>
         /// Getting USB file and uploading it to web service
         /// </summary>
         /// <param name="direction"></param>
-        protected override void OnPull(SyncDirection direction)
+        protected override Guid OnPull(SyncDirection direction)
         {
             var drive = GetDrive(); // accept driver to flash on
+            Guid syncProcessId = Guid.Empty;
 
+            this.stopUsbAccessRequested.Reset();
+ 
             try
             {
                 var usbArchive = new UsbFileArchive(drive, direction == SyncDirection.Down);
                 var usbArchiveName = usbArchive.ArchiveFileName;
 
                 this.lastUsbArchiveName = string.Empty;
-                usbArchive.LoadArchive();
 
                 using (var done = new ManualResetEvent(false))
                 {
                     using (var webClient = new WebClient())
                     {
-                        SynchronizationException error = null;
+                        ServiceException error = null;
 
                         webClient.UploadProgressChanged +=
                             (s, e) =>
@@ -148,9 +159,9 @@ namespace Synchronization.Core.SynchronizationFlow
                                 var percents = e.TotalBytesToSend == 0 ? 100 :
                                     e.BytesSent * 100 / e.TotalBytesToSend;
 
-                                var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null);
+                                var status = new SyncStatus(SyncType.Pull, direction, (int)percents, null, "Uploading data ..");
 
-                                OnSyncProgressChanged(new SynchronizationEvent(status));
+                                OnSyncProgressChanged(new SynchronizationEventArgs(status));
                             };
 
                         webClient.UploadFileCompleted +=
@@ -162,18 +173,26 @@ namespace Synchronization.Core.SynchronizationFlow
 
                                 try
                                 {
+                                    syncProcessId = new Guid(System.Text.Encoding.UTF8.GetString(e.Result));
+                                }
+                                catch
+                                {
+                                }
+
+                                try
+                                {
                                     this.lastUsbArchiveName = string.Empty;
 
                                     if (cancelled)
-                                        error = new CancelledSynchronizationException("Pull from usb is cancelled", error);
+                                        error = new CancelledServiceException("Pull from usb is cancelled", error);
                                     else if (errornous)
                                         error = new SynchronizationException("Pull from usb is failed", e.Error);
                                     else
                                         this.lastUsbArchiveName = usbArchiveName;
 
-                                    var status = new SyncStatus(SyncType.Push, direction, percents, error);
+                                    var status = new SyncStatus(SyncType.Push, direction, percents / 2, error, error == null ? "Completed .." : null);
 
-                                    OnSyncProgressChanged(new SynchronizationEvent(status));
+                                    OnSyncProgressChanged(new SynchronizationEventArgs(status));
                                 }
                                 finally
                                 {
@@ -182,13 +201,13 @@ namespace Synchronization.Core.SynchronizationFlow
                             };
 
 
-                        var url = new Uri(this.urlUtils.GetUsbPullUrl(this.SettingsProvider.Settings.ClientId));
+                        var url = new Uri(this.UrlUtils.GetUsbPullUrl(this.SettingsProvider.Settings.ClientId));
 
                         webClient.UploadFileAsync(url, usbArchiveName);
 
                         while (webClient.IsBusy && !done.WaitOne(200))
                         {
-                            if (this.stopRequested.WaitOne(100))
+                            if (this.stopUsbAccessRequested.WaitOne(100))
                             {
                                 webClient.CancelAsync();
                                 break;
@@ -201,9 +220,8 @@ namespace Synchronization.Core.SynchronizationFlow
                             throw error;
                     }
                 }
-
             }
-            catch (SynchronizationException)
+            catch (ServiceException)
             {
                 throw;
             }
@@ -211,31 +229,32 @@ namespace Synchronization.Core.SynchronizationFlow
             {
                 throw new SynchronizationException("Pull from usb is failed", e);
             }
+
+            return syncProcessId;
         }
 
-        /// <summary>
-        /// Interrupt pending loading and wait for its finalization
-        /// </summary>
         protected override void OnStop()
         {
-            this.stopRequested.Set();
+            this.stopUsbAccessRequested.Set();
+ 
+            base.OnStop(); // stop web processing as well
         }
 
         public override string GetSuccessMessage(SyncType syncAction, SyncDirection direction)
         {
-            return string.Format("Usb {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
+            return string.Format("Usb synchronization {0} is successful with file {1}", syncAction, this.lastUsbArchiveName);
         }
 
-        protected override IList<SynchronizationException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
+        protected override IList<ServiceException> OnCheckSyncIssues(SyncType syncType, SyncDirection direction)
         {
             try
             {
-                var drive = GetDrive(); // only check if usb driver available and choozen
+                var drive = GetDrive(); // only check if usb driver available and choosen
                 return null;
             }
             catch (Exception ex)
             {
-                return new List<SynchronizationException>() { new UsbUnacceptableException(ex.Message) };
+                return new List<ServiceException>() { new UsbNotAccessableException(ex.Message) };
             }
         }
 

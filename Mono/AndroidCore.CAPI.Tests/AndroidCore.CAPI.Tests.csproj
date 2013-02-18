@@ -13,6 +13,7 @@
     <AssemblyName>AndroidCore.CAPI.Tests</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Core.CAPI.Tests\ExportStatisticsFactoryTests.cs">
+      <Link>ExportStatisticsFactoryTests.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Core.CAPI.Tests\Synchronization\ClientEventSyncTests.cs">
       <Link>Synchronization\ClientEventSyncTests.cs</Link>
     </Compile>
@@ -76,7 +80,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" />
+      <UserProperties ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

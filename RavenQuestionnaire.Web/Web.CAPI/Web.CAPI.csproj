@@ -127,6 +127,7 @@
       <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Discovery" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Routing" />
@@ -298,6 +299,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="WCF\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -372,6 +374,10 @@
       <Project>{03626966-3597-42FA-A394-A13941B558EB}</Project>
       <Name>DataEntryClient</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
+      <Name>SynchronizationMessages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Core.CAPI\Core.CAPI.csproj">
       <Project>{C71E88E7-10A1-40FB-A789-E1FF2F0687D4}</Project>
       <Name>Core.CAPI</Name>
@@ -379,6 +385,10 @@
     <ProjectReference Include="..\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.Synchronization\Main.Synchronization.csproj">
+      <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
+      <Name>Main.Synchronization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
       <Project>{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}</Project>
@@ -416,7 +426,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>11555</DevelopmentServerPort>
+          <DevelopmentServerPort>63140</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:8083/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

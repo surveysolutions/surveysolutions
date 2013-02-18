@@ -27,39 +27,39 @@ namespace Main.DenormalizerStorage.Tests
         {
             Mock<IPersistentStorage> storageMock=new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            PersistentDenormalizer<object> target = new PersistentDenormalizer<object>(cache, storageMock.Object, new List<Guid>());
+            PersistentDenormalizer<object> target = new PersistentDenormalizer<object>(cache, storageMock.Object);
             var key = Guid.NewGuid();
             var objectToStore = new object();
             target.Store(objectToStore, key);
-            storageMock.Verify(x => x.Store(objectToStore, key), Times.Never());
+            storageMock.Verify(x => x.Store(objectToStore, key.ToString()), Times.Never());
             Assert.IsTrue(cache.Contains(key.ToString()));
             cache.Remove(key.ToString());
-            
-            storageMock.Setup(x => x.GetByGuid<object>(key)).Returns(objectToStore);
+
+            storageMock.Setup(x => x.GetByGuid<object>(key.ToString())).Returns(objectToStore);
 
             var result = target.GetByGuid(key);
             Assert.IsTrue(objectToStore == result);
 
-            storageMock.Verify(x => x.GetByGuid<object>(key), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
             result = target.GetByGuid(key);
             
             //still once!
-            storageMock.Verify(x => x.GetByGuid<object>(key), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
 
         //    result = objectToStore = null;
             //befoure collect once
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key), Times.Once());
+            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Once());
             cache.Remove(key.ToString());
            
             //after collect twice
-            storageMock.Verify(x => x.Store(It.IsAny<object>(), key), Times.Exactly(2));
+            storageMock.Verify(x => x.Store(It.IsAny<object>(), key.ToString()), Times.Exactly(2));
         }
         [Test]
         public void Store_WhenObjectWasChangedAndExpired_ObjectWillDumpTheLatestVersion()
         {
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, new List<Guid>());
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
 
@@ -70,7 +70,7 @@ namespace Main.DenormalizerStorage.Tests
 
            // objectToStore = null;
             cache.Remove(key.ToString());
-            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key), Times.Exactly(1));
+            storageMock.Verify(x => x.Store(It.Is<TestObjectDump>(o => o.Name == "hello world"), key.ToString()), Times.Exactly(1));
         }
         [Test]
         public void Remove_WhenCachedObjectIsAllover_ObjectIsAbswentInAllStoreges()
@@ -78,24 +78,21 @@ namespace Main.DenormalizerStorage.Tests
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
-            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
+            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key.ToString())).Returns(objectToStore);
             var cache = new MemoryCache("WeakReferenceDenormalizer");
-            var bag = new List<Guid>();
-            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, bag);
+          
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
            
 
-            bag.Add(key);
-           
             var result = target.GetByGuid(key);
 
             target.Remove(key);
             Thread.Sleep(1000);
-            Assert.IsTrue(bag.Count==0);
             Assert.IsTrue(cache[key.ToString()] == null);
 
-            storageMock.Verify(x => x.Store<TestObjectDump>(objectToStore, key), Times.Never());
-            storageMock.Verify(x => x.Remove<TestObjectDump>(key), Times.Once());
-            storageMock.Verify(x => x.GetByGuid<TestObjectDump>(key), Times.Once());
+            storageMock.Verify(x => x.Store<TestObjectDump>(objectToStore, key.ToString()), Times.Once());
+            storageMock.Verify(x => x.Remove<TestObjectDump>(key.ToString()), Times.Once());
+            storageMock.Verify(x => x.GetByGuid<TestObjectDump>(key.ToString()), Times.Once());
           /*  Assert.IsTrue(storageStub.StoreCount == 0);
             Assert.IsTrue(storageStub.DeleteCount == 1);
             Assert.IsTrue(storageStub.GetCount == 1);*/
@@ -107,17 +104,28 @@ namespace Main.DenormalizerStorage.Tests
             var key = Guid.NewGuid();
             var objectToStore = new TestObjectDump("test", key);
             Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
-            var bag = new List<Guid>();
             var cache = new MemoryCache("WeakReferenceDenormalizer");
 
-            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object, bag);
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
 
-
-            bag.Add(key);
             cache.Add(key.ToString(), objectToStore, new CacheItemPolicy());
 
             target.Store(new TestObjectDump("hello", key), key);
             Assert.IsTrue((cache[key.ToString()] as TestObjectDump).Name == "hello");
+        }
+        [Test]
+        public void GetByGuid_ObjectExistesOnlyInPersistantStorage_ObjectIsReturnedAndPlacedInMemoryAndBag()
+        {
+            var key = Guid.NewGuid();
+            var objectToStore = new TestObjectDump("test", key);
+            Mock<IPersistentStorage> storageMock = new Mock<IPersistentStorage>();
+            storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key.ToString())).Returns(objectToStore);
+            var cache = new MemoryCache("WeakReferenceDenormalizer");
+
+            PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
+
+            var result = target.GetByGuid(key);
+            Assert.AreEqual(result, objectToStore);
         }
     }
 

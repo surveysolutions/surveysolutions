@@ -38,7 +38,7 @@ namespace Core.Supervisor.Views.Summary
         /// <param name="template">
         /// The template.
         /// </param>
-        public SummaryView(int page, int pageSize, int totalCount, SummaryViewItem.TemplateLight template)
+        public SummaryView(int page, int pageSize, int totalCount, TemplateLight template)
         {
             this.Orders = new List<OrderRequestItem>();
             this.Order = string.Empty;
@@ -51,9 +51,9 @@ namespace Core.Supervisor.Views.Summary
                         {
                             { "Initial", SurveyStatus.Initial.Name },
                             { "Redo", SurveyStatus.Redo.Name },
-                            { "Complete", SurveyStatus.Complete.Name },
+                            { "Completed", SurveyStatus.Complete.Name },
                             { "Error", SurveyStatus.Error.Name },
-                            { "Approve", SurveyStatus.Approve.Name },
+                            { "Approved", SurveyStatus.Approve.Name },
                             { "Total", "Total" },
                         });
         }
@@ -70,7 +70,7 @@ namespace Core.Supervisor.Views.Summary
         /// <summary>
         /// Gets or sets Template.
         /// </summary>
-        public SummaryViewItem.TemplateLight Template { get; set; }
+        public TemplateLight Template { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

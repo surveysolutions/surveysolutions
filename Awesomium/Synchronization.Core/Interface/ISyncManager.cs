@@ -18,10 +18,10 @@ namespace Synchronization.Core.Interface
         /// </summary>
         void UpdateStatuses();
 
-        IList<SynchronizationException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
+        IList<ServiceException> CheckSyncIssues(SyncType syncAction, SyncDirection direction);
 
-        event EventHandler<SynchronizationEvent> SyncProgressChanged;
-        event EventHandler<SynchronizationEvent> BgnOfSync;
-        event EventHandler<SynchronizationCompletedEvent> EndOfSync;
+        event EventHandler<SynchronizationEventArgs> SyncProgressChanged;
+        event EventHandler<SynchronizationEventArgs> BgnOfSync;
+        event EventHandler<SynchronizationCompletedEventArgs> EndOfSync;
     }
 }

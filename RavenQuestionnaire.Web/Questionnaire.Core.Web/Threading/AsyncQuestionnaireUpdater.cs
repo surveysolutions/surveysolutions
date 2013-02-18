@@ -6,15 +6,13 @@
 //   The async questionnaire updater.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using System.Threading.Tasks;
-using System.Web.Mvc.Async;
-using NLog;
-
 namespace Questionnaire.Core.Web.Threading
 {
     using System;
     using System.Threading;
+    using System.Web.Mvc.Async;
+
+    using NLog;
 
     /// <summary>
     /// The async questionnaire updater.
@@ -35,19 +33,21 @@ namespace Questionnaire.Core.Web.Threading
         /// <summary>
         /// The update.
         /// </summary>
-        /// <param name="resp">
-        /// The resp.
+        /// <param name="manager">
+        /// The manager.
+        /// </param>
+        /// <param name="result">
+        /// The result.
         /// </param>
         /// <returns>
-        /// The System.IAsyncResult.
+        /// The <see cref="IAsyncResult"/>.
         /// </returns>
-        public static IAsyncResult Update(AsyncManager manager, SaveSingleResult resp)
+        public static IAsyncResult Update(AsyncManager manager, SaveSingleResult result)
         {
             manager.OutstandingOperations.Increment();
-            return new AsyncViewResult(manager,resp);
-            
+            return new AsyncViewResult(manager, result);
         }
-     
+
         #endregion
 
         /// <summary>
@@ -68,6 +68,11 @@ namespace Questionnaire.Core.Web.Threading
             #region Fields
 
             /// <summary>
+            /// The logger.
+            /// </summary>
+            private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+            /// <summary>
             /// The m thread.
             /// </summary>
             private readonly Thread mThread;
@@ -81,10 +86,6 @@ namespace Questionnaire.Core.Web.Threading
             /// The update questionnare.
             /// </summary>
             private readonly SaveSingleResult updateQuestionnare;
-            /// <summary>
-            /// The logger.
-            /// </summary>
-            private  Logger logger = LogManager.GetCurrentClassLogger();
 
             #endregion
 
@@ -93,12 +94,15 @@ namespace Questionnaire.Core.Web.Threading
             /// <summary>
             /// Initializes a new instance of the <see cref="AsyncViewResult"/> class.
             /// </summary>
-            /// <param name="updateQuestionnare">
-            /// The update questionnare.
+            /// <param name="manager">
+            /// The manager.
             /// </param>
-            public AsyncViewResult(AsyncManager manager, SaveSingleResult updateQuestionnare)
+            /// <param name="updateQuestionnaire">
+            /// The update questionnaire.
+            /// </param>
+            public AsyncViewResult(AsyncManager manager, SaveSingleResult updateQuestionnaire)
             {
-                this.updateQuestionnare = updateQuestionnare;
+                this.updateQuestionnare = updateQuestionnaire;
 
                 bool hasMail = Interlocked.Increment(ref mCount) % 2 == 0;
 
@@ -114,9 +118,9 @@ namespace Questionnaire.Core.Web.Threading
                             }
                             catch (Exception e)
                             {
-                                logger.ErrorException(e.Message, e);
-
+                                this.logger.ErrorException(e.Message, e);
                             }
+
                             manager.OutstandingOperations.Decrement();
                             this.mWait.Set();
                         });

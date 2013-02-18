@@ -29,15 +29,23 @@ namespace Main.Core.Commands.Synchronization
         /// Initializes a new instance of the <see cref="CreateNewSynchronizationProcessCommand"/> class.
         /// </summary>
         /// <param name="publicKey">
-        /// The public key.
+        ///   The public key.
+        /// </param>
+        /// <param name="parentProcessKey">
+        /// The parent process key
         /// </param>
         /// <param name="synckType">
-        /// The synck type.
+        ///   The sync type.
         /// </param>
-        public CreateNewSynchronizationProcessCommand(Guid publicKey, SynchronizationType synckType)
+        /// <param name="description">
+        ///   The description
+        /// </param>
+        public CreateNewSynchronizationProcessCommand(Guid publicKey, Guid? parentProcessKey, SynchronizationType synckType, string description)
         {
             this.PublicKey = publicKey;
+            this.ParentProcessKey = parentProcessKey;
             this.SynckType = synckType;
+            this.Description = description;
         }
 
         #endregion
@@ -50,9 +58,19 @@ namespace Main.Core.Commands.Synchronization
         public Guid PublicKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the synck type.
+        /// Gets or sets ParentProcessKey.
+        /// </summary>
+        public Guid? ParentProcessKey { get; set; }
+
+        /// <summary>
+        /// Gets or sets the sync type.
         /// </summary>
         public SynchronizationType SynckType { get; set; }
+
+        /// <summary>
+        /// Gets or sets description.
+        /// </summary>
+        public string Description { get; set; }
 
         #endregion
     }

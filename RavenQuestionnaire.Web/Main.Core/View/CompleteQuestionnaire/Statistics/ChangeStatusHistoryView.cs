@@ -27,10 +27,14 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// <param name="status">
         /// The status.
         /// </param>
-        public ChangeStatusHistoryView(UserLight user, SurveyStatus status)
+        /// <param name="date">
+        /// The date.
+        /// </param>
+        public ChangeStatusHistoryView(UserLight user, SurveyStatus status, DateTime date)
         {
             this.UserName = user.Name;
             this.StatusName = status.Name;
+            this.ChangeDate = date;
             this.Comment = status.ChangeComment;
         }
 
@@ -38,6 +42,11 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// Gets or sets Comment.
         /// </summary>
         public string Comment { get; set; }
+
+        /// <summary>
+        /// Gets or sets ChangeDate.
+        /// </summary>
+        public DateTime ChangeDate { get; set; }
 
         /// <summary>
         /// Gets or sets StatusName.

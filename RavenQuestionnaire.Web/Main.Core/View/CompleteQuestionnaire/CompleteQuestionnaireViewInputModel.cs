@@ -102,5 +102,7 @@ namespace Main.Core.View.CompleteQuestionnaire
         #endregion
 
         // public Guid? CurrentScreenPublicKey { get; set; }
+
+        public Entities.SubEntities.QuestionScope Scope { get; set; }
     }
 }

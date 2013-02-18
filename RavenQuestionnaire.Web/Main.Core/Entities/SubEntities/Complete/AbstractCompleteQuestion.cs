@@ -32,9 +32,12 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Enabled = true;
             this.Valid = true;
+            this.IsFlaged = false;
             this.Cards = new List<Image>();
             this.AnswerDate = DateTime.Now;
             this.Answers = new List<IAnswer>();
+            this.ConditionalDependentQuestions = new List<Guid>();
+            this.ConditionalDependentGroups = new List<Guid>();
         }
 
         /// <summary>
@@ -51,6 +54,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the validated time.
+        /// </summary>
+        public DateTime ValidatedTime { get; set; }
 
         /// <summary>
         /// Gets or sets the answer date.
@@ -100,6 +108,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public string Comments { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether IsFlaged.
+        /// </summary>
+        public bool IsFlaged { get; set; }
+
+        /// <summary>
         /// Gets or sets the condition expression.
         /// </summary>
         public string ConditionExpression { get; set; }
@@ -108,6 +121,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets a value indicating whether enabled.
         /// </summary>
         public bool Enabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets the enable state calculated.
+        /// </summary>
+        public DateTime EnableStateCalculated { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether featured.
@@ -125,18 +143,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         public bool Mandatory { get; set; }
 
         /// <summary>
-        /// Gets the parent.
+        /// Gets or sets the parent.
         /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
         [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IComposite Parent { get; set; }
 
         /// <summary>
         /// Gets or sets the propogation public key.
@@ -159,6 +169,11 @@ namespace Main.Core.Entities.SubEntities.Complete
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
+        /// Gets or sets question scope.
+        /// </summary>
+        public QuestionScope QuestionScope { get; set; }
+
+        /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
         public string StataExportCaption { get; set; }
@@ -179,15 +194,15 @@ namespace Main.Core.Entities.SubEntities.Complete
         public string ValidationMessage { get; set; }
 
         /// <summary>
-        /// The add answer.
+        /// Gets or sets the conditional dependent questions.
         /// </summary>
-        /// <param name="answer">
-        /// The answer.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public abstract void AddAnswer(IAnswer answer);
+        public List<Guid> ConditionalDependentQuestions { get; set; }
 
+        /// <summary>
+        /// Gets or sets the conditional dependent groups.
+        /// </summary>
+        public List<Guid> ConditionalDependentGroups { get; set; }
+        
         /// <summary>
         /// Gets or sets the triggers.
         /// </summary>
@@ -199,6 +214,17 @@ namespace Main.Core.Entities.SubEntities.Complete
         #region Public Methods and Operators
 
         /// <summary>
+        /// The add answer.
+        /// </summary>
+        /// <param name="answer">
+        /// The answer.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public abstract void AddAnswer(IAnswer answer);
+
+
+        /*/// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
@@ -207,10 +233,10 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <param name="parent">
         /// The parent.
         /// </param>
-        public void Add(IComposite c, Guid? parent)
+        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         /// <summary>
         /// The find.
@@ -284,7 +310,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// </returns>
         public abstract string GetAnswerString();
 
-        /// <summary>
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="c">
@@ -293,17 +319,68 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void Remove(IComposite c)
         {
             throw new NotImplementedException();
-        }
-
-        /// <summary>
+        }*/
+        
+        /*/// <summary>
         /// The remove.
         /// </summary>
         /// <param name="publicKey">
         /// The public key.
         /// </param>
-        public void Remove(Guid publicKey)
+        /// <param name="propagationKey">
+        /// The propagation key.
+        /// </param>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        public void Remove(Guid publicKey, Guid? propagationKey)
         {
             throw new NotImplementedException();
+        }*/
+
+        /// <summary>
+        /// The connect childs with parent.
+        /// </summary>
+        public void ConnectChildsWithParent()
+        {
+            //// do nothing
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IComposite"/>.
+        /// </returns>
+        public virtual IComposite Clone()
+        {
+            var question = this.MemberwiseClone() as ICompleteQuestion;
+
+            question.Parent = null;
+
+            if (this.Cards != null)
+            {
+                question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
+            }
+
+            if (this.ConditionalDependentGroups != null)
+            {
+                question.ConditionalDependentGroups = new List<Guid>(this.ConditionalDependentGroups);
+            }
+
+            if (this.ConditionalDependentQuestions != null)
+            {
+                question.ConditionalDependentQuestions = new List<Guid>(this.ConditionalDependentQuestions);
+            }
+
+            // handle reference part
+            question.Answers = new List<IAnswer>();
+            foreach (var answer in this.Answers)
+            {
+                var item = answer.Clone();
+                question.Answers.Add(answer.Clone());
+            }
+
+            return question;
         }
 
         /// <summary>

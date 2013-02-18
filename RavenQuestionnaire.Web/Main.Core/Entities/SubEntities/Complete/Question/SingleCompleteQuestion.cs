@@ -91,7 +91,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
 
             this.Answers.Add(answer);
         }
-
         
         /// <summary>
         /// The get answer object.
@@ -101,8 +100,8 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </returns>
         public override object GetAnswerObject()
         {
-            IEnumerable<object> answers = this.Answers.Where(c => ((ICompleteAnswer)c).Selected).Select(
-                    c => ((ICompleteAnswer)c).AnswerValue ?? ((ICompleteAnswer)c).AnswerText).ToArray();
+            IEnumerable<object> answers = 
+                this.Answers.Where(c => ((ICompleteAnswer)c).Selected).Select(c => c.AnswerValue ?? c.AnswerText).ToArray();
             
             return answers.Any() ? answers.First() : null;
         }
@@ -130,52 +129,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             return answer == null ? string.Empty : answer.AnswerText;
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public override void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey);
-        }*/
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public override void Remove(Guid publicKey)
-        {
-            if (this.PublicKey == publicKey)
-            {
-                foreach (CompleteAnswer answer in this.Answers)
-                {
-                    answer.Remove(answer);
-                }
-
-                return;
-            }
-
-            foreach (CompleteAnswer completeAnswer in this.Answers)
-            {
-                try
-                {
-                    completeAnswer.Remove(publicKey);
-
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException("answer wasn't found");
-        }*/
 
         /// <summary>
         /// The set answer.
@@ -201,18 +154,6 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
             {
                 (item as ICompleteAnswer).Selected = selecteAnswer == item.PublicKey;
             }
-
-            /*var answerObject = this.FirstOrDefault<ICompleteAnswer>(a => a.PublicKey == selecteAnswer);
-            if (answerObject != null)
-            {
-                this.Answers.ForEach(c => ((ICompleteAnswer)c).Selected = false);
-                answerObject.Add(answerObject, null);
-
-                // this.AnswerDate = DateTime.Now;
-                return;
-            }
-
-            throw new CompositeException("Answer wasn't found.");*/
         }
 
         #endregion

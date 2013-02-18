@@ -18,6 +18,8 @@ namespace Questionnaire.Core.Web.Helpers
     using System.Web.Mvc;
     using System.Web.Mvc.Html;
 
+    using Main.Core.Entities.SubEntities;
+
     /// <summary>
     /// The select extensions.
     /// </summary>
@@ -133,11 +135,14 @@ namespace Questionnaire.Core.Web.Helpers
             var items = new List<SelectListItem>();
             foreach (object item in Enum.GetValues(enumType))
             {
-                FieldInfo fi = enumType.GetField(item.ToString());
-                object attribute = fi.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
-                string title = attribute == null ? item.ToString() : ((DescriptionAttribute)attribute).Description;
-                string value = item.ToString();
-                items.Add(new SelectListItem { Value = value, Text = title, Selected = value == selectedItem });
+                if (enumType != typeof(QuestionType) || (enumType == typeof(QuestionType) && item.ToString() != "YesNo"))
+                {
+                    FieldInfo fi = enumType.GetField(item.ToString());
+                    object attribute = fi.GetCustomAttributes(typeof(DescriptionAttribute), true).FirstOrDefault();
+                    string title = attribute == null ? item.ToString() : ((DescriptionAttribute)attribute).Description;
+                    string value = item.ToString();
+                    items.Add(new SelectListItem { Value = value, Text = title, Selected = value == selectedItem });
+                }
             }
 
             return items;

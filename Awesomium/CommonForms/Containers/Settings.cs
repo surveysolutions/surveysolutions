@@ -184,8 +184,7 @@ namespace Browsing.Common.Containers
                 SaveSettings();
                 //Properties.Settings.Default.Save();
 
-                foreach (var screen in this.Holder.LoadedScreens)
-                    screen.UpdateConfigDependencies();
+                Holder.UpdateConfigDependencies();
             }
 
             this.btnCancel.Enabled = false;

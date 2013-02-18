@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyStatus.cs" company="">
-//   
+// <copyright file="SurveyStatus.cs" company="The World Bank">
+//   2012
 // </copyright>
 // <summary>
 //   The survey status.
@@ -10,22 +10,20 @@ namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// The survey status.
     /// </summary>
-    public class SurveyStatus
+    public struct SurveyStatus
     {
-        #region Constructors and Destructors
+        // IF YOU WANT TO CHANGE THIS STRUCTURE TO THE CLASS
+        // PAY ATTENTION THAT IT IS USED AS A MEMBER OF OBJECTS
+        // WHICH are used MEMBERWISECLONE 
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
-        /// </summary>
-        public SurveyStatus()
-        {
-        }
 
-        /// <summary>
+
+        /* /// <summary>
         /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
         /// </summary>
         /// <param name="id">
@@ -33,10 +31,10 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public SurveyStatus(Guid id)
         {
-            this.PublicId = id;
-        }
+            PublicId = id;
+        }*/
 
-        /// <summary>
+        /*/// <summary>
         /// Initializes a new instance of the <see cref="SurveyStatus"/> class.
         /// </summary>
         /// <param name="id">
@@ -47,12 +45,9 @@ namespace Main.Core.Entities.SubEntities
         /// </param>
         public SurveyStatus(Guid id, string name)
         {
-            this.PublicId = id;
+            PublicId = id;
             this.Name = name;
-        }
-
-        #endregion
-
+        }*/
         #region Public Properties
 
         /// <summary>
@@ -62,9 +57,10 @@ namespace Main.Core.Entities.SubEntities
         {
             get
             {
-                var identifier = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555");
-                string name = "Approved";
-                return new SurveyStatus(identifier, name);
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("AA6C0DC1-23C4-4B03-A3ED-B24EF0055555"), Name = "Approved" 
+                    };
             }
         }
 
@@ -75,9 +71,10 @@ namespace Main.Core.Entities.SubEntities
         {
             get
             {
-                var identifier = new Guid("776C0DC1-23C4-4B03-A3ED-B24EF005559B");
-                string name = "Completed";
-                return new SurveyStatus(identifier, name);
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("776C0DC1-23C4-4B03-A3ED-B24EF005559B"), Name = "Completed" 
+                    };
             }
         }
 
@@ -88,9 +85,10 @@ namespace Main.Core.Entities.SubEntities
         {
             get
             {
-                var identifier = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F");
-                string name = "Completed with error";
-                return new SurveyStatus(identifier, name);
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("D65CF1F6-8A75-43FA-9158-B745EB4D6A1F"), Name = "Completed with error" 
+                    };
             }
         }
 
@@ -101,9 +99,10 @@ namespace Main.Core.Entities.SubEntities
         {
             get
             {
-                var identifier = new Guid("8927D124-3CFB-4374-AD36-2FD99B62CE13");
-                string name = "Initial";
-                return new SurveyStatus(identifier, name);
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("8927D124-3CFB-4374-AD36-2FD99B62CE13"), Name = "Initial" 
+                    };
             }
         }
 
@@ -114,9 +113,35 @@ namespace Main.Core.Entities.SubEntities
         {
             get
             {
-                var identifier = new Guid("2bb6f94d-5beb-4374-8749-fac7cee1e020");
-                string name = "Redo";
-                return new SurveyStatus(identifier, name);
+                return new SurveyStatus { PublicId = new Guid("2bb6f94d-5beb-4374-8749-fac7cee1e020"), Name = "Redo" };
+            }
+        }
+
+        /// <summary>
+        /// Gets Redo.
+        /// </summary>
+        public static SurveyStatus Unassign
+        {
+            get
+            {
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("4da8dddb-b31d-4508-bde6-178160705ba1"), Name = "Unassigned" 
+                    };
+            }
+        }
+
+        /// <summary>
+        /// Gets Unknown.
+        /// </summary>
+        public static SurveyStatus Unknown
+        {
+            get
+            {
+                return new SurveyStatus
+                    {
+                       PublicId = new Guid("EAA0AA81-CCF1-4FB6-91C7-861264EC3FC9"), Name = "Unknown" 
+                    };
             }
         }
 
@@ -147,46 +172,39 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static IEnumerable<SurveyStatus> GetAllStatuses()
         {
-            return new[] { Initial, Error, Complete, Approve, Redo };
+            return new[] { Unassign, Initial, Error, Complete, Approve, Redo, Unknown };
         }
 
         /// <summary>
-        /// check status on allowance to be pushed from capi
+        /// The get status by id or default.
         /// </summary>
-        /// <param name="status">
+        /// <param name="id">
+        /// The id.
         /// </param>
         /// <returns>
-        /// The System.Boolean.
+        /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static bool IsStatusAllowCapiSync(SurveyStatus status)
+        public static SurveyStatus GetStatusByIdOrDefault(Guid id)
         {
-            return status.PublicId == Complete.PublicId || status.PublicId == Error.PublicId;
+            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id);
+            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
         }
 
         /// <summary>
-        /// The is status allow down supervisor sync.
+        /// The get status by name.
         /// </summary>
-        /// <param name="status">
-        /// The status.
+        /// <param name="statusName">
+        /// The status name.
         /// </param>
         /// <returns>
-        /// The System.Boolean.
+        /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
-        {            
-             return status.PublicId == SurveyStatus.Initial.PublicId || status.PublicId == SurveyStatus.Approve.PublicId || status.PublicId == SurveyStatus.Redo.PublicId;
-        }
-
-        /// <summary>
-        /// check status on allowance to be pushed from capi
-        /// </summary>
-        /// <param name="status">
-        /// </param>
-        /// <returns>
-        /// The Main.Core.Entities.SubEntities.SurveyStatus.
-        /// </returns>
-        public static SurveyStatus IsValidStatus(string statusName)
+        public static SurveyStatus GetStatusByNameOrDefault(string statusName)
         {
+            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.Name == statusName);
+            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
+
+            /*
             if (statusName == Approve.Name)
             {
                 return Approve;
@@ -212,9 +230,113 @@ namespace Main.Core.Entities.SubEntities
                 return Redo;
             }
 
-            return null;
+            if (statusName == Unassign.Name)
+            {
+                return Unassign;
+            }
+
+            return Unknown;*/
+        }
+
+        /// <summary>
+        /// check status on allowance to be pushed from capi
+        /// </summary>
+        /// <param name="status">
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public static bool IsStatusAllowCapiSync(SurveyStatus status)
+        {
+            return status.PublicId == Complete.PublicId || status.PublicId == Error.PublicId;
+        }
+
+        /// <summary>
+        /// The is status allow down supervisor sync.
+        /// </summary>
+        /// <param name="status">
+        /// The status.
+        /// </param>
+        /// <returns>
+        /// The System.Boolean.
+        /// </returns>
+        public static bool IsStatusAllowDownSupervisorSync(SurveyStatus status)
+        {
+            return status.PublicId == Initial.PublicId || status.PublicId == Approve.PublicId
+                   || status.PublicId == Redo.PublicId;
+        }
+
+        /// <summary>
+        /// To string
+        /// </summary>
+        /// <returns>
+        /// The string
+        /// </returns>
+        public override string ToString()
+        {
+            return string.Format("{0}: [{1}]", this.Name, this.PublicId);
         }
 
         #endregion
+
+        public override bool Equals(object obj)
+        {
+         /* if (ReferenceEquals(null, obj))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }*/
+
+
+            if (obj.GetType() != typeof(SurveyStatus))
+            {
+                return false;
+            }
+
+            SurveyStatus item = (SurveyStatus)obj;
+
+            return Equals((SurveyStatus)obj);
+        }
+       
+
+        public bool Equals(SurveyStatus other)
+        {
+            /*if (ReferenceEquals(null, other))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }*/
+
+            // ignoring name 
+            return /*Equals(other.Name, this.Name) && */other.PublicId.Equals(this.PublicId);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.PublicId.GetHashCode();
+
+            /*unchecked
+            {
+                return ((this.Name != null ? this.Name.GetHashCode() : 0) * 947) ^ this.PublicId.GetHashCode();
+            }*/
+        }
+
+        public static bool operator ==(SurveyStatus left, SurveyStatus right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(SurveyStatus left, SurveyStatus right)
+        {
+            return !Equals(left, right);
+        }
     }
 }

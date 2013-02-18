@@ -66,7 +66,12 @@ namespace Main.Core.Domain
             // instance will be update in the handler of 
             // this event (the OnNewQuestionnaireCreated method).
             this.ApplyEvent(
-                new NewQuestionnaireCreated { PublicKey = questionnaireId, Title = text, CreationDate = clock.UtcNow() });
+                new NewQuestionnaireCreated
+                    {
+                        PublicKey = questionnaireId, 
+                        Title = text, 
+                        CreationDate = clock.UtcNow()
+                    });
         }
 
         #endregion
@@ -83,7 +88,7 @@ namespace Main.Core.Domain
         /// </param>
         public void UpdateQuestionnaire(string title)
         {
-            this.ApplyEvent(new QuestionnaireUpdated() { PublicKey = this.EventSourceId, Title = title });
+            this.ApplyEvent(new QuestionnaireUpdated() {Title = title });
         }
 
         /// <summary>
@@ -96,13 +101,16 @@ namespace Main.Core.Domain
         /// The text.
         /// </param>
         /// <param name="propagateble">
-        /// The propagateble.
+        /// The propagate.
         /// </param>
         /// <param name="parentGroupKey">
         /// The parent group key.
         /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
+        /// </param>
+        /// <param name="description">
+        /// The description.
         /// </param>
         public void AddGroup(
             Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
@@ -144,6 +152,9 @@ namespace Main.Core.Domain
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// The question scope
+        /// </param>
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
@@ -180,6 +191,7 @@ namespace Main.Core.Domain
             string questionText, 
             string stataExportCaption, 
             QuestionType questionType, 
+            QuestionScope questionScope,
             string conditionExpression, 
             string validationExpression, 
             string validationMessage, 
@@ -203,8 +215,9 @@ namespace Main.Core.Domain
                     {
                         PublicKey = publicKey, 
                         QuestionText = questionText, 
-                        StataExportCaption = stataExportCaption, 
-                        QuestionType = questionType, 
+                        StataExportCaption = stataExportCaption,
+                        QuestionType = questionType,
+                        QuestionScope = questionScope, 
                         ConditionExpression = conditionExpression, 
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
@@ -243,6 +256,9 @@ namespace Main.Core.Domain
         /// <param name="questionType">
         /// The question type.
         /// </param>
+        /// <param name="questionScope">
+        /// The question scope
+        /// </param>
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
@@ -274,7 +290,8 @@ namespace Main.Core.Domain
             int maxValue,
             string stataExportCaption, 
             string instructions, 
-            QuestionType questionType, 
+            QuestionType questionType,
+            QuestionScope questionScope, 
             Guid? groupPublicKey, 
             string conditionExpression, 
             string validationExpression, 
@@ -291,7 +308,8 @@ namespace Main.Core.Domain
                         Triggers = triggers, 
                         MaxValue = maxValue,
                         StataExportCaption = stataExportCaption, 
-                        QuestionType = questionType, 
+                        QuestionType = questionType,
+                        QuestionScope = questionScope, 
                         ConditionExpression = conditionExpression, 
                         ValidationExpression = validationExpression, 
                         ValidationMessage = validationMessage, 
@@ -310,9 +328,13 @@ namespace Main.Core.Domain
         /// <param name="completeQuestionnaireId">
         /// The complete questionnaire id.
         /// </param>
+        /// <param name="creator">
+        /// The creator.
+        /// </param>
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         {
-            //// TODO: check is it good to create new AR form another?
+            // TODO: check is it good to create new AR form another?
+            // Do we need Saga here?
             var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
@@ -336,9 +358,12 @@ namespace Main.Core.Domain
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public void DeleteGroup(Guid groupPublicKey)
+        /// <param name="parentPublicKey">
+        /// The parent Public Key.
+        /// </param>
+        public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
         {
-            this.ApplyEvent(new GroupDeleted { GroupPublicKey = groupPublicKey });
+            this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
         }
 
         /// <summary>
@@ -361,9 +386,12 @@ namespace Main.Core.Domain
         /// <param name="questionId">
         /// The question id.
         /// </param>
-        public void DeleteQuestion(Guid questionId)
+        /// <param name="parentPublicKey">
+        /// The parent Public Key.
+        /// </param>
+        public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
         {
-            this.ApplyEvent(new QuestionDeleted { QuestionId = questionId });
+            this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
 
         /// <summary>
@@ -381,7 +409,13 @@ namespace Main.Core.Domain
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(
-                new QuestionnaireItemMoved { QuestionnaireId  = this.innerDocument.PublicKey,  AfterItemKey = afterItemKey, GroupKey = groupKey, PublicKey = publicKey });
+                new QuestionnaireItemMoved
+                    {
+                        QuestionnaireId  = this.innerDocument.PublicKey,  
+                        AfterItemKey = afterItemKey, 
+                        GroupKey = groupKey, 
+                        PublicKey = publicKey
+                    });
         }
 
         /// <summary>
@@ -392,7 +426,7 @@ namespace Main.Core.Domain
         /// </param>
         public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
-            this.innerDocument = snapshot;
+            this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
         }
 
         // public void UpdateGroup(string groupText, Propagate propagateble, Guid groupPublicKey, List<Guid> triggers)
@@ -427,7 +461,11 @@ namespace Main.Core.Domain
         /// <param name="conditionExpression">
         /// The condition expression.
         /// </param>
+        /// <param name="description">
+        /// The description.
+        /// </param>
         /// <exception cref="ArgumentException">
+        /// Some exception
         /// </exception>
         public void UpdateGroup(
             string groupText, 
@@ -450,7 +488,7 @@ namespace Main.Core.Domain
                         GroupPublicKey = groupPublicKey, 
                         GroupText = groupText, 
                         Propagateble = propagateble, 
-                        Executor = executor, 
+                        /*Executor = executor,*/ 
                         ConditionExpression = conditionExpression,
                         Description = description
                     });
@@ -527,7 +565,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnGroupDeleted(GroupDeleted e)
         {
-            this.innerDocument.Remove(e.GroupPublicKey);
+            this.innerDocument.Remove(e.GroupPublicKey, null, e.ParentPublicKey, null);
         }
 
         /// <summary>
@@ -616,7 +654,7 @@ namespace Main.Core.Domain
             group.PublicKey = e.PublicKey;
             group.Description = e.Description;
             group.ConditionExpression = e.ConditionExpression;
-            this.innerDocument.Add(group, e.ParentGroupPublicKey);
+            this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
         /// <summary>
@@ -633,7 +671,7 @@ namespace Main.Core.Domain
                 return;
             }
 
-            this.innerDocument.Add(question, e.GroupPublicKey);
+            this.innerDocument.Add(question, e.GroupPublicKey, null);
         }
 
         /// <summary>
@@ -675,7 +713,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
-            this.innerDocument.Remove(e.QuestionId);
+            this.innerDocument.Remove(e.QuestionId, null, e.ParentPublicKey, null);
         }
 
         /// <summary>

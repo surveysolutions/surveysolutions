@@ -7,6 +7,7 @@
             <th>User</th>
             <th>set status</th>
             <th>with comment</th>
+            <th>on</th>
         </tr>
     </thead>
     <tbody>
@@ -20,7 +21,12 @@
                     @ch.StatusName
                 </td>
                 <td>
-                    @ch.Comment
+                    <div class="expander">
+                        @ch.Comment
+                    </div>
+                </td>
+                <td>
+                    @ch.ChangeDate.ToLocalTime()
                 </td>
             </tr>
         }

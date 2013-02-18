@@ -25,10 +25,10 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// The complete questionnaire browse item denormalizer.
     /// </summary>
-    public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, 
-                                                               IEventHandler<AnswerSet>, 
-                                                               IEventHandler<CompleteQuestionnaireDeleted>, 
-                                                               IEventHandler<QuestionnaireStatusChanged>, 
+    public class CompleteQuestionnaireBrowseItemDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>,
+                                                               IEventHandler<AnswerSet>,
+                                                               IEventHandler<CompleteQuestionnaireDeleted>,
+                                                               IEventHandler<QuestionnaireStatusChanged>,
                                                                IEventHandler<QuestionnaireAssignmentChanged>,
                                                                IEventHandler<SnapshootLoaded>
     {
@@ -49,8 +49,7 @@ namespace Main.Core.EventHandlers
         /// <param name="documentItemStore">
         /// The document item store.
         /// </param>
-        public CompleteQuestionnaireBrowseItemDenormalizer(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
+        public CompleteQuestionnaireBrowseItemDenormalizer(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemStore)
         {
             this.documentItemStore = documentItemStore;
         }
@@ -67,32 +66,24 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            HandleNewQuestionnaire(evnt.Payload.Questionnaire);
+            this.HandleNewSurvey(evnt.Payload.Questionnaire);
         }
+
+        /// <summary>
+        /// The handle.
+        /// </summary>
+        /// <param name="evnt">
+        /// The evnt.
+        /// </param>
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if(document==null)
-                return;
-            HandleNewQuestionnaire(document);
-        }
-
-        protected void HandleNewQuestionnaire(CompleteQuestionnaireDocument document)
-        {
-            // getting all featured questions
-            var browseItem = this.documentItemStore.GetByGuid(document.PublicKey);
-            if (browseItem == null)
+            if (document == null)
             {
-                browseItem = new CompleteQuestionnaireBrowseItem(document);
-                this.documentItemStore.Store(browseItem, document.PublicKey);
+                return;
             }
-            List<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
 
-            browseItem.FeaturedQuestions =
-                featuredQuestions.Select(
-                    q => new CompleteQuestionView() {PublicKey = q.PublicKey, Answer = q.GetAnswerString(), Title = q.QuestionText}).ToArray();
-            browseItem.Status = document.Status;
-            browseItem.Responsible = document.Responsible;
+            this.HandleNewSurvey(document.Clone() as CompleteQuestionnaireDocument);
         }
 
         /// <summary>
@@ -107,12 +98,21 @@ namespace Main.Core.EventHandlers
             {
                 CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
                 if (item == null)
+                {
                     return;
+                }
+
+                item.LastEntryDate = evnt.EventTimeStamp;
                 CompleteQuestionView currentFeatured =
                     item.FeaturedQuestions.FirstOrDefault(q => q.PublicKey == evnt.Payload.QuestionPublicKey);
 
                 if (currentFeatured != null)
+                {
                     currentFeatured.Answer = evnt.Payload.AnswerString;
+                }
+                
+
+                this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
             }
         }
 
@@ -139,6 +139,8 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             item.Status = evnt.Payload.Status;
+            item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
         /// <summary>
@@ -153,6 +155,8 @@ namespace Main.Core.EventHandlers
                 this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
+            item.LastEntryDate = evnt.EventTimeStamp;
+            this.documentItemStore.Store(item, item.CompleteQuestionnaireId);
         }
 
         #endregion
@@ -179,30 +183,50 @@ namespace Main.Core.EventHandlers
         /// </param>
         protected void ProccessQuestions(
             List<ICompleteQuestion> featuredQuestions,
-            IEnumerable<ICompleteQuestion> questions, 
-            Guid gropPublicKey, 
-            Guid? gropPropagationPublicKey, 
+            IEnumerable<ICompleteQuestion> questions,
+            Guid gropPublicKey,
+            Guid? gropPropagationPublicKey,
             Guid screenPublicKey)
         {
-            foreach (ICompleteQuestion completeQuestion in questions)
-            {
-                if (completeQuestion.Featured)
-                {
-                    featuredQuestions.Add(completeQuestion);
-                }
-            }
+            featuredQuestions.AddRange(questions.Where(completeQuestion => completeQuestion.Featured));
+        }
+
+        /// <summary>
+        /// Handle new complete questionnaire
+        /// </summary>
+        /// <param name="document">
+        /// The document.
+        /// </param>
+        protected void HandleNewSurvey(CompleteQuestionnaireDocument document)
+        {
+            var browseItem = new CompleteQuestionnaireBrowseItem(document);
+            
+            // IEnumerable<ICompleteQuestion> featuredQuestions = this.FindFeaturedQuestions(document);
+            IEnumerable<ICompleteQuestion> featuredQuestions = document.GetFeaturedQuestions().ToList();
+
+            browseItem.FeaturedQuestions =
+                featuredQuestions.Select(
+                    q =>
+                    new CompleteQuestionView
+                    {
+                        PublicKey = q.PublicKey,
+                        Answer = q.GetAnswerString(),
+                        Title = q.QuestionText
+                    }).ToArray();
+
+            this.documentItemStore.Store(browseItem, document.PublicKey);
         }
 
         /// <summary>
         /// The find featured questions.
         /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
+        /// <param name="target">
+        /// The target.
         /// </param>
         /// <returns>
         /// The System.Collections.Generic.List`1[T -&gt; RavenQuestionnaire.Core.Views.Statistics.QuestionStatisticView].
         /// </returns>
-        private List<ICompleteQuestion> FindFeaturedQuestions(CompleteQuestionnaireDocument target)
+        private IEnumerable<ICompleteQuestion> FindFeaturedQuestions(CompleteQuestionnaireDocument target)
         {
             var featuredQuestions = new List<ICompleteQuestion>();
             var nodes = new Queue<ICompleteGroup>(new List<ICompleteGroup> { target });
@@ -212,10 +236,10 @@ namespace Main.Core.EventHandlers
                 ICompleteGroup group = nodes.Dequeue();
                 Guid key = keys.Dequeue();
                 this.ProccessQuestions(
-                    featuredQuestions, 
-                    @group.Children.OfType<ICompleteQuestion>(), 
-                    group.PublicKey, 
-                    group.PropagationPublicKey, 
+                    featuredQuestions,
+                    @group.Children.OfType<ICompleteQuestion>(),
+                    group.PublicKey,
+                    group.PropagationPublicKey,
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
@@ -229,10 +253,10 @@ namespace Main.Core.EventHandlers
                 ICompleteGroup group = nodes.Dequeue();
                 Guid key = keys.Dequeue();
                 this.ProccessQuestions(
-                    featuredQuestions, 
-                    group.Children.OfType<ICompleteQuestion>(), 
-                    group.PublicKey, 
-                    group.PropagationPublicKey, 
+                    featuredQuestions,
+                    group.Children.OfType<ICompleteQuestion>(),
+                    group.PublicKey,
+                    group.PropagationPublicKey,
                     key);
                 foreach (ICompleteGroup subGroup in group.Children.OfType<ICompleteGroup>())
                 {
