@@ -46,7 +46,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 view = layoutInflater.Inflate(Resource.Layout.list_navigation_item, null);
             }
             var tvITem = view.FindViewById<TextView>(Resource.Id.tvITem);
-            
+
             var tvCount = view.FindViewById<TextView>(Resource.Id.tvCount);
             if (position < Count-1)
             {

@@ -1,39 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/contentLayout"
-              android:orientation="horizontal"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-              android:layout_weight="1"   
-    >
-  --><!--android:columnWidth="90dp"--><!--
-  --><!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/tlDashboard"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:stretchColumns="1"></TableLayout>--><!--
-
-  <fragment android:name="androidapp.controls.questionnairedetails.QuestionnaireNavigationView"
-   android:id="@+id/navList"
-   android:gravity=    "center_horizontal"
-   android:layout_width="10dip"
-   android:layout_height="fill_parent" android:layout_weight=    "1" />
-  <androidapp.controls.questionnairedetails.ScreenContentView
-     android:id="@+id/scveenView"
-     android:gravity=    "center_horizontal"
-     android:layout_width="wrap_content"
-     android:layout_height="fill_parent"
-     android:layout_weight=    "4" />
-</LinearLayout>-->
-
-
-<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/flContainer"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />-->
-
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+               xmlns:local="http://schemas.android.com/apk/res/AndroidApp.AndroidApp"
               android:id="@+id/llContainer"
       android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -43,7 +10,15 @@
           android:id="@+id/NavList" android:layout_weight="1"
           android:layout_width="0px"
           android:layout_height="match_parent" />
-
+  <!--local:MvxItemTemplate="@layout/listitem_main"-->
+  <!--<Mvx.MvxBindableListView
+       android:id="@android:id/list"
+       android:layout_width="0px"
+       android:layout_height="match_parent"
+       android:layout_weight="1"
+       local:MvxBind="{'ItemsSource':{'Path':'Chapters'}}"
+       local:MvxItemTemplate="@layout/list_navigation_item"
+    />-->
   <android.support.v4.view.ViewPager
           android:id="@+id/vpContent"
           android:layout_width="0px"

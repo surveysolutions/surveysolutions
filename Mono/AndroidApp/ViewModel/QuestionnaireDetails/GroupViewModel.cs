@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class GroupViewModel : IQuestionnaireItemViewModel
+    public class GroupViewModel :Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireItemViewModel
     {
         #region Implementation of IQuestionnaireItemView
 

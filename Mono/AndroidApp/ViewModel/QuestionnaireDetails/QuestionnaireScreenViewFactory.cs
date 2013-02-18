@@ -52,7 +52,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""NameCollection"": null," +
                 @"                  ""PropogationPublicKey"": null," +
                 @"                  ""PublicKey"": ""13f206a2-b762-4877-9210-00984883e6c8""," +
-                @"                  ""Selected"": false" +
+                @"                  ""Selected"": true" +
                 @"                }," +
                 @"                {" +
                 @"                  ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
@@ -72,7 +72,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"              ""Capital"": false," +
                 @"              ""Cards"": []," +
                 @"              ""Children"": null," +
-                @"              ""Comments"": null," +
+                @"              ""Comments"": ""Hello commment""," +
                 @"              ""ConditionExpression"": null," +
                 @"              ""Enabled"": true," +
                 @"              ""Featured"": false," +
@@ -1426,7 +1426,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                      ""NameCollection"": null," +
                 @"                      ""PropogationPublicKey"": null," +
                 @"                      ""PublicKey"": ""9df57979-6578-4883-846e-6675333b2f9e""," +
-                @"                      ""Selected"": false" +
+                @"                      ""Selected"": true" +
                 @"                    }" +
                 @"                  ]," +
                 @"                  ""AnswerOrder"": ""AsIs""," +
@@ -1531,7 +1531,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                      ""NameCollection"": null," +
                 @"                      ""PropogationPublicKey"": null," +
                 @"                      ""PublicKey"": ""6f4f93b2-0e16-4a2f-8606-68465c383d0f""," +
-                @"                      ""Selected"": false" +
+                @"                      ""Selected"": true" +
                 @"                    }," +
                 @"                    {" +
                 @"                      ""$type"": ""Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core""," +
@@ -1562,7 +1562,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""QuestionText"": ""Room type""," +
                 @"                  ""QuestionType"": ""SingleOption""," +
                 @"                  ""StataExportCaption"": ""room_type""," +
-                @"                  ""Valid"": true," +
+                @"                  ""Valid"": false," +
                 @"                  ""ValidationExpression"": null," +
                 @"                  ""ValidationMessage"": null," +
                 @"                  ""Triggers"": []" +
@@ -1671,7 +1671,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 @"                  ""Children"": null," +
                 @"                  ""Comments"": null," +
                 @"                  ""ConditionExpression"": null," +
-                @"                  ""Enabled"": true," +
+                @"                  ""Enabled"": false," +
                 @"                  ""Featured"": false," +
                 @"                  ""Instructions"": null," +
                 @"                  ""Mandatory"": false," +
@@ -1807,12 +1807,21 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return new QuestionnaireGridViewModel(input.QuestionnaireId, screen.Title, root.Title, new ItemPublicKey(screen.PublicKey,null), siblings,
                                                   Enumerable.Empty<QuestionnaireNavigationPanelItem>(),
                                                   BuildChapters(root),
-                                                  screen.Children.OfType<ICompleteQuestion>().Select(
-                                                      c => new HeaderItem(c.PublicKey, c.QuestionText, c.Instructions)).ToList(),
+                                                  screen.Children.OfType<ICompleteQuestion>().Select(BuildHeader).ToList(),
                                                   BuildGridRows(root, screen));
         }
 
         #endregion
+        protected HeaderItem BuildHeader(ICompleteQuestion question)
+        {
+          /*  var newType = CalculateViewType(question.QuestionType);
+            if (!IsTypeSelectable(newType))*/
+                return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
+          /*  return new SelectableHeaderItem(question.PublicKey, question.QuestionText, question.Instructions,
+                                            question.Answers.OfType<ICompleteAnswer>().Select(
+                                                a =>
+                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));*/
+        }
 
         protected IEnumerable<QuestionnaireNavigationPanelItem> BuildChapters(CompleteQuestionnaireDocument root)
         {
@@ -1827,9 +1836,9 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                 root.Find<ICompleteGroup>(g => g.PublicKey == template.PublicKey && g.PropagationPublicKey.HasValue).
                     Select(
                         g =>
-                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,
-                                       g.Children.OfType<ICompleteQuestion>().Select(
-                                           q => CreateRowItem(q, g.PropagationPublicKey.Value))));
+                        new RosterItem(new ItemPublicKey(g.PublicKey, g.PropagationPublicKey.Value), g.Title,BuildItems(g).ToList())
+                                      /* g.Children.OfType<ICompleteQuestion>().Select(
+                                           q => CreateRowItem(q, g.PropagationPublicKey.Value)).ToList())*/);
         }
 
         protected IEnumerable<IQuestionnaireItemViewModel> BuildItems(ICompleteGroup screen)
@@ -1837,16 +1846,18 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
             return screen.Children.Select(CreateView).Where(c => c != null);
         }
 
-        protected RowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
+      /*  protected AbstractRowItem CreateRowItem(ICompleteQuestion item, Guid propagationKey)
         {
             var newType = CalculateViewType(item.QuestionType);
-           // if (IsTypeSelectable(newType))
-                return new RowItem(item.PublicKey, propagationKey, item.QuestionText, newType,
-                                             item.Enabled, item.Valid, item.Comments,item.GetAnswerString());
-           /* return new ValueRowItem(item.PublicKey, propagationKey, item.QuestionText, newType,
-                                    item.Enabled,
-                                    item.Valid, item.Comments, item.GetAnswerString());*/
-        }
+            if (IsTypeSelectable(newType))
+                return new SelectableRowItem(item.PublicKey, propagationKey, newType,
+                                             item.Enabled, item.Valid, item.Comments, item.GetAnswerString(), item.Answers.OfType<ICompleteAnswer>().Select(
+                                                               a =>
+                                                               new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)));
+            else
+                return new ValueRowItem(item.PublicKey, propagationKey, item.GetAnswerString(), newType,
+                                                  item.Enabled, item.Valid, item.Comments);
+        }*/
 
         protected IQuestionnaireItemViewModel CreateView(IComposite item)
         {
@@ -1868,7 +1879,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
                                                                a =>
                                                                new AnswerViewModel(a.PublicKey, a.AnswerText, a.Selected)),
                                                            question.Enabled, question.Instructions, question.Comments,
-                                                           question.Valid, question.Mandatory);
+                                                           question.Valid, question.Mandatory, question.GetAnswerString());
             }
             var group = item as ICompleteGroup;
             if (group != null && !group.PropagationPublicKey.HasValue)

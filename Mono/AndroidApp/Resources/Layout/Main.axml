@@ -8,33 +8,18 @@
     >-->
 
 
-  <ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-               android:id="@+id/MyLayout"
-                android:background="#EEEEEE" 
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:scrollbars="horizontal|vertical"/>
-  <!--<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-      android:id="@+id/gvDashboard"
-      android:layout_width="fill_parent"
-      android:layout_height="fill_parent"
-      android:background="@android:color/black"
-      android:numColumns="auto_fit"
-      android:verticalSpacing="10dp"
-      android:horizontalSpacing="0dp"
-      android:stretchMode="columnWidth"
-      android:gravity="center"/>-->
-  
-  <!--<TableLayout android:id="@+id/tlSurveys" 
-               android:layout_width="fill_parent" 
-               android:background="#EEEEEE" 
-               android:layout_height="wrap_content"
-               android:gravity="center"></TableLayout>-->
-
-  <!--android:columnWidth="90dp"-->
-  <!--<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/tlDashboard"
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res/AndroidApp.AndroidApp"
+             android:id="@+id/MyLayout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:stretchColumns="1"></TableLayout>-->
-<!--</LinearLayout>-->
+    android:scrollbars="horizontal|vertical">
+  <Mvx.MvxBindableLinearLayout
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:padding="10px"
+  android:orientation="vertical"
+  local:MvxItemTemplate="@layout/dashboard_survey_row"
+  local:MvxBind="{'ItemsSource':{'Path':'Surveys'}}"
+  />
+</ScrollView>

@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public interface IQuestionnaireViewModel
+    public interface IQuestionnaireViewModel : Cirrious.MvvmCross.Interfaces.ViewModels.IMvxViewModel
     {
         Guid QuestionnaireId { get; }
         string Title { get; }

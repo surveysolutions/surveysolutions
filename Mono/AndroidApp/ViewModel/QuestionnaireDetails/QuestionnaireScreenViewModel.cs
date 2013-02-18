@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -9,11 +10,29 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Cirrious.MvvmCross.Interfaces.ViewModels;
+using Cirrious.MvvmCross.Interfaces.Views;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
 {
-    public class QuestionnaireScreenViewModel : IQuestionnaireViewModel
+    public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
+        public QuestionnaireScreenViewModel(string completeQuestionnaireId)
+        {
+            var objectQ = CapiApplication.LoadView<QuestionnaireScreenInput, IQuestionnaireViewModel>(
+                   new QuestionnaireScreenInput(Guid.Parse(completeQuestionnaireId), null)) as QuestionnaireScreenViewModel;
+
+
+            QuestionnaireId = objectQ.QuestionnaireId;
+            Items = objectQ.Items;
+            ScreenId = objectQ.ScreenId;
+            Siblings = objectQ.Siblings;
+            Breadcrumbs = objectQ.Breadcrumbs;
+            Chapters = objectQ.Chapters;
+            ScreenName = objectQ.ScreenName;
+            Title = objectQ.Title;
+        }
+
         public QuestionnaireScreenViewModel(Guid questionnaireId,string screenName,string title,
             ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
             IList<QuestionnaireNavigationPanelItem> siblings,
@@ -39,5 +58,8 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<QuestionnaireNavigationPanelItem> Chapters { get; private set; }
 
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
+       
+
+      
     }
 }

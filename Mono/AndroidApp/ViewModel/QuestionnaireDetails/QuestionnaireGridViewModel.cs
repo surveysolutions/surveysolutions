@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.ComponentModel;
 using AndroidApp.ViewModel.QuestionnaireDetails.GridItems;
 
 namespace AndroidApp.ViewModel.QuestionnaireDetails
@@ -16,7 +17,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class QuestionnaireGridViewModel : IQuestionnaireViewModel
+    public class QuestionnaireGridViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel,IQuestionnaireViewModel
     {
         #region Implementation of IQuestionnaireViewModel
 
@@ -46,5 +47,7 @@ namespace AndroidApp.ViewModel.QuestionnaireDetails
         public IEnumerable<RosterItem> Rows { get; private set; }
 
         #endregion
+
+       
     }
 }

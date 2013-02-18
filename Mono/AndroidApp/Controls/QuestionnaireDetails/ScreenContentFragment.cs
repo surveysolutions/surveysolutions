@@ -11,13 +11,16 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Controls.QuestionnaireDetails.ScreenItems;
+using AndroidApp.Events;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Entities.SubEntities;
 
 namespace AndroidApp.Controls.QuestionnaireDetails
 {
     public class ScreenContentFragment : Fragment
     {
+        private readonly IQuestionViewFactory questionViewFactory;
         public static ScreenContentFragment NewInstance(QuestionnaireScreenViewModel model)
         {
             ScreenContentFragment f = new ScreenContentFragment(model);
@@ -28,6 +31,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public ScreenContentFragment(QuestionnaireScreenViewModel model):base()
         {
             this.Model = model;
+            this.questionViewFactory=new DefaultQuestionViewFactory();
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -54,29 +58,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 View itemView = null;
                 if (question != null)
                 {
-
-                    switch (question.QuestionType)
-                    {
-                        case QuestionType.Text:
-                            itemView = new TextQuestionView(inflater.Context, question);
-                            break;
-                        case QuestionType.Numeric:
-                            itemView = new NumericQuestionView(inflater.Context, question);
-                            break;
-                        case QuestionType.DateTime:
-                            itemView = new DateQuestionView(inflater.Context, question);
-                            break;
-                        case QuestionType.SingleOption:
-                            itemView = new SingleChoiseQuestionView(inflater.Context, question);
-                            break;
-                        case QuestionType.MultyOption:
-                            itemView = new MultyQuestionView(inflater.Context, question);
-                            break;
-                        default:
-                            itemView = new TextQuestionView(inflater.Context, question);
-                            break;
-                    }
-
+                    itemView = this.questionViewFactory.CreateQuestionView(inflater.Context, question);
                 }
                 var group = item as GroupViewModel;
                 if (group != null)

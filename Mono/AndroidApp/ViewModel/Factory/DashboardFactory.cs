@@ -26,17 +26,17 @@ namespace AndroidApp.ViewModel.Factory
         public DashboardModel Load(DashboardInput input)
         {
             List<DashboardQuestionnaireItem> items = new List<DashboardQuestionnaireItem>();
-             var propertiesTitles = new List<string>();
+         /*    var propertiesTitles = new List<string>();
              for (int j = 0; j < 4; j++)
              {
                  propertiesTitles.Add("pTitle" + j);
-             }
+             }*/
             for (int i = 0; i < 5; i++)
             {
-                var properties = new List<string>();
+                var properties = new List<FeaturedItem>();
                 for (int j = 0; j < 4; j++)
                 {
-                    properties.Add("p"+j);
+                    properties.Add(new FeaturedItem(Guid.NewGuid(),"pTitle" + j,"p"+j));
                 }
                 var item = new DashboardQuestionnaireItem(Guid.NewGuid(),"status" + i, properties);
                 items.Add(item);
@@ -46,9 +46,9 @@ namespace AndroidApp.ViewModel.Factory
                 new DashboardModel(
                     new[]
                         {
-                            new DashboardSurveyItem(Guid.NewGuid(), "Super Servey1", propertiesTitles, items),
-                            new DashboardSurveyItem(Guid.NewGuid(), "Super Servey2", propertiesTitles, items),
-                             new DashboardSurveyItem(Guid.NewGuid(), "Super Servey3", propertiesTitles, items)
+                            new DashboardSurveyItem(Guid.NewGuid(), "Super Servey1", items),
+                            new DashboardSurveyItem(Guid.NewGuid(), "Super Servey2",  items),
+                             new DashboardSurveyItem(Guid.NewGuid(), "Super Servey3", items)
                         });
             return retval;
         }

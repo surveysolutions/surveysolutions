@@ -14,6 +14,9 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.ViewModel.QuestionnaireDetails;
+using Cirrious.MvvmCross.Binding.Droid.ExtensionMethods;
+using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
+using Cirrious.MvvmCross.Binding.Droid.Views;
 
 namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
@@ -22,48 +25,101 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected QuestionViewModel Model { get; private set; }
 
 
-        public AbstractQuestionView(Context context, QuestionViewModel model)
+         private readonly IMvxBindingActivity _bindingActivity;
+
+        private readonly int _templateId;
+
+
+        public void ClearBindings()
+        {
+            _bindingActivity.ClearBindings(this);
+        }
+
+        protected IMvxBindingActivity BindingActivity
+        {
+            get { return _bindingActivity; }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                ClearBindings();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        protected View Content { get; set; }
+
+        public virtual void BindTo(object source)
+        {
+            BindViewTo(Content, source);
+        }
+
+        public int TemplateId
+        {
+            get { return _templateId; }
+        }
+
+        protected static void BindViewTo(View view, object source)
+        {
+            IDictionary<View, IList<Cirrious.MvvmCross.Binding.Interfaces.IMvxUpdateableBinding>> bindings;
+            if (!TryGetJavaBindingContainer(view, out bindings))
+            {
+                return;
+            }
+
+            foreach (var binding in bindings)
+            {
+                foreach (var bind in binding.Value)
+                {
+                    bind.DataContext = source;
+                }
+            }
+        }
+
+        private static bool TryGetJavaBindingContainer(View view, out IDictionary<View, IList<Cirrious.MvvmCross.Binding.Interfaces.IMvxUpdateableBinding>> result)
+        {
+            return view.TryGetStoredBindings(out result);
+        }
+        public AbstractQuestionView(Context context, IMvxBindingActivity bindingActivity, QuestionViewModel source)
             : base(context)
         {
-            this.Model = model;
+            _bindingActivity = bindingActivity;
+            _templateId = Resource.Layout.AbstractQuestionView;
+            Content = BindingActivity.BindingInflate(source, _templateId, this);
+            this.Model = source;
             Initialize();
+          
             PostInit();
         }
 
-        public AbstractQuestionView(Context context, IAttributeSet attrs, QuestionViewModel model)
-            : base(context, attrs)
-        {
-            this.Model = model;
-            Initialize();
-            PostInit();
-        }
+        //public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
+        //    : base(context, attrs, defStyle)
+        //{
+        //    this.Model = model;
+        //    Initialize();
+        //    PostInit();
+        //}
 
-        public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
-            : base(context, attrs, defStyle)
-        {
-            this.Model = model;
-            Initialize();
-            PostInit();
-        }
+        //protected AbstractQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
+        //    : base(javaReference, transfer)
+        //{
+        //    this.Model = model;
+        //    Initialize();
+        //    PostInit();
 
-        protected AbstractQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
-            : base(javaReference, transfer)
-        {
-            this.Model = model;
-            Initialize();
-            PostInit();
-
-        }
+        //}
         protected virtual void Initialize()
         {
-            LayoutInflater layoutInflater =
+         /*   LayoutInflater layoutInflater =
                 (LayoutInflater)this.Context.GetSystemService(Context.LayoutInflaterService);
-            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);
-            tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
-            etComments.Text = tvComments.Text = Model.Comments;
-            this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            layoutInflater.Inflate(Resource.Layout.AbstractQuestionView, this);*/
+        //    tvTitle.Text = Model.Text + (Model.Mandatory ? "*" : "");
+        //    etComments.Text = tvComments.Text = Model.Comments;
             etComments.FocusChange += new EventHandler<FocusChangeEventArgs>(etComments_FocusChange);
-            
+            this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
         }
 
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
@@ -76,15 +132,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         protected virtual void PostInit()
         {
+            
             if (!Model.Enabled)
                 EnableDisableView(llWrapper, Model.Enabled);
-            else
+           /* else
             {
                 if (!Model.Valid)
                     llRoot.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
                 else if(Model.Answered)
                     llRoot.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
-            }
+            }*/
             //    EnableDisableView(this, Model.Enabled);
             if (string.IsNullOrEmpty(Model.Instructions))
                 btnInstructions.Visibility = ViewStates.Gone;
@@ -108,20 +165,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
            
         }
 
-        private void EnableDisableView(View view, bool enabled)
-        {
-            view.Enabled = enabled;
-            ViewGroup group = view as ViewGroup;
-            if (group != null)
-            {
-
-                for (int idx = 0; idx < group.ChildCount; idx++)
-                {
-                    EnableDisableView(group.GetChildAt(idx), enabled);
-                }
-            }
-
-        }
+       
 
 
         protected LinearLayout llRoot
@@ -148,6 +192,20 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected EditText etComments
         {
             get { return this.FindViewById<EditText>(Resource.Id.etComments); }
+        }
+        protected void EnableDisableView(View view, bool enabled)
+        {
+            view.Enabled = enabled;
+            ViewGroup group = view as ViewGroup;
+            if (group != null)
+            {
+
+                for (int idx = 0; idx < group.ChildCount; idx++)
+                {
+                    EnableDisableView(group.GetChildAt(idx), enabled);
+                }
+            }
+
         }
     }
 }
