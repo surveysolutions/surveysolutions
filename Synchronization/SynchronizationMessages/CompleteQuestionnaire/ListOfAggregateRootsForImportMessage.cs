@@ -59,7 +59,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
-            string rootsString = JsonConvert.SerializeObject(this.Roots, Formatting.Indented, settings);
+            string rootsString = JsonConvert.SerializeObject(this.Roots, Formatting.None, settings);
             FormatHelper.WriteString(stream, rootsString);
         }
 

@@ -481,17 +481,28 @@ namespace Web.Supervisor.Controllers
         {
             Guid syncProcess = Guid.NewGuid();
 
-            if (string.IsNullOrWhiteSpace(request))
+            /*if (string.IsNullOrWhiteSpace(request))
             {
                 return false;
             }
-
+*/
             try
             {
+                Request.InputStream.Position = 0;
+
+                /*var message = new EventSyncMessage();
+                message.InitializeFrom(Request.InputStream);*/
+
                 var settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
 
-                EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(request, settings);
+                string item;
+                using (var sr = new StreamReader(Request.InputStream))
+                {
+                    item = sr.ReadToEnd();
+                }
+                
+                EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
 
                 if (message == null)
                 {

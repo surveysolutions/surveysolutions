@@ -43,6 +43,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
         {
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
+            
             string commandString = FormatHelper.ReadString(stream);
             var command = JsonConvert.DeserializeObject<AggregateRootEvent[]>(commandString, settings);
 
@@ -60,7 +61,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
-            string command = JsonConvert.SerializeObject(this.EventStream, Formatting.Indented, settings);
+            string command = JsonConvert.SerializeObject(this.EventStream, Formatting.None, settings);
             FormatHelper.WriteString(stream, command);
         }
 
