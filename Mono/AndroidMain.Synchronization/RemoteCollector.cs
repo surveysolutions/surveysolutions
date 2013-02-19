@@ -108,17 +108,11 @@ namespace AndroidMain.Synchronization
                 var message = new EventSyncMessage { Command = chunk.ToArray(), SynchronizationKey = this.ProcessGuid };
                 
                 var settings = new JsonSerializerSettings();
-                settings.TypeNameHandling = TypeNameHandling.None;
+                settings.TypeNameHandling = TypeNameHandling.Objects;
                 string item = JsonConvert.SerializeObject(message, Formatting.None, settings);
-                
-                /*MemoryStream stream = new MemoryStream();
-                message.WriteTo(stream);
-                stream.Position = 0L;
-                var item = new StreamReader(stream).ReadToEnd();*/
-                
-                request.AddParameter("application/json; charset=utf-8", item, ParameterType.RequestBody);
-                
-                //request.AddParameter("request", item);
+
+                // text must be changed to  "application/json; charset=utf-8"
+                request.AddParameter("text; charset=utf-8", item, ParameterType.RequestBody);
                 
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
