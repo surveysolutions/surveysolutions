@@ -141,7 +141,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         {
 
             var status = SurveyStatus.IsStatusAllowCapiSync(this.Model.Status)
-                             ? SurveyStatus.Redo
+                             ? SurveyStatus.Initial
                              : Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
             status.ChangeComment = etComments.Text;
             var command = new ChangeStatusCommand()
