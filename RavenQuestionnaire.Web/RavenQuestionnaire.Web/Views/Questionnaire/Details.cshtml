@@ -1,101 +1,92 @@
 ﻿@using System.Web.Script.Serialization
-@using Main.Core.View.Question
-@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Group
+@using ClientDependency.Core.Mvc
 @using RavenQuestionnaire.Core.Views.Questionnaire
 @using RavenQuestionnaire.Web.Utils
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
-<script type="text/javascript">
-    
-    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
+
+<script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
 
 
-    !function ($) {
+<script src="../../Scripts/details/lib/json2.js"></script>
 
-        $(function () {
-            var $window = $(window);
-            // Disable certain links in docs
-            $('section [href^=#]').click(function (e) {
-                e.preventDefault();
-            });
+<script src="../../Scripts/details/lib/moment.js"></script>
 
-            // side bar
-            $('.bs-docs-sidenav').affix({
-                offset: {
-                    top: function () { return $window.width() <= 980 ? 290 : 210; },
-                    bottom: 270
-                }
-            });
+<script src="../../Scripts/details/lib/TrafficCop.js"></script>
+<script src="../../Scripts/details/lib/infuser.js"></script>
 
-            function getUrlVars() {
-                var vars = [], hash;
-                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-                for (var i = 0; i < hashes.length; i++) {
-                    hash = hashes[i].split('=');
-                    vars.push(hash[0]);
-                    vars[hash[0]] = hash[1];
-                }
-                return vars;
-            }
-            $(document).ready(function() {
-                var vars = getUrlVars();
-                $('#' + vars['qid']).focus();
-            })
-        });
-        ;
+<script src="../../Scripts/details/lib/underscore.js"></script>
 
-    } (window.jQuery)
-</script>
+<script src="../../Scripts/details/lib/knockout.activity.js"></script>
+<script src="../../Scripts/details/lib/knockout.asyncCommand.js"></script>
+<script src="../../Scripts/details/lib/knockout.dirtyFlag.js"></script>
+<script src="../../Scripts/details/lib/knockout.validation.js"></script>
+<script src="../../Scripts/details/lib/koExternalTemplateEngine.js"></script>
 
-<div class="row-fluid">
-    <div class="span3 bs-docs-sidebar">
-        <ul class="nav nav-list bs-docs-sidenav">
-            @foreach (var item in Model.Children)
-            {
-                if ((item as GroupView) != null)
-                {
-                    var @group = @item as GroupView;
-                <li><a href="#group-@(group.PublicKey)"><i class="icon-chevron-right"></i>@group.Title</a></li>
-                @this.RenderTOC(@group)
-                }
-            }
-        </ul>
-        <p></p>
+<script src="../../Scripts/details/lib/sammy.js"></script>
+<script src="../../Scripts/details/lib/sammy.title.js"></script>
+<script src="../../Scripts/details/lib/amplify.core.js"></script>
+<script src="../../Scripts/details/lib/amplify.request.js"></script>
+<script src="../../Scripts/details/lib/amplify.store.js"></script>
+
+<script src="../../Scripts/details/lib/toastr.js"></script>
+
+<script src="../../Scripts/details/lib/require.js"></script>
+
+<script src="../../Scripts/details/app/binder.js"></script>
+<script src="../../Scripts/details/app/bootstrapper.js"></script>
+<script src="../../Scripts/details/app/config.js"></script>
+<script src="../../Scripts/details/app/ko.bindingHandlers.js"></script>
+<script src="../../Scripts/details/app/ko.debug.helpers.js"></script>
+<script src="../../Scripts/details/app/presenter.js"></script>
+<script src="../../Scripts/details/app/vm.js"></script>
+<script src="../../Scripts/details/app/vm.menu.js"></script>
+<script src="../../Scripts/details/app/vm.questionnaire.js"></script>
+
+<script src="../../Scripts/details/main.js"></script>
+
+
+<div id="busyindicator"></div>
+<div id="stacks">
+    <div id="groups" class="stack">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+            </div>
+            <div class="body">
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-success"><i class="icon-plus icon-white"></i> Chapter</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="span9">
-        <h1>@Model.Title</h1>
-        <div class="control-group">
-            <label class="control-label">Creation Date:</label>
-            <div class="controls">
-                <p class="text-block">@Model.CreationDate.ToLocalTime()</p>
+    <div id="answers" class="stack">
+        <div class="inner">
+            <div class="body">
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                </div>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label">Last edit Date:</label>
-            <div class="controls">
-                <p class="text-block">@Model.LastEntryDate.ToLocalTime()</p>
+    </div>
+    <div id="details" class="stack">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close">&times</button>
             </div>
-        </div>
-        <p>
-        @Html.ActionLink("Add Chapter", "Create", "Group", new { id = Model.PublicKey }, new { @class = "btn " })
-                        <a href="@Url.Action("Edit", new { id = Model.PublicKey })" class="btn btn-primary">
-                            <i class="icon-pencil icon-white"></i>Edit</a></p>
-        <div>
-            @{ Html.RenderPartial("~/Views/Questionnaire/_RenderChildren.cshtml", Model.Children); }
+            <div class="body">
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-@helper RenderTOC(GroupView block)
-    {
-        foreach (var @group in from item in block.Children where (item as GroupView) != null select @item as GroupView)
-        {
-    <li><a href="#group-@(group.PublicKey)"><i class="icon-chevron-right"></i>@group.Title</a></li>
-    @this.RenderTOC(@group)
-        }
-}

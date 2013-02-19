@@ -1,0 +1,363 @@
+﻿/* Let's get this party started */
+::-webkit-scrollbar
+{
+	width: 8px;
+	height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb
+{
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	background: #ddd;
+	-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+body:before
+{
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: cover;
+	bottom: 0;
+	content: "";
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: -100;
+}
+#stacks
+{
+	bottom: 0;
+	left: 0;
+	right: 0;
+	top: 40px;
+	overflow: hidden;
+	position: absolute;
+}
+#stacks > div
+{
+	position: absolute;
+}
+.stack
+{
+}
+#groups
+{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	bottom: 0;
+	
+	left: 0;
+	top: 0;
+	width: 360px;
+	padding: 9px;
+}
+
+#groups > .inner
+{
+	background: #fff;
+	border-radius: 5px 5px 5px 5px;
+	height: 100%;
+	position: relative;
+	border: 1px solid #DDDDDD;
+}
+#groups .title
+{
+	background: rgba(255, 255, 255, 0.1);
+	background: -webkit-gradient(linear,left top,left bottom,from(rgba(255, 255, 255, 0.1)),to(rgba(0, 0, 0, 0.05)));
+	background: -moz-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-ms-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-o-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+	min-height: 24px;
+	padding: 8px;
+	text-shadow: 0 1px 0 white;
+	word-wrap: break-word;
+}
+#groups .body
+{
+	overflow: auto;
+	position: absolute;
+	top: 55px;
+	bottom: 43px;
+	right: 0;
+	left: 0;
+	overflow-y: scroll;
+}
+
+#groups .body li a
+{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 8px;
+	padding-right: 12px;
+	display: block;
+	color: #423E3E;
+	font-weight: bold;
+	font-size: 13px;
+	position: relative;
+	text-shadow: 0 1px 0 white;
+	background: url("img/divider.png") center bottom repeat-x;
+}
+#groups .body li.level1 a{
+	padding-left: 8px;	
+}
+#groups .body li.level2 a{
+	padding-left: 24px;	
+}
+#groups .body li.level3 a{
+	padding-left: 40px;	
+}
+#groups .body li.level4 a{
+	padding-left: 56px;	
+}
+#groups .body li.level5 a {
+	padding-left: 64px;	
+}
+#groups .body li.level6 a{
+	padding-left: 68px;	
+}
+#groups .body li.level7 a{
+	padding-left: 72px;	
+}
+#groups .body li.level8 a{
+	padding-left: 76px;	
+}
+#groups .body li.level9 a{
+	padding-left: 80px;	
+}
+#groups .body li a .count
+{
+	color: #8c8c8c;
+	float: right;
+	margin-top: 2px;
+}
+#groups .body li.active
+{
+	margin-top: -2px;
+}
+#groups .body li.active a
+{
+	background: #4c9bdd;
+	color: white;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+	border-bottom: 1px solid transparent;
+}
+#groups .body li.active a .count
+{
+	color: white;
+}
+#groups .bottom
+{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	background: #E9E9E9;
+	border-top: 1px solid lightGrey;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-ms-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-o-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	height: 42px;
+}
+#groups .bottom .inner {
+	padding: 6px 8px 0 8px;
+}
+#answers
+{
+	bottom: 0;
+	left: 360px;
+	right: 10px;
+	top: 0;
+	padding: 9px;
+    	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+}
+#answers .inner
+{
+	height: 100%;
+	position: relative;
+
+}
+
+#answers .body {
+	overflow: auto;
+	position: absolute;
+	top: 0;
+	bottom: 43px;
+	right: 0;
+	left: 0;
+	overflow-y: auto;
+}
+
+#answers .bottom
+{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	background: #E9E9E9;
+	border-top: 1px solid lightGrey;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-ms-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-o-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	border-bottom: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	height: 42px;
+}
+#answers .bottom .inner {
+	padding: 6px 8px 0 8px;
+}
+
+.btn-mini > i {
+	margin-top: -1px;
+	margin-right: 2px;
+}
+
+#details
+{
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	bottom: 0;
+	right: -360px;
+	top: 0;
+	width: 360px;
+	padding: 9px;
+}
+#details > .inner
+{
+	background: #fff;
+	border-radius: 5px 5px 5px 5px;
+	height: 100%;
+	position: relative;
+	border: 1px solid #DDDDDD;
+}
+#details .title
+{
+	background: rgba(255, 255, 255, 0.1);
+	background: -webkit-gradient(linear,left top,left bottom,from(rgba(255, 255, 255, 0.1)),to(rgba(0, 0, 0, 0.05)));
+	background: -moz-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-ms-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-o-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+	min-height: 24px;
+	padding: 8px;
+	text-shadow: 0 1px 0 white;
+	word-wrap: break-word;
+}
+
+#details .body
+{
+	overflow: auto;
+	position: absolute;
+	top: 55px;
+	bottom: 43px;
+	right: 0;
+	left: 0;
+	overflow-y: scroll;
+}
+.details-block {
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 8px;
+	padding-right: 12px;
+	display: block;
+	color: #423E3E;
+	font-size: 13px;
+	position: relative;
+	text-shadow: 0 1px 0 white;
+	background: url("img/divider.png") center bottom repeat-x;
+}
+#details .bottom
+{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	-webkit-border-radius: 0 0 5px 5px;
+	-moz-border-radius: 0 0 5px 5px;
+	-ms-border-radius: 0 0 5px 5px;
+	-o-border-radius: 0 0 5px 5px;
+	border-radius: 0 0 5px 5px;
+	background: #E9E9E9;
+	border-top: 1px solid lightGrey;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-ms-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	-o-box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+	height: 42px;
+}
+#details .bottom .inner {
+	padding: 6px 8px 0 8px;
+}
+#stacks.detail-visible #answers {
+    right: 360px;
+}
+#stacks.detail-visible #details {
+	right: 0;
+}
+#stacks.menu-hidden #groups {
+    left: -360px;
+}
+#stacks.menu-hidden #answers {
+	left: 0;
+}

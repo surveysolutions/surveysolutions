@@ -304,6 +304,7 @@
     <Content Include="Content\Bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\bootstrap.css" />
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
+    <Content Include="Content\details.css" />
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
@@ -395,6 +396,47 @@
     <Content Include="Content\themes\jquerymobile\images\comment.gif" />
     <Content Include="Raven.Studio.xap" />
     <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Scripts\details\app\binder.js" />
+    <Content Include="Scripts\details\app\bootstrapper.js" />
+    <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\datacontext.js" />
+    <Content Include="Scripts\details\app\dataprimer.js" />
+    <Content Include="Scripts\details\app\dataservice.group.js" />
+    <Content Include="Scripts\details\app\dataservice.js" />
+    <Content Include="Scripts\details\app\dataservice.question.js" />
+    <Content Include="Scripts\details\app\model.group.js" />
+    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\details\app\model.question.js" />
+    <Content Include="Scripts\details\app\presenter.js" />
+    <Content Include="Scripts\details\app\vm.questionnaire.js" />
+    <Content Include="Scripts\details\app\ko.bindingHandlers.js" />
+    <Content Include="Scripts\details\app\ko.debug.helpers.js" />
+    <Content Include="Scripts\details\app\vm.js" />
+    <Content Include="Scripts\details\app\vm.menu.js" />
+    <Content Include="Scripts\details\lib\amplify.core.js" />
+    <Content Include="Scripts\details\lib\amplify.request.js" />
+    <Content Include="Scripts\details\lib\amplify.store.js" />
+    <Content Include="Scripts\details\lib\infuser.js" />
+    <None Include="Scripts\details\lib\jquery-1.7.2-vsdoc.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\details\lib\jquery.mockjson.js" />
+    <Content Include="Scripts\details\lib\json2.js" />
+    <Content Include="Scripts\details\lib\knockout-2.1.0.js" />
+    <Content Include="Scripts\details\lib\knockout.activity.js" />
+    <Content Include="Scripts\details\lib\knockout.asyncCommand.js" />
+    <Content Include="Scripts\details\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\details\lib\knockout.validation.js" />
+    <Content Include="Scripts\details\lib\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\details\lib\modernizr-2.5.3.js" />
+    <Content Include="Scripts\details\lib\moment.js" />
+    <Content Include="Scripts\details\lib\require.js" />
+    <Content Include="Scripts\details\lib\sammy.js" />
+    <Content Include="Scripts\details\lib\sammy.title.js" />
+    <Content Include="Scripts\details\lib\toastr.js" />
+    <Content Include="Scripts\details\lib\TrafficCop.js" />
+    <Content Include="Scripts\details\lib\underscore.js" />
+    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
@@ -588,7 +630,7 @@
     <Content Include="Views\Questionnaire\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Questionnaire\Details.cshtml" />
+    <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\_Create.cshtml" />
@@ -719,6 +761,7 @@
     <Content Include="Views\Question\Create.cshtml" />
     <Content Include="Views\Question\MainBlock.cshtml" />
     <Content Include="Views\Question\MultiSelectBlock.cshtml" />
+    <Content Include="Views\Questionnaire\Details.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
