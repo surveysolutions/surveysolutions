@@ -108,7 +108,7 @@ namespace AndroidMain.Synchronization
                 var message = new EventSyncMessage { Command = chunk.ToArray(), SynchronizationKey = this.ProcessGuid };
                 
                 var settings = new JsonSerializerSettings();
-                settings.TypeNameHandling = TypeNameHandling.None;
+                settings.TypeNameHandling = TypeNameHandling.Objects;
                 string item = JsonConvert.SerializeObject(message, Formatting.None, settings);
                 
                 /*MemoryStream stream = new MemoryStream();
