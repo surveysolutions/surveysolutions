@@ -136,7 +136,7 @@ namespace AndroidApp
             {
                 _setup.Initialize();
             }
-            var eventStore = CapiApplication.Kernel.Get<IEventStore>() as SQLiteEventStore;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
             /*var events = eventStore.GetAllEvents();
             if (eventStore.GetAllEvents().Any())
             {
