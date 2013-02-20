@@ -27,7 +27,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private readonly CompleteQuestionnaireView questionnaire;
         protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
         protected LinearLayout top;
-        protected ScreenContentFragment()
+        public ScreenContentFragment()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.bindableElements = new List<AbstractQuestionView>();

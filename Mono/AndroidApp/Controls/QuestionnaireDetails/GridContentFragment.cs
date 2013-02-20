@@ -38,7 +38,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Model = model;
             this.questionnaire = questionnaire;
         }
-        protected GridContentFragment()
+        public GridContentFragment()
             : base()
         {
             this.rowEventHandlers = new Dictionary<ItemPublicKey, IList<PropertyChangedEventHandler>>();

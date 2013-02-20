@@ -21,7 +21,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
     public class StatisticsContentFragment : AbstractScreenChangingFragment
     {
         public StatisticsViewModel Model { get; private set; }
-        protected Guid questionnaireKey;
+//        protected Guid questionnaireKey;
         protected AlertDialog answeredDilog;
         protected AlertDialog unansweredDilog;
         protected AlertDialog invaliDilog;
@@ -29,9 +29,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         public StatisticsContentFragment(Guid questionnaireKey)
             : this()
         {
-            this.questionnaireKey = questionnaireKey;
+            //  this.questionnaireKey = questionnaireKey;
+            this.Model =
+                CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
         }
-        protected StatisticsContentFragment()
+
+        public StatisticsContentFragment()
             : base()
         {
             this.RetainInstance = true;
@@ -55,7 +58,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             btnInvalid.Enabled = this.Model.InvalidQuestions.Count != 0;
             tvErrorWarning.Visibility = btnInvalid.Enabled? ViewStates.Visible : ViewStates.Gone;
         }
-
+    /*    public override void OnSaveInstanceState(Bundle p0)
+        {
+            base.OnSaveInstanceState(p0);
+            p0.PutString("questionnaireKey", Model.QuestionnaireId.ToString());
+        }
+        public override void OnViewStateRestored(Bundle p0)
+        {
+            base.OnViewStateRestored(p0);
+            if(p0==null)
+            return;
+            var publicKey = p0.GetString("questionnaireKey");
+            if(string.IsNullOrEmpty(publicKey))
+                return;
+            this.Model =
+                CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(Guid.Parse(publicKey)));
+        }*/
         public override void OnPause()
         {
             base.OnPause();
@@ -63,7 +81,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             invaliDilog.Dispose();
             answeredDilog.Dispose();
             unansweredDilog.Dispose();
-            Model = null;
+         //   Model = null;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -74,8 +92,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-            this.Model =
-              CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));
+          
             containerView = inflater.Inflate(Resource.Layout.StatisticsContent, null);
             btnComplete.Click += btnComplete_Click;
             popupBuilder = new AlertDialog.Builder(this.Activity);

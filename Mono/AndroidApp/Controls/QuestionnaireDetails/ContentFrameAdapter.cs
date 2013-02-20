@@ -111,7 +111,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
-           
+            foreach (Fragment mFragment in mFragments)
+            {
+                if (mFragment != null)
+                    mFragment.RetainInstance = false;
+            }
             this.mFragments = new Fragment[this.Count];
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
