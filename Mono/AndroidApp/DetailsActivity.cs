@@ -85,17 +85,6 @@ namespace AndroidApp
 
         }
 
-        //      private bool isRotation = false;
-
-        protected override void OnStop()
-        {
-            if (IsFinishing)
-            {
-                var saveTask = new Task(() => ViewModel.Recicle());
-                saveTask.Start();
-            }
-            base.OnStop();
-        }
 
         public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
         {
