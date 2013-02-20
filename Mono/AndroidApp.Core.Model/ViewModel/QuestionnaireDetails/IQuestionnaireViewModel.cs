@@ -18,7 +18,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         bool Enabled { get; }
         void SetEnabled(bool enabled);
-        QuestionnaireNavigationPanelItem GetShortVersion();
 
     }
 }

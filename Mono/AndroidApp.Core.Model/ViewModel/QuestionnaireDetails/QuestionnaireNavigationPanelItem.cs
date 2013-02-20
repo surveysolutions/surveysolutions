@@ -60,10 +60,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         private IQuestionnaireViewModel screen;
 
-        public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
+     /*   public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
         {
             this.getFullScreen = getFullScreen;
             var t = Screen;
-        }
+        }*/
     }
 }

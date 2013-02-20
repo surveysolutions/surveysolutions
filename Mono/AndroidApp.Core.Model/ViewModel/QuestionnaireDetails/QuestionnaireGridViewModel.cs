@@ -74,13 +74,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged("Enabled");
         }
 
-        public QuestionnaireNavigationPanelItem GetShortVersion()
-        {
-            if (shortVersion == null)
-                shortVersion = new QuestionnaireNavigationPanelItem(this.ScreenId, (k) => this);
-            return shortVersion;
-        }
-
+       
         private QuestionnaireNavigationPanelItem shortVersion;
 
         #endregion

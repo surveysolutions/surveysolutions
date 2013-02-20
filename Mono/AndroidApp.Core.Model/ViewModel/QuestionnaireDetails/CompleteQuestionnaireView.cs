@@ -232,17 +232,26 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             else if (group.PropagationPublicKey.HasValue)
             {
                 var screenItems = BuildItems(group, true);
+                var gridKey = new ItemPublicKey(group.PublicKey, null);
+                if(!this.Screens.ContainsKey(gridKey))
+                {
+                    CreateGrid(group, rout);
+                }
                 var screen = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title,
                                                               group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
                                                               BuildBreadCrumbs(rout, key));
                 this.Screens.Add(key, screen);
+                UpdateGrid(group.PublicKey);
             }
             else
             {
-
-                CreateGrid(group, rout);
+                var gridKey = new ItemPublicKey(group.PublicKey, null);
+                if (!this.Screens.ContainsKey(gridKey))
+                {
+                    CreateGrid(group, rout);
+                }
             }
 
         }
@@ -336,12 +345,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                         g => new ItemPublicKey(g.PublicKey, g.PropagationPublicKey)));
         }
 
-        protected QuestionnaireNavigationPanelItem BuildNavigationItem(ICompleteGroup g)
-        {
-            var key = new ItemPublicKey(g.PublicKey, g.PropagationPublicKey);
-            return new QuestionnaireNavigationPanelItem(key, (k) => this.Screens[k]);
-        }
-
+    
         protected HeaderItem BuildHeader(ICompleteQuestion question)
         {
             return new HeaderItem(question.PublicKey, question.QuestionText, question.Instructions);
