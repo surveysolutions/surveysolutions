@@ -1,8 +1,10 @@
 ﻿@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
 
 @{
-    ViewBag.Title = "PDF Preview";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    this.ViewBag.Title = "PDF Preview";
+    this.Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
+@{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
 
 @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })

@@ -1,0 +1,14 @@
+﻿@model Main.Core.View.ICompositeView
+
+@this.Model.Title
+<br/>
+
+@if (this.Model.Children != null && this.Model.Children.Count > 0)
+{
+    <div style="margin-left: 20px;">
+        @foreach (var child in this.Model.Children)
+        {
+            Html.RenderPartial("_RenderChild", child);
+        }
+    </div>
+}

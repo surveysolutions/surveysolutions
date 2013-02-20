@@ -720,6 +720,8 @@
     <Content Include="Views\Question\MainBlock.cshtml" />
     <Content Include="Views\Question\MultiSelectBlock.cshtml" />
     <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
