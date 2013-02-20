@@ -56,10 +56,6 @@ namespace AndroidApp
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        public static IProjectionStorage ProjectionStorage
-        {
-            get { return Kernel.Get<IProjectionStorage>(); }
-        }
 
         public static IAuthentication Membership
         {
@@ -99,10 +95,9 @@ namespace AndroidApp
             #region register handlers
 
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            ProjectionStorage.ClearStorage();
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
-                    Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>(), ProjectionStorage);
+                    Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
             bus.RegisterHandler(eventHandler, typeof (SnapshootLoaded));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));
@@ -136,7 +131,7 @@ namespace AndroidApp
             {
                 _setup.Initialize();
             }
-            var eventStore = CapiApplication.Kernel.Get<IEventStore>() as SQLiteEventStore;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
             /*var events = eventStore.GetAllEvents();
             if (eventStore.GetAllEvents().Any())
             {

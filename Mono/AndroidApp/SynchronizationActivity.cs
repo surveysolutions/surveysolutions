@@ -51,7 +51,8 @@ namespace AndroidApp
 
             // "http://217.12.197.135/DEV-Supervisor/";
             // "http://192.168.173.1:8084/";
-            "http://10.0.2.2:8084";
+            "http://192.168.173.1:9089/";
+            //  "http://10.0.2.2:8084";  
 
         /// <summary>
         /// The sync address settings name.

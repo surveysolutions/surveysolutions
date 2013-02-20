@@ -229,7 +229,7 @@ namespace AndroidApp.Core.Model.Tests
             this.Screens=new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
         }
 
-        public CompleteQuestionnaireViewTestable(CompleteQuestionnaireDocument document) : base(document,null)
+        public CompleteQuestionnaireViewTestable(CompleteQuestionnaireDocument document) : base(document)
         {
         }
         public IDictionary<ItemPublicKey, QuestionViewModel> GetQuestionHash()

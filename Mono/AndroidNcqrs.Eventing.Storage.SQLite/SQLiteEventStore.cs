@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Data;
+using System.Linq;
+using Mono.Data.Sqlite;
+
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
     using System;
@@ -37,10 +41,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </summary>
         private readonly DataBaseHelper _databaseHelper;
 
-        /// <summary>
+   /*     /// <summary>
         /// The _sq lite context.
         /// </summary>
-        private readonly SQLiteContext _sqLiteContext;
+        private readonly SQLiteContext _sqLiteContext;*/
 
         #endregion
 
@@ -58,8 +62,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             this._context = context;
 
             this._databaseHelper = new DataBaseHelper(context);
-
-            this._sqLiteContext = new SQLiteContext(this._databaseHelper);
+            //   this._sqLiteContext = new SQLiteContext(this._databaseHelper);
 
             // _propertyBagConverter = new PropertyBagConverter();
         }
@@ -73,8 +76,39 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </summary>
         public void ClearDB()
         {
-            this._sqLiteContext.ExecuteWithTransaction(
-                () => this._databaseHelper.WritableDatabase.Delete("Events", null, null));
+            this._databaseHelper.ExecuteCommand(Query.ClearTable());
+          /*  this._sqLiteContext.ExecuteWithTransaction(
+                () => this._databaseHelper.WritableDatabase.Delete("Events", null, null));*/
+        }
+        protected  IEnumerable<CommittedEvent> GetEvents(string query)
+        {
+            var cursor = this._databaseHelper.QueryData(query);
+
+            var events = new List<CommittedEvent>();
+            try
+            {
+                foreach (object[] objectse in cursor)
+                {
+                    Guid commitId = Guid.Parse(objectse[0].ToString());
+                    Guid eventSourceId = Guid.Parse(objectse[1].ToString());
+                    Guid eventId = Guid.Parse(objectse[2].ToString());
+                    //TimeStamp, Data, Sequence
+                    long timestamp = Convert.ToInt64(objectse[3]);
+                    DateTime eventTimeStamp = DateTime.FromBinary(timestamp);
+                    object data = this.GetObject(objectse[4].ToString());
+                    long sequenceId = Convert.ToInt64(objectse[5]);
+                    var @event = new CommittedEvent(
+                        commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1, 0));
+
+                    events.Add(@event);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                throw;
+            }
+            return @events;
         }
 
         /// <summary>
@@ -85,33 +119,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </returns>
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            ICursor cursor = this._databaseHelper.ReadableDatabase.RawQuery(Query.SelectAllEventsQuery(), null);
-
-            var events = new List<CommittedEvent>();
-
-            int commitIdIndex = cursor.GetColumnIndex("CommitId");
-            int eventIdIndex = cursor.GetColumnIndex("EventId");
-            int eventSourceIndex = cursor.GetColumnIndex("EventSourceId");
-            int sequenceIndex = cursor.GetColumnIndex("Sequence");
-            int timestampIndex = cursor.GetColumnIndex("TimeStamp");
-            int dataIndex = cursor.GetColumnIndex("Data");
-
-            while (cursor.MoveToNext())
-            {
-                Guid commitId = Guid.Parse(cursor.GetString(commitIdIndex));
-                Guid eventSourceId = Guid.Parse(cursor.GetString(eventSourceIndex));
-                Guid eventId = Guid.Parse(cursor.GetString(eventIdIndex));
-                long sequenceId = cursor.GetLong(sequenceIndex);
-                DateTime eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-                object data = this.GetObject(cursor.GetString(dataIndex));
-
-                var @event = new CommittedEvent(
-                    commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1, 0));
-
-                events.Add(@event);
-            }
-
-            return @events;
+            return GetEvents(Query.SelectAllEventsQuery());
         }
 
         /// <summary>
@@ -142,32 +150,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </returns>
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            ICursor cursor =
-                this._databaseHelper.ReadableDatabase.RawQuery(
-                    Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion), null);
-
-            var events = new List<CommittedEvent>();
-
-            int commitIdIndex = cursor.GetColumnIndex("CommitId");
-            int eventIdIndex = cursor.GetColumnIndex("EventId");
-            int sequenceIndex = cursor.GetColumnIndex("Sequence");
-            int timestampIndex = cursor.GetColumnIndex("TimeStamp");
-            int dataIndex = cursor.GetColumnIndex("Data");
-
-            while (cursor.MoveToNext())
-            {
-                Guid commitId = Guid.Parse(cursor.GetString(commitIdIndex));
-                Guid eventId = Guid.Parse(cursor.GetString(eventIdIndex));
-                long sequenceId = cursor.GetLong(sequenceIndex);
-                DateTime eventTimeStamp = DateTime.FromBinary(cursor.GetLong(timestampIndex));
-                object data = this.GetObject(cursor.GetString(dataIndex));
-
-                var @event = new CommittedEvent(
-                    commitId, eventId, id, sequenceId, eventTimeStamp, data, new Version(1, 0));
-
-                events.Add(@event);
-            }
-
+            var events = GetEvents(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion));
             return new CommittedEventStream(id, events);
         }
 
@@ -179,7 +162,8 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </param>
         public void Store(UncommittedEventStream events)
         {
-            this._sqLiteContext.ExecuteWithTransaction(() => this.SaveEvents(events));
+            this._databaseHelper.ExecuteCommandsInTrnsactionScope(SaveEvents(events));
+       //     this._sqLiteContext.ExecuteWithTransaction(() => this.SaveEvents(events));
         }
 
         #endregion
@@ -222,47 +206,50 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// <param name="events">
         /// The events.
         /// </param>
-        private void SaveEvents(UncommittedEventStream events)
+        private IList<CommandWithParams> SaveEvents(UncommittedEventStream events)
         {
+            var result = new List<CommandWithParams>();
             foreach (UncommittedEvent @event in events)
             {
                 string data = this.GetJsonData(@event.Payload);
 
-                var values = new ContentValues();
+               /* var values = new ContentValues();
                 values.Put("CommitId", @event.CommitId.ToString());
                 values.Put("EventSourceId", @event.EventSourceId.ToString());
                 values.Put("EventId", @event.EventIdentifier.ToString());
                 values.Put("Sequence", @event.EventSequence);
                 values.Put("Timestamp", @event.EventTimeStamp.Ticks);
                 values.Put("Data", data);
-                values.Put("Name", @event.Payload.GetType().FullName);
-
-                this._databaseHelper.WritableDatabase.Insert("Events", null, values);
+                values.Put("Name", @event.Payload.GetType().FullName);*/
+                var command = new CommandWithParams(Query.InsertNewEventQuery());
+                //[CommitId], [EventSourceId], [EventId], [Name], [Data], [Sequence], [TimeStamp]
+                command.Paramaters.Add(new SqliteParameter("@commitId", @event.CommitId.ToString()));
+                command.Paramaters.Add(new SqliteParameter("@eventSourceId",@event.EventSourceId.ToString()));
+                command.Paramaters.Add(new SqliteParameter("@eventId", @event.EventIdentifier.ToString()));
+                command.Paramaters.Add(new SqliteParameter("@name", @event.Payload.GetType().FullName));
+                command.Paramaters.Add(new SqliteParameter("@data", data));
+                command.Paramaters.Add(new SqliteParameter("@timestamp", @event.EventTimeStamp.Ticks));
+                command.Paramaters.Add(new SqliteParameter("@sequence", @event.EventSequence));
+                result.Add(command);
+               
+                //      this._databaseHelper.WritableDatabase.Insert("Events", null, values);
             }
+            return result;
         }
 
         #endregion
 
-        // private byte[] GetBinaryData(object payload)
-        // {
-        // var bag = _propertyBagConverter.Convert(payload);
-        // using (var stream = new MemoryStream())
-        // {
-        // var formatter = new BinaryFormatter();
-        // formatter.Serialize(stream, bag);
-        // stream.Position = 0;
-        // return stream.ToArray();
-        // }
-        // }
+    }
 
-        // private object GetObject(byte[] data)
-        // {
-        // using (var stream = new MemoryStream(data))
-        // {
-        // var formatter = new BinaryFormatter();
-        // var bag = (PropertyBag)formatter.Deserialize(stream);
-        // return _propertyBagConverter.Convert(bag);
-        // }
-        // }
+    public class CommandWithParams
+    {
+        public CommandWithParams(string command)
+        {
+            Command = command;
+            this.Paramaters = new List<SqliteParameter>();
+        }
+
+        public string Command { get; private set; }
+        public IList<SqliteParameter> Paramaters { get; private set; }
     }
 }

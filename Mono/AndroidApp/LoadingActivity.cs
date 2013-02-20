@@ -43,7 +43,6 @@ namespace AndroidApp
             {
                 ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                     new QuestionnaireScreenInput(publicKey));
-                ViewModel.Restore();
                 
                 Intent intent = new Intent(this, typeof(DetailsActivity));
                 intent.PutExtra("publicKey", publicKey.ToString());

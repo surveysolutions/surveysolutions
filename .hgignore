@@ -29,3 +29,4 @@ ClientDependency
 success.marker
 
 Externals/lib/*
+Bin

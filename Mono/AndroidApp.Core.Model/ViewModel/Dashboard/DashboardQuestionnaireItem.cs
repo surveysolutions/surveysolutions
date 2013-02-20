@@ -13,6 +13,8 @@ using System.Windows.Input;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.Commands;
+using Main.Core.Entities.SubEntities;
+
 namespace AndroidApp.Core.Model.ViewModel.Dashboard
 {
     /// <summary>
@@ -34,10 +36,10 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         /// <param name="properties">
         /// The properties.
         /// </param>
-        public DashboardQuestionnaireItem(Guid publicKey, string status, IList<FeaturedItem> properties)
+        public DashboardQuestionnaireItem(Guid publicKey, SurveyStatus status, IList<FeaturedItem> properties)
         {
             this.PublicKey = publicKey;
-            this.Status = status;
+            this.status = status;
             this.Properties = properties;
         }
 
@@ -58,7 +60,22 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         /// <summary>
         /// Gets the status.
         /// </summary>
-        public string Status { get; private set; }
+        public string Status
+        {
+            get { return status.Name; }
+        }
+
+        private SurveyStatus status;
+
+        public bool Visible
+        {
+            get
+            {
+                return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
+                       status == SurveyStatus.Error;
+
+            }
+        }
 
         /// <summary>
         /// Gets the view detail command.
@@ -76,11 +93,11 @@ namespace AndroidApp.Core.Model.ViewModel.Dashboard
         }
 
         #endregion
-        public void SetStatus(string newStatus)
+        public void SetStatus(SurveyStatus newStatus)
         {
-            if (newStatus == this.Status)
+            if (newStatus == this.status)
                 return;
-            this.Status = newStatus;
+            this.status = newStatus;
             this.RaisePropertyChanged("Status");
         }
     }

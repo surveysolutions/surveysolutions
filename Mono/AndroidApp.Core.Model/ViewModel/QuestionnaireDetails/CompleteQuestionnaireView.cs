@@ -13,14 +13,14 @@ using Main.Core.Entities.SubEntities.Complete;
 
 namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
-    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel, IProjection
+    public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
     {
         public CompleteQuestionnaireView(string publicKey)
         {
             this.PublicKey = Guid.Parse(publicKey); ;
         }
 
-        public CompleteQuestionnaireView(CompleteQuestionnaireDocument document, IProjectionStorage projectionStorage)
+        public CompleteQuestionnaireView(CompleteQuestionnaireDocument document)
         {
             this.PublicKey = document.PublicKey;
             this.Title = string.Format("{0} - {1}", document.Title,
@@ -41,8 +41,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.validator = new QuestionnaireValidationExecutor(this);
             this.validator.Execute();
          
-            this.IsRestored = true;
-            this.projectionStorage = projectionStorage;
         }
 
         protected void FillQuestionnairePostOrder(ICompleteGroup document)
@@ -76,88 +74,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         #region fields
 
-        public void Restore()
-        {
-           /* if (this.IsRestored)
-                return;
-            while (isProccessing)
-            {
-                Thread.Sleep(1000);
-            }
-            
-            isProccessing = true;
-
-            this.IsRestored = true;
-            var restoredState =
-                projectionStorage.RestoreProjection(this.PublicKey) as CompleteQuestionnaireViewState;
-            if (restoredState == null)
-                return;
-            this.PublicKey = restoredState.PublicKey;
-            this.Title = restoredState.Title;
-            this.Templates = restoredState.Templates;
-            this.Screens = restoredState.Screens;
-            this.Chapters =
-                restoredState.Chapters.Select(c => this.Screens[c] as QuestionnaireScreenViewModel).ToList();
-            this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            foreach (var screen in Screens.Select(s => s.Value))
-            {
-                var plainScreen = screen as QuestionnaireScreenViewModel;
-                if (plainScreen != null)
-                {
-                    foreach (var item in plainScreen.Items)
-                    {
-                        var question = item as QuestionViewModel;
-                        if (question != null)
-                        {
-                            UpdateQuestionHash(question);
-                            continue;
-                        }
-                        var group = item as QuestionnaireNavigationPanelItem;
-                        if (group != null)
-                        {
-                            group.RestoreFullScreenFunk((k) => this.Screens[k]);
-                        }
-                    }
-
-                    if (plainScreen is QuestionnairePropagatedScreenViewModel)
-                        plainScreen.PropertyChanged += screen_PropertyChanged;
-                    continue;
-                }
-                var roster = screen as QuestionnaireGridViewModel;
-                if (roster != null)
-                {
-                    roster.RestoreRowFunction(() => CollectPropagatedScreen(roster.ScreenId.PublicKey));
-                }
-
-            }
-            this.validator = new QuestionnaireValidationExecutor(this);
-            isProccessing = false;*/
-        }
-
-        public void Recicle()
-        {
-           /* if (!IsRestored)
-                return;
-
-            while (isProccessing)
-            {
-                Thread.Sleep(1000);
-            }
-            
-            isProccessing = true;
-            IsRestored = false;
-            var state = new CompleteQuestionnaireViewState(this.PublicKey, this.Title, Screens, Templates,
-                                                           this.Chapters.Select(c => c.ScreenId));
-            projectionStorage.SaveOrUpdateProjection(state, PublicKey);
-            Chapters = null;
-            Templates = null;
-            Screens = null;
-            Questions = null;
-            
-            isProccessing = false;*/
-        }
-
-        private bool isProccessing = false;
         public Guid PublicKey { get; private set; }
 
         public string Title { get; private set; }
@@ -169,8 +85,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
 
         protected IQuestionnaireValidationExecutor validator;
-        protected IProjectionStorage projectionStorage;
-        public bool IsRestored { get; private set; }
 
         #endregion
 

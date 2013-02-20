@@ -4,18 +4,18 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
 	public class Query
 	{
-		internal static string InsertNewEventQuery()
-		{
-			return
-@"INSERT INTO [Events]
-([CommitId] [EventSourceId], [EventId], [Name], [Data], [Sequence], [TimeStamp]) 
-VALUES (?, ?, ?, ?, ?, ?, ?)";
-		}
+        internal static string InsertNewEventQuery()
+        {
+            return string.Format(
+                @"INSERT INTO [Events]
+([CommitId], [EventSourceId], [EventId], [Name], [Data], [Sequence], [TimeStamp]) 
+VALUES (@commitId, @eventSourceId,@eventId,@name, @data, @sequence, @timeStamp)");
+        }
 
 		internal static string SelectAllEventsByGuidQuery(Guid id, long minVersion, long maxVersion)
 		{
 			var template =
-@"SELECT TimeStamp, EventId, Data, Sequence, CommitId
+@"SELECT CommitId, EventSourceId, EventId, TimeStamp, Data, Sequence
 FROM Events
 WHERE [EventSourceId] = '{0}'
 AND Sequence >= {1}
@@ -49,7 +49,10 @@ Name TEXT  NOT NULL)";
 		{
 			return @"DROP TABLE IF EXISTS Events";
 		}
-
+        internal static string ClearTable()
+        {
+            return @"delete from [Events]";
+        }
 
 	}
 }

@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
+    <Compile Include="Bindings\VisibilityBinding.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
