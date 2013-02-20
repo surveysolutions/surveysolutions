@@ -19,11 +19,7 @@ namespace Main.Synchronization.SyncManager
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-
-    //using NLog;
-
-    //using LogManager = NLog.LogManager;
-
+    
     /// <summary>
     /// The sync manager.
     /// </summary>

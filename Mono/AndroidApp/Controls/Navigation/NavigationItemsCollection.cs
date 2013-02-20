@@ -32,27 +32,34 @@ namespace AndroidApp.Controls.Navigation
             this.context = context;
             this.membership = CapiApplication.Membership;
 
-            Add(new NavigationItem(Dashboard, "Dashboard"));
-            //Add(new NavigationItem(Sync, "Sync"));
-            Add(new NavigationItem(Synchronization, "Synchronization"));
-            if (membership.IsLoggedIn)
-                Add(new NavigationItem(LogOff, "LogOff"));
+            this.Add(new NavigationItem(Dashboard, "Dashboard"));
+            this.Add(new NavigationItem(Synchronization, "Synchronization"));
+
+            if (this.membership.IsLoggedIn)
+            {
+                this.Add(new NavigationItem(LogOff, "LogOff"));
+            }
         }
 
         protected bool LogOff(object sender, EventArgs e)
         {
-            membership.LogOff();
+            this.membership.LogOff();
             this.context.StartActivity(typeof(LoginActivity));
             return true;
         }
+
         protected bool Dashboard(object sender, EventArgs e)
         {
             if (this.context is DashboardActivity || this.context is LoginActivity)
+            {
                 return true;
-            if (membership.IsLoggedIn)
-                this.context.StartActivity(typeof(DashboardActivity));
-            else
-                this.context.StartActivity(typeof(LoginActivity));
+            }
+
+            this.context.StartActivity(
+                this.membership.IsLoggedIn ? 
+                typeof(DashboardActivity) : 
+                typeof(LoginActivity));
+            
             return true;
         }
 

@@ -167,6 +167,7 @@
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SyncActivity.cs" />
     <Compile Include="SynchronizationActivity.cs" />
+    <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

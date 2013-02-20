@@ -57,7 +57,7 @@ namespace AndroidApp
         {
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                new QuestionnaireScreenInput(QuestionnaireId));
-            activitySnapshooting=new InMemoryEventStore();
+            activitySnapshooting = new InMemoryEventStore();
             
             NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);
             base.OnCreate(bundle);
