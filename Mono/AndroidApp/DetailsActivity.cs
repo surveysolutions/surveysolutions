@@ -125,10 +125,14 @@ namespace AndroidApp
         }
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
-            
+
             if (Adapter.IsRoot)
                 NavList.SelectItem(e.P0);
+            var statistic = Adapter.GetItem(e.P0) as StatisticsContentFragment;
+            if (statistic != null)
+                statistic.RecalculateStatistics();
         }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();

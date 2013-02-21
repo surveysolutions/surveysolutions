@@ -109,8 +109,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             if (!e.HasFocus)
             {
-                etComments.Visibility = ViewStates.Gone;
-                tvComments.Visibility = ViewStates.Visible;
+                SetEditCommentsVisibility(false);
                 etComments.Text = tvComments.Text;
                 HideCommentKeyboard();
             }
@@ -124,8 +123,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
                                                          etComments.Text, this.Model.PublicKey.PropagationKey, CapiApplication.Membership.CurrentUser));
             etComments.ClearFocus();
-            etComments.Visibility = ViewStates.Gone;
-            tvComments.Visibility = ViewStates.Visible;
+            SetEditCommentsVisibility(false);
             HideCommentKeyboard();
         }
         private void  HideCommentKeyboard()
@@ -134,6 +132,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
                   = (InputMethodManager)this.Context.GetSystemService(
                       Context.InputMethodService);
             imm.HideSoftInputFromWindow(etComments.WindowToken, 0);
+        }
+        private void SetEditCommentsVisibility(bool visible)
+        {
+            etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
+            tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
         }
 
         protected virtual void PostInit()
@@ -165,8 +168,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         void AbstractQuestionView_LongClick(object sender, View.LongClickEventArgs e)
         {
-            etComments.Visibility = ViewStates.Visible;
-            tvComments.Visibility = ViewStates.Gone;
+            SetEditCommentsVisibility(true);
+            
             etComments.RequestFocus();
            
         }
@@ -194,6 +197,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected TextView tvComments
         {
             get { return this.FindViewById<TextView>(Resource.Id.tvComments); }
+        }
+        protected TextView tvCommentsTitle
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvCommentsTitle); }
         }
         protected TextView tvError
         {
