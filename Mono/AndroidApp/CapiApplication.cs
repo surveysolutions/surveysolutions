@@ -76,11 +76,11 @@ namespace AndroidApp
 
             //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
             NcqrsInit.Init(Kernel);
-            var eventStore = new SQLiteEventStore(this.ApplicationContext);
+          //  var eventStore = new SQLiteEventStore(this.ApplicationContext);
             
-            NcqrsEnvironment.SetDefault(eventStore);
+     //       NcqrsEnvironment.SetDefault(eventStore);
             // NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(eventStore);
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore);
 
             #region register handlers
 
