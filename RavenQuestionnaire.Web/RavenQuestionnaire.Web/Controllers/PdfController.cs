@@ -1,6 +1,7 @@
 ﻿namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
+    using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
 
@@ -41,15 +42,15 @@
 
             using (var memoryStream = new MemoryStream())
             {
-                RenderQuestionnairePdfToMemoryStream(id, memoryStream);
+                this.RenderQuestionnairePdfToMemoryStream(id, memoryStream);
 
                 return this.File(memoryStream.ToArray(), "application/pdf", string.Format("{0}.pdf", questionnaire.Title));
             }
         }
 
-        private static void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
+        private void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
         {
-            PdfConvert.Environment.WkHtmlToPdfPath = @"C:\Program Files (x86)\wkhtmltopdf\wkhtmltopdf.exe";
+            PdfConvert.Environment.WkHtmlToPdfPath = this.GetPathToWkHtmlToPdfExecutableOrThrow();
 
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
@@ -62,6 +63,18 @@
                 });
 
             memoryStream.Flush();
+        }
+
+        private string GetPathToWkHtmlToPdfExecutableOrThrow()
+        {
+            string path = Path.GetFullPath(Path.Combine(
+                this.Server.MapPath("~"),
+                @"..\..\tools\3rdparty\wkhtmltopdf-0.11.0-rc1\wkhtmltopdf.exe"));
+
+            if (!System.IO.File.Exists(path))
+                throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
+
+            return path;
         }
 
         private QuestionnaireView LoadQuestionnaire(Guid id)
