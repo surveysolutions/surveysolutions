@@ -5,13 +5,14 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel,
                                                     IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(ItemPublicKey publicKey, Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
+        public QuestionnaireNavigationPanelItem(ItemPublicKey publicKey, IQuestionnaireViewModel fullScreen)
         {
             this.PublicKey = publicKey;
-            this.getFullScreen = getFullScreen;
+            this.fullScreen = fullScreen;
+            fullScreen.PropertyChanged += screen_PropertyChanged;
         }
 
-        private Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen;
+        private IQuestionnaireViewModel fullScreen;
 
         public ItemPublicKey PublicKey { get; private set; }
        
@@ -19,7 +20,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                        getFullScreen);
+                                                        fullScreen);
         }
         public string Text { get { return Screen.ScreenName; } }
 
@@ -42,12 +43,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
             get
             {
-                if (screen == null)
+             /*   if (screen == null)
                 {
                     screen = getFullScreen(this.PublicKey);
                     screen.PropertyChanged += screen_PropertyChanged;
-                }
-                return screen;
+                }*/
+                return fullScreen;
             }
         }
 
@@ -58,7 +59,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged(e.PropertyName);
         }
 
-        private IQuestionnaireViewModel screen;
+      //  private IQuestionnaireViewModel screen;
 
      /*   public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
         {

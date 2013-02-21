@@ -184,11 +184,18 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var question = sender as QuestionViewModel;
             if (question == null || !question.Capital || !question.PublicKey.PropagationKey.HasValue)
                 return;
+           
+            UpdatePropagatedGroupScreenName(question.PublicKey.PropagationKey.Value);
+        }
+
+        private void UpdatePropagatedGroupScreenName(Guid propagationKey)
+        {
             var screens =
                 Screens.Select(
-                    q => q.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(q => q.ScreenId.PropagationKey == question.PublicKey.PropagationKey);
+                    q => q.Value).OfType<QuestionnairePropagatedScreenViewModel>().Where(
+                        q => q.ScreenId.PropagationKey == propagationKey);
             var newTitle = string.Concat(
-                Questions.Where(q => q.Key.PropagationKey == question.PublicKey.PropagationKey && q.Value.Capital).
+                Questions.Where(q => q.Key.PropagationKey == propagationKey && q.Value.Capital).
                     Select(
                         q => q.Value.AnswerString));
             foreach (var screen in screens)
@@ -196,7 +203,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 screen.UpdateScreenName(newTitle);
             }
         }
-
 
         private void screen_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -241,9 +247,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                               group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
-                                                              BuildBreadCrumbs(rout, key));
+                                                               this.Templates[group.PublicKey].Breadcrumbs);
                 this.Screens.Add(key, screen);
+                screen.PropertyChanged += screen_PropertyChanged;
                 UpdateGrid(group.PublicKey);
+                UpdatePropagatedGroupScreenName(group.PropagationPublicKey.Value);
             }
             else
             {
@@ -259,7 +267,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         protected void UpdateQuestionHash(QuestionViewModel question)
         {
             this.Questions.Add(question.PublicKey, question);
-            if (question.Capital)
+            if (question.Capital && question.PublicKey.PropagationKey.HasValue)
             {
                 question.PropertyChanged += question_PropertyChanged;
             }
@@ -397,7 +405,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 var key = new ItemPublicKey(group.PublicKey, group.PropagationPublicKey);
                 return
                     new QuestionnaireNavigationPanelItem(
-                        key, (k) => this.Screens[k]);
+                        key, this.Screens[key]);
             }
             return null;
         }
