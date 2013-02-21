@@ -15,9 +15,12 @@ namespace AndroidApp
     using Android.Content;
     using Android.Graphics;
     using Android.OS;
+    using Android.Views;
     using Android.Widget;
 
     using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+    using AndroidApp.Extensions;
+    using AndroidApp.Settings;
     using AndroidApp.Syncronization;
 
     using AndroidMain.Synchronization;
@@ -34,34 +37,11 @@ namespace AndroidApp
     /// <summary>
     /// The synchronization activity.
     /// </summary>
-    [Activity(Label = "Synchronization", Icon = "@drawable/capi")]
+    [Activity(NoHistory = true, Icon = "@drawable/capi")]
     public class SynchronizationActivity : Activity
     {
-        #region Constants
-
-        /// <summary>
-        /// The app name.
-        /// </summary>
-        private const string AppName = "CapiApp";
-
-        /// <summary>
-        /// The remote sync node.
-        /// </summary>
-        private const string RemoteSyncNode =
-
-            // "http://217.12.197.135/DEV-Supervisor/";
-            // "http://192.168.173.1:8084/";
-            "http://192.168.173.1:9089/";
-            //  "http://10.0.2.2:8084";  
-
-        /// <summary>
-        /// The sync address settings name.
-        /// </summary>
-        private const string SyncAddressSettingsName = "SyncAddress";
-
-        #endregion
         
-        /*/// <summary>
+        /// <summary>
         /// The on create options menu.
         /// </summary>
         /// <param name="menu">
@@ -74,7 +54,7 @@ namespace AndroidApp
         {
             this.CreateActionBar();
             return base.OnCreateOptionsMenu(menu);
-        }*/
+        }
         #region Methods
 
         /// <summary>
@@ -105,11 +85,6 @@ namespace AndroidApp
             {
                 buttonPush.Click += this.buttonPush_Click;
             }
-
-            var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
-
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-            syncPoint.Text = prefs.GetString(SyncAddressSettingsName, RemoteSyncNode);
         }
 
         /// <summary>
@@ -144,24 +119,22 @@ namespace AndroidApp
         /// </param>
         private void DoSync(bool isPush)
         {
-            var syncPoint = this.FindViewById<EditText>(Resource.Id.editSyncPoint);
+            var syncPoint = SettingsManager.GetSyncAddressPoint();
 
             Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint.Text, UriKind.Absolute, out test)
+            bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
                          && (test.Scheme == "http" || test.Scheme == "https");
-
+            
             if (!valid)
             {
-                syncPoint.SetBackgroundColor(Color.Red);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.SetTitle("Incorrect Address Point");
+                builder.SetMessage("Please set in settings");
+                var dialog = builder.Create();
+                dialog.Show();
                 return;
             }
 
-            syncPoint.SetBackgroundColor(Color.Transparent);
-
-            // saving into the settings
-            ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
-            ISharedPreferencesEditor prefEditor = prefs.Edit();
-            prefEditor.PutString(SyncAddressSettingsName, syncPoint.Text);
 
             var progressDialog = new ProgressDialog(this);
 
@@ -180,7 +153,7 @@ namespace AndroidApp
                         i++;
                         this.RunOnUiThread(() => progressDialog.IncrementProgressBy(1));
 
-                        bool result = isPush ? this.Push(syncPoint.Text) : this.Pull(syncPoint.Text);
+                        bool result = isPush ? this.Push(syncPoint) : this.Pull(syncPoint);
 
                         this.RunOnUiThread(
                             delegate
@@ -266,7 +239,9 @@ namespace AndroidApp
         /// </param>
         private void buttonPull_Click(object sender, EventArgs e)
         {
-            this.DoSync(false);
+            //if (((Button)sender).Id == Resource.Id.btnPull)
+                this.DoSync(false);
+            
         }
 
         /// <summary>

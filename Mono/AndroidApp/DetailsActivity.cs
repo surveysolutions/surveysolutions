@@ -55,12 +55,18 @@ namespace AndroidApp
 
         protected override void OnCreate(Bundle bundle)
         {
+            base.OnCreate(bundle);
+            if (!CapiApplication.Membership.IsLoggedIn)
+            {
+                StartActivity(typeof(LoginActivity));
+            }
+
+
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                new QuestionnaireScreenInput(QuestionnaireId));
             activitySnapshooting = new InMemoryEventStore();
             
             NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);
-            base.OnCreate(bundle);
 
             SetContentView(Resource.Layout.Details);
             if (bundle != null)

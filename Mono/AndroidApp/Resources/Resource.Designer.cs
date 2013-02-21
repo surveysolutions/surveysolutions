@@ -129,32 +129,35 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040003
 			public const int ScreenId = 2130968579;
 			
-			// aapt resource value: 0x7f04001f
-			public const int btnAnswered = 2130968607;
+			// aapt resource value: 0x7f040022
+			public const int btnAnswered = 2130968610;
 			
-			// aapt resource value: 0x7f040023
-			public const int btnComplete = 2130968611;
+			// aapt resource value: 0x7f040026
+			public const int btnComplete = 2130968614;
 			
 			// aapt resource value: 0x7f040008
 			public const int btnInstructions = 2130968584;
 			
-			// aapt resource value: 0x7f040022
-			public const int btnInvalid = 2130968610;
+			// aapt resource value: 0x7f040025
+			public const int btnInvalid = 2130968613;
 			
 			// aapt resource value: 0x7f04001c
 			public const int btnLogin = 2130968604;
 			
-			// aapt resource value: 0x7f040025
-			public const int btnPull = 2130968613;
+			// aapt resource value: 0x7f040027
+			public const int btnPull = 2130968615;
 			
-			// aapt resource value: 0x7f040026
-			public const int btnPush = 2130968614;
+			// aapt resource value: 0x7f040028
+			public const int btnPush = 2130968616;
+			
+			// aapt resource value: 0x7f040021
+			public const int btnSyncPoint = 2130968609;
+			
+			// aapt resource value: 0x7f040023
+			public const int btnUnanswered = 2130968611;
 			
 			// aapt resource value: 0x7f040020
-			public const int btnUnanswered = 2130968608;
-			
-			// aapt resource value: 0x7f040024
-			public const int editSyncPoint = 2130968612;
+			public const int editSettingsSyncPoint = 2130968608;
 			
 			// aapt resource value: 0x7f04000d
 			public const int etComments = 2130968589;
@@ -189,6 +192,9 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04001b
 			public const int tePassword = 2130968603;
 			
+			// aapt resource value: 0x7f04001f
+			public const int textSyncPoint = 2130968607;
+			
 			// aapt resource value: 0x7f04000c
 			public const int tvComments = 2130968588;
 			
@@ -198,8 +204,8 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04000a
 			public const int tvError = 2130968586;
 			
-			// aapt resource value: 0x7f040021
-			public const int tvErrorWarning = 2130968609;
+			// aapt resource value: 0x7f040024
+			public const int tvErrorWarning = 2130968612;
 			
 			// aapt resource value: 0x7f040016
 			public const int tvITem = 2130968598;
@@ -207,8 +213,8 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04000e
 			public const int tvStatus = 2130968590;
 			
-			// aapt resource value: 0x7f040027
-			public const int tvSyncResult = 2130968615;
+			// aapt resource value: 0x7f040029
+			public const int tvSyncResult = 2130968617;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;
@@ -267,13 +273,16 @@ namespace AndroidApp
 			public const int ScreenNavigationView = 2130903051;
 			
 			// aapt resource value: 0x7f03000c
-			public const int SplashScreen = 2130903052;
+			public const int settings_dialog = 2130903052;
 			
 			// aapt resource value: 0x7f03000d
-			public const int StatisticsContent = 2130903053;
+			public const int SplashScreen = 2130903053;
 			
 			// aapt resource value: 0x7f03000e
-			public const int sync_dialog = 2130903054;
+			public const int StatisticsContent = 2130903054;
+			
+			// aapt resource value: 0x7f03000f
+			public const int sync_dialog = 2130903055;
 			
 			private Layout()
 			{
