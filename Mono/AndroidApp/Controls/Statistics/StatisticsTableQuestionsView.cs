@@ -22,8 +22,9 @@ namespace AndroidApp.Controls.Statistics
         protected readonly IEnumerable<StatisticsQuestionViewModel> questions;
         protected readonly IEnumerable<string> headerNames;
         protected readonly IEnumerable<Func<StatisticsQuestionViewModel, string>> valueFucntions;
+        protected TableLayout tl;
         public StatisticsTableQuestionsView(
-            Context context, 
+            Context context,
             IEnumerable<StatisticsQuestionViewModel> questions, 
             Action<ScreenChangedEventArgs> notifier,
             IEnumerable<string> headerNames,
@@ -43,7 +44,7 @@ namespace AndroidApp.Controls.Statistics
         {
             ScrollView sv = new ScrollView(this.Context);
 
-            TableLayout tl = new TableLayout(this.Context);
+            tl = new TableLayout(this.Context);
             tl.StretchAllColumns = true;
             TableRow th = new TableRow(this.Context);
             foreach (string headerName in headerNames)
@@ -56,6 +57,13 @@ namespace AndroidApp.Controls.Statistics
 
             tl.AddView(th);
 
+            BuildRows();
+            sv.AddView(tl);
+            this.AddView(sv);
+        }
+      
+        private void BuildRows()
+        {
             foreach (var statisticsQuestionViewModel in questions)
             {
                 TableRow tr = new TableRow(this.Context);
@@ -66,15 +74,13 @@ namespace AndroidApp.Controls.Statistics
                 foreach (Func<StatisticsQuestionViewModel, string> valueFucntion in valueFucntions)
                 {
                     TextView tvQuestion = new TextView(this.Context);
-                   
+
                     tvQuestion.Text = valueFucntion(statisticsQuestionViewModel);
                     StyleCell(tvQuestion);
                     tr.AddView(tvQuestion);
                 }
                 tl.AddView(tr);
             }
-            sv.AddView(tl);
-            this.AddView(sv);
         }
 
         void tr_Click(object sender, EventArgs e)
