@@ -100,21 +100,42 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
-            this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
-            this.Clickable = true;
+            etComments.FocusChange += etComments_FocusChange;
+            llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            llWrapper.Clickable = true;
         }
+
+        void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (!e.HasFocus)
+            {
+                etComments.Visibility = ViewStates.Gone;
+                tvComments.Visibility = ViewStates.Visible;
+                etComments.Text = tvComments.Text;
+                HideCommentKeyboard();
+            }
+
+        }
+
+    
         void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+         
             CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
                                                          etComments.Text, this.Model.PublicKey.PropagationKey, CapiApplication.Membership.CurrentUser));
             etComments.ClearFocus();
             etComments.Visibility = ViewStates.Gone;
             tvComments.Visibility = ViewStates.Visible;
+            HideCommentKeyboard();
+        }
+        private void  HideCommentKeyboard()
+        {
             InputMethodManager imm
-                = (InputMethodManager)this.Context.GetSystemService(
-                    Context.InputMethodService);
+                  = (InputMethodManager)this.Context.GetSystemService(
+                      Context.InputMethodService);
             imm.HideSoftInputFromWindow(etComments.WindowToken, 0);
         }
+
         protected virtual void PostInit()
         {
             llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
