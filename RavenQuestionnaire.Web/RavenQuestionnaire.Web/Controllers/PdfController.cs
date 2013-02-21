@@ -7,7 +7,6 @@
 
     using RavenQuestionnaire.Core.Views.Questionnaire;
 
-    [Authorize]
     public class PdfController : Controller
     {
         private readonly IViewRepository viewRepository;
@@ -17,7 +16,15 @@
             this.viewRepository = viewRepository;
         }
 
+        [Authorize]
         public ActionResult PreviewQuestionnaire(Guid id)
+        {
+            QuestionnaireView viewModel = this.LoadQuestionnaire(id);
+
+            return this.View(viewModel);
+        }
+
+        public ActionResult RenderQuestionnaire(Guid id)
         {
             QuestionnaireView viewModel = this.LoadQuestionnaire(id);
 
