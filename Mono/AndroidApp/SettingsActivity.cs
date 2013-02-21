@@ -46,7 +46,6 @@ namespace AndroidApp
             {
                 editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
             }
-
         }
 
         private void buttonChange_Click(object sender, EventArgs e)
