@@ -29,15 +29,18 @@ namespace AndroidApp.Controls.QuestionnaireDetails.Roster
             _bindingActivity = bindingActivity;
             this.Model = source;
             Content = bindingActivity.BindingInflate(source, Resource.Layout.RosterQuestion, this);
-            llWrapper.Click += rowViewItem_Click;
+           
             llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            llWrapper.Click += rowViewItem_Click;
          //   this.SetBackgroundResource(Resource.Drawable.grid_headerItem);
         }
 
         void rowViewItem_Click(object sender, EventArgs e)
         {
+            if (!this.Model.Status.HasFlag(QuestionStatus.Enabled))
+                return;
             var handler = RosterItemsClick;
-            if(handler!=null)
+            if (handler != null)
             {
                 handler(this, new RosterItemClickEventArgs(Model));
             }
