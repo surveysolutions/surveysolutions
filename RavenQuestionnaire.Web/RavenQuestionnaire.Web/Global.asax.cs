@@ -15,6 +15,8 @@ namespace RavenQuestionnaire.Web
     using System.Web.Mvc;
     using System.Web.Routing;
 
+    using NConfig;
+
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
@@ -27,6 +29,14 @@ namespace RavenQuestionnaire.Web
     /// </summary>
     public class MvcApplication : HttpApplication
     {
+        /// <summary>
+        /// Per AppDomain initialization.
+        /// </summary>
+        static MvcApplication()
+        {
+            SetupNConfig();
+        }
+
         #region Fields
 
         /// <summary>
@@ -185,6 +195,11 @@ namespace RavenQuestionnaire.Web
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             this.logger.Fatal(e.ExceptionObject);
+        }
+
+        private static void SetupNConfig()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Designer.Web.config").SetAsSystemDefault();
         }
 
         #endregion

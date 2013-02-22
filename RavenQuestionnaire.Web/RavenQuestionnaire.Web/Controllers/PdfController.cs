@@ -50,7 +50,7 @@
 
         private void RenderQuestionnairePdfToMemoryStream(Guid id, MemoryStream memoryStream)
         {
-            PdfConvert.Environment.WkHtmlToPdfPath = this.GetPathToWkHtmlToPdfExecutableOrThrow();
+            PdfConvert.Environment.WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow();
 
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
@@ -65,11 +65,11 @@
             memoryStream.Flush();
         }
 
-        private string GetPathToWkHtmlToPdfExecutableOrThrow()
+        private string GetPathToWKHtmlToPdfExecutableOrThrow()
         {
             string path = Path.GetFullPath(Path.Combine(
                 this.Server.MapPath("~"),
-                @"..\..\tools\3rdparty\wkhtmltopdf-0.11.0-rc1\wkhtmltopdf.exe"));
+                ConfigurationManager.AppSettings["WKHtmlToPdfExecutablePath"]));
 
             if (!System.IO.File.Exists(path))
                 throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));
