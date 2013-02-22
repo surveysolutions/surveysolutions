@@ -173,6 +173,9 @@
     <Reference Include="MvcPaging">
       <HintPath>..\..\packages\MvcPaging.2.0.3\lib\net40\MvcPaging.dll</HintPath>
     </Reference>
+    <Reference Include="NConfig">
+      <HintPath>..\..\packages\NConfig.1.0.14\lib\Net40\NConfig.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
