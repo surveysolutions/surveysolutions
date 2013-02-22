@@ -55,7 +55,9 @@
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
                 {
-                    Url = string.Format("http://localhost/RavenQuestionnaire.Web/Pdf/RenderQuestionnaire/{0}", id),
+                    Url = string.Format("{0}/Pdf/RenderQuestionnaire/{1}",
+                        ConfigurationManager.AppSettings["SiteRoot"],
+                        id),
                 },
                 new PdfOutput
                 {
