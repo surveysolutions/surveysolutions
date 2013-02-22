@@ -1,5 +1,15 @@
+using System.IO;
+using System.Reflection;
+using System.Threading;
 using Android.App;
+using AndroidNcqrs.Eventing.Storage.SQLite;
+using Cirrious.MvvmCross.Droid.Platform;
 using Cirrious.MvvmCross.Droid.Views;
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using Newtonsoft.Json;
 
 
 namespace AndroidApp
@@ -11,7 +21,11 @@ namespace AndroidApp
             : base(Resource.Layout.SplashScreen)
         {
         }
+        protected override void TriggerFirstNavigate()
+        {
+            CapiApplication.GenerateEvents();
+            base.TriggerFirstNavigate();
+        }
 
-      
     }
 }
