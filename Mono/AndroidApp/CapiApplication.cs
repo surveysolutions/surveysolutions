@@ -69,17 +69,9 @@ namespace AndroidApp
             CurrentContext = this;
 
             Kernel.Bind<Context>().ToConstant(this.ApplicationContext);
-
-
             Kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
-            //Kernel.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
-
-            //  Kernel.Bind<IAuthentication>().ToConstant(new AndroidAuthentication());
             NcqrsInit.Init(Kernel);
-          //  var eventStore = new SQLiteEventStore(this.ApplicationContext);
-            
-     //       NcqrsEnvironment.SetDefault(eventStore);
-            // NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
+     
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore);
 
             #region register handlers

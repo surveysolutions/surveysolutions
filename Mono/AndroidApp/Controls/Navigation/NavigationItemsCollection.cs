@@ -126,7 +126,7 @@ namespace AndroidApp.Controls.Navigation
                 typeof(DashboardActivity) : 
                 typeof(LoginActivity));
             */
-            this.context.StartActivity(typeof(SynchronizationActivity));
+            this.context.StartActivity(typeof(DashboardActivity));
             return true;
         }
 

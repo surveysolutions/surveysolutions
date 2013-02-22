@@ -13,7 +13,6 @@ namespace AndroidApp
 
     using Android.App;
     using Android.Content;
-    using Android.Graphics;
     using Android.OS;
     using Android.Views;
     using Android.Widget;
@@ -65,11 +64,7 @@ namespace AndroidApp
         /// </param>
         protected override void OnCreate(Bundle bundle)
         {
-            if (bundle == null)
-            {
-                NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            }
-
+            
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.sync_dialog);
@@ -93,7 +88,6 @@ namespace AndroidApp
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
             GC.Collect();
         }
 
@@ -134,29 +128,33 @@ namespace AndroidApp
                 dialog.Show();
                 return;
             }
-
-
+            
             var progressDialog = new ProgressDialog(this);
 
             progressDialog.SetMessage("Synchronization in progress");
             progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
             progressDialog.SetCancelable(false);
-            progressDialog.Show();
+            
 
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
-
 
             int i = 0;
             ThreadPool.QueueUserWorkItem(
                 state =>
                     {
                         i++;
-                        this.RunOnUiThread(() => progressDialog.IncrementProgressBy(1));
+                        this.RunOnUiThread(() =>
+                            {
+                                progressDialog.Show();
+                                progressDialog.IncrementProgressBy(1);
+                            });
 
                         bool result = isPush ? this.Push(syncPoint) : this.Pull(syncPoint);
 
+
+
                         this.RunOnUiThread(
-                            delegate
+                            () =>
                                 {
                                     progressDialog.IncrementProgressBy(98);
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
@@ -239,8 +237,7 @@ namespace AndroidApp
         /// </param>
         private void buttonPull_Click(object sender, EventArgs e)
         {
-            //if (((Button)sender).Id == Resource.Id.btnPull)
-                this.DoSync(false);
+            this.DoSync(false);
             
         }
 

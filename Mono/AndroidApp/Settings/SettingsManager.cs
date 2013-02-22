@@ -81,6 +81,7 @@ namespace AndroidApp.Settings
             ISharedPreferences prefs = Application.Context.GetSharedPreferences(AppName, FileCreationMode.Private);
             ISharedPreferencesEditor prefEditor = prefs.Edit();
             prefEditor.PutString(SyncAddressSettingsName, syncPoint);
+            prefEditor.Commit();
 
             return true;
         }

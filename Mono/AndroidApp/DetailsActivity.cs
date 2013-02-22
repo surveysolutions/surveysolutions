@@ -1,7 +1,6 @@
 using System;
-using System.Threading.Tasks;
+
 using Android.App;
-using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Widget;
@@ -9,8 +8,7 @@ using AndroidApp.Controls.QuestionnaireDetails;
 using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
-using Main.Core.Entities.SubEntities;
-using Ncqrs;
+
 using Ncqrs.Eventing.Storage;
 
 /*
@@ -25,7 +23,7 @@ namespace AndroidApp
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
-        protected InMemoryEventStore activitySnapshooting;
+        //protected InMemoryEventStore activitySnapshooting;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -64,9 +62,10 @@ namespace AndroidApp
 
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                new QuestionnaireScreenInput(QuestionnaireId));
-            activitySnapshooting = new InMemoryEventStore();
-            
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);
+
+            /*activitySnapshooting = new InMemoryEventStore();
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);*/
+
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Details);
             if (bundle != null)
@@ -136,8 +135,8 @@ namespace AndroidApp
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
-            activitySnapshooting = null;
+            //NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
+            //activitySnapshooting = null;
             GC.Collect();
         }
         public override void OnLowMemory()
