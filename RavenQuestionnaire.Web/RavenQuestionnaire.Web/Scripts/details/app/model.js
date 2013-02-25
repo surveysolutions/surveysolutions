@@ -1,20 +1,20 @@
 ﻿define('model',
     [
         'model.question',
-        'model.group'
+        'model.group',
+        'model.menuItem'
     ],
-function (question, group) {
+function (question, group, menuItem) {
         var
             model = {
                 Question: question,
-                Group: group
+                Group: group,
+                MenuItem: menuItem
             };
 
         model.setDataContext = function (dc) {
-            // Model's that have navigation properties 
-            // need a reference to the datacontext.
-            model.Question.datacontext(dc);
-            model.Group.datacontext(dc);
+            model.MenuItem.datacontext(dc);
+            //model.Group.datacontext(dc);
         };
 
         return model;

@@ -98,9 +98,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid quesry string parameters");
             }
 
-            QuestionnaireView model =
-                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    new QuestionnaireViewInputModel(id));
+            QuestionnaireView model = this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
 
             ReplaceGuidsInValidationAndComditionRules(id, model);
 

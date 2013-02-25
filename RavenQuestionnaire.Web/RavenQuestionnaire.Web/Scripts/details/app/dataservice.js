@@ -1,11 +1,13 @@
 ﻿define('dataservice',
     [
         'dataservice.question',
-        'dataservice.group'
+        'dataservice.group',
+        'dataservice.questionnaire'
     ],
-    function (question, group) {
+    function (question, group, questionnaire) {
         return {
             question: question,
-            group: group
+            group: group,
+            questionnaire: questionnaire
         };
     });

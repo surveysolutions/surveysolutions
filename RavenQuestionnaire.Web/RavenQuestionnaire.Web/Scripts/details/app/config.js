@@ -5,6 +5,19 @@
         var
             // properties
             //-----------------
+            hashes = {
+                details: '#/details',
+                detailsMenu: '#/details/group',
+            },
+            viewIds = {
+                details: '#stacks'
+            },
+            messages = {
+                viewModelActivated: 'viewmodel-activation'
+            },
+            stateKeys = {
+                lastView: 'state.active-hash'
+            },
             logger = toastr, // use toastr for the logger
 
             storeExpirationMs = (1000 * 60 * 60 * 24), // 1 day
@@ -36,6 +49,10 @@
             throttle: throttle,
             title: title,
             toasts: toasts,
+            hashes: hashes,
+            viewIds: viewIds,
+            messages: messages,
+            stateKeys: stateKeys,
             window: window
         };
     });

@@ -5,12 +5,13 @@
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Html.RequiresCss("toastr.css", "Content");
+    Html.RequiresCss("toastr-responsive.css", "Content");
     Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 
 <script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
-
 
 <script src="../../Scripts/details/lib/json2.js"></script>
 
@@ -19,7 +20,7 @@
 <script src="../../Scripts/details/lib/TrafficCop.js"></script>
 <script src="../../Scripts/details/lib/infuser.js"></script>
 
-<script src="../../Scripts/details/lib/underscore.js"></script>
+<script src="../../Scripts/details/lib/lodash.min.js"></script>
 
 <script src="../../Scripts/details/lib/knockout.activity.js"></script>
 <script src="../../Scripts/details/lib/knockout.asyncCommand.js"></script>
@@ -37,16 +38,14 @@
 
 <script src="../../Scripts/details/lib/require.js"></script>
 
-<script src="../../Scripts/details/app/binder.js"></script>
-<script src="../../Scripts/details/app/bootstrapper.js"></script>
-<script src="../../Scripts/details/app/config.js"></script>
-<script src="../../Scripts/details/app/ko.bindingHandlers.js"></script>
-<script src="../../Scripts/details/app/ko.debug.helpers.js"></script>
-<script src="../../Scripts/details/app/presenter.js"></script>
-<script src="../../Scripts/details/app/vm.js"></script>
-<script src="../../Scripts/details/app/vm.menu.js"></script>
-<script src="../../Scripts/details/app/vm.questionnaire.js"></script>
-
+<script>
+    define('input', [], function () {
+        var q= @Html.Raw(serializer.Serialize(Model)) ;
+        return {
+            questionnaire: q
+        };
+    });
+</script>
 <script src="../../Scripts/details/main.js"></script>
 
 
@@ -55,9 +54,13 @@
     <div id="groups" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+                <button type="button" class="close" >&times</button>
             </div>
             <div class="body">
+                  <ul class="nav nav-list" data-bind="foreach: menu">
+                    <li data-bind="css: { active : isSelected, level1: level() == 1, level2: level() == 2 }">
+                        <a data-bind="attr: {'href': getHref() }" href="#/group"><span class="link-text" data-bind="    text: title"></span></a></li>
+                </ul>
             </div>
             <div class="bottom">
                 <div class="inner">

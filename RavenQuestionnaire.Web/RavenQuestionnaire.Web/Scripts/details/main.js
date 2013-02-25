@@ -20,6 +20,9 @@
     function loadPluginsAndBoot() {
         // Plugins must be loaded after jQuery and Knockout, 
         // since they depend on them.
+        require.config({
+            baseUrl: '/designer/Scripts/details/app'
+        });
         requirejs([
                 'ko.bindingHandlers',
                 'ko.debug.helpers'

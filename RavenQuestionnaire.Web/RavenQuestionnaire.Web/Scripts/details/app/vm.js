@@ -1,8 +1,7 @@
 ﻿define('vm',
-       [ 'vm.menu', 'vm.questionnaire'],
-    function (menu, questionnaire) {
+    ['vm.questionnaire'],
+    function (questionnaire) {
         return {
-            menu: menu,
             questionnaire: questionnaire
-    };
-});
+        };
+    });

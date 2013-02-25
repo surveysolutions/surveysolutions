@@ -1,34 +1,34 @@
-﻿define('dataservice.group',
+﻿define('dataservice.questionnaire',
     ['amplify'],
     function(amplify) {
         var init = function() {
 
-            amplify.request.define('group', 'ajax', {
-                url: '/api/persons/{id}',
+            amplify.request.define('questionnaire', 'ajax', {
+                url: '/designer/api/questionnaire/{id}',
                 dataType: 'json',
                 type: 'GET'
                 //cache:
             });
 
-            amplify.request.define('updateGroup', 'ajax', {
-                url: '/api/persons',
+            amplify.request.define('updateQuestionnaire', 'ajax', {
+                url: '/designer/api/questionnaire',
                 dataType: 'json',
                 type: 'PUT',
                 contentType: 'application/json; charset=utf-8'
             });
         },
-            getGroup = function(callbacks, id) {
+            getQuestionnaire = function (callbacks, id) {
                 return amplify.request({
-                    resourceId: 'group',
+                    resourceId: 'questionnaire',
                     data: { id: id },
                     success: callbacks.success,
                     error: callbacks.error
                 });
             };
 
-        updateGroup = function(callbacks, data) {
+        updateQuestionnaire = function (callbacks, data) {
             return amplify.request({
-                resourceId: 'updateGroup',
+                resourceId: 'updateQuestionnaire',
                 data: data,
                 success: callbacks.success,
                 error: callbacks.error
@@ -38,8 +38,8 @@
         init();
 
         return {
-            getGroup: getGroup,
-            updateGroup: updateGroup
+            getQuestionnaire: getQuestionnaire,
+            updateQuestionnaire: updateQuestionnaire
         };
     });
 
