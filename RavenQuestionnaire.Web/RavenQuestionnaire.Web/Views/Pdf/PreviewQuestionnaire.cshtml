@@ -1,10 +1,20 @@
-﻿@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
+﻿@using ClientDependency.Core.Mvc
+@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
 
 @{
     this.ViewBag.Title = "PDF Preview";
     this.Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Html.RequiresCss("pdf.css", "Content");
 }
 
-@{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+<div class="pdf-preview">
 
-@Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    <div class="content">
+        @{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+    </div>
+
+    @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+
+</div>
+
