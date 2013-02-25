@@ -7,6 +7,7 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Android.Text;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
@@ -74,8 +75,12 @@ namespace AndroidApp.Controls.Statistics
                 foreach (Func<StatisticsQuestionViewModel, string> valueFucntion in valueFucntions)
                 {
                     TextView tvQuestion = new TextView(this.Context);
-
-                    tvQuestion.Text = valueFucntion(statisticsQuestionViewModel);
+                    var text = valueFucntion(statisticsQuestionViewModel);
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        tvQuestion.SetText(Html.FromHtml(text),
+                                           TextView.BufferType.Spannable);
+                    }
                     StyleCell(tvQuestion);
                     tr.AddView(tvQuestion);
                 }
