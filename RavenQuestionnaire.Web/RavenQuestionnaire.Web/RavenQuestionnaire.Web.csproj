@@ -409,6 +409,9 @@
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\Slava.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
