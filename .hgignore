@@ -28,3 +28,5 @@ ClientDependency
 success.marker
 
 Externals/lib/*
+lib/Release
+lib/Debug
