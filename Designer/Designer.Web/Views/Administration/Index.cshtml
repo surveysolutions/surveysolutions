@@ -1,0 +1,20 @@
+﻿@using MvcContrib.UI.Grid
+@model System.Collections.Generic.IEnumerable<Designer.Web.Models.UserProfile>
+@{
+    ViewBag.Title = "Administration";
+}
+
+<h2>Users</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@Html.Grid(Model).Columns(column => {
+          column.For(user => user.UserName); 
+          column.For(user => user.Email);
+          column.For(user => Html.ActionLink("Edit", "Edit", new { id = user.UserId 
+          })).Named("").Encode(false).CellCondition(x => !x.UserName.Equals(Designer.Web.Models.UserHelper.DEFAULTADMINUSER));
+          column.For(user => Html.ActionLink("Delete", "Delete", new { id = user.UserId 
+          })).Named("").Encode(false).CellCondition(x => !x.UserName.Equals(Designer.Web.Models.UserHelper.DEFAULTADMINUSER));
+})
+

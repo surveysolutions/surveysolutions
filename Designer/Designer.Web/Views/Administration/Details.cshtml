@@ -1,0 +1,23 @@
+@model Designer.Web.Models.UserProfile
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>UserProfile</legend>
+
+    <div class="display-label">UserName</div>
+    <div class="display-field">@Model.UserName</div>
+
+    <div class="display-label">Email</div>
+    <div class="display-field">@Model.Email</div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.UserId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+

@@ -12,8 +12,8 @@ namespace Main.Core.Commands
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
     using Ncqrs.Eventing.Storage;
-
     using NLog;
+
 
     /// <summary>
     /// Repeates command execution until success.
