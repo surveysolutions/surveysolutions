@@ -406,7 +406,9 @@
     <Content Include="Configuration\Dev.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="HostMap.config" />
+    <Content Include="HostMap.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -734,6 +736,7 @@
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
