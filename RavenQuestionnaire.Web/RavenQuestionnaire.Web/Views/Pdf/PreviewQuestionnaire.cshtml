@@ -10,11 +10,17 @@
 
 <div class="pdf-preview">
 
+    <div class="buttons">
+        @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    </div>
+
     <div class="content">
         @{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
     </div>
 
-    @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    <div class="buttons">
+        @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    </div>
 
 </div>
 
