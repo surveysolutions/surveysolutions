@@ -9,8 +9,6 @@ using AndroidApp.Core;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Events;
 
-using Ncqrs.Eventing.Storage;
-
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
 using Orientation = Android.Content.Res.Orientation;*/

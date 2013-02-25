@@ -28,9 +28,6 @@ namespace AndroidApp
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncStreamCollector;
 
-    using Ncqrs;
-    using Ncqrs.Eventing.Storage;
-
     using Ninject;
 
     /// <summary>
@@ -39,7 +36,8 @@ namespace AndroidApp
     [Activity(NoHistory = true, Icon = "@drawable/capi")]
     public class SynchronizationActivity : Activity
     {
-        
+        #region Public Methods and Operators
+
         /// <summary>
         /// The on create options menu.
         /// </summary>
@@ -54,6 +52,9 @@ namespace AndroidApp
             this.CreateActionBar();
             return base.OnCreateOptionsMenu(menu);
         }
+
+        #endregion
+
         #region Methods
 
         /// <summary>
@@ -64,7 +65,6 @@ namespace AndroidApp
         /// </param>
         protected override void OnCreate(Bundle bundle)
         {
-            
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.sync_dialog);
@@ -113,54 +113,85 @@ namespace AndroidApp
         /// </param>
         private void DoSync(bool isPush)
         {
-            var syncPoint = SettingsManager.GetSyncAddressPoint();
+            string syncPoint = SettingsManager.GetSyncAddressPoint();
 
             Uri test = null;
             bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
                          && (test.Scheme == "http" || test.Scheme == "https");
-            
+
             if (!valid)
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                var builder = new AlertDialog.Builder(this);
                 builder.SetTitle("Incorrect Address Point");
                 builder.SetMessage("Please set in settings");
-                var dialog = builder.Create();
+                AlertDialog dialog = builder.Create();
                 dialog.Show();
                 return;
             }
-            
+
             var progressDialog = new ProgressDialog(this);
 
-            progressDialog.SetMessage("Synchronization in progress");
+            progressDialog.SetTitle("Synchronization status");
             progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
+            progressDialog.SetMessage("Starting");
             progressDialog.SetCancelable(false);
-            
 
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
 
-            int i = 0;
+            int currentProgress = 0;
             ThreadPool.QueueUserWorkItem(
                 state =>
                     {
-                        i++;
-                        this.RunOnUiThread(() =>
+                        this.RunOnUiThread(
+                            () =>
+                                {
+                                    progressDialog.Show();
+                                    progressDialog.IncrementProgressBy(1);
+                                });
+
+                        var result = new SyncronizationStatus();
+                        currentProgress = result.Progress;
+
+                        ThreadPool.QueueUserWorkItem(
+                            proc =>
+                                {
+                                    if (isPush)
+                                    {
+                                        this.Push(syncPoint, result);
+                                    }
+                                    else
+                                    {
+                                        this.Pull(syncPoint, result);
+                                    }
+                                });
+
+                        while (result.IsWorking || currentProgress < 100)
+                        {
+                            int diff = result.Progress - currentProgress;
+
+                            if (diff > 0)
                             {
-                                progressDialog.Show();
-                                progressDialog.IncrementProgressBy(1);
-                            });
+                                this.RunOnUiThread(
+                                    () =>
+                                        {
+                                            progressDialog.IncrementProgressBy(diff);
+                                            progressDialog.SetMessage(result.CurrentStageDescription);
+                                        });
+                                currentProgress = result.Progress;
+                            }
 
-                        bool result = isPush ? this.Push(syncPoint) : this.Pull(syncPoint);
-
-
+                            Thread.Sleep(300);
+                        }
 
                         this.RunOnUiThread(
                             () =>
                                 {
-                                    progressDialog.IncrementProgressBy(98);
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
-                                    syncResult.Text = result ? "OK" : "Error on sync!";
+                                    syncResult.Text = result.Result
+                                                          ? "Synchronization was finished successful"
+                                                          : "Synchronization error. \r\n" + result.ErrorMessage;
+                                    progressDialog.Hide();
                                 });
-                        RunOnUiThread(progressDialog.Hide);
                     });
         }
 
@@ -170,10 +201,13 @@ namespace AndroidApp
         /// <param name="remoteSyncNode">
         /// The remote Sync Node.
         /// </param>
+        /// <param name="status">
+        /// The status.
+        /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool Pull(string remoteSyncNode)
+        private bool Pull(string remoteSyncNode, SyncronizationStatus status)
         {
             Guid processKey = Guid.NewGuid();
 
@@ -184,13 +218,14 @@ namespace AndroidApp
                     CapiApplication.Kernel, processKey, remoteSyncNode);
                 var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
-                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null);
-                manager.StartPush();
+                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null, status);
+                manager.StartPump();
                 return true;
             }
             catch (Exception ex)
             {
                 // log
+                status.IsWorking = false;
                 return false;
             }
         }
@@ -201,10 +236,13 @@ namespace AndroidApp
         /// <param name="remoteSyncNode">
         /// The remote Sync Node.
         /// </param>
+        /// <param name="status">
+        /// The status.
+        /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        private bool Push(string remoteSyncNode)
+        private bool Push(string remoteSyncNode, SyncronizationStatus status)
         {
             Guid processKey = Guid.NewGuid();
 
@@ -212,16 +250,18 @@ namespace AndroidApp
             try
             {
                 var streamProvider =
-                    new AClientEventStreamProvider(CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                    new AClientEventStreamProvider(
+                        CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
                 var collector = new RemoteCollector(remoteSyncNode, processKey);
 
-                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null);
-                manager.StartPush();
+                var manager = new SyncManager(streamProvider, collector, processKey, SyncMessage, null, status);
+                manager.StartPump();
                 return true;
             }
             catch (Exception ex)
             {
                 // log
+                status.IsWorking = false;
                 return false;
             }
         }
@@ -238,7 +278,6 @@ namespace AndroidApp
         private void buttonPull_Click(object sender, EventArgs e)
         {
             this.DoSync(false);
-            
         }
 
         /// <summary>
