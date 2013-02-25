@@ -30,7 +30,7 @@
      android:layout_height="wrap_content"
      android:id="@+id/tvTitle"
      android:textSize="20dip"
-     local:MvxBind="{'Text':{'Path':'Text'}}"/>
+     local:MvxBind="{'Html':{'Path':'Text'}}"/>
   </LinearLayout>
   <TextView
     android:layout_width="fill_parent"
