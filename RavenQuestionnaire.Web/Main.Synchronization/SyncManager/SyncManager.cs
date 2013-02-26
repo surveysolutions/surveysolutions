@@ -314,9 +314,12 @@ namespace Main.Synchronization.SyncManager
             {
                 // Logger logger = LogManager.GetCurrentClassLogger();
                 // logger.Fatal("Import error", e);
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
-                this.status.ErrorMessage = "Error occured during synchronization";
-                throw;
+                //this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
+                
+                this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
+                this.status.Progress = 100;
+                this.status.IsWorking = false;
+                //throw;
 
                 // return ErrorCodes.Fail;
             }

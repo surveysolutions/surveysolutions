@@ -165,8 +165,9 @@ namespace AndroidApp
                                     }
                                 });
 
-                        while (result.IsWorking || currentProgress < 100)
+                        while (result.IsWorking && currentProgress < 100)
                         {
+                            currentProgress = result.Progress;
                             int diff = result.Progress - currentProgress;
 
                             if (diff > 0)
