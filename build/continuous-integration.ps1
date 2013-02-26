@@ -96,6 +96,45 @@ function BuildSolutions($BuildConfiguration) {
 }
 
 
+function GetProjectsWithTests() {
+    return Get-ChildItem -Filter *Test*.csproj -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+}
+
+function GetOutputAssembly($Project, $BuildConfiguration) {
+    $projectFileInfo = Get-Item $Project
+    $fullPathToAssembly = "$($projectFileInfo.DirectoryName)\bin\$BuildConfiguration\$($projectFileInfo.BaseName).dll"
+
+    return GetPathRelativeToCurrectLocation $fullPathToAssembly
+}
+
+function RunTestsFromProject($Project, $BuildConfiguration) {
+
+    $assembly = GetOutputAssembly $Project $BuildConfiguration
+
+    Write-Host $assembly
+
+    if (-not (Test-Path $assembly)) {
+        Write-Host "##teamcity[message status='WARNING' text='Expected tests assembly $assembly is missing']"
+    }
+}
+
+function RunTests($BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Running tests']"
+
+    $projects = GetProjectsWithTests
+
+    if ($projects -ne $null) {
+        foreach ($project in $projects) {
+            RunTestsFromProject $project $BuildConfiguration
+        }
+    }
+
+    Write-Host "##teamcity[blockClosed name='Running tests']"
+}
+
+
 CleanBinAndObjFolders
 
 BuildSolutions 'Debug'
+
+RunTests 'Debug'
