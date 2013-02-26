@@ -1,6 +1,6 @@
 ﻿using Designer.Web.Providers.Roles;
 
-namespace Designer.Web.Providers.Repositories.CQRS
+namespace Designer.Web.Providers.CQRS
 {
     public class CQRSRoleRepository : IRoleRepository
     {

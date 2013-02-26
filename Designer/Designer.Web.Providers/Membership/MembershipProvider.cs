@@ -209,6 +209,15 @@ namespace Designer.Web.Providers.Membership
             get { return PasswordPolicy.PasswordStrengthRegularExpression; }
         }
 
+
+        /// <summary>
+        /// Need when account provider use event sourcing
+        /// </summary>
+        private bool IsEventSourcingUsed
+        {
+            get { return AccountRepository.IsEventSourcingUsed; }
+        }
+
         /// <summary>
         /// Adds a new membership user to the data source.
         /// </summary>
@@ -320,7 +329,8 @@ namespace Designer.Web.Providers.Membership
 
             account.PasswordQuestion = newPasswordAnswer;
             account.PasswordAnswer = newPasswordAnswer;
-            AccountRepository.Update(account);
+            AccountRepository.ChangePasswordQuestionAndAnswer(newPasswordQuestion, newPasswordAnswer);
+            if(!IsEventSourcingUsed) AccountRepository.Update(account);
             return true;
         }
 
@@ -362,7 +372,8 @@ namespace Designer.Web.Providers.Membership
             account.Password = newPassword;
             pwInfo = account.CreatePasswordInfo();
             account.Password = PasswordStrategy.Encrypt(pwInfo);
-            AccountRepository.Update(account);
+            AccountRepository.ChangePassword(account.Password);
+            if (!IsEventSourcingUsed) AccountRepository.Update(account);
             return true;
         }
 
@@ -392,7 +403,8 @@ namespace Designer.Web.Providers.Membership
             var info = new AccountPasswordInfo(username, newPassword);
             user.Password = PasswordStrategy.Encrypt(info);
             user.PasswordSalt = info.PasswordSalt;
-            AccountRepository.Update(user);
+            AccountRepository.ResetPassword(user.Password, user.PasswordSalt);
+            if (!IsEventSourcingUsed) AccountRepository.Update(user);
             return newPassword;
         }
 
@@ -453,7 +465,8 @@ namespace Designer.Web.Providers.Membership
                 user.LastLoginAt = DateTime.Now;
                 user.FailedPasswordWindowStartedAt = DateTime.MinValue;
                 user.FailedPasswordWindowAttemptCount = 0;
-                AccountRepository.Update(user);
+                AccountRepository.UserValidated();
+                if (!IsEventSourcingUsed) AccountRepository.Update(user);
                 return true;
             }
 
@@ -465,7 +478,8 @@ namespace Designer.Web.Providers.Membership
             {
                 user.IsLockedOut = true;
                 user.LastLockedOutAt = DateTime.Now;
-                AccountRepository.Update(user);
+                AccountRepository.LockUser();
+                if (!IsEventSourcingUsed) AccountRepository.Update(user);
             }
 
             return false;
@@ -489,7 +503,8 @@ namespace Designer.Web.Providers.Membership
             user.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             user.FailedPasswordWindowAttemptCount = 0;
             user.FailedPasswordWindowStartedAt = DateTime.MinValue;
-            AccountRepository.Update(user);
+            AccountRepository.UnlockUser();
+            if (!IsEventSourcingUsed) AccountRepository.Update(user);
             return true;
         }
 
@@ -518,7 +533,8 @@ namespace Designer.Web.Providers.Membership
 
             user.LastActivityAt = DateTime.Now;
             //user.IsOnline = true;
-            AccountRepository.Update(user);
+            AccountRepository.UpdateOnlineState();
+            if (!IsEventSourcingUsed) AccountRepository.Update(user);
         }
 
         /// <summary>
@@ -692,7 +708,8 @@ namespace Designer.Web.Providers.Membership
             if (user != null)
             {
                 isConfirmed = user.IsConfirmed = true;
-                AccountRepository.Update(user);
+                AccountRepository.ConfirmAccount();
+                if (!IsEventSourcingUsed) AccountRepository.Update(user);
             }
 
             return isConfirmed;
@@ -710,7 +727,7 @@ namespace Designer.Web.Providers.Membership
             string email = values == null? string.Empty :(string)values["Email"];
 
             MembershipCreateStatus status;
-            var account = InternalCreateAccount(userName, password, email, Guid.NewGuid(), !requireConfirmation, out status);
+            var account = InternalCreateAccount(userName, password, email, string.Empty, !requireConfirmation, out status);
             if (status == MembershipCreateStatus.Success)
             {
                 token = account.ConfirmationToken;
