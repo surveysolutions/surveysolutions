@@ -50,7 +50,7 @@ namespace StreamTransformer
         /// <summary>
         /// The start push.
         /// </summary>
-        public void StartPush()
+        public void StartPump()
         {
             this.streamCollector.PrepareToCollect();
 
