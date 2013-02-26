@@ -481,7 +481,7 @@ namespace Main.Core.Domain
                         {
                             foreach (var guid in keysPropagate)
                             {
-                                var parent = completeGroup.Parent as CompleteGroup;
+                                var parent = completeGroup.GetParent() as CompleteGroup;
                                 if (parent == null)
                                 {
                                     throw new InvalidOperationException("Incorrect parent-child relationship.");
@@ -510,7 +510,8 @@ namespace Main.Core.Domain
                                 var item = this.doc.Find<ICompleteGroup>(
                                     g => g.PublicKey == trigger && g.PropagationPublicKey == guid).First();
 
-                                collector.CollectGroupHierarhicallyStates(item, (item.Parent as ICompleteItem).Enabled, resultGroupsStatus, resultQuestionsStatus);
+                                var completeItem = item.GetParent() as ICompleteItem;
+                                collector.CollectGroupHierarhicallyStates(item, completeItem != null && completeItem.Enabled, resultGroupsStatus, resultQuestionsStatus);
                             }
                         }
                     }
@@ -554,7 +555,7 @@ namespace Main.Core.Domain
                             var lastGroup = scopeRoot.Find<CompleteGroup>(g => g.PublicKey == trigger && g.PropagationPublicKey == propagatedGroups[i - 1]).FirstOrDefault(); 
                             if (lastGroup != null)
                             {
-                                var parent = lastGroup.Parent as CompleteGroup;
+                                var parent = lastGroup.GetParent() as CompleteGroup;
                                 if (parent == null)
                                 {
                                     throw new InvalidOperationException("Incorrect parent-child relationship.");
@@ -563,15 +564,10 @@ namespace Main.Core.Domain
                                 this.ApplyEvent(
                                     new PropagatableGroupDeleted
                                     {
-                                        /*CompletedQuestionnaireId = this.doc.PublicKey,*/
-
                                         PublicKey = lastGroup.PublicKey,
                                         PropagationKey = lastGroup.PropagationPublicKey.Value,
                                         ParentKey = parent.PublicKey,
-                                        ParentPropagationKey = parent.PropagationPublicKey,
-
-                                        /*QuestionPropagationKey = autoQuestion.PropagationPublicKey,*/
-
+                                        ParentPropagationKey = parent.PropagationPublicKey
                                     });
                             }
                         }
@@ -782,7 +778,7 @@ namespace Main.Core.Domain
             }
 
             //// Navigate throught hierarchy to find scope bounds 
-            IComposite parent = question.Parent;
+            IComposite parent = question.GetParent();
 
             while (true)
             {
@@ -792,12 +788,12 @@ namespace Main.Core.Domain
                     break;
                 }
                 
-                if (item.PropagationPublicKey != question.PropagationPublicKey || item.Parent == null)
+                if (item.PropagationPublicKey != question.PropagationPublicKey || item.GetParent() == null)
                 {
                     break;
                 }
 
-                parent = item.Parent;
+                parent = item.GetParent();
             }
 
             return parent;
@@ -813,27 +809,7 @@ namespace Main.Core.Domain
         /// </exception>
         protected void OnPropagatableGroupDeleted(PropagatableGroupDeleted e)
         {
-
             this.doc.Remove(e.PublicKey, e.PropagationKey, e.ParentKey, e.ParentPropagationKey);
-
-
-            /*///// find group to be deleted
-            var groupToDelete =
-                this.doc.FirstOrDefault<CompleteGroup>(g => g.PublicKey == e.PublicKey && g.PropagationPublicKey == e.PropagationKey);
-
-            if (groupToDelete != null)
-            {
-                if (groupToDelete.Parent == null)
-                {
-                    //// temporary check that Parent was set
-                    //// 
-                    throw new CompositeException(); 
-                }
-
-                groupToDelete.Parent.Children.Remove(groupToDelete);
-
-                this.doc.QuestionHash.RemoveGroup(groupToDelete as ICompleteGroup);
-            }*/
         }
 
         /// <summary>
