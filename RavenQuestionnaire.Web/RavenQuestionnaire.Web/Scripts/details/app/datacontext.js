@@ -22,25 +22,25 @@
                 //logger.info('Fetched, filtered and sorted ' + underlyingArray.length + ' records');
                 observableArray(underlyingArray);
             },
-            mapToContext = function(dtoList, items, results, mapper, filter, sortFunction) {
+            mapToContext = function(dtoList, items, results, mapper, filter, sortFunction,  otherData) {
                 // Loop through the raw dto list and populate a dictionary of the items
                 items = _.reduce(dtoList, function(memo, dto) {
                     var id = mapper.getDtoId(dto);
                     var existingItem = items[id];
-                    memo[id] = mapper.fromDto(dto, existingItem);
+                    memo[id] = mapper.fromDto(dto, existingItem,  otherData);
                     return memo;
                 }, {});
                 itemsToArray(items, results, filter, sortFunction);
                 //logger.success('received with ' + dtoList.length + ' elements');
                 return items; // must return these
             },
-            LocalEntitySet = function(mapper, nullo) {
+            LocalEntitySet = function(mapper, nullo, otherData) {
                 var items = {},
                     // returns the model item produced by merging dto into context
                     mapDtoToContext = function(dto) {
                         var id = mapper.getDtoId(dto);
                         var existingItem = items[id];
-                        items[id] = mapper.fromDto(dto, existingItem);
+                        items[id] = mapper.fromDto(dto, existingItem, otherData);
                         return items[id];
                     },
                     add = function(newObj) {
@@ -69,7 +69,7 @@
                             // or it exists but has no properties, 
                             // or we force a refresh
                             if (forceRefresh || !items || !utils.hasProperties(items)) {
-                                items = mapToContext(dtos, items, results, mapper, filter, sortFunction);
+                                items = mapToContext(dtos, items, results, mapper, filter, sortFunction, otherData);
                                 def.resolve(results);
                             } else {
                                 itemsToArray(items, results, filter, sortFunction);
@@ -97,7 +97,7 @@
 
             menu = new LocalEntitySet(modelmapper.menuItem, model.MenuItem.Nullo),
             groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
-            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo);
+            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, {groups : groups});
 
         console.log(input.questionnaire);
 

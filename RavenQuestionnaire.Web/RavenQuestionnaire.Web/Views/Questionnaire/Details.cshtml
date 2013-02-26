@@ -97,7 +97,7 @@
             <div class="body container-fluid">
                 <div class="row-fluid">
                     <label class="required">Title</label>
-                    <input type="text" data-bind="value: title" class="span12"/>
+                    <input type="text" data-bind="value: title" class="span12" />
                 </div>
                 <div class="row-fluid">
                     <label class="required">Type</label>
@@ -300,11 +300,20 @@
         <input type="text" placeholder="max value" class="span12" data-bind="value: maxValue">
     </div>
     <div data-bind="foreach: triggers">
+        <div class="row-fluid">
+            <div class="input-append">
+                <input class="span11" disabled type="text" data-bind="value: value">
+                <button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
         <div class="input-append">
-            <input class="span2" id="appendedInputButton" type="text">
+            <select data-bind="options: propagatedGroups, optionsValue: 'key', optionsText: 'value', value: currentTrigger" class="span11"></select>
             <button class="btn btn-danger" type="button"><i class="icon-remove icon-white"></i></button>
         </div>
     </div>
+
 </script>
 
 

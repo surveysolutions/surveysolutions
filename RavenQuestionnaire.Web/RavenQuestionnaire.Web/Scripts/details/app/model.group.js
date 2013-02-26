@@ -18,6 +18,7 @@
                     return config.hashes.detailsGroup + "/" + self.id();
                 };
                 
+                
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);

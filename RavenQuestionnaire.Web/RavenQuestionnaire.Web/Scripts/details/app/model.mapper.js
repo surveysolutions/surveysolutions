@@ -1,8 +1,8 @@
 ﻿define('model.mapper',
     ['model', 'config'],
     function (model, config) {
-        var
-            // private methods
+        var 
+        // private methods
             getGroups = function (group, level) {
                 var items = _.filter(group.Children, { '__type': 'GroupView' }).map(function(item) {
                     return { level: level, group: item };
@@ -73,7 +73,8 @@
             },
             question = {
                 getDtoId: function (dto) { return dto.PublicKey; },
-                fromDto: function(dto, item) {
+                fromDto: function(dto, item, otherData) {
+                    var groups = otherData.groups;
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
 
                     var type = config.questionTypes[dto.QuestionType];
@@ -88,6 +89,12 @@
                     var answers = _.map(dto.Answers, function (answer) {
                         return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);
                     });
+
+                    var triggers = _.map(dto.Triggers, function (groupId) {
+                        return { key: groupId, value: groups.getLocalById(groupId).title() };
+                    });
+                    item.triggers(triggers);
+
                     item.answerOptions(answers);
                     item.isHead(dto.Capital);
                     item.isFeatured(dto.Featured);
@@ -98,7 +105,7 @@
                     item.maxValue(dto.MaxValue);
                     
                     item.alias(dto.StataExportCaption);
-                    item.triggers(dto.Triggers);
+                    
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
                     

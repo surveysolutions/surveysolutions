@@ -26,6 +26,10 @@
               self.triggers = ko.observableArray();
 
               // UI stuff
+              self.currentTrigger = ko.observable();
+                self.propagatedGroups = ko.computed(function() {
+                    return [{ key: "1", value: "aaa" }];
+                });
               self.addAnswer = function() {
                   var answer = new answerOption().id('id').title(self.currentAnswerTitle()).value(self.currentAnswerValue());
                   self.answerOptions.push(answer);
