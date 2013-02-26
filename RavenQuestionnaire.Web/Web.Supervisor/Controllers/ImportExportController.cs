@@ -156,11 +156,17 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
+                        var syncResult = new Main.Synchronization.SyncManager.SyncronizationStatus();
                         var collector = new CompressedStreamStreamCollector(syncProcessKey);
 
-                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), collector, syncProcessKey, "Backup Request", null);
+                        var syncManager = new SyncManager(new AllIntEventsStreamProvider(), 
+                            collector, 
+                            syncProcessKey, 
+                            "Backup Request", 
+                            null,
+                            syncResult);
 
-                        syncManager.StartPush();
+                        syncManager.StartPump();
 
                         var timings = syncManager.StartTime - syncManager.EndTime;
 
