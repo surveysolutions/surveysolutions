@@ -27,7 +27,13 @@ namespace Main.Core.Entities.Composite
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
-        IComposite Parent { get; set; }
+        IComposite GetParent();
+
+        /// <summary>
+        /// Gets or sets the parent.
+        /// IS USED TO AVOID SERIALIZATION 
+        /// </summary>
+        void SetParent(IComposite parent);
 
         /// <summary>
         /// Gets the public key.

@@ -184,7 +184,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
             // moved to the write layer
             // this.executor.Execute(target);
 
-            foreach (var question in target.WrappedQuestions.Where(q=>q.Question.QuestionScope <= scope))
+            foreach (var question in target.WrappedQuestions().Where(q=>q.Question.QuestionScope <= scope))
             {
                 this.ProccessQuestions(question.Question, question.GroupKey);
             }

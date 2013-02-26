@@ -26,16 +26,5 @@ namespace Main.Core.Events
         IEnumerable<AggregateRootEvent> ReadEvents();
 
         #endregion
-
-        ///// <summary>
-        ///// The write events.
-        ///// </summary>
-        ///// <param name="stream">
-        ///// The stream.
-        ///// </param>
-        // void WriteEvents(IEnumerable<AggregateRootEvent> stream);
-
-        //// AggregateRootEventStream ReadEventStream(Guid eventSurceId);
-        //// IEnumerable<AggregateRootEventStream> ReadCompleteQuestionare();
     }
 }

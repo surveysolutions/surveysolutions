@@ -125,8 +125,17 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
-        [JsonIgnore]
-        public IComposite Parent { get; set; }
+        private IComposite parent;
+
+        public IComposite GetParent()
+        {
+            return parent;
+        }
+
+        public void SetParent(IComposite parent)
+        {
+            this.parent = parent;
+        }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -171,20 +180,6 @@ namespace Main.Core.Entities.SubEntities
         public List<Guid> Triggers { get; set; }*/
         #region Public Methods and Operators
 
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
-        {
-            throw new CompositeException();
-        }*/
-
         /// <summary>
         /// The add answer.
         /// </summary>
@@ -219,7 +214,8 @@ namespace Main.Core.Entities.SubEntities
         {
             var question = this.MemberwiseClone() as IQuestion;
 
-            question.Parent = null;
+            question.SetParent(null);
+
             if (this.Cards != null)
             {
                 question.Cards = new List<Image>(this.Cards); // assuming that cards are structures 
@@ -291,33 +287,6 @@ namespace Main.Core.Entities.SubEntities
         /// The T.
         /// </returns>
         public abstract T FirstOrDefault<T>(Func<T, bool> condition) where T : class;
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public void Remove(IComposite c)
-        {
-            throw new CompositeException();
-        }*/
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Remove(Guid publicKey, Guid? propagationKey)
-        {
-            throw new CompositeException();
-        }*/
 
         /// <summary>
         /// The remove card.

@@ -321,7 +321,6 @@
     <Compile Include="Events\AbstractEventStreamReader.cs" />
     <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
     <Compile Include="Events\AggregateRootEvent.cs" />
-    <Compile Include="Events\AggregateRootEventStream.cs" />
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
     <Compile Include="Events\Collection\CollectionRemoved.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />

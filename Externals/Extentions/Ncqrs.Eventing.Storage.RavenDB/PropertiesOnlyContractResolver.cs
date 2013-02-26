@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+//using Newtonsoft.Json.Serialization;
 using Raven.Imports.Newtonsoft.Json.Serialization;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
@@ -10,7 +11,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     {
         public PropertiesOnlyContractResolver()
         {
-            DefaultMembersSearchFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            DefaultMembersSearchFlags = BindingFlags.Public | /*BindingFlags.NonPublic |*/ BindingFlags.Instance;
         }
 
         protected override List<MemberInfo> GetSerializableMembers(Type objectType)
