@@ -54,24 +54,33 @@
     <div id="groups" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" >&times</button>
+                <button type="button" data-bind="click: closeMenu" class="close">&times</button>
             </div>
             <div class="body">
-                  <ul class="nav nav-list" data-bind="foreach: menu">
+                <ul class="nav nav-list" data-bind="foreach: menu">
                     <li data-bind="css: { active : isSelected, level1: level() == 1, level2: level() == 2 }">
-                        <a data-bind="attr: {'href': getHref() }" href="#/group"><span class="link-text" data-bind="    text: title"></span></a></li>
+                        <a data-bind="attr: {'href': getHref() }" href="#/group">
+                            <!-- ko if: level() == 0 -->
+                            <span class="chapter-marker">Chapter</span>
+                            <!-- /ko -->
+                            <span class="link-text" data-bind="text: title"></span>
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-success"><i class="icon-plus icon-white"></i> Chapter</button>
+                    <button class="btn btn-success"><i class="icon-plus icon-white"></i>Chapter</button>
                 </div>
             </div>
         </div>
     </div>
-    <div id="answers" class="stack">
+    <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
+                <ul data-bind="foreach: chapters">
+                    <li data-bind="template: { name: 'GroupView' }"></li>
+                </ul>
             </div>
             <div class="bottom">
                 <div class="inner">
@@ -79,17 +88,97 @@
             </div>
         </div>
     </div>
-    <div id="details" class="stack">
+    <div id="details-group" class="details stack" data-bind="with:selectedGroup ">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close">&times</button>
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
             </div>
             <div class="body">
             </div>
             <div class="bottom">
                 <div class="inner">
+                    <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="details-question" class="details stack" data-bind="with:selectedQuestion ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
+            </div>
+            <div class="body">
+                    <label class="required">Title</label>
+                    <textarea rows="2" data-bind="value: title"></textarea>
+                    <label class="required">Variable name</label>
+                    <input type="text" placeholder="var. name" data-bind="value: alias">
+                    <label class="required">Type</label>
+                    <select data-bind="options: typeOptions, value: type"></select>
+                    <div data-bind="template: { name: type(), data: $data}"></div>
+                    <div class="btn-group">
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-star"></i>mandatory</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-star"></i>head</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                    </div>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
+                    <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/html" id="GroupView">
+    <div class="q-item-wrap">
+        <div class="q-item">
+            <span class="alias" data-bind="text: id"></span>
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+        </div>
+    </div>
+    <ul data-bind="foreach: children()">
+        <li data-bind="template: { name: $data.template}"></li>
+    </ul>
+</script>
+<script type="text/html" id="QuestionView">
+    <div class="q-item-wrap">
+        <div class="q-item">
+            <span class="alias" data-bind="text: alias"></span>
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="SingleOption">
+    SingleOption
+</script>
+<script type="text/html" id="YesNo">
+    YesNo
+</script>
+<script type="text/html" id="DropDownList">
+    DropDownList
+</script>
+<script type="text/html" id="MultyOption">
+    MultyOption
+</script>
+<script type="text/html" id="Numeric">
+    Numeric
+</script>
+<script type="text/html" id="DateTime">
+    DateTime
+</script>
+<script type="text/html" id="GpsCoordinates">
+    GpsCoordinates
+</script>
+<script type="text/html" id="Text">
+    Text
+</script>
+<script type="text/html" id="AutoPropagate">
+    AutoPropagate
+</script>
+
+

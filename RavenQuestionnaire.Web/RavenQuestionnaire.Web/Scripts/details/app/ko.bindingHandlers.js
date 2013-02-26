@@ -3,6 +3,66 @@
 function ($, ko) {
     var unwrap = ko.utils.unwrapObservable;
 
+    ko.bindingHandlers.checkedButtons = {
+        init: function(element, valueAccessor, allBindingsAccessor) {
+            var type = element.getAttribute('data-toggle') || 'radio';
+            var updateHandler = function() {
+                var valueToWrite;
+                var isActive = !!~element.className.indexOf('active');
+                var dataValue = element.getAttribute('data-value');
+                if (type == "checkbox") {
+                    valueToWrite = !isActive;
+                } else if (type == "radio" && !isActive) {
+                    valueToWrite = dataValue;
+                } else {
+                    return; // "checkedButtons" binding only responds to checkbox and radio data-toggle attribute
+                }
+
+                var modelValue = valueAccessor();
+                if ((type == "checkbox") && (ko.utils.unwrapObservable(modelValue) instanceof Array)) {
+                    // For checkboxes bound to an array, we add/remove the checkbox value to that array
+                    // This works for both observable and non-observable arrays
+                    var existingEntryIndex = ko.utils.arrayIndexOf(ko.utils.unwrapObservable(modelValue), dataValue);
+                    if (!isActive && (existingEntryIndex < 0))
+                        modelValue.push(dataValue);
+                    else if (isActive && (existingEntryIndex >= 0))
+                        modelValue.splice(existingEntryIndex, 1);
+                } else {
+                    if (modelValue() !== valueToWrite) {
+                        modelValue(valueToWrite);
+                    }
+                }
+            };
+
+            ko.utils.registerEventHandler(element, "click", updateHandler);
+        },
+        update: function(element, valueAccessor) {
+            var value = ko.utils.unwrapObservable(valueAccessor());
+            var type = element.getAttribute('data-toggle') || 'radio';
+
+            if (type == "checkbox") {
+                if (value instanceof Array) {
+                    // When bound to an array, the checkbox being checked represents its value being present in that array
+                    if (ko.utils.arrayIndexOf(value, element.getAttribute('data-value')) >= 0) {
+                        ko.utils.toggleDomNodeCssClass(element, 'active', true);
+                        ko.utils.toggleDomNodeCssClass(element, 'btn-primary', true);
+                    } else {
+                        ko.utils.toggleDomNodeCssClass(element, 'active', false);
+                        ko.utils.toggleDomNodeCssClass(element, 'btn-primary', false);
+                    }
+
+                } else {
+                    // When bound to anything other value (not an array), the checkbox being checked represents the value being trueish
+                    ko.utils.toggleDomNodeCssClass(element, 'active', value);
+                    ko.utils.toggleDomNodeCssClass(element, 'btn-primary', value);
+                }
+            } else if (type == "radio") {
+                ko.utils.toggleDomNodeCssClass(element, 'active', element.getAttribute('data-value') == value);
+                ko.utils.toggleDomNodeCssClass(element, 'btn-primary', element.getAttribute('data-value') == value);
+            }
+        }
+    };
+    
     // escape
     //---------------------------
     ko.bindingHandlers.escape = {
@@ -52,39 +112,6 @@ function ($, ko) {
             $el.prop('disabled', !enable);
 
             checked ? $el.addClass('selected') : $el.removeClass('selected');
-        }
-    };
-
-    // favoriteCheckbox
-    //---------------------------
-    ko.bindingHandlers.favoriteCheckbox = {
-        init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-            var $el = $(element);
-
-            $el.addClass('markfavorite');
-
-            ko.bindingHandlers.favoriteCheckbox.update(
-                element, valueAccessor, allBindingsAccessor, viewModel);
-        },
-        update: function (element, valueAccessor) {
-            var $el = $(element),
-                valAccessor = valueAccessor(),
-                enable = (valAccessor.enable !== undefined) ? unwrap(valAccessor.enable()) : true,
-                checked = (valAccessor.checked !== undefined) ? unwrap(valAccessor.checked()) : true;
-
-            $el.prop('disabled', !enable);
-            if (checked) {
-                if (enable) {
-                    $el.attr('title', 'remove favorite');
-                } else {
-                    $el.attr('title', 'locked');
-                }
-            } else {
-                $el.attr('title', 'mark as favorite');
-            }
-
-            checked ? $el.addClass('selected') : $el.removeClass('selected');
-            enable ? $el.removeClass('locked') : $el.addClass('locked');
         }
     };
 

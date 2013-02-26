@@ -82,11 +82,6 @@
                     store.save(config.stateKeys.lastView, context.path);
                     options.callback(context.params); // Activate the viewmodel
                     $('.view').hide();
-                    presenter.transitionTo(
-                        $(options.view),
-                        context.path,
-                        options.group
-                    );
                     if (this.title) {
                         this.title(options.title);
                     }

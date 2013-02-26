@@ -7,8 +7,6 @@
 
             bind = function () {
                 ko.applyBindings(vm.questionnaire, getView(ids.details));
-
-                
             },
 
             getView = function (viewName) {

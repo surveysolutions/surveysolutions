@@ -5,9 +5,21 @@
         var
             // properties
             //-----------------
+            questionTypes = [
+                "SingleOption", 
+                "YesNo", 
+                "DropDownList", 
+                "MultyOption", 
+                "Numeric", 
+                "DateTime", 
+                "GpsCoordinates", 
+                "Text", 
+                "AutoPropagate"
+            ],
             hashes = {
                 details: '#/details',
-                detailsMenu: '#/details/group',
+                detailsGroup: '#/details/group',
+                detailsQuestion: '#/details/question',
             },
             viewIds = {
                 details: '#stacks'
@@ -53,6 +65,7 @@
             viewIds: viewIds,
             messages: messages,
             stateKeys: stateKeys,
-            window: window
+            window: window,
+            questionTypes: questionTypes
         };
     });

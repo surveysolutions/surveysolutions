@@ -9,7 +9,7 @@
                 self.level = ko.observable();
                 self.isSelected = ko.observable(false);
                 self.getHref = function () {
-                    return config.hashes.detailsMenu + "/" + self.id();
+                    return config.hashes.detailsGroup + "/" + self.id();
                 };
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.level]);

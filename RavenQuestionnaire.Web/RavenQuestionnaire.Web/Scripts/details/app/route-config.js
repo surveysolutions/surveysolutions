@@ -16,13 +16,15 @@
                                 isDefault: true,
                                 route: config.hashes.details,
                                 title: 'Details',
-                                callback: vm.questionnaire.activate,
-                                group: '.route-top'
+                                callback: vm.questionnaire.activate
                             }, {
-                                route: config.hashes.detailsMenu + '/:group',
+                                route: config.hashes.detailsGroup + '/:group',
                                 title: 'Details',
-                                callback: vm.questionnaire.activate,
-                                group: '.route-left'
+                                callback: vm.questionnaire.activate
+                            }, {
+                                route: config.hashes.detailsQuestion + '/:question',
+                                title: 'Details',
+                                callback: vm.questionnaire.activate
                             }
                         ]
                     },

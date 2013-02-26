@@ -14,7 +14,7 @@ function (question, group, menuItem) {
 
         model.setDataContext = function (dc) {
             model.MenuItem.datacontext(dc);
-            //model.Group.datacontext(dc);
+            model.Group.datacontext(dc);
         };
 
         return model;
