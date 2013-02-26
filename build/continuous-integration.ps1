@@ -1,10 +1,19 @@
+function GetPathRelativeToCurrectLocation($FullPath) {
+    return $FullPath.Substring((Get-Location).Path.Length + 1)
+}
+
+
 function CleanFolders($Filter) {
     $progressMessage = "Cleaning $Filter folders"
     Write-Host "##teamcity[blockOpened name='$Filter']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } `
-        | Remove-Item -Force -Recurse -Verbose
+    $folders = Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
+
+    foreach ($folder in $folders) {
+        Write-Host $folder
+        Remove-Item $folder -Force -Recurse
+    }
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"
     Write-Host "##teamcity[blockClosed name='$Filter']"
@@ -29,7 +38,7 @@ function ShouldSolutionBeIgnored($Solution) {
 }
 
 function GetSolutionsToBuild() {
-    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ $_.FullName.Substring((Get-Location).Path.Length + 1) }
+    $foundSolutions = Get-ChildItem -Filter *.sln -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
     $solutionsToIgnore = $foundSolutions | ?{ ShouldSolutionBeIgnored $_ }
     $solutionsToBuild = $foundSolutions | ?{ -not (ShouldSolutionBeIgnored $_) }
 
