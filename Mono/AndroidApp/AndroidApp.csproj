@@ -215,6 +215,7 @@
     <AndroidResource Include="Resources\Layout\settings_dialog.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">

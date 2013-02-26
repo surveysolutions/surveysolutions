@@ -32,6 +32,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
         public CompleteQuestionnaireView Model { get;  set; }
+        public int SelectedIndex
+        {
+            get { return selectedItemIndex; }
+        }
         private int selectedItemIndex=0;
         private QuestionnaireNavigationAdapter adapter;
         #endregion
@@ -54,6 +58,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         public void SelectItem(int ind)
         {
+            if(selectedItemIndex==ind)
+                return;
             selectedItemIndex = ind;
             adapter.SelectItem(selectedItemIndex);
         }

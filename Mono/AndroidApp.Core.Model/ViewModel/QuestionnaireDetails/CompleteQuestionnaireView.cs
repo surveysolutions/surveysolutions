@@ -31,7 +31,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.Status = document.Status;
             this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            this.Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
+            this.Templates = new TemplateCollection();
 
             FillQuestionnairePostOrder(document);
             this.Chapters =
@@ -70,6 +70,34 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 rout.Remove(last);
                 last = rout.Last();
             }
+            CreateNextPrevious();
+        }
+        protected void CreateNextPrevious()
+        {
+            var templates = Templates.Select(t => t.ScreenId.PublicKey).ToList();
+            while (templates.Count > 0)
+            {
+                var first = templates[0];
+                var scope = Templates.GetItemsFromScope(first).ToArray();
+                templates.RemoveAll(t => scope.Any(s => s == t));
+                for (int i = 0; i < scope.Length; i++)
+                {
+                    var target = this.Templates[scope[i]];
+                    IQuestionnaireItemViewModel next = null;
+                    IQuestionnaireItemViewModel previous = null;
+                    if (i > 0)
+                    {
+                        var item = this.Templates[scope[i - 1]];
+                        previous = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                    }
+                    if (i < scope.Length - 1)
+                    {
+                        var item = this.Templates[scope[i + 1]];
+                        next = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                    }
+                    target.AddNextPrevious(next, previous);
+                }
+            }
         }
 
         #region fields
@@ -81,7 +109,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        protected IDictionary<Guid, QuestionnairePropagatedScreenViewModel> Templates { get; set; }
+        protected TemplateCollection Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
 
         protected IQuestionnaireValidationExecutor validator;
@@ -91,7 +119,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         #region public methods
 
-       
+
 
         public void PropagateGroup(Guid publicKey, Guid propagationKey)
         {
@@ -110,9 +138,11 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
             }
             var screen = new QuestionnairePropagatedScreenViewModel(PublicKey,
-                                                          template.Title, true,
-                                                          key, items,
-                                                          () => GetSiblings(key.PublicKey), bradCrumbs);
+                                                                    template.Title, true,
+                                                                    key, items,
+                                                                    () => GetSiblings(key.PublicKey), bradCrumbs,
+                                                                    template.Next!=null?template.Next.Clone(propagationKey):null,
+                                                                    template.Previous!=null?template.Previous.Clone(propagationKey):null);
             screen.PropertyChanged += screen_PropertyChanged;
             this.Screens.Add(key, screen);
             UpdateGrid(publicKey);
@@ -243,11 +273,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 {
                     CreateGrid(group, rout);
                 }
+                var template = this.Templates[group.PublicKey];
                 var screen = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title,
                                                               group.Enabled,
                                                               key, screenItems,
                                                               () => GetSiblings(key.PublicKey),
-                                                               this.Templates[group.PublicKey].Breadcrumbs);
+                                                               template.Breadcrumbs);
                 this.Screens.Add(key, screen);
                 screen.PropertyChanged += screen_PropertyChanged;
                 UpdateGrid(group.PublicKey);
@@ -279,7 +310,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
-
+            
             var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                         rosterKey, group.Enabled,
                                                         siblings,
@@ -395,6 +426,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
                             question.ValidationExpression, question.ValidationMessage);
+
+                var trigger = question as IAutoPropagate;
+                if (trigger!=null)
+                {
+                    Templates.AssignScope(item.PublicKey, trigger.Triggers);
+                }
                 //  questionView.PropertyChanged += questionView_PropertyChanged;
                 return questionView;
 

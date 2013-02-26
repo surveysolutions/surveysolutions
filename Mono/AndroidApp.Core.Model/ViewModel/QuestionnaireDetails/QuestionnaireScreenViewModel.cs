@@ -79,6 +79,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public int Answered { get; private set; }
         public int Total { get; private set; }
         public bool Enabled { get; private set; }
+        public ItemPublicKey ChapterId { get; private set; }
         public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
 
         public virtual IEnumerable<ItemPublicKey> Siblings { get; private set; }

@@ -20,9 +20,13 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                       bool enabled,
                                                       ItemPublicKey screenId,
                                                       IEnumerable<IQuestionnaireItemViewModel> items,
-                                                      IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
+                                                      IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered,
+            IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous
+            )
             : base(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs,  total,  answered)
         {
+            this.Next = next;
+            this.Previous = previous;
         }
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                       bool enabled,
@@ -30,13 +34,28 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                                                       IEnumerable<IQuestionnaireItemViewModel> items,
                                                       Func<IEnumerable<ItemPublicKey>> sibligs,
                                                       IEnumerable<ItemPublicKey> breadcrumbs)
-            : this(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs, 0, 0)
+            : this(questionnaireId,  title, enabled, screenId, items,sibligs, breadcrumbs, null, null)
+        {
+        }
+        public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
+                                                     bool enabled,
+                                                     ItemPublicKey screenId,
+                                                     IEnumerable<IQuestionnaireItemViewModel> items,
+                                                     Func<IEnumerable<ItemPublicKey>> sibligs,
+                                                     IEnumerable<ItemPublicKey> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+            : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)
         {
 
             if (screenId.PropagationKey.HasValue)
             {
                 this.sibligsValue = sibligs;
+                this.ScreenName = string.Empty;
             }
+        }
+        public void AddNextPrevious(IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+        {
+            this.Next = next;
+            this.Previous = previous;
         }
 
         private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;
@@ -51,5 +70,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
             get { return sibligsValue(); }
         }
+
+        public IQuestionnaireItemViewModel Next { get; private set; }
+        public IQuestionnaireItemViewModel Previous { get; private set; }
     }
 }
