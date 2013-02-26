@@ -146,12 +146,13 @@ namespace AndroidApp
                 }
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
-            eventStore.ClearDB();
-          /*  var events = eventStore.GetAllEvents();
+          
+            var events = eventStore.GetAllEvents();
             foreach (CommittedEvent committedEvent in events)
             {
                 bus.Publish(committedEvent);
-            }*/
+            }
+      /*      eventStore.ClearDB();
                var stream = new UncommittedEventStream(Guid.NewGuid());
                //  var payload = new NewCompleteQuestionnaireCreated();
 
@@ -192,7 +193,7 @@ namespace AndroidApp
                eventStore.Store(stream);
                bus.Publish(userEventUcmt);
 
-               bus.Publish(rEventTempl);
+               bus.Publish(rEventTempl);*/
 
         }
         protected static T DesserializeEmbededResource<T>(string fileName)

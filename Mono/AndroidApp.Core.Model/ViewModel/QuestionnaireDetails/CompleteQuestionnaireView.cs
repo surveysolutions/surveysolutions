@@ -78,7 +78,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             while (templates.Count > 0)
             {
                 var first = templates[0];
-                var scope = Templates.GetItemsFromScope(first).ToArray();
+                var scope = Templates.GetScopeByItem(first).ToArray();
                 templates.RemoveAll(t => scope.Any(s => s == t));
                 for (int i = 0; i < scope.Length; i++)
                 {

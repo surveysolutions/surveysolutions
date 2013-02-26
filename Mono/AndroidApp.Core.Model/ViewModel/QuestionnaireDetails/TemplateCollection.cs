@@ -18,11 +18,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         private readonly Dictionary<Guid, QuestionnairePropagatedScreenViewModel> collection =
             new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
 
-        private readonly Dictionary<Guid, Guid[]> scopes =
-          new Dictionary<Guid, Guid[]>();
+        private readonly Dictionary<Guid, IList<Guid>> scopes =
+          new Dictionary<Guid, IList<Guid>>();
         public void Add(Guid key, QuestionnairePropagatedScreenViewModel value)
         {
             collection.Add(key, value);
+            scopes.Add(key, new List<Guid> {key});
         }
 
         public QuestionnairePropagatedScreenViewModel this[Guid key]
@@ -31,22 +32,40 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
         public void AssignScope(Guid scopeId, IEnumerable<Guid> keys)
         {
-            scopes.Add(scopeId, keys.ToArray());
+            foreach (var guid in keys)
+            {
+                var currentScope = GetItemScope(guid);
+                var itemsInCurrentScope = scopes[currentScope];
+                if (itemsInCurrentScope.Count == 1)
+                {
+                    scopes.Remove(currentScope);
+                }
+                else
+                {
+                    itemsInCurrentScope.Remove(guid);
+                }
+            }
+            scopes.Add(scopeId, keys.ToList());
         }
 
         public IEnumerable<Guid> GetItemsInScope(Guid scopeKey)
         {
             if (!scopes.ContainsKey(scopeKey))
-                Enumerable.Empty<QuestionnairePropagatedScreenViewModel>();
+                throw new ArgumentException("item is absent in any scope");
             return scopes[scopeKey];
         }
 
-        public IEnumerable<Guid> GetItemsFromScope(Guid scopedItem)
+        public IEnumerable<Guid> GetScopeByItem(Guid scopedItem)
         {
-            var itemScopes = scopes.Where(s => s.Value.Contains(scopedItem)).Select(s => s.Key);
+            var itemScopes = GetItemScope(scopedItem);
+            return GetItemsInScope(itemScopes);
+        }
+        public Guid GetItemScope(Guid itemKey)
+        {
+            var itemScopes = scopes.Where(s => s.Value.Contains(itemKey)).Select(s => s.Key);
             if (!itemScopes.Any())
-                return Enumerable.Empty<Guid>();
-            return GetItemsInScope(itemScopes.First());
+                throw new ArgumentException("item is absent in any scope");
+            return itemScopes.First();
         }
 
         #region Implementation of IEnumerable
