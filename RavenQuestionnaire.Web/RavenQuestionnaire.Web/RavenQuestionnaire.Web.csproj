@@ -577,7 +577,6 @@
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroup.cshtml" />
