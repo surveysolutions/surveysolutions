@@ -218,6 +218,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
@@ -248,6 +249,7 @@
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\jquery.mobile.simpledialog.min.css" />
     <Content Include="Content\mobile.css" />
+    <Content Include="Content\pdf.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -334,6 +336,10 @@
     <Content Include="Content\themes\jquerymobile\images\comment.gif" />
     <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
+    <Content Include="Configuration\Designer.Web.config" />
+    <Content Include="Configuration\Dev.Designer.Web.config" />
+    <Content Include="Configuration\Slava.Designer.Web.config" />
+    <Content Include="HostMap.config" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -343,6 +349,7 @@
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Models\ViewDataUploadFilesResult.cs" />
+    <Compile Include="PdfConvert.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
@@ -656,6 +663,11 @@
     <Content Include="Views\Question\Create.cshtml" />
     <Content Include="Views\Question\MainBlock.cshtml" />
     <Content Include="Views\Question\MultiSelectBlock.cshtml" />
+    <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderChild.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
