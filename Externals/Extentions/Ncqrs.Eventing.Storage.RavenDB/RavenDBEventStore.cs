@@ -175,7 +175,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         session.Advanced.UseOptimisticConcurrency = true;
                         foreach (UncommittedEvent uncommittedEvent in eventStream)
                         {
-                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
+                            session.StoreAsync(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                         }
 
                         session.SaveChangesAsync();
