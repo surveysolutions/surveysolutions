@@ -116,29 +116,11 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
-    </Reference>
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.Spatial">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.Spatial.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.SpellChecker">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
@@ -146,39 +128,22 @@
     <Reference Include="Ninject.Extensions.Conventions">
       <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Raven.Abstractions">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
+    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Backup">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Backup.exe</HintPath>
+    <Reference Include="Raven.Client.Embedded, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2261\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Embedded">
-      <HintPath>..\..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Database">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Munin">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Munin.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Smuggler">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Smuggler.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Esent">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Managed">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Managed.dll</HintPath>
-    </Reference>
-    <Reference Include="Spatial4n.Core">
-      <HintPath>..\..\packages\RavenDB.Database.1.0.960\lib\net40\Spatial4n.Core.dll</HintPath>
+    <Reference Include="Raven.Database, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2261\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -248,7 +213,6 @@
     <Compile Include="Views\Questionnaire\QuestionnaireViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Raven.Studio.xap" />
     <EmbeddedResource Include="Views\Event\ExportCommands.xml" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
