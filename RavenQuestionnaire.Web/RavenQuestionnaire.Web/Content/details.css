@@ -328,20 +328,15 @@ body:before
 	left: 0;
 	overflow-y: scroll;
 }
-.details-block {
-    -webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	-o-box-sizing: border-box;
-	box-sizing: border-box;
-	padding: 8px;
-	padding-right: 12px;
-	display: block;
-	color: #423E3E;
-	font-size: 13px;
-	position: relative;
-	text-shadow: 0 1px 0 white;
-	background: url("img/divider.png") center bottom repeat-x;
+.details.stack .body .input-append{
+    display: inline;
+}
+.details.stack .body .input-append .btn{
+    padding: 4px 6px;
+}
+.details.stack .body.container-fluid {
+    padding-left: 8px;
+    padding-right: 8px;
 }
 .details.stack .bottom
 {

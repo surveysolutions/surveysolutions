@@ -45,20 +45,20 @@ function ($, ko) {
                     // When bound to an array, the checkbox being checked represents its value being present in that array
                     if (ko.utils.arrayIndexOf(value, element.getAttribute('data-value')) >= 0) {
                         ko.utils.toggleDomNodeCssClass(element, 'active', true);
-                        ko.utils.toggleDomNodeCssClass(element, 'btn-primary', true);
+                        ko.utils.toggleDomNodeCssClass(element, 'btn-info', true);
                     } else {
                         ko.utils.toggleDomNodeCssClass(element, 'active', false);
-                        ko.utils.toggleDomNodeCssClass(element, 'btn-primary', false);
+                        ko.utils.toggleDomNodeCssClass(element, 'btn-info', false);
                     }
 
                 } else {
                     // When bound to anything other value (not an array), the checkbox being checked represents the value being trueish
                     ko.utils.toggleDomNodeCssClass(element, 'active', value);
-                    ko.utils.toggleDomNodeCssClass(element, 'btn-primary', value);
+                    ko.utils.toggleDomNodeCssClass(element, 'btn-info', value);
                 }
             } else if (type == "radio") {
                 ko.utils.toggleDomNodeCssClass(element, 'active', element.getAttribute('data-value') == value);
-                ko.utils.toggleDomNodeCssClass(element, 'btn-primary', element.getAttribute('data-value') == value);
+                ko.utils.toggleDomNodeCssClass(element, 'btn-info', element.getAttribute('data-value') == value);
             }
         }
     };

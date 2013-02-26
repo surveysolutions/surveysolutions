@@ -57,7 +57,11 @@
                 fromDto: function(dto, item) {
                     item = item || new model.Group().id(dto.group.PublicKey).level(dto.level);
                     item.title(dto.group.Title);
-                    item.type('type');
+                    item.description(dto.group.Description);
+                    item.condition(dto.group.ConditionExpression);
+                    var type = config.groupTypes[dto.group.Propagated];
+                    item.type(type);
+                    
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
                     }));
@@ -75,8 +79,16 @@
                     var type = config.questionTypes[dto.QuestionType];
                     item.type(type);
                     
-                    item.answerOrder(dto.AnswerOrder);
-                    item.answerOptions(dto.Answers);
+                    var scope = config.questionScopes[dto.QuestionScope];
+                    item.scope(scope);
+
+                    var order = config.answerOrders[dto.AnswerOrder];
+                    item.answerOrder(order);
+
+                    var answers = _.map(dto.Answers, function (answer) {
+                        return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);
+                    });
+                    item.answerOptions(answers);
                     item.isHead(dto.Capital);
                     item.isFeatured(dto.Featured);
                     item.isMandatory(dto.Mandatory);
@@ -84,7 +96,6 @@
                     item.condition(dto.ConditionExpression);
                     item.instruction(dto.Instructions);
                     item.maxValue(dto.MaxValue);
-                    item.scope(dto.QuestionScope);
                     
                     item.alias(dto.StataExportCaption);
                     item.triggers(dto.Triggers);

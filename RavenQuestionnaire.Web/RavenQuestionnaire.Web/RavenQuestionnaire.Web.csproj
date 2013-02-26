@@ -402,6 +402,7 @@
     <Content Include="Scripts\details\app\binder.js" />
     <Content Include="Scripts\details\app\bootstrapper.js" />
     <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\model.answerOption.js" />
     <Content Include="Scripts\details\app\messenger.js" />
     <Content Include="Scripts\details\app\model.menuItem.js" />
     <Content Include="Scripts\details\app\dataservice.questionnaire.js" />

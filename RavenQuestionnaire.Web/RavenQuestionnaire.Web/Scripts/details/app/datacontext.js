@@ -111,6 +111,13 @@
             });
             return chapters;
         };
+        
+        groups.getPropagateableGroups = function () {
+            var propagatable = _.filter(groups.getAllLocal(), function (item) {
+                return item.level() == 0;
+            });
+            return propagatable;
+        };
 
         var datacontext = {
             menu: menu,

@@ -9,12 +9,16 @@
                 self.title = ko.observable();
                 self.type = ko.observable();
                 self.level = ko.observable();
+                self.description = ko.observable();
+                self.condition = ko.observable();
+                
                 self.childrenID = ko.observableArray();
                 self.template = "GroupView";
                 self.getHref = function () {
                     return config.hashes.detailsGroup + "/" + self.id();
                 };
                 
+                self.typeOptions = config.groupTypes;
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
                 return self;

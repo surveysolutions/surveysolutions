@@ -1,20 +1,37 @@
 ﻿define('config',
     ['toastr', 'ko'],
-    function (toastr, ko) {
+    function(toastr, ko) {
 
-        var
-            // properties
+        var// properties
             //-----------------
             questionTypes = [
-                "SingleOption", 
-                "YesNo", 
-                "DropDownList", 
-                "MultyOption", 
-                "Numeric", 
-                "DateTime", 
-                "GpsCoordinates", 
-                "Text", 
+                "SingleOption",
+                "YesNo",
+                "DropDownList",
+                "MultyOption",
+                "Numeric",
+                "DateTime",
+                "GpsCoordinates",
+                "Text",
                 "AutoPropagate"
+            ],
+            questionScopes = [
+                "Interviewer",
+                "Supervisor",
+                "Headquarter"
+            ],
+            answerOrders = [
+                "AsIs",
+                "Random",
+                "AZ",
+                "ZA",
+                "MinMax",
+                "MaxMin"
+            ],
+            groupTypes = [
+                "None",
+                "Propagated",
+                "AutoPropagated"
             ],
             hashes = {
                 details: '#/details',
@@ -65,7 +82,9 @@
             viewIds: viewIds,
             messages: messages,
             stateKeys: stateKeys,
-            window: window,
-            questionTypes: questionTypes
+            questionTypes: questionTypes,
+            questionScopes: questionScopes,
+            answerOrders: answerOrders,
+            groupTypes: groupTypes
         };
     });
