@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.Web.Security;
 
@@ -13,6 +13,11 @@ namespace Designer.Web.Providers.Membership
         /// Gets whether all users must have unique email addresses.
         /// </summary>
         bool IsUniqueEmailRequired { get; }
+
+        /// <summary>
+        /// Gets whether accounts repository used event sourcing
+        /// </summary>
+        bool IsEventSourcingUsed { get; }
 
         /// <summary>
         /// Register a new account.
@@ -32,10 +37,50 @@ namespace Designer.Web.Providers.Membership
         IMembershipAccount Get(string username);
 
         /// <summary>
-        /// Update an existing user.
+        /// Update an existing user
         /// </summary>
         /// <param name="account">Account being updated.</param>
         void Update(IMembershipAccount account);
+
+        /// <summary>
+        /// Processes a request to update the password question and answer for a membership user.
+        /// </summary>
+        void ChangePasswordQuestionAndAnswer(string newPasswordQuestion, string newPasswordAnswer);
+
+        /// <summary>
+        /// Processes a request to update the password for a membership user.
+        /// </summary>
+        void ChangePassword(string newPassword);
+
+        /// <summary>
+        /// Resets a user's password to a new, automatically generated password.
+        /// </summary>
+        void ResetPassword(string newPassword, string passwordSalt);
+
+        /// <summary>
+        /// Lock user
+        /// </summary>
+        void LockUser();
+
+        /// <summary>
+        /// Unlock user
+        /// </summary>
+        void UnlockUser();
+
+        /// <summary>
+        /// Update login information by user
+        /// </summary>
+        void UserValidated();
+
+        /// <summary>
+        /// Update the last-activity date/time stamp for the user
+        /// </summary>
+        void UpdateOnlineState();
+
+        /// <summary>
+        /// User account confirmation
+        /// </summary>
+        void ConfirmAccount();
 
         /// <summary>
         /// Get a user by using your PK.
@@ -54,7 +99,7 @@ namespace Designer.Web.Providers.Membership
         /// <summary>
         /// Translate an confirmation token into a user name.
         /// </summary>
-        /// <param name="email">Confirmation token to lookup</param>
+        /// <param name="confirmationToken">Confirmation token to lookup</param>
         /// <returns>User name if the specified confirmation token was found; otherwise null.</returns>
         string GetUserNameByConfirmationToken(string confirmationToken);
 

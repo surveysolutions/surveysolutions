@@ -37,11 +37,21 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountChanged.cs" />
+    <Compile Include="AccountDeleted.cs" />
+    <Compile Include="AccountDenormalizer.cs" />
+    <Compile Include="AccountListItem.cs" />
+    <Compile Include="AccountRegistered.cs" />
     <Compile Include="AccountView.cs" />
     <Compile Include="AccountViewFactory.cs" />
     <Compile Include="AccountViewInputModel.cs" />
+    <Compile Include="AccountListView.cs" />
+    <Compile Include="AccountListViewFactory.cs" />
+    <Compile Include="AccountListViewInputModel.cs" />
+    <Compile Include="AccountDocument.cs" />
     <Compile Include="CQRSAccountRepository.cs" />
     <Compile Include="CQRSRoleRepository.cs" />
+    <Compile Include="NewAccountCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
