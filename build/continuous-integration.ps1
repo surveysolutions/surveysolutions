@@ -1,3 +1,25 @@
+function CleanFolders($Filter) {
+    $progressMessage = "Cleaning $Filter folders"
+    Write-Host "##teamcity[blockOpened name='$Filter']"
+    Write-Host "##teamcity[progressStart '$progressMessage']"
+
+    Get-ChildItem -Directory -Filter $Filter -Recurse | ?{ $_.FullName -notmatch '\\.hg\\' } `
+        | Remove-Item -Force –Recurse -Verbose
+
+    Write-Host "##teamcity[progressFinish '$progressMessage']"
+    Write-Host "##teamcity[blockClosed name='$Filter']"
+}
+
+function CleanBinAndObjFolders() {
+    Write-Host "##teamcity[blockOpened name='Cleaning folders']"
+
+    CleanFolders 'bin'
+    CleanFolders 'obj'
+
+    Write-Host "##teamcity[blockClosed name='Cleaning folders']"
+}
+
+
 function IsSetupSolution($Solution) {
     return $Solution.EndsWith('Setup.sln')
 }
@@ -59,5 +81,8 @@ function BuildSolutions($BuildConfiguration) {
 
     Write-Host "##teamcity[blockClosed name='Building solutions']"
 }
+
+
+CleanBinAndObjFolders
 
 BuildSolutions 'Debug'
