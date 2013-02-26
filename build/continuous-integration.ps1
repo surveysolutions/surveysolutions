@@ -10,9 +10,11 @@ function CleanFolders($Filter) {
 
     $folders = Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } | %{ GetPathRelativeToCurrectLocation $_.FullName }
 
-    foreach ($folder in $folders) {
-        Write-Host $folder
-        Remove-Item $folder -Force -Recurse
+    if ($folders -ne $null) {
+        foreach ($folder in $folders) {
+            Write-Host $folder
+            Remove-Item $folder -Force -Recurse
+        }
     }
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"
@@ -75,12 +77,14 @@ function BuildSolutions($BuildConfiguration) {
 
     $countOfFailedSolutions = 0
 
-    foreach ($solution in $solutionsToBuild) {
+    if ($solutionsToBuild -ne $null) {
+        foreach ($solution in $solutionsToBuild) {
 
-        $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
+            $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
 
-        if (-not $wasBuildSuccessfull) {
-            $countOfFailedSolutions += 1
+            if (-not $wasBuildSuccessfull) {
+                $countOfFailedSolutions += 1
+            }
         }
     }
 
