@@ -1,7 +1,7 @@
 ﻿
 namespace Designer.Web.Providers.CQRS
 {
-    public class AccountView : AccountDocument
+    public class AccountListItem : AccountDocument
     {
     }
 }

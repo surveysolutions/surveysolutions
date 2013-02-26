@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using Main.Core.Documents;
+﻿using Main.Core.View;
 using Main.DenormalizerStorage;
-using Main.Core.View;
+using System;
+using System.Linq;
+using Main.Core.Utility;
 
-namespace Designer.Web.Providers.Repositories.CQRS
+namespace Designer.Web.Providers.CQRS
 {
     /// <summary>
     /// The account view factory.
@@ -14,23 +14,23 @@ namespace Designer.Web.Providers.Repositories.CQRS
         #region Fields
 
         /// <summary>
-        /// The users.
+        /// The accounts.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IDenormalizerStorage<AccountDocument> _accounts;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserViewFactory"/> class.
+        /// Initializes a new instance of the <see cref="AccountViewFactory"/> class.
         /// </summary>
-        /// <param name="users">
-        /// The users.
+        /// <param name="accounts">
+        /// The accounts.
         /// </param>
-        public AccountViewFactory(IDenormalizerStorage<UserDocument> users)
+        public AccountViewFactory(IDenormalizerStorage<AccountDocument> accounts)
         {
-            this.users = users;
+            _accounts = accounts;
         }
 
         #endregion
@@ -44,35 +44,49 @@ namespace Designer.Web.Providers.Repositories.CQRS
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.User.UserView.
+        /// The Designer.Web.Providers.CQRS.AccountView.
         /// </returns>
         public AccountView Load(AccountViewInputModel input)
         {
-            //UserDocument doc = null;
-            //if (input.AccountId != Guid.Empty)
-            //    doc = this.users.Query().FirstOrDefault(u => u.PublicKey == input.AccountId);
-            //else
-            //    if (!string.IsNullOrEmpty(input.AccountName) && string.IsNullOrEmpty(input.Password))
-            //    {
-            //        doc =
-            //            this.users.Query().FirstOrDefault(
-            //                u => string.Compare(u.UserName, input.AccountName, StringComparison.OrdinalIgnoreCase) == 0);
-            //    }
+            Func<AccountDocument,bool> query = (x) => false;
+            if (input.AccountId != Guid.Empty)
+            {
+                query = (x) => (Guid) x.ProviderUserKey == input.AccountId;
+            }
+            else if(!string.IsNullOrEmpty( input.AccountName))
+            {
+                query = (x) => x.UserName.Compare(input.AccountName);
+            }
+            else if(!string.IsNullOrEmpty(input.AccountEmail))
+            {
+                query = (x) => x.Email.Compare(input.AccountEmail);
+            }
+            else if(!string.IsNullOrEmpty(input.ConfirmationToken))
+            {
+                query = (x) => x.ConfirmationToken == input.ConfirmationToken;
+            }
 
-            //if (!string.IsNullOrEmpty(input.AccountName) && !string.IsNullOrEmpty(input.Password))
-            //{
-            //    doc = this.users.Query().FirstOrDefault(u => u.UserName == input.AccountName);
-            //    if (doc != null && doc.Password != input.Password)
-            //        return null;
-            //}
-
-            //if (doc == null || doc.IsDeleted)
-            //    return null;
-
-            //return new AccountView(doc.PublicKey, doc.UserName, doc.Password, doc.Email,
-            //                    doc.CreationDate, doc.Roles, doc.IsLocked, doc.Supervisor, doc.Location.Id);
-
-            return new AccountView();
+            return _accounts.Query().Where(query).Select(x=>new AccountView()
+                {
+                    ApplicationName = x.ApplicationName,
+                    ProviderUserKey = x.ProviderUserKey,
+                    UserName = x.UserName,
+                    Comment = x.Comment,
+                    ConfirmationToken = x.ConfirmationToken,
+                    CreatedAt = x.CreatedAt,
+                    Email = x.Email,
+                    FailedPasswordAnswerWindowAttemptCount = x.FailedPasswordAnswerWindowAttemptCount,
+                    FailedPasswordAnswerWindowStartedAt = x.FailedPasswordAnswerWindowStartedAt,
+                    FailedPasswordWindowAttemptCount = x.FailedPasswordWindowAttemptCount,
+                    FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
+                    IsConfirmed = x.IsConfirmed,
+                    IsLockedOut = x.IsLockedOut,
+                    IsOnline = x.IsOnline,
+                    LastActivityAt = x.LastActivityAt,
+                    LastLockedOutAt = x.LastLockedOutAt,
+                    LastLoginAt = x.LastLoginAt,
+                    LastPasswordChangeAt = x.LastPasswordChangeAt
+                }).FirstOrDefault();
         }
 
         #endregion
