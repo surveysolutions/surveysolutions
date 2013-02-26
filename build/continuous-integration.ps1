@@ -108,14 +108,26 @@ function GetOutputAssembly($Project, $BuildConfiguration) {
 }
 
 function RunTestsFromProject($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='$Project']"
 
     $assembly = GetOutputAssembly $Project $BuildConfiguration
 
-    Write-Host $assembly
-
     if (-not (Test-Path $assembly)) {
+
         Write-Host "##teamcity[message status='WARNING' text='Expected tests assembly $assembly is missing']"
+
+    } else {
+
+        Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
+
+        $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
+        C:\Projects\WorldBank-Dev\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo
+        Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
+
+        Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
     }
+
+    Write-Host "##teamcity[blockClosed name='$Project']"
 }
 
 function RunTests($BuildConfiguration) {
