@@ -3,8 +3,8 @@ function CleanFolders($Filter) {
     Write-Host "##teamcity[blockOpened name='$Filter']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    Get-ChildItem -Directory -Filter $Filter -Recurse | ?{ $_.FullName -notmatch '\\.hg\\' } `
-        | Remove-Item -Force –Recurse -Verbose
+    Get-ChildItem -Filter $Filter -Recurse | ?{ $_.Attributes -match 'Directory' } | ?{ $_.FullName -notmatch '\\.hg\\' } `
+        | Remove-Item -Force -Recurse -Verbose
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"
     Write-Host "##teamcity[blockClosed name='$Filter']"
