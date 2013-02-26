@@ -1,6 +1,6 @@
-﻿using Designer.Web.Providers.Membership;
+﻿using Designer.Web.Providers.CQRS;
+using Designer.Web.Providers.Membership;
 using Designer.Web.Providers.Membership.PasswordStrategies;
-using Designer.Web.Providers.Repositories.CQRS;
 using Designer.Web.Providers.Roles;
 using Main.Core.View;
 using Ncqrs;
