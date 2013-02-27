@@ -167,7 +167,6 @@ namespace AndroidApp
 
                         while (result.IsWorking && currentProgress < 100)
                         {
-                            currentProgress = result.Progress;
                             int diff = result.Progress - currentProgress;
 
                             if (diff > 0)
@@ -181,7 +180,7 @@ namespace AndroidApp
                                 currentProgress = result.Progress;
                             }
 
-                            Thread.Sleep(300);
+                            Thread.Sleep(200);
                         }
 
                         this.RunOnUiThread(
