@@ -11,7 +11,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     {
         public PropertiesOnlyContractResolver()
         {
-            DefaultMembersSearchFlags = BindingFlags.Public | /*BindingFlags.NonPublic |*/ BindingFlags.Instance;
+            DefaultMembersSearchFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         }
 
         protected override List<MemberInfo> GetSerializableMembers(Type objectType)
