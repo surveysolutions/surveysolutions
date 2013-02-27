@@ -23,7 +23,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public void Add(Guid key, QuestionnairePropagatedScreenViewModel value)
         {
             collection.Add(key, value);
-            scopes.Add(key, new List<Guid> {key});
+            if (!scopes.Where(s => s.Value.Contains(key)).Select(s => s.Key).Any())
+                scopes.Add(key, new List<Guid> {key});
         }
 
         public QuestionnairePropagatedScreenViewModel this[Guid key]
@@ -34,7 +35,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         {
             foreach (var guid in keys)
             {
-                var currentScope = GetItemScope(guid);
+                var scopeBy = scopes.Where(s => s.Value.Contains(guid)).Select(s => s.Key);
+                if (!scopeBy.Any())
+                    continue;
+                var currentScope = scopeBy.First();
                 var itemsInCurrentScope = scopes[currentScope];
                 if (itemsInCurrentScope.Count == 1)
                 {

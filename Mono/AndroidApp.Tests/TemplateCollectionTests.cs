@@ -99,6 +99,17 @@ namespace AndroidApp.Core.Model.Tests
 
             Assert.Throws<ArgumentException>(() => target.GetItemsInScope(key1));
         }
+        [Test]
+        public void Add_ItemAlreadyInScope_SecondScopeWasntCreated()
+        {
+            var target = new TemplateCollection();
+            var scopeKey = Guid.NewGuid();
+            var itemKey = Guid.NewGuid();
+            target.AssignScope(scopeKey, new Guid[] {itemKey});
+            AddItemInCollections(target, itemKey);
+            Assert.Throws<ArgumentException>(() => target.GetItemsInScope(itemKey));
+        }
+
         protected void AddItemInCollections(TemplateCollection target,Guid key)
         {
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,

@@ -174,14 +174,15 @@ namespace AndroidApp.Core.Model.Tests
             var templateKey = new ItemPublicKey(Guid.NewGuid(), null);
 
 
-            var propagatedGroup = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t",  true,
-                                                                   new ItemPublicKey(templateKey.PublicKey,
-                                                                                     propagationKey),
-                                                                   new IQuestionnaireItemViewModel[1]
-                                                                       {
-                                                                           question
-                                                                       },Enumerable.Empty<ItemPublicKey>,
-                                                                   Enumerable.Empty<ItemPublicKey>());
+            var propagatedGroup = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "t", true,
+                                                                             new ItemPublicKey(templateKey.PublicKey,
+                                                                                               propagationKey),
+                                                                             new IQuestionnaireItemViewModel[1]
+                                                                                 {
+                                                                                     question
+                                                                                 },
+                                                                             (k) => Enumerable.Empty<ItemPublicKey>(),
+                                                                             Enumerable.Empty<ItemPublicKey>());
             screens.Add(propagatedGroup.ScreenId, propagatedGroup);
             var grid = new QuestionnaireGridViewModel(propagatedGroup.QuestionnaireId, "t", "t", templateKey, true,
                                                       Enumerable.Empty<ItemPublicKey>(),
