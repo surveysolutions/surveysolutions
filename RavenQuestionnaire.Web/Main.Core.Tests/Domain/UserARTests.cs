@@ -41,7 +41,7 @@
             user.Lock();
 
             // assert
-            Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(8));
+            Assert.That(this.GetRaisedEvents<UserLocked>().Count(), Is.EqualTo(1));
         }
 
         [Test]
