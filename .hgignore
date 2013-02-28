@@ -13,7 +13,6 @@ obj.Wpf
 *.StyleCop
 StyleCop.Cache
 *.suo
-Installation/SupervisorInstallProj/_ReSharper.Setup/*
 
 *.DotSettings.user
 *.dotCover
@@ -29,3 +28,5 @@ ClientDependency
 success.marker
 
 Externals/lib/*
+lib/Release
+lib/Debug

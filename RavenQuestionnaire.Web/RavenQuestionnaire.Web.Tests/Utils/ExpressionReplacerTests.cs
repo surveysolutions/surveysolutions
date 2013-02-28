@@ -12,24 +12,6 @@ namespace RavenQuestionnaire.Web.Tests.Utils
     [TestFixture]
     public class ExpressionReplacerTests
     {
-        private Mock<IViewRepository> viewRepositoryMock;
-
-        [SetUp]
-        public void Init()
-        {
-            var dummyQuestionnaireStataMapView = new QuestionnaireStataMapView
-            {
-                StataMap = new List<KeyValuePair<Guid, string>>()
-                {
-                    {new KeyValuePair<Guid, string>(Guid.Parse("a0d6ff6f-230e-4a1f-b940-97f93e037e08"), "caption1")}, 
-                    {new KeyValuePair<Guid, string>(Guid.Parse("9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0"), "caption2")}, 
-                }
-            };
-
-            this.viewRepositoryMock = Mock.Get(Mock.Of<IViewRepository>(repository
-                => repository.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()) == dummyQuestionnaireStataMapView));
-        }
-
         #region Replacing stata captions
 
         [Test]
@@ -70,7 +52,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
             string expressionWithStataCaptions, string expectedExpressionWithGuids)
         {
             // Arrange
-            var replacer = CreateExpressionReplacer();
+            var replacer = CreateExpressionReplacer(viewRepository: CreateRepositoryStubWhichReturnsMapWithSeedData());
 
             // Act
             var result = replacer.ReplaceStataCaptionsWithGuids(expressionWithStataCaptions, Guid.NewGuid());
@@ -87,7 +69,7 @@ namespace RavenQuestionnaire.Web.Tests.Utils
         public void ReplaceGuidsWithStataCaptions_When_expression_contains_guids_Then_all_known_should_be_replaced()
         {
             // Arrange
-            var replacer = CreateExpressionReplacer();
+            var replacer = CreateExpressionReplacer(viewRepository: CreateRepositoryStubWhichReturnsMapWithSeedData());
             var expressionWithGuids = "[a0d6ff6f-230e-4a1f-b940-97f93e037e08] == 8 or [a0d6ff6f-230e-4a1f-b940-97f93e037e08] > [9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0]";
 
             // Act
@@ -100,38 +82,25 @@ namespace RavenQuestionnaire.Web.Tests.Utils
 
 
         [Test]
-        public void ReplaceGuidsWithStataCaptions_When_expression_is_empty_Then_factory_should_not_be_called()
+        public void ReplaceGuidsWithStataCaptions_When_expression_is_empty_Then_repository_should_not_be_called()
         {
             // Arrange
-            var replacer = CreateExpressionReplacer();
+            var viewRepositoryMock = Mock.Get(Mock.Of<IViewRepository>());
+            var replacer = CreateExpressionReplacer(viewRepository: viewRepositoryMock.Object);
             var emptyExpression = "";
 
             // Act
             replacer.ReplaceGuidsWithStataCaptions(emptyExpression, Guid.NewGuid());
 
             // Assert
-            this.viewRepositoryMock.Verify(x => x.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()), Times.Never());
-        }
-
-        [Test]
-        public void ReplaceGuidsWithStataCaptions_When_expression_is_not_empty_Then_factory_should_be_called_only_ones()
-        {
-            // Arrange
-            var replacer = CreateExpressionReplacer();
-            var notEmptyExpression = "some expression";
-
-            // Act
-            replacer.ReplaceGuidsWithStataCaptions(notEmptyExpression, Guid.NewGuid());
-
-            // Assert
-            this.viewRepositoryMock.Verify(x => x.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()), Times.Once());
+            viewRepositoryMock.Verify(x => x.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()), Times.Never());
         }
 
         [Test]
         public void ReplaceGuidsWithStataCaptions_When_expression_contains_no_guids_Then_result_should_match_with_given_expression()
         {
             // Arrange
-            var replacer = CreateExpressionReplacer();
+            var replacer = CreateExpressionReplacer(viewRepository: CreateRepositoryStubWhichReturnsMapWithNoCaptions());
             var guidLessExpression = "[age] == 8 or [weight] > [tall]";
 
             // Act
@@ -143,9 +112,9 @@ namespace RavenQuestionnaire.Web.Tests.Utils
 
         #endregion
 
-        private ExpressionReplacer CreateExpressionReplacer(IViewRepository viewRepository = null)
+        private ExpressionReplacer CreateExpressionReplacer(IViewRepository viewRepository)
         {
-            return new ExpressionReplacer(viewRepository ?? this.viewRepositoryMock.Object);
+            return new ExpressionReplacer(viewRepository);
         }
 
         private IViewRepository CreateRepositoryStubWhichReturnsMapWithNoCaptions()
@@ -154,6 +123,21 @@ namespace RavenQuestionnaire.Web.Tests.Utils
 
             return Mock.Of<IViewRepository>(repository
                 => repository.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()) == emptyStataMapView);
+        }
+
+        private IViewRepository CreateRepositoryStubWhichReturnsMapWithSeedData()
+        {
+            var stataMapWithSeedData = new QuestionnaireStataMapView
+            {
+                StataMap = new List<KeyValuePair<Guid, string>>()
+                {
+                    {new KeyValuePair<Guid, string>(Guid.Parse("a0d6ff6f-230e-4a1f-b940-97f93e037e08"), "caption1")}, 
+                    {new KeyValuePair<Guid, string>(Guid.Parse("9e7bf746-ba13-4b53-aa1c-c0e5d9b2a1e0"), "caption2")}, 
+                }
+            };
+
+            return Mock.Of<IViewRepository>(repository
+                => repository.Load<QuestionnaireViewInputModel, QuestionnaireStataMapView>(It.IsAny<QuestionnaireViewInputModel>()) == stataMapWithSeedData);
         }
     }
 }

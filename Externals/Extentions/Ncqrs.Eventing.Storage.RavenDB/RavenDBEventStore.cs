@@ -175,7 +175,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         session.Advanced.UseOptimisticConcurrency = true;
                         foreach (UncommittedEvent uncommittedEvent in eventStream)
                         {
-                            session.Store(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
+                            session.StoreAsync(ToStoredEvent(eventStream.CommitId, uncommittedEvent));
                         }
 
                         session.SaveChangesAsync();
@@ -245,29 +245,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
 
             return result.OrderBy(x => x.EventSequence);
-
-            /*  List<StoredEvent> retval = new List<StoredEvent>();
-            int maxPageSize = 1024;
-            int page = 0;
-            while (true)
-            {
-
-
-                using (var session = _documentStore.OpenSession())
-                {
-                    Raven.Client.Linq.RavenQueryStatistics stats;
-                    var chunk =
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Statistics(out stats).Skip(page * maxPageSize).
-                        Take(maxPageSize).Where(query);
-                    if (!chunk.Any())
-                        break;
-
-                    retval.AddRange(chunk);
-                    page++;
-                }
-            }
-
-            return retval.OrderBy(x=>x.EventSequence);*/
         }
 
         /// <summary>
@@ -282,8 +259,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     JsonContractResolver = new PropertiesOnlyContractResolver(), 
                     FindTypeTagName = x => "Events"
-                    
-                    
                     // NewDocumentETagGenerator = GenerateETag
                 };
         }

@@ -1,0 +1,7 @@
+﻿@using Main.Core.View
+@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
+
+@foreach (ICompositeView child in this.Model.Children)
+{
+    Html.RenderPartial("_RenderChild", child);
+}
