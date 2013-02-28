@@ -23,6 +23,9 @@ using Main.Core.Events.User;
 using Main.Core.View;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
+using Mono.Android.Crasher;
+using Mono.Android.Crasher.Attributes;
+using Mono.Android.Crasher.Data.Submit;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
@@ -38,6 +41,7 @@ namespace AndroidApp
     using Main.Synchronization.SycProcessRepository;
 
     [Application]
+    [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
         #region static properties
@@ -118,7 +122,8 @@ namespace AndroidApp
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             
             base.OnCreate();
-
+            CrashManager.Initialize(this);
+            CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             var manager = this.GetSystemService(Context.ActivityService) as ActivityManager;
             var topActivity = manager.GetRunningTasks(1).Last().TopActivity;
             if (!topActivity.ClassName.Contains(typeof(SplashScreenActivity).Name))

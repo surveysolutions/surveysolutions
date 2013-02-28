@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections.Generic;
 using Android.App;
 using Android.OS;
 using Android.Support.V4.View;
@@ -21,7 +21,6 @@ namespace AndroidApp
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
-        //protected InMemoryEventStore activitySnapshooting;
         protected FrameLayout FlDetails
         {
             get { return this.FindViewById<FrameLayout>(Resource.Id.flDetails); }
@@ -48,21 +47,17 @@ namespace AndroidApp
         }
         
         protected ContentFrameAdapter Adapter { get; set; }
-
         protected override void OnCreate(Bundle bundle)
         {
-           
+
             if (!CapiApplication.Membership.IsLoggedIn)
             {
-                StartActivity(typeof(LoginActivity));
+                StartActivity(typeof (LoginActivity));
             }
 
 
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
-               new QuestionnaireScreenInput(QuestionnaireId));
-
-            /*activitySnapshooting = new InMemoryEventStore();
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(activitySnapshooting);*/
+                new QuestionnaireScreenInput(QuestionnaireId));
 
             base.OnCreate(bundle);
             SetContentView(Resource.Layout.Details);
@@ -73,21 +68,19 @@ namespace AndroidApp
                     return;
                 ScreenId = ItemPublicKey.Parse(savedScreen);
             }
-           
+
             this.Title = ViewModel.Title;
 
-           if (bundle == null)
+            if (bundle == null)
             {
                 NavList.Model = ViewModel;
-                //NavList.SelectItem();
             }
-
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
                                               ViewModel.Chapters.FirstOrDefault().ScreenId);
+
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
 
         }
-
 
         public override void OnAttachFragment(Android.Support.V4.App.Fragment p0)
         {
@@ -98,7 +91,6 @@ namespace AndroidApp
             }
             base.OnAttachFragment(p0);
         }
-
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
 
@@ -146,8 +138,6 @@ namespace AndroidApp
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            //NcqrsEnvironment.RemoveDefault<ISnapshotStore>();
-            //activitySnapshooting = null;
             GC.Collect();
         }
         public override void OnLowMemory()
