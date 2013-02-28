@@ -50,9 +50,24 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             etAnswer.ImeOptions=ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
+            etAnswer.FocusChange += etAnswer_FocusChange;
             llWrapper.AddView(etAnswer);
         }
-        void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+
+        void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if(e.HasFocus)
+                return;
+            InputMethodManager imm
+               = (InputMethodManager)this.Context.GetSystemService(
+                   Context.InputMethodService);
+            if(imm.IsAcceptingText)
+            {
+                SaveAnswer();
+                imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
+            }
+        }
+        protected void SaveAnswer()
         {
             try
             {
@@ -63,11 +78,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             }
             catch (Exception ex)
             {
-               // etAnswer.Text = Model.AnswerString;
+                // etAnswer.Text = Model.AnswerString;
                 tvError.Visibility = ViewStates.Visible;
                 etAnswer.Text = Model.AnswerString;
-                tvError.Text = (ex.InnerException??ex).Message;
+                tvError.Text = (ex.InnerException ?? ex).Message;
             }
+        }
+
+        void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            SaveAnswer();
             
             etAnswer.ClearFocus();
             InputMethodManager imm
@@ -78,6 +98,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
+            InputMethodManager imm
+               = (InputMethodManager)this.Context.GetSystemService(
+                   Context.InputMethodService);
+            imm.ShowSoftInput(etAnswer, 0);
         }
 
         protected TextView tvTitle

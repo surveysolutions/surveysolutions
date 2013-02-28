@@ -30,14 +30,21 @@ namespace Mono.Android.Crasher.Data.Submit
 
         public void Initialize(Application application)
         {
-            bugreports = System.IO.Path.Combine(Environment.ExternalStorageDirectory.AbsolutePath, BUGREPORTS);
+            bugreports = Environment.ExternalStorageDirectory.AbsolutePath;
             if (Directory.Exists(bugreports))
             {
+                bugreports = System.IO.Path.Combine(bugreports, BUGREPORTS);
+                if (!Directory.Exists(bugreports))
+                {
+                    Directory.CreateDirectory(bugreports);
+                }
                 bugreports = System.IO.Path.Combine(bugreports, appName);
-                 if (!Directory.Exists(bugreports))
-                     Directory.CreateDirectory(bugreports);
+                if (!Directory.Exists(bugreports))
+                    Directory.CreateDirectory(bugreports);
                 filePath = System.IO.Path.Combine(bugreports, FILE_NAME);
-            }else
+
+            }
+            else
             {
                 filePath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), FILE_NAME);
             }

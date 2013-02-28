@@ -46,10 +46,30 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             etAnswer.ImeOptions = ImeAction.Done;
             etAnswer.SetSingleLine(true);
             etAnswer.EditorAction += etAnswer_EditorAction;
+            etAnswer.FocusChange += etAnswer_FocusChange;
             llWrapper.Click += TextQuestionView_Click;
             llWrapper.AddView(etAnswer);
         }
 
+        void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (e.HasFocus)
+                return;
+            InputMethodManager imm
+               = (InputMethodManager)this.Context.GetSystemService(
+                   Context.InputMethodService);
+            if (imm.IsAcceptingText)
+            {
+                SaveAnswer();
+                imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
+            }
+        }
+        protected void SaveAnswer()
+        {
+            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                      null, etAnswer.Text,
+                                                      Model.PublicKey.PropagationKey));
+        }
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
             CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
@@ -65,6 +85,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         void TextQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
+            InputMethodManager imm
+               = (InputMethodManager)this.Context.GetSystemService(
+                   Context.InputMethodService);
+            imm.ShowSoftInput(etAnswer, 0);
         }
 
 
