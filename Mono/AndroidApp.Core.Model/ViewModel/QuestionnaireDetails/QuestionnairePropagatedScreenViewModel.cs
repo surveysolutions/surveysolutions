@@ -19,7 +19,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string screenName, string title,
                                                       bool enabled,
                                                       ItemPublicKey screenId,
-                                                      IEnumerable<IQuestionnaireItemViewModel> items,
+                                                      IList<IQuestionnaireItemViewModel> items,
                                                       IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
             : base(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs,  total,  answered)
         {
@@ -27,7 +27,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                       bool enabled,
                                                       ItemPublicKey screenId,
-                                                      IEnumerable<IQuestionnaireItemViewModel> items,
+                                                      IList<IQuestionnaireItemViewModel> items,
                                                       Func<IEnumerable<ItemPublicKey>> sibligs,
                                                       IEnumerable<ItemPublicKey> breadcrumbs)
             : this(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs, 0, 0)

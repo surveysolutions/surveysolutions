@@ -118,10 +118,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             llTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             llTablesContainer.Orientation = Orientation.Vertical;
-            for (int i = 0; i < Model.Header.Count; i = i + 2)
+            const int columnCount = 2;
+            for (int i = 0; i < Model.Header.Count; i = i + columnCount)
             {
-                var count = Math.Min(Model.Header.Count - i, 2);
-                BuildTable(context, llTablesContainer, i, count);
+                BuildTable(context, llTablesContainer, i, columnCount);
             }
             if (!Model.Rows.Any(r => r.Enabled))
                 llTablesContainer.Visibility = ViewStates.Gone;
@@ -149,28 +149,30 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected void CreateHeader(Context context, TableLayout tl, int index, int count)
         {
             TableRow th = new TableRow(context);
-         //   th.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             TextView first = new TextView(context);
             AssignHeaderStyles(first);
             th.AddView(first);
-
-            foreach (HeaderItem headerItem in Model.Header.Skip(index).Take(count))
+            for (int i = index; i < index+count; i++)
             {
+                HeaderItem headerItem = null;
+                if (Model.Header.Count > i)
+                    headerItem = Model.Header[i];
                 TextView column = new TextView(context);
-                column.Text = headerItem.Title;
-                if (!string.IsNullOrEmpty(headerItem.Instructions))
+                if (headerItem != null)
                 {
+                    column.Text = headerItem.Title;
+                    if (!string.IsNullOrEmpty(headerItem.Instructions))
+                    {
 
-                    var img = context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
-                    //img.SetBounds(0, 0, 45, 45);
-                    column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-                    column.Click += new EventHandler(column_Click);
+                        var img = context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
+                        column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+                        column.Click += new EventHandler(column_Click);
+                    }
+                    column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
                    
                 }
-                column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
-           //     column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+
                 AssignHeaderStyles(column);
-                
                 th.AddView(column);
             }
 
@@ -206,15 +208,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 AlignTableCell(first);
                 th.AddView(first);
 
-                foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
+                //foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
+                //{
+                for (int i = index; i < index+count; i++)
                 {
-                    RosterQuestionView rowViewItem = new RosterQuestionView(context,
-                                                                            context as IMvxBindingActivity,
-                                                                            abstractRowItem as QuestionViewModel);
-                    AlignTableCell(rowViewItem);
-                    rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
-                    rosterQuestionViews.Add(rowViewItem);
-                    th.AddView(rowViewItem);
+                    View rosterCell;
+                    if (i < rosterItem.Items.Count())
+                    {
+                        QuestionViewModel rowModel = rosterItem.Items[i] as QuestionViewModel;
+                        RosterQuestionView rowViewItem = new RosterQuestionView(context,
+                                                                                context as IMvxBindingActivity, rowModel);
+                        rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
+                        rosterQuestionViews.Add(rowViewItem);
+                        rosterCell = rowViewItem;
+                    }
+                    else
+                    {
+                        rosterCell = new TextView(context);
+                    }
+                    AlignTableCell(rosterCell);
+                    th.AddView(rosterCell);
                 }
 
 
