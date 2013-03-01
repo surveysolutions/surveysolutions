@@ -199,7 +199,7 @@ namespace AndroidApp
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
-                                                          ? "Synchronization was finished successful"
+                                                          ? "Synchronization is successfully finished "
                                                           : "Synchronization error. \r\n" + result.ErrorMessage;
                                     progressDialog.Hide();
                                 });
