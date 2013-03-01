@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
@@ -31,6 +32,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected LinearLayout top;
         protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
         protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
+        protected AnswerSetPopupClosure answerHandler;
         public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
@@ -79,9 +81,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             top.AddView(sv);
             return top;
         }
-        public override void OnDestroy()
+        public override void OnDetach()
         {
-            base.OnDestroy();
+            base.OnDetach();
             foreach (var row in Model.Rows)
             {
                 var handlers = rowEventHandlers[row.ScreenId];
@@ -96,7 +98,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 rosterQuestionView.Dispose();
             }
             rosterQuestionViews = new List<RosterQuestionView>();
-            
+            if (answerHandler != null)
+            {
+                answerHandler.Dispose();
+                answerHandler = null;
+            }
         }
 
         protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)
@@ -240,42 +246,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var key = Guid.Parse(((TextView) sender).GetTag(Resource.Id.ScreenId).ToString());
             var instructionsBuilder = new AlertDialog.Builder(this.Activity);
             instructionsBuilder.SetMessage(Model.Header.First(h=>h.PublicKey==key).Instructions);
-            
             instructionsBuilder.Show();
-
-            
         }
-        void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
+
+        private void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
-            /*   var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
-               if (headerItem == null)
-                   return;*/
             var group = Model.Rows.FirstOrDefault(r => r.ScreenId.PropagationKey == e.Model.PublicKey.PropagationKey);
-            if(group==null)
+            if (group == null)
                 return;
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
             setAnswerPopup.SetView(new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
                                                         questionViewFactory));
-            //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
 
-            PropertyChangedEventHandler answerHandler = (s, evt) =>
-                {
-                    if (evt.PropertyName == "AnswerString")
-                    {
-                        dialog.Dismiss();
-                        dialog.Dispose();
-                        setAnswerPopup.Dispose();
-                    }
-                };
-            
+            answerHandler = new AnswerSetPopupClosure(dialog, e.Model);
             dialog.DismissEvent += (dialogSender, dialogEvt) =>
                 {
-                    e.Model.PropertyChanged -= answerHandler;
+                    answerHandler.Dispose();
+                    answerHandler = null;
                 };
             dialog.Show();
-
-            e.Model.PropertyChanged += answerHandler;
         }
 
 
@@ -321,6 +311,32 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
+
+        protected class AnswerSetPopupClosure:IDisposable
+        {
+            private AlertDialog dialog;
+            private QuestionViewModel question;
+            public AnswerSetPopupClosure(AlertDialog dialog, QuestionViewModel question)
+            {
+                this.dialog = dialog;
+                this.question = question;
+                question.PropertyChanged += AnswerSetHandler;
+            }
+            
+            public void AnswerSetHandler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == "AnswerString")
+                {
+                    dialog.Dismiss();
+                    dialog.Dispose();
+                }
+            }
+
+            public void Dispose()
+            {
+                question.PropertyChanged -= AnswerSetHandler;
+            }
+        }
 
         protected class StatusChangedHandlerClosure
         {
