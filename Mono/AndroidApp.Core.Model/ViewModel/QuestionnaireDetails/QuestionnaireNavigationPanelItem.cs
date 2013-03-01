@@ -15,14 +15,18 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         private IQuestionnaireViewModel fullScreen;
 
         public ItemPublicKey PublicKey { get; private set; }
-       
+
 
         public IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
                                                         fullScreen);
         }
-        public string Text { get { return Screen.ScreenName; } }
+
+        public string Text
+        {
+            get { return Screen.ScreenName; }
+        }
 
         public bool Enabled
         {
@@ -41,15 +45,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         protected IQuestionnaireViewModel Screen
         {
-            get
-            {
-             /*   if (screen == null)
-                {
-                    screen = getFullScreen(this.PublicKey);
-                    screen.PropertyChanged += screen_PropertyChanged;
-                }*/
-                return fullScreen;
-            }
+            get { return fullScreen; }
         }
 
         private void screen_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -58,13 +54,5 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                 return;
             RaisePropertyChanged(e.PropertyName);
         }
-
-      //  private IQuestionnaireViewModel screen;
-
-     /*   public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
-        {
-            this.getFullScreen = getFullScreen;
-            var t = Screen;
-        }*/
     }
 }

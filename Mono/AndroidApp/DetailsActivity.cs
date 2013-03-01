@@ -98,6 +98,7 @@ namespace AndroidApp
         }
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
+
             var index = Adapter.GetScreenIndex(e.ScreenId);
 
             if (index >= 0)
@@ -105,8 +106,23 @@ namespace AndroidApp
                 VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
                 return;
             }
+
             Adapter.UpdateScreenData(e.ScreenId);
+
+            if (e.ScreenId.HasValue)
+            {
+                var screen = ViewModel.Screens[e.ScreenId.Value];
+                var chapterKey = screen.Breadcrumbs.First();
+                for (int i = 0; i < ViewModel.Chapters.Count; i++)
+                {
+                    if (ViewModel.Chapters[i].ScreenId == chapterKey)
+                    {
+                        NavList.SelectItem(i);
+                    }
+                }
+            }
         }
+
         protected override void OnSaveInstanceState(Bundle outState)
         {
             base.OnSaveInstanceState(outState);

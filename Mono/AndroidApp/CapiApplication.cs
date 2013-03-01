@@ -14,6 +14,7 @@ using AndroidApp.Injections;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
+using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
 using Main.Core.View;
@@ -26,6 +27,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 
@@ -146,18 +148,14 @@ namespace AndroidApp
                 }
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
-            /*var events = eventStore.GetAllEvents();
-            if (eventStore.GetAllEvents().Any())
-            {
-                bus.Publish(events.Select(e => e as IPublishableEvent));
-                return;
-            }*/
+          
             var events = eventStore.GetAllEvents();
             foreach (CommittedEvent committedEvent in events)
             {
                 bus.Publish(committedEvent);
             }
-            /*   var stream = new UncommittedEventStream(Guid.NewGuid());
+      /*      eventStore.ClearDB();
+               var stream = new UncommittedEventStream(Guid.NewGuid());
                //  var payload = new NewCompleteQuestionnaireCreated();
 
                #region init
@@ -200,6 +198,20 @@ namespace AndroidApp
                bus.Publish(rEventTempl);*/
 
         }
+        protected static T DesserializeEmbededResource<T>(string fileName)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+            //var data = Encoding.Default.GetString("");
+            string s = string.Empty;
+            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
+                               .GetManifestResourceStream("AndroidApp." + fileName))
+            using (StreamReader reader = new StreamReader(streamEmbededRes))
+            {
+                s = reader.ReadToEnd();
+            }
+            return JsonConvert.DeserializeObject<T>(s, settings);
+        }
+
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
           

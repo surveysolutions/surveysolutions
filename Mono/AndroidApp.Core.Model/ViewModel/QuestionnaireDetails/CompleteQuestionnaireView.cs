@@ -31,7 +31,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             this.Status = document.Status;
             this.Screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             this.Questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
-            this.Templates = new Dictionary<Guid, QuestionnairePropagatedScreenViewModel>();
+            this.Templates = new TemplateCollection();
 
             FillQuestionnairePostOrder(document);
             this.Chapters =
@@ -46,6 +46,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         protected void FillQuestionnairePostOrder(ICompleteGroup document)
         {
             List<ICompleteGroup> rout = new List<ICompleteGroup>();
+            List<ICompleteGroup> propagatedPostOrder = new List<ICompleteGroup>();
             rout.Add(document);
             Stack<ICompleteGroup> queue = new Stack<ICompleteGroup>(document.Children.OfType<ICompleteGroup>());
             while (queue.Count > 0)
@@ -54,7 +55,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
                 while (rout.Count > 0 && !rout[rout.Count - 1].Children.Contains(current))
                 {
-                    this.AddScreen(rout, rout.Last());
+                    this.AddScreen(rout,propagatedPostOrder, rout.Last());
                     rout.RemoveAt(rout.Count - 1);
                 }
                 rout.Add(current);
@@ -66,9 +67,54 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var last = rout.Last();
             while (!(last is CompleteQuestionnaireDocument))
             {
-                AddScreen(rout, last);
+                AddScreen(rout,propagatedPostOrder, last);
                 rout.Remove(last);
                 last = rout.Last();
+            }
+
+            CreateNextPrevious();
+            CreatePropagatedGroupd(propagatedPostOrder);
+        }
+        protected void CreatePropagatedGroupd(List<ICompleteGroup> propagatedPostOrder)
+        {
+            foreach (var completeGroup in propagatedPostOrder)
+            {
+                var key = new ItemPublicKey(completeGroup.PublicKey, completeGroup.PropagationPublicKey.Value);
+                var screenItems = BuildItems(completeGroup, true);
+                var template = this.Templates[completeGroup.PublicKey];
+                var screen = template.Clone(completeGroup.PropagationPublicKey.Value, screenItems);
+                this.Screens.Add(key, screen);
+                screen.PropertyChanged += screen_PropertyChanged;
+                UpdateGrid(completeGroup.PublicKey);
+                UpdatePropagatedGroupScreenName(completeGroup.PropagationPublicKey.Value);
+            }
+        }
+
+        protected void CreateNextPrevious()
+        {
+            var templates = Templates.Select(t => t.ScreenId.PublicKey).ToList();
+            while (templates.Count > 0)
+            {
+                var first = templates[0];
+                var scope = Templates.GetScopeByItem(first).ToArray();
+                templates.RemoveAll(t => scope.Any(s => s == t));
+                for (int i = 0; i < scope.Length; i++)
+                {
+                    var target = this.Templates[scope[i]];
+                    IQuestionnaireItemViewModel next = null;
+                    IQuestionnaireItemViewModel previous = null;
+                    if (i > 0)
+                    {
+                        var item = this.Templates[scope[i - 1]];
+                        previous = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                    }
+                    if (i < scope.Length - 1)
+                    {
+                        var item = this.Templates[scope[i + 1]];
+                        next = new QuestionnaireNavigationPanelItem(item.ScreenId, item);
+                    }
+                    target.AddNextPrevious(next, previous);
+                }
             }
         }
 
@@ -81,7 +127,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public IDictionary<ItemPublicKey, IQuestionnaireViewModel> Screens { get; protected set; }
         public IList<QuestionnaireScreenViewModel> Chapters { get; protected set; }
 
-        protected IDictionary<Guid, QuestionnairePropagatedScreenViewModel> Templates { get; set; }
+        protected TemplateCollection Templates { get; set; }
         protected IDictionary<ItemPublicKey, QuestionViewModel> Questions { get;  set; }
 
         protected IQuestionnaireValidationExecutor validator;
@@ -91,30 +137,18 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         #region public methods
 
-       
+
 
         public void PropagateGroup(Guid publicKey, Guid propagationKey)
         {
             var template = this.Templates[publicKey];
-            var key = new ItemPublicKey(publicKey, propagationKey);
-            var bradCrumbs = template.Breadcrumbs.ToList();
-
-            IList<IQuestionnaireItemViewModel> items = new List<IQuestionnaireItemViewModel>();
-            foreach (var questionnaireItemViewModel in template.Items)
+            var screen = template.Clone(propagationKey);
+            foreach (var question in screen.Items.OfType<QuestionViewModel>())
             {
-                var newItem = questionnaireItemViewModel.Clone(propagationKey);
-                items.Add(newItem);
-                var newQuestion = newItem as QuestionViewModel;
-                if (newQuestion != null)
-                    UpdateQuestionHash(newQuestion);
-
+                UpdateQuestionHash(question);
             }
-            var screen = new QuestionnairePropagatedScreenViewModel(PublicKey,
-                                                          template.Title, true,
-                                                          key, items,
-                                                          () => GetSiblings(key.PublicKey), bradCrumbs);
             screen.PropertyChanged += screen_PropertyChanged;
-            this.Screens.Add(key, screen);
+            this.Screens.Add(screen.ScreenId, screen);
             UpdateGrid(publicKey);
         }
 
@@ -219,7 +253,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         #endregion
 
         #region protected helper methods
-        protected void AddScreen(List<ICompleteGroup> rout,
+        protected void AddScreen(List<ICompleteGroup> rout,List<ICompleteGroup> propagatedPostOrder,
                             ICompleteGroup group)
         {
             var key = new ItemPublicKey(group.PublicKey,
@@ -237,21 +271,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             }
             else if (group.PropagationPublicKey.HasValue)
             {
-                var screenItems = BuildItems(group, true);
-                var gridKey = new ItemPublicKey(group.PublicKey, null);
-                if(!this.Screens.ContainsKey(gridKey))
-                {
-                    CreateGrid(group, rout);
-                }
-                var screen = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title,
-                                                              group.Enabled,
-                                                              key, screenItems,
-                                                              () => GetSiblings(key.PublicKey),
-                                                               this.Templates[group.PublicKey].Breadcrumbs);
-                this.Screens.Add(key, screen);
-                screen.PropertyChanged += screen_PropertyChanged;
-                UpdateGrid(group.PublicKey);
-                UpdatePropagatedGroupScreenName(group.PropagationPublicKey.Value);
+                propagatedPostOrder.Add(group);
+       
             }
             else
             {
@@ -279,7 +300,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
-
+            
             var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                         rosterKey, group.Enabled,
                                                         siblings,
@@ -292,7 +313,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { roster.ScreenId }).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
                                                                       rosterKey, screenItems,
-                                                                      null,
+                                                                      GetSiblings,
                                                                       breadcrumbs);
             Templates.Add(rosterKey.PublicKey, template);
             this.Screens.Add(rosterKey, roster);
@@ -395,6 +416,12 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
                             question.ValidationExpression, question.ValidationMessage);
+
+                var trigger = question as IAutoPropagate;
+                if (trigger!=null)
+                {
+                    Templates.AssignScope(item.PublicKey, trigger.Triggers);
+                }
                 //  questionView.PropertyChanged += questionView_PropertyChanged;
                 return questionView;
 

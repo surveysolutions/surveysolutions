@@ -91,6 +91,7 @@
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionnaireScreenViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\QuestionViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\SelectebleQuestionViewModel.cs" />
+    <Compile Include="ViewModel\QuestionnaireDetails\TemplateCollection.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\Validation\IQuestionnaireValidationExecutor.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\Validation\QuestionnaireValidationExecutor.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\ValueQuestionViewModel.cs" />
