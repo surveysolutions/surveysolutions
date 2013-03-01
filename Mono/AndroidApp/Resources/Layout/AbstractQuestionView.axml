@@ -13,7 +13,7 @@
       android:layout_height="wrap_content"
       android:text="Instructions" />
 
-  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <LinearLayout
               android:id="@+id/llWrapper"
     android:layout_width="fill_parent"
                  android:orientation="vertical"
@@ -24,21 +24,26 @@
     android:textColor="#FF0000"
     android:id="@+id/tvError"
     android:textSize="20dip"
-    local:MvxBind="{'ValidationMessage':{'Path':'Status'},'Text':{'Path':'ValidationMessage'}}"/>
+    local:MvxBind="{'Text':{'Path':'ValidationMessage'},'ValidationMessage':{'Path':'Status'}}"/>
     <TextView
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:id="@+id/tvTitle"
      android:textSize="20dip"
-     local:MvxBind="{'Text':{'Path':'Text'}}"/>
+     local:MvxBind="{'Html':{'Path':'Text'}}"/>
   </LinearLayout>
   <TextView
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:id="@+id/tvComments"
+    android:id="@+id/tvComments" android:textStyle="italic"
     android:textSize="15dip" local:MvxBind="{'Text':{'Path':'Comments'}}"/>
-  <EditText
+  <TextView
    android:layout_width="fill_parent"
    android:layout_height="wrap_content"
+   android:id="@+id/tvCommentsTitle" 
+   android:textSize="15dip" android:text="Comments" android:visibility="gone"/>
+  <EditText
+   android:layout_width="fill_parent"
+   android:layout_height="wrap_content" android:textStyle="italic"
    android:id="@+id/etComments" android:visibility="gone"  local:MvxBind="{'Text':{'Path':'Comments'}}"/>
 </LinearLayout>

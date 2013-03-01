@@ -25,7 +25,7 @@ namespace AndroidApp
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
+    [Activity(NoHistory = true, Icon = "@drawable/capi")]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
         #region Properties

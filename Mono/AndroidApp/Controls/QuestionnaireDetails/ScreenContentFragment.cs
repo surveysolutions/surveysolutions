@@ -26,8 +26,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private readonly IQuestionViewFactory questionViewFactory;
         private readonly CompleteQuestionnaireView questionnaire;
         protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
-        protected LinearLayout top;
-        protected ScreenContentFragment()
+        protected View top;
+        public ScreenContentFragment()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.bindableElements = new List<AbstractQuestionView>();
@@ -49,25 +49,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
-            top = new LinearLayout(inflater.Context);
-            top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                              ViewGroup.LayoutParams.FillParent);
-            top.Orientation = Orientation.Vertical;
-            var breadcrumbs = new BreadcrumbsView(inflater.Context,questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
+            top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
+            //  top.Orientation = Orientation.Vertical;
+            var breadcrumbs = new BreadcrumbsView(inflater.Context,
+                                                  questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
                                                   OnScreenChanged);
+
             breadcrumbs.SetPadding(0, 0, 0, 10);
-            top.AddView(breadcrumbs);
+            llTop.AddView(breadcrumbs);
 
-            ScrollView sv = new ScrollView(inflater.Context);
-            sv.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.WrapContent);
-            
-            LinearLayout ll = new LinearLayout(inflater.Context);
-            ll.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
-            ll.Orientation = Orientation.Vertical;
+            var previousBtn = new GroupView(inflater.Context,
+                                            PropagatedModel == null
+                                                ? null
+                                                : PropagatedModel.Previous as QuestionnaireNavigationPanelItem, Android.Resource.Drawable.ArrowUpFloat);
 
-            sv.AddView(ll);
+            previousBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            llTop.AddView(previousBtn);
 
 
 
@@ -78,7 +75,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 if (question != null)
                 {
                     var questionView = this.questionViewFactory.CreateQuestionView(inflater.Context, question,
-                                                                           Model.QuestionnaireId);
+                                                                                   Model.QuestionnaireId);
                     this.bindableElements.Add(questionView);
                     itemView = questionView;
                 }
@@ -90,16 +87,24 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                     itemView = groupView;
                 }
                 if (itemView != null)
-                    ll.AddView(itemView);
+                    llContent.AddView(itemView);
             }
-            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
-            top.AddView(sv);
-            
+            llContent.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
+
+            var nextBtn = new GroupView(inflater.Context,
+                                        PropagatedModel == null
+                                            ? null
+                                            : PropagatedModel.Next as QuestionnaireNavigationPanelItem, Android.Resource.Drawable.ArrowDownFloat);
+
+
+            nextBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+
+            llButtom.AddView(nextBtn);
+
+
             return top;
-            /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
-            this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
-            //  return retval;
         }
+
         public override void OnDestroy()
         {
            
@@ -117,6 +122,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
 
         public QuestionnaireScreenViewModel Model { get; private set; }
+        protected QuestionnairePropagatedScreenViewModel PropagatedModel
+        {
+            get { return Model as QuestionnairePropagatedScreenViewModel; }
+        }
 
+        protected LinearLayout llContent
+        {
+            get { return top.FindViewById<LinearLayout>(Resource.Id.llContent); }
+        }
+        protected LinearLayout llTop
+        {
+            get { return top.FindViewById<LinearLayout>(Resource.Id.llTop); }
+        }
+        protected LinearLayout llButtom
+        {
+            get { return top.FindViewById<LinearLayout>(Resource.Id.llButtom); }
+        }
     }
 }

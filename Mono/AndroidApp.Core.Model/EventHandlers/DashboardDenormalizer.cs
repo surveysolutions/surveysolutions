@@ -57,7 +57,7 @@ namespace AndroidApp.Core.Model.EventHandlers
             var currentItem = survey.Items.FirstOrDefault(i => i.PublicKey == doc.PublicKey);
             if (currentItem != null)
                 survey.Items.Remove(currentItem);
-            var item = new DashboardQuestionnaireItem(doc.PublicKey, doc.Status.Name, featuredItems.Select(
+            var item = new DashboardQuestionnaireItem(doc.PublicKey, doc.Status, featuredItems.Select(
                 q =>
                 new FeaturedItem(q.PublicKey, q.QuestionText,
                                  q.GetAnswerString())).ToList());
@@ -76,7 +76,7 @@ namespace AndroidApp.Core.Model.EventHandlers
                     q => q.PublicKey == evnt.EventSourceId);
             if (questionnaire == null)
                 return;
-            questionnaire.SetStatus(evnt.Payload.Status.Name);
+            questionnaire.SetStatus(evnt.Payload.Status);
         }
 
         #endregion

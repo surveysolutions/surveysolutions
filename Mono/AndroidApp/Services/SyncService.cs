@@ -130,7 +130,7 @@ namespace AndroidApp.Services
         private bool Sync()
         {
 
-            //check network avalability
+            /*//check network avalability
             //ConnectivityManager cm = (ConnectivityManager)GetSystemService(Context.ConnectivityService);
 
 
@@ -149,7 +149,7 @@ namespace AndroidApp.Services
             {
                 return false;
             }
-
+            */
             return true;
         }
 

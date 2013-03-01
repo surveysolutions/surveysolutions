@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AndroidMain.Synchronization</RootNamespace>
-    <AssemblyName>AndroidMain.Synchronization</AssemblyName>
+    <AssemblyName>Main.Synchronization</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
@@ -77,6 +77,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SyncManager\SyncManagerSettings.cs">
       <Link>SyncManager\SyncManagerSettings.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SyncManager\SyncronizationStatus.cs">
+      <Link>SyncManager\SyncronizationStatus.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SyncSreamProvider\AllIntEventsStreamProvider.cs">
       <Link>SyncSreamProvider\AllIntEventsStreamProvider.cs</Link>
     </Compile>
@@ -110,11 +113,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SyncStreamCollector\RemoteServiceStreamCollector.cs">
       <Link>SyncStreamCollector\RemoteServiceStreamCollector.cs</Link>
     </Compile>
-    <Compile Include="GetAggragateRootListService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Provider.cs" />
     <Compile Include="RemoteCollector.cs" />
-    <Compile Include="ServiceClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">

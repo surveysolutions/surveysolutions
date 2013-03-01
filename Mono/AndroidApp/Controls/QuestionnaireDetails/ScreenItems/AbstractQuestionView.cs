@@ -100,21 +100,45 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             etComments.SetSelectAllOnFocus(true);
             etComments.SetSingleLine(true);
             etComments.EditorAction += etComments_EditorAction;
-            this.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
-            this.Clickable = true;
+            etComments.FocusChange += etComments_FocusChange;
+            llWrapper.LongClick += new EventHandler<LongClickEventArgs>(AbstractQuestionView_LongClick);
+            llWrapper.Clickable = true;
         }
+
+        void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
+        {
+            if (!e.HasFocus)
+            {
+                SetEditCommentsVisibility(false);
+                etComments.Text = tvComments.Text;
+                HideCommentKeyboard();
+            }
+
+        }
+
+    
         void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
+         
             CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
                                                          etComments.Text, this.Model.PublicKey.PropagationKey, CapiApplication.Membership.CurrentUser));
             etComments.ClearFocus();
-            etComments.Visibility = ViewStates.Gone;
-            tvComments.Visibility = ViewStates.Visible;
+            SetEditCommentsVisibility(false);
+            HideCommentKeyboard();
+        }
+        private void  HideCommentKeyboard()
+        {
             InputMethodManager imm
-                = (InputMethodManager)this.Context.GetSystemService(
-                    Context.InputMethodService);
+                  = (InputMethodManager)this.Context.GetSystemService(
+                      Context.InputMethodService);
             imm.HideSoftInputFromWindow(etComments.WindowToken, 0);
         }
+        private void SetEditCommentsVisibility(bool visible)
+        {
+            etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
+            tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
+        }
+
         protected virtual void PostInit()
         {
             llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
@@ -144,8 +168,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         void AbstractQuestionView_LongClick(object sender, View.LongClickEventArgs e)
         {
-            etComments.Visibility = ViewStates.Visible;
-            tvComments.Visibility = ViewStates.Gone;
+            SetEditCommentsVisibility(true);
+            
             etComments.RequestFocus();
            
         }
@@ -173,6 +197,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected TextView tvComments
         {
             get { return this.FindViewById<TextView>(Resource.Id.tvComments); }
+        }
+        protected TextView tvCommentsTitle
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.tvCommentsTitle); }
         }
         protected TextView tvError
         {

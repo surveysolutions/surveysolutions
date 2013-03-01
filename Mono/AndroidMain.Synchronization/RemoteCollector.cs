@@ -19,6 +19,8 @@ namespace AndroidMain.Synchronization
     using Main.Core.View.SyncProcess;
     using Main.Synchronization.SyncStreamCollector;
 
+    using Newtonsoft.Json;
+
     using RestSharp;
 
     using SynchronizationMessages.CompleteQuestionnaire;
@@ -104,15 +106,13 @@ namespace AndroidMain.Synchronization
             try
             {
                 var message = new EventSyncMessage { Command = chunk.ToArray(), SynchronizationKey = this.ProcessGuid };
-
-                var stream = new MemoryStream();
-                message.WriteTo(stream);
-                stream.Position = 0L;
-
-                var sr = new StreamReader(stream);
-                var item = sr.ReadToEnd();
                 
-                request.AddParameter("request", item);
+                var settings = new JsonSerializerSettings();
+                settings.TypeNameHandling = TypeNameHandling.Objects;
+                string item = JsonConvert.SerializeObject(message, Formatting.None, settings);
+
+                // text must be changed to  "application/json; charset=utf-8"
+                request.AddParameter("text; charset=utf-8", item, ParameterType.RequestBody);
                 
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)

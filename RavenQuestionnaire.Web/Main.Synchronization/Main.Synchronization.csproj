@@ -87,6 +87,7 @@
     <Compile Include="SyncManager\ISyncManager.cs" />
     <Compile Include="SyncManager\SyncManager.cs" />
     <Compile Include="SyncManager\SyncManagerSettings.cs" />
+    <Compile Include="SyncManager\SyncronizationStatus.cs" />
     <Compile Include="SyncSreamProvider\AllIntEventsStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\ExtFileEventStreamProvider.cs" />
     <Compile Include="SyncSreamProvider\IExtSyncEventStreamProvider.cs" />

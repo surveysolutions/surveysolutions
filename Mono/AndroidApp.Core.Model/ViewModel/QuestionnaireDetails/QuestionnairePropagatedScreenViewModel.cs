@@ -19,27 +19,75 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string screenName, string title,
                                                       bool enabled,
                                                       ItemPublicKey screenId,
-                                                      IEnumerable<IQuestionnaireItemViewModel> items,
-                                                      IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
+                                                      IList<IQuestionnaireItemViewModel> items,
+                                                      IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered,
+            IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous
+            )
             : base(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs,  total,  answered)
         {
+            this.Next = next;
+            this.Previous = previous;
         }
         public QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                       bool enabled,
                                                       ItemPublicKey screenId,
-                                                      IEnumerable<IQuestionnaireItemViewModel> items,
-                                                      Func<IEnumerable<ItemPublicKey>> sibligs,
+                                                      IList<IQuestionnaireItemViewModel> items,
+                                                      Func<Guid, IEnumerable<ItemPublicKey>> sibligs,
                                                       IEnumerable<ItemPublicKey> breadcrumbs)
-            : this(questionnaireId, string.Empty, title, enabled, screenId, items, breadcrumbs, 0, 0)
+            : this(questionnaireId,  title, enabled, screenId, items,sibligs, breadcrumbs, null, null)
         {
-
+        }
+        protected QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
+                                                     bool enabled,
+                                                     ItemPublicKey screenId,
+                                                     IList<IQuestionnaireItemViewModel> items,
+                                                     Func<Guid, IEnumerable<ItemPublicKey>> sibligs,
+                                                     IEnumerable<ItemPublicKey> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+            : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)
+        {
+            this.sibligsValue = sibligs;
             if (screenId.PropagationKey.HasValue)
             {
-                this.sibligsValue = sibligs;
+               
+                this.ScreenName = string.Empty;
             }
         }
+        public QuestionnairePropagatedScreenViewModel Clone(Guid propagationKey, IList<IQuestionnaireItemViewModel> items)
+        {
+            if (ScreenId.PropagationKey.HasValue)
+                throw new InvalidOperationException("only template can mutate in that way");
+            var key = new ItemPublicKey(this.ScreenId.PublicKey, propagationKey);
+            var bradCrumbs = this.Breadcrumbs.ToList();
+            return new QuestionnairePropagatedScreenViewModel(this.QuestionnaireId,
+                                                                this.Title, true,
+                                                                key, items,
+                                                                sibligsValue, bradCrumbs,
+                                                                this.Next != null ? this.Next.Clone(propagationKey) : null,
+                                                                this.Previous != null ? this.Previous.Clone(propagationKey) : null);
+        }
 
-        private readonly Func<IEnumerable<ItemPublicKey>> sibligsValue;
+        public QuestionnairePropagatedScreenViewModel Clone(Guid propagationKey)
+        {
+
+            IList<IQuestionnaireItemViewModel> items = new List<IQuestionnaireItemViewModel>();
+            foreach (var questionnaireItemViewModel in this.Items)
+            {
+                var newItem = questionnaireItemViewModel.Clone(propagationKey);
+                items.Add(newItem);
+
+            }
+            return Clone(propagationKey, items);
+        }
+
+        public void AddNextPrevious(IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
+        {
+            if(ScreenId.PropagationKey.HasValue)
+                throw new InvalidOperationException("only template can mutate in that way");
+            this.Next = next;
+            this.Previous = previous;
+        }
+
+        private readonly Func<Guid, IEnumerable<ItemPublicKey>> sibligsValue;
 
         public void UpdateScreenName(string screenName)
         {
@@ -49,7 +97,10 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         [JsonIgnore]
         public override IEnumerable<ItemPublicKey> Siblings
         {
-            get { return sibligsValue(); }
+            get { return sibligsValue(this.ScreenId.PublicKey); }
         }
+
+        public IQuestionnaireItemViewModel Next { get; private set; }
+        public IQuestionnaireItemViewModel Previous { get; private set; }
     }
 }

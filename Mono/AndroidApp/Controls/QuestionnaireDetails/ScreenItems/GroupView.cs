@@ -19,7 +19,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
     {
         protected QuestionnaireNavigationPanelItem Model { get; private set; }
         protected Button GroupButton { get; private set; }
-
+        protected int? IconId { get; private set; }
         public GroupView(Context context, QuestionnaireNavigationPanelItem model)
             : base(context)
         {
@@ -27,6 +27,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             Initialize();
         }
 
+        public GroupView(Context context, QuestionnaireNavigationPanelItem model, int iconId)
+            : base(context)
+        {
+            IconId = iconId;
+            Model = model;
+            Initialize();
+        }
         public GroupView(Context context, IAttributeSet attrs, QuestionnaireNavigationPanelItem model)
             : base(context, attrs)
         {
@@ -55,10 +62,24 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             
             GroupButton=new Button(this.Context);
             GroupButton.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.WrapContent);
-            GroupButton.Text = Model.Text;
-            GroupButton.Enabled = Model.Enabled;
-            GroupButton.Click += new EventHandler(GroupButton_Click);
             this.AddView(GroupButton);
+            if (Model != null)
+            {
+                GroupButton.Text = Model.Text;
+                GroupButton.Enabled = Model.Enabled;
+                GroupButton.Click += new EventHandler(GroupButton_Click);
+                if (IconId.HasValue)
+                {
+                    var img = Context.Resources.GetDrawable(IconId.Value);
+                    //img.SetBounds(0, 0, 45, 45);
+                    GroupButton.SetCompoundDrawablesWithIntrinsicBounds(img, null, img, null);
+                }
+            }
+            else
+            {
+                this.Visibility = ViewStates.Gone;
+            }
+            
         }
 
         void GroupButton_Click(object sender, EventArgs e)

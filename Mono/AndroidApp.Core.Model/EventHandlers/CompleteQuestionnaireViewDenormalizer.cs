@@ -24,13 +24,11 @@ namespace AndroidApp.Core.Model.EventHandlers
         /// The _document storage.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
-        private readonly IProjectionStorage _projectionStorage;
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage,IProjectionStorage projectionStorage)
+        public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
         {
             _documentStorage = documentStorage;
-            _projectionStorage = projectionStorage;
         }
 
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
@@ -38,10 +36,9 @@ namespace AndroidApp.Core.Model.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
-            var view = new CompleteQuestionnaireView(document, _projectionStorage);
+            var view = new CompleteQuestionnaireView(document);
 
             _documentStorage.Store(view, document.PublicKey);
-            view.Recicle();
         }
 
 

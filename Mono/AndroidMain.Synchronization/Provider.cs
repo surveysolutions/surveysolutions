@@ -171,11 +171,13 @@ namespace AndroidMain.Synchronization
             
             var request = new RestRequest(listPath, Method.GET);
             request.RequestFormat = DataFormat.Json;
-
+            
             IRestResponse response = restClient.Execute(request);
+
+
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                return null;
+                throw new Exception("Event list is empty");
             }
 
             var listOfAggregateRootsForImportMessage =
@@ -189,12 +191,10 @@ namespace AndroidMain.Synchronization
                 throw new Exception("aggregate roots list is empty");
             }
 
-            var events = new List<AggregateRootEvent>();
+            //var events = new List<AggregateRootEvent>();
 
             foreach (ProcessedEventChunk root in listOfAggregateRootsForImportMessage.Roots)
             {
-                try
-                {
                     if (root.EventKeys.Count == 0)
                     {
                         continue;
@@ -214,24 +214,34 @@ namespace AndroidMain.Synchronization
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                    var str = responseStream.Content.Substring(responseStream.Content.IndexOf("["));
+                    var str = responseStream.Content.Substring( responseStream.Content.IndexOf("[") );
                     var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
-                    if (evnts != null)
+
+                    foreach (var aggregateRootEvent in evnts)
+                    {
+                        yield return aggregateRootEvent;
+                    }
+
+
+                    /*if (evnts != null)
                     {
                         events.AddRange(evnts);
-                    }
-                }
+                    }*/
+
+
+
+                /*}
                 catch (Exception ex)
                 {
                     /*Logger logger = LogManager.GetCurrentClassLogger();
-                            logger.Fatal("Import error", ex);*/
+                            logger.Fatal("Import error", ex);#1#
                     events = null;
                     throw;
-                }
+                }*/
             }
 
-            return events;
+            //return events;
         }
 
         #endregion

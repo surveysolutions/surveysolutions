@@ -9,7 +9,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     public class QuestionnaireScreenViewModel : Cirrious.MvvmCross.ViewModels.MvxViewModel, IQuestionnaireViewModel
     {
         protected QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                            ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                            ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
                                             IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
         {
 
@@ -57,7 +57,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
 
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                           ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                           ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
                                            IEnumerable<ItemPublicKey> siblings,
                                            IEnumerable<ItemPublicKey> breadcrumbs)
             : this(questionnaireId,screenName, title, enabled, screenId, items,siblings, breadcrumbs,0,0)
@@ -65,7 +65,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         }
         [JsonConstructor]
         public QuestionnaireScreenViewModel(Guid questionnaireId, string screenName, string title, bool enabled,
-                                          ItemPublicKey screenId, IEnumerable<IQuestionnaireItemViewModel> items,
+                                          ItemPublicKey screenId, IList<IQuestionnaireItemViewModel> items,
                                           IEnumerable<ItemPublicKey> siblings,
                                           IEnumerable<ItemPublicKey> breadcrumbs, int total, int answered)
             : this(questionnaireId, screenName, title, enabled, screenId, items, breadcrumbs, total, answered)
@@ -79,7 +79,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         public int Answered { get; private set; }
         public int Total { get; private set; }
         public bool Enabled { get; private set; }
-        public IEnumerable<IQuestionnaireItemViewModel> Items { get; private set; }
+        public IList<IQuestionnaireItemViewModel> Items { get; private set; }
 
         public virtual IEnumerable<ItemPublicKey> Siblings { get; private set; }
 
@@ -132,12 +132,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             RaisePropertyChanged("Enabled");
         }
 
-        public QuestionnaireNavigationPanelItem GetShortVersion()
-        {
-            if (shortVersion == null)
-                shortVersion = new QuestionnaireNavigationPanelItem(this.ScreenId, (k) => this);
-            return shortVersion;
-        }
+      
 
         private QuestionnaireNavigationPanelItem shortVersion;
 

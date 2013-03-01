@@ -5,23 +5,28 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
     public class QuestionnaireNavigationPanelItem : Cirrious.MvvmCross.ViewModels.MvxViewModel,
                                                     IQuestionnaireItemViewModel
     {
-        public QuestionnaireNavigationPanelItem(ItemPublicKey publicKey, Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
+        public QuestionnaireNavigationPanelItem(ItemPublicKey publicKey, IQuestionnaireViewModel fullScreen)
         {
             this.PublicKey = publicKey;
-            this.getFullScreen = getFullScreen;
+            this.fullScreen = fullScreen;
+            fullScreen.PropertyChanged += screen_PropertyChanged;
         }
 
-        private Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen;
+        private IQuestionnaireViewModel fullScreen;
 
         public ItemPublicKey PublicKey { get; private set; }
-       
+
 
         public IQuestionnaireItemViewModel Clone(Guid propagationKey)
         {
             return new QuestionnaireNavigationPanelItem(new ItemPublicKey(this.PublicKey.PublicKey, propagationKey),
-                                                        getFullScreen);
+                                                        fullScreen);
         }
-        public string Text { get { return Screen.ScreenName; } }
+
+        public string Text
+        {
+            get { return Screen.ScreenName; }
+        }
 
         public bool Enabled
         {
@@ -40,15 +45,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         protected IQuestionnaireViewModel Screen
         {
-            get
-            {
-                if (screen == null)
-                {
-                    screen = getFullScreen(this.PublicKey);
-                    screen.PropertyChanged += screen_PropertyChanged;
-                }
-                return screen;
-            }
+            get { return fullScreen; }
         }
 
         private void screen_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -56,14 +53,6 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
             if (e.PropertyName != "Answered" && e.PropertyName != "Total")
                 return;
             RaisePropertyChanged(e.PropertyName);
-        }
-
-        private IQuestionnaireViewModel screen;
-
-        public void RestoreFullScreenFunk(Func<ItemPublicKey, IQuestionnaireViewModel> getFullScreen)
-        {
-            this.getFullScreen = getFullScreen;
-            var t = Screen;
         }
     }
 }

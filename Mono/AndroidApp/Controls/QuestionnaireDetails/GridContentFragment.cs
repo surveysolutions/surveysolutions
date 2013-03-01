@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
@@ -31,6 +32,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected LinearLayout top;
         protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
         protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
+        protected AnswerSetPopupClosure answerHandler;
         public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
@@ -38,7 +40,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.Model = model;
             this.questionnaire = questionnaire;
         }
-        protected GridContentFragment()
+        public GridContentFragment()
             : base()
         {
             this.rowEventHandlers = new Dictionary<ItemPublicKey, IList<PropertyChangedEventHandler>>();
@@ -79,9 +81,9 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             top.AddView(sv);
             return top;
         }
-        public override void OnDestroy()
+        public override void OnDetach()
         {
-            base.OnDestroy();
+            base.OnDetach();
             foreach (var row in Model.Rows)
             {
                 var handlers = rowEventHandlers[row.ScreenId];
@@ -96,7 +98,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 rosterQuestionView.Dispose();
             }
             rosterQuestionViews = new List<RosterQuestionView>();
-            
+            if (answerHandler != null)
+            {
+                answerHandler.Dispose();
+                answerHandler = null;
+            }
         }
 
         protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)
@@ -118,10 +124,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             llTablesContainer.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                              ViewGroup.LayoutParams.FillParent);
             llTablesContainer.Orientation = Orientation.Vertical;
-            for (int i = 0; i < Model.Header.Count; i = i + 2)
+            const int columnCount = 2;
+            for (int i = 0; i < Model.Header.Count; i = i + columnCount)
             {
-                var count = Math.Min(Model.Header.Count - i, 2);
-                BuildTable(context, llTablesContainer, i, count);
+                BuildTable(context, llTablesContainer, i, columnCount);
             }
             if (!Model.Rows.Any(r => r.Enabled))
                 llTablesContainer.Visibility = ViewStates.Gone;
@@ -149,28 +155,30 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         protected void CreateHeader(Context context, TableLayout tl, int index, int count)
         {
             TableRow th = new TableRow(context);
-         //   th.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent);
             TextView first = new TextView(context);
             AssignHeaderStyles(first);
             th.AddView(first);
-
-            foreach (HeaderItem headerItem in Model.Header.Skip(index).Take(count))
+            for (int i = index; i < index+count; i++)
             {
+                HeaderItem headerItem = null;
+                if (Model.Header.Count > i)
+                    headerItem = Model.Header[i];
                 TextView column = new TextView(context);
-                column.Text = headerItem.Title;
-                if (!string.IsNullOrEmpty(headerItem.Instructions))
+                if (headerItem != null)
                 {
+                    column.Text = headerItem.Title;
+                    if (!string.IsNullOrEmpty(headerItem.Instructions))
+                    {
 
-                    var img = context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
-                    //img.SetBounds(0, 0, 45, 45);
-                    column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
-                    column.Click += new EventHandler(column_Click);
+                        var img = context.Resources.GetDrawable(Android.Resource.Drawable.IcDialogInfo);
+                        column.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);
+                        column.Click += new EventHandler(column_Click);
+                    }
+                    column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
                    
                 }
-                column.SetTag(Resource.Id.ScreenId, headerItem.PublicKey.ToString());
-           //     column.SetBackgroundResource(Resource.Drawable.grid_headerItem);
+
                 AssignHeaderStyles(column);
-                
                 th.AddView(column);
             }
 
@@ -206,15 +214,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 AlignTableCell(first);
                 th.AddView(first);
 
-                foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
+                //foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
+                //{
+                for (int i = index; i < index+count; i++)
                 {
-                    RosterQuestionView rowViewItem = new RosterQuestionView(context,
-                                                                            context as IMvxBindingActivity,
-                                                                            abstractRowItem as QuestionViewModel);
-                    AlignTableCell(rowViewItem);
-                    rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
-                    rosterQuestionViews.Add(rowViewItem);
-                    th.AddView(rowViewItem);
+                    View rosterCell;
+                    if (i < rosterItem.Items.Count())
+                    {
+                        QuestionViewModel rowModel = rosterItem.Items[i] as QuestionViewModel;
+                        RosterQuestionView rowViewItem = new RosterQuestionView(context,
+                                                                                context as IMvxBindingActivity, rowModel);
+                        rowViewItem.RosterItemsClick += rowViewItem_RosterItemsClick;
+                        rosterQuestionViews.Add(rowViewItem);
+                        rosterCell = rowViewItem;
+                    }
+                    else
+                    {
+                        rosterCell = new TextView(context);
+                    }
+                    AlignTableCell(rosterCell);
+                    th.AddView(rosterCell);
                 }
 
 
@@ -227,42 +246,26 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             var key = Guid.Parse(((TextView) sender).GetTag(Resource.Id.ScreenId).ToString());
             var instructionsBuilder = new AlertDialog.Builder(this.Activity);
             instructionsBuilder.SetMessage(Model.Header.First(h=>h.PublicKey==key).Instructions);
-            
             instructionsBuilder.Show();
-
-            
         }
-        void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
+
+        private void rowViewItem_RosterItemsClick(object sender, RosterItemClickEventArgs e)
         {
-            /*   var headerItem = this.Model.Header.FirstOrDefault(h => h.PublicKey == e.Model.PublicKey.PublicKey);
-               if (headerItem == null)
-                   return;*/
             var group = Model.Rows.FirstOrDefault(r => r.ScreenId.PropagationKey == e.Model.PublicKey.PropagationKey);
-            if(group==null)
+            if (group == null)
                 return;
             var setAnswerPopup = new AlertDialog.Builder(this.Activity);
             setAnswerPopup.SetView(new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
                                                         questionViewFactory));
-            //  setAnswerPopup.Show();
             var dialog = setAnswerPopup.Create();
 
-            PropertyChangedEventHandler answerHandler = (s, evt) =>
-                {
-                    if (evt.PropertyName == "AnswerString")
-                    {
-                        dialog.Dismiss();
-                        dialog.Dispose();
-                        setAnswerPopup.Dispose();
-                    }
-                };
-            
+            answerHandler = new AnswerSetPopupClosure(dialog, e.Model);
             dialog.DismissEvent += (dialogSender, dialogEvt) =>
                 {
-                    e.Model.PropertyChanged -= answerHandler;
+                    answerHandler.Dispose();
+                    answerHandler = null;
                 };
             dialog.Show();
-
-            e.Model.PropertyChanged += answerHandler;
         }
 
 
@@ -308,6 +311,32 @@ namespace AndroidApp.Controls.QuestionnaireDetails
 
         protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
+
+        protected class AnswerSetPopupClosure:IDisposable
+        {
+            private AlertDialog dialog;
+            private QuestionViewModel question;
+            public AnswerSetPopupClosure(AlertDialog dialog, QuestionViewModel question)
+            {
+                this.dialog = dialog;
+                this.question = question;
+                question.PropertyChanged += AnswerSetHandler;
+            }
+            
+            public void AnswerSetHandler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == "AnswerString")
+                {
+                    dialog.Dismiss();
+                    dialog.Dispose();
+                }
+            }
+
+            public void Dispose()
+            {
+                question.PropertyChanged -= AnswerSetHandler;
+            }
+        }
 
         protected class StatusChangedHandlerClosure
         {

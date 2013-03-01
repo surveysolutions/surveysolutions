@@ -28,19 +28,16 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
-        private Fragment[] mFragments;
-        private FragmentManager fm;
+        private AbstractScreenChangingFragment[] mFragments;
         public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey screenId)
             : base(fm)
         {
-            this.fm = fm;
             this.questionnaire = questionnaire;
-          //  this.questionnaireId = questionnaire.PublicKey;
             this.target = target;
             this.screensHolder = questionnaire.Screens[screenId].Siblings.ToList();
             this.screenId = screenId;
             this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId);
-            this.mFragments=new Fragment[this.Count];
+            this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.target.Adapter = this;
         }
 
@@ -60,9 +57,10 @@ namespace AndroidApp.Controls.QuestionnaireDetails
         }
         public override Fragment GetItem(int position)
         {
-            Fragment fragment = this.mFragments[position];
+            AbstractScreenChangingFragment fragment = this.mFragments[position];
             if (fragment != null)
                 return fragment;
+            
             if (position == screensHolder.Count && isRoot)
             {
                 fragment = new StatisticsContentFragment(questionnaire.PublicKey);
@@ -87,6 +85,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             }
             if (fragment == null)
                 throw new InvalidOperationException();
+            
             this.mFragments[position] = fragment;
             return fragment;
         }
@@ -111,8 +110,12 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
-           
-            this.mFragments = new Fragment[this.Count];
+            foreach (Fragment mFragment in mFragments)
+            {
+                if (mFragment != null)
+                    mFragment.RetainInstance = false;
+            }
+            this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.NotifyDataSetChanged();
             target.CurrentItem = this.GetScreenIndex(newScreenId);
         }
