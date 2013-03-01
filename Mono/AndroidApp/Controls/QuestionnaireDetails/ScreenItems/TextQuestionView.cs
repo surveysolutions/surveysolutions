@@ -50,7 +50,6 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.Click += TextQuestionView_Click;
             llWrapper.AddView(etAnswer);
         }
-
         void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
             if (e.HasFocus)
@@ -72,14 +71,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         }
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                      null, etAnswer.Text,
-                                                      Model.PublicKey.PropagationKey));
             etAnswer.ClearFocus();
-            InputMethodManager imm
-                = (InputMethodManager) this.Context.GetSystemService(
-                    Context.InputMethodService);
-            imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
         }
 
         void TextQuestionView_Click(object sender, EventArgs e)

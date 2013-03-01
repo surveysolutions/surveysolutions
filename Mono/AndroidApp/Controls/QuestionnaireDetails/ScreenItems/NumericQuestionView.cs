@@ -71,10 +71,11 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         {
             try
             {
+                tvError.Visibility = ViewStates.Gone;
                 CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                             null, etAnswer.Text,
                                                             Model.PublicKey.PropagationKey));
-                tvError.Visibility = ViewStates.Gone;
+              
             }
             catch (Exception ex)
             {
@@ -87,13 +88,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            SaveAnswer();
-            
             etAnswer.ClearFocus();
-            InputMethodManager imm
-                = (InputMethodManager)this.Context.GetSystemService(
-                    Context.InputMethodService);
-            imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
         }
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
