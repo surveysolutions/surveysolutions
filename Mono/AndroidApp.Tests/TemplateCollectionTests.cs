@@ -25,7 +25,7 @@ namespace AndroidApp.Core.Model.Tests
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                   new ItemPublicKey(Guid.NewGuid(), null),
-                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>(),
+                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                   Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
             target.Add(key, item);
             Assert.AreEqual(item, target[key]);
@@ -65,7 +65,7 @@ namespace AndroidApp.Core.Model.Tests
             var key = Guid.NewGuid();
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                   new ItemPublicKey(Guid.NewGuid(), null),
-                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>(),
+                                                                  Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                   Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
             target.Add(key, item);
             var result = target.GetItemsInScope(key);
@@ -114,7 +114,7 @@ namespace AndroidApp.Core.Model.Tests
         {
             var item = new QuestionnairePropagatedScreenViewModel(Guid.NewGuid(), "", "", true,
                                                                  new ItemPublicKey(Guid.NewGuid(), null),
-                                                                 Enumerable.Empty<IQuestionnaireItemViewModel>(),
+                                                                 Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                                  Enumerable.Empty<ItemPublicKey>(), 0, 0, null, null);
             target.Add(key, item);
         }

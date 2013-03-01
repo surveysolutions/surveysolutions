@@ -40,7 +40,7 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
         protected QuestionnairePropagatedScreenViewModel(Guid questionnaireId, string title,
                                                      bool enabled,
                                                      ItemPublicKey screenId,
-                                                     IEnumerable<IQuestionnaireItemViewModel> items,
+                                                     IList<IQuestionnaireItemViewModel> items,
                                                      Func<Guid, IEnumerable<ItemPublicKey>> sibligs,
                                                      IEnumerable<ItemPublicKey> breadcrumbs, IQuestionnaireItemViewModel next, IQuestionnaireItemViewModel previous)
             : this(questionnaireId, title, title, enabled, screenId, items, breadcrumbs, 0, 0, next, previous)

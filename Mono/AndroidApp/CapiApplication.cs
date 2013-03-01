@@ -198,7 +198,7 @@ namespace AndroidApp
                bus.Publish(rEventTempl);*/
 
         }
-        protected static T DesserializeEmbededResource<T>(string fileName)
+   /*     protected static T DesserializeEmbededResource<T>(string fileName)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             //var data = Encoding.Default.GetString("");
@@ -210,7 +210,7 @@ namespace AndroidApp
                 s = reader.ReadToEnd();
             }
             return JsonConvert.DeserializeObject<T>(s, settings);
-        }
+        }*/
 
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
