@@ -145,7 +145,15 @@ namespace AndroidApp.Controls.Navigation
         protected bool LogOff(object sender, EventArgs e)
         {
             this.membership.LogOff();
-            this.context.StartActivity(typeof(LoginActivity));
+            Intent intent = new Intent(this.context, typeof(LoginActivity));
+            intent.PutExtra("finish", true); // if you are checking for this in your other Activities
+            intent.SetFlags(ActivityFlags.ClearTop |
+                            ActivityFlags.ClearTask |
+                            ActivityFlags.NewTask);
+            
+            this.context.StartActivity(intent);
+            
+            //this.context.StartActivity(typeof(LoginActivity));
             return true;
         }
 

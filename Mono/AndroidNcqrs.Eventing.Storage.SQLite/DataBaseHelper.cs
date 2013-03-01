@@ -1,16 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Android.Content;
-using Android.Database.Sqlite;
-using System.Data;
-using Java.IO;
-using Mono.Data.Sqlite;
-using File = System.IO.File;
-
-namespace AndroidNcqrs.Eventing.Storage.SQLite
+﻿namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.IO;
+    using System.Linq;
+
+    using Android.Content;
+
+    using Mono.Data.Sqlite;
+
+    using File = System.IO.File;
+
     public class DataBaseHelper /*: SQLiteOpenHelper*/
     {
         public const string DATABASE_NAME = "EventStore";
@@ -22,6 +23,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             dbPath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.Personal), DATABASE_NAME);
+            
             bool exists = File.Exists(dbPath);
             if (!exists)
             {
