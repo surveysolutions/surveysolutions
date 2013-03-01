@@ -49,6 +49,11 @@ namespace AndroidApp
         
         protected ContentFrameAdapter Adapter { get; set; }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+        }
+
         protected override void OnCreate(Bundle bundle)
         {
            

@@ -11,7 +11,7 @@ namespace AndroidApp
     using AndroidApp.Extensions;
     using AndroidApp.Settings;
 
-    [Activity(NoHistory = true, Icon = "@drawable/capi")]
+    [Activity(/*NoHistory = true,*/ Icon = "@drawable/capi")]
     public class SettingsActivity : Activity
     {
         /// <summary>

@@ -1,9 +1,6 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+
 using Android.App;
 using Android.Content;
 using Android.Runtime;
@@ -28,7 +25,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
-using Newtonsoft.Json;
+
 using Ninject;
 
 namespace AndroidApp

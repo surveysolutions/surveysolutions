@@ -13,6 +13,7 @@ namespace AndroidApp
 
     using Android.App;
     using Android.Content;
+    using Android.Content.PM;
     using Android.OS;
     using Android.Views;
     using Android.Widget;
@@ -33,7 +34,7 @@ namespace AndroidApp
     /// <summary>
     /// The synchronization activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi")]
+    [Activity(/*NoHistory = true, */Icon = "@drawable/capi")]
     public class SynchronizationActivity : Activity
     {
         #region Public Methods and Operators
@@ -66,7 +67,7 @@ namespace AndroidApp
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
+            
             this.SetContentView(Resource.Layout.sync_dialog);
 
             var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
@@ -81,6 +82,12 @@ namespace AndroidApp
                 buttonPush.Click += this.buttonPush_Click;
             }
         }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+        }
+
 
         /// <summary>
         /// The on destroy.
@@ -128,6 +135,10 @@ namespace AndroidApp
                 dialog.Show();
                 return;
             }
+
+            // async task protection
+            var oldOrientation = this.RequestedOrientation; 
+            this.RequestedOrientation = ScreenOrientation.Nosensor;
 
             var progressDialog = new ProgressDialog(this);
 
@@ -193,6 +204,9 @@ namespace AndroidApp
                                     progressDialog.Hide();
                                 });
                     });
+
+            this.RequestedOrientation = oldOrientation;
+
         }
 
         /// <summary>
