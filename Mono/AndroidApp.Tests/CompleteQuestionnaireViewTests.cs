@@ -30,7 +30,7 @@ namespace AndroidApp.Core.Model.Tests
             var screens = new Dictionary<ItemPublicKey, IQuestionnaireViewModel>();
             var screenKEy = new ItemPublicKey(Guid.NewGuid(), null);
             var screen = new QuestionnaireScreenViewModel(Guid.NewGuid(), "test", "test", true, screenKEy,
-                                                          Enumerable.Empty<IQuestionnaireItemViewModel>(),
+                                                          Enumerable.Empty<IQuestionnaireItemViewModel>().ToList(),
                                                           Enumerable.Empty<ItemPublicKey>(),
                                                           Enumerable.Empty<ItemPublicKey>());
             screens.Add(screenKEy, screen);
