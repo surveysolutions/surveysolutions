@@ -218,12 +218,12 @@ namespace Main.Synchronization.SyncManager
                 if (this.streamCollector == null)
                 {
                     this.status.Result = false;
-                    this.status.ErrorMessage = "Incorrect reciever";
+                    this.status.ErrorMessage = "Incorrect receiver";
                     this.status.Progress = 99;
                 }
 
                 this.status.Progress++;
-                this.status.CurrentStageDescription = "Synchronization process is starting";
+                this.status.CurrentStageDescription = "Process is starting";
 
                 this.Invoker.Execute(
                     new CreateNewSynchronizationProcessCommand(
@@ -240,7 +240,7 @@ namespace Main.Synchronization.SyncManager
                 var chunk = new List<AggregateRootEvent>();
 
                 this.status.Progress = 15;
-                this.status.CurrentStageDescription = "Synchronization is in progress";
+                this.status.CurrentStageDescription = "In progress";
 
                 // read from stream and handle by chunk
                 foreach (AggregateRootEvent evnt in this.eventStreamProvider.GetEventStream())
