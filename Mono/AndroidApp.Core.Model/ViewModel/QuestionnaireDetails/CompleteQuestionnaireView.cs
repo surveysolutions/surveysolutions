@@ -188,6 +188,8 @@ namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 
         public void SetQuestionStatus(ItemPublicKey key, bool enebled)
         {
+            if (!this.Questions.ContainsKey(key))
+                return;
             var question =
                 this.Questions[key];
             question.SetEnabled(enebled);

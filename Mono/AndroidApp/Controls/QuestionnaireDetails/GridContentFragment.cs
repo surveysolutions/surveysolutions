@@ -262,6 +262,8 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             answerHandler = new AnswerSetPopupClosure(dialog, e.Model);
             dialog.DismissEvent += (dialogSender, dialogEvt) =>
                 {
+                    if (answerHandler == null)
+                        return;
                     answerHandler.Dispose();
                     answerHandler = null;
                 };
