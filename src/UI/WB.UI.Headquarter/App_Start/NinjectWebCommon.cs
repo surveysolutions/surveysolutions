@@ -54,6 +54,9 @@ namespace WB.UI.Headquarter.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load(new HeadquarterRegistry(repositoryPath: "http://localhost:8080", isEmbeded: false));
+
+            #warning TLK: move NCQRS initialization to Global.asax
+            Main.Core.NcqrsInit.Init(kernel);
         }        
     }
 }
