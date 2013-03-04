@@ -7,21 +7,19 @@ namespace WB.UI.Headquarter.Controllers
     using System.Web;
     using System.Web.Mvc;
 
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Questionnaire.Completed;
 
-    using Questionnaire.Core.Web.Helpers;
-
     public class DashboardController : Controller
     {
-        private IViewRepository viewRepository;
-        private readonly IGlobalInfoProvider _globalProvider;
+        private readonly IViewRepository viewRepository;
 
-        public DashboardController(IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
+        public DashboardController(IViewRepository viewRepository)
         {
             this.viewRepository = viewRepository;
-            this._globalProvider = globalProvider;
         }
 
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
@@ -37,8 +35,13 @@ namespace WB.UI.Headquarter.Controllers
                 throw new HttpException("404");
             var newQuestionnairePublicKey = Guid.NewGuid();
             var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
+            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.GetCurrentUser()));
             return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
+        }
+
+        private UserLight GetCurrentUser()
+        {
+            return new UserLight(Guid.Empty, "#DUMMY#");
         }
     }
 }
