@@ -8,6 +8,8 @@ using System.Web.Routing;
 
 namespace WB.UI.Headquarter
 {
+    using Main.Core;
+
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : System.Web.HttpApplication
@@ -19,6 +21,9 @@ namespace WB.UI.Headquarter
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            #warning TLK: remove parameter from RebuildReadLayer method because it is not used
+            NcqrsInit.RebuildReadLayer(null);
         }
     }
 }
