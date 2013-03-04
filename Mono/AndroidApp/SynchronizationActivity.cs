@@ -105,7 +105,7 @@ namespace AndroidApp
 
         private void buttonBackup_Click(object sender, EventArgs e)
         {
-            this.DoSync(Pumpimg.Backup);
+            this.DoSync(PumpimgType.Backup);
         }
 
         protected override void OnResume()
@@ -165,7 +165,7 @@ namespace AndroidApp
         /// <param name="isPush">
         /// The is push.
         /// </param>
-        private void DoSync(Pumpimg pumpingType)
+        private void DoSync(PumpimgType pumpingType)
         {
             if (!CheckSyncPoint())
                 return;
@@ -202,15 +202,15 @@ namespace AndroidApp
                                 {
                                     try
                                     {
-                                        if (pumpingType == Pumpimg.Push)
+                                        if (pumpingType == PumpimgType.Push)
                                         {
                                             this.Push(SettingsManager.GetSyncAddressPoint(), result);
                                         }
-                                        else if (pumpingType == Pumpimg.Pull)
+                                        else if (pumpingType == PumpimgType.Pull)
                                         {
                                             this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
-                                        else if (pumpingType == Pumpimg.Backup)
+                                        else if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
                                         }
@@ -300,15 +300,31 @@ namespace AndroidApp
 
             if (result)
             {
-                var documents = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
+
+                var extStorage = Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+                if (Directory.Exists(extStorage))
+                {
+                    extStorage = System.IO.Path.Combine(extStorage, CAPI);
+                    if (!Directory.Exists(extStorage))
+                    {
+                        Directory.CreateDirectory(extStorage);
+                    }
+                }
+                else
+                {
+                    extStorage = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+                    
+                }
+
                 var filename = Path.Combine(
-                    documents, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
+                    extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
                 File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
             }
             return result;
         }
 
-
+        private const string CAPI = "Capi";
+        
         /// <summary>
         /// The pull.
         /// </summary>
@@ -361,7 +377,7 @@ namespace AndroidApp
         /// </param>
         private void buttonPull_Click(object sender, EventArgs e)
         {
-            this.DoSync(Pumpimg.Pull);
+            this.DoSync(PumpimgType.Pull);
         }
 
         /// <summary>
@@ -375,13 +391,13 @@ namespace AndroidApp
         /// </param>
         private void buttonPush_Click(object sender, EventArgs e)
         {
-            this.DoSync(Pumpimg.Push);
+            this.DoSync(PumpimgType.Push);
         }
         #endregion
     }
 
 
-    public enum Pumpimg
+    public enum PumpimgType
     {
         Push,
         Pull,

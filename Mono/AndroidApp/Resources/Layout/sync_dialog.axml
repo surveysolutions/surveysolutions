@@ -21,7 +21,8 @@
         <View
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25px" />
         <Button
             android:id="@+id/btnBackup"
             android:layout_width="fill_parent"
