@@ -42,6 +42,9 @@ body:before
 	right: 0;
 	top: 0;
 	z-index: -100;
+    background-image: url("//wunderlist2.s3.amazonaws.com/backgrounds/405d1d20072eb387876967b5b77f854964cae545/sources/03.jpg");
+    background-size: 128px 128px;
+    background-repeat: repeat;
 }
 #stacks
 {
@@ -441,4 +444,7 @@ body:before
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.edit-triggers .row-fluid {
+    margin-bottom: 5px;
 }

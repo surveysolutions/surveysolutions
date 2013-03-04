@@ -1,7 +1,7 @@
 ﻿define('model.question',
-    ['ko','config', 'model.answerOption'],
+    ['ko', 'config', 'model.answerOption'],
     function (ko, config, answerOption) {
-        
+
         var _dc = null,
           Question = function () {
               var self = this;
@@ -17,35 +17,57 @@
               self.validationExpression = ko.observable();
               self.validationMessage = ko.observable();
               self.instruction = ko.observable();
-            
+
               self.answerOrder = ko.observable();
               self.answerOptions = ko.observableArray();
               self.cards = ko.observableArray();
-            
+
               self.maxValue = ko.observable();
               self.triggers = ko.observableArray();
 
               // UI stuff
               self.currentTrigger = ko.observable();
-                self.propagatedGroups = ko.computed(function() {
-                    return [{ key: "1", value: "aaa" }];
-                });
-              self.addAnswer = function() {
+              self.localPropagatedGroups = ko.observableArray();
+              self.propagatedGroups = ko.computed(function () {
+                  return _.filter(self.localPropagatedGroups(), function (item) {
+                      var trigger = _.find(self.triggers(), function (t) { return t.key == item.id(); });
+                      if (!_.isUndefined(trigger)) {
+                          return false;
+                      }
+                      return true;
+                  }).map(function (item) {
+                      return { key: item.id(), value: item.title() };
+                  });
+              }).extend({ throttle: 500 });
+              self.hasPropagatedGroups = ko.computed(function () {
+                  return self.propagatedGroups().length != 0;
+              });
+              self.addAnswer = function () {
                   var answer = new answerOption().id('id').title(self.currentAnswerTitle()).value(self.currentAnswerValue());
                   self.answerOptions.push(answer);
                   self.currentAnswerTitle('');
                   self.currentAnswerValue('');
+                  $('#idcurrentAnswerValue').focus();
               };
-              self.removeAnswer = function(answer) {
+              self.removeAnswer = function (answer) {
                   self.answerOptions.remove(answer);
               };
-              self.currentAnswerValue  = ko.observable();
+
+              self.addTrigger = function () {
+                  self.triggers.push(self.currentTrigger());
+              };
+              self.removeTrigger = function (trigger) {
+                  self.triggers.remove(trigger);
+                  //self.triggers.valueHasMutated();
+              };
+
+              self.currentAnswerValue = ko.observable();
               self.currentAnswerTitle = ko.observable();
-              
+
               self.typeOptions = config.questionTypes;
               self.scopeOptions = config.questionScopes;
               self.orderOptions = config.answerOrders;
-            
+
               self.getHref = function () {
                   return config.hashes.detailsQuestion + "/" + self.id();
               };
@@ -79,4 +101,4 @@
         }();
 
         return Question;
-});
+    });

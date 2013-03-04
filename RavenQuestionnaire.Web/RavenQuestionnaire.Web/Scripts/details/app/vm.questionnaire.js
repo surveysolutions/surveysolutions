@@ -57,7 +57,7 @@
             },
             editQuestion = function(id) {
                 var question = datacontext.questions.getLocalById(id);
-                console.log(question);
+                question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
                 selectedQuestion(question);
                 openDetails("show-question");
             },

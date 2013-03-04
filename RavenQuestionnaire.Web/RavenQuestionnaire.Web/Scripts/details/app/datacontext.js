@@ -114,7 +114,7 @@
         
         groups.getPropagateableGroups = function () {
             var propagatable = _.filter(groups.getAllLocal(), function (item) {
-                return item.level() == 0;
+                return item.type() !== "None";
             });
             return propagatable;
         };
