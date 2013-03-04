@@ -132,6 +132,9 @@ namespace AndroidApp
 			// aapt resource value: 0x7f040023
 			public const int btnAnswered = 2130968611;
 			
+			// aapt resource value: 0x7f04002a
+			public const int btnBackup = 2130968618;
+			
 			// aapt resource value: 0x7f040027
 			public const int btnComplete = 2130968615;
 			
@@ -149,6 +152,9 @@ namespace AndroidApp
 			
 			// aapt resource value: 0x7f040029
 			public const int btnPush = 2130968617;
+			
+			// aapt resource value: 0x7f04002b
+			public const int btnRestore = 2130968619;
 			
 			// aapt resource value: 0x7f040022
 			public const int btnSyncPoint = 2130968610;
@@ -216,8 +222,8 @@ namespace AndroidApp
 			// aapt resource value: 0x7f04000f
 			public const int tvStatus = 2130968591;
 			
-			// aapt resource value: 0x7f04002a
-			public const int tvSyncResult = 2130968618;
+			// aapt resource value: 0x7f04002c
+			public const int tvSyncResult = 2130968620;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;

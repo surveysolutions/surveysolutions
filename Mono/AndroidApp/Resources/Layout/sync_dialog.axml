@@ -18,6 +18,23 @@
             android:layout_height="wrap_content"
             android:layout_margin="15px"
             android:text="Push" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+        <Button
+            android:id="@+id/btnBackup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:text="Backup" />
+        <Button
+            android:id="@+id/btnRestore"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15px"
+            android:text="Restore"
+            android:enabled="false" />
         <TextView
             android:id="@+id/tvSyncResult"
             android:padding="10px"
