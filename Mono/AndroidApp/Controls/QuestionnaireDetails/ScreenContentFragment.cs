@@ -50,6 +50,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails
                 return null;
             }
             top = inflater.Inflate(Resource.Layout.ScreenContentFragment, null);
+            var previousBtn = new GroupView(inflater.Context,
+                                          PropagatedModel == null
+                                              ? null
+                                              : PropagatedModel.Previous as QuestionnaireNavigationPanelItem, Android.Resource.Drawable.ArrowUpFloat);
+
+            previousBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
+            llTop.AddView(previousBtn);
             //  top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
                                                   questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
@@ -58,13 +65,7 @@ namespace AndroidApp.Controls.QuestionnaireDetails
             breadcrumbs.SetPadding(0, 0, 0, 10);
             llTop.AddView(breadcrumbs);
 
-            var previousBtn = new GroupView(inflater.Context,
-                                            PropagatedModel == null
-                                                ? null
-                                                : PropagatedModel.Previous as QuestionnaireNavigationPanelItem, Android.Resource.Drawable.ArrowUpFloat);
-
-            previousBtn.ScreenChanged += new EventHandler<ScreenChangedEventArgs>(groupView_ScreenChanged);
-            llTop.AddView(previousBtn);
+          
 
 
 
