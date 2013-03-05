@@ -1,4 +1,5 @@
-﻿using System.Web.Security;
+﻿using System;
+using System.Web.Security;
 
 namespace Designer.Web.Extensions
 {
@@ -38,6 +39,11 @@ namespace Designer.Web.Extensions
                 default:
                     return "An unknown error occurred. Please verify your entry and try again. If the problem persists, please contact your system administrator.";
             }
+        }
+
+        public static string ToUIString(this DateTime source)
+        {
+            return source == DateTime.MinValue ? string.Empty : source.ToString();
         }
     }
 }

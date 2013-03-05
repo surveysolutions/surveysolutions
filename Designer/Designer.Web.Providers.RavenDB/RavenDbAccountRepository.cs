@@ -1,11 +1,12 @@
 ﻿using Designer.Web.Providers.Membership;
+using Designer.Web.Providers.Repositories.RavenDb;
 using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.Repositories.RavenDb
+namespace Designer.Web.Providers.RavenDB
 {
     /// <summary>
     /// Raven implementation of the account repository
@@ -13,7 +14,7 @@ namespace Designer.Web.Providers.Repositories.RavenDb
     public class RavenDbAccountRepository : IAccountRepository
     {
         private readonly IDocumentSession _documentSession;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="RavenDbAccountRepository"/> class.
         /// </summary>
@@ -60,7 +61,7 @@ namespace Designer.Web.Providers.Repositories.RavenDb
         /// Update an existing user.
         /// </summary>
         /// <param name="account">Account being updated.</param>
-        public void Update(IMembershipAccount account)
+        public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
             AccountDocument accountDocument;
             if (!(account is AccountDocument))
@@ -240,7 +241,7 @@ namespace Designer.Web.Providers.Repositories.RavenDb
         {
             var _user = _documentSession.Query<AccountDocument>().FirstOrDefault(user =>
                                                                                 user.ConfirmationToken == confirmationToken);
-            return _user.UserName;
+            return _user == null ? string.Empty : _user.UserName;
         }
         #endregion
     }

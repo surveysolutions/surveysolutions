@@ -57,11 +57,17 @@ namespace Designer.Web.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
+            NcqrsInit.Init(kernel);
+
             try
             {
-                NcqrsInit.Init(kernel);
+                NcqrsInit.RebuildReadLayer(kernel);
             }
-            catch { }
+            catch (Exception ex)
+            {
+                NLog.LogManager.GetCurrentClassLogger().Error(ex);
+            }
+            
 
             RegisterServices(kernel);
             return kernel;
