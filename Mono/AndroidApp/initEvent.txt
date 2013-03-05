@@ -1239,7 +1239,7 @@
                           {
                             "$type": "Main.Core.Entities.SubEntities.Complete.CompleteAnswer, Main.Core",
                             "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Reciever of income from abroad",
+                            "AnswerText": "Receiver of income from abroad",
                             "AnswerType": 0,
                             "AnswerValue": "3",
                             "Mandatory": false,

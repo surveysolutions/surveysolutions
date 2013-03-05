@@ -171,7 +171,8 @@ namespace AndroidMain.Synchronization
             
             var request = new RestRequest(listPath, Method.GET);
             request.RequestFormat = DataFormat.Json;
-            
+            request.AddHeader("Accept-Encoding", "gzip,deflate");
+
             IRestResponse response = restClient.Execute(request);
 
 
@@ -205,6 +206,7 @@ namespace AndroidMain.Synchronization
                     itemRequest.AddParameter("length", root.EventKeys.Count);
 
                     itemRequest.RequestFormat = DataFormat.Json;
+                    itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
                     
                     IRestResponse responseStream = restClient.Execute(itemRequest);
                     if (string.IsNullOrWhiteSpace(responseStream.Content)
@@ -222,23 +224,6 @@ namespace AndroidMain.Synchronization
                     {
                         yield return aggregateRootEvent;
                     }
-
-
-                    /*if (evnts != null)
-                    {
-                        events.AddRange(evnts);
-                    }*/
-
-
-
-                /*}
-                catch (Exception ex)
-                {
-                    /*Logger logger = LogManager.GetCurrentClassLogger();
-                            logger.Fatal("Import error", ex);#1#
-                    events = null;
-                    throw;
-                }*/
             }
 
             //return events;
