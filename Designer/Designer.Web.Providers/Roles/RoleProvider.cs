@@ -1,4 +1,5 @@
-﻿using Ninject;
+﻿using System.Web.Mvc;
+using Ninject;
 using System;
 using System.Collections.Specialized;
 using System.Configuration.Provider;
@@ -11,8 +12,7 @@ namespace Designer.Web.Providers.Roles
     /// Provides roles through a repository
     /// </summary>
     /// <remarks>
-    /// You need to register a  <see cref="IRoleRepository"/> in your inversion of control container. This classes
-    /// uses <see cref="DependencyResolver"/> to find it's dependencies.
+    /// You need to register a  <see cref="IRoleRepository"/> in your inversion of control container.
     /// </remarks>
     /// <example>
     /// <code>
@@ -29,12 +29,25 @@ namespace Designer.Web.Providers.Roles
     /// </example>
     public class RoleProvider : System.Web.Security.RoleProvider
     {
+        private IRoleRepository _roleService;
+
         /// <summary>
         /// Gets repository used to retrieve information from the data source.
         /// </summary>
-        [Inject]
-        private IRoleRepository Repository { get; set; }
-        
+        protected IRoleRepository Repository
+        {
+            get
+            {
+                if (_roleService == null)
+                {
+                    _roleService = DependencyResolver.Current.GetService<IRoleRepository>();
+                    if (_roleService == null)
+                        throw new InvalidOperationException(
+                            "You need to assign a locator to the ServiceLocator property and it should be able to lookup IRoleRepository.");
+                }
+                return _roleService;
+            }
+        }
 
         #region Overrides of RoleProvider
 
@@ -63,7 +76,7 @@ namespace Designer.Web.Providers.Roles
             if (String.IsNullOrEmpty(config["description"]))
             {
                 config.Remove("description");
-                config.Add("description", "Griffin.MvcContrib Role Provider");
+                config.Add("description", "Role Provider");
             }
 
             base.Initialize(name, config);

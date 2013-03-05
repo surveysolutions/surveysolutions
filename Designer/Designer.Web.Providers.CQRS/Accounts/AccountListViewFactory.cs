@@ -1,11 +1,13 @@
-﻿using Main.Core.Utility;
+﻿using Designer.Web.Providers.CQRS.Accounts.View;
+using Designer.Web.Providers.Roles;
+using Main.Core.Utility;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Accounts
 {
     /// <summary>
     /// The account view factory.
@@ -51,8 +53,21 @@ namespace Designer.Web.Providers.CQRS
         {
             IEnumerable<AccountListItem> retVal = new AccountListItem[0];
 
-            Func<AccountDocument, bool> query = (x) => false;
-            if (input.IsNewOnly)
+            bool hasName = !string.IsNullOrEmpty(input.Name);
+            bool hasEmail = !string.IsNullOrEmpty(input.Email);
+            bool hasRole = input.Role != SimpleRoleEnum.Undefined;
+
+            Func<AccountDocument, bool> query = (x) => true;
+
+            if(hasRole && hasName)
+            {
+                query = (x) => x.SimpleRoles.Contains(input.Role) && x.UserName.Contains(input.Name);
+            }
+                else if (hasRole)
+            {
+                query = (x) => x.SimpleRoles.Contains(input.Role);
+            }
+            else if (input.IsNewOnly)
             {
                 query = (x) => !x.IsConfirmed;
             }
@@ -60,26 +75,22 @@ namespace Designer.Web.Providers.CQRS
             {
                 query = (x) => x.IsOnline;
             }
-            else if(!string.IsNullOrEmpty(input.AccountName))
+            else if(hasName)
             {
-                query = (x) => x.UserName.Compare(input.AccountName);
+                query = (x) => x.UserName.Compare(input.Name);
             }
-            else if (!string.IsNullOrEmpty(input.AccountEmail))
+            else if (hasEmail)
             {
-                query = (x) => x.Email.Compare(input.AccountEmail);
+                query = (x) => x.Email.Compare(input.Email);
             }
 
-            var orderedQuery = _accounts.Query()
-                              .Where(query)
-                              .Skip((input.Page - 1)*input.PageSize)
-                              .Take(input.PageSize)
+            retVal = _accounts.Query().Where(query).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
                               .Select(x => new AccountListItem()
                                   {
                                       ApplicationName = x.ApplicationName,
                                       ProviderUserKey = x.ProviderUserKey,
                                       UserName = x.UserName,
                                       Comment = x.Comment,
-                                      ConfirmationToken = x.ConfirmationToken,
                                       CreatedAt = x.CreatedAt,
                                       Email = x.Email,
                                       FailedPasswordAnswerWindowAttemptCount = x.FailedPasswordAnswerWindowAttemptCount,
@@ -88,7 +99,6 @@ namespace Designer.Web.Providers.CQRS
                                       FailedPasswordWindowStartedAt = x.FailedPasswordWindowStartedAt,
                                       IsConfirmed = x.IsConfirmed,
                                       IsLockedOut = x.IsLockedOut,
-                                      IsOnline = x.IsOnline,
                                       LastActivityAt = x.LastActivityAt,
                                       LastLockedOutAt = x.LastLockedOutAt,
                                       LastLoginAt = x.LastLoginAt,

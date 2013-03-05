@@ -1,5 +1,5 @@
 ﻿
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Accounts.View
 {
     public class AccountListItem : AccountDocument
     {

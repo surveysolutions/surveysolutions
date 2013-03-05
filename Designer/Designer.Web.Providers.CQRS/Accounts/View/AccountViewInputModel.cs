@@ -1,17 +1,14 @@
-﻿using System;
-
-namespace Designer.Web.Providers.CQRS
+﻿namespace Designer.Web.Providers.CQRS.Accounts.View
 {
     public class AccountViewInputModel
     {
-        public AccountViewInputModel(Guid accountId)
+        public AccountViewInputModel(object providerUserKey)
         {
-            AccountId = accountId;
+            ProviderUserKey = providerUserKey;
         }
 
         public AccountViewInputModel(string accountName, string accountEmail, string confirmationToken)
         {
-            AccountId = Guid.Empty;
             AccountName = accountName;
             AccountEmail = accountEmail;
             ConfirmationToken = confirmationToken;
@@ -20,7 +17,7 @@ namespace Designer.Web.Providers.CQRS
         /// <summary>
         /// Account Id
         /// </summary>
-        public Guid AccountId { get; protected set; }
+        public object ProviderUserKey { get; protected set; }
         /// <summary>
         /// Account name
         /// </summary>

@@ -57,6 +57,7 @@
     <Compile Include="Membership\IMembershipAccount.cs" />
     <Compile Include="Membership\IPasswordPolicy.cs" />
     <Compile Include="Membership\IPasswordStrategy.cs" />
+    <Compile Include="Membership\MembershipEventType.cs" />
     <Compile Include="Membership\MembershipProvider.cs" />
     <Compile Include="Membership\PasswordExtensions.cs" />
     <Compile Include="Membership\PasswordPolicy.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="Roles\IRoleRepository.cs" />
     <Compile Include="Roles\IUserWithRoles.cs" />
     <Compile Include="Roles\RoleProvider.cs" />
+    <Compile Include="Roles\SimpleRoleEnum.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

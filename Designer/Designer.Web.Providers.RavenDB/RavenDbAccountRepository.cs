@@ -14,12 +14,7 @@ namespace Designer.Web.Providers.RavenDB
     public class RavenDbAccountRepository : IAccountRepository
     {
         private readonly IDocumentSession _documentSession;
-
-        public bool IsEventSourcingUsed
-        {
-            get { return false; }
-        }
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="RavenDbAccountRepository"/> class.
         /// </summary>
@@ -66,7 +61,7 @@ namespace Designer.Web.Providers.RavenDB
         /// Update an existing user.
         /// </summary>
         /// <param name="account">Account being updated.</param>
-        public void Update(IMembershipAccount account)
+        public void Update(IMembershipAccount account, MembershipEventType eventType)
         {
             AccountDocument accountDocument;
             if (!(account is AccountDocument))
@@ -248,49 +243,6 @@ namespace Designer.Web.Providers.RavenDB
                                                                                 user.ConfirmationToken == confirmationToken);
             return _user == null ? string.Empty : _user.UserName;
         }
-        #endregion
-
-        #region [needed only for event sourcing]
-        public void ChangePasswordQuestionAndAnswer(string newPasswordQuestion, string newPasswordAnswer)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ChangePassword(string newPassword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ResetPassword(string newPassword, string passwordSalt)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LockUser()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UnlockUser()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UserValidated()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateOnlineState()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ConfirmAccount()
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
     }
 }
