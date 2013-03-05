@@ -1,12 +1,28 @@
-﻿using Designer.Web.Providers.Roles;
+﻿using Designer.Web.Providers.CQRS.Accounts.Commands;
+using Designer.Web.Providers.CQRS.Accounts.View;
+using Designer.Web.Providers.Roles;
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace Designer.Web.Providers.Repositories.CQRS
+namespace Designer.Web.Providers.CQRS
 {
     public class CQRSRoleRepository : IRoleRepository
     {
+        private readonly IViewRepository _viewRepository;
+        private readonly ICommandService _commandService;
+
+        public CQRSRoleRepository(IViewRepository viewRepository, ICommandService commandService)
+        {
+            _viewRepository = viewRepository;
+            _commandService = commandService;
+        }
+
         public IUserWithRoles GetUser(string applicationName, string username)
         {
-            throw new System.NotImplementedException();
+            return GetUser(username);
         }
 
         public void CreateRole(string applicationName, string roleName)
@@ -21,37 +37,68 @@ namespace Designer.Web.Providers.Repositories.CQRS
 
         public void AddUserToRole(string applicationName, string roleName, string username)
         {
-            throw new System.NotImplementedException();
+            var user = GetUser(username);
+            _commandService.Execute(new AddRoleToAccountCommnad(accountPublicKey: user.PublicKey,
+                                                                role: GetRoleByRoleName(roleName)));
         }
 
         public void RemoveUserFromRole(string applicationName, string roleName, string username)
         {
-            throw new System.NotImplementedException();
+            var user = GetUser(username);
+            _commandService.Execute(new RemoveRoleFromAccountCommnad(accountPublicKey: user.PublicKey,
+                                                                     role: GetRoleByRoleName(roleName)));
         }
 
-        public System.Collections.Generic.IEnumerable<string> GetRoleNames(string applicationName)
+        public IEnumerable<string> GetRoleNames(string applicationName)
         {
-            throw new System.NotImplementedException();
+            return Enum.GetNames(typeof (SimpleRoleEnum));
         }
 
         public bool Exists(string applicationName, string roleName)
         {
-            throw new System.NotImplementedException();
+            SimpleRoleEnum roleType;
+            return Enum.TryParse(roleName, true, out roleType);
         }
 
         public int GetNumberOfUsersInRole(string applicationName, string roleName)
         {
-            throw new System.NotImplementedException();
+            return GetUsersInRole(applicationName, roleName).Count();
         }
 
-        public System.Collections.Generic.IEnumerable<string> FindUsersInRole(string applicationName, string roleName, string userNameToMatch)
+        public IEnumerable<string> FindUsersInRole(string applicationName, string roleName, string userNameToMatch)
         {
-            throw new System.NotImplementedException();
+            var accounts =
+                _viewRepository.Load<AccountListViewInputModel, AccountListView>(new AccountListViewInputModel()
+                {
+                    Role = GetRoleByRoleName(roleName),
+                    Name = userNameToMatch
+                });
+            return accounts.Items.Select(x => x.UserName);
         }
 
-        public System.Collections.Generic.IEnumerable<string> GetUsersInRole(string applicationName, string roleName)
+        public IEnumerable<string> GetUsersInRole(string applicationName, string roleName)
         {
-            throw new System.NotImplementedException();
+            var accounts =
+                _viewRepository.Load<AccountListViewInputModel, AccountListView>(new AccountListViewInputModel()
+                    {
+                        Role = GetRoleByRoleName(roleName)
+                    });
+            return accounts.Items.Select(x => x.UserName);
+        }
+
+        private AccountView GetUser(string username)
+        {
+            return _viewRepository.Load<AccountViewInputModel, AccountView>(new AccountViewInputModel(
+                                                                                accountName: username,
+                                                                                accountEmail: null,
+                                                                                confirmationToken: null));
+        }
+
+        private SimpleRoleEnum GetRoleByRoleName(string roleName)
+        {
+            var role = SimpleRoleEnum.User;
+            Enum.TryParse(roleName, out role);
+            return role;
         }
     }
 }

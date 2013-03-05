@@ -6,26 +6,24 @@ using WebMatrix.WebData;
 
 namespace Designer.Web.Controllers
 {   
-    [Authorize(Roles="Admin")]
+    [Authorize(Roles = "Administrator")]
     public class AdministrationController : Controller
-    {
-        MembershipProvider _provider = Membership.Provider;
+    {   
         //
         // GET: /Administration/
 
         public ViewResult Index()
         {
             int totalRecords;
-            var users = _provider.GetAllUsers(0, 20, out totalRecords);
-            return View(users);
+            return View(Membership.GetAllUsers(0, 20, out totalRecords));
         }
 
         //
         // GET: /Administration/Details/john
 
-        public ViewResult Details(string userName)
+        public ViewResult Details(string id)
         {
-            return View(GetUser(userName));
+            return View(GetUser(id));
         }
 
         //
@@ -66,20 +64,45 @@ namespace Designer.Web.Controllers
         
         //
         // GET: /Administration/Edit/john
- 
-        public ActionResult Edit(string userName)
+
+        public ActionResult Edit(string id)
         {
-            return View(GetUser(userName));
+            var intUser = GetUser(id);
+            return View(new UpdateAccountModel()
+                {
+                    Comment = intUser.Comment,
+                    Email = intUser.Email,
+                    IsApproved = intUser.IsApproved,
+                    IsLockedOut = intUser.IsLockedOut,
+                    UserName = intUser.UserName
+                });
         }
 
         //
         // POST: /Administration/Edit/john
 
         [HttpPost]
-        public ActionResult Edit(MembershipUser user)
+        public ActionResult Edit(UpdateAccountModel user)
         {
-            if (ModelState.IsValid) {
-                _provider.UpdateUser(user);
+            if (ModelState.IsValid)
+            {
+                var intUser = Membership.GetUser(user.UserName);
+                if (intUser != null)
+                {
+                    Membership.UpdateUser(new MembershipUser(providerName: intUser.ProviderName,
+                                                             name: user.UserName,
+                                                             providerUserKey: intUser.ProviderUserKey,
+                                                             email: user.Email,
+                                                             passwordQuestion: intUser.PasswordQuestion,
+                                                             comment: user.Comment,
+                                                             isApproved: user.IsApproved,
+                                                             isLockedOut: user.IsLockedOut,
+                                                             creationDate: intUser.CreationDate,
+                                                             lastLoginDate: intUser.LastLoginDate,
+                                                             lastActivityDate: intUser.LastActivityDate,
+                                                             lastPasswordChangedDate: intUser.LastPasswordChangedDate,
+                                                             lastLockoutDate: intUser.LastLockoutDate));
+                }
                 return RedirectToAction("Index");
             } else {
                 return View();
@@ -89,26 +112,25 @@ namespace Designer.Web.Controllers
         //
         // GET: /Administration/Delete/john
 
-        public ActionResult Delete(string userName)
+        public ActionResult Delete(string id)
         {
-            return View(GetUser(userName));
+            return View(GetUser(id));
         }
 
         //
         // POST: /Administration/Delete/john
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(string userName)
+        public ActionResult DeleteConfirmed(string id)
         {
-            _provider.DeleteUser(userName, true);
+            Membership.DeleteUser(id);
 
             return RedirectToAction("Index");
         }
 
-        private MembershipUser GetUser(string userName)
+        private MembershipUser GetUser(string id)
         {
-            int totalRecords;
-            return _provider.FindUsersByName(userName, 0, 20, out totalRecords)[userName];
+            return Membership.GetUser(id);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 using System.Web.Security;
 
@@ -32,10 +32,11 @@ namespace Designer.Web.Providers.Membership
         IMembershipAccount Get(string username);
 
         /// <summary>
-        /// Update an existing user.
+        /// Update an existing user
         /// </summary>
         /// <param name="account">Account being updated.</param>
-        void Update(IMembershipAccount account);
+        /// <param name="eventType">Using only for event sourcing</param>
+        void Update(IMembershipAccount account, MembershipEventType eventType = MembershipEventType.Update);
 
         /// <summary>
         /// Get a user by using your PK.
@@ -54,7 +55,7 @@ namespace Designer.Web.Providers.Membership
         /// <summary>
         /// Translate an confirmation token into a user name.
         /// </summary>
-        /// <param name="email">Confirmation token to lookup</param>
+        /// <param name="confirmationToken">Confirmation token to lookup</param>
         /// <returns>User name if the specified confirmation token was found; otherwise null.</returns>
         string GetUserNameByConfirmationToken(string confirmationToken);
 

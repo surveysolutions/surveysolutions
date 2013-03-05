@@ -279,7 +279,7 @@ namespace Designer.Web.Providers.Membership
 
         internal static string GenerateToken(RandomNumberGenerator generator)
         {
-            byte[] tokenBytes = new byte[TokenSizeInBytes];
+            var tokenBytes = new byte[TokenSizeInBytes];
             generator.GetBytes(tokenBytes);
             return HttpServerUtility.UrlTokenEncode(tokenBytes);
         }
@@ -320,7 +320,7 @@ namespace Designer.Web.Providers.Membership
 
             account.PasswordQuestion = newPasswordAnswer;
             account.PasswordAnswer = newPasswordAnswer;
-            AccountRepository.Update(account);
+            AccountRepository.Update(account, MembershipEventType.ChangePasswordQuestionAndAnswer);
             return true;
         }
 
@@ -362,7 +362,7 @@ namespace Designer.Web.Providers.Membership
             account.Password = newPassword;
             pwInfo = account.CreatePasswordInfo();
             account.Password = PasswordStrategy.Encrypt(pwInfo);
-            AccountRepository.Update(account);
+            AccountRepository.Update(account, MembershipEventType.ChangePassword);
             return true;
         }
 
@@ -392,7 +392,7 @@ namespace Designer.Web.Providers.Membership
             var info = new AccountPasswordInfo(username, newPassword);
             user.Password = PasswordStrategy.Encrypt(info);
             user.PasswordSalt = info.PasswordSalt;
-            AccountRepository.Update(user);
+            AccountRepository.Update(user, MembershipEventType.ResetPassword);
             return newPassword;
         }
 
@@ -453,19 +453,25 @@ namespace Designer.Web.Providers.Membership
                 user.LastLoginAt = DateTime.Now;
                 user.FailedPasswordWindowStartedAt = DateTime.MinValue;
                 user.FailedPasswordWindowAttemptCount = 0;
-                AccountRepository.Update(user);
+                AccountRepository.Update(user, MembershipEventType.UserValidated);
                 return true;
             }
-
-            user.FailedPasswordWindowAttemptCount += 1;
-            if (user.FailedPasswordWindowStartedAt == DateTime.MinValue)
-                user.FailedPasswordAnswerWindowStartedAt = DateTime.Now;
-            else if (DateTime.Now.Subtract(user.FailedPasswordAnswerWindowStartedAt).TotalMinutes >
-                     PasswordPolicy.PasswordAttemptWindow)
+            else
             {
-                user.IsLockedOut = true;
-                user.LastLockedOutAt = DateTime.Now;
-                AccountRepository.Update(user);
+                user.FailedPasswordWindowAttemptCount += 1;
+                if (user.FailedPasswordWindowStartedAt == DateTime.MinValue)
+                {
+                    user.FailedPasswordAnswerWindowStartedAt = DateTime.Now;
+                }
+                AccountRepository.Update(user, MembershipEventType.FailedLogin);
+
+                if (DateTime.Now.Subtract(user.FailedPasswordAnswerWindowStartedAt).TotalMinutes >
+                         PasswordPolicy.PasswordAttemptWindow)
+                {
+                    user.IsLockedOut = true;
+                    user.LastLockedOutAt = DateTime.Now;
+                    AccountRepository.Update(user, MembershipEventType.LockUser);
+                }
             }
 
             return false;
@@ -489,7 +495,7 @@ namespace Designer.Web.Providers.Membership
             user.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             user.FailedPasswordWindowAttemptCount = 0;
             user.FailedPasswordWindowStartedAt = DateTime.MinValue;
-            AccountRepository.Update(user);
+            AccountRepository.Update(user, MembershipEventType.UnlockUser);
             return true;
         }
 
@@ -513,12 +519,12 @@ namespace Designer.Web.Providers.Membership
 
         private void UpdateOnlineState(bool userIsOnline, IMembershipAccount user)
         {
-            if (!userIsOnline)
+            if (userIsOnline)
                 return;
 
             user.LastActivityAt = DateTime.Now;
             //user.IsOnline = true;
-            AccountRepository.Update(user);
+            AccountRepository.Update(user, MembershipEventType.UpdateOnlineState);
         }
 
         /// <summary>
@@ -527,7 +533,11 @@ namespace Designer.Web.Providers.Membership
         /// <returns>
         /// A <see cref="T:System.Web.Security.MembershipUser"/> object populated with the specified user's information from the data source.
         /// </returns>
-        /// <param name="username">The name of the user to get information for. </param><param name="userIsOnline">true to update the last-activity date/time stamp for the user; false to return user information without updating the last-activity date/time stamp for the user. </param>
+        /// <param name="username">The name of the user to get information for. 
+        /// </param>
+        /// <param name="userIsOnline">true to update the last-activity date/time stamp for the user; 
+        /// false to return user information without updating the last-activity date/time stamp for the user. 
+        /// </param>
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
             var user = AccountRepository.Get(username);
@@ -692,7 +702,7 @@ namespace Designer.Web.Providers.Membership
             if (user != null)
             {
                 isConfirmed = user.IsConfirmed = true;
-                AccountRepository.Update(user);
+                AccountRepository.Update(user, MembershipEventType.ConfirmAccount);
             }
 
             return isConfirmed;
@@ -710,7 +720,7 @@ namespace Designer.Web.Providers.Membership
             string email = values == null? string.Empty :(string)values["Email"];
 
             MembershipCreateStatus status;
-            var account = InternalCreateAccount(userName, password, email, Guid.NewGuid(), !requireConfirmation, out status);
+            var account = InternalCreateAccount(userName, password, email, null, !requireConfirmation, out status);
             if (status == MembershipCreateStatus.Success)
             {
                 token = account.ConfirmationToken;
