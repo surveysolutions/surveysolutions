@@ -66,7 +66,7 @@
             },
             editGroup = function (id) {
                 var group = datacontext.groups.getLocalById(id);
-                console.log(group);
+                
                 selectedGroup(group);
                 openDetails("show-group");
             },
@@ -86,9 +86,24 @@
             showMenu = function () {
                  $('#stacks').removeClass('menu-hidden');
             },
-            addQuestion = function () {
+            addQuestion = function (parent) {
+                console.log(parent);
+                var question = model.Question.Nullo;
+                question.id(Math.uuid());
+                
+                parent.childrenID.push({type:question.type(), id :question.id() });
+                parent.fillChildren();
+                datacontext.questions.add(question);
             },
-            addGroup = function () {
+            addGroup = function (parent) {
+                console.log(parent);
+                var group = model.Group.Nullo;
+                group.id(Math.uuid());
+                debugger;
+                parent.childrenID.push({type :group.type(), id :group.id() });
+                parent.fillChildren();
+                datacontext.groups.add(group);
+                
             },
             init = function () {
                 selectedMenuItem.subscribe(syncSelectedMenuItemWithIsSelected);

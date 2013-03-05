@@ -11,10 +11,14 @@ define('presenter',
             },
             toggleActivity = function(show) {
                 $('#busyindicator').activity(show);
-                if (show) {
+               if (!show) {
+                   $.when($('.loading-backdrop').slideUp(800))
+                       .then(function() {
+                           $('body').removeClass('loading');
+                       });
+               } else {
                     $('body').addClass('loading');
-                } else {
-                    $('body').removeClass('loading');
+                    $('.loading-backdrop').slideDown(800);
                 }
             };
 

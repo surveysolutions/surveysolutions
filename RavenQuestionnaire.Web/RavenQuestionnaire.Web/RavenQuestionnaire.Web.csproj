@@ -384,6 +384,7 @@
     <Content Include="Scripts\details\lib\knockout.validation.js" />
     <Content Include="Scripts\details\lib\koExternalTemplateEngine.js" />
     <Content Include="Scripts\details\lib\lodash.min.js" />
+    <Content Include="Scripts\details\lib\Math.uuid.js" />
     <Content Include="Scripts\details\lib\modernizr-2.5.3.js" />
     <Content Include="Scripts\details\lib\moment.js" />
     <Content Include="Scripts\details\lib\require.js" />

@@ -24,12 +24,7 @@
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
                 return self;
             };
-
-        Group.Nullo = new Group().id(0).title('');
-        Group.Nullo.isNullo = true;
-        Group.Nullo.dirtyFlag().reset();
-
-
+        
         Group.datacontext = function(dc) {
             if (dc) {
                 _dc = dc;
@@ -53,6 +48,10 @@
                 fillChildren: fillChildren
             };
         }();
+
+        Group.Nullo = new Group().id(0).title('Title').type('GroupView');
+        Group.Nullo.isNullo = true;
+        Group.Nullo.dirtyFlag().reset();
 
         return Group;
     });

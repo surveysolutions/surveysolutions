@@ -11,6 +11,7 @@
     Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
+<script src="../../Scripts/details/lib/Math.uuid.js"></script>
 <script src="../../Scripts/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
 
@@ -59,7 +60,7 @@
             <div class="title">
                 <button type="button" data-bind="click: closeMenu" class="close">&times</button>
                 <!-- ko with: questionnaire -->
-                <span data-bind="text: title"></span>
+                    <span data-bind="text: title"></span>
                 <!-- /ko -->
             </div>
             <div class="body">
@@ -76,7 +77,7 @@
             </div>
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-success"><i class="icon-plus icon-white"></i>Chapter</button>
+                    <button class="btn btn-success disabled"><i class="icon-plus icon-white"></i>Chapter</button>
                 </div>
             </div>
         </div>
@@ -189,8 +190,8 @@
                     <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
-                        <li><a tabindex="-1" href="#"><i class="icon-plus"></i>Group</a></li>
+                        <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
+                        <li><a data-bind="click: addGroup" tabindex="-1" href="#"><i class="icon-plus"></i>Group</a></li>
                     </ul>
                 </div>
             </div>

@@ -35,7 +35,7 @@
 }
 #questionnaire ::-webkit-scrollbar-thumb
 {
-	background-color:#164B69;
+	background-color:#2478A8;
 }
 
 body:before
@@ -51,11 +51,6 @@ body:before
 	top: 0;
 	z-index: -100;
     background-color:#164B69;
-    -webkit-transition: all .6s ease-in-out;
-    -moz-transition: all .6s ease-in-out;
-    -o-transition: all .6s ease-in-out;
-    -ms-transition: all .6s ease-in-out;
-    transition: all .6s ease-in-out;
 }
 .loading-backdrop {
     background-position: center top;
@@ -69,12 +64,6 @@ body:before
 	top: 0;
 	z-index: -99999;
     background-color:#164B69;
-     opacity: 0;
-    -webkit-transition: all .6s ease-in-out;
-    -moz-transition: all .6s ease-in-out;
-    -o-transition: all .6s ease-in-out;
-    -ms-transition: all .6s ease-in-out;
-    transition: all 1s ease-in-out;
 }
 body.loading .loading-backdrop
 {

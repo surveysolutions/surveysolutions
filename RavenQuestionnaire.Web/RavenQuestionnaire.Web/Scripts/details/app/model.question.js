@@ -78,7 +78,7 @@
               return self;
           };
 
-        Question.Nullo = new Question().id(0).title('');
+        Question.Nullo = new Question().id(0).title('Title').type('QuestionView');
         Question.Nullo.isNullo = true;
         Question.Nullo.dirtyFlag().reset();
 
