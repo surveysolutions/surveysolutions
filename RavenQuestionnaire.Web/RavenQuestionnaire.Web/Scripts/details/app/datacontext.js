@@ -119,6 +119,8 @@
             return propagatable;
         };
 
+       
+
         var datacontext = {
             menu: menu,
             groups: groups,
@@ -128,5 +130,9 @@
         // We did this so we can access the datacontext during its construction
         model.setDataContext(datacontext);
 
+        _.each(groups.getAllLocal(), function (group) {
+            group.fillChildren();
+        });
+        
         return datacontext;
     });

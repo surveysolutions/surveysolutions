@@ -5,12 +5,13 @@
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Html.RequiresCss("jquery-ui.min.css", "Base");
     Html.RequiresCss("toastr.css", "Content");
     Html.RequiresCss("toastr-responsive.css", "Content");
     Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
-
+<script src="../../Scripts/jquery-ui-1.8.16.custom.min.js"></script>
 <script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
 
 <script src="../../Scripts/details/lib/json2.js"></script>
@@ -27,6 +28,7 @@
 <script src="../../Scripts/details/lib/knockout.dirtyFlag.js"></script>
 <script src="../../Scripts/details/lib/knockout.validation.js"></script>
 <script src="../../Scripts/details/lib/koExternalTemplateEngine.js"></script>
+<script src="../../Scripts/details/lib/knockout-sortable.js"></script>
 
 <script src="../../Scripts/details/lib/sammy.js"></script>
 <script src="../../Scripts/details/lib/sammy.title.js"></script>
@@ -79,7 +81,7 @@
         <div class="inner">
             <div class="body">
                 <ul data-bind="foreach: chapters">
-                    <li data-bind="template: { name: 'GroupView' }"></li>
+                    <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
             </div>
             <div class="bottom">
@@ -186,8 +188,8 @@
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
         </div>
     </div>
-    <ul data-bind="foreach: children()">
-        <li data-bind="template: { name: $data.template}"></li>
+    <ul data-bind="sortable: children">
+        <li data-bind="template: { name: $data.template}, allowDrop : true"></li>
     </ul>
 </script>
 <script type="text/html" id="QuestionView">

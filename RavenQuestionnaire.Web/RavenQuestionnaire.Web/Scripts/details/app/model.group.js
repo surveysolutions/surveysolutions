@@ -12,13 +12,13 @@
                 self.description = ko.observable();
                 self.condition = ko.observable();
                 
+                self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();
                 self.template = "GroupView";
                 self.getHref = function () {
                     return config.hashes.detailsGroup + "/" + self.id();
                 };
-                
-                
+
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
@@ -39,17 +39,18 @@
 
         Group.prototype = function() {
             var dc = Group.datacontext,
-                children = function () {
+                fillChildren = function () {
                      var items =_.map(this.childrenID(), function (item) {
                         if (item.type === "GroupView")
                             return dc().groups.getLocalById(item.id);
                         return dc().questions.getLocalById(item.id);
                      });
-                    return items;
+                    this.children(items);
+                    //return self.children();
                 };
             return {
                 isNullo: false,
-                children: children
+                fillChildren: fillChildren
             };
         }();
 

@@ -47,7 +47,7 @@
                   self.answerOptions.push(answer);
                   self.currentAnswerTitle('');
                   self.currentAnswerValue('');
-                  $('#idcurrentAnswerValue').focus();
+                  $('#currentAnswerValue').focus();
               };
               self.removeAnswer = function (answer) {
                   self.answerOptions.remove(answer);
