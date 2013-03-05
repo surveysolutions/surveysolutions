@@ -12,15 +12,12 @@ namespace Main.Core.Documents
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.Xml.Serialization;
 
     using Main.Core.AbstractFactories;
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
-
-    using Newtonsoft.Json;
 
     /// <summary>
     /// The complete questionnaire document.

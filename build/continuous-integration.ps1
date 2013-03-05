@@ -96,6 +96,57 @@ function BuildSolutions($BuildConfiguration) {
 }
 
 
+function GetProjectsWithTests() {
+    return Get-ChildItem -Filter *Test*.csproj -Recurse | %{ GetPathRelativeToCurrectLocation $_.FullName }
+}
+
+function GetOutputAssembly($Project, $BuildConfiguration) {
+    $projectFileInfo = Get-Item $Project
+    $fullPathToAssembly = "$($projectFileInfo.DirectoryName)\bin\$BuildConfiguration\$($projectFileInfo.BaseName).dll"
+
+    return GetPathRelativeToCurrectLocation $fullPathToAssembly
+}
+
+function RunTestsFromProject($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='$Project']"
+
+    $assembly = GetOutputAssembly $Project $BuildConfiguration
+
+    if (-not (Test-Path $assembly)) {
+
+        Write-Host "##teamcity[message status='WARNING' text='Expected tests assembly $assembly is missing']"
+
+    } else {
+
+        Write-Host "##teamcity[progressStart 'Running tests from $assembly']"
+
+        $resultXml = (Get-Item $assembly).BaseName + '.NUnit-Result.xml'
+        .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
+        Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
+
+        Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
+    }
+
+    Write-Host "##teamcity[blockClosed name='$Project']"
+}
+
+function RunTests($BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Running tests']"
+
+    $projects = GetProjectsWithTests
+
+    if ($projects -ne $null) {
+        foreach ($project in $projects) {
+            RunTestsFromProject $project $BuildConfiguration
+        }
+    }
+
+    Write-Host "##teamcity[blockClosed name='Running tests']"
+}
+
+
 CleanBinAndObjFolders
 
 BuildSolutions 'Debug'
+
+RunTests 'Debug'
