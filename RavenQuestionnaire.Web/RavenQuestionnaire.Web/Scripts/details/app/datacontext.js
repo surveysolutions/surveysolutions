@@ -97,9 +97,10 @@
 
             menu = new LocalEntitySet(modelmapper.menuItem, model.MenuItem.Nullo),
             groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
-            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, {groups : groups});
+            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, {groups : groups}),
+            questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
-        console.log(input.questionnaire);
+        console.log(questionnaire);
 
         menu.parse(input.questionnaire);
         groups.parse(input.questionnaire);
@@ -124,7 +125,8 @@
         var datacontext = {
             menu: menu,
             groups: groups,
-            questions: questions
+            questions: questions,
+            questionnaire: questionnaire
         };
 
         // We did this so we can access the datacontext during its construction

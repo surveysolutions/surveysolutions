@@ -342,6 +342,7 @@
     <Content Include="Scripts\details\app\binder.js" />
     <Content Include="Scripts\details\app\bootstrapper.js" />
     <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\model.questionnaire.js" />
     <Content Include="Scripts\details\app\model.answerOption.js" />
     <Content Include="Scripts\details\app\messenger.js" />
     <Content Include="Scripts\details\app\model.menuItem.js" />
@@ -375,6 +376,8 @@
     <Content Include="Scripts\details\lib\jquery.mockjson.js" />
     <Content Include="Scripts\details\lib\json2.js" />
     <Content Include="Scripts\details\lib\knockout-2.1.0.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.min.js" />
     <Content Include="Scripts\details\lib\knockout.activity.js" />
     <Content Include="Scripts\details\lib\knockout.asyncCommand.js" />
     <Content Include="Scripts\details\lib\knockout.dirtyFlag.js" />

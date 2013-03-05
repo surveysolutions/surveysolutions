@@ -1,9 +1,10 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store'],
-    function(ko, _, config, datacontext, router, messenger, store) {
+    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model'],
+    function(ko, _, config, datacontext, router, messenger, store, model) {
         var selectedMenuItem = ko.observable(),
             selectedGroup = ko.observable(),
             selectedQuestion = ko.observable(),
+            questionnaire = ko.observable(model.Questionnaire.Nullo),
             menu = ko.observableArray(),
             chapters = ko.observableArray(),
             
@@ -14,6 +15,8 @@
                 
                 if (!isInitialized) {
                     getChapters();
+                    questionnaire(datacontext.questionnaire);
+                     $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
                 }
                 if (routeData.has('question')) {
                     editQuestion(routeData.question);
@@ -92,6 +95,7 @@
         return {
             activate: activate,
             menu: menu,
+            questionnaire:questionnaire,
             chapters: chapters,
             selectedGroup : selectedGroup,
             selectedQuestion: selectedQuestion,

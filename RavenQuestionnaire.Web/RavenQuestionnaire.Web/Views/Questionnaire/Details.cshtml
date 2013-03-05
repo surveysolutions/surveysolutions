@@ -57,6 +57,9 @@
         <div class="inner">
             <div class="title">
                 <button type="button" data-bind="click: closeMenu" class="close">&times</button>
+                 <!-- ko with: questionnaire -->
+                <span data-bind="text: title"></span>
+                <!-- /ko -->
             </div>
             <div class="body">
                 <ul class="nav nav-list" data-bind="foreach: menu">
@@ -80,13 +83,9 @@
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
-                <ul data-bind="foreach: chapters">
+                <ul data-bind="foreach: chapters" class="list">
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
-            </div>
-            <div class="bottom">
-                <div class="inner">
-                </div>
             </div>
         </div>
     </div>
@@ -182,18 +181,29 @@
 </div>
 
 <script type="text/html" id="GroupView">
-    <div class="q-item-wrap">
+    <div class="q-item-wrap q-group">
         <div class="q-item">
+            <div class="group-actions  pull-right">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                    
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
+                        <li><a tabindex="-1" href="#"><i class="icon-plus"></i>Group</a></li>
+                    </ul>
+                </div>
+            </div>
             <span class="alias" data-bind="text: id"></span>
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
         </div>
     </div>
-    <ul data-bind="sortable: children">
+    <ul data-bind="sortable: children" class="list">
         <li data-bind="template: { name: $data.template}, allowDrop : true"></li>
     </ul>
 </script>
 <script type="text/html" id="QuestionView">
-    <div class="q-item-wrap">
+    <div class="q-item-wrap q-question">
         <div class="q-item">
             <span class="alias" data-bind="text: alias"></span>
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>

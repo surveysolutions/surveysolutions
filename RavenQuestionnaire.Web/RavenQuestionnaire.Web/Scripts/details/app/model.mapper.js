@@ -42,6 +42,13 @@
                 return questions;
             },
             // public mapping methods
+             questionnaire = {
+                 getDtoId: function (dto) { return dto.PublicKey; },
+                 fromDto: function (dto, item) {
+                     item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title);
+                     return item;
+                 }
+             },
             menuItem = {
                 getDtoId: function(dto) { return dto.group.PublicKey; },
                 fromDto: function(dto, item) {
@@ -117,6 +124,7 @@
             };
 
         return {
+            questionnaire : questionnaire,
             question: question,
             group: group,
             menuItem: menuItem
