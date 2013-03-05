@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Designer.Web.Providers.CQRS.Accounts.View;
 
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Roles.View
 {
     /// <summary>
-    /// The account list view.
+    /// The role list view.
     /// </summary>
-    public class AccountListView
+    public class RoleListView
     {
         #region Constructors and Destructors
 
@@ -27,8 +28,8 @@ namespace Designer.Web.Providers.CQRS
         /// <param name="order">
         /// The order.
         /// </param>
-        public AccountListView(
-            int page, int pageSize, int totalCount, IEnumerable<AccountListItem> items, string order)
+        public RoleListView(
+            int page, int pageSize, int totalCount, IEnumerable<RoleListItem> items, string order)
         {
             this.Page = page;
             this.TotalCount = totalCount;
@@ -44,7 +45,7 @@ namespace Designer.Web.Providers.CQRS
         /// <summary>
         /// Gets the items.
         /// </summary>
-        public IEnumerable<AccountListItem> Items { get; private set; }
+        public IEnumerable<RoleListItem> Items { get; private set; }
 
         /// <summary>
         /// Gets or sets the order.

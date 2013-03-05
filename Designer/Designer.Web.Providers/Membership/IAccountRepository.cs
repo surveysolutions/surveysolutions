@@ -15,11 +15,6 @@ namespace Designer.Web.Providers.Membership
         bool IsUniqueEmailRequired { get; }
 
         /// <summary>
-        /// Gets whether accounts repository used event sourcing
-        /// </summary>
-        bool IsEventSourcingUsed { get; }
-
-        /// <summary>
         /// Register a new account.
         /// </summary>
         /// <param name="account">Acount to register</param>
@@ -40,47 +35,8 @@ namespace Designer.Web.Providers.Membership
         /// Update an existing user
         /// </summary>
         /// <param name="account">Account being updated.</param>
-        void Update(IMembershipAccount account);
-
-        /// <summary>
-        /// Processes a request to update the password question and answer for a membership user.
-        /// </summary>
-        void ChangePasswordQuestionAndAnswer(string newPasswordQuestion, string newPasswordAnswer);
-
-        /// <summary>
-        /// Processes a request to update the password for a membership user.
-        /// </summary>
-        void ChangePassword(string newPassword);
-
-        /// <summary>
-        /// Resets a user's password to a new, automatically generated password.
-        /// </summary>
-        void ResetPassword(string newPassword, string passwordSalt);
-
-        /// <summary>
-        /// Lock user
-        /// </summary>
-        void LockUser();
-
-        /// <summary>
-        /// Unlock user
-        /// </summary>
-        void UnlockUser();
-
-        /// <summary>
-        /// Update login information by user
-        /// </summary>
-        void UserValidated();
-
-        /// <summary>
-        /// Update the last-activity date/time stamp for the user
-        /// </summary>
-        void UpdateOnlineState();
-
-        /// <summary>
-        /// User account confirmation
-        /// </summary>
-        void ConfirmAccount();
+        /// <param name="eventType">Using only for event sourcing</param>
+        void Update(IMembershipAccount account, MembershipEventType eventType = MembershipEventType.Update);
 
         /// <summary>
         /// Get a user by using your PK.

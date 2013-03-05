@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Designer.Web
+@using Designer.Web.Models
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8" />
@@ -10,7 +12,7 @@
     </head>
     <body>
         @StackExchange.Profiling.MiniProfiler.RenderIncludes()
-        @Raven.Client.MvcIntegration.RavenProfiler.CurrentRequestSessions()
+        @*@Raven.Client.MvcIntegration.RavenProfiler.CurrentRequestSessions()*@
         <header>
             <div class="content-wrapper">
                 <div class="float-left">
@@ -23,7 +25,7 @@
                     <nav>
                         <ul id="menu">
                             <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Administration", "Index", "Administration")</li>
+                            <li>@Html.ActionLink("Administration", "Index", "Administration").If(User.IsInRole(UserHelper.ADMINROLENAME))</li>
                         </ul>
                     </nav>
                 </div>

@@ -1,4 +1,7 @@
-﻿using Main.Core;
+﻿using Designer.Web.Providers.CQRS;
+using Designer.Web.Providers.CQRS.Accounts;
+using Main.Core;
+using System.Linq;
 
 namespace Designer.Web
 {
@@ -10,9 +13,9 @@ namespace Designer.Web
  
         }
 
-        public override void Load()
+        public override System.Collections.Generic.IEnumerable<System.Reflection.Assembly> GetAssweblysForRegister()
         {
-            base.Load();
+            return Enumerable.Concat(base.GetAssweblysForRegister(), new[] {typeof (AccountAR).Assembly});
         }
     }
 }

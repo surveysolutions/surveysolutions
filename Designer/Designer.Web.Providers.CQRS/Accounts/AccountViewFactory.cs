@@ -1,10 +1,11 @@
-﻿using Main.Core.View;
+﻿using Designer.Web.Providers.CQRS.Accounts.View;
+using Main.Core.View;
 using Main.DenormalizerStorage;
 using System;
 using System.Linq;
 using Main.Core.Utility;
 
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Accounts
 {
     /// <summary>
     /// The account view factory.
@@ -49,9 +50,9 @@ namespace Designer.Web.Providers.CQRS
         public AccountView Load(AccountViewInputModel input)
         {
             Func<AccountDocument,bool> query = (x) => false;
-            if (input.AccountId != Guid.Empty)
+            if (input.ProviderUserKey != null)
             {
-                query = (x) => (Guid) x.ProviderUserKey == input.AccountId;
+                query = (x) => x.ProviderUserKey == input.ProviderUserKey;
             }
             else if(!string.IsNullOrEmpty( input.AccountName))
             {
@@ -85,7 +86,12 @@ namespace Designer.Web.Providers.CQRS
                     LastActivityAt = x.LastActivityAt,
                     LastLockedOutAt = x.LastLockedOutAt,
                     LastLoginAt = x.LastLoginAt,
-                    LastPasswordChangeAt = x.LastPasswordChangeAt
+                    LastPasswordChangeAt = x.LastPasswordChangeAt,
+                    Password = x.Password,
+                    PasswordSalt = x.PasswordSalt,
+                    PasswordQuestion = x.PasswordQuestion,
+                    PasswordAnswer = x.PasswordAnswer,
+                    SimpleRoles = x.SimpleRoles
                 }).FirstOrDefault();
         }
 

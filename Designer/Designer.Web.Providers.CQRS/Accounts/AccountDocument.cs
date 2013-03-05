@@ -1,11 +1,13 @@
-﻿using Designer.Web.Providers.Membership;
+﻿using System.Collections.Generic;
+using Designer.Web.Providers.Membership;
+using Designer.Web.Providers.Roles;
 using System;
+using System.Linq;
 
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Accounts
 {
-    public class AccountDocument : IMembershipAccount
+    public class AccountDocument : IMembershipAccount, IUserWithRoles
     {
-        public Guid PublicKey { get; set; }
         public string ApplicationName { get; set; }
         public string Email { get; set; }
         public string PasswordQuestion { get; set; }
@@ -28,5 +30,21 @@ namespace Designer.Web.Providers.CQRS
         public string Password { get; set; }
         public string PasswordSalt { get; set; }
         public string ConfirmationToken { get; set; }
+        public Guid PublicKey
+        {
+            get { return (Guid) ProviderUserKey; }
+        }
+
+        public List<SimpleRoleEnum> SimpleRoles { set; get; }
+
+        public IEnumerable<string> Roles
+        {
+            get { return SimpleRoles.Select(x => Enum.GetName(typeof(SimpleRoleEnum), x)); }
+        }
+
+        public bool IsInRole(string roleName)
+        {
+            return Roles.Contains(roleName);
+        }
     }
 }

@@ -1,8 +1,9 @@
-﻿using Main.Core.Entities;
+﻿using Designer.Web.Providers.Roles;
+using Main.Core.Entities;
 using Main.Core.Utility;
 using System.Collections.Generic;
 
-namespace Designer.Web.Providers.CQRS
+namespace Designer.Web.Providers.CQRS.Accounts.View
 {
     /// <summary>
     /// The account list input model.
@@ -41,23 +42,28 @@ namespace Designer.Web.Providers.CQRS
         public int PageSize = 20;
 
         /// <summary>
-        /// Get or set accounts online only
+        /// Get online accounts only
         /// </summary>
         public bool IsOnlineOnly = false;
 
         /// <summary>
-        /// Get or set account new only
+        /// Get new accounts only
         /// </summary>
         public bool IsNewOnly = false;
 
         /// <summary>
-        /// Get or set account by account name
+        /// Get accounts by name
         /// </summary>
-        public string AccountName = string.Empty;
+        public string Name = string.Empty;
 
         /// <summary>
-        /// Get or set account by account email
+        /// Get accounts by email
         /// </summary>
-        public string AccountEmail = string.Empty;
+        public string Email = string.Empty;
+
+        /// <summary>
+        /// Get accounts by role
+        /// </summary>
+        public SimpleRoleEnum Role = SimpleRoleEnum.Undefined;
     }
 }
