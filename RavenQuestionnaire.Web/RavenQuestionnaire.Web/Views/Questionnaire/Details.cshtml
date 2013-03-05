@@ -53,11 +53,12 @@
 
 <div id="busyindicator"></div>
 <div id="stacks">
+    <div id="menu-toggle" class="stack" data-bind="click: showMenu"></div>
     <div id="groups" class="stack">
         <div class="inner">
             <div class="title">
                 <button type="button" data-bind="click: closeMenu" class="close">&times</button>
-                 <!-- ko with: questionnaire -->
+                <!-- ko with: questionnaire -->
                 <span data-bind="text: title"></span>
                 <!-- /ko -->
             </div>
@@ -186,7 +187,6 @@
             <div class="group-actions  pull-right">
                 <div class="btn-group">
                     <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
-                    
                     </a>
                     <ul class="dropdown-menu">
                         <li><a tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
@@ -194,7 +194,7 @@
                     </ul>
                 </div>
             </div>
-            <span class="alias" data-bind="text: id"></span>
+          @*  <span class="alias" data-bind="text: id"></span>*@
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
         </div>
     </div>

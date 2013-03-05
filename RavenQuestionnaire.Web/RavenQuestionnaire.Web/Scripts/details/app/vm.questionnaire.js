@@ -85,7 +85,11 @@
             },
             showMenu = function () {
                  $('#stacks').removeClass('menu-hidden');
-             },
+            },
+            addQuestion = function () {
+            },
+            addGroup = function () {
+            },
             init = function () {
                 selectedMenuItem.subscribe(syncSelectedMenuItemWithIsSelected);
              };
@@ -101,6 +105,8 @@
             selectedQuestion: selectedQuestion,
             closeDetails: closeDetails,
             closeMenu: closeMenu,
-            showMenu: showMenu
+            showMenu: showMenu,
+            addQuestion: addQuestion,
+            addGroup : addGroup
         };
     });

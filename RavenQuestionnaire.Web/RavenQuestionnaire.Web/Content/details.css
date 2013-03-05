@@ -35,7 +35,7 @@
 }
 #questionnaire ::-webkit-scrollbar-thumb
 {
-	background: #2478a8;
+	background-color:#164B69;
 }
 
 body:before
@@ -51,7 +51,37 @@ body:before
 	top: 0;
 	z-index: -100;
     background-color:#164B69;
+    -webkit-transition: all .6s ease-in-out;
+    -moz-transition: all .6s ease-in-out;
+    -o-transition: all .6s ease-in-out;
+    -ms-transition: all .6s ease-in-out;
+    transition: all .6s ease-in-out;
 }
+.loading-backdrop {
+    background-position: center top;
+	background-repeat: no-repeat;
+	background-size: cover;
+	bottom: 0;
+	content: "";
+	left: 0;
+	position: fixed;
+	right: 0;
+	top: 0;
+	z-index: -99999;
+    background-color:#164B69;
+     opacity: 0;
+    -webkit-transition: all .6s ease-in-out;
+    -moz-transition: all .6s ease-in-out;
+    -o-transition: all .6s ease-in-out;
+    -ms-transition: all .6s ease-in-out;
+    transition: all 1s ease-in-out;
+}
+body.loading .loading-backdrop
+{
+    opacity: 1;
+    z-index: 99999;
+}
+
 #stacks
 {
 	bottom: 0;
@@ -61,13 +91,20 @@ body:before
 	overflow: hidden;
 	position: absolute;
 }
+
 #stacks > div
 {
 	position: absolute;
 }
-.stack
-{
+#menu-toggle {
+    bottom: 0;
+    top: 0;
+    width: 30px;
+    left: 0;
+    cursor: pointer;
+    visibility: hidden;
 }
+
 #groups
 {
 	-webkit-box-sizing: border-box;
@@ -367,6 +404,14 @@ body:before
 #stacks.menu-hidden #questionnaire {
 	left: 0;
 }
+#stacks.menu-hidden #menu-toggle {
+    z-index: 200;
+    visibility: visible;
+}
+#stacks.menu-hidden #menu-toggle:hover {
+    background: rgba(179, 227, 255, 0.11);
+}
+
 #questionnaire ul.list {
     list-style: none;
     margin: 0;
@@ -429,16 +474,18 @@ body:before
 
 }
 .alias {
+    background-color: #A38F8F;
+    border-radius: 2px 2px 2px 2px;
+    color: #FFFFFF;
     float: right;
     font-size: 11px;
-    color: #3b6594;
     line-height: 14px;
-    margin: 11px 3px 0 7px;
-    text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-    max-width: 200px;
-    white-space: nowrap;
+    margin: 9px 3px 0 7px;
+    max-width: 150px;
     overflow: hidden;
+    padding: 1px 3px;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .edit-triggers .row-fluid {
     margin-bottom: 5px;
@@ -461,4 +508,8 @@ body:before
 .pull-right .dropdown-menu {
     left: auto;
     right: 0;
+}
+.group-actions  .btn.dropdown-toggle {
+    padding-left: 2px;
+    padding-right: 2px;
 }

@@ -11,6 +11,11 @@ define('presenter',
             },
             toggleActivity = function(show) {
                 $('#busyindicator').activity(show);
+                if (show) {
+                    $('body').addClass('loading');
+                } else {
+                    $('body').removeClass('loading');
+                }
             };
 
         return {
