@@ -5,12 +5,15 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
@@ -43,18 +46,22 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
+            this.Orientation = Orientation.Horizontal;
+            
             typedMode = Model as SelectebleQuestionViewModel;
 
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
+                cb.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                 ViewGroup.LayoutParams.WrapContent);
                 cb.Text = answer.Title;
                 cb.Checked = answer.Selected;
                 cb.CheckedChange += cb_CheckedChange;
                 cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
                 llWrapper.AddView(cb);
+                cb.AttachImage(answer);
             }
-           
         }
 
         private SelectebleQuestionViewModel typedMode;

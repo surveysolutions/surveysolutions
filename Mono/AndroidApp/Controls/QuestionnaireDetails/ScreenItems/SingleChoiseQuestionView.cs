@@ -5,12 +5,15 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
@@ -41,10 +44,13 @@ namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
             {
                 radioButtons[i] = new RadioButton(this.Context);
                 radioButtons[i].Text = answer.Title;
+                
                 if (answer.Selected)
                     checkedButton = radioButtons[i];
                 radioButtons[i].SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
+                radioButtons[i].AttachImage(answer);
                 radioGroup.AddView(radioButtons[i]);
+               
                 i++;
             }
             if (checkedButton != null)
