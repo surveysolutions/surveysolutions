@@ -1,0 +1,30 @@
+﻿@using WB.UI.Designer.Extensions
+@using MvcContrib.UI.Grid
+@model MembershipUserCollection
+@{
+    ViewBag.Title = "Administration";
+}
+
+<h2>Users</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@Html.Grid(Model.Cast<MembershipUser>()).Columns(column =>
+{
+    column.For(user => Html.ActionLink("Edit", "Edit", new
+    {
+        id = user.UserName
+    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
+    column.For(user => Html.ActionLink("Delete", "Delete", new
+    {
+        id = user.UserName
+    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
+    column.For(user => user.UserName).Named("Name");
+    column.For(user => user.Email);
+    column.For(user => user.CreationDate.ToUIString()).Named("Created date");
+    column.For(user => user.LastLoginDate.ToUIString()).Named("Last Login");
+    column.For(user => user.IsApproved).Named("Approved");
+    column.For(user => user.IsLockedOut).Named("Locked");
+}).Attributes(@class=>"table table-striped", width=>"100%")
+
