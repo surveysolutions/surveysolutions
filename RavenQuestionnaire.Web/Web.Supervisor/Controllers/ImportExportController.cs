@@ -164,13 +164,13 @@ namespace Web.Supervisor.Controllers
 
                         var timings = syncManager.StartTime - syncManager.EndTime;
 
-                        this.AsyncManager.Parameters["result"] = collector.GetExportedStream().ToArray();
+                        this.AsyncManager.Parameters["result"] = collector.GetExportedStream();
                     }
                     catch (Exception e)
                     {
                         this.AsyncManager.Parameters["result"] = null;
                         Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.Fatal("Error on export ", e);
+                        logger.Fatal("Error on export " + e.Message, e);
                         if (e.InnerException != null)
                         {
                             logger.Fatal("Error on export (Inner Exception)", e.InnerException);
@@ -190,7 +190,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Downlods zip archive with events to client
         /// </returns>
-        public ActionResult BackupCompleted(byte[] result)
+        public ActionResult BackupCompleted(Stream result)
         {
             if (result != null)
             {
