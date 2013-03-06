@@ -132,6 +132,9 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f040027
 			public const int btnAnswered = 2130968615;
 			
+			// aapt resource value: 0x7f04002e
+			public const int btnBackup = 2130968622;
+			
 			// aapt resource value: 0x7f04002b
 			public const int btnComplete = 2130968619;
 			
@@ -149,6 +152,9 @@ namespace CAPI.Android
 			
 			// aapt resource value: 0x7f04002d
 			public const int btnPush = 2130968621;
+			
+			// aapt resource value: 0x7f04002f
+			public const int btnRestore = 2130968623;
 			
 			// aapt resource value: 0x7f040026
 			public const int btnSyncPoint = 2130968614;
@@ -228,8 +234,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f04000f
 			public const int tvStatus = 2130968591;
 			
-			// aapt resource value: 0x7f04002e
-			public const int tvSyncResult = 2130968622;
+			// aapt resource value: 0x7f040030
+			public const int tvSyncResult = 2130968624;
 			
 			// aapt resource value: 0x7f04000b
 			public const int tvTitle = 2130968587;

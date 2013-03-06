@@ -26,7 +26,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         protected LinearLayout top;
         protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
         protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
-        protected AnswerSetPopupClosure answerHandler;
+        protected RosterItemDialog dialog;
         public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
             : this()
         {
@@ -92,10 +92,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 rosterQuestionView.Dispose();
             }
             rosterQuestionViews = new List<RosterQuestionView>();
-            if (answerHandler != null)
+            if (dialog != null)
             {
-                answerHandler.Dispose();
-                answerHandler = null;
+                dialog.Dispose();
+                dialog = null;
             }
         }
 
@@ -248,20 +248,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var group = Model.Rows.FirstOrDefault(r => r.ScreenId.PropagationKey == e.Model.PublicKey.PropagationKey);
             if (group == null)
                 return;
-            var setAnswerPopup = new AlertDialog.Builder(this.Activity);
-            setAnswerPopup.SetView(new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
-                                                        questionViewFactory));
-            var dialog = setAnswerPopup.Create();
-
-            answerHandler = new AnswerSetPopupClosure(dialog, e.Model);
-            dialog.DismissEvent += (dialogSender, dialogEvt) =>
-                {
-                    if (answerHandler == null)
-                        return;
-                    answerHandler.Dispose();
-                    answerHandler = null;
-                };
-            dialog.Show();
+            dialog =new RosterItemDialog(this.Activity, e.Model, group.ScreenName, Model.QuestionnaireId,
+                                                        questionViewFactory);
         }
 
 
@@ -308,31 +296,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         protected readonly IQuestionViewFactory questionViewFactory;
         public QuestionnaireGridViewModel Model { get; private set; }
 
-        protected class AnswerSetPopupClosure:IDisposable
-        {
-            private AlertDialog dialog;
-            private QuestionViewModel question;
-            public AnswerSetPopupClosure(AlertDialog dialog, QuestionViewModel question)
-            {
-                this.dialog = dialog;
-                this.question = question;
-                question.PropertyChanged += AnswerSetHandler;
-            }
-            
-            public void AnswerSetHandler(object sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName == "AnswerString")
-                {
-                    dialog.Dismiss();
-                    dialog.Dispose();
-                }
-            }
-
-            public void Dispose()
-            {
-                question.PropertyChanged -= AnswerSetHandler;
-            }
-        }
 
         protected class StatusChangedHandlerClosure
         {
