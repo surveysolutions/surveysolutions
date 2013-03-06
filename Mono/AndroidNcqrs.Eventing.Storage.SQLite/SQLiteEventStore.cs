@@ -98,7 +98,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                     object data = this.GetObject(objectse[4].ToString());
                     long sequenceId = Convert.ToInt64(objectse[5]);
                     var @event = new CommittedEvent(
-                        commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1, 0));
+                        commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1,1,1,1));
 
                     events.Add(@event);
                 }

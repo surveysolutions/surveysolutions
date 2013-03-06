@@ -102,6 +102,7 @@ namespace AndroidMain.Synchronization
 
             var request = new RestRequest(pushPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
+            request.AddHeader("Accept-Encoding", "gzip,deflate");
 
             try
             {
