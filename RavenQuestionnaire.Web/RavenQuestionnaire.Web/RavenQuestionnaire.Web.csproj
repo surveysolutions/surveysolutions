@@ -345,7 +345,6 @@
     <Content Include="Scripts\details\app\model.questionnaire.js" />
     <Content Include="Scripts\details\app\model.answerOption.js" />
     <Content Include="Scripts\details\app\messenger.js" />
-    <Content Include="Scripts\details\app\model.menuItem.js" />
     <Content Include="Scripts\details\app\dataservice.questionnaire.js" />
     <Content Include="Scripts\details\app\datacontext.js" />
     <Content Include="Scripts\details\app\dataprimer.js" />

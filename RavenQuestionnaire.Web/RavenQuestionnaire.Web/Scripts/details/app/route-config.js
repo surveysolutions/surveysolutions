@@ -17,11 +17,18 @@
                                 route: config.hashes.details,
                                 title: 'Details',
                                 callback: vm.questionnaire.activate
-                            }, {
+                            },
+                            {
+                                route: config.hashes.detailsQuestionnaire + '/:questionnaire',
+                                title: 'Details',
+                                callback: vm.questionnaire.activate
+                            },
+                            {
                                 route: config.hashes.detailsGroup + '/:group',
                                 title: 'Details',
                                 callback: vm.questionnaire.activate
-                            }, {
+                            },
+                            {
                                 route: config.hashes.detailsQuestion + '/:question',
                                 title: 'Details',
                                 callback: vm.questionnaire.activate

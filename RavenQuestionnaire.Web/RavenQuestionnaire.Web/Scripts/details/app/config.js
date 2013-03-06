@@ -37,6 +37,7 @@
                 details: '#/details',
                 detailsGroup: '#/details/group',
                 detailsQuestion: '#/details/question',
+                detailsQuestionnaire: '#/details/questionnaire'
             },
             viewIds = {
                 details: '#stacks'
