@@ -1,5 +1,5 @@
 ﻿
-namespace Designer.Web.Providers.CQRS.Roles.View
+namespace WB.UI.Designer.Providers.CQRS.Roles.View
 {
     public class RoleView : RoleDocument
     {

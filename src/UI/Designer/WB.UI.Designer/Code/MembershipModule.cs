@@ -1,14 +1,19 @@
-﻿using Designer.Web.Providers.CQRS;
-using Designer.Web.Providers.Membership;
-using Designer.Web.Providers.Membership.PasswordStrategies;
-using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.CQRS;
+using WB.UI.Designer.Providers.Membership;
+using WB.UI.Designer.Providers.Membership.PasswordStrategies;
+using WB.UI.Designer.Providers.Roles;
 using Main.Core.View;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ninject.Modules;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
+    using WB.UI.Designer.Providers.CQRS;
+    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Designer.Providers.Membership.PasswordStrategies;
+    using WB.UI.Designer.Providers.Roles;
+
     public class MembershipModule : NinjectModule
     {
         public override void Load()

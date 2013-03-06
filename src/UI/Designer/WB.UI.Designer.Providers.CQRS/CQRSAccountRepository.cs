@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Designer.Web.Providers.CQRS.Accounts.Commands;
-using Designer.Web.Providers.CQRS.Accounts.View;
-using Designer.Web.Providers.Membership;
+using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Providers.Membership;
 using Main.Core.View;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.ServiceModel;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.CQRS
+namespace WB.UI.Designer.Providers.CQRS
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
+    using WB.UI.Designer.Providers.CQRS.Accounts.View;
+    using WB.UI.Designer.Providers.Membership;
+
     public class CQRSAccountRepository : IAccountRepository
     {
         private readonly IViewRepository _viewRepository;

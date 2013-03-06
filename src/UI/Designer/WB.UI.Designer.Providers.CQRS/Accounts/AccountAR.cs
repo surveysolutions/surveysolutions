@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Designer.Web.Providers.CQRS.Accounts.Events;
+using WB.UI.Designer.Providers.CQRS.Accounts.Events;
 using Ncqrs.Domain;
-using Designer.Web.Providers.Roles;
+using WB.UI.Designer.Providers.Roles;
 
-namespace Designer.Web.Providers.CQRS.Accounts
+namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+    using WB.UI.Designer.Providers.Roles;
+
     public class AccountAR : AggregateRootMappedByConvention
     {
 

@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
     public static class CustomHtmlHelper
     {

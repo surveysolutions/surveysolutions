@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Designer.Web.Providers.CQRS.Accounts.Events
+namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
     public class AccountLoginFailed
     {

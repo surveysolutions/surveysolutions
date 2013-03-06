@@ -1,10 +1,12 @@
-﻿using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.Roles;
 using Main.Core.Entities;
 using Main.Core.Utility;
 using System.Collections.Generic;
 
-namespace Designer.Web.Providers.CQRS.Accounts.View
+namespace WB.UI.Designer.Providers.CQRS.Accounts.View
 {
+    using WB.UI.Designer.Providers.Roles;
+
     /// <summary>
     /// The account list input model.
     /// </summary>

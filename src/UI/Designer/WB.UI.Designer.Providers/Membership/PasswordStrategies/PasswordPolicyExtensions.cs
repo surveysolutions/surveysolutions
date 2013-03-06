@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Designer.Web.Providers.Membership.PasswordStrategies
+namespace WB.UI.Designer.Providers.Membership.PasswordStrategies
 {
     /// <summary>
     /// Extension methods for password policies.

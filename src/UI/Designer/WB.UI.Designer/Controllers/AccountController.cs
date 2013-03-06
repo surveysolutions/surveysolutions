@@ -1,5 +1,5 @@
-﻿using Designer.Web.Extensions;
-using Designer.Web.Models;
+﻿using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
 using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using System;
@@ -9,8 +9,10 @@ using System.Web.Mvc;
 using System.Web.Security;
 using WebMatrix.WebData;
 
-namespace Designer.Web.Controllers
+namespace WB.UI.Designer.Controllers
 {
+    using WB.UI.Designer.Models;
+
     [Authorize]
     //[InitializeSimpleMembership]
     public class AccountController : Controller

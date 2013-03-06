@@ -2,7 +2,7 @@
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using System;
 
-namespace Designer.Web.Providers.CQRS.Accounts.Commands
+namespace WB.UI.Designer.Providers.CQRS.Accounts.Commands
 {
     [Serializable]
     [MapsToAggregateRootConstructor(typeof(AccountAR))]

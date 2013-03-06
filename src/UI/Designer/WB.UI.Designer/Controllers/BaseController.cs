@@ -1,7 +1,7 @@
 ﻿using Main.Core.View;
 using System.Web.Mvc;
 
-namespace Designer.Web.Controllers
+namespace WB.UI.Designer.Controllers
 {
     public abstract class BaseController : Controller
     {

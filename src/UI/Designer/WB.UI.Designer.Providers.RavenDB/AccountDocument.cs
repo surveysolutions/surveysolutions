@@ -1,10 +1,13 @@
-﻿using Designer.Web.Providers.Membership;
-using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.Membership;
+using WB.UI.Designer.Providers.Roles;
 using System;
 using System.Collections.Generic;
 
-namespace Designer.Web.Providers.Repositories.RavenDb
+namespace WB.UI.Designer.Providers.Repositories.RavenDb
 {
+    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Designer.Providers.Roles;
+
     /// <summary>
     /// RavenDb account document
     /// </summary>

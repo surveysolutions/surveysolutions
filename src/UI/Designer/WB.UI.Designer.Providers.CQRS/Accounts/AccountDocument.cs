@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
-using Designer.Web.Providers.Membership;
-using Designer.Web.Providers.Roles;
+using WB.UI.Designer.Providers.Membership;
+using WB.UI.Designer.Providers.Roles;
 using System;
 using System.Linq;
 
-namespace Designer.Web.Providers.CQRS.Accounts
+namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
+    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Designer.Providers.Roles;
+
     public class AccountDocument : IMembershipAccount, IUserWithRoles
     {
         public string ApplicationName { get; set; }
