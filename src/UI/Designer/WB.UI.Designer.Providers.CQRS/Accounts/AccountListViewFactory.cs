@@ -1,5 +1,5 @@
-﻿using Designer.Web.Providers.CQRS.Accounts.View;
-using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Providers.Roles;
 using Main.Core.Utility;
 using Main.Core.View;
 using Main.DenormalizerStorage;
@@ -7,8 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Designer.Web.Providers.CQRS.Accounts
+namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.View;
+    using WB.UI.Designer.Providers.Roles;
+
     /// <summary>
     /// The account view factory.
     /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace Designer.Web.Providers.Repositories.RavenDb
+﻿namespace WB.UI.Designer.Providers.Repositories.RavenDb
 {
     /// <summary>
     /// Role document

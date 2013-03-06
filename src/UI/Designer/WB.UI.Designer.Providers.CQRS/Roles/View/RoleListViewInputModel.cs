@@ -2,7 +2,7 @@
 using Main.Core.Utility;
 using System.Collections.Generic;
 
-namespace Designer.Web.Providers.CQRS.Roles.View
+namespace WB.UI.Designer.Providers.CQRS.Roles.View
 {
     /// <summary>
     /// The account list input model.

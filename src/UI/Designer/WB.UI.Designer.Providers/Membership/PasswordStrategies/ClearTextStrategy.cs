@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.Membership.PasswordStrategies
+namespace WB.UI.Designer.Providers.Membership.PasswordStrategies
 {
     /// <summary>
     /// Strategy that do nothing with the passwords.

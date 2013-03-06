@@ -6,7 +6,7 @@ using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
 
-namespace Designer.Web.Providers.Roles
+namespace WB.UI.Designer.Providers.Roles
 {
     /// <summary>
     /// Provides roles through a repository

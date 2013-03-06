@@ -6,10 +6,10 @@ using System;
 using System.Web;
 using System.Web.Configuration;
 
-[assembly: WebActivator.PreApplicationStartMethod(typeof(Designer.Web.App_Start.NinjectWebCommon), "Start")]
-[assembly: WebActivator.PostApplicationStartMethod(typeof(Designer.Web.App_Start.NinjectWebCommon), "PostStart")]
-[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(Designer.Web.App_Start.NinjectWebCommon), "Stop")]
-namespace Designer.Web.App_Start
+[assembly: WebActivator.PreApplicationStartMethod(typeof(WB.UI.Designer.App_Start.NinjectWebCommon), "Start")]
+[assembly: WebActivator.PostApplicationStartMethod(typeof(WB.UI.Designer.App_Start.NinjectWebCommon), "PostStart")]
+[assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(WB.UI.Designer.App_Start.NinjectWebCommon), "Stop")]
+namespace WB.UI.Designer.App_Start
 {
     public static class NinjectWebCommon 
     {

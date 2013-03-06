@@ -6,13 +6,16 @@
 
 using System;
 using System.Collections.Generic;
-using Designer.Web.Providers.CQRS.Accounts.Events;
-using Designer.Web.Providers.Roles;
+using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+using WB.UI.Designer.Providers.Roles;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
-namespace Designer.Web.Providers.CQRS.Accounts
+namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.Events;
+    using WB.UI.Designer.Providers.Roles;
+
     /// <summary>
     /// The user denormalizer.
     /// </summary>

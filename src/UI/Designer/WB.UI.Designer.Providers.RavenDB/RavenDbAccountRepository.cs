@@ -1,13 +1,16 @@
-﻿using Designer.Web.Providers.Membership;
-using Designer.Web.Providers.Repositories.RavenDb;
+﻿using WB.UI.Designer.Providers.Membership;
+using WB.UI.Designer.Providers.Repositories.RavenDb;
 using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.RavenDB
+namespace WB.UI.Designer.Providers.RavenDB
 {
+    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Designer.Providers.Repositories.RavenDb;
+
     /// <summary>
     /// Raven implementation of the account repository
     /// </summary>

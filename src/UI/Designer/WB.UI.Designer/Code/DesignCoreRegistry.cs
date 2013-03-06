@@ -1,10 +1,12 @@
-﻿using Designer.Web.Providers.CQRS;
-using Designer.Web.Providers.CQRS.Accounts;
+﻿using WB.UI.Designer.Providers.CQRS;
+using WB.UI.Designer.Providers.CQRS.Accounts;
 using Main.Core;
 using System.Linq;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts;
+
     public class DesignCoreRegistry : CoreRegistry
     {
         public DesignCoreRegistry(string repositoryPath, bool isEmbeded)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.Membership
+namespace WB.UI.Designer.Providers.Membership
 {
     /// <summary>
     /// Repository for user accounts

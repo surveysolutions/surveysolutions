@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Security;
 
-namespace Designer.Web.Providers.Membership.PasswordStrategies
+namespace WB.UI.Designer.Providers.Membership.PasswordStrategies
 {
     /// <summary>
     /// Encrypts the password by using triple des.

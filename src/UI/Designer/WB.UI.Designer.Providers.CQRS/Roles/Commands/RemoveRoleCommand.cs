@@ -1,10 +1,12 @@
-﻿using Designer.Web.Providers.CQRS.Accounts;
+﻿using WB.UI.Designer.Providers.CQRS.Accounts;
 using Ncqrs.Commanding;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 using System;
 
-namespace Designer.Web.Providers.CQRS.Roles.Commands
+namespace WB.UI.Designer.Providers.CQRS.Roles.Commands
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts;
+
     [Serializable]
     [MapsToAggregateRootMethod(typeof(AccountAR), "Remove")]
     public class RemoveRoleCommand : CommandBase

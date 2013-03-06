@@ -1,5 +1,5 @@
 ﻿
-namespace Designer.Web.Providers.Membership
+namespace WB.UI.Designer.Providers.Membership
 {
     /// <summary>
     /// Default policy object

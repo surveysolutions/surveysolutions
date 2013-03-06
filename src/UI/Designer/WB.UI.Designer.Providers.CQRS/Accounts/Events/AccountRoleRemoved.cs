@@ -1,7 +1,9 @@
-﻿using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.Roles;
 
-namespace Designer.Web.Providers.CQRS.Accounts.Events
+namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
+    using WB.UI.Designer.Providers.Roles;
+
     public class AccountRoleRemoved
     {
         public SimpleRoleEnum Role { set; get; }

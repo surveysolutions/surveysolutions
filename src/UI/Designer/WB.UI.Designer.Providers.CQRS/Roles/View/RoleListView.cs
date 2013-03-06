@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using Designer.Web.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
 
-namespace Designer.Web.Providers.CQRS.Roles.View
+namespace WB.UI.Designer.Providers.CQRS.Roles.View
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.View;
+
     /// <summary>
     /// The role list view.
     /// </summary>

@@ -1,4 +1,4 @@
-﻿namespace Designer.Web.Models
+﻿namespace WB.UI.Designer.Models
 {
     public class ExternalLogin
     {

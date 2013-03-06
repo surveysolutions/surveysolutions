@@ -1,5 +1,5 @@
 ﻿
-namespace Designer.Web.Providers.CQRS.Roles
+namespace WB.UI.Designer.Providers.CQRS.Roles
 {
     public class RoleDocument
     {

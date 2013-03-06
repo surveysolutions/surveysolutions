@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Security;
 
-namespace Designer.Web.Extensions
+namespace WB.UI.Designer.Extensions
 {
     public static class CustomExtensions
     {

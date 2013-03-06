@@ -13,13 +13,13 @@ using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 //using StackExchange.Profiling.Data.Linq2Sql;
 
 [assembly: WebActivator.PreApplicationStartMethod(
-	typeof(Designer.Web.App_Start.MiniProfilerPackage), "PreStart")]
+	typeof(WB.UI.Designer.App_Start.MiniProfilerPackage), "PreStart")]
 
 [assembly: WebActivator.PostApplicationStartMethod(
-	typeof(Designer.Web.App_Start.MiniProfilerPackage), "PostStart")]
+	typeof(WB.UI.Designer.App_Start.MiniProfilerPackage), "PostStart")]
 
 
-namespace Designer.Web.App_Start 
+namespace WB.UI.Designer.App_Start 
 {
     public static class MiniProfilerPackage
     {

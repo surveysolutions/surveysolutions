@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Designer.Web;
-using Designer.Web.Controllers;
+using WB.UI.Designer;
+using WB.UI.Designer.Controllers;
 
-namespace Designer.Web.Tests.Controllers
+namespace WB.UI.Designer.Tests.Controllers
 {
+    using WB.UI.Designer.Controllers;
+
     [TestClass]
     public class HomeControllerTest
     {

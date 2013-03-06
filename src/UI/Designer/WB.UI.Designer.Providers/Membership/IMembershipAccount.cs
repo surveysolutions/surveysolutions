@@ -1,7 +1,7 @@
 
 using System;
 
-namespace Designer.Web.Providers.Membership
+namespace WB.UI.Designer.Providers.Membership
 {
     /// <summary>
     /// Account information for a user 

@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
-namespace Designer.Web.Models
+namespace WB.UI.Designer.Models
 {
     public class UpdateAccountModel
     {

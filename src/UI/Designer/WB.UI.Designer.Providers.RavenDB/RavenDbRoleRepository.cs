@@ -1,11 +1,13 @@
-﻿using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.Roles;
 using Raven.Client;
 using System.Collections.Generic;
 using System.Configuration.Provider;
 using System.Linq;
 
-namespace Designer.Web.Providers.Repositories.RavenDb
+namespace WB.UI.Designer.Providers.Repositories.RavenDb
 {
+    using WB.UI.Designer.Providers.Roles;
+
     /// <summary>
     /// Used to load roles from raven
     /// </summary>
