@@ -16,8 +16,6 @@ namespace Web.Supervisor.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using Main.Core.Commands.Synchronization;
-
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Questionnaire.Completed;
