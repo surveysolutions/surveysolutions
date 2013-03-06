@@ -1,19 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
 using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Widget;
-using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 
-namespace AndroidApp.Extensions
+namespace CAPI.Android.Extensions
 {
     public static class ImageExtensions
     {
@@ -28,9 +18,10 @@ namespace AndroidApp.Extensions
                     {
                         using (var resized = Resize(bm))
                         {
-                            view.SetCompoundDrawablesWithIntrinsicBounds(null, new BitmapDrawable(resized), null, null);
+                            view.SetCompoundDrawablesWithIntrinsicBounds(null, null, null, new BitmapDrawable(resized));
                         }
                         view.Text = string.Empty;
+                        view.SetBackgroundResource(Resource.Drawable.questionShape);
                     }
                 }
             }

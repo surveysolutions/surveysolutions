@@ -1,19 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
-using Android.App;
 using Android.Content;
-using Android.Graphics;
-using Android.Graphics.Drawables;
-using Android.OS;
-using Android.Runtime;
-using Android.Util;
-using Android.Views;
 using Android.Widget;
-using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
-using AndroidApp.Extensions;
+using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
