@@ -7,6 +7,7 @@ using Android.Runtime;
 
 using AndroidApp.Core.Model.Authorization;
 using AndroidApp.Core.Model.EventHandlers;
+using AndroidApp.Core.Model.FileStorage;
 using AndroidApp.Core.Model.ViewModel.Dashboard;
 using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 using AndroidApp.Core.Unmanaged;
@@ -15,8 +16,11 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
 using Main.Core.Documents;
+using Main.Core.EventHandlers;
+using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
+using Main.Core.Services;
 using Main.Core.View;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
@@ -32,6 +36,7 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 
 using Ninject;
+using UserDenormalizer = AndroidApp.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace AndroidApp
 {
@@ -57,7 +62,10 @@ namespace AndroidApp
         {
             get { return Kernel.Get<IAuthentication>(); }
         }
-
+        public static IFileStorageService FileStorageService
+        {
+            get { return Kernel.Get<IFileStorageService>(); }
+        }
         public static IKernel Kernel
         {
             get
@@ -108,9 +116,13 @@ namespace AndroidApp
                 new UserDenormalizer(kernel.Get<IDenormalizerStorage<UserView>>());
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
 
+            var fileSorage = new FileStoreDenormalizer(kernel.Get<IDenormalizerStorage<FileDescription>>(),
+                                                       new FileStorageService());
+            bus.RegisterHandler(fileSorage, typeof(FileUploaded));
+            bus.RegisterHandler(fileSorage, typeof(FileDeleted));
             #endregion
 
-           
+
         }
         public override void OnCreate()
         {
