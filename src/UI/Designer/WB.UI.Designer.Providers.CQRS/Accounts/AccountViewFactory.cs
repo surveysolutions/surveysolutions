@@ -1,12 +1,14 @@
-﻿using Designer.Web.Providers.CQRS.Accounts.View;
+﻿using WB.UI.Designer.Providers.CQRS.Accounts.View;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using System;
 using System.Linq;
 using Main.Core.Utility;
 
-namespace Designer.Web.Providers.CQRS.Accounts
+namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.View;
+
     /// <summary>
     /// The account view factory.
     /// </summary>
@@ -45,7 +47,7 @@ namespace Designer.Web.Providers.CQRS.Accounts
         /// The input.
         /// </param>
         /// <returns>
-        /// The Designer.Web.Providers.CQRS.AccountView.
+        /// The WB.UI.Designer.Providers.CQRS.AccountView.
         /// </returns>
         public AccountView Load(AccountViewInputModel input)
         {

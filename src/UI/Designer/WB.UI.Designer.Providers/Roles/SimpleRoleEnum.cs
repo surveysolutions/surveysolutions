@@ -1,5 +1,5 @@
 ﻿
-namespace Designer.Web.Providers.Roles
+namespace WB.UI.Designer.Providers.Roles
 {
     public enum SimpleRoleEnum
     {

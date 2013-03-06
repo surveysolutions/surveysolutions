@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Designer.Web.Providers.CQRS.Roles
+namespace WB.UI.Designer.Providers.CQRS.Roles
 {
     class RoleAR
     {

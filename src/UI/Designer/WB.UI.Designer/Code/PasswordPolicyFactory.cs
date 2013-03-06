@@ -1,7 +1,9 @@
-﻿using Designer.Web.Providers.Membership;
+﻿using WB.UI.Designer.Providers.Membership;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
+    using WB.UI.Designer.Providers.Membership;
+
     public static class PasswordPolicyFactory
     {
         public static IPasswordPolicy CreatePasswordPolicy()

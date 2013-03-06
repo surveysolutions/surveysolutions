@@ -7,7 +7,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using Main.Core;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
     public class MvcApplication : System.Web.HttpApplication
     {

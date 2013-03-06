@@ -1,8 +1,10 @@
-using Designer.Web.Providers.Membership;
+using WB.UI.Designer.Providers.Membership;
 using System;
 
-namespace Designer.Web.Providers.Repositories.RavenDb
+namespace WB.UI.Designer.Providers.Repositories.RavenDb
 {
+    using WB.UI.Designer.Providers.Membership;
+
     /// <summary>
     /// An account have been deleted
     /// </summary>

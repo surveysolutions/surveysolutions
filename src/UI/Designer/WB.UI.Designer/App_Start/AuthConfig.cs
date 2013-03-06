@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Web.WebPages.OAuth;
-using Designer.Web.Models;
+using WB.UI.Designer.Models;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
     public static class AuthConfig
     {

@@ -1,14 +1,18 @@
-﻿using Designer.Web.Providers.CQRS.Accounts.Commands;
-using Designer.Web.Providers.CQRS.Accounts.View;
-using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
+using WB.UI.Designer.Providers.CQRS.Accounts.View;
+using WB.UI.Designer.Providers.Roles;
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Designer.Web.Providers.CQRS
+namespace WB.UI.Designer.Providers.CQRS
 {
+    using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
+    using WB.UI.Designer.Providers.CQRS.Accounts.View;
+    using WB.UI.Designer.Providers.Roles;
+
     public class CQRSRoleRepository : IRoleRepository
     {
         private readonly IViewRepository _viewRepository;

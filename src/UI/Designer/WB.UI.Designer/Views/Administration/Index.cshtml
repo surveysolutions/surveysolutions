@@ -1,4 +1,4 @@
-﻿@using Designer.Web.Extensions
+﻿@using WB.UI.Designer.Extensions
 @using MvcContrib.UI.Grid
 @model MembershipUserCollection
 @{
@@ -15,11 +15,11 @@
     column.For(user => Html.ActionLink("Edit", "Edit", new
     {
         id = user.UserName
-    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, Designer.Web.Models.UserHelper.ADMINROLENAME));
+    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
     column.For(user => Html.ActionLink("Delete", "Delete", new
     {
         id = user.UserName
-    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, Designer.Web.Models.UserHelper.ADMINROLENAME));
+    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
     column.For(user => user.UserName).Named("Name");
     column.For(user => user.Email);
     column.For(user => user.CreationDate.ToUIString()).Named("Created date");

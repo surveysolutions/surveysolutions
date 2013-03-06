@@ -1,7 +1,7 @@
 
 using System.Web.Security;
 
-namespace Designer.Web.Providers.Membership
+namespace WB.UI.Designer.Providers.Membership
 {
     /// <summary>
     /// Used to handle passwords.

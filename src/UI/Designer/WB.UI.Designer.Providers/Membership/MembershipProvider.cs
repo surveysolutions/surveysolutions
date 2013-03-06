@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using System.Security.Cryptography;
 using System.Web;
 
-namespace Designer.Web.Providers.Membership
+namespace WB.UI.Designer.Providers.Membership
 {
     /// <summary>
     /// A membership provider which uses different components to make it more SOLID.

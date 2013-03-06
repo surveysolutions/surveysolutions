@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Designer.Web.Providers.Roles
+namespace WB.UI.Designer.Providers.Roles
 {
     /// <summary>
     /// Repository used to find users and their roles.

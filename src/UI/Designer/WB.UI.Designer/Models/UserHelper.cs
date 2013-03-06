@@ -1,8 +1,10 @@
-﻿using Designer.Web.Providers.Roles;
+﻿using WB.UI.Designer.Providers.Roles;
 using System;
 
-namespace Designer.Web.Models
+namespace WB.UI.Designer.Models
 {
+    using WB.UI.Designer.Providers.Roles;
+
     public static class UserHelper
     {
         public static string ADMINROLENAME = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.Administrator);
