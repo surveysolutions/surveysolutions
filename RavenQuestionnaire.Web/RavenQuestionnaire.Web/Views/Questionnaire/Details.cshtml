@@ -54,37 +54,16 @@
 
 <div id="busyindicator"></div>
 <div id="stacks">
-    <div id="menu-toggle" class="stack" data-bind="click: showMenu"></div>
-    <div id="groups" class="stack">
-        <div class="inner">
-            <div class="title">
-                <button type="button" data-bind="click: closeMenu" class="close">&times</button>
-                <!-- ko with: questionnaire -->
-                    <span data-bind="text: title"></span>
-                <!-- /ko -->
-            </div>
-            <div class="body">
-                <ul class="nav nav-list" data-bind="foreach: menu">
-                    <li data-bind="css: { active : isSelected, level1: level() == 1, level2: level() == 2 }">
-                        <a data-bind="attr: {'href': getHref() }" href="#/group">
-                            <!-- ko if: level() == 0 -->
-                            <span class="chapter-marker">Chapter</span>
-                            <!-- /ko -->
-                            <span class="link-text" data-bind="text: title"></span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="bottom">
-                <div class="inner">
-                    <button class="btn btn-success disabled"><i class="icon-plus icon-white"></i>Chapter</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
+                <!-- ko with: questionnaire -->
+                    <h1 data-bind="text: title"></h1>
+                <!-- /ko -->
+                <div id="filter">
+                    <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                    <input type="text" class="transparent" maxlength="255" placeholder="filter">
+                </div>
                 <ul data-bind="foreach: chapters" class="list">
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
