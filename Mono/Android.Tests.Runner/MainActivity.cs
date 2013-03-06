@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Android.App;
-using AndroidApp.Core.Model.Tests;
-using AndroidMain.Core.Tests.CommonTests;
+using CAPI.Androids.Core.Model.Tests;
 using NUnitLite;
 using NUnitLite.MonoDroid;
 using Ncqrs.Eventing.Storage.SQLite.Tests;
