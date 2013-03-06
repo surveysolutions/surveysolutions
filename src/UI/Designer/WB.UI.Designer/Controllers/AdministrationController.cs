@@ -1,15 +1,33 @@
-using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Models;
+using Designer.Web.Extensions;
+using Designer.Web.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebMatrix.WebData;
 
-namespace WB.UI.Designer.Controllers
+namespace Designer.Web.Controllers
 {
-    using WB.UI.Designer.Models;
+    public class AccountListViewItemModel
+    {
+        [Key]
+        public string Id { get; set; }
+        [Display(Name = "Name")]
+        public string UserName { get; set; }
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+        [Display(Name = "Created date")]
+        public string CreationDate { get; set; }
+        [Display(Name = "Last login")]
+        public string LastLoginDate { get; set; }
+        [Display(Name = "Approved?")]
+        public bool IsApproved { get; set; }
+        [Display(Name = "Locked?")]
+        public bool IsLockedOut { get; set; }
+    }
 
     [Authorize(Roles = "Administrator")]
-    public class AdministrationController : Controller
+    public class AdministrationController : BootstrapBaseController
     {   
         //
         // GET: /Administration/
@@ -17,7 +35,17 @@ namespace WB.UI.Designer.Controllers
         public ViewResult Index()
         {
             int totalRecords;
-            return View(Membership.GetAllUsers(0, 20, out totalRecords));
+            var users = Membership.GetAllUsers(0, 20, out totalRecords).OfType<MembershipUser>().Select(x=> new AccountListViewItemModel()
+                {
+                    Id = x.UserName,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                    CreationDate = x.CreationDate.ToUIString(),
+                    LastLoginDate = x.LastLoginDate.ToUIString(),
+                    IsApproved = x.IsApproved,
+                    IsLockedOut = x.IsLockedOut
+                }).ToList();
+            return View(users);
         }
 
         //
@@ -58,7 +86,7 @@ namespace WB.UI.Designer.Controllers
                 }
                 catch (MembershipCreateUserException e)
                 {
-                     ModelState.AddModelError("", e.StatusCode.ToErrorCode());
+                    Error(e.StatusCode.ToErrorCode());
                 }
             }
             return View();
