@@ -8,14 +8,14 @@ using System.Transactions;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebMatrix.WebData;
+using Designer.Web.Extensions;
 
 namespace WB.UI.Designer.Controllers
 {
     using WB.UI.Designer.Models;
 
     [Authorize]
-    //[InitializeSimpleMembership]
-    public class AccountController : Controller
+    public class AccountController : BootstrapBaseController
     {
         //
         // GET: /Account/Login
@@ -41,20 +41,20 @@ namespace WB.UI.Designer.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "The user name or password provided is incorrect.");
+            Error("The user name or password provided is incorrect.");
             return View(model);
         }
 
         //
         // POST: /Account/LogOff
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
             WebSecurity.Logout();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("login", "account");
         }
 
         //
@@ -75,11 +75,11 @@ namespace WB.UI.Designer.Controllers
         [Recaptcha.RecaptchaControlMvc.CaptchaValidator]
         public ActionResult Register(RegisterModel model, bool captchaValid)
         {
-            //if (!captchaValid)
-            //{
-            //    ModelState.AddModelError("", "You did not type the verification word correctly. Please try again.");
-            //}
-            //else
+            if (!captchaValid)
+            {
+                Error("You did not type the verification word correctly. Please try again.");
+            }
+            else
             {
                 if (ModelState.IsValid)
                 {
@@ -87,21 +87,25 @@ namespace WB.UI.Designer.Controllers
                     try
                     {
                         string confirmationToken =
-                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email }, true);
-                        
-                        Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
+                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new {Email = model.Email},
+                                                             true);
 
-                        dynamic email = new Postal.Email("ConfirmationEmail");
-                        email.To = model.Email;
-                        email.UserName = model.UserName;
-                        email.ConfirmationToken = confirmationToken;
-                        email.Send();
+                        if (!string.IsNullOrEmpty(confirmationToken))
+                        {
+                            Roles.Provider.AddUsersToRoles(new[] {model.UserName}, new[] {UserHelper.USERROLENAME});
 
-                        return RedirectToAction("RegisterStepTwo", "Account");
+                            dynamic email = new Postal.Email("ConfirmationEmail");
+                            email.To = model.Email;
+                            email.UserName = model.UserName;
+                            email.ConfirmationToken = confirmationToken;
+                            email.Send();
+
+                            return RedirectToAction("registersteptwo", "account");
+                        }
                     }
                     catch (MembershipCreateUserException e)
                     {
-                        ModelState.AddModelError("", e.StatusCode.ToErrorCode());
+                        Error(e.StatusCode.ToErrorCode());
                     }
                 }
             }
@@ -114,6 +118,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult RegisterStepTwo()
         {
             return View();
+
         }
 
         [AllowAnonymous]
@@ -121,9 +126,9 @@ namespace WB.UI.Designer.Controllers
         {
             if (WebSecurity.ConfirmAccount(Id))
             {
-                return RedirectToAction("ConfirmationSuccess");
+                return RedirectToAction("confirmationsuccess");
             }
-            return RedirectToAction("ConfirmationFailure");
+            return RedirectToAction("confirmationfailure");
         }
 
         [AllowAnonymous]
@@ -146,39 +151,48 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Disassociate(string provider, string providerUserId)
         {
             string ownerAccount = OAuthWebSecurity.GetUserName(provider, providerUserId);
-            ManageMessageId? message = null;
+            AccountManageMessageId? message = null;
 
             // Only disassociate the account if the currently logged in user is the owner
             if (ownerAccount == User.Identity.Name)
             {
                 // Use a transaction to prevent the user from deleting their last login credential
-                using (var scope = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                using (
+                    var scope = new TransactionScope(TransactionScopeOption.Required,
+                                                     new TransactionOptions
+                                                         {
+                                                             IsolationLevel = IsolationLevel.Serializable
+                                                         }))
                 {
                     bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
                     if (hasLocalAccount || OAuthWebSecurity.GetAccountsFromUserName(User.Identity.Name).Count > 1)
                     {
                         OAuthWebSecurity.DeleteAccount(provider, providerUserId);
                         scope.Complete();
-                        message = ManageMessageId.RemoveLoginSuccess;
+                        message = AccountManageMessageId.RemoveLoginSuccess;
                     }
                 }
             }
 
-            return RedirectToAction("Manage", new { Message = message });
+            return RedirectToAction("manage", new {Message = message});
+        }
+
+        public ActionResult ExternalManage()
+        {
+            return RedirectToActionPermanent("manage");
         }
 
         //
         // GET: /Account/Manage
 
-        public ActionResult Manage(ManageMessageId? message)
+        public ActionResult Manage(AccountManageMessageId? message)
         {
-            ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : "";
+            if (message.HasValue)
+            {
+                Success(message.Value.ToUIMessage());
+            }
             //ViewBag.HasLocalPassword = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
-            ViewBag.ReturnUrl = Url.Action("Manage");
+            ViewBag.ReturnUrl = Url.Action("manage");
             return View();
         }
 
@@ -191,31 +205,33 @@ namespace WB.UI.Designer.Controllers
         {
             //bool hasLocalAccount = OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             //ViewBag.HasLocalPassword = hasLocalAccount;
-            ViewBag.ReturnUrl = Url.Action("Manage");
+            ViewBag.ReturnUrl = Url.Action("manage");
             //if (hasLocalAccount)
             //{
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+                // ChangePassword will throw an exception rather than return false in certain failure scenarios.
+                bool changePasswordSucceeded;
+                try
                 {
-                    // ChangePassword will throw an exception rather than return false in certain failure scenarios.
-                    bool changePasswordSucceeded;
-                    try
-                    {
-                        changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword, model.NewPassword);
-                    }
-                    catch (Exception)
-                    {
-                        changePasswordSucceeded = false;
-                    }
-
-                    if (changePasswordSucceeded)
-                    {
-                        return RedirectToAction("Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "The current password is incorrect or the new password is invalid.");
-                    }
+                    changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword,
+                                                                         model.NewPassword);
                 }
+                catch (Exception)
+                {
+                    changePasswordSucceeded = false;
+                }
+
+                if (changePasswordSucceeded)
+                {
+                    //Success();
+                    return RedirectToAction("manage", new {message = AccountManageMessageId.ChangePasswordSuccess});
+                }
+                else
+                {
+                    Error("The current password is incorrect or the new password is invalid.");
+                }
+            }
             //}
             //else
             //{
@@ -232,11 +248,11 @@ namespace WB.UI.Designer.Controllers
             //        try
             //        {
             //            WebSecurity.CreateAccount(User.Identity.Name, model.NewPassword);
-            //            return RedirectToAction("Manage", new { Message = ManageMessageId.SetPasswordSuccess });
+            //            return RedirectToAction("manage", new { Message = ManageMessageId.SetPasswordSuccess });
             //        }
             //        catch (Exception e)
             //        {
-            //            ModelState.AddModelError("", e);
+            //            Error( e);
             //        }
             //    }
             //}
@@ -253,7 +269,7 @@ namespace WB.UI.Designer.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            return new ExternalLoginResult(provider, Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
         }
 
         //
@@ -262,7 +278,8 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         public ActionResult ExternalLoginCallback(string returnUrl)
         {
-            AuthenticationResult result = OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new { ReturnUrl = returnUrl }));
+            AuthenticationResult result =
+                OAuthWebSecurity.VerifyAuthentication(Url.Action("ExternalLoginCallback", new {ReturnUrl = returnUrl}));
             if (!result.IsSuccessful)
             {
                 return RedirectToAction("ExternalLoginFailure");
@@ -285,7 +302,8 @@ namespace WB.UI.Designer.Controllers
                 string loginData = OAuthWebSecurity.SerializeProviderUserId(result.Provider, result.ProviderUserId);
                 ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(result.Provider).DisplayName;
                 ViewBag.ReturnUrl = returnUrl;
-                return View("ExternalLoginConfirmation", new RegisterExternalLoginModel { UserName = result.UserName, ExternalLoginData = loginData });
+                return View("ExternalLoginConfirmation",
+                            new RegisterExternalLoginModel {UserName = result.UserName, ExternalLoginData = loginData});
             }
         }
 
@@ -300,33 +318,34 @@ namespace WB.UI.Designer.Controllers
             string provider = null;
             string providerUserId = null;
 
-            if (User.Identity.IsAuthenticated || !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
+            if (User.Identity.IsAuthenticated ||
+                !OAuthWebSecurity.TryDeserializeProviderUserId(model.ExternalLoginData, out provider, out providerUserId))
             {
-                return RedirectToAction("Manage");
+                return RedirectToAction("manage");
             }
 
             if (ModelState.IsValid)
             {
                 // Insert a new user into the database
 
-                  int uId = WebSecurity.GetUserId(model.UserName.ToLower());
-                    // Check if user already exists
-                    if (uId == 0)
-                    {
-                        // Insert name into the profile table
-                        //Repository. .Add(new AccountView { UserName = model.UserName });
-                        //db.SaveChanges();
+                int uId = WebSecurity.GetUserId(model.UserName.ToLower());
+                // Check if user already exists
+                if (uId == 0)
+                {
+                    // Insert name into the profile table
+                    //Repository. .Add(new AccountView { UserName = model.UserName });
+                    //db.SaveChanges();
 
-                        OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
-                        OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
+                    OAuthWebSecurity.CreateOrUpdateAccount(provider, providerUserId, model.UserName);
+                    OAuthWebSecurity.Login(provider, providerUserId, createPersistentCookie: false);
 
-                        return RedirectToLocal(returnUrl);
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
-                    }
-                
+                    return RedirectToLocal(returnUrl);
+                }
+                else
+                {
+                    ModelState.AddModelError("UserName", "User name already exists. Please enter a different user name.");
+                }
+
             }
 
             ViewBag.ProviderDisplayName = OAuthWebSecurity.GetOAuthClientData(provider).DisplayName;
@@ -361,18 +380,20 @@ namespace WB.UI.Designer.Controllers
                 AuthenticationClientData clientData = OAuthWebSecurity.GetOAuthClientData(account.Provider);
 
                 externalLogins.Add(new ExternalLogin
-                {
-                    Provider = account.Provider,
-                    ProviderDisplayName = clientData.DisplayName,
-                    ProviderUserId = account.ProviderUserId,
-                });
+                    {
+                        Provider = account.Provider,
+                        ProviderDisplayName = clientData.DisplayName,
+                        ProviderUserId = account.ProviderUserId,
+                    });
             }
 
-            ViewBag.ShowRemoveButton = externalLogins.Count > 1 || OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
+            ViewBag.ShowRemoveButton = externalLogins.Count > 1 ||
+                                       OAuthWebSecurity.HasLocalAccount(WebSecurity.GetUserId(User.Identity.Name));
             return PartialView("_RemoveExternalLoginsPartial", externalLogins);
         }
 
         #region Helpers
+
         private ActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
@@ -384,14 +405,7 @@ namespace WB.UI.Designer.Controllers
                 return RedirectToAction("Index", "Home");
             }
         }
-
-        public enum ManageMessageId
-        {
-            ChangePasswordSuccess,
-            SetPasswordSuccess,
-            RemoveLoginSuccess,
-        }
-
+        
         internal class ExternalLoginResult : ActionResult
         {
             public ExternalLoginResult(string provider, string returnUrl)
