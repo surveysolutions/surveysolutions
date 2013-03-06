@@ -61,12 +61,17 @@
                     <h1 data-bind="text: title"></h1>
                 <!-- /ko -->
                 <div id="filter">
-                    <button type="button" class="close" data-bind="click: closeDetails">&times</button>
-                    <input type="text" class="transparent" maxlength="255" placeholder="filter">
+                    <button type="button" class="close" data-bind="click: clearFilter">&times</button>
+                    <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
+                <!-- ko ifnot: isFilterMode -->
                 <ul data-bind="foreach: chapters" class="list">
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
+                <!-- /ko -->
+                 <!-- ko if: isFilterMode -->
+               
+                <!-- /ko -->
             </div>
         </div>
     </div>
@@ -124,8 +129,8 @@
                 <div data-bind="template: { name: type(), data: $data}"></div>
                 <div class="row-fluid">
                     <div class="btn-group">
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-star"></i>mandatory</button>
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-star"></i>head</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
                     </div>
                 </div>
@@ -147,7 +152,9 @@
                 </div>
                 <div class="row-fluid">
                     <label>Instruction</label>
-                    <textarea rows="2" data-bind="value: instruction" class="span12"></textarea>
+                    <div class="note">
+                        <textarea rows="2" data-bind="value: instruction" class="span12"></textarea>
+                        </div>
                 </div>
             </div>
 

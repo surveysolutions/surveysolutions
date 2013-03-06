@@ -49,16 +49,6 @@
                      return item;
                  }
              },
-            menuItem = {
-                getDtoId: function(dto) { return dto.group.PublicKey; },
-                fromDto: function(dto, item) {
-                    item = item || new model.MenuItem().id(dto.group.PublicKey).title(dto.group.Title).level(dto.level);
-                    return item;
-                },
-                objectsFromDto: function(dto) {
-                    return getAllGroups(dto);
-                }
-            },
             group = {
                 getDtoId: function(dto) { return dto.group.PublicKey; },
                 fromDto: function(dto, item) {
@@ -126,7 +116,6 @@
         return {
             questionnaire : questionnaire,
             question: question,
-            group: group,
-            menuItem: menuItem
+            group: group
         };
     });

@@ -1,17 +1,16 @@
 ﻿define('vm.questionnaire',
     ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model'],
     function(ko, _, config, datacontext, router, messenger, store, model) {
-        var selectedMenuItem = ko.observable(),
+        var filter = ko.observable('').extend({throttle: 400}),
+            isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
             selectedQuestion = ko.observable(),
             questionnaire = ko.observable(model.Questionnaire.Nullo),
-            menu = ko.observableArray(),
             chapters = ko.observableArray(),
             
             isInitialized = false;
             activate = function (routeData, callback) {
                 messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
-                getMenu();
                 
                 if (!isInitialized) {
                     getChapters();
@@ -23,8 +22,7 @@
                 }
                 if (routeData.has('group')) {
                     editGroup(routeData.group);
-                    setSelectedMenuItem(routeData.group);
-                }
+                    }
                 isInitialized = true;
             },
             canLeave = function() {
@@ -35,29 +33,6 @@
                      chapters(datacontext.groups.getChapters());
                  }
              },
-            getMenu = function () {
-                if (!menu().length) {
-                    menu(datacontext.menu.getAllLocal());
-                }
-            },
-             setSelectedMenuItem = function (data) {
-                 var value = data || selectedMenuItem();
-                 selectedMenuItem(value);
-                 selectedMenuItem.valueHasMutated();
-             },
-            syncSelectedMenuItemWithIsSelected = function (value) {
-                _.forEach(menu(), function(item) {
-                    item.isSelected(false);
-                });
-
-                for (var i = 0; i < menu().length; i++) {
-                    var item = menu()[i];
-                    if (item.id() == selectedMenuItem()) {
-                        item.isSelected(true);
-                        break;
-                    }
-                }
-            },
             editQuestion = function(id) {
                 var question = datacontext.questions.getLocalById(id);
                 question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
@@ -105,23 +80,29 @@
                 datacontext.groups.add(group);
                 
             },
+            clearFilter = function() {
+                filter('');
+            },
+            filterContent = function() {
+                isFilterMode(filter().trim() !== '');
+            },
             init = function () {
-                selectedMenuItem.subscribe(syncSelectedMenuItemWithIsSelected);
+                filter.subscribe(filterContent);
              };
 
         init();
 
         return {
             activate: activate,
-            menu: menu,
             questionnaire:questionnaire,
             chapters: chapters,
             selectedGroup : selectedGroup,
             selectedQuestion: selectedQuestion,
             closeDetails: closeDetails,
-            closeMenu: closeMenu,
-            showMenu: showMenu,
             addQuestion: addQuestion,
-            addGroup : addGroup
+            addGroup: addGroup,
+            clearFilter: clearFilter,
+            filter: filter,
+            isFilterMode: isFilterMode
         };
     });

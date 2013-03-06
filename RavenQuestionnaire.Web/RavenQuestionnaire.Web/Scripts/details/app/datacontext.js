@@ -95,14 +95,12 @@
             //  model mapper
             //----------------------------------
 
-            menu = new LocalEntitySet(modelmapper.menuItem, model.MenuItem.Nullo),
             groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
             questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, {groups : groups}),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
         console.log(questionnaire);
 
-        menu.parse(input.questionnaire);
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
         
@@ -123,7 +121,6 @@
        
 
         var datacontext = {
-            menu: menu,
             groups: groups,
             questions: questions,
             questionnaire: questionnaire

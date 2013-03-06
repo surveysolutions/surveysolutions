@@ -394,3 +394,37 @@ h1 {
     padding-left: 2px;
     padding-right: 2px;
 }
+
+.note {
+    background: #f8f5db;
+    background-image: -webkit-linear-gradient(#dee2d0 1px,transparent 1px);
+    background-image: -moz-linear-gradient(top,#dee2d0 1px,transparent 1px);
+    background-image: -ms-linear-gradient(top,#dee2d0 1px,transparent 2px);
+    background-size: 100% 26px;
+    border: 1px solid #cfcfcf;
+    font-size: 13px;
+    line-height: 26px;
+    margin: 0 0 8px 0;
+    padding: 7px 15px;
+    -webkit-box-shadow: 0 2px 3px rgba(0,0,0,0.1),inset 0 1px 0 #f8f5db;
+    -moz-box-shadow: 0 2px 3px rgba(0,0,0,0.1),inset 0 1px 0 #f8f5db;
+    -ms-box-shadow: 0 2px 3px rgba(0,0,0,0.1),inset 0 1px 0 #f8f5db;
+    -o-box-shadow: 0 2px 3px rgba(0,0,0,0.1),inset 0 1px 0 #f8f5db;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1),inset 0 1px 0 #f8f5db;
+}
+.note textarea {
+    padding: 0;
+background: transparent;
+border: none;
+font-family: "Helvetica Neue","Helvetica",Arial,sans-serif;
+white-space: pre-wrap;
+word-wrap: break-word;
+font-size: 13px;
+line-height: 26px;
+text-shadow: none !important;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -ms-box-shadow: none;
+    -o-box-shadow: none;
+    box-shadow: none;
+}
