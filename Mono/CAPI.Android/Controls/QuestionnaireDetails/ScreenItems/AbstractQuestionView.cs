@@ -14,6 +14,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
     public abstract class AbstractQuestionView : LinearLayout
     {
+        public event EventHandler AnswerSet;
+        public bool IsCommentsEditorFocused { get; private set; }
         protected QuestionViewModel Model { get; private set; }
 
         protected Guid QuestionnairePublicKey { get; private set; }
@@ -60,23 +62,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
             PostInit();
         }
-        
-        //public AbstractQuestionView(Context context, IAttributeSet attrs, int defStyle, QuestionViewModel model)
-        //    : base(context, attrs, defStyle)
-        //{
-        //    this.Model = model;
-        //    Initialize();
-        //    PostInit();
-        //}
-
-        //protected AbstractQuestionView(IntPtr javaReference, JniHandleOwnership transfer, QuestionViewModel model)
-        //    : base(javaReference, transfer)
-        //{
-        //    this.Model = model;
-        //    Initialize();
-        //    PostInit();
-
-        //}
         protected virtual void Initialize()
         {
          /*   LayoutInflater layoutInflater =
@@ -93,34 +78,76 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             llWrapper.Clickable = true;
         }
 
+       
+
+      
+
+        protected virtual void SaveAnswer()
+        {
+            OnAnswerSet();
+        }
+
+        protected void OnAnswerSet()
+        {
+            var handler = AnswerSet;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+
+        #region 
+
+        private void AbstractQuestionView_LongClick(object sender, LongClickEventArgs e)
+        {
+            IsCommentsEditorFocused = true;
+            SetEditCommentsVisibility(true);
+            etComments.RequestFocus();
+        }
         void etComments_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
+            IsCommentsEditorFocused = e.HasFocus;
             if (!e.HasFocus)
             {
-                SetEditCommentsVisibility(false);
-                etComments.Text = tvComments.Text;
-                HideCommentKeyboard();
+                SaveComment();
+                HideKeyboard(etComments);
             }
-
+            else
+            {
+                ShowKeyboard(etComments);
+            }
         }
-
-    
-        void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        protected void SaveComment()
         {
-         
             CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
-                                                         etComments.Text, this.Model.PublicKey.PropagationKey, CapiApplication.Membership.CurrentUser));
-            etComments.ClearFocus();
+                                                         etComments.Text, this.Model.PublicKey.PropagationKey,
+                                                         CapiApplication.Membership.CurrentUser));
             SetEditCommentsVisibility(false);
-            HideCommentKeyboard();
+            etComments.Text = tvComments.Text;
+            
         }
-        private void  HideCommentKeyboard()
+
+        private void etComments_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            etComments.ClearFocus();
+        }
+
+        protected void HideKeyboard(EditText editor)
         {
             InputMethodManager imm
-                  = (InputMethodManager)this.Context.GetSystemService(
-                      Context.InputMethodService);
-            imm.HideSoftInputFromWindow(etComments.WindowToken, 0);
+                = (InputMethodManager) this.Context.GetSystemService(
+                    Context.InputMethodService);
+            imm.HideSoftInputFromWindow(editor.WindowToken, 0);
         }
+
+        protected void ShowKeyboard(EditText editor)
+        {
+            InputMethodManager imm
+                = (InputMethodManager) this.Context.GetSystemService(
+                    Context.InputMethodService);
+            imm.ShowSoftInput(editor, 0);
+        }
+
+        #endregion
+
         private void SetEditCommentsVisibility(bool visible)
         {
             etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
@@ -130,15 +157,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected virtual void PostInit()
         {
             llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
-          /*  this.Enabled = true;*/
-            /* else
-            {
-                if (!Model.Valid)
-                    llRoot.SetBackgroundResource(Resource.Drawable.questionInvalidShape);
-                else if(Model.Answered)
-                    llRoot.SetBackgroundResource(Resource.Drawable.questionAnsweredShape);
-            }*/
-            //    EnableDisableView(this, Model.Enabled);
             if (string.IsNullOrEmpty(Model.Instructions))
                 btnInstructions.Visibility = ViewStates.Gone;
             else
@@ -154,13 +172,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             instructionsBuilder.SetMessage(Model.Instructions);
             instructionsBuilder.Show();
         }
-        void AbstractQuestionView_LongClick(object sender, View.LongClickEventArgs e)
-        {
-            SetEditCommentsVisibility(true);
-            
-            etComments.RequestFocus();
-           
-        }
+       
 
        
 

@@ -48,18 +48,23 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         void etAnswer_FocusChange(object sender, View.FocusChangeEventArgs e)
         {
-            if(e.HasFocus)
+            if (e.HasFocus)
+            {
+                ShowKeyboard(etAnswer);
                 return;
-            InputMethodManager imm
+            }
+            SaveAnswer();
+            if (!IsCommentsEditorFocused)
+                HideKeyboard(etAnswer);
+           /* InputMethodManager imm
                = (InputMethodManager)this.Context.GetSystemService(
                    Context.InputMethodService);
             if(imm.IsAcceptingText)
             {
-                SaveAnswer();
-                imm.HideSoftInputFromWindow(etAnswer.WindowToken, 0);
-            }
+                
+            }*/
         }
-        protected void SaveAnswer()
+        protected override void SaveAnswer()
         {
             try
             {
@@ -67,6 +72,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                             null, etAnswer.Text,
                                                             Model.PublicKey.PropagationKey));
+                base.SaveAnswer();
               
             }
             catch (Exception ex)
@@ -85,10 +91,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         void NumericQuestionView_Click(object sender, EventArgs e)
         {
             etAnswer.RequestFocus();
-            InputMethodManager imm
-               = (InputMethodManager)this.Context.GetSystemService(
-                   Context.InputMethodService);
-            imm.ShowSoftInput(etAnswer, 0);
         }
 
         protected TextView tvTitle

@@ -68,7 +68,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                                                         Model.PublicKey.PropagationKey));
             dateDisplay.Text = Model.AnswerString;
             this.date = e.Date;
-
+            SaveAnswer();
           //  UpdateDisplay();
         }
  /*       protected override Dialog OnCreateDialog(int id)
