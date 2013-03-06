@@ -11,8 +11,8 @@
     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Designer.Web</RootNamespace>
-    <AssemblyName>Designer.Web</AssemblyName>
+    <RootNamespace>WB.UI.Designer</RootNamespace>
+    <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
@@ -370,13 +370,13 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Designer.Web.Providers.CQRS\Designer.Web.Providers.CQRS.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
-      <Name>Designer.Web.Providers.CQRS</Name>
+      <Name>WB.UI.Designer.Providers.CQRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Designer.Web.Providers\Designer.Web.Providers.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
       <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
-      <Name>Designer.Web.Providers</Name>
+      <Name>WB.UI.Designer.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
