@@ -7,8 +7,8 @@
     <ProjectGuid>{8ACB96F6-D1FE-4A81-99B8-7E7664C418F5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Designer.Web.Providers.RavenDB</RootNamespace>
-    <AssemblyName>Designer.Web.Providers.RavenDB</AssemblyName>
+    <RootNamespace>WB.UI.Designer.Providers.RavenDB</RootNamespace>
+    <AssemblyName>WB.UI.Designer.Providers.RavenDB</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -53,9 +53,9 @@
     <Compile Include="Role.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Designer.Web.Providers\Designer.Web.Providers.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
       <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
-      <Name>Designer.Web.Providers</Name>
+      <Name>WB.UI.Designer.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

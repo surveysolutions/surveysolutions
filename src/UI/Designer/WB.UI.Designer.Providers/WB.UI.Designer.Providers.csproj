@@ -7,8 +7,8 @@
     <ProjectGuid>{E936364C-A916-45E7-8F59-80DE2518AF2C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Designer.Web.Providers</RootNamespace>
-    <AssemblyName>Designer.Web.Providers</AssemblyName>
+    <RootNamespace>WB.UI.Designer.Providers</RootNamespace>
+    <AssemblyName>WB.UI.Designer.Providers</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

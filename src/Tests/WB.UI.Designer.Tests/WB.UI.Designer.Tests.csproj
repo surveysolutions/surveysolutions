@@ -9,8 +9,8 @@
     <ProjectGuid>{5177AFE4-E047-4F57-AB4D-84911D16F818}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Designer.Web.Tests</RootNamespace>
-    <AssemblyName>Designer.Web.Tests</AssemblyName>
+    <RootNamespace>WB.UI.Designer.Tests</RootNamespace>
+    <AssemblyName>WB.UI.Designer.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -100,9 +100,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\UI\Designer\Designer.Web\Designer.Web.csproj">
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
-      <Name>Designer.Web</Name>
+      <Name>WB.UI.Designer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
