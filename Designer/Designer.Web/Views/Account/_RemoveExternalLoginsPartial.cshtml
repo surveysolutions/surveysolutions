@@ -12,7 +12,7 @@
                 <td>
                     @if (ViewBag.ShowRemoveButton)
                     {
-                        using (Html.BeginForm("Disassociate", "Account"))
+                        using (Html.BeginForm("Disassociate", "account"))
                         {
                             @Html.AntiForgeryToken()
                             <fieldset>

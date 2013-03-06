@@ -6,7 +6,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5177AFE4-E047-4F57-AB4D-84911D16F818}</ProjectGuid>
+    <ProjectGuid>{CD6D2CCD-C19E-45F4-BA1C-996FFA9B4831}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Designer.Web.Tests</RootNamespace>

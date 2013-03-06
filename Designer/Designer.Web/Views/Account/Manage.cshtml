@@ -4,10 +4,8 @@
 }
 
 <hgroup class="title">
-    <h1>@ViewBag.Title.</h1>
+    <h2>@ViewBag.Title.</h2>
 </hgroup>
-
-<p class="message-success">@ViewBag.StatusMessage</p>
 
 <p>You're logged in as <strong>@User.Identity.Name</strong>.</p>
 
@@ -29,6 +27,3 @@ else
     @Html.Action("ExternalLoginsList", new { ReturnUrl = ViewBag.ReturnUrl })
 </section>*@
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

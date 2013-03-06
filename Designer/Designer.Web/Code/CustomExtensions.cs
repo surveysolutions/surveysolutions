@@ -41,6 +41,18 @@ namespace Designer.Web.Extensions
             }
         }
 
+        public static string ToUIMessage(this AccountManageMessageId message)
+        {
+            return
+                message == AccountManageMessageId.ChangePasswordSuccess
+                    ? "Your password has been changed."
+                    : message == AccountManageMessageId.SetPasswordSuccess
+                          ? "Your password has been set."
+                          : message == AccountManageMessageId.RemoveLoginSuccess
+                                ? "The external login was removed."
+                                : "";
+        }
+
         public static string ToUIString(this DateTime source)
         {
             return source == DateTime.MinValue ? string.Empty : source.ToString();
