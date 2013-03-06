@@ -80,10 +80,6 @@
     <AndroidResource Include="Resources\Drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidApp.Tests\AndroidApp.Core.Model.Tests.csproj">
-      <Project>{79488597-3210-4c72-a2e5-d4eec269d3fe}</Project>
-      <Name>AndroidApp.Core.Model.Tests</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidCore.CAPI.Tests\AndroidCore.CAPI.Tests.csproj">
       <Project>{18843DE6-BA3F-4964-BB63-99635C3CAEDA}</Project>
       <Name>AndroidCore.CAPI.Tests</Name>
@@ -107,6 +103,10 @@
     <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
       <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
       <Name>AndroidNcqrs.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CAPI.Android.Model.Tests\CAPI.Android.Core.Model.Tests.csproj">
+      <Project>{79488597-3210-4c72-a2e5-d4eec269d3fe}</Project>
+      <Name>CAPI.Android.Core.Model.Tests</Name>
     </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid.Runner\NUnitLite.MonoDroid.Runner.csproj">
       <Project>{7E10B3F0-F646-43E1-A301-04FB8FE7B81B}</Project>
