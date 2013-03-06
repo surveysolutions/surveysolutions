@@ -1,9 +1,9 @@
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
 
-namespace CAPI.Android.Extensions
+namespace AndroidApp.Extensions
 {
     public static class ImageExtensions
     {
