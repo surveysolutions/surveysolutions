@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Models
     {
         [Required]
         [Display(Name = "User name")]
-        [Editable(false, AllowInitialValue = true)]
+        [HiddenInput(DisplayValue=true)]
         public string UserName { get; set; }
         
         [Required]
