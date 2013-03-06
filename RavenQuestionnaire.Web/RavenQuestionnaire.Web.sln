@@ -89,15 +89,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Synchronization.Tests"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Designer", "Designer", "{83C45CDF-6A19-4315-A897-D710BCC106BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Web", "..\Designer\Designer.Web\Designer.Web.csproj", "{3464F3AE-094C-4DEC-8725-59506328E597}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer", "..\src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj", "{3464F3AE-094C-4DEC-8725-59506328E597}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Web.Tests", "..\Designer\Designer.Web.Tests\Designer.Web.Tests.csproj", "{5177AFE4-E047-4F57-AB4D-84911D16F818}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.Tests", "..\src\Tests\WB.UI.Designer.Tests\WB.UI.Designer.Tests.csproj", "{5177AFE4-E047-4F57-AB4D-84911D16F818}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Web.Providers", "..\Designer\Designer.Web.Providers\Designer.Web.Providers.csproj", "{E936364C-A916-45E7-8F59-80DE2518AF2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.Providers", "..\src\UI\Designer\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj", "{E936364C-A916-45E7-8F59-80DE2518AF2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Web.Providers.CQRS", "..\Designer\Designer.Web.Providers.CQRS\Designer.Web.Providers.CQRS.csproj", "{400CDE74-7407-4388-8D57-BF429E7C508D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.Providers.CQRS", "..\src\UI\Designer\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj", "{400CDE74-7407-4388-8D57-BF429E7C508D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer.Web.Providers.RavenDB", "..\Designer\Designer.Web.Providers.RavenDB\Designer.Web.Providers.RavenDB.csproj", "{8ACB96F6-D1FE-4A81-99B8-7E7664C418F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.Providers.RavenDB", "..\src\UI\Designer\WB.UI.Designer.Providers.RavenDB\WB.UI.Designer.Providers.RavenDB.csproj", "{8ACB96F6-D1FE-4A81-99B8-7E7664C418F5}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
