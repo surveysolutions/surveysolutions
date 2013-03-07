@@ -1,9 +1,9 @@
-﻿using System;
-using Designer.Web.Models;
+﻿using WB.UI.Designer.NavigationRoutes;
+using System;
 using System.Web;
-using Designer.Web.NavigationRoutes;
+using WB.UI.Designer.Models;
 
-namespace Designer.Web.RouteFilters
+namespace WB.UI.Designer.RouteFilters
 {
     public class AdministrationRouteFilter : INavigationRouteFilter
     {

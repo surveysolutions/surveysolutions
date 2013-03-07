@@ -7,7 +7,7 @@ using System.Web.Mvc.Html;
 using System.Web.Routing;
 using System.Text;
 
-namespace Designer.Web.NavigationRoutes
+namespace WB.UI.Designer.NavigationRoutes
 {
     public class Defaults
     {

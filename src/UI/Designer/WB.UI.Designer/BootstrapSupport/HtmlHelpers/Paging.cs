@@ -23,7 +23,7 @@ public ActionResult Index(int page = 1)
 }
 */
 
-namespace Designer.Web.BootstrapSupport.HtmlHelpers
+namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 {
     public static class PaginiationHelperExtensions
     {

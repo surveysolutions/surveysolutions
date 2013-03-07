@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
     public class BootstrapBundleConfig
     {

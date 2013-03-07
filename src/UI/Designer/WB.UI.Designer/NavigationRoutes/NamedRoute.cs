@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
 
-namespace Designer.Web.NavigationRoutes
+namespace WB.UI.Designer.NavigationRoutes
 {
     public class NamedRoute : Route
     {

@@ -1,6 +1,6 @@
 ﻿using System.Web.Routing;
 
-namespace Designer.Web.NavigationRoutes
+namespace WB.UI.Designer.NavigationRoutes
 {
     public interface INavigationRouteFilter
     {
