@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace WB.UI.Designer.Controllers
 {
+    [Authorize]
     public class QuestionnairesController : Controller
     {
         public class HomeInputModel

@@ -1,5 +1,4 @@
-﻿using WB.UI.Designer.Controllers;
-using DotNetOpenAuth.AspNet;
+﻿using DotNetOpenAuth.AspNet;
 using Microsoft.Web.WebPages.OAuth;
 using System;
 using System.Collections.Generic;
@@ -7,11 +6,12 @@ using System.Transactions;
 using System.Web.Mvc;
 using System.Web.Security;
 using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
 using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    using WB.UI.Designer.Models;
+    
 
     [Authorize]
     public class AccountController : BootstrapBaseController
@@ -401,7 +401,7 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Questionnaires");
             }
         }
         
