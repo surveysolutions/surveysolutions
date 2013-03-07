@@ -77,6 +77,14 @@ namespace RavenQuestionnaire.Web
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+               "Api",
+                // Route name
+               "api/{action}/{id}",
+                // URL with parameters
+               new { controller = "WillBeApi", id = UrlParameter.Optional } // Parameter defaults
+               );
+
+            routes.MapRoute(
                 "Default",
                 // Route name
                 "{controller}/{action}/{id}",
