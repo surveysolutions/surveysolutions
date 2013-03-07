@@ -5,23 +5,25 @@
         var _dc = null,
             Group = function() {
                 var self = this;
-                self.id = ko.observable();
-                self.title = ko.observable();
-                self.type = ko.observable();
+                self.id = ko.observable(Math.uuid());
+                self.title = ko.observable('Title');
+                self.type = ko.observable("GroupView"); // Object type
+                self.template = "GroupView"; // inner html template name
                 self.level = ko.observable();
                 self.description = ko.observable();
                 self.condition = ko.observable();
                 
                 self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();
-                self.template = "GroupView";
+                
                 self.getHref = function () {
                     return config.hashes.detailsGroup + "/" + self.id();
                 };
-
+                self.isSelected = ko.observable();
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
+                self.dirtyFlag().reset();
                 return self;
             };
         
@@ -32,7 +34,7 @@
             return _dc;
         };
 
-        Group.prototype = function() {
+        var BaseGroup = function() {
             var dc = Group.datacontext,
                 fillChildren = function () {
                      var items =_.map(this.childrenID(), function (item) {
@@ -47,7 +49,10 @@
                 isNullo: false,
                 fillChildren: fillChildren
             };
-        }();
+        };
+
+
+        Group.prototype = new BaseGroup();
 
         Group.Nullo = new Group().id(0).title('Title').type('GroupView');
         Group.Nullo.isNullo = true;

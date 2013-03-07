@@ -3,6 +3,12 @@
 function ($, ko) {
     var unwrap = ko.utils.unwrapObservable;
 
+    ko.bindingHandlers.autoGrowArea = {
+        init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            $(element).autogrow();
+        }
+    };
+
     ko.bindingHandlers.checkedButtons = {
         init: function(element, valueAccessor, allBindingsAccessor) {
             var type = element.getAttribute('data-toggle') || 'radio';
