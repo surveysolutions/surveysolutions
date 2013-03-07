@@ -264,7 +264,7 @@ namespace CAPI.Android
         private bool Pull(string remoteSyncNode, SyncronizationStatus status)
         {
             Guid processKey = Guid.NewGuid();
-            var provider = new RemoteServiceEventStreamProvider1(
+            var provider = new RemoteServiceEventStreamRestProvider(
                     CapiApplication.Kernel, processKey, remoteSyncNode);
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 

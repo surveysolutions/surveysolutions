@@ -173,6 +173,8 @@
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
+    <Compile Include="Syncronization\Provider.cs" />
+    <Compile Include="Syncronization\RemoteCollector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
