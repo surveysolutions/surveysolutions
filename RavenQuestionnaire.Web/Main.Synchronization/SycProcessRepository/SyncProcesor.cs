@@ -140,7 +140,7 @@ namespace Main.Synchronization.SycProcessRepository
             foreach (UncommittedEventStream uncommittedEventStream in this.IncomeEvents)
             {
                 this.eventStore.Store(uncommittedEventStream);
-                myEventBus.Publish(uncommittedEventStream);
+                myEventBus.Publish(uncommittedEventStream.Select(e => e as IPublishableEvent));
             }
         }
 

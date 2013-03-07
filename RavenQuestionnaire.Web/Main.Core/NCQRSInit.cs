@@ -16,17 +16,26 @@ namespace Main.Core
     using Main.Core.Services;
 
     using Ncqrs;
+    using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
     using Ncqrs.Commanding.ServiceModel;
+    using Ncqrs.Eventing;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Eventing.Storage.RavenDB;
+
+#if MONODROID
+using AndroidNcqrs.Eventing.Storage.SQLite;
+#else
+//using Ncqrs.Eventing.Storage.RavenDB;
+#endif
+    
+    //using Ncqrs.Eventing.Storage.RavenDB;
 
     using Ninject;
 
-    using Raven.Client.Document;
+    /*using Raven.Client.Document;*/
 
     /// <summary>
     /// The ncqrs init.
@@ -43,20 +52,29 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
-            var store = InitializeEventStore(kernel.Get<DocumentStore>());
+#if MONODROID
+			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
+#else
+            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            //NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            //NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+            
+            //NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+#endif
 
-            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+           NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+         
             var bus = new InProcessEventBus(true);
-            RegisterEventHandlers(bus, kernel);
+
+            // RegisterEventHandlers(bus, kernel);
+
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
@@ -86,7 +104,7 @@ namespace Main.Core
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream());
+            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
         }
 
         #endregion
@@ -106,15 +124,15 @@ namespace Main.Core
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-
-            foreach (Type type in commandSupplier.GetCommandList())
-            {
+            foreach (Type type in commandSupplier.GetCommandList()){
+                   
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
             return service;
         }
 
+#if !MONODROID
         /// <summary>
         /// The initialize event store.
         /// </summary>
@@ -124,10 +142,13 @@ namespace Main.Core
         /// <returns>
         /// The <see cref="IStreamableEventStore"/>.
         /// </returns>
-        private static IStreamableEventStore InitializeEventStore(DocumentStore store)
-        {
-            return new RavenDBEventStore(store);
-        }
+        //private static IStreamableEventStore InitializeEventStore(DocumentStore store)
+        //{
+        //    return new RavenDBEventStore(store);
+        //}
+
+#endif
+
 
         /// <summary>
         /// The is i event handler interface.

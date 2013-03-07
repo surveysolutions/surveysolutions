@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<!--<TextView
+       android:text=    "red"
+       android:gravity=    "center_horizontal"
+       android:background=    "#aa0000"
+       android:layout_width=    "wrap_content"
+       android:layout_height=    "fill_parent"
+       android:layout_weight=    "4"    />-->
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/qGuid"
+          android:background=    "#aa0000"
+           android:text=    "red"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp"
+    android:textSize="16sp"/>
+
+

@@ -9,7 +9,6 @@
 
 using System.CodeDom.Compiler;
 using System.Linq;
-using System.Management.Instrumentation;
 
 namespace Main.Core.Domain
 {

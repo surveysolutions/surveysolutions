@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SyncManager.cs" company="The World Bank">
-//   The World Bank
+// <copyright file="SyncManager.cs" company="">
+//   
 // </copyright>
 // <summary>
 //   The sync manager.
@@ -19,10 +19,6 @@ namespace Main.Synchronization.SyncManager
 
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
-
-    using NLog;
-
-    using LogManager = NLog.LogManager;
 
     /// <summary>
     /// The sync manager.
@@ -49,6 +45,11 @@ namespace Main.Synchronization.SyncManager
         /// The event stream provider.
         /// </summary>
         private readonly ISyncEventStreamProvider eventStreamProvider;
+
+        /// <summary>
+        /// The status.
+        /// </summary>
+        private readonly SyncronizationStatus status;
 
         /// <summary>
         /// The stream collector.
@@ -87,18 +88,23 @@ namespace Main.Synchronization.SyncManager
         /// <param name="settings">
         /// The settings.
         /// </param>
+        /// <param name="status">
+        /// The status.
+        /// </param>
         public SyncManager(
             ISyncEventStreamProvider provider, 
             ISyncStreamCollector collector, 
             Guid syncProcess, 
             string syncMessage, 
-            SyncManagerSettings settings)
+            SyncManagerSettings settings, 
+            SyncronizationStatus status)
         {
             this.eventStreamProvider = provider;
             this.managerSettings = settings;
             this.ProcessGuid = syncProcess;
             this.streamCollector = collector;
 
+            this.status = status;
             this.syncMessage = syncMessage;
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
         }
@@ -149,43 +155,18 @@ namespace Main.Synchronization.SyncManager
         }
 
         /// <summary>
-        /// The start pull.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void StartPull()
-        {
-            this.StartTime = DateTime.UtcNow;
-            this.Pull();
-
-            this.EndTime = DateTime.UtcNow;
-        }
-
-        /// <summary>
         /// The start push.
         /// </summary>
         /// <exception cref="NotImplementedException">
         /// </exception>
-        public void StartPush()
+        public void StartPump()
         {
             this.StartTime = DateTime.UtcNow;
+            this.status.IsWorking = true;
+            this.IsWorking = true;
 
-            this.Push();
+            this.Pump();
 
-            this.EndTime = DateTime.UtcNow;
-        }
-
-        /// <summary>
-        /// The start synchronization.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void StartSynchronization()
-        {
-            this.StartTime = DateTime.UtcNow;
-            this.Push();
-
-            this.Pull();
             this.EndTime = DateTime.UtcNow;
         }
 
@@ -228,27 +209,39 @@ namespace Main.Synchronization.SyncManager
         /// <summary>
         /// The push.
         /// </summary>
-        private void Push()
+        private void Pump()
         {
-            if (streamCollector == null)
-                throw new Exception("StreamCollector is not set");
-
-            this.Invoker.Execute(
-                new CreateNewSynchronizationProcessCommand(
-                    this.ProcessGuid, 
-                    Guid.Empty, 
-                    this.eventStreamProvider.SyncType, 
-                    string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
-
-            this.streamCollector.PrepareToCollect();
-
-            int currentChunkSize = Math.Min(this.streamCollector.MaxChunkSize, ChunkSize);
-            int counter = 0;
-
-            var chunk = new List<AggregateRootEvent>();
-
             try
             {
+                this.status.Progress = 3;
+
+                if (this.streamCollector == null)
+                {
+                    this.status.Result = false;
+                    this.status.ErrorMessage = "Incorrect receiver";
+                    this.status.Progress = 99;
+                }
+
+                this.status.Progress++;
+                this.status.CurrentStageDescription = "Process is starting";
+
+                this.Invoker.Execute(
+                    new CreateNewSynchronizationProcessCommand(
+                        this.ProcessGuid, 
+                        Guid.Empty, 
+                        this.eventStreamProvider.SyncType, 
+                        string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
+
+                this.streamCollector.PrepareToCollect();
+
+                int currentChunkSize = Math.Min(this.streamCollector.MaxChunkSize, ChunkSize);
+                int counter = 0;
+
+                var chunk = new List<AggregateRootEvent>();
+
+                this.status.Progress = 15;
+                this.status.CurrentStageDescription = "In progress";
+
                 // read from stream and handle by chunk
                 foreach (AggregateRootEvent evnt in this.eventStreamProvider.GetEventStream())
                 {
@@ -258,7 +251,22 @@ namespace Main.Synchronization.SyncManager
 
                     if (counter == currentChunkSize)
                     {
-                        this.streamCollector.Collect(chunk);
+                        if (this.status.Progress < 90)
+                        {
+                            this.status.Progress = this.status.Progress + 5;
+                        }
+
+                        if (!this.streamCollector.Collect(chunk))
+                        {
+                            this.status.Result = false;
+                            this.status.ErrorMessage = "Target refused stream";
+                            this.status.Progress = 100;
+                            this.status.IsWorking = false;
+                            return;
+
+                            // throw new Exception("Target refused stream");
+                        }
+
                         chunk = new List<AggregateRootEvent>();
                         counter = 0;
                     }
@@ -267,7 +275,21 @@ namespace Main.Synchronization.SyncManager
                 // process partial completed chunk
                 if (counter > 0)
                 {
-                    this.streamCollector.Collect(chunk);
+                    if (this.status.Progress < 90)
+                    {
+                        this.status.Progress = this.status.Progress + 5;
+                    }
+
+                    if (!this.streamCollector.Collect(chunk))
+                    {
+                        this.status.Result = false;
+                        this.status.ErrorMessage = "Target refused stream";
+                        this.status.Progress = 100;
+                        this.status.IsWorking = false;
+                        return;
+
+                        // throw new Exception("Target refused stream");
+                    }
                 }
 
                 // write stat for sync
@@ -276,21 +298,34 @@ namespace Main.Synchronization.SyncManager
                     this.Invoker.Execute(new PushStatisticsCommand(this.ProcessGuid, this.streamCollector.GetStat()));
                 }
 
+                this.status.Progress = 95;
+                this.status.CurrentStageDescription = "Finishing process";
+
                 // notify collector about finishing
                 this.streamCollector.Finish();
 
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
+
+                this.status.CurrentStageDescription = "Finished";
+                this.status.Result = true;
+                this.status.Progress = 100;
             }
             catch (Exception e)
             {
-                Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal("Import error", e);
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
+                // Logger logger = LogManager.GetCurrentClassLogger();
+                // logger.Fatal("Import error", e);
+                //this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
+                
+                this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
+                this.status.Progress = 100;
+                this.status.IsWorking = false;
+                //throw;
 
                 // return ErrorCodes.Fail;
             }
             finally
             {
+                this.status.IsWorking = false;
             }
         }
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+               android:orientation="horizontal">
+  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+             android:textSize="15dp"
+             local:MvxBind="{'Text':{'Path':'Title'}}"/>
+
+  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+              android:textSize="15dp"
+            android:text=":"/>
+  <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+              android:textSize="15dp"
+             local:MvxBind="{'Text':{'Path':'Value'}}"/>
+</LinearLayout>

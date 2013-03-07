@@ -58,21 +58,18 @@ namespace Ncqrs.Spec
         [Then]
         public void the_value_of_each_public_property_is_the_same()
         {
-            var inconclusiveItems = new List<string>();
+	        var props = GetProperties();
+            var indexedProps = props.Where(p => p.GetIndexParameters().Any())
+									.ToList();
 
-            var props = GetProperties();
-            var indexedProps = props.Where(p => p.GetIndexParameters().Any());
+	        var inconclusiveItems = indexedProps
+				.Select(prop => string.Format("{0} is an indexed property and can't be tested automatically", prop.Name))
+				.ToList();
 
-            foreach (var prop in indexedProps)
-                inconclusiveItems.Add(
-                    string.Format(
-                        "{0} is an indexed property and can't be tested automatically",
-                        prop.Name));
+	        var unindexedProps = props.Except(indexedProps)
+										.ToList();
 
-            var unindexedProps = props.Except(indexedProps);
-
-            TestItems(
-                unindexedProps,
+            TestItems(unindexedProps.Select(p => (MemberInfo)p).ToList() ,
                 (p, obj) => ((PropertyInfo)p).GetValue(obj, new object[0]),
                 p => ((PropertyInfo)p).PropertyType,
                 inconclusiveItems);
@@ -111,10 +108,12 @@ namespace Ncqrs.Spec
                     p.Name,
                     Type = getMemberType(p),
                     value = getValue(p, OriginalEvent)
-                });
+                })
+				.ToList();
 
             var resultValues = publicMembers
-                .Select(p => getValue(p, DeserializedEvent));
+                .Select(p => getValue(p, DeserializedEvent))
+				.ToList();
 
             var items = originalValues.Zip(
                 resultValues,
@@ -125,7 +124,8 @@ namespace Ncqrs.Spec
                     DefaultValue = GetDefaultValue(o.Type),
                     Expected = o.value,
                     Actual = r
-                });
+                })
+				.ToList();
 
             foreach (var item in items)
             {

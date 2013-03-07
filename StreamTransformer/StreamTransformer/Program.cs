@@ -37,7 +37,7 @@ namespace StreamTransformer
                 // who makes transition
                 var mnger = new TransformManager(streamProvider, collector);
 
-                mnger.StartPush();
+                mnger.StartPump();
 
                 File.WriteAllBytes(fileName, collector.GetExportedStream().ToArray());
                 
