@@ -1,0 +1,23 @@
+﻿@model WB.UI.Designer.Models.LoginModel
+
+@{
+    ViewBag.Title = "login";
+    Layout = "~/Views/Shared/_BootstrapLayout.empty.cshtml";
+}
+
+@using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin" }))
+{
+    @Html.AntiForgeryToken()
+    <h2 class="form-signin-heading">Please log in</h2>
+  
+    @Html.TextBoxFor(x => x.UserName, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.UserName) })
+    @Html.PasswordFor(x => x.Password, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.Password) })
+    <label class="checkbox">
+        @Html.CheckBoxFor(x => x.RememberMe) @Html.DisplayNameFor(m => m.RememberMe)
+    </label>
+
+    <button class="btn btn-large btn-primary pull-right" type="submit">Log in</button>
+    <p style="margin-top: 20px">
+        @Html.ActionLink("Register", "Register") if you don't have an account.
+    </p>
+}
