@@ -1,51 +1,38 @@
-﻿@using WB.UI.Designer
-@using WB.UI.Designer.Models
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>@ViewBag.Title - My ASP.NET MVC Application</title>
-        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-        <meta name="viewport" content="width=device-width" />
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-    </head>
-    <body>
-        @StackExchange.Profiling.MiniProfiler.RenderIncludes()
-        @*@Raven.Client.MvcIntegration.RavenProfiler.CurrentRequestSessions()*@
-        <header>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p class="site-title">@Html.ActionLink("your logo here", "Index", "Home")</p>
-                </div>
-                <div class="float-right">
-                    <section id="login">
-                        @Html.Partial("_LoginPartial")
-                    </section>
-                    <nav>
-                        <ul id="menu">
-                            <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                            <li>@Html.ActionLink("Administration", "Index", "Administration").If(User.IsInRole(UserHelper.ADMINROLENAME))</li>
-                        </ul>
-                    </nav>
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/favicon.png")">
+    @Styles.Render("~/Content/main")
+    @RenderSection("Styles", false)
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body class="loading">
+    <div class="loading-backdrop"></div>
+    <div class="navbar  navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a><a href="@Url.Action("Index", "Questionnaire")" class="brand">Home</a>
+                <div class="nav-collapse ">
+                    <ul id="menu" class="nav">
+                        <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire") </li>
+                    </ul>
                 </div>
             </div>
-        </header>
-        <div id="body">
-            @RenderSection("featured", required: false)
-            <section class="content-wrapper main-content clear-fix">
-                @RenderBody()
-            </section>
         </div>
-        <footer>
-            <div class="content-wrapper">
-                <div class="float-left">
-                    <p>&copy; @DateTime.Now.Year - My ASP.NET MVC Application</p>
-                </div>
-            </div>
-        </footer>
-
-        @Scripts.Render("~/bundles/jquery")
-        @RenderSection("scripts", required: false)
-    </body>
+    </div>
+    <div class="container-fluid">
+        @RenderBody()
+    </div>
+    @Scripts.Render(
+        "~/bundles/jquery", 
+        "~/bundles/jqueryui",
+        "~/bundles/jsextlibs", 
+        "~/Scripts/require.js"
+    )
+    @RenderSection("Scripts", false)
+</body>
 </html>

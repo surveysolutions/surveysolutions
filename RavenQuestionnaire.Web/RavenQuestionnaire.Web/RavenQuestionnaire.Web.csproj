@@ -218,6 +218,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\WillBeApiController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
@@ -244,6 +245,7 @@
     <Content Include="Content\Bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\bootstrap.css" />
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
+    <Content Include="Content\details.css" />
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
@@ -334,7 +336,64 @@
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.gif" />
     <Content Include="Content\themes\jquerymobile\images\comment.gif" />
+    <Content Include="Content\toastr-responsive.css" />
+    <Content Include="Content\toastr.css" />
     <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Scripts\details\app\binder.js" />
+    <Content Include="Scripts\details\app\bootstrapper.js" />
+    <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\model.questionnaire.js" />
+    <Content Include="Scripts\details\app\model.answerOption.js" />
+    <Content Include="Scripts\details\app\messenger.js" />
+    <Content Include="Scripts\details\app\dataservice.questionnaire.js" />
+    <Content Include="Scripts\details\app\datacontext.js" />
+    <Content Include="Scripts\details\app\dataprimer.js" />
+    <Content Include="Scripts\details\app\dataservice.group.js" />
+    <Content Include="Scripts\details\app\dataservice.js" />
+    <Content Include="Scripts\details\app\dataservice.question.js" />
+    <Content Include="Scripts\details\app\model.group.js" />
+    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\details\app\model.mapper.js" />
+    <Content Include="Scripts\details\app\model.question.js" />
+    <Content Include="Scripts\details\app\presenter.js" />
+    <Content Include="Scripts\details\app\route-config.js" />
+    <Content Include="Scripts\details\app\route-mediator.js" />
+    <Content Include="Scripts\details\app\router.js" />
+    <Content Include="Scripts\details\app\store.js" />
+    <Content Include="Scripts\details\app\utils.js" />
+    <Content Include="Scripts\details\app\vm.questionnaire.js" />
+    <Content Include="Scripts\details\app\ko.bindingHandlers.js" />
+    <Content Include="Scripts\details\app\ko.debug.helpers.js" />
+    <Content Include="Scripts\details\app\vm.js" />
+    <Content Include="Scripts\details\lib\amplify.core.js" />
+    <Content Include="Scripts\details\lib\amplify.request.js" />
+    <Content Include="Scripts\details\lib\amplify.store.js" />
+    <Content Include="Scripts\details\lib\infuser.js" />
+    <None Include="Scripts\details\lib\jquery-1.7.2-vsdoc.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\details\lib\jquery.autogrow-textarea.js" />
+    <Content Include="Scripts\details\lib\jquery.mockjson.js" />
+    <Content Include="Scripts\details\lib\json2.js" />
+    <Content Include="Scripts\details\lib\knockout-2.1.0.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.min.js" />
+    <Content Include="Scripts\details\lib\knockout.activity.js" />
+    <Content Include="Scripts\details\lib\knockout.asyncCommand.js" />
+    <Content Include="Scripts\details\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\details\lib\knockout.validation.js" />
+    <Content Include="Scripts\details\lib\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\details\lib\lodash.min.js" />
+    <Content Include="Scripts\details\lib\Math.uuid.js" />
+    <Content Include="Scripts\details\lib\modernizr-2.5.3.js" />
+    <Content Include="Scripts\details\lib\moment.js" />
+    <Content Include="Scripts\details\lib\require.js" />
+    <Content Include="Scripts\details\lib\sammy.js" />
+    <Content Include="Scripts\details\lib\sammy.title.js" />
+    <Content Include="Scripts\details\lib\toastr.js" />
+    <Content Include="Scripts\details\lib\TrafficCop.js" />
+    <Content Include="Scripts\details\lib\underscore.js" />
+    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
     <Content Include="Configuration\Designer.Web.config" />
     <Content Include="Configuration\Dev.Designer.Web.config" />
@@ -351,6 +410,7 @@
     <Compile Include="Models\ViewDataUploadFilesResult.cs" />
     <Compile Include="PdfConvert.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
+    <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -533,7 +593,7 @@
     <Content Include="Views\Questionnaire\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Questionnaire\Details.cshtml" />
+    <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\_Create.cshtml" />
@@ -663,6 +723,7 @@
     <Content Include="Views\Question\Create.cshtml" />
     <Content Include="Views\Question\MainBlock.cshtml" />
     <Content Include="Views\Question\MultiSelectBlock.cshtml" />
+    <Content Include="Views\Questionnaire\Details.cshtml" />
     <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\_RenderChild.cshtml" />
