@@ -8,6 +8,12 @@ namespace WB.UI.Designer
         // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
         public static void RegisterBundles(BundleCollection bundles)
         {
+            bundles.UseCdn = false;
+
+            bundles.IgnoreList.Clear();
+            bundles.IgnoreList.Ignore("*-vsdoc.js");
+            bundles.IgnoreList.Ignore("*intellisense.js");
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -38,6 +44,51 @@ namespace WB.UI.Designer
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            // 3rd Party JavaScript files
+            bundles.Add(new ScriptBundle("~/bundles/jsextlibs")
+                            //.IncludeDirectory("~/Scripts/lib", "*.js", searchSubdirectories: false));
+                            .Include(
+                                "~/Scripts/lib/json2.js", // IE7 needs this
+
+                                // jQuery plugins
+                                "~/Scripts/lib/activity-indicator.js",
+                                "~/Scripts/TrafficCop.js",
+                                "~/Scripts/infuser.js", // depends on TrafficCop
+
+                                // Knockout and its plugins
+                                "~/Scripts/knockout-{version}.js",
+                                "~/Scripts/lib/knockout.activity.js",
+                                "~/Scripts/lib/knockout.asyncCommand.js",
+                                "~/Scripts/lib/knockout.dirtyFlag.js",
+                                "~/Scripts/lib/knockout.validation.js",
+                                "~/Scripts/lib/koExternalTemplateEngine.js",
+                                "~/Scripts/lib/knockout-sortable.js",
+
+                                // Other 3rd party libraries
+                                "~/Scripts/lodash.js",
+                                "~/Scripts/moment.js",
+                                "~/Scripts/lib/sammy.js",
+                                "~/Scripts/lib/sammy.title.js",
+                                "~/Scripts/amplify.*",
+                                "~/Scripts/toastr.js",
+
+                                //Plugins
+                                "~/Scripts/lib/jquery.autogrow-textarea.js",
+                                "~/Scripts/lib/Math.uuid.js"
+                            ));
+
+            bundles.Add(new ScriptBundle("~/bundles/jsappdetails")
+                   .IncludeDirectory("~/Scripts/details/", "*.js", searchSubdirectories: false));
+
+            bundles.Add(new StyleBundle("~/Content/main").Include(
+                       "~/Content/bootstrap.css",
+                       "~/Content/bootstrap-responsive",
+                       "~/Content/toastr.css"
+                      ));
+
+            bundles.Add(new StyleBundle("~/Content/edit").Include(
+               "~/Content/details.css"));
         }
     }
 }
