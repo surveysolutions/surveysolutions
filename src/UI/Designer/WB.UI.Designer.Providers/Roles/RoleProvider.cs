@@ -1,10 +1,9 @@
-﻿using System.Web.Mvc;
-using Ninject;
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
+using System.Web.Mvc;
 
 namespace WB.UI.Designer.Providers.Roles
 {
