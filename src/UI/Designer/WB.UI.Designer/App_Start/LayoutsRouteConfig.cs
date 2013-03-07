@@ -14,8 +14,8 @@ namespace WB.UI.Designer
             // this enables menu suppression for routes with a FilterToken of "admin" set
             NavigationRouteFilters.Filters.Add(new AdministrationRouteFilter());
 
-            routes.MapNavigationRoute<QuestionnairesController>("My Questionnaires", c => c.Index());
-            routes.MapNavigationRoute<QuestionnairesController>("Public Questionnaires", c => c.Public());
+            routes.MapNavigationRoute<QuestionnaireController>("My Questionnaires", c => c.Index());
+            routes.MapNavigationRoute<QuestionnaireController>("Public Questionnaires", c => c.Public());
 
             routes.MapNavigationRoute<AccountController>("My Account", c => c.Login(string.Empty))
                   .AddChildRoute<AccountController>("Manage", c => c.ExternalManage())
