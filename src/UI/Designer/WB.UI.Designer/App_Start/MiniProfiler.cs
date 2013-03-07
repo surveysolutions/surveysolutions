@@ -1,16 +1,9 @@
-using System;
-using System.Web;
-using System.Web.Mvc;
-using System.Linq;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using StackExchange.Profiling;
 using StackExchange.Profiling.MVCHelpers;
-using Microsoft.Web.Infrastructure;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-//using System.Data;
-//using System.Data.Entity;
-//using System.Data.Entity.Infrastructure;
-//using StackExchange.Profiling.Data.EntityFramework;
-//using StackExchange.Profiling.Data.Linq2Sql;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
 
 [assembly: WebActivator.PreApplicationStartMethod(
 	typeof(WB.UI.Designer.App_Start.MiniProfilerPackage), "PreStart")]
@@ -33,7 +26,7 @@ namespace WB.UI.Designer.App_Start
             //      in your master layout
 
             //TODO: Non SQL Server based installs can use other formatters like: new StackExchange.Profiling.SqlFormatters.InlineFormatter()
-            MiniProfiler.Settings.SqlFormatter = new StackExchange.Profiling.SqlFormatters.SqlServerFormatter();
+            MiniProfiler.Settings.SqlFormatter = new StackExchange.Profiling.SqlFormatters.InlineFormatter();
 
 			//TODO: To profile a standard DbConnection: 
 			// var profiled = new ProfiledDbConnection(cnn, MiniProfiler.Current);
