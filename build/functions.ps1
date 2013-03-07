@@ -88,11 +88,14 @@ function BuildSolutions($BuildConfiguration) {
         }
     }
 
-    if ($countOfFailedSolutions -gt 0) {
+    $wereAllSolutionsBuiltSuccessfully = $countOfFailedSolutions -eq 0
+    if (-not $wereAllSolutionsBuiltSuccessfully) {
         Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $countOfFailedSolutions solution(s)']"
     }
 
     Write-Host "##teamcity[blockClosed name='Building solutions']"
+
+    return $wereAllSolutionsBuiltSuccessfully
 }
 
 

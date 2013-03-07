@@ -26,7 +26,7 @@
                     <div>Description: @Model.Description</div>
                 }            
         </h3>
-        <div class="btn-group">
+        <div class="btn-group"> 
             @Html.ActionLink("Add Question", "Create", "Question", new { id = Model.QuestionnaireKey, groupPublicKey = Model.PublicKey }, new { @class = "btn btn-success btn-mini" })
             @*@if (@Model.Propagated == Propagate.None)
             {

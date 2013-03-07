@@ -1,30 +1,59 @@
-﻿@using WB.UI.Designer.Extensions
-@using MvcContrib.UI.Grid
-@model MembershipUserCollection
-@{
-    ViewBag.Title = "Administration";
-}
+﻿@using WB.UI.Designer.BootstrapSupport
+@model System.Collections.IEnumerable  
+<blockquote class="pull-right">
+    <p>
+        <h4>Registered users<small>Listing</small></h4>
+    </p>
+</blockquote>
+<table class="table table-striped">
+    <caption></caption>
+    <thead>
+        <tr>
+            @foreach (var property in Model.VisibleProperties())
+            {
+                <th>
+                    @property.GetLabel().ToSeparatedWords()
+                </th>
+            }
+            <th></th>
+        </tr>
+    </thead>
+    @{ int index = 0; }
+    @foreach (var model in Model)
+    {
+        ViewData[index.ToString()] = model;
+        <tr>
+            @foreach (var property in model.VisibleProperties())
+            {
+                <td>
+                    @Html.Display(index + "." + property.Name)
+                </td>                    
+            }
+            <td>
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @{
+                            @Html.TryPartial("_actions", model)                            
+                            var routevalues = model.GetIdValue();  
+                            <li>@Html.ActionLink("Edit", "Edit", routevalues)</li>
+                            <li>@Html.ActionLink("Details", "Details", routevalues)</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Delete", "Delete", routevalues)</li>
+                               
+                        }
+                    </ul>
+                </div>
 
-<h2>Users</h2>
+            </td>
+        </tr>
+            index++;
+    }
 
+</table>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new {@class = "btn"})
 </p>
-@Html.Grid(Model.Cast<MembershipUser>()).Columns(column =>
-{
-    column.For(user => Html.ActionLink("Edit", "Edit", new
-    {
-        id = user.UserName
-    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
-    column.For(user => Html.ActionLink("Delete", "Delete", new
-    {
-        id = user.UserName
-    })).Named("").Encode(false).CellCondition(x => !Roles.Provider.IsUserInRole(x.UserName, WB.UI.Designer.Models.UserHelper.ADMINROLENAME));
-    column.For(user => user.UserName).Named("Name");
-    column.For(user => user.Email);
-    column.For(user => user.CreationDate.ToUIString()).Named("Created date");
-    column.For(user => user.LastLoginDate.ToUIString()).Named("Last Login");
-    column.For(user => user.IsApproved).Named("Approved");
-    column.For(user => user.IsLockedOut).Named("Locked");
-}).Attributes(@class=>"table table-striped", width=>"100%")
 
