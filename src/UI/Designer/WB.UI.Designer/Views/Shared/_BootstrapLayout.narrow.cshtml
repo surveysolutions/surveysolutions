@@ -7,58 +7,26 @@
     <title>@ViewBag.Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
-    <style type="text/css">
-        body {
-            padding-top: 20px;
-            padding-bottom: 40px;
-        }
-
-        /* Custom container */
-        .container-narrow {
-            margin: 0 auto;
-            max-width: 700px;
-        }
-
-            .container-narrow > hr {
-                margin: 30px 0;
-            }
-
-        /* Main marketing message and sign up button */
-        .jumbotron {
-            margin: 60px 0;
-            text-align: center;
-        }
-
-            .jumbotron h1 {
-                font-size: 72px;
-                line-height: 1;
-            }
-
-            .jumbotron .btn {
-                font-size: 21px;
-                padding: 14px 24px;
-            }
-
-        /* Supporting marketing content */
-        .marketing {
-            margin: 60px 0;
-        }
-
-            .marketing p + h4 {
-                margin-top: 28px;
-            }
-    </style>
-    <link href="@Styles.Url("~/Content/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />
     @RenderSection("head", required: false)
     @Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
 </head>
-<body>
-    <div class="container-narrow">
-        <div class="masthead">
-            @Html.Navigation()
-            <h3 class="muted">Designer</h3>
+<body class="loading">
+    <div class="loading-backdrop"></div>
+    <div class="navbar  navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a>
+                <a href="@Url.Action("Index", "Questionnaire")" class="brand">Designer</a>
+                <div class="nav-collapse ">
+                    @Html.Navigation()
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="container-fluid">
         @Html.Partial("_alerts")
         @RenderBody()
         <hr>
