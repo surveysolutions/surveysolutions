@@ -17,6 +17,8 @@ namespace WB.UI.Designer
 
             LayoutsRouteConfig.RegisterRoutes(RouteTable.Routes);
             BootstrapBundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
     }
 }
