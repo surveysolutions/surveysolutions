@@ -92,7 +92,7 @@ namespace Questionnaire.Core.Web.Export.csv
             using (var streamWriter = new StreamWriter(memoryStream))
             using (var writer = new CsvWriter(streamWriter))
             {
-                writer.Configuration.Delimiter = this.Delimeter;
+                writer.Configuration.Delimiter = this.Delimeter.ToString();
 
                 writer.WriteField("PublicKey"); // templated column for ID
 

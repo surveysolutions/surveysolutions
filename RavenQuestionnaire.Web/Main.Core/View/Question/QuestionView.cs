@@ -64,7 +64,7 @@ namespace Main.Core.View.Question
             : this()
         {
             this.PublicKey = doc.PublicKey;
-            this.Title = doc.QuestionText;
+            this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
             this.QuestionScope = doc.QuestionScope;
             this.QuestionnaireKey = questionnaire.PublicKey;

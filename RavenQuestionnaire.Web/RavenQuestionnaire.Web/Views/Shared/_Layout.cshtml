@@ -17,6 +17,7 @@
 												   new BasicPath("Content", "~/Content"),
                                                    new BasicPath("googleCDN", "http://ajax.googleapis.com/ajax/libs/"),
                                                    new BasicPath("Plugins", "~/Scripts/Plugins"),
+                                                   new BasicPath("Details", "~/Scripts/details"),
 											   }))
     @{
         Html.RequiresCss("jquery.ui.theme.css", "Base", 1);
@@ -38,35 +39,36 @@
         
     }
 </head>
-<body data-spy="scroll" data-target=".bs-docs-sidebar">
-    <div class="navbar  navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
-                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
-                </a><a href="@Url.Action("Index", "Questionnaire")" class="brand">Home</a>
-                <div class="nav-collapse ">
-                    <ul id="menu" class="nav">
-                        <li>@Html.ActionLink("Users", "Index", "User") </li>
-                        <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire") </li>
-                        <li>@Html.ActionLink("Images", "Index", "Resource") </li>
-                        <li>@Html.ActionLink("Collection", "Index", "Collection")</li>
-                    </ul>
-                    @Html.Partial("_LogOnPartial")
+    <body data-spy="scroll" data-target=".bs-docs-sidebar" class="loading">
+        <div class="loading-backdrop"></div>
+        <div class="navbar  navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container-fluid">
+                    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                                                                                                     class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                    </a><a href="@Url.Action("Index", "Questionnaire")" class="brand">Home</a>
+                    <div class="nav-collapse ">
+                        <ul id="menu" class="nav">
+                            <li>@Html.ActionLink("Users", "Index", "User") </li>
+                            <li>@Html.ActionLink("Survey templates", "Index", "Questionnaire") </li>
+                            <li>@Html.ActionLink("Images", "Index", "Resource") </li>
+                            <li>@Html.ActionLink("Collection", "Index", "Collection")</li>
+                        </ul>
+                        @Html.Partial("_LogOnPartial")
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid">
-        @RenderBody()
-    </div>
-    <script type="text/javascript">
-        $('.dropdown-toggle').dropdown();
-        $("[rel=popover]")
-            .popover()
-            .click(function (e) {
-                e.preventDefault();
-            });
-    </script>
-</body>
+        <div class="container-fluid">
+            @RenderBody()
+        </div>
+        <script type="text/javascript">
+            $('.dropdown-toggle').dropdown();
+            $("[rel=popover]")
+                .popover()
+                .click(function (e) {
+                    e.preventDefault();
+                });
+        </script>
+    </body>
 </html>

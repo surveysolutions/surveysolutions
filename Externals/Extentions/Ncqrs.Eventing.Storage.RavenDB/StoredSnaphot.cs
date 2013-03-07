@@ -1,8 +1,10 @@
 ﻿using System;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
+    using Raven.Imports.Newtonsoft.Json;
+
     public class StoredSnaphot
     {
         public string Id { get; set; }

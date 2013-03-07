@@ -1,0 +1,11 @@
+﻿@using Main.Core.View
+@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
+
+<div style="font-weight: bold; font-size: 140%; text-align: center; padding-bottom: 10px;">
+    @this.Model.Title
+</div>
+
+@foreach (ICompositeView child in this.Model.Children)
+{
+    Html.RenderPartial("_RenderChild", child);
+}

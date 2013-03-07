@@ -69,6 +69,11 @@ namespace Main.Core.Utility
             return result;
         }
 
+        public static bool Compare(this string source, string compareTo)
+        {
+            return string.Compare(source, compareTo, StringComparison.OrdinalIgnoreCase) == 0;
+        }
+
         #endregion
     }
 }

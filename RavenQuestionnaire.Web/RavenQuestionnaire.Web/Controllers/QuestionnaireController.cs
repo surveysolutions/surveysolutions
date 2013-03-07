@@ -48,7 +48,6 @@ namespace RavenQuestionnaire.Web.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
-        private readonly IDataExport exporter;
         #endregion
 
         #region Constructors and Destructors
@@ -59,10 +58,9 @@ namespace RavenQuestionnaire.Web.Controllers
         /// <param name="viewRepository">
         /// The view repository.
         /// </param>
-        public QuestionnaireController(IViewRepository viewRepository, IDataExport exporter)
+        public QuestionnaireController(IViewRepository viewRepository)
         {
             this.viewRepository = viewRepository;
-            this.exporter = exporter;
         }
 
         #endregion
@@ -98,9 +96,7 @@ namespace RavenQuestionnaire.Web.Controllers
                 throw new HttpException(404, "Invalid quesry string parameters");
             }
 
-            QuestionnaireView model =
-                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    new QuestionnaireViewInputModel(id));
+            QuestionnaireView model = this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
 
             ReplaceGuidsInValidationAndComditionRules(id, model);
 
@@ -205,73 +201,6 @@ namespace RavenQuestionnaire.Web.Controllers
                 this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(id));
             return View("Create", model);
-        }
-
-        // POST: /Questionnaire/Create
-
-         /*
-        //
-        // GET: /Questionnaire/Delete/5
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Delete(string id)
-        {
-            commandInvoker.Execute(new DeleteQuestionnaireCommand(id, GlobalInfo.GetCurrentUser()));
-            return RedirectToAction("Index");
-        }*/
-
-        /// <summary>
-        /// The export.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// </exception>
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public ActionResult Export(Guid id)
-        {
-            if (id == Guid.Empty)
-            {
-                throw new HttpException(404, "Invalid quesry string parameters");
-            }
-
-            QuestionnaireView model =
-                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    new QuestionnaireViewInputModel(id));
-            return View(model);
-        }
-
-        /// <summary>
-        /// The get exported data.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// </exception>
-        [QuestionnaireAuthorize(UserRoles.Administrator)]
-        public FileResult GetExportedData(Guid id, string type)
-        {
-            if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
-            {
-                throw new HttpException(404, "Invalid quesry string parameters");
-            }
-
-          /*  QuestionnaireView model =
-                this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
-                    new QuestionnaireViewInputModel(id));
-
-            if (model != null)
-            {*/
-
-            return this.File(this.exporter.ExportData(id, type), "application/zip", "data.zip");
         }
 
         /// <summary>

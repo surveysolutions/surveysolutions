@@ -6,6 +6,9 @@
 //   The string field name sorting support.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+
 namespace Main.Core.Utility
 {
     using System;
@@ -76,12 +79,12 @@ namespace Main.Core.Utility
         /// <returns>
         /// The System.Linq.IOrderedQueryable`1[T -&gt; TEntity].
         /// </returns>
-        public static IOrderedQueryable<TEntity> OrderUsingSortExpression<TEntity>(
+        public static IEnumerable<TEntity> OrderUsingSortExpression<TEntity>(
             this IQueryable<TEntity> source, string sortExpression) where TEntity : class
         {
-            string[] orderFields = sortExpression.Split(',');
+            string[] orderFields = sortExpression.Split(',').Where(x=>!string.IsNullOrEmpty(x)).ToArray();
             IOrderedQueryable<TEntity> result = null;
-            for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Length; currentFieldIndex++)
+            for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Count(); currentFieldIndex++)
             {
                 string[] expressionPart = orderFields[currentFieldIndex].Trim().Split(' ');
                 string sortField = expressionPart[0];
@@ -99,7 +102,7 @@ namespace Main.Core.Utility
                 }
             }
 
-            return result;
+            return result ?? source;
         }
 
         /// <summary>

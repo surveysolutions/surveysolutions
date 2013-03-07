@@ -1,0 +1,25 @@
+﻿@using Main.Core.View
+@using Main.Core.View.Question
+@model Main.Core.View.ICompositeView
+
+<p>
+
+    @this.Model.Title
+    <br/>
+
+    @if (this.Model is QuestionView)
+    {
+        Html.RenderPartial("_RenderQuestionDetails", (QuestionView) this.Model);
+    }
+
+    @if (this.Model.Children != null && this.Model.Children.Count > 0)
+    {
+        <div style="margin-left: 20px;">
+            @foreach (ICompositeView child in this.Model.Children)
+            {
+                Html.RenderPartial("_RenderChild", child);
+            }
+        </div>
+    }
+
+</p>

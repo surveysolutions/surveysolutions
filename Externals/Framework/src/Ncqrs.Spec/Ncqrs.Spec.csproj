@@ -46,7 +46,6 @@
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
     <OutputPath>bin\Debug\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -77,19 +76,18 @@
     <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
     <CodeContractsReferenceAssembly>DoNotBuild</CodeContractsReferenceAssembly>
     <CodeContractsContainerAnalysis>False</CodeContractsContainerAnalysis>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
-    <OutputPath>bin\MONODROID\</OutputPath>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Mono\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\RavenQuestionnaire.Web\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -100,61 +98,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AggregateRootTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AndAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AutoMappedCommandTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BigBangTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CommandTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DomainTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventContext.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="EventSerializationFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ExceptionTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Fakes\EnvironmentConfigurationWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Fakes\FrozenClock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GivenAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="JsonEventSerializationFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OneEventTestFixture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Prepare.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="AggregateRootTestFixture.cs" />
+    <Compile Include="AndAttribute.cs" />
+    <Compile Include="AutoMappedCommandTestFixture.cs" />
+    <Compile Include="BaseTestFixture.cs" />
+    <Compile Include="DomainTestFixture.cs" />
+    <Compile Include="JsonEventSerializationFixture.cs" />
+    <Compile Include="CommandTestFixture.cs" />
+    <Compile Include="BigBangTestFixture.cs" />
+    <Compile Include="EventSerializationFixture.cs" />
+    <Compile Include="ExceptionTestFixture.cs" />
+    <Compile Include="OneEventTestFixture.cs" />
+    <Compile Include="EventContext.cs" />
+    <Compile Include="Fakes\EnvironmentConfigurationWrapper.cs" />
+    <Compile Include="Fakes\FrozenClock.cs" />
+    <Compile Include="GivenAttribute.cs" />
+    <Compile Include="Prepare.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SpecificationAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ThenAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="SpecificationAttribute.cs" />
+    <Compile Include="ThenAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ncqrs\Ncqrs.csproj">
@@ -162,7 +124,9 @@
       <Name>Ncqrs</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -86,7 +86,7 @@ namespace Main.Core.ExpressionExecutors
         public bool Execute()
         {
             bool isValid = true;
-            foreach (ICompleteQuestion completeQuestion in this.doc.Questions.Where(q => q.QuestionScope <= this.scope))
+            foreach (ICompleteQuestion completeQuestion in this.doc.GetQuestions().Where(q => q.QuestionScope <= this.scope))
             {
                 completeQuestion.Valid = this.Execute(completeQuestion);
                 isValid = isValid && completeQuestion.Valid;
