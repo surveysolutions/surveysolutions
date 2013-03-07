@@ -11,8 +11,6 @@ using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    
-
     [Authorize]
     public class AccountController : BootstrapBaseController
     {
@@ -401,7 +399,7 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "Questionnaires");
+                return RedirectToAction("Index", "Questionnaire");
             }
         }
         

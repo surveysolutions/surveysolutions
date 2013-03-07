@@ -13,6 +13,7 @@ using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
 {
+    [Authorize]
     public class QuestionnaireController : BaseController
     {
         public class HomeInputModel
