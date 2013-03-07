@@ -9,7 +9,7 @@ BuildSolution 'src\Designer.sln' 'Release' | %{ if (-not $_) { Exit } }
 
 RunTests 'Release'
 
-& (GetPathToMSBuild) 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' '/t:Package' '/p:Configuration=Release'
+& (GetPathToMSBuild) 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' '/t:Package' '/p:Configuration=Release' | Write-Host
 
 Remove-Item \\192.168.3.113\Web\Designer\* -Force -Recurse
 
