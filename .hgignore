@@ -7,6 +7,8 @@ bin
 obj
 *.csproj.user
 obj.Wpf
+*.sdf
+*.opensdf
 
 *.StyleCop
 StyleCop.Cache
@@ -30,3 +32,5 @@ success.marker
 
 Externals/lib/*
 Bin
+lib/Release
+lib/Debug
