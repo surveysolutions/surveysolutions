@@ -38,6 +38,33 @@ namespace WB.UI.Designer
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
+
+            // 3rd Party JavaScript files
+            bundles.Add(new ScriptBundle("~/bundles/jsextlibs")
+                //.IncludeDirectory("~/Scripts/lib", "*.js", searchSubdirectories: false));
+                .Include(
+                    "~/Scripts/lib/json2.js", // IE7 needs this
+
+                    // jQuery plugins
+                    "~/Scripts/lib/activity-indicator.js",
+                    "~/Scripts/TrafficCop.js",
+                    "~/Scripts/infuser.js", // depends on TrafficCop
+
+                    // Knockout and its plugins
+                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/lib/knockout.activity.js",
+                    "~/Scripts/lib/knockout.asyncCommand.js",
+                    "~/Scripts/lib/knockout.dirtyFlag.js",
+                    "~/Scripts/lib/knockout.validation.js",
+                    "~/Scripts/lib/koExternalTemplateEngine.js",
+
+                    // Other 3rd party libraries
+                    "~/Scripts/lib/underscore.js",
+                    "~/Scripts/lib/moment.js",
+                    "~/Scripts/lib/sammy.*",
+                    "~/Scripts/lib/amplify.*",
+                    "~/Scripts/lib/toastr.js"
+                    ));
         }
     }
 }
