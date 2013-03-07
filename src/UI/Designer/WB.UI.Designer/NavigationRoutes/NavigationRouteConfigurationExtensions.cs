@@ -7,7 +7,7 @@ using System.Web.Routing;
 
 //nuget:mvc4futures
 
-namespace Designer.Web.NavigationRoutes
+namespace WB.UI.Designer.NavigationRoutes
 {
     public static class NavigationRouteConfigurationExtensions
     {

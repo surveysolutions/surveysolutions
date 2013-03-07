@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Designer.Web.Controllers
+namespace WB.UI.Designer.Controllers
 {
     public class QuestionnairesController : Controller
     {

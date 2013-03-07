@@ -1,4 +1,4 @@
-﻿namespace Designer.Web.NavigationRoutes
+﻿namespace WB.UI.Designer.NavigationRoutes
 {
     public class NavigationRouteOptions
     {

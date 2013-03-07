@@ -1,4 +1,4 @@
-﻿namespace Designer.Web
+﻿namespace WB.UI.Designer
 {
     public enum AccountManageMessageId
     {
