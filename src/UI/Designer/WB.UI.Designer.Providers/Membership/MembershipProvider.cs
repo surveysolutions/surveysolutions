@@ -227,8 +227,9 @@ namespace WB.UI.Designer.Providers.Membership
             return null;
         }
 
-        private IMembershipAccount InternalCreateAccount(string username, string password, string email, object providerUserKey,
-            bool isApproved, out MembershipCreateStatus status)
+        private IMembershipAccount InternalCreateAccount(string username, string password, string email,
+                                                         object providerUserKey,
+                                                         bool isApproved, out MembershipCreateStatus status)
         {
             if (AccountRepository.IsUniqueEmailRequired && AccountRepository.GetUserNameByEmail(email) != null)
             {
@@ -312,9 +313,9 @@ namespace WB.UI.Designer.Providers.Membership
                 return false;
 
             var info = new AccountPasswordInfo(username, account.Password)
-                           {
-                               PasswordSalt = account.PasswordSalt
-                           };
+                {
+                    PasswordSalt = account.PasswordSalt
+                };
             if (PasswordStrategy.Compare(info, password))
                 return false;
 
@@ -442,39 +443,53 @@ namespace WB.UI.Designer.Providers.Membership
         /// <param name="username">The name of the user to validate. </param><param name="password">The password for the specified user. </param>
         public override bool ValidateUser(string username, string password)
         {
-            var user = AccountRepository.Get(username);
-            if (user == null || user.IsLockedOut)
+            var account = AccountRepository.Get(username);
+            if (account == null || account.IsLockedOut)
                 return false;
 
-            var passwordInfo = user.CreatePasswordInfo();
+            var passwordInfo = account.CreatePasswordInfo();
             var validated = PasswordStrategy.Compare(passwordInfo, password);
             if (validated)
             {
-                user.LastLoginAt = DateTime.Now;
-                user.FailedPasswordWindowStartedAt = DateTime.MinValue;
-                user.FailedPasswordWindowAttemptCount = 0;
-                AccountRepository.Update(user, MembershipEventType.UserValidated);
+                account.LastLoginAt = DateTime.Now;
+                account.FailedPasswordWindowStartedAt = DateTime.MinValue;
+                account.FailedPasswordWindowAttemptCount = 0;
+                AccountRepository.Update(account, MembershipEventType.UserValidated);
                 return true;
             }
             else
             {
-                user.FailedPasswordWindowAttemptCount += 1;
-                if (user.FailedPasswordWindowStartedAt == DateTime.MinValue)
+                if (account.FailedPasswordWindowAttemptCount > PasswordPolicy.MaxInvalidPasswordAttempts)
                 {
-                    user.FailedPasswordAnswerWindowStartedAt = DateTime.Now;
+                    LockUser(account);
                 }
-                AccountRepository.Update(user, MembershipEventType.FailedLogin);
-
-                if (DateTime.Now.Subtract(user.FailedPasswordAnswerWindowStartedAt).TotalMinutes >
-                         PasswordPolicy.PasswordAttemptWindow)
+                else
                 {
-                    user.IsLockedOut = true;
-                    user.LastLockedOutAt = DateTime.Now;
-                    AccountRepository.Update(user, MembershipEventType.LockUser);
+                    account.FailedPasswordWindowAttemptCount += 1;
+                    if (account.FailedPasswordWindowStartedAt == DateTime.MinValue)
+                    {
+                        account.FailedPasswordAnswerWindowStartedAt = DateTime.Now;
+                    }
+                    AccountRepository.Update(account, MembershipEventType.FailedLogin);
+
+                    //if (DateTime.Now.Subtract(user.FailedPasswordAnswerWindowStartedAt).TotalMinutes >
+                    //         PasswordPolicy.PasswordAttemptWindow)
+                    //{
+                    //    user.IsLockedOut = true;
+                    //    user.LastLockedOutAt = DateTime.Now;
+                    //    AccountRepository.Update(user, MembershipEventType.LockUser);
+                    //}
                 }
             }
 
             return false;
+        }
+
+        private void LockUser(IMembershipAccount account)
+        {
+            account.IsLockedOut = true;
+            account.LastLockedOutAt = DateTime.Now;
+            AccountRepository.Update(account, MembershipEventType.LockUser);
         }
 
         /// <summary>
@@ -693,7 +708,7 @@ namespace WB.UI.Designer.Providers.Membership
         {
             bool isConfirmed = false;
 
-            if(userName == null)
+            if (userName == null)
             {
                 userName = AccountRepository.GetUserNameByConfirmationToken(accountConfirmationToken);
             }
@@ -713,11 +728,12 @@ namespace WB.UI.Designer.Providers.Membership
             return CreateUserAndAccount(userName, password, requireConfirmationToken, null);
         }
 
-        public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
+        public override string CreateUserAndAccount(string userName, string password, bool requireConfirmation,
+                                                    IDictionary<string, object> values)
         {
             string token = string.Empty;
 
-            string email = values == null? string.Empty :(string)values["Email"];
+            string email = values == null ? string.Empty : (string) values["Email"];
 
             MembershipCreateStatus status;
             var account = InternalCreateAccount(userName, password, email, null, !requireConfirmation, out status);
@@ -749,7 +765,7 @@ namespace WB.UI.Designer.Providers.Membership
             throw new NotImplementedException();
         }
 
-        
+
         public override bool ResetPasswordWithToken(string token, string newPassword)
         {
             throw new NotImplementedException();
