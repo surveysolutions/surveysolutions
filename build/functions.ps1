@@ -2,6 +2,10 @@ function GetPathRelativeToCurrectLocation($FullPath) {
     return $FullPath.Substring((Get-Location).Path.Length + 1)
 }
 
+function GetPathToMSBuild() {
+    return 'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe'
+}
+
 
 function CleanFolders($Filter) {
     $progressMessage = "Cleaning $Filter folders"
@@ -56,7 +60,7 @@ function BuildSolution($Solution, $BuildConfiguration) {
     Write-Host "##teamcity[blockOpened name='$Solution']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
-    C:\Windows\Microsoft.NET\Framework64\v4.0.30319\MSBuild.exe $Solution /t:Rebuild /p:Configuration=$BuildConfiguration | Write-Host
+    & (GetPathToMSBuild) $Solution '/t:Rebuild' "/p:Configuration=$BuildConfiguration" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
