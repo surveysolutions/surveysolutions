@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Web;
 using System.Web.Mvc;
 
-namespace Designer.Web.BootstrapSupport
+namespace WB.UI.Designer.BootstrapSupport
 {
     public class ControlGroup : IDisposable
     {

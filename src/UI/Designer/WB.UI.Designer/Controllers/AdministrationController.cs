@@ -1,12 +1,12 @@
-using Designer.Web.Extensions;
-using Designer.Web.Models;
+using WB.UI.Designer.Extensions;
+using WB.UI.Designer.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebMatrix.WebData;
 
-namespace Designer.Web.Controllers
+namespace WB.UI.Designer.Controllers
 {
     public class AccountListViewItemModel
     {

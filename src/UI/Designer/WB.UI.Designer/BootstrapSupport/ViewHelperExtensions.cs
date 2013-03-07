@@ -11,7 +11,7 @@ using System.Web.Mvc.Html;
 using System.Web.Routing;
 using System.ComponentModel.DataAnnotations;
 
-namespace Designer.Web.BootstrapSupport
+namespace WB.UI.Designer.BootstrapSupport
 {
     public static class DefaultScaffoldingExtensions
     {

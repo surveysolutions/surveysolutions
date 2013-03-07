@@ -1,10 +1,11 @@
-﻿using Designer.Web.Controllers;
-using Designer.Web.Models;
-using Designer.Web.NavigationRoutes;
-using Designer.Web.RouteFilters;
+﻿using WB.UI.Designer.Controllers;
+using WB.UI.Designer.NavigationRoutes;
+using WB.UI.Designer.RouteFilters;
 using System.Web.Routing;
+using WB.UI.Designer.Controllers;
+using WB.UI.Designer.Models;
 
-namespace Designer.Web
+namespace WB.UI.Designer
 {
     public class LayoutsRouteConfig
     {

@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
-using Designer.Web.BootstrapSupport;
+using WB.UI.Designer.BootstrapSupport;
 
-namespace Designer.Web.Controllers
+namespace WB.UI.Designer.Controllers
 {
     public class BootstrapBaseController: Controller
     {
