@@ -21,7 +21,7 @@
         // Plugins must be loaded after jQuery and Knockout, 
         // since they depend on them.
         require.config({
-            baseUrl: '/Scripts/details/app'
+            baseUrl: '/designer/Scripts/details/app'
         });
         requirejs([
                 'ko.bindingHandlers',
