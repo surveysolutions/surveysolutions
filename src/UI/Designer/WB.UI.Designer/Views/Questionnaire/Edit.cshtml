@@ -1,56 +1,15 @@
 ﻿@using System.Web.Script.Serialization
-@using ClientDependency.Core.Mvc
-@using RavenQuestionnaire.Core.Views.Questionnaire
-@using RavenQuestionnaire.Web.Utils
-@model QuestionnaireView
+@using WB.UI.Designer.Utils
+@model RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireView
+
 @{
+    ViewBag.Title = "title";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    Html.RequiresCss("jquery-ui.min.css", "Base");
-    Html.RequiresCss("toastr.css", "Content");
-    Html.RequiresCss("toastr-responsive.css", "Content");
-    Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
-<script src="../../Scripts/details/lib/Math.uuid.js"></script>
-<script src="../../Scripts/jquery-ui-1.8.16.custom.min.js"></script>
-<script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
-
-<script src="../../Scripts/details/lib/json2.js"></script>
-
-<script src="../../Scripts/details/lib/moment.js"></script>
-<script src="../../Scripts/details/lib/jquery.autogrow-textarea.js"></script>
-<script src="../../Scripts/details/lib/TrafficCop.js"></script>
-<script src="../../Scripts/details/lib/infuser.js"></script>
-
-<script src="../../Scripts/details/lib/lodash.min.js"></script>
-
-<script src="../../Scripts/details/lib/knockout.activity.js"></script>
-<script src="../../Scripts/details/lib/knockout.asyncCommand.js"></script>
-<script src="../../Scripts/details/lib/knockout.dirtyFlag.js"></script>
-<script src="../../Scripts/details/lib/knockout.validation.js"></script>
-<script src="../../Scripts/details/lib/koExternalTemplateEngine.js"></script>
-<script src="../../Scripts/details/lib/knockout-sortable.js"></script>
-
-<script src="../../Scripts/details/lib/sammy.js"></script>
-<script src="../../Scripts/details/lib/sammy.title.js"></script>
-<script src="../../Scripts/details/lib/amplify.core.js"></script>
-<script src="../../Scripts/details/lib/amplify.request.js"></script>
-<script src="../../Scripts/details/lib/amplify.store.js"></script>
-
-<script src="../../Scripts/details/lib/toastr.js"></script>
-
-<script src="../../Scripts/details/lib/require.js"></script>
-
-<script>
-    define('input', [], function () {
-        var q= @Html.Raw(serializer.Serialize(Model)) ;
-        return {
-            questionnaire: q
-        };
-    });
-</script>
-<script src="../../Scripts/details/main.js"></script>
-
+@section Styles{
+    @Styles.Render("~/Content/edit")
+}
 
 <div id="busyindicator"></div>
 <div id="stacks">
@@ -323,5 +282,17 @@
     </div>
 
 </script>
-
-
+@section Scripts{
+    <script>
+    define('input', [], function () {
+        var q= @Html.Raw(serializer.Serialize(Model)) ;
+        return {
+            questionnaire: q
+        };
+    });
+</script>
+    @Scripts.Render(
+        "~/bundles/jsappdetails",
+        "~/Scripts/details/main.js"
+    )
+}

@@ -5,10 +5,13 @@
         var _dc = null,
           Question = function () {
               var self = this;
-              self.id = ko.observable();
-              self.title = ko.observable();
+              self.id = ko.observable(Math.uuid());
+              self.title = ko.observable('Title');
               self.alias = ko.observable();
-              self.type = ko.observable();
+              
+              self.type = ko.observable("QuestionView"); // Object type
+              self.template = "QuestionView"; // tempate id in html file
+              
               self.isHead = ko.observable();
               self.isFeatured = ko.observable();
               self.isMandatory = ko.observable();
@@ -71,10 +74,10 @@
               self.getHref = function () {
                   return config.hashes.detailsQuestion + "/" + self.id();
               };
-              self.template = "QuestionView";
+              self.isSelected = ko.observable();
               self.isNullo = false;
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
-
+              self.dirtyFlag().reset();
               return self;
           };
 

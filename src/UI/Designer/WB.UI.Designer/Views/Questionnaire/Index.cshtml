@@ -1,5 +1,5 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
-@model System.Collections.IEnumerable   
+@model Main.Core.View.Questionnaire.QuestionnaireBrowseView   
 
 <blockquote class="pull-left">
   <p>My Questionnaires<small>Listing</small></p>
@@ -19,7 +19,7 @@
         </tr>
     </thead>
     @{ int index = 0; }
-    @foreach (var model in Model)
+    @foreach (var model in Model.Items)
     {
         ViewData[index.ToString()] = model;
         <tr>

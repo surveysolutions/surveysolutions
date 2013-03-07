@@ -225,7 +225,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignCoreRegistry.cs" />
-    <Compile Include="Controllers\QuestionnairesController.cs" />
+    <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -246,6 +246,9 @@
     <Compile Include="NavigationRoutes\NavigationRouteOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteFilters\AdministrationRouteFilter.cs" />
+    <Compile Include="Utils\ExpressionReplacer.cs" />
+    <Compile Include="Utils\JsonWithTypeResult.cs" />
+    <Compile Include="Utils\TypeResolver.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\body.css" />
@@ -254,8 +257,10 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\details.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -278,12 +283,16 @@
     <Content Include="Content\themes\base\jquery.ui.core.css" />
     <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
     <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.menu.css" />
     <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
     <Content Include="Content\themes\base\jquery.ui.resizable.css" />
     <Content Include="Content\themes\base\jquery.ui.selectable.css" />
     <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
     <Content Include="Content\themes\base\jquery.ui.tabs.css" />
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Include="Content\themes\base\minified\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -304,12 +313,15 @@
     <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Content\toastr.css" />
     <Content Include="Content\toastr.min.css" />
     <Content Include="favicon.ico" />
@@ -361,6 +373,8 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.js" />
     <Content Include="Scripts\jquery-migrate-1.1.1.min.js" />
+    <Content Include="Scripts\jquery-ui-1.10.1.js" />
+    <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -372,15 +386,17 @@
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
-    <Content Include="Scripts\libs\jquery.autogrow-textarea.js" />
-    <Content Include="Scripts\libs\knockout-sortable.js" />
-    <Content Include="Scripts\libs\knockout-sortable.min.js" />
-    <Content Include="Scripts\libs\knockout.activity.js" />
-    <Content Include="Scripts\libs\knockout.asyncCommand.js" />
-    <Content Include="Scripts\libs\knockout.dirtyFlag.js" />
-    <Content Include="Scripts\libs\knockout.validation.js" />
-    <Content Include="Scripts\libs\koExternalTemplateEngine.js" />
-    <Content Include="Scripts\libs\Math.uuid.js" />
+    <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
+    <Content Include="Scripts\lib\knockout-sortable.js" />
+    <Content Include="Scripts\lib\knockout-sortable.min.js" />
+    <Content Include="Scripts\lib\knockout.activity.js" />
+    <Content Include="Scripts\lib\knockout.asyncCommand.js" />
+    <Content Include="Scripts\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\lib\knockout.validation.js" />
+    <Content Include="Scripts\lib\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\lib\Math.uuid.js" />
+    <Content Include="Scripts\lib\sammy.js" />
+    <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
     <Content Include="Scripts\MIT-LICENSE.txt" />
@@ -451,8 +467,8 @@
     <Content Include="Views\Administration\_CreateOrEdit.cshtml" />
     <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Shared\_MINIPROFILER UPDATED Layout.cshtml" />
-    <Content Include="Views\Questionnaires\Index.cshtml" />
-    <Content Include="Views\Questionnaires\Public.cshtml" />
+    <Content Include="Views\Questionnaire\Index.cshtml" />
+    <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\_BootstrapLayout.basic.cshtml" />
     <Content Include="Views\Shared\_BootstrapLayout.empty.cshtml" />
@@ -462,6 +478,7 @@
     <Content Include="Views\Shared\Details.cshtml" />
     <Content Include="Views\Shared\_validationSummary.cshtml" />
     <Content Include="Views\Shared\Index.cshtml" />
+    <Content Include="Views\Questionnaire\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -473,6 +490,10 @@
     <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
+      <Project>{7e143353-a648-4435-819f-93a748a90704}</Project>
+      <Name>RavenQuestionnaire.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>

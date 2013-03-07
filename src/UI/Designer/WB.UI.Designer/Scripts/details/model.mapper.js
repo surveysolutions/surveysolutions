@@ -62,6 +62,7 @@
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
                     }));
+                    item.dirtyFlag().reset();
                     return item;
                 },
                 objectsFromDto: function (dto) {
@@ -105,7 +106,7 @@
                     
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
-                    
+                    item.dirtyFlag().reset();
                     return item;
                 },
                 objectsFromDto: function (dto) {
