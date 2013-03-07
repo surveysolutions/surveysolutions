@@ -5,11 +5,11 @@ namespace WB.UI.Designer.Controllers
 {
     public abstract class BaseController : Controller
     {
-        public IViewRepository Repository { get; set; }
+        protected IViewRepository _repository;
 
         protected BaseController(IViewRepository repository)
         {
-            Repository = repository;
+            _repository = repository;
         }
     }
 }
