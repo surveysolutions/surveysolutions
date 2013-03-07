@@ -4,6 +4,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 CleanBinAndObjFolders
 
-BuildSolution '.\src\Designer.sln' 'Release'
+BuildSolution '.\src\Designer.sln' 'Release' | %{ if (-not $_) { Exit } }
 
 RunTests 'Release'
