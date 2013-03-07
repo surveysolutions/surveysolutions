@@ -15,14 +15,14 @@
                 getChapters();
                 questionnaire(datacontext.questionnaire);
                 $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
-            } else {
-                if (!_.isUndefined(selectedGroup())) {
-                    selectedGroup().isSelected(false);
-                }
-                if (!_.isUndefined(selectedQuestion())) {
-                    selectedQuestion().isSelected(false);
-                }
+            } 
+            if (!_.isUndefined(selectedGroup())) {
+                selectedGroup().isSelected(false);
             }
+            if (!_.isUndefined(selectedQuestion())) {
+                selectedQuestion().isSelected(false);
+            }
+            
             if (routeData.has('question')) {
                 editQuestion(routeData.question);
             }
