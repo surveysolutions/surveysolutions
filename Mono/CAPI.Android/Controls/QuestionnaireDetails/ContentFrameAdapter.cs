@@ -25,14 +25,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
         private AbstractScreenChangingFragment[] mFragments;
-        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey screenId)
+        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey? screenId)
             : base(fm)
         {
             this.questionnaire = questionnaire;
             this.target = target;
-            this.screensHolder = questionnaire.Screens[screenId].Siblings.ToList();
+            this.screensHolder = (screenId.HasValue
+                                     ? questionnaire.Screens[screenId.Value].Siblings
+                                     : questionnaire.Chapters.Select(c=>c.ScreenId)).ToList();
             this.screenId = screenId;
-            this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId);
+            this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId) || !screenId.HasValue;
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.target.Adapter = this;
         }

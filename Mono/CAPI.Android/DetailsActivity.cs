@@ -45,11 +45,7 @@ namespace CAPI.Android
         }
         
         protected ContentFrameAdapter Adapter { get; set; }
-        protected override void OnResume()
-        {
-            base.OnResume();
-        }
-
+       
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -67,9 +63,14 @@ namespace CAPI.Android
             if (bundle != null)
             {
                 var savedScreen = bundle.GetString("ScreenId");
-                if (string.IsNullOrEmpty(savedScreen))
-                    return;
-                ScreenId = ItemPublicKey.Parse(savedScreen);
+                if (!string.IsNullOrEmpty(savedScreen))
+                {
+                    ScreenId = ItemPublicKey.Parse(savedScreen);
+                }
+            }
+            else
+            {
+                ScreenId = ViewModel.Chapters.FirstOrDefault().ScreenId;
             }
 
             this.Title = ViewModel.Title;
@@ -78,13 +79,20 @@ namespace CAPI.Android
             {
                 NavList.Model = ViewModel;
             }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
-                                              ViewModel.Chapters.FirstOrDefault().ScreenId);
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId
+                                             /* ViewModel.Chapters.FirstOrDefault().ScreenId*/);
 
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
 
         }
-
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            base.OnSaveInstanceState(outState);
+        
+            if (!Adapter.ScreenId.HasValue)
+                return;
+            outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
+        }
         public override void OnAttachFragment(global::Android.Support.V4.App.Fragment p0)
         {
             var screen = p0 as IScreenChanging;
@@ -121,17 +129,7 @@ namespace CAPI.Android
             }
         }
 
-        protected override void OnSaveInstanceState(Bundle outState)
-        {
-            base.OnSaveInstanceState(outState);
-            if(Adapter==null)
-                throw new ArgumentException("Adapter is empty");
-            if(outState==null)
-                throw new ArgumentException("bundle is null");
-            if (!Adapter.ScreenId.HasValue)
-                return;
-            outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
-        }
+       
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
 
