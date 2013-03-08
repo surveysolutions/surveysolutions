@@ -73,8 +73,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
          
             var bus = new InProcessEventBus(true);
 
-            // RegisterEventHandlers(bus, kernel);
-
+#if !MONODROID
+            RegisterEventHandlers(bus, kernel);
+#endif
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
