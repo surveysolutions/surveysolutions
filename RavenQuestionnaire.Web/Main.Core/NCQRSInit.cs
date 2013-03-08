@@ -6,6 +6,10 @@
 //   The ncqrs init.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ncqrs.Eventing.Storage.RavenDB;
+using Raven.Client.Document;
+
 namespace Main.Core
 {
     using System;
@@ -56,12 +60,13 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
-            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            //NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            var store = InitializeEventStore(kernel.Get<DocumentStore>());
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
-            //NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
             
-            //NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
@@ -143,10 +148,10 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// <returns>
         /// The <see cref="IStreamableEventStore"/>.
         /// </returns>
-        //private static IStreamableEventStore InitializeEventStore(DocumentStore store)
-        //{
-        //    return new RavenDBEventStore(store);
-        //}
+        private static IStreamableEventStore InitializeEventStore(DocumentStore store)
+        {
+            return new RavenDBEventStore(store);
+        }
 
 #endif
 
