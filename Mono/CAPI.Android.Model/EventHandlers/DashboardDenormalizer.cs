@@ -44,14 +44,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 survey = new DashboardSurveyItem(doc.TemplateId, doc.Title);
                 dashboard.Surveys.Add(survey);
             }
-            var currentItem = survey.Items.FirstOrDefault(i => i.PublicKey == doc.PublicKey);
-            if (currentItem != null)
-                survey.Items.Remove(currentItem);
             var item = new DashboardQuestionnaireItem(doc.PublicKey, doc.Status, featuredItems.Select(
-                q =>
-                new FeaturedItem(q.PublicKey, q.QuestionText,
-                                 q.GetAnswerString())).ToList());
-            survey.Items.Add(item);
+              q =>
+              new FeaturedItem(q.PublicKey, q.QuestionText,
+                               q.GetAnswerString())).ToList());
+            survey.AddItem(item);
         }
 
         #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
@@ -62,7 +59,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             if (dashboard == null)
                 return;
             var questionnaire =
-                dashboard.Surveys.SelectMany(s => s.Items).FirstOrDefault(
+                dashboard.Surveys.SelectMany(s => s.AllItems).FirstOrDefault(
                     q => q.PublicKey == evnt.EventSourceId);
             if (questionnaire == null)
                 return;

@@ -124,6 +124,10 @@ namespace CAPI.Android
         protected override void OnSaveInstanceState(Bundle outState)
         {
             base.OnSaveInstanceState(outState);
+            if(Adapter==null)
+                throw new ArgumentException("Adapter is empty");
+            if(outState==null)
+                throw new ArgumentException("bundle is null");
             if (!Adapter.ScreenId.HasValue)
                 return;
             outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
