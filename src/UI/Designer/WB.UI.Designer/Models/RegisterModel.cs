@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace WB.UI.Designer.Models
 {
+    [DisplayName("Create New Account")]
     public class RegisterModel
     {
         [Required]
