@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+               xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+               android:id="@+id/llRoot"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+              local:MvxBind="{'Background':{'Path':'Status'}}"
+              >
+ 
+  
+
+
+  <LinearLayout 
+             android:id="@+id/llWrapper"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="vertical">
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+       android:gravity="center"
+      android:id="@+id/tvTitle"
+        android:padding="10dip"
+      android:textSize="20dip"
+      local:MvxBind="{'Text':{'Path':'AnswerString'}}"/>
+  </LinearLayout>
+</LinearLayout>

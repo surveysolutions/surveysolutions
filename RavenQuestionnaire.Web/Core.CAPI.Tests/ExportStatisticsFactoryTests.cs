@@ -1,28 +1,27 @@
-// -----------------------------------------------------------------------
-// <copyright file="ClientEventSyncTests.cs" company="">
-// TODO: Update copyright text.
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ExportStatisticsFactoryTests.cs" company="">
+//   
 // </copyright>
-// -----------------------------------------------------------------------
-
-using System;
-using System.Linq;
-using Core.CAPI.Synchronization;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using Main.Core.View;
-using Main.Core.View.CompleteQuestionnaire;
-using Main.DenormalizerStorage;
-using Moq;
-using NUnit.Framework;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
-
-namespace Core.CAPI.Tests.Synchronization
+// <summary>
+//   TODO: Update summary.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+namespace Core.CAPI.Tests
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     using Core.CAPI.Views.ExporStatistics;
+
+    using Main.Core.Documents;
+    using Main.Core.Entities.SubEntities;
+    using Main.Core.View.CompleteQuestionnaire;
+    using Main.DenormalizerStorage;
+
+    using Moq;
+
+    using NUnit.Framework;
 
     /// <summary>
     /// TODO: Update summary.
@@ -30,70 +29,82 @@ namespace Core.CAPI.Tests.Synchronization
     [TestFixture]
     public class ExportStatisticsFactoryTests
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The load_ key list is empty_ empty list returned.
+        /// </summary>
         [Test]
         public void Load_KeyListIsEmpty_EmptyListReturned()
         {
             var store = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             Guid eventSourceId = Guid.NewGuid();
-            var questionnaireList = new[]
-                                        {
-                                            new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument()
-                                                                                    {
-                                                                                        Responsible = new UserLight(new Guid(), "User"),
-                                                                                        PublicKey = eventSourceId,
-                                                                                        Status = SurveyStatus.Initial
-                                                                                    })
-                                        }.AsQueryable();
-            store.Setup(
-                x =>
-                x.Query()).Returns(questionnaireList);
-
-            var factory = new ExportStatisticsFactory(store.Object);
-
-            var target = factory.Load(new ExporStatisticsInputModel(new List<Guid>()));
-            
-            Assert.AreEqual(target.Items.Count(), 0);
-           
-        }
-
-        [Test]
-        public void Load_KeyListNotEmptyButStorageIsEmpty_EmptyListReturned()
-        {
-            var store = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
-            var questionnaireList = new CompleteQuestionnaireBrowseItem[0].AsQueryable();
+            IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
+                new[]
+                    {
+                        new CompleteQuestionnaireBrowseItem(
+                            new CompleteQuestionnaireDocument
+                                {
+                                    Responsible = new UserLight(new Guid(), "User"), 
+                                    PublicKey = eventSourceId, 
+                                    Status = SurveyStatus.Initial
+                                })
+                    }.AsQueryable();
             store.Setup(x => x.Query()).Returns(questionnaireList);
 
             var factory = new ExportStatisticsFactory(store.Object);
 
-            var target = factory.Load(new ExporStatisticsInputModel(new List<Guid>()));
+            ExportStatisticsView target = factory.Load(new ExporStatisticsInputModel(new List<Guid>()));
 
             Assert.AreEqual(target.Items.Count(), 0);
-
         }
 
+        /// <summary>
+        /// The load_ key list not empty but storage is empty_ empty list returned.
+        /// </summary>
+        [Test]
+        public void Load_KeyListNotEmptyButStorageIsEmpty_EmptyListReturned()
+        {
+            var store = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
+                new CompleteQuestionnaireBrowseItem[0].AsQueryable();
+            store.Setup(x => x.Query()).Returns(questionnaireList);
+
+            var factory = new ExportStatisticsFactory(store.Object);
+
+            ExportStatisticsView target = factory.Load(new ExporStatisticsInputModel(new List<Guid>()));
+
+            Assert.AreEqual(target.Items.Count(), 0);
+        }
+
+        /// <summary>
+        /// The load_ key list not empty_ not empty list returned.
+        /// </summary>
         [Test]
         public void Load_KeyListNotEmpty_NotEmptyListReturned()
         {
             var store = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             Guid eventSourceId = Guid.NewGuid();
-            var questionnaireList = new[]
-                                        {
-                                            new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument
-                                                                                    {
-                                                                                        Responsible = new UserLight(new Guid(), "User"),
-                                                                                        PublicKey = eventSourceId,
-                                                                                        Status = SurveyStatus.Initial
-                                                                                    })
-                                        }.AsQueryable();
-            store.Setup(
-                x =>
-                x.Query()).Returns(questionnaireList);
+            IQueryable<CompleteQuestionnaireBrowseItem> questionnaireList =
+                new[]
+                    {
+                        new CompleteQuestionnaireBrowseItem(
+                            new CompleteQuestionnaireDocument
+                                {
+                                    Responsible = new UserLight(new Guid(), "User"), 
+                                    PublicKey = eventSourceId, 
+                                    Status = SurveyStatus.Initial
+                                })
+                    }.AsQueryable();
+            store.Setup(x => x.Query()).Returns(questionnaireList);
 
             var factory = new ExportStatisticsFactory(store.Object);
 
-            var target = factory.Load(new ExporStatisticsInputModel(new List<Guid>{ eventSourceId }));
+            ExportStatisticsView target = factory.Load(new ExporStatisticsInputModel(new List<Guid> { eventSourceId }));
 
             Assert.AreEqual(target.Items.Count(), 1);
         }
+
+        #endregion
     }
 }

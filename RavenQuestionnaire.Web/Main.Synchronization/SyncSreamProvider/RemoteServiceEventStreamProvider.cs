@@ -18,7 +18,7 @@ namespace Main.Synchronization.SyncSreamProvider
 
     using Ninject;
 
-    using NLog;
+    //using NLog;
 
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.WcfInfrastructure;
@@ -50,10 +50,11 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <param name="kernel">
         /// The kernel.
         /// </param>
-        public RemoteServiceEventStreamProvider(IKernel kernel, Guid processGuid)
+        public RemoteServiceEventStreamProvider(IKernel kernel, Guid processGuid, string baseAddress)
         {
             this.chanelFactoryWrapper = kernel.Get<IChanelFactoryWrapper>();
             this.ProcessGuid = processGuid;
+            this.baseAddress = baseAddress;
         }
 
         #endregion
@@ -176,8 +177,8 @@ namespace Main.Synchronization.SyncSreamProvider
                             }
                             catch (Exception ex)
                             {
-                                Logger logger = LogManager.GetCurrentClassLogger();
-                                logger.Fatal("Import error", ex);
+                                //Logger logger = LogManager.GetCurrentClassLogger();
+                                //logger.Fatal("Import error", ex);
 
                                 events = null;
 

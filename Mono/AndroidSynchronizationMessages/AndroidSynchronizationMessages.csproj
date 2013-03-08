@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0B303848-98EF-4C13-B344-548B5DF5B1B5}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidSynchronizationMessages</RootNamespace>
+    <AssemblyName>SynchronizationMessages</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\CompleteQuestionnaireMessage.cs">
+      <Link>CompleteQuestionnaire\CompleteQuestionnaireMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\ErrorCodes.cs">
+      <Link>CompleteQuestionnaire\ErrorCodes.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\IEventDocumentSync.cs">
+      <Link>CompleteQuestionnaire\IEventDocumentSync.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\IGetAggragateRootList.cs">
+      <Link>CompleteQuestionnaire\IGetAggragateRootList.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\IGetEventStream.cs">
+      <Link>CompleteQuestionnaire\IGetEventStream.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\ImportSynchronizationMessage.cs">
+      <Link>CompleteQuestionnaire\ImportSynchronizationMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs">
+      <Link>CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\JsonSerrializer.cs">
+      <Link>CompleteQuestionnaire\JsonSerrializer.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs">
+      <Link>CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Discover\ISpotSync.cs">
+      <Link>Discover\ISpotSync.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Export\ZipFileData.cs">
+      <Link>Export\ZipFileData.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Export\ZipManager.cs">
+      <Link>Export\ZipManager.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Synchronization\FormatHelper.cs">
+      <Link>Synchronization\FormatHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Synchronization\ICustomSerializable.cs">
+      <Link>Synchronization\ICustomSerializable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Synchronization\IGetLastSyncEvent.cs">
+      <Link>Synchronization\IGetLastSyncEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\WcfInfrastructure\ChanelFactoryWrapper.cs">
+      <Link>WcfInfrastructure\ChanelFactoryWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\WcfInfrastructure\DebugMessageBehavior.cs">
+      <Link>WcfInfrastructure\DebugMessageBehavior.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\WcfInfrastructure\DebugMessageInspector.cs">
+      <Link>WcfInfrastructure\DebugMessageInspector.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\WcfInfrastructure\IChanelFactoryWrapper.cs">
+      <Link>WcfInfrastructure\IChanelFactoryWrapper.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
+      <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
+      <Name>AndroidMain.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handshake\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="ad672732-3d12-48bc-8612-09547f0065d3" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

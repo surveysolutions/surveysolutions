@@ -1,4 +1,4 @@
-// --------------------------------------------------------------------------------------------------------------------
+﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="DocumentStoreProvider.cs" company="The World Bank">
 //   2012
 // </copyright>
@@ -6,6 +6,7 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+#if !MONODROID
 
 namespace Main.Core
 {
@@ -33,7 +34,7 @@ namespace Main.Core
         /// </summary>
         private readonly string storage;
 
-        
+
         #endregion
 
         #region Constructors and Destructors
@@ -71,25 +72,26 @@ namespace Main.Core
             DocumentStore store;
 
             store = this.isEmbedded ?
-                        this.GetEmbededStorage() : 
+                        this.GetEmbededStorage() :
                         new DocumentStore { Url = this.storage };
-                
+
             store.Initialize();
 
             return store;
         }
-        protected  EmbeddableDocumentStore GetEmbededStorage()
+        protected EmbeddableDocumentStore GetEmbededStorage()
         {
-            if(!isEmbedded)
+            if (!isEmbedded)
                 throw new InvalidOperationException("You can't call this method");
-            if(embStorage==null ||embStorage.WasDisposed)
+            if (embStorage == null || embStorage.WasDisposed)
             {
                 embStorage = new EmbeddableDocumentStore() { DataDirectory = this.storage, UseEmbeddedHttpServer = false };
                 embStorage.ResourceManagerId = Guid.NewGuid();
             }
             return embStorage;
         }
-        private  EmbeddableDocumentStore embStorage;
+        private EmbeddableDocumentStore embStorage;
         #endregion
     }
 }
+#endif

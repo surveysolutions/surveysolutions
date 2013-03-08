@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidNcqrs.Tests</RootNamespace>
+    <AssemblyName>AndroidNcqrs.Tests</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
+    <OutputPath>bin\MONODROID\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BasicGuidGeneratorSpecs.cs" />
+    <Compile Include="Commanding\CommandBasedTests.cs" />
+    <Compile Include="Commanding\CommandExecution\CommandExecutorWrapperTests.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttributeTests.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapperTests.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeCommandMappingTests.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\TestMappedCommandExecutor.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\FluentCommandMappingTests.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\MappingForCommandNotFoundExceptionTests.cs" />
+    <Compile Include="Commanding\CommandExecution\TransactionalCommandExecutorWrapperTests.cs" />
+    <Compile Include="Commanding\CommandExecutorBaseTests.cs" />
+    <Compile Include="Commanding\ExecutorForCommandNotFoundExceptionTests.cs" />
+    <Compile Include="Commanding\ServiceModel\CommandServiceBaseTests.cs" />
+    <Compile Include="Commanding\TransactionalCommandExecutorWrapperTests.cs" />
+    <Compile Include="Config\InstanceNotFoundInEnvironmentConfigurationExceptionTests.cs" />
+    <Compile Include="DateTimeBasedClockSpecs.cs" />
+    <Compile Include="Domain\AggregateRootMappedByConventionTests.cs" />
+    <Compile Include="Domain\AggregateRootMappedByExpressionTests.cs" />
+    <Compile Include="Domain\AggregateRootMappedWithAttributesTests.cs" />
+    <Compile Include="Domain\AggregateRootTests.cs" />
+    <Compile Include="Domain\EntityTests.cs" />
+    <Compile Include="Domain\EventNotHandledExceptionTests.cs" />
+    <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextExceptionTests.cs" />
+    <Compile Include="Domain\Storage\AggregateRootCreationExceptionTests.cs" />
+    <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategyTests.cs" />
+    <Compile Include="Domain\TypeThresholdedActionBasedInternalEventHandlerSpecs.cs" />
+    <Compile Include="Domain\UnitOfWorkTests.cs" />
+    <Compile Include="Eventing\CommittedEventStreamTests.cs" />
+    <Compile Include="Eventing\EventBaseSpecs.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\InProcessEventBusSpecs.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\AttributeBasedDomainEventHandlerMappingStrategyTests.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedDomainEventHandlerMappingStrategyTests.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ExpressionBasedDomainEventHandlerMappingStrategyTests.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\InvalidEventHandlerMappingExceptionTests.cs" />
+    <Compile Include="Eventing\Storage\AttributeEventTypeResolverTests.cs" />
+    <Compile Include="Eventing\Storage\BaseExceptionTests.cs" />
+    <Compile Include="Eventing\Storage\ConcurrencyExceptionSpecs.cs" />
+    <Compile Include="Eventing\Storage\DuplicateCommitExceptionTests.cs" />
+    <Compile Include="Eventing\Storage\InMemoryEventStoreSpecs.cs" />
+    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\NoDBEventStoreTests.cs" />
+    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_getting_all_events_for_an_event_source.cs" />
+    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_getting_the_events_since_a_specific_version.cs" />
+    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_saving_a_new_event_source.cs" />
+    <Compile Include="Eventing\Storage\NoDB\EventStoreTests\when_saving_events_based_on_stale_state.cs" />
+    <Compile Include="Eventing\Storage\NoDB\Fakes\AccountTitleChangedEvent.cs" />
+    <Compile Include="Eventing\Storage\NoDB\Fakes\CustomerCreatedEvent.cs" />
+    <Compile Include="Eventing\Storage\NoDB\Fakes\CustomerNameChanged.cs" />
+    <Compile Include="Eventing\Storage\NoDB\Fakes\TestSnapshot.cs" />
+    <Compile Include="Eventing\Storage\NoDB\SnapshotStoreTests\NoDBSnapshotStoreTestFixture.cs" />
+    <Compile Include="Eventing\Storage\NoDB\SnapshotStoreTests\when_getting_the_snapshot.cs" />
+    <Compile Include="Eventing\Storage\NoDB\SnapshotStoreTests\when_saving_a_new_snapshot.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagConverterTests.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagTests.cs" />
+    <Compile Include="Eventing\Storage\Serialization\EventConverterTests.cs" />
+    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatterTests.cs" />
+    <Compile Include="Eventing\Storage\Serialization\StringEventTranslatorTests.cs" />
+    <Compile Include="Eventing\Storage\SimpleEventTypeResolverTests.cs" />
+    <Compile Include="Eventing\UncommittedEventStreamTests.cs" />
+    <Compile Include="GuidCombGenerator.cs" />
+    <Compile Include="InternalExtensionsTests.cs" />
+    <Compile Include="NcqrsEnvironmentConfigurationExceptionSpecs.cs" />
+    <Compile Include="NcqrsEnvironmentSpecs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
+      <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
+      <Name>AndroidFluentAssertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+      <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
+      <Name>AndroidLogger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Spec\AndroidNcqrs.Spec.csproj">
+      <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
+      <Name>AndroidNcqrs.Spec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
+      <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
+      <Name>NUnitLite.MonoDroid</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -22,7 +22,11 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+
+#if !MONODROID
+using Raven.Client;
 using Raven.Client.Document;
+#endif
 
 namespace Main.Core
 {
@@ -98,15 +102,21 @@ namespace Main.Core
 
         protected virtual void RegisterAdditionalElements()
         {
+#if !MONODROID
             var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
+#endif
 
-            ICommandListSupplier commands=new CommandListSupplier(RegisteredCommandList());
+
+            ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
+
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
+                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
+                    new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
+
 
         }
 
@@ -203,10 +213,7 @@ namespace Main.Core
         }
         protected object ActivteDenormalizerFromProvider(IContext ctx)
         {
-            return
-                (ctx.Kernel.Get(
-                    typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments))
-                 as IProvider).Create(ctx);
+            return (ctx.Kernel.Get(typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
         }
     }
 }

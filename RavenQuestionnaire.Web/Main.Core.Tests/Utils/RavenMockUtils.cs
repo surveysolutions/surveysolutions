@@ -6,7 +6,7 @@
 //   The raven mock utils.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+#if !MONODROID
 namespace RavenQuestionnaire.Core.Tests.Utils
 {
     using System;
@@ -72,3 +72,4 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         #endregion
     }
 }
+#endif

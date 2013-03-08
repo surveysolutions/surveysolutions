@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{15F83817-1405-42FE-B0B4-9A663851CC98}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Android.Tests.Runner</RootNamespace>
+    <AssemblyName>Android.Tests.Runner</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <AndroidApplication>true</AndroidApplication>
+    <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AndroidSupportedAbis>armeabi%3bx86</AndroidSupportedAbis>
+    <AndroidStoreUncompressedFileExtensions />
+    <MandroidI18n />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
+    <OutputPath>bin\MONODROID\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MvvmCross\System.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="MainActivity.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\AboutResources.txt" />
+    <None Include="Assets\AboutAssets.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Layout\Main.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Values\Strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Drawable\Icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidCore.CAPI.Tests\AndroidCore.CAPI.Tests.csproj">
+      <Project>{18843DE6-BA3F-4964-BB63-99635C3CAEDA}</Project>
+      <Name>AndroidCore.CAPI.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.Core.Tests\AndroidMain.Core.Tests.csproj">
+      <Project>{9268D360-154C-46C9-9B56-924DE80306A6}</Project>
+      <Name>AndroidMain.Core.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCalc.Tests\AndroidNCalc.Tests.csproj">
+      <Project>{9F3A0A7A-471A-43CC-8E12-F465B413623D}</Project>
+      <Name>AndroidNCalc.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite.Tests\AndroidNcqrs.Eventing.Storage.SQLite.Tests.csproj">
+      <Project>{5DEEE833-95C4-4D28-AAA7-E281FF1569D8}</Project>
+      <Name>AndroidNcqrs.Eventing.Storage.SQLite.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot.Test\AndroidNcqrs.Restoring.EventStapshoot.Test.csproj">
+      <Project>{7D58D343-D618-4FD2-A4C5-CFA90D533229}</Project>
+      <Name>AndroidNcqrs.Restoring.EventStapshoot.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Tests\AndroidNcqrs.Tests.csproj">
+      <Project>{B1AA86AF-1FFA-4D20-B612-D7C119635438}</Project>
+      <Name>AndroidNcqrs.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CAPI.Android.Model.Tests\CAPI.Android.Core.Model.Tests.csproj">
+      <Project>{79488597-3210-4c72-a2e5-d4eec269d3fe}</Project>
+      <Name>CAPI.Android.Core.Model.Tests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NUnitLite.MonoDroid.Runner\NUnitLite.MonoDroid.Runner.csproj">
+      <Project>{7E10B3F0-F646-43E1-A301-04FB8FE7B81B}</Project>
+      <Name>NUnitLite.MonoDroid.Runner</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
+      <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
+      <Name>NUnitLite.MonoDroid</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+     Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
