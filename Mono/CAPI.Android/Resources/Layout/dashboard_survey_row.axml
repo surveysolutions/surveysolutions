@@ -38,7 +38,7 @@
      
         android:layout_width="wrap_content"
         android:layout_height="20dp"
-        local:MvxBind="{'Text':{'Path':'Items.Count'}}"/>
+        local:MvxBind="{'Text':{'Path':'VisibleItems.Count'}}"/>
   </RelativeLayout>
   <!---->
 <Mvx.MvxBindableLinearLayout
@@ -46,7 +46,7 @@
        android:layout_height="wrap_content"
        android:orientation="vertical"
        local:MvxItemTemplate="@layout/dashboard_survey_item"
-       local:MvxBind="{'ItemsSource':{'Path':'Items'}}"
+       local:MvxBind="{'ItemsSource':{'Path':'VisibleItems'}}"
       />
 <!--android:numColumns="1"
        android:gravity="center"
