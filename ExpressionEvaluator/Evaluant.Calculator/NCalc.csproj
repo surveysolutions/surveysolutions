@@ -104,6 +104,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main|AnyCPU'">
     <OutputPath>bin\Deploy-Main\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-devKh|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -139,27 +140,65 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\EvaluationTesterVisitor.cs" />
-    <Compile Include="Domain\SerializationVisitor.cs" />
-    <Compile Include="Domain\TernaryExpression.cs" />
-    <Compile Include="EvaluationException.cs" />
-    <Compile Include="EvaluationOption.cs" />
-    <Compile Include="NCalcLexer.cs" />
-    <Compile Include="NCalcParser.cs" />
-    <Compile Include="Numbers.cs" />
-    <Compile Include="ParameterArgs.cs" />
-    <Compile Include="Domain\Parameter.cs" />
-    <Compile Include="EvaluateParameterHandler.cs" />
-    <Compile Include="Domain\BinaryExpression.cs" />
-    <Compile Include="Domain\Function.cs" />
-    <Compile Include="Domain\LogicalExpressionVisitor.cs" />
-    <Compile Include="Domain\LogicalExpression.cs" />
-    <Compile Include="Domain\UnaryExpression.cs" />
-    <Compile Include="Domain\Value.cs" />
-    <Compile Include="Domain\EvaluationVisitor.cs" />
+    <Compile Include="Domain\BinaryExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\EvaluationTesterVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\EvaluationVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Function.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\LogicalExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\LogicalExpressionVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Parameter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\SerializationVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\TernaryExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\UnaryExpression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\Value.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="EvaluateFunctionHandler.cs" />
-    <Compile Include="Expression.cs" />
-    <Compile Include="FunctionArgs.cs" />
+    <Compile Include="EvaluateParameterHandler.cs" />
+    <Compile Include="EvaluationException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EvaluationOption.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Expression.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FunctionArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NCalcLexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NCalcParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Numbers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ParameterArgs.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

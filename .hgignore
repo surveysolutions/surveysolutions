@@ -14,6 +14,9 @@ obj.Wpf
 StyleCop.Cache
 *.suo
 
+*.userprefs
+*.cache
+
 *.DotSettings.user
 *.dotCover
 *.ReSharper.user
@@ -28,5 +31,6 @@ ClientDependency
 success.marker
 
 Externals/lib/*
+Bin
 lib/Release
 lib/Debug

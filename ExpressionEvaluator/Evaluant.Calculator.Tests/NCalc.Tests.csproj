@@ -104,6 +104,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main|AnyCPU'">
     <OutputPath>bin\Deploy-Main\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-devKh|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -137,8 +138,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fixtures.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Fixtures.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Evaluant.Calculator\NCalc.csproj">
