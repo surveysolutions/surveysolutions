@@ -4,11 +4,29 @@
 
 @{
     ViewBag.Title = "title";
-    Layout = "~/Views/Shared/_Layout.cshtml";
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
     @Styles.Render("~/Content/edit")
+}
+@section Scripts{
+    @Scripts.Render(
+        "~/bundles/jqueryui",
+        "~/bundles/jqueryval",
+        "~/bundles/jsextlibs",
+        "~/Scripts/require.js",
+        "~/bundles/modernizr",
+        "~/bundles/jsappdetails",
+        "~/Scripts/details/main.js"
+    )
+    <script>
+        define('input', [], function () {
+            var q = @Html.Raw(serializer.Serialize(Model));
+        return {
+            questionnaire: q
+        };
+    });
+    </script>
 }
 
 <div id="busyindicator"></div>
@@ -61,7 +79,7 @@
             <div class="bottom">
                 <div class="inner">
                     <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
-                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset,visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left" ></i>Undo</button>
+                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset,visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left"></i>Undo</button>
                     <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
@@ -76,7 +94,7 @@
             <div class="body container-fluid">
                 <div class="row-fluid">
                     <label class="required">Title</label>
-                     <div class="note">
+                    <div class="note">
                         <textarea rows="1" data-bind="value: title, autoGrowArea: {}" class="span12"></textarea>
                     </div>
                 </div>
@@ -123,7 +141,7 @@
             <div class="bottom">
                 <div class="inner">
                     <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
-                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset, visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left" ></i>Undo</button>
+                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset, visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left"></i>Undo</button>
                     <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
@@ -282,17 +300,3 @@
     </div>
 
 </script>
-@section Scripts{
-    <script>
-    define('input', [], function () {
-        var q= @Html.Raw(serializer.Serialize(Model)) ;
-        return {
-            questionnaire: q
-        };
-    });
-</script>
-    @Scripts.Render(
-        "~/bundles/jsappdetails",
-        "~/Scripts/details/main.js"
-    )
-}

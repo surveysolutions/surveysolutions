@@ -1,26 +1,27 @@
-@model MembershipUser
-
-@{
-    ViewBag.Title = "Delete";
-}
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+@using WB.UI.Designer.BootstrapSupport
+@model Object
 <fieldset>
-    <legend>UserProfile</legend>
-
-    <div class="display-label">UserName</div>
-    <div class="display-field">@Model.UserName</div>
-
-    <div class="display-label">Email</div>
-    <div class="display-field">@Model.Email</div>
+    <legend>Delete @Model.GetLabel() <small>confirmation</small></legend>
+    <dl class="dl-horizontal">
+        <!-- use this class on the dl if you want horizontal styling http://twitter.github.com/bootstrap/base-css.html#typography  class="dl-horizontal"-->
+        @foreach (var property in Model.VisibleProperties())
+        {
+            <dt>
+                @property.GetLabel().ToSeparatedWords()
+            </dt>
+            <dd>
+                @Html.Display(property.Name)
+            </dd>
+        }
+    </dl>
 </fieldset>
-@using (Html.BeginForm()) {
+
+@using (Html.BeginForm())
+{
     <p>
-        <input type="submit" value="Delete" /> |
+        <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
+        |
         @Html.ActionLink("Back to List", "Index")
     </p>
 }
-
 

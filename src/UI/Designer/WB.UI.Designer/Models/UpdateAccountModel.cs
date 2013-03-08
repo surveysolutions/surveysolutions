@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace WB.UI.Designer.Models
 {
+    [DisplayName("Update Account Info")]
     public class UpdateAccountModel
     {
         [Required]

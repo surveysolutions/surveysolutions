@@ -1,5 +1,4 @@
-﻿using System.Web;
-using System.Web.Optimization;
+﻿using System.Web.Optimization;
 
 namespace WB.UI.Designer
 {
@@ -15,7 +14,8 @@ namespace WB.UI.Designer
             bundles.IgnoreList.Ignore("*intellisense.js");
 
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery-migrate-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
                         "~/Scripts/jquery-ui-{version}.js"));
@@ -78,12 +78,6 @@ namespace WB.UI.Designer
 
             bundles.Add(new ScriptBundle("~/bundles/jsappdetails")
                    .IncludeDirectory("~/Scripts/details/", "*.js", searchSubdirectories: false));
-
-            bundles.Add(new StyleBundle("~/Content/main").Include(
-                       "~/Content/bootstrap.css",
-                       "~/Content/bootstrap-responsive",
-                       "~/Content/toastr.css"
-                      ));
 
             bundles.Add(new StyleBundle("~/Content/edit").Include(
                "~/Content/details.css"));

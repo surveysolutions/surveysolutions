@@ -14,23 +14,8 @@ using WB.UI.Designer.Utils;
 namespace WB.UI.Designer.Controllers
 {
     [Authorize]
-    public class QuestionnaireController : BaseController
+    public class QuestionnaireController : BootstrapBaseController
     {
-        public class HomeInputModel
-        {
-            public int Id { get; set; }
-            [Required]
-            public string Name { get; set; }
-
-            [DataType(DataType.Url)]
-            public string Blog { get; set; }
-
-            [DataType(DataType.Date)]
-            public DateTime StartDate { get; set; }
-
-            [DataType(DataType.Password)]
-            public string Password { get; set; }
-        }
         //
         // GET: /Questionnaires/
 
@@ -42,14 +27,14 @@ namespace WB.UI.Designer.Controllers
         {
             QuestionnaireBrowseView model = this._repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
                    new QuestionnaireBrowseInputModel());
-            return View(model);
+            return View(model.Items);
         }
 
         public ActionResult Edit(Guid id)
         {
             if (id == Guid.Empty)
             {
-                throw new HttpException(404, "Invalid quesry string parameters");
+                throw new HttpException(404, "Invalid query string parameters");
             }
 
             QuestionnaireView model = this._repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
@@ -57,6 +42,11 @@ namespace WB.UI.Designer.Controllers
             ReplaceGuidsInValidationAndComditionRules(id, model);
 
             return View(model);
+        }
+
+        public ActionResult Create()
+        {
+            return View(new QuestionnaireView());
         }
 
         private void ReplaceGuidsInValidationAndComditionRules(Guid id, QuestionnaireView model)
@@ -88,25 +78,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Public()
         {
-            return View(new List<HomeInputModel>
-                {
-                    new HomeInputModel
-                        {
-                            Id = 1,
-                            Blog = "http://foobar.com",
-                            Name = "asdf",
-                            Password = "asdfsd",
-                            StartDate = DateTime.Now.AddYears(1)
-                        },
-                    new HomeInputModel
-                        {
-                            Id = 2,
-                            Blog = "http://foobar.com",
-                            Name = "fffff",
-                            Password = "dddddddasdfsd",
-                            StartDate = DateTime.Now.AddYears(2)
-                        },
-                });
+            return RedirectToActionPermanent("Index");
         }
     }
 }

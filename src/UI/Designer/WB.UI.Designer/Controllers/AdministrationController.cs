@@ -8,24 +8,6 @@ using WebMatrix.WebData;
 
 namespace WB.UI.Designer.Controllers
 {
-    public class AccountListViewItemModel
-    {
-        [Key]
-        public string Id { get; set; }
-        [Display(Name = "Name")]
-        public string UserName { get; set; }
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-        [Display(Name = "Created date")]
-        public string CreationDate { get; set; }
-        [Display(Name = "Last login")]
-        public string LastLoginDate { get; set; }
-        [Display(Name = "Approved?")]
-        public bool IsApproved { get; set; }
-        [Display(Name = "Locked?")]
-        public bool IsLockedOut { get; set; }
-    }
-
     [Authorize(Roles = "Administrator")]
     public class AdministrationController : BootstrapBaseController
     {   
@@ -53,7 +35,23 @@ namespace WB.UI.Designer.Controllers
 
         public ViewResult Details(string id)
         {
-            return View(GetUser(id));
+            var account = GetUser(id);
+            return View(new AccountViewModel()
+                {
+                    Id = account.UserName,
+                    CreationDate = account.CreationDate,
+                    Email =  account.Email,
+                    IsApproved = account.IsApproved,
+                    IsLockedOut =  account.IsLockedOut,
+                    LastLoginDate = account.LastLoginDate,
+                    UserName = account.UserName,
+                    IsOnline = account.IsOnline,
+                    LastActivityDate = account.LastActivityDate,
+                    LastLockoutDate = account.LastLockoutDate,
+                    PasswordQuestion = account.PasswordQuestion,
+                    LastPasswordChangedDate = account.LastPasswordChangedDate,
+                    Comment = account.Comment
+                });
         }
 
         //
@@ -61,7 +59,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            return View(new RegisterModel());
         } 
 
         //
@@ -89,7 +87,7 @@ namespace WB.UI.Designer.Controllers
                     Error(e.StatusCode.ToErrorCode());
                 }
             }
-            return View();
+            return View(model);
         }
         
         //
@@ -144,7 +142,13 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Delete(string id)
         {
-            return View(GetUser(id));
+            var user = GetUser(id);
+            return View(new DeleteAccountModel()
+                {
+                    Id = user.UserName,
+                    UserName = user.UserName,
+                    Email = user.Email
+                });
         }
 
         //

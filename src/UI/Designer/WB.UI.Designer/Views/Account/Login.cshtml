@@ -1,7 +1,7 @@
 ﻿@model WB.UI.Designer.Models.LoginModel
 
 @{
-    ViewBag.Title = "login";
+    ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_BootstrapLayout.empty.cshtml";
 }
 
@@ -18,6 +18,10 @@
 
     <button class="btn btn-large btn-primary pull-right" type="submit">Log in</button>
     <p style="margin-top: 20px">
-        @Html.ActionLink("Register", "Register") if you don't have an account.
+        @Html.ActionLink("Register", "register") if you don't have an account.
     </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

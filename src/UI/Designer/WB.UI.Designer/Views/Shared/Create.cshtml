@@ -2,7 +2,7 @@
 @model Object
 @using (Html.BeginForm())
 {
-    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
     <fieldset class="form-horizontal">
         <legend>@Model.GetLabel() <small>Details</small></legend>
         @foreach (var property in Model.VisibleProperties())
@@ -24,3 +24,8 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
