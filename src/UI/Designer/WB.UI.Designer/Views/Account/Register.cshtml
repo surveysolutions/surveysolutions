@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_BootstrapLayout.empty.cshtml";
 }
 
-@using (Html.BeginForm("Register", "account", null, FormMethod.Post, new { @class = "form-signin" }))
+@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin" }))
 {
     @Html.AntiForgeryToken()
     <h2 class="form-signin-heading">Register</h2>
@@ -18,4 +18,8 @@
         @Html.Raw(Html.GenerateCaptcha())
     </p>
     <button class="btn btn-large btn-primary" type="submit">Register</button>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }
