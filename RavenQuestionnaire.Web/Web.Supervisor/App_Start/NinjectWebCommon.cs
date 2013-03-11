@@ -19,6 +19,10 @@ using WebActivator;
 
 namespace Web.Supervisor.App_Start
 {
+    using Microsoft.Practices.ServiceLocation;
+
+    using NinjectAdapter;
+
     /// <summary>
     /// The ninject web common.
     /// </summary>
@@ -66,7 +70,7 @@ namespace Web.Supervisor.App_Start
             
             var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
-            KernelLocator.SetKernel(kernel);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
