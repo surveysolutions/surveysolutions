@@ -1,14 +1,21 @@
-﻿using WB.UI.Designer.Providers.CQRS;
-using WB.UI.Designer.Providers.Membership;
-using WB.UI.Designer.Providers.Membership.PasswordStrategies;
-using WB.UI.Designer.Providers.Roles;
-using Main.Core.View;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using Ninject.Modules;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MembershipModule.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   Defines the MembershipModule type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace WB.UI.Designer
 {
+    using Main.Core.View;
+
+    using Ncqrs;
+    using Ncqrs.Commanding.ServiceModel;
+
+    using Ninject.Modules;
+
     using WB.UI.Designer.Providers.CQRS;
     using WB.UI.Designer.Providers.Membership;
     using WB.UI.Designer.Providers.Membership.PasswordStrategies;
