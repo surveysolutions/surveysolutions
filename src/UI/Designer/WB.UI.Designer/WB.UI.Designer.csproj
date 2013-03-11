@@ -208,6 +208,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\LayoutsRouteConfig.cs" />
+    <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -234,6 +235,7 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
+    <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\UpdateAccountModel.cs" />
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
