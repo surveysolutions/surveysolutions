@@ -219,11 +219,13 @@
     <Compile Include="Code\AccountManageMessageId.cs" />
     <Compile Include="Code\CustomExtensions.cs" />
     <Compile Include="Code\CustomHtmlHelper.cs" />
+    <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\BootstrapBaseController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -416,7 +418,9 @@
     <Content Include="Scripts\TrafficCop.js" />
     <Content Include="Scripts\TrafficCop.min.gz.js" />
     <Content Include="Scripts\TrafficCop.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -442,7 +446,6 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
     <Content Include="Views\Account\ConfirmationSuccess.cshtml" />
@@ -462,6 +465,9 @@
     <Content Include="Views\Questionnaire\Edit.cshtml" />
     <Content Include="Views\Administration\Index.cshtml" />
     <Content Include="Views\Shared\Edit.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
