@@ -37,8 +37,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
         }
         void rowViewItem_Click(object sender, EventArgs e)
         {
-            if (!this.Model.Status.HasFlag(QuestionStatus.Enabled))
-                return;
             var handler = RosterItemsClick;
             if (handler != null)
             {

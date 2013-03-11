@@ -23,7 +23,11 @@ namespace CAPI.Android.Extensions
 
         public static void EnableDisableView(this View view, bool enabled)
         {
-            view.Enabled = enabled;
+            bool parentEnabled = true;
+            var parentView = view.Parent as View;
+            if (parentView != null)
+                parentEnabled = parentView.Enabled;
+            view.Enabled = parentEnabled && enabled;
             ViewGroup group = view as ViewGroup;
             if (group != null)
             {
