@@ -4,6 +4,8 @@ using Questionnaire.Core.Web.Helpers;
 
 namespace RavenQuestionnaire.Web.Tests.Stubs
 {
+    using Microsoft.Practices.ServiceLocation;
+
     public interface IRoleProviderMock
     {
         bool IsUserInRole(string username, string roleName);
@@ -23,7 +25,7 @@ namespace RavenQuestionnaire.Web.Tests.Stubs
     {
         protected IRoleProviderMock LogicMockObject
         {
-            get { return KernelLocator.Kernel.Get<IRoleProviderMock>(); }
+            get { return ServiceLocator.Current.GetInstance<IRoleProviderMock>(); }
         }
 
         public override bool IsUserInRole(string username, string roleName)

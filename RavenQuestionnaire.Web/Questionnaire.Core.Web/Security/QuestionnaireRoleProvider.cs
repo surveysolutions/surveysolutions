@@ -19,6 +19,8 @@ namespace Questionnaire.Core.Web.Security
 
     using Main.Core.Entities.SubEntities;
 
+    using Microsoft.Practices.ServiceLocation;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
@@ -77,7 +79,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return KernelLocator.Kernel.Get<IViewRepository>();
+                return ServiceLocator.Current.GetInstance<IViewRepository>();
             }
         }
 

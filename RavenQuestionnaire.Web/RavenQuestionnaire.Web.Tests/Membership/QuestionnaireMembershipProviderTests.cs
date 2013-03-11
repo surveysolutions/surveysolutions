@@ -11,6 +11,10 @@ using Main.Core.Entities.SubEntities;
 
 namespace RavenQuestionnaire.Web.Tests.Membership
 {
+    using Microsoft.Practices.ServiceLocation;
+
+    using NinjectAdapter;
+
     [TestFixture]
     public class QuestionnaireMembershipProviderTests
     {
@@ -26,7 +30,7 @@ namespace RavenQuestionnaire.Web.Tests.Membership
             IKernel kernel = new StandardKernel();
             //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
             kernel.Bind<IViewRepository>().ToConstant(ViewRepositoryMock.Object);
-            KernelLocator.SetKernel(kernel);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
         
             Provider = new QuestionnaireMembershipProvider();
             Provider.Initialize(Provider.GetType().Name, null);
