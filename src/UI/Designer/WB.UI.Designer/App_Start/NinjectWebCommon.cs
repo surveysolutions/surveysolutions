@@ -21,9 +21,11 @@ namespace WB.UI.Designer.App_Start
         public static void Start() 
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
+            #warning TLK: why?
             //DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
         }
 
+        #warning TLK: why?
         public static void PostStart()
         {
             bootstrapper.Initialize(CreateKernel);
@@ -43,31 +45,9 @@ namespace WB.UI.Designer.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
-
-            string storePath = isEmbeded
-                                   ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                                   : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-            var kernel = new StandardKernel(new DesignCoreRegistry( repositoryPath: storePath, isEmbeded: isEmbeded));
+            var kernel = new StandardKernel();
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-
-            NcqrsInit.Init(kernel);
-
-            try
-            {
-                NcqrsInit.RebuildReadLayer(kernel);
-            }
-            catch (Exception ex)
-            {
-                NLog.LogManager.GetCurrentClassLogger().Error(ex);
-            }
-            
 
             RegisterServices(kernel);
             return kernel;
@@ -79,7 +59,22 @@ namespace WB.UI.Designer.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            bool isEmbeded;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
+            {
+                isEmbeded = false;
+            }
+
+            string storePath = isEmbeded
+                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
+                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+
+            kernel.Load(new DesignerRegistry(repositoryPath: storePath, isEmbeded: isEmbeded));
+
             kernel.Load<MembershipModule>();
+
+            #warning TLK: move NCQRS initialization to Global.asax
+            NcqrsInit.Init(kernel);
         }        
     }
 }

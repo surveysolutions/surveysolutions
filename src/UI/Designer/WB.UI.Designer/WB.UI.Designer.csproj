@@ -223,7 +223,7 @@
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\BootstrapBaseController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Code\DesignCoreRegistry.cs" />
+    <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

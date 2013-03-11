@@ -5,6 +5,10 @@ using System.Web.Routing;
 
 namespace WB.UI.Designer
 {
+    using System;
+
+    using Main.Core;
+
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
@@ -19,6 +23,16 @@ namespace WB.UI.Designer
             BootstrapBundleConfig.RegisterBundles(BundleTable.Bundles);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            try
+            {
+                NcqrsInit.RebuildReadLayer(null);
+            }
+            catch (Exception ex)
+            {
+                NLog.LogManager.GetCurrentClassLogger().Error(ex);
+                #warning TLK: should not we rethrow exception here?
+            }
         }
     }
 }
