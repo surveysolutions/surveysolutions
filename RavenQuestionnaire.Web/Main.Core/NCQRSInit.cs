@@ -7,8 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+#if !MONODROID
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Document;
+#endif
 
 namespace Main.Core
 {
