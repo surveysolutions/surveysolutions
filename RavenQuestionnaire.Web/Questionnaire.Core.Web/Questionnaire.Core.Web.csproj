@@ -162,7 +162,6 @@
     <Compile Include="Helpers\HtmlPrefixScopeExtensions.cs" />
     <Compile Include="Helpers\IGlobalInfoProvider.cs" />
     <Compile Include="Helpers\InputExtensions.cs" />
-    <Compile Include="Helpers\KernelLocator.cs" />
     <Compile Include="Helpers\SelectExtensions.cs" />
     <Compile Include="Helpers\SuccessMarker.cs" />
     <Compile Include="RegistrationController.cs" />
