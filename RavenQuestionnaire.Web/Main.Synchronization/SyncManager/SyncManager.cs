@@ -219,7 +219,7 @@ namespace Main.Synchronization.SyncManager
                 {
                     this.status.Result = false;
                     this.status.ErrorMessage = "Incorrect receiver";
-                    this.status.Progress = 99;
+                    this.status.Progress = 98;
                 }
 
                 this.status.Progress++;
@@ -260,7 +260,7 @@ namespace Main.Synchronization.SyncManager
                         {
                             this.status.Result = false;
                             this.status.ErrorMessage = "Target refused stream";
-                            this.status.Progress = 100;
+                            this.status.Progress = 98;
                             this.status.IsWorking = false;
                             return;
 
@@ -284,7 +284,7 @@ namespace Main.Synchronization.SyncManager
                     {
                         this.status.Result = false;
                         this.status.ErrorMessage = "Target refused stream";
-                        this.status.Progress = 100;
+                        this.status.Progress = 98;
                         this.status.IsWorking = false;
                         return;
 
@@ -308,7 +308,7 @@ namespace Main.Synchronization.SyncManager
 
                 this.status.CurrentStageDescription = "Finished";
                 this.status.Result = true;
-                this.status.Progress = 100;
+                this.status.Progress = 98;
             }
             catch (Exception e)
             {
@@ -317,7 +317,7 @@ namespace Main.Synchronization.SyncManager
                 //this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
                 
                 this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
-                this.status.Progress = 100;
+                this.status.Progress = 98;
                 this.status.IsWorking = false;
                 //throw;
 
