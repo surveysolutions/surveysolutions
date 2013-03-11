@@ -22,8 +22,7 @@ namespace WB.UI.Headquarter
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            #warning TLK: remove parameter from RebuildReadLayer method because it is not used
-            NcqrsInit.RebuildReadLayer(null);
+            NcqrsInit.RebuildReadLayer();
         }
     }
 }
