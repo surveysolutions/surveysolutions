@@ -26,10 +26,13 @@ namespace Web.CAPI.App_Start
     using Main.Core;
     using Main.Synchronization.SycProcessRepository;
 
+    using Microsoft.Practices.ServiceLocation;
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
     using Ninject.Web.Common;
+
+    using NinjectAdapter;
 
     using Questionnaire.Core.Web.Binding;
     using Questionnaire.Core.Web.Helpers;
@@ -100,7 +103,7 @@ namespace Web.CAPI.App_Start
 
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
 
-            KernelLocator.SetKernel(kernel);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
 
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
