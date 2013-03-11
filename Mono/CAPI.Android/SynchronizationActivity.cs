@@ -209,14 +209,19 @@ namespace CAPI.Android
                                     this.Backup(result);
                                 }
                             }
-                            catch (Exception)
+                            catch (Exception exc)
                             {
+
                                 //throw;
+                            }
+                            finally
+                            {
+                                result.Progress = 100;
                             }
 
                         });
 
-                    while (result.IsWorking && currentProgress < 100)
+                    while (currentProgress < 100)
                     {
                         int diff = result.Progress - currentProgress;
 
@@ -268,7 +273,9 @@ namespace CAPI.Android
                     CapiApplication.Kernel, processKey, remoteSyncNode);
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
-            return Process(provider, collector, "Remote sync (Pulling)", status, processKey);
+            bool result = Process(provider, collector, "Remote sync (Pulling)", status, processKey);
+            status.Progress = 100;
+            return result;
         }
 
 
@@ -294,7 +301,6 @@ namespace CAPI.Android
 
             if (result)
             {
-
                 var extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
                 if (Directory.Exists(extStorage))
                 {
@@ -307,13 +313,27 @@ namespace CAPI.Android
                 else
                 {
                     extStorage = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
-
                 }
 
-                var filename = Path.Combine(
-                    extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
+                var filename = Path.Combine(extStorage, string.Format("backup-{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
+                using (var file = File.Open(filename, FileMode.Create)) 
+                {
+                    byte[] buf = new byte[1024];
+                    int r;
+                    MemoryStream stream = collector.GetExportedStream();
+                    while ((r = stream.Read(buf, 0, buf.Length)) > 0)
+                    {
+                        file.Write (buf, 0, r);
+                    }
+
+                    file.Flush();
+                }
+
+                /*filename = Path.Combine(extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}--1.acapi", DateTime.UtcNow));
                 File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
-            }
+*/            }
+
+            status.Progress = 100;
             return result;
         }
 
@@ -338,7 +358,9 @@ namespace CAPI.Android
                         CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
-            return Process(provider, collector, "Remote sync (Pushing)", status, processKey);
+            bool result = Process(provider, collector, "Remote sync (Pushing)", status, processKey);
+            status.Progress = 100;
+            return result;
         }
 
 
