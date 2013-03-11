@@ -113,7 +113,7 @@ namespace Web.Supervisor
 
             try
             {
-                SuccessMarker.Start(KernelLocator.Kernel);
+                SuccessMarker.Start();
                 correctlyInitialized = true;
             }
             catch (Exception e)

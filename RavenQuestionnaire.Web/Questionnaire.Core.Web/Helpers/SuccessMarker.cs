@@ -7,7 +7,6 @@
 using System.IO;
 using System.Web.Hosting;
 using Main.Core;
-using Ninject;
 
 namespace Questionnaire.Core.Web.Helpers
 {
@@ -43,7 +42,7 @@ namespace Questionnaire.Core.Web.Helpers
             myFile.Attributes |= FileAttributes.Hidden;*/
         }
 
-        public static void Start(IKernel kernel)
+        public static void Start()
         {
            /* if (!File.Exists(SuccessMarker.SuccessFilePath))
             {*/

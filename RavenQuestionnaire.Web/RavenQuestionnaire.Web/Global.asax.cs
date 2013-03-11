@@ -121,7 +121,7 @@ namespace RavenQuestionnaire.Web
 
             try
             {
-                SuccessMarker.Start(KernelLocator.Kernel);
+                SuccessMarker.Start();
                 correctlyInitialyzed = true;
             }
             catch (Exception e)
