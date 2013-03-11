@@ -16,6 +16,8 @@ namespace Questionnaire.Core.Web.Security
     using Main.Core.View;
     using Main.Core.View.User;
 
+    using Microsoft.Practices.ServiceLocation;
+
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
@@ -199,7 +201,7 @@ namespace Questionnaire.Core.Web.Security
         {
             get
             {
-                return KernelLocator.Kernel.Get<IViewRepository>();
+                return ServiceLocator.Current.GetInstance<IViewRepository>();
             }
         }
 
