@@ -26,7 +26,7 @@ namespace WB.UI.Designer
 
             try
             {
-                NcqrsInit.RebuildReadLayer(null);
+                NcqrsInit.RebuildReadLayer();
             }
             catch (Exception ex)
             {
