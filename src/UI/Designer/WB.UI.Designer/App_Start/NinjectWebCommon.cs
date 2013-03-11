@@ -14,6 +14,10 @@ using WebActivator;
 
 namespace WB.UI.Designer.App_Start
 {
+    using Microsoft.Practices.ServiceLocation;
+
+    using NinjectAdapter;
+
     public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
@@ -47,6 +51,9 @@ namespace WB.UI.Designer.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
 
             RegisterServices(kernel);
+
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
+
             return kernel;
         }
 
