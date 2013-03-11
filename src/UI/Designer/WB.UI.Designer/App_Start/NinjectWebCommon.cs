@@ -59,17 +59,7 @@ namespace WB.UI.Designer.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            bool isEmbeded;
-            if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
-            {
-                isEmbeded = false;
-            }
-
-            string storePath = isEmbeded
-                ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
-                : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-
-            kernel.Load(new DesignerRegistry(repositoryPath: storePath, isEmbeded: isEmbeded));
+            kernel.Load(new DesignerRegistry(repositoryPath: WebConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
 
             kernel.Load<MembershipModule>();
 
