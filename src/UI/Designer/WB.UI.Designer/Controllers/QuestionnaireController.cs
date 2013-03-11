@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
+﻿using Main.Core.Commands.Questionnaire;
 using Main.Core.View;
 using Main.Core.View.Question;
 using Main.Core.View.Questionnaire;
+using Ncqrs.Commanding.ServiceModel;
 using RavenQuestionnaire.Core.Views.Group;
 using RavenQuestionnaire.Core.Views.Questionnaire;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using WB.UI.Designer.Models;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
@@ -19,13 +21,15 @@ namespace WB.UI.Designer.Controllers
         //
         // GET: /Questionnaires/
 
-        public QuestionnaireController(IViewRepository repository) : base(repository)
+        public QuestionnaireController(IViewRepository repository, ICommandService commandService)
+            : base(repository, commandService)
         {
+
         }
 
         public ActionResult Index()
         {
-            QuestionnaireBrowseView model = this._repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+            QuestionnaireBrowseView model = Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
                    new QuestionnaireBrowseInputModel());
             return View(model.Items);
         }
@@ -37,7 +41,7 @@ namespace WB.UI.Designer.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            QuestionnaireView model = this._repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            QuestionnaireView model = Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
 
             ReplaceGuidsInValidationAndComditionRules(id, model);
 
@@ -46,12 +50,24 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Create()
         {
-            return View(new QuestionnaireView());
+            return View(new QuestionnaireViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(QuestionnaireViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                CommandService.Execute(new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title));
+                return RedirectToActionPermanent("Index");
+            }
+            return View(model);
         }
 
         private void ReplaceGuidsInValidationAndComditionRules(Guid id, QuestionnaireView model)
         {
-            var transformator = new ExpressionReplacer(this._repository);
+            var transformator = new ExpressionReplacer(Repository);
 
             var elements = new Queue<ICompositeView>(model.Children.OfType<GroupView>());
 
