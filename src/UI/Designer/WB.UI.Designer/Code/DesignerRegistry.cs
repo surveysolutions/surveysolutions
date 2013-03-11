@@ -11,9 +11,9 @@ namespace WB.UI.Designer
 {
     using WB.UI.Designer.Providers.CQRS.Accounts;
 
-    public class DesignCoreRegistry : CoreRegistry
+    public class DesignerRegistry : CoreRegistry
     {
-        public DesignCoreRegistry(string repositoryPath, bool isEmbeded)
+        public DesignerRegistry(string repositoryPath, bool isEmbeded)
             : base(repositoryPath, isEmbeded)
         {
  
