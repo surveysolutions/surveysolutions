@@ -90,12 +90,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
         /// <exception cref="Exception">
         /// </exception>
-        public static void RebuildReadLayer(IKernel kernel)
+        public static void RebuildReadLayer()
         {
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
