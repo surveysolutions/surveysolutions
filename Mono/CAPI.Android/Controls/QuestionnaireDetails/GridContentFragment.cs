@@ -20,19 +20,25 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class GridContentFragment : AbstractScreenChangingFragment
     {
-        private readonly CompleteQuestionnaireView questionnaire;
         protected TextView tvEmptyLabelDescription;
         protected LinearLayout llTablesContainer;
         protected LinearLayout top;
         protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
         protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
         protected RosterItemDialog dialog;
-        public GridContentFragment(QuestionnaireGridViewModel model, CompleteQuestionnaireView questionnaire)
-            : this()
+
+        private const string SCREEN_ID = "screenId";
+        private const string QUESTIONNAIRE_ID = "questionnaireId";
+        public static GridContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
         {
-           
-            this.Model = model;
-            this.questionnaire = questionnaire;
+            GridContentFragment myFragment = new GridContentFragment();
+
+            Bundle args = new Bundle();
+            args.PutString(SCREEN_ID, screenId.ToString());
+            args.PutString(QUESTIONNAIRE_ID, questionnaireId.ToString());
+            myFragment.Arguments = args;
+
+            return myFragment;
         }
         public GridContentFragment()
             : base()
@@ -55,7 +61,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                                                               ViewGroup.LayoutParams.FillParent);
             top.Orientation = Orientation.Vertical;
             var breadcrumbs = new BreadcrumbsView(inflater.Context,
-                                                  questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
+                                                  Questionnaire.RestoreBreadCrumbs(Model.Breadcrumbs).ToList(),
                                                   OnScreenChanged);
             breadcrumbs.SetPadding(0, 0, 0, 10);
             top.AddView(breadcrumbs);
@@ -71,7 +77,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             BuildEmptyLabelDescription(inflater.Context, ll);
             BuildTabels(inflater.Context, ll);
             sv.AddView(ll);
-            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(questionnaire.Status));
+            sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(Questionnaire.Status));
             top.AddView(sv);
             return top;
         }
@@ -208,8 +214,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 AlignTableCell(first);
                 th.AddView(first);
 
-                //foreach (var abstractRowItem in rosterItem.Items.Skip(index).Take(count))
-                //{
                 for (int i = index; i < index+count; i++)
                 {
                     View rosterCell;
@@ -294,7 +298,34 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         }
 
         protected readonly IQuestionViewFactory questionViewFactory;
-        public QuestionnaireGridViewModel Model { get; private set; }
+        private QuestionnaireGridViewModel model;
+
+        public QuestionnaireGridViewModel Model
+        {
+            get
+            {
+                if (model == null)
+                {
+                    model = Questionnaire.Screens[ItemPublicKey.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireGridViewModel;
+                }
+                return model;
+            }
+        }
+
+        private CompleteQuestionnaireView questionnaire;
+
+        protected CompleteQuestionnaireView Questionnaire
+        {
+            get
+            {
+                if (questionnaire == null)
+                {
+                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
+                }
+                return questionnaire;
+            }
+        }
 
 
         protected class StatusChangedHandlerClosure

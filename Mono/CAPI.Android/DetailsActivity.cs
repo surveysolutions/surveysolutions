@@ -81,10 +81,11 @@ namespace CAPI.Android
             }
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId
                                              /* ViewModel.Chapters.FirstOrDefault().ScreenId*/);
-
+            
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
 
         }
+
         protected override void OnSaveInstanceState(Bundle outState)
         {
             base.OnSaveInstanceState(outState);
