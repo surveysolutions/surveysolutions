@@ -19,6 +19,7 @@ namespace Main.Core.Commands.Questionnaire.Group
     /// <summary>
     /// The update group command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "UpdateGroup")]
     public class UpdateGroupCommand : CommandBase
