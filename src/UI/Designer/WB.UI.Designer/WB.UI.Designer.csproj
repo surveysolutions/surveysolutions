@@ -221,6 +221,7 @@
     <Compile Include="Code\CustomExtensions.cs" />
     <Compile Include="Code\CustomHtmlHelper.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Code\Helpers\CommandDeserializer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />
     <Compile Include="Controllers\BootstrapBaseController.cs" />
@@ -228,6 +229,7 @@
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Code\Helpers\ICommandDeserializer.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
