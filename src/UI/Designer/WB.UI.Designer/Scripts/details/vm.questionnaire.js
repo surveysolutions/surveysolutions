@@ -104,6 +104,9 @@
         filterContent = function() {
             isFilterMode(filter().trim() !== '');
         },
+        afterMove = function(arg) {
+            console.log(arg);
+        },
         init = function() {
             filter.subscribe(filterContent);
         };

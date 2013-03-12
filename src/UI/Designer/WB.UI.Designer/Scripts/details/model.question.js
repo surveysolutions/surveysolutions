@@ -11,7 +11,8 @@
               
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
-              
+
+              self.qtype = ko.observable("Text"); // Questoin type
               self.isHead = ko.observable();
               self.isFeatured = ko.observable();
               self.isMandatory = ko.observable();
@@ -20,6 +21,9 @@
               self.validationExpression = ko.observable();
               self.validationMessage = ko.observable();
               self.instruction = ko.observable();
+
+                   
+              
 
               self.answerOrder = ko.observable();
               self.answerOptions = ko.observableArray();
