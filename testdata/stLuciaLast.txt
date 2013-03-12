@@ -5,8 +5,8 @@
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
       "CommitId": "236816b6-57a3-477f-b683-4bce1bdb288e",
-      "EventIdentifier": "af43580d-5bb3-408f-bd48-fc2f20a149d1",
-      "EventSequence": 18,
+      "EventIdentifier": "8785af4f-9c25-4a05-a8d0-dc0886c9ddfc",
+      "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
       "EventTimeStamp": "2013-03-01T22:54:57.8706334Z",
       "EventVersion": {
@@ -58,7 +58,6 @@
                     "AddNumericAttr": null,
                     "IntAttr": 0,
                     "Triggers": [
-                      "7c342474-0f16-4b7c-a533-9a63201dc393",
                       "989a29be-82ae-4a52-bf6a-4df2212091d0",
                       "6722fdd5-f32f-45bd-94b8-ae3e7f4173f4",
                       "94d956cc-2b10-463c-a67a-1764d765577b",
@@ -178,7 +177,7 @@
                   {
                     "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
                     "Children": [
-                      {
+			{
                         "$type": "Main.Core.Entities.SubEntities.Question.TextQuestion, Main.Core",
                         "AddTextAttr": null,
                         "AnswerOrder": 0,
@@ -200,19 +199,7 @@
                         "StataExportCaption": "name",
                         "ValidationExpression": null,
                         "ValidationMessage": null
-                      }
-                    ],
-                    "ConditionExpression": null,
-                    "Enabled": true,
-                    "Description": null,
-                    "Propagated": 2,
-                    "PublicKey": "7c342474-0f16-4b7c-a533-9a63201dc393",
-                    "Title": "NAMES OF MEMBERS OF THE HOUSEHOLD",
-                    "Triggers": []
-                  },
-                  {
-                    "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
-                    "Children": [
+                      },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
                         "AddSingleAttr": null,
