@@ -226,6 +226,7 @@
     <Compile Include="Controllers\BootstrapBaseController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
