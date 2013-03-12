@@ -22,14 +22,23 @@
         [HttpPost]
         public ActionResult Execute(string command)
         {
-            dynamic parsedCommand = JObject.Parse(command);
-
-            var concreteCommand = new NewUpdateGroupCommand(
-                Guid.Parse((string)parsedCommand.questionnaireId), Guid.Parse((string)parsedCommand.groupId), (string)parsedCommand.title);
+            ICommand concreteCommand = this.DeserializeCommand(command);
 
             this.commandService.Execute(concreteCommand);
 
             return new EmptyResult();
+        }
+
+        private ICommand DeserializeCommand(string command)
+        {
+            dynamic parsedCommand = JObject.Parse(command);
+
+            ICommand concreteCommand = new NewUpdateGroupCommand(
+                Guid.Parse((string)parsedCommand.questionnaireId),
+                Guid.Parse((string)parsedCommand.groupId),
+                (string)parsedCommand.title);
+
+            return concreteCommand;
         }
     }
 }
