@@ -6,8 +6,10 @@
 
     public class CommandController : Controller
     {
-        public ActionResult Execute(object command)
+        [HttpPost]
+        public ActionResult Execute(string command)
         {
+            return new EmptyResult();
         }
     }
 }

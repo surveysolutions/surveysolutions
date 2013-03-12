@@ -78,8 +78,6 @@
                         }).promise();
                     },
                     updateData = function(entity, callbacks) {
-                        var entityJson = ko.toJSON(entity);
-
                         return $.Deferred(function(def) {
                             if (!updateFunction) {
                                 logger.error('updateData method not implemented'); 
@@ -101,9 +99,9 @@
                                     def.reject(response);
                                     return;
                                 }
-                            }, entityJson);
+                            }, entity);
                         }).promise();
-                    };;
+                    };
 
                 return {
                     mapDtoToContext: mapDtoToContext,
@@ -111,7 +109,8 @@
                     getAllLocal: getAllLocal,
                     getLocalById: getLocalById,
                     parse: parse,
-                    removeById: removeById
+                    removeById: removeById,
+                    update: updateData
                 };
             },
             //----------------------------------

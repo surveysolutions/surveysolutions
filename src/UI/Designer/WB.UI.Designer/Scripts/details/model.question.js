@@ -22,9 +22,6 @@
               self.validationMessage = ko.observable();
               self.instruction = ko.observable();
 
-                   
-              
-
               self.answerOrder = ko.observable();
               self.answerOptions = ko.observableArray();
               self.cards = ko.observableArray();

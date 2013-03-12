@@ -11,9 +11,9 @@
             });
 
             amplify.request.define('updateGroup', 'ajax', {
-                url: '/api/persons',
+                url: '/Command/Execute',
                 dataType: 'json',
-                type: 'PUT',
+                type: 'POST',
                 contentType: 'application/json; charset=utf-8'
             });
         },
@@ -26,10 +26,12 @@
                 });
             };
 
-        updateGroup = function(callbacks, data) {
+        updateGroup = function (callbacks, data) {
+            var command =  { text: "text" };
+
             return amplify.request({
                 resourceId: 'updateGroup',
-                data: data,
+                data: ko.toJSON( { command:  ko.toJSON(command) }),
                 success: callbacks.success,
                 error: callbacks.error
             });

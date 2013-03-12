@@ -94,6 +94,14 @@
         },
         saveGroup = function(group) {
             console.log(group);
+            datacontext.groups.update(group, {
+                success: function (d) {
+                    console.log("ok");
+                },
+                error: function(d) {
+                    console.log("fail");
+                }
+            });
         },
         saveQuestion = function() {
             
