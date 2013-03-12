@@ -92,8 +92,8 @@
         deleteQuestion = function() {
             
         },
-        saveGroup = function() {
-            
+        saveGroup = function(group) {
+            console.log(group);
         },
         saveQuestion = function() {
             
@@ -107,8 +107,15 @@
         afterMove = function(arg) {
             console.log(arg);
         },
+        isMovementPossible = function (arg) {
+            console.log(arg.targetParent().title());
+            console.log("souce : " + arg.item.type());
+            
+            arg.cancelDrop = true;
+        },
         init = function() {
             filter.subscribe(filterContent);
+            
         };
 
         init();
@@ -124,6 +131,12 @@
             addGroup: addGroup,
             clearFilter: clearFilter,
             filter: filter,
-            isFilterMode: isFilterMode
+            isFilterMode: isFilterMode,
+            afterMove: afterMove,
+            isMovementPossible: isMovementPossible,
+            saveGroup: saveGroup,
+            deleteGroup: deleteGroup,
+            saveQuestion: saveQuestion,
+            deleteQuestion: deleteQuestion
         };
     });

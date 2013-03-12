@@ -34,7 +34,7 @@
                 //logger.success('received with ' + dtoList.length + ' elements');
                 return items; // must return these
             },
-            LocalEntitySet = function(mapper, nullo, otherData) {
+            LocalEntitySet = function (mapper, nullo, otherData, updateFunction) {
                 var items = {},
                     // returns the model item produced by merging dto into context
                     mapDtoToContext = function(dto) {
@@ -76,7 +76,34 @@
                                 def.resolve(results);
                             }
                         }).promise();
-                    };
+                    },
+                    updateData = function(entity, callbacks) {
+                        var entityJson = ko.toJSON(entity);
+
+                        return $.Deferred(function(def) {
+                            if (!updateFunction) {
+                                logger.error('updateData method not implemented'); 
+                                if (callbacks && callbacks.error) { callbacks.error(); }
+                                def.reject();
+                                return;
+                            }
+
+                            updateFunction({
+                                success: function(response) {
+                                    logger.success(config.toasts.savedData);
+                                    entity.dirtyFlag().reset();
+                                    if (callbacks && callbacks.success) { callbacks.success(); }
+                                    def.resolve(response);
+                                },
+                                error: function(response) {
+                                    logger.error(config.toasts.errorSavingData);
+                                    if (callbacks && callbacks.error) { callbacks.error(); }
+                                    def.reject(response);
+                                    return;
+                                }
+                            }, entityJson);
+                        }).promise();
+                    };;
 
                 return {
                     mapDtoToContext: mapDtoToContext,
@@ -95,8 +122,8 @@
             //  model mapper
             //----------------------------------
 
-            groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
-            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, {groups : groups}),
+            groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo, undefined, dataservice.group.updateGroup),
+            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }, dataservice.question.updateQuestion),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
         console.log(questionnaire);
