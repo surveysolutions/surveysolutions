@@ -27,7 +27,7 @@
                 self.isSelected = ko.observable();
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.type, self.description, self.condition]);
                 self.dirtyFlag().reset();
                 return self;
             };
