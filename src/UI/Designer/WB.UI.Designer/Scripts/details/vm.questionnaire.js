@@ -44,6 +44,7 @@
             question.isSelected(true);
             question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
             selectedQuestion(question);
+            selectedQuestion.valueHasMutated();
             openDetails("show-question");
         },
         editGroup = function(id) {
