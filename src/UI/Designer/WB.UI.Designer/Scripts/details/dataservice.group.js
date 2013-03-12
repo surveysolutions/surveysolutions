@@ -27,7 +27,11 @@
             };
 
         updateGroup = function (callbacks, data) {
-            var command =  { text: "text" };
+            var command = {
+                questionnaireId: '2213d3cb-bf96-4c5f-813d-438759066c55',
+                groupId: '53279073-5b77-4ab8-954c-6f949430cc80',
+                title: 'title'
+            };
 
             return amplify.request({
                 resourceId: 'updateGroup',
