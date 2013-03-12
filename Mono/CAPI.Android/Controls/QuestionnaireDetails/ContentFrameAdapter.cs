@@ -61,7 +61,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             
             if (position == screensHolder.Count && isRoot)
             {
-                fragment = new StatisticsContentFragment(questionnaire.PublicKey);
+                fragment =  StatisticsContentFragment.NewInstance(questionnaire.PublicKey);
             }
             else
             {
@@ -71,15 +71,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 var screenModel = model as QuestionnaireScreenViewModel;
                 if (screenModel != null)
                 {
-                    fragment = new ScreenContentFragment(screenModel, questionnaire);
+                    fragment = ScreenContentFragment.NewInstance(screenModel.ScreenId, questionnaire.PublicKey);
                 }
-                var grid = model as QuestionnaireGridViewModel;
-                if (grid != null)
+                else
                 {
-                    fragment = new GridContentFragment(grid, questionnaire);
+                    var grid = model as QuestionnaireGridViewModel;
+                    if (grid != null)
+                    {
+                        fragment = GridContentFragment.NewInstance(grid.ScreenId, questionnaire.PublicKey);
+                    }
                 }
-              
-
             }
             if (fragment == null)
                 throw new InvalidOperationException();
