@@ -97,6 +97,8 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
 
         public PagedList(IEnumerable<T> source, int pageIndex, int pageSize, int totalCount)
         {
+            if (pageSize == 0) return;
+
             this.TotalCount = totalCount;
             this.TotalPages = totalCount / pageSize;
 
@@ -123,6 +125,11 @@ namespace WB.UI.Designer.BootstrapSupport.HtmlHelpers
         public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> query, int page, int pageSize)
         {
             return new PagedList<T>(query, page - 1, pageSize);
+        }
+
+        public static IPagedList<T> ToPagedList<T>(this IEnumerable<T> query, int page, int pageSize, int totalCount)
+        {
+            return new PagedList<T>(query, page - 1, pageSize, totalCount);
         }
 
         public static IEnumerable<T> GetPage<T>(this IEnumerable<T> source, int pageIndex, int pageSize)
