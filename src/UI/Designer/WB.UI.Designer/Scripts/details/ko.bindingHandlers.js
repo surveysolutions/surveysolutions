@@ -5,6 +5,7 @@ function ($, ko) {
 
     ko.bindingHandlers.autoGrowArea = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            ko.applyBindingsToNode(element, { value: valueAccessor() });
             $(element).autogrow();
         }
     };

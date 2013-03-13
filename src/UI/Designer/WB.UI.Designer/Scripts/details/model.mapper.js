@@ -57,7 +57,7 @@
                     item.description(dto.group.Description);
                     item.condition(dto.group.ConditionExpression);
                     var type = config.groupTypes[dto.group.Propagated];
-                    item.type(type);
+                    item.gtype(type);
                     
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
@@ -76,7 +76,7 @@
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
 
                     var type = config.questionTypes[dto.QuestionType];
-                    item.type(type);
+                    item.qtype(type);
                     
                     var scope = config.questionScopes[dto.QuestionScope];
                     item.scope(scope);

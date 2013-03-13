@@ -226,6 +226,7 @@
     <Compile Include="Controllers\BootstrapBaseController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
+    <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
@@ -340,10 +341,7 @@
     <Content Include="Scripts\details\config.js" />
     <Content Include="Scripts\details\datacontext.js" />
     <Content Include="Scripts\details\dataprimer.js" />
-    <Content Include="Scripts\details\dataservice.group.js" />
     <Content Include="Scripts\details\dataservice.js" />
-    <Content Include="Scripts\details\dataservice.question.js" />
-    <Content Include="Scripts\details\dataservice.questionnaire.js" />
     <Content Include="Scripts\details\ko.bindingHandlers.js" />
     <Content Include="Scripts\details\ko.debug.helpers.js" />
     <Content Include="Scripts\details\main.js" />

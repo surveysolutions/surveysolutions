@@ -44,6 +44,7 @@
             question.isSelected(true);
             question.localPropagatedGroups(datacontext.groups.getPropagateableGroups());
             selectedQuestion(question);
+            selectedQuestion.valueHasMutated();
             openDetails("show-question");
         },
         editGroup = function(id) {
@@ -91,8 +92,17 @@
         deleteQuestion = function() {
             
         },
-        saveGroup = function() {
-            
+        saveGroup = function(group) {
+            console.log(group);
+            datacontext.sendCommand(config.commands.updateGroup, group, {
+                success: function (d) {
+                    group.dirtyFlag().reset();
+                    console.log("ok");
+                },
+                error: function(d) {
+                    console.log("fail");
+                }
+            });
         },
         saveQuestion = function() {
             
@@ -103,8 +113,18 @@
         filterContent = function() {
             isFilterMode(filter().trim() !== '');
         },
+        afterMove = function(arg) {
+            console.log(arg);
+        },
+        isMovementPossible = function (arg) {
+            console.log(arg.targetParent().title());
+            console.log("souce : " + arg.item.type());
+            
+            arg.cancelDrop = true;
+        },
         init = function() {
             filter.subscribe(filterContent);
+            
         };
 
         init();
@@ -120,6 +140,12 @@
             addGroup: addGroup,
             clearFilter: clearFilter,
             filter: filter,
-            isFilterMode: isFilterMode
+            isFilterMode: isFilterMode,
+            afterMove: afterMove,
+            isMovementPossible: isMovementPossible,
+            saveGroup: saveGroup,
+            deleteGroup: deleteGroup,
+            saveQuestion: saveQuestion,
+            deleteQuestion: deleteQuestion
         };
     });

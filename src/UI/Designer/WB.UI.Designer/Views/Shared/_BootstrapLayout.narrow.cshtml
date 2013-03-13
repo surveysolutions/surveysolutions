@@ -10,7 +10,7 @@
     @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
     @RenderSection("Scripts", required: false)
-    @MiniProfiler.RenderIncludes()
+   @* @MiniProfiler.RenderIncludes()*@
     @Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
 </head>
@@ -32,11 +32,11 @@
     <div class="container-fluid">
         @Html.Partial("_alerts")
         @RenderBody()
-        <hr>
-        <footer>
-            <p>&copy; The World Bank Group @System.DateTime.Now.ToString("yyyy")</p>
-        </footer>
     </div>
+    <footer>
+        <hr>
+        <p>&copy; The World Bank Group @System.DateTime.Now.ToString("yyyy")</p>
+    </footer>
 </body>
 </html>
 

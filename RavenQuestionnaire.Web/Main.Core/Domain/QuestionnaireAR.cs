@@ -449,6 +449,11 @@ namespace Main.Core.Domain
                     });
         }
 
+        public void NewUpdateGroup(Guid groupId, string title)
+        {
+            throw new ArgumentException(string.Format("incorrect title: {0}", title));
+        }
+
         /// <summary>
         /// The update group.
         /// </summary>
@@ -473,6 +478,7 @@ namespace Main.Core.Domain
         /// <exception cref="ArgumentException">
         /// Some exception
         /// </exception>
+        [Obsolete]
         public void UpdateGroup(
             string groupText,
             Propagate propagateble,
