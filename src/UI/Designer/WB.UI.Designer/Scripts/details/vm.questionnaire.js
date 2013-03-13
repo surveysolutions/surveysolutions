@@ -63,11 +63,11 @@
             $('#stacks').removeClass("show-question").removeClass("show-group");
             $('#stacks').removeClass('detail-visible');
         },
-        closeMenu = function() {
-            $('#stacks').addClass('menu-hidden');
+        showOutput = function () {
+            $('#stacks').addClass('output-visible');
         },
-        showMenu = function() {
-            $('#stacks').removeClass('menu-hidden');
+        hideOutput = function () {
+            $('#stacks').removeClass('output-visible');
         },
         addQuestion = function(parent) {
             console.log(parent);
@@ -146,6 +146,8 @@
             saveGroup: saveGroup,
             deleteGroup: deleteGroup,
             saveQuestion: saveQuestion,
-            deleteQuestion: deleteQuestion
+            deleteQuestion: deleteQuestion,
+            showOutput: showOutput,
+            hideOutput: hideOutput
         };
     });

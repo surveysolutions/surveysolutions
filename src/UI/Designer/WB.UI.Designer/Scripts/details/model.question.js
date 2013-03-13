@@ -78,8 +78,11 @@
               };
               self.isSelected = ko.observable();
               self.isNullo = false;
+
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
               self.dirtyFlag().reset();
+              self.errors = ko.validation.group(self);
+              
               return self;
           };
 
