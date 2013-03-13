@@ -173,7 +173,6 @@
     <Compile Include="ExpressionExecutors\ExpressionExtentions\ExtentionFunctionsTests.cs" />
     <Compile Include="ExpressionExecutors\QuestionnaireParametersParserTest.cs" />
     <Compile Include="Domain\when_creating_a_new_questionnaire.cs" />
-    <Compile Include="Domain\when_serializing_NewGroupAdded.cs" />
     <Compile Include="Domain\when_updating_image.cs" />
     <Compile Include="Domain\when_uploading_new_image.cs" />
     <Compile Include="GroupWithRoutTests.cs" />

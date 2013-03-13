@@ -10,13 +10,17 @@
 
     using Newtonsoft.Json.Linq;
 
+    using WB.UI.Designer.Code.Helpers;
+
     public class CommandController : Controller
     {
         private readonly ICommandService commandService;
+        private readonly ICommandDeserializer commandDeserializer;
 
-        public CommandController(ICommandService commandService)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer)
         {
             this.commandService = commandService;
+            this.commandDeserializer = commandDeserializer;
         }
 
         [HttpPost]
@@ -29,16 +33,9 @@
             return new EmptyResult();
         }
 
-        private ICommand DeserializeCommand(string command)
+        private ICommand DeserializeCommand(string serializedCommand)
         {
-            dynamic parsedCommand = JObject.Parse(command);
-
-            ICommand concreteCommand = new NewUpdateGroupCommand(
-                Guid.Parse((string)parsedCommand.questionnaireId),
-                Guid.Parse((string)parsedCommand.groupId),
-                (string)parsedCommand.title);
-
-            return concreteCommand;
+            return this.commandDeserializer.Deserialize(serializedCommand);
         }
     }
 }

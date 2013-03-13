@@ -54,7 +54,12 @@ namespace WB.UI.Designer
         {
             return
                 base.GetAssweblysForRegister()
-                    .Concat(second: new[] { typeof(QuestionnaireView).Assembly, typeof(AccountAR).Assembly });
+                    .Concat(new[]
+                    {
+                        typeof(DesignerRegistry).Assembly,
+                        typeof(QuestionnaireView).Assembly,
+                        typeof(AccountAR).Assembly,
+                    });
         }
 
         #endregion
