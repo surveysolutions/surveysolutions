@@ -76,19 +76,19 @@ namespace CAPI.Android
 
             this.Title = ViewModel.Title;
 
-          /*  if (bundle == null)
-            {*/
+            if (bundle == null)
+            {
                 NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
                 this.SupportFragmentManager.BeginTransaction()
-                    .Add(Resource.Id.llNavigationContainer, NavList)
+                    .Add(Resource.Id.llNavigationContainer, NavList, "navigation")
                     .Commit();
                 //  NavList.NewInstance(ViewModel.PublicKey);
                 //NavList.Model = ViewModel;
-           /* }
+            }
             else
             {
-            NavList=
-            }*/
+                NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
+            }
             Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId);
             
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
