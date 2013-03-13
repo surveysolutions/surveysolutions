@@ -87,7 +87,9 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                 query = (x) => x.Email.Compare(input.Email);
             }
 
-            retVal = _accounts.Query().Where(query).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
+            var queryResult = _accounts.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+
+            retVal = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize)
                               .Select(x => new AccountListItem()
                                   {
                                       ApplicationName = x.ApplicationName,
@@ -106,9 +108,9 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                       LastLockedOutAt = x.LastLockedOutAt,
                                       LastLoginAt = x.LastLoginAt,
                                       LastPasswordChangeAt = x.LastPasswordChangeAt
-                                  }).AsQueryable().OrderUsingSortExpression(input.Order);
+                                  });
 
-            return new AccountListView(input.Page, input.PageSize, retVal.Count(), retVal, input.Order);
+            return new AccountListView(input.Page, input.PageSize, queryResult.Count(), retVal, input.Order);
         }
 
         #endregion

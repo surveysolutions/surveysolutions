@@ -13,8 +13,8 @@ namespace WB.UI.Designer
             // this enables menu suppression for routes with a FilterToken of "admin" set
             NavigationRouteFilters.Filters.Add(new AdministrationRouteFilter());
 
-            routes.MapNavigationRoute<QuestionnaireController>("My Questionnaires", c => c.Index());
-            routes.MapNavigationRoute<QuestionnaireController>("Public Questionnaires", c => c.Public(), string.Empty,
+            routes.MapNavigationRoute<QuestionnaireController>("My Questionnaires", c => c.Index(null, null, null, null));
+            routes.MapNavigationRoute<QuestionnaireController>("Public Questionnaires", c => c.Public(null, null, null, null), string.Empty,
                                                                new NavigationRouteOptions() {HasBreakAfter = true});
 
             routes.MapNavigationRoute<AccountController>("My Account", c => c.Login(string.Empty), string.Empty,
@@ -22,7 +22,7 @@ namespace WB.UI.Designer
                   .AddChildRoute<AccountController>("Manage", c => c.ExternalManage())
                   .AddChildRoute<AccountController>("Logout", c => c.LogOff());
 
-            routes.MapNavigationRoute<AdministrationController>("Manage users", c => c.Index(), string.Empty,
+            routes.MapNavigationRoute<AdministrationController>("Manage users", c => c.Index(null, null, null, null), string.Empty,
                                                                 new NavigationRouteOptions()
                                                                     {
                                                                         FilterToken = UserHelper.ADMINROLENAME,

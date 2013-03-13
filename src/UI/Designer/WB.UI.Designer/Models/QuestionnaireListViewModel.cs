@@ -29,13 +29,13 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     Gets or sets the creation date.
         /// </summary>
-        [Display(Name = "Creation Date")]
+        [Display(Name = "Creation Date", Order = 2)]
         public DateTime CreationDate { get; set; }
 
         /// <summary>
         ///     Gets or sets the last entry date.
         /// </summary>
-        [Display(Name = "Last Entry Date")]
+        [Display(Name = "Last Entry Date", Order = 3)]
         public DateTime LastEntryDate { get; set; }
 
         #endregion
