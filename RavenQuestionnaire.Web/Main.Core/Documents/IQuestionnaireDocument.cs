@@ -10,6 +10,7 @@
 namespace Main.Core.Documents
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;

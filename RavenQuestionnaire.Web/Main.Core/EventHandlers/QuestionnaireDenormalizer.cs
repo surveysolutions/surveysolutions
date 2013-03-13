@@ -26,19 +26,20 @@ namespace Main.Core.EventHandlers
     /// <summary>
     /// The questionnaire denormalizer.
     /// </summary>
-    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>, 
-                                             IEventHandler<SnapshootLoaded>, 
-                                             IEventHandler<NewGroupAdded>, 
-                                             IEventHandler<QuestionnaireItemMoved>, 
-                                             IEventHandler<QuestionDeleted>, 
-                                             IEventHandler<NewQuestionAdded>, 
-                                             IEventHandler<QuestionChanged>, 
-                                             IEventHandler<ImageUpdated>, 
-                                             IEventHandler<ImageUploaded>, 
-                                             IEventHandler<ImageDeleted>, 
+    public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
+                                             IEventHandler<SnapshootLoaded>,
+                                             IEventHandler<NewGroupAdded>,
+                                             IEventHandler<QuestionnaireItemMoved>,
+                                             IEventHandler<QuestionDeleted>,
+                                             IEventHandler<NewQuestionAdded>,
+                                             IEventHandler<QuestionChanged>,
+                                             IEventHandler<ImageUpdated>,
+                                             IEventHandler<ImageUploaded>,
+                                             IEventHandler<ImageDeleted>,
                                              IEventHandler<GroupDeleted>,
                                              IEventHandler<GroupUpdated>,
-                                             IEventHandler<QuestionnaireUpdated>
+                                             IEventHandler<QuestionnaireUpdated>,
+                                             IEventHandler<QuestionnaireDeleted>
     {
         #region Fields
 
@@ -59,7 +60,8 @@ namespace Main.Core.EventHandlers
         /// <param name="documentStorage">
         /// The document storage.
         /// </param>
-        public QuestionnaireDenormalizer(IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
+        public QuestionnaireDenormalizer(
+            IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
             this.documentStorage = documentStorage;
             this.questionFactory = questionFactory;
@@ -82,6 +84,7 @@ namespace Main.Core.EventHandlers
             item.Title = evnt.Payload.Title;
             item.PublicKey = evnt.Payload.PublicKey;
             item.CreationDate = evnt.Payload.CreationDate;
+            item.CreatedBy = evnt.Payload.CreatedBy;
 
             this.documentStorage.Store(item, item.PublicKey);
         }
@@ -99,7 +102,7 @@ namespace Main.Core.EventHandlers
             {
                 return;
             }
-            
+
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
 
@@ -216,12 +219,12 @@ namespace Main.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
             var newImage = new Image
-                {
-                    PublicKey = evnt.Payload.ImagePublicKey, 
-                    Title = evnt.Payload.Title, 
-                    Description = evnt.Payload.Description, 
-                    CreationDate = DateTime.Now
-                };
+                               {
+                                   PublicKey = evnt.Payload.ImagePublicKey,
+                                   Title = evnt.Payload.Title,
+                                   Description = evnt.Payload.Description,
+                                   CreationDate = DateTime.Now
+                               };
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             question.AddCard(newImage);
             this.UpdateQuestionnaire(evnt, item);
@@ -290,8 +293,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
             QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            if (document == null)
-                return;
+            if (document == null) return;
             document.Title = evnt.Payload.Title;
             this.UpdateQuestionnaire(evnt, document);
         }
@@ -308,6 +310,13 @@ namespace Main.Core.EventHandlers
         private void UpdateQuestionnaire(IEvent evnt, QuestionnaireDocument document)
         {
             document.LastEntryDate = evnt.EventTimeStamp;
+        }
+
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            if (document == null) return;
+            document.IsDeleted = true;
         }
     }
 }

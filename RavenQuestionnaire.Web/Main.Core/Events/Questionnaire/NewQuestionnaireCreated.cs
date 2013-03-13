@@ -36,6 +36,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        public Guid? CreatedBy { get; set; }
+
         #endregion
     }
 }

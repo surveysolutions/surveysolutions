@@ -40,11 +40,15 @@ namespace Main.Core.Commands.Questionnaire
         /// <param name="text">
         /// The text.
         /// </param>
-        public CreateQuestionnaireCommand(Guid questionnaireId, string text)
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy)
             : base(questionnaireId)
         {
             this.PublicKey = questionnaireId;
             this.Title = text;
+            this.CreatedBy = createdBy;
         }
 
         #endregion
@@ -60,6 +64,11 @@ namespace Main.Core.Commands.Questionnaire
         /// Gets or sets the text.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        public Guid? CreatedBy { get; set; }
 
         #endregion
     }

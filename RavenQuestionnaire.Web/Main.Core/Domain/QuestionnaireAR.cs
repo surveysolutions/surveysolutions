@@ -49,7 +49,6 @@ namespace Main.Core.Domain
             this.questionFactory = new CompleteQuestionFactory();
         }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
         /// </summary>
@@ -59,7 +58,10 @@ namespace Main.Core.Domain
         /// <param name="title">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid publicKey, string title)
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy)
             : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -74,7 +76,8 @@ namespace Main.Core.Domain
                     {
                         PublicKey = publicKey,
                         Title = title,
-                        CreationDate = clock.UtcNow()
+                        CreationDate = clock.UtcNow(),
+                        CreatedBy = createdBy
                     });
         }
 
@@ -114,6 +117,14 @@ namespace Main.Core.Domain
         #warning CRUD
         {
             this.ApplyEvent(new QuestionnaireUpdated() { Title = title });
+        }
+
+        /// <summary>
+        /// The delete questionnaire.
+        /// </summary>
+        public void DeleteQuestionnaire()
+        {
+            this.ApplyEvent(new QuestionnaireDeleted());
         }
 
         /// <summary>
@@ -567,6 +578,17 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
+        /// The on questionnaire deleted.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnQuestionnaireDeleted(QuestionnaireDeleted e)
+        {
+            this.innerDocument.IsDeleted = true;
+        }
+
+        /// <summary>
         /// The on group deleted.
         /// </summary>
         /// <param name="e">
@@ -695,6 +717,7 @@ namespace Main.Core.Domain
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
             this.innerDocument.LastEntryDate = e.CreationDate;
+            this.innerDocument.CreatedBy = e.CreatedBy;
         }
 
         /// <summary>
