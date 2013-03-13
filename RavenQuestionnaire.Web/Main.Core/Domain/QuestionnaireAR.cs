@@ -61,7 +61,7 @@ namespace Main.Core.Domain
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy)
+        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null)
             : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();

@@ -43,7 +43,7 @@ namespace Main.Core.Commands.Questionnaire
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy)
+        public CreateQuestionnaireCommand(Guid questionnaireId, string text, Guid? createdBy = null)
             : base(questionnaireId)
         {
             this.PublicKey = questionnaireId;

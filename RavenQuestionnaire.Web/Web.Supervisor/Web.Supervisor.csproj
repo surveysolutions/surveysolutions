@@ -15,7 +15,7 @@
     <AssemblyName>Web.Supervisor</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <CodeContractsAssemblyMode>0</CodeContractsAssemblyMode>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -604,7 +604,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8084</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
