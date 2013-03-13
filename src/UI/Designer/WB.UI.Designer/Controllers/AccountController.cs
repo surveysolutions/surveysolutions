@@ -12,7 +12,7 @@ namespace WB.UI.Designer.Controllers
     {
         public ActionResult Index()
         {
-            return RedirectToAction("Index", "Questionnaire");
+            return this.RedirectToAction("Index", "Questionnaire");
         }
         //
         // GET: /Account/Login
