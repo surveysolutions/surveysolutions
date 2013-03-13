@@ -486,10 +486,6 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Core\RavenQuestionnaire.Core\RavenQuestionnaire.Core.csproj">
-      <Project>{7e143353-a648-4435-819f-93a748a90704}</Project>
-      <Name>RavenQuestionnaire.Core</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
@@ -501,6 +497,10 @@
     <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
       <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
       <Name>WB.UI.Designer.Providers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
+      <Project>{4489F996-D379-43D1-8932-3C48D59D9AB5}</Project>
+      <Name>WB.UI.Designer.Views</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
