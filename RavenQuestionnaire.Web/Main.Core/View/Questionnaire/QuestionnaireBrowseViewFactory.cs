@@ -15,6 +15,8 @@ using Main.DenormalizerStorage;
 
 namespace Main.Core.View.Questionnaire
 {
+    using Main.Core.Utility;
+
     /// <summary>
     /// The questionnaire browse view factory.
     /// </summary>
@@ -75,12 +77,12 @@ namespace Main.Core.View.Questionnaire
                     (input.IsAdminMode.Value || !x.IsDeleted);
             }
 
-            var page = query.Where(q).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
 
-            // And enact this query
-            QuestionnaireBrowseItem[] items = page.ToArray();
+            var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
-            return new QuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
+
+            return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
         }
 
         #endregion

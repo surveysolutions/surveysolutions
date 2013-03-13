@@ -57,5 +57,15 @@ namespace WB.UI.Designer.Extensions
         {
             return source == DateTime.MinValue ? string.Empty : source.ToString();
         }
+
+        public static bool? InvertSpecial(this bool? val, bool needValue)
+        {
+            if (needValue)
+            {
+                val = val ?? false;
+            }
+
+            return val.HasValue ? !(bool?)val.Value : null;
+        }
     }
 }

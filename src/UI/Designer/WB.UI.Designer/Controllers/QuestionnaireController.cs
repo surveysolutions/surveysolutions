@@ -16,6 +16,8 @@ namespace WB.UI.Designer.Controllers
 {
     using System.Web.Security;
 
+    using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
+
     [Authorize]
     public class QuestionnaireController : BootstrapBaseController
     {
@@ -28,9 +30,9 @@ namespace WB.UI.Designer.Controllers
 
         }
 
-        public ActionResult Index()
+        public ActionResult Index(int? p, string sb, bool? so, string f)
         {
-            return this.View(this.GetItems(true));
+            return this.View(this.GetItems(true, p, sb, so, f));
         }
 
         public ActionResult Edit(Guid id)
@@ -97,9 +99,9 @@ namespace WB.UI.Designer.Controllers
             }
         }
 
-        public ActionResult Public()
+        public ActionResult Public(int? p, string sb, bool? so, string f)
         {
-            return this.View(this.GetItems(false));
+            return this.View(this.GetItems(false, p, sb, so, f));
         }
 
         public ActionResult Delete(Guid id)
@@ -118,9 +120,18 @@ namespace WB.UI.Designer.Controllers
             return RedirectToAction("Index");
         }
 
-        private IEnumerable<QuestionnaireListViewModel> GetItems(bool isOnlyOwnerItems)
+        private IPagedList<QuestionnaireListViewModel> GetItems(
+            bool isOnlyOwnerItems, int? pageIndex, string sortBy, bool? sortOrder, string filter)
         {
-            IEnumerable<QuestionnaireListViewModel> retVal = default(IEnumerable<QuestionnaireListViewModel>);
+            ViewBag.PageIndex = pageIndex;
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortOrder = sortOrder;
+            if (ViewBag.SortOrder != null && ViewBag.SortOrder)
+            {
+                sortBy = string.Format("{0} Desc", sortBy);
+            }
+            
+            IPagedList<QuestionnaireListViewModel> retVal = default(IPagedList<QuestionnaireListViewModel>);
 
             var user = Membership.GetUser(User.Identity.Name);
             if (user != null)
@@ -134,7 +145,10 @@ namespace WB.UI.Designer.Controllers
                                     IsOnlyOwnerItems = isOnlyOwnerItems,
                                     IsAdminMode =
                                         Roles.IsUserInRole(
-                                            user.UserName, UserHelper.ADMINROLENAME)
+                                            user.UserName, UserHelper.ADMINROLENAME),
+                                    Page = pageIndex ?? 1,
+                                    PageSize = GlobalHelper.GridPageItemsCount,
+                                    Order = sortBy, 
                                 });
                 retVal =
                     model.Items.Select(
@@ -145,7 +159,8 @@ namespace WB.UI.Designer.Controllers
                                 CreationDate = x.CreationDate,
                                 LastEntryDate = x.LastEntryDate,
                                 Title = x.Title
-                            }).ToArray();
+                            })
+                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
             }
             return retVal;
         }
