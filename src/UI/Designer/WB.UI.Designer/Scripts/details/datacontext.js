@@ -34,7 +34,7 @@
                 //logger.success('received with ' + dtoList.length + ' elements');
                 return items; // must return these
             },
-            LocalEntitySet = function (mapper, nullo, otherData, updateFunction) {
+            LocalEntitySet = function (mapper, nullo, otherData) {
                 var items = {},
                     // returns the model item produced by merging dto into context
                     mapDtoToContext = function(dto) {
@@ -76,31 +76,6 @@
                                 def.resolve(results);
                             }
                         }).promise();
-                    },
-                    updateData = function(entity, callbacks) {
-                        return $.Deferred(function(def) {
-                            if (!updateFunction) {
-                                logger.error('updateData method not implemented'); 
-                                if (callbacks && callbacks.error) { callbacks.error(); }
-                                def.reject();
-                                return;
-                            }
-
-                            updateFunction({
-                                success: function(response) {
-                                    logger.success(config.toasts.savedData);
-                                    entity.dirtyFlag().reset();
-                                    if (callbacks && callbacks.success) { callbacks.success(); }
-                                    def.resolve(response);
-                                },
-                                error: function(response) {
-                                    logger.error(config.toasts.errorSavingData);
-                                    if (callbacks && callbacks.error) { callbacks.error(); }
-                                    def.reject(response);
-                                    return;
-                                }
-                            }, entity);
-                        }).promise();
                     };
 
                 return {
@@ -109,8 +84,7 @@
                     getAllLocal: getAllLocal,
                     getLocalById: getLocalById,
                     parse: parse,
-                    removeById: removeById,
-                    update: updateData
+                    removeById: removeById
                 };
             },
             //----------------------------------
@@ -121,8 +95,8 @@
             //  model mapper
             //----------------------------------
 
-            groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo, undefined, dataservice.group.updateGroup),
-            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }, dataservice.question.updateQuestion),
+            groups = new LocalEntitySet(modelmapper.group, model.Group.Nullo),
+            questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
         console.log(questionnaire);
@@ -144,12 +118,47 @@
             return propagatable;
         };
 
-       
+        var commands = {};
+
+        commands[config.commands.updateGroup] = function(group) {
+            return {
+                questionnaireId: questionnaire.id(),
+                groupId: group.id(),
+                title: group.title(),
+                type : group.gtype(),
+                description: group.description(),
+                condition: group.condition()
+            };
+        };
+
+        var sendCommand = function(commandName, args, callbacks) {
+            return $.Deferred(function(def) {
+                var command = commands[commandName](args);
+                dataservice.sendCommand({
+                    success: function(response) {
+                        logger.success(config.toasts.savedData);
+                        if (callbacks && callbacks.success) {
+                            callbacks.success();
+                        }
+                        def.resolve(response);
+                    },
+                    error: function(response) {
+                        logger.error(config.toasts.errorSavingData);
+                        if (callbacks && callbacks.error) {
+                            callbacks.error();
+                        }
+                        def.reject(response);
+                        return;
+                    }
+                }, ko.toJSON(command));
+            }).promise();
+        };
 
         var datacontext = {
             groups: groups,
             questions: questions,
-            questionnaire: questionnaire
+            questionnaire: questionnaire,
+            sendCommand: sendCommand
         };
 
         // We did this so we can access the datacontext during its construction
