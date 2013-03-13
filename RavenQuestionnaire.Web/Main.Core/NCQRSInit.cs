@@ -92,7 +92,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// </summary>
         /// <exception cref="Exception">
         /// </exception>
-        public static void RebuildReadLayer()
+        public static void RebuildReadLayer(IKernel kernel)
         {
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)

@@ -47,7 +47,7 @@ namespace Questionnaire.Core.Web.Helpers
         {
            /* if (!File.Exists(SuccessMarker.SuccessFilePath))
             {*/
-                NcqrsInit.RebuildReadLayer();
+                NcqrsInit.RebuildReadLayer(kernel);
          /*   }
             else
                 File.Delete(SuccessMarker.SuccessFilePath);*/
