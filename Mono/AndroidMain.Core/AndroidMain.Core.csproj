@@ -120,6 +120,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\CreateQuestionnaireCommand.cs">
       <Link>Commands\Questionnaire\CreateQuestionnaireCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\DeleteQuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\DeleteQuestionnaireCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\DeleteImageCommand.cs">
       <Link>Commands\Questionnaire\DeleteImageCommand.cs</Link>
     </Compile>
@@ -140,6 +143,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateGroupCommand.cs">
+      <Link>Commands\Questionnaire\Group\NewUpdateGroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\UpdateGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\UpdateGroupCommand.cs</Link>
@@ -679,6 +685,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireDeleted.cs">
+      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupDeleted.cs">
       <Link>Events\Questionnaire\GroupDeleted.cs</Link>
