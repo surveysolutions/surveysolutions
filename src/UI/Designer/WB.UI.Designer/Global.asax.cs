@@ -17,9 +17,11 @@ namespace WB.UI.Designer
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             LayoutsRouteConfig.RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+
+            
             BootstrapBundleConfig.RegisterBundles(BundleTable.Bundles);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
