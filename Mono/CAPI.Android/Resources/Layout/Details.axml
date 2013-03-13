@@ -6,10 +6,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-  <fragment class="capi.android.controls.questionnairedetails.QuestionnaireNavigationFragment"
+  <!--<fragment class="capi.android.controls.questionnairedetails.QuestionnaireNavigationFragment"
           android:id="@+id/NavList" android:layout_weight="1"
           android:layout_width="0px"
-          android:layout_height="match_parent" />
+          android:layout_height="match_parent" />-->
+  <LinearLayout android:id="@+id/llNavigationContainer"
+      android:orientation="vertical" android:layout_weight="1"
+         android:layout_width="0px"
+        android:layout_height="fill_parent"/>
   <!--local:MvxItemTemplate="@layout/listitem_main"-->
   <!--<Mvx.MvxBindableListView
        android:id="@android:id/list"
