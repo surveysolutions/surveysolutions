@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.View;
-using RavenQuestionnaire.Core.Views.Questionnaire;
+using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.Utils
 {
