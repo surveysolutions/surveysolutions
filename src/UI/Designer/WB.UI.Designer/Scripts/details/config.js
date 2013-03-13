@@ -33,6 +33,9 @@
                 "Propagated",
                 "AutoPropagated"
             ],
+            commands = {
+                updateGroup: "updateGroup"
+            },
             hashes = {
                 details: '#/details',
                 detailsGroup: '#/details/group',
@@ -86,6 +89,7 @@
             questionTypes: questionTypes,
             questionScopes: questionScopes,
             answerOrders: answerOrders,
-            groupTypes: groupTypes
+            groupTypes: groupTypes,
+            commands: commands
         };
     });

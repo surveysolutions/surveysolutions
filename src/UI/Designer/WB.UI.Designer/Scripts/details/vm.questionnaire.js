@@ -94,8 +94,9 @@
         },
         saveGroup = function(group) {
             console.log(group);
-            datacontext.groups.update(group, {
+            datacontext.sendCommand(config.commands.updateGroup, group, {
                 success: function (d) {
+                    group.dirtyFlag().reset();
                     console.log("ok");
                 },
                 error: function(d) {
