@@ -225,6 +225,7 @@
     <Compile Include="Code\CustomExtensions.cs" />
     <Compile Include="Code\CustomHtmlHelper.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
+    <Compile Include="Code\GlobalHelper.cs" />
     <Compile Include="Code\Helpers\CommandDeserializer.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdministrationController.cs" />

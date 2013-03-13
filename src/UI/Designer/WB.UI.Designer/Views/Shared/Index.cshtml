@@ -1,10 +1,19 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
-@model System.Collections.IEnumerable 
+@using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
+@model IPagedList
 <blockquote class="pull-right">
     <p>
         <b>@ViewBag.Title</b><small>Listing</small>
     </p>
 </blockquote>
+
+<form class="form-search">
+    <div class="input-prepend">
+        <button type="submit" class="btn">Search</button>
+        <input type="text" class="span2 search-query">
+    </div>
+</form>
 <table class="table table-striped">
     <caption></caption>
     <thead>
@@ -12,8 +21,21 @@
             @foreach (var property in Model.VisibleProperties())
             {
                 <th>
-                    @property.GetLabel().ToSeparatedWords()
+                    @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction,
+                    new { p = ViewBag.PageIndex, sb = property.Name, so = CustomExtensions.InvertSpecial(ViewBag.SortOrder, ViewBag.SortBy == property.Name) })
+                    @if (ViewBag.SortBy == property.Name)
+                    {
+                        if (ViewBag.SortOrder == null || !(bool)ViewBag.SortOrder)
+                        {
+                        <i class="icon-chevron-up"></i>
+                        }
+                        else
+                        {
+                        <i class="icon-chevron-down"></i>
+                        }
+                    }
                 </th>
+
             }
             <th></th>
         </tr>
@@ -37,7 +59,7 @@
                     <ul class="dropdown-menu">
                         @{
                             @Html.TryPartial("_actions", model)                            
-                            var routevalues = model.GetIdValue();  
+            var routevalues = model.GetIdValue();  
                             <li>@Html.ActionLink("Edit", "Edit", routevalues)</li>
                             <li>@Html.ActionLink("Details", "Details", routevalues)</li>
                             <li class="divider"></li>
@@ -53,7 +75,12 @@
     }
 
 </table>
+@Html.Pager(Model.PageIndex,
+            Model.TotalPages,
+            x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController,
+                new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder }),
+            " pagination-right")
 <p>
-    @Html.ActionLink("Create New", "Create", null, new {@class = "btn"})
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn" })
 </p>
 

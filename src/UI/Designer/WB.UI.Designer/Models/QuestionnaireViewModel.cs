@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the title.
         /// </summary>
         [Required]
-        [Display(Name = "Title")]
+        [Display(Name = "Title", Order = 1)]
         public string Title { get; set; }
 
         #endregion
