@@ -3,8 +3,6 @@ using Main.Core.View;
 using Main.Core.View.Question;
 using Main.Core.View.Questionnaire;
 using Ncqrs.Commanding.ServiceModel;
-using RavenQuestionnaire.Core.Views.Group;
-using RavenQuestionnaire.Core.Views.Questionnaire;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Utils;
+using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.Controllers
 {
