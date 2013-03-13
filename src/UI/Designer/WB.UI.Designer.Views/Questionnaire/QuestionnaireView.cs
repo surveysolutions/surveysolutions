@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
-using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
-using RavenQuestionnaire.Core.Views.Group;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {

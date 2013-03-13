@@ -1,9 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AbstractQuestionnaireView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-
 namespace RavenQuestionnaire.Core.Views.Questionnaire
 {
     using System;
