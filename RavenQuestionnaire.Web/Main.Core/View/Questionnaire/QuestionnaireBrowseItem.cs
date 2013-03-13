@@ -39,12 +39,16 @@ namespace Main.Core.View.Questionnaire
         /// <param name="lastEntryDate">
         /// The last entry date.
         /// </param>
-        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate)
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
         {
             this.Id = id;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
+            this.CreatedBy = createdBy;
         }
 
         /// <summary>
@@ -54,7 +58,7 @@ namespace Main.Core.View.Questionnaire
         /// The doc.
         /// </param>
         public QuestionnaireBrowseItem(QuestionnaireDocument doc)
-            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate)
+            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy)
         {
         }
 
@@ -79,9 +83,19 @@ namespace Main.Core.View.Questionnaire
         public DateTime LastEntryDate { get; private set; }
 
         /// <summary>
-        /// Gets the title.
+        /// Gets or sets the title.
         /// </summary>
         public string Title { get;  set; }
+
+        /// <summary>
+        /// Gets the created by.
+        /// </summary>
+        public Guid? CreatedBy { get; private set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is deleted.
+        /// </summary>
+        public bool IsDeleted { get; set; }
 
         #endregion
 
@@ -95,7 +109,7 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public static QuestionnaireBrowseItem New()
         {
-            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now);
+            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null);
         }
 
         /// <summary>

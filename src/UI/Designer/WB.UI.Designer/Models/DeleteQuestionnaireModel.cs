@@ -1,32 +1,34 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireViewModel.cs" company="">
+// <copyright file="DeleteQuestionnaireModel.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   The questionnaire view model.
+//   The delete questionnaire model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace WB.UI.Designer.Models
 {
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// The questionnaire view model.
+    /// The delete questionnaire model.
     /// </summary>
-    [DisplayName("Create Questionnaire")]
-    public class QuestionnaireViewModel
+    [DisplayName("Questionnaire")]
+    public class DeleteQuestionnaireModel
     {
-        #region Public Properties
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        [Key]
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
-        [Required]
         [Display(Name = "Title")]
         public string Title { get; set; }
-
-        #endregion
     }
 }

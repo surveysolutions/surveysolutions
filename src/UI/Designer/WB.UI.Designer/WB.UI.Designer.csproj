@@ -241,6 +241,8 @@
     <Compile Include="Code\MembershipModule.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\QuestionnaireListViewModel.cs" />
+    <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
     <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\UpdateAccountModel.cs" />
@@ -458,7 +460,7 @@
     <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="Views\Shared\Index.cshtml" />
     <Content Include="Views\Emails\ConfirmationEmail.cshtml" />
-    <Content Include="Views\Administration\Delete.cshtml" />
+    <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Questionnaire\Index.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />

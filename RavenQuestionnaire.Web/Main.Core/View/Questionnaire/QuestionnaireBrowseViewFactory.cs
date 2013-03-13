@@ -57,8 +57,6 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
-            
-
             // Adjust the model appropriately
             int count = this.documentGroupSession.Count();
             if (count == 0)
@@ -67,29 +65,20 @@ namespace Main.Core.View.Questionnaire
                     input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            // Perform the paged query
-
-            /*   if (input.Orders.Count > 0)
-            {
-                query = input.Orders[0].Direction == OrderDirection.Asc
-                            ? query.OrderBy(input.Orders[0].Field)
-                            : query.OrderByDescending(input.Orders[0].Field);
-
-            }
-            if (input.Orders.Count > 1)
-                foreach (var order in input.Orders.Skip(1))
-                {
-                    query = order.Direction == OrderDirection.Asc
-                                ? query.ThenBy(order.Field)
-                                : query.ThenByDescending(order.Field);
-                }*/
             IQueryable<QuestionnaireBrowseItem> query = this.documentGroupSession.Query();
-            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+
+            Func<QuestionnaireBrowseItem, bool> q = (ret) => true;
+
+            if (input.IsAdminMode.HasValue)
+            {
+                q = x => (input.IsOnlyOwnerItems ? x.CreatedBy == input.CreatedBy : x.CreatedBy != input.CreatedBy) &&
+                    (input.IsAdminMode.Value || !x.IsDeleted);
+            }
+
+            var page = query.Where(q).Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
 
             // And enact this query
             QuestionnaireBrowseItem[] items = page.ToArray();
-          /*      page.Select(x => new QuestionnaireBrowseItem(x.PublicKey, x.Title, DateTime.Now, DateTime.Now)).
-                    ToArray();*/
 
             return new QuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
         }
