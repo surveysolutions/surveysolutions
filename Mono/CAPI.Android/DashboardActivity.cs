@@ -11,12 +11,10 @@ namespace CAPI.Android
     {
         protected override void OnCreate(Bundle bundle)
         {
+          
             base.OnCreate(bundle);
-            if (!CapiApplication.Membership.IsLoggedIn)
-            {
-                StartActivity(typeof(LoginActivity));
-            }
-
+            if (this.FinishIfNotLoggedIn())
+                return;
             ViewModel =
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));

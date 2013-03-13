@@ -8,6 +8,7 @@ using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
+using CAPI.Android.Extensions;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -49,17 +50,15 @@ namespace CAPI.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-
-            if (!CapiApplication.Membership.IsLoggedIn)
-            {
-                StartActivity(typeof (LoginActivity));
-            }
-
-
+          
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                 new QuestionnaireScreenInput(QuestionnaireId));
 
             base.OnCreate(bundle);
+
+            if (this.FinishIfNotLoggedIn())
+                return;
+
             SetContentView(Resource.Layout.Details);
             if (bundle != null)
             {

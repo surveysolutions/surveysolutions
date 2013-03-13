@@ -1,4 +1,7 @@
+using System;
+using System.Security.Authentication;
 using Android.App;
+using Android.Content;
 using Android.Views;
 using CAPI.Android.Controls.Navigation;
 
@@ -19,6 +22,27 @@ namespace CAPI.Android.Extensions
             
             if (navigation.SelectedItemIndex != null)
                 activity.ActionBar.SetSelectedNavigationItem(navigation.SelectedItemIndex.Value);
+        }
+
+        public static bool FinishIfNotLoggedIn(this Activity activity)
+        {
+            if (!CapiApplication.Membership.IsLoggedIn)
+            {
+              //  throw new AuthenticationException("invalid credentials");
+                activity.Finish();
+                return true;
+            }
+            return false;
+        }
+
+        public static void ClearAllBackStack<T>(this Context context) where T:Activity
+        {
+            Intent intent = new Intent(context,typeof(T) );
+            intent.PutExtra("finish", true); // if you are checking for this in your other Activities
+            intent.AddFlags(ActivityFlags.ClearTask);
+            intent.AddFlags(ActivityFlags.ClearTop);
+            intent.AddFlags(ActivityFlags.NewTask);
+            context.StartActivity(intent);
         }
 
         public static void EnableDisableView(this View view, bool enabled)
