@@ -15,14 +15,33 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             this.RetainInstance = true;
         }
-        public QuestionnaireNavigationFragment(CompleteQuestionnaireView model):this()
+        private const string QUESTIONNAIRE_ID = "questionnaireId";
+
+        public static QuestionnaireNavigationFragment NewInstance(Guid questionnaireId)
         {
-            this.RetainInstance = true;
-            this.Model = model;
+            QuestionnaireNavigationFragment myFragment = new QuestionnaireNavigationFragment();
+
+            Bundle args = new Bundle();
+            args.PutString(QUESTIONNAIRE_ID, questionnaireId.ToString());
+            myFragment.Arguments = args;
+
+            return myFragment;
         }
 
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
-        public CompleteQuestionnaireView Model { get;  set; }
+        public CompleteQuestionnaireView Model
+        {
+            get
+            {
+                if (model == null)
+                {
+                    model = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
+                }
+                return model;
+            }
+        }
+        private CompleteQuestionnaireView model;
         public int SelectedIndex
         {
             get { return selectedItemIndex; }

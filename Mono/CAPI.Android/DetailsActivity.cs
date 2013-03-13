@@ -35,17 +35,18 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
         }
-        protected QuestionnaireNavigationFragment NavList
+     /*   protected LinearLayout llNavigationContainer
         {
             get
             {
                 return
                     this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             }
-        }
+        }*/
         
         protected ContentFrameAdapter Adapter { get; set; }
-       
+        protected QuestionnaireNavigationFragment NavList { get; set; }
+
         protected override void OnCreate(Bundle bundle)
         {
 
@@ -75,12 +76,20 @@ namespace CAPI.Android
 
             this.Title = ViewModel.Title;
 
-            if (bundle == null)
+          /*  if (bundle == null)
+            {*/
+                NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
+                this.SupportFragmentManager.BeginTransaction()
+                    .Add(Resource.Id.llNavigationContainer, NavList)
+                    .Commit();
+                //  NavList.NewInstance(ViewModel.PublicKey);
+                //NavList.Model = ViewModel;
+           /* }
+            else
             {
-                NavList.Model = ViewModel;
-            }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId
-                                             /* ViewModel.Chapters.FirstOrDefault().ScreenId*/);
+            NavList=
+            }*/
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId);
             
             VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
 
