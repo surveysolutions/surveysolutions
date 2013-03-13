@@ -394,13 +394,14 @@
     <Content Include="Scripts\json2.min.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
+    <Content Include="Scripts\knockout.validation.debug.js" />
+    <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
     <Content Include="Scripts\lib\knockout-sortable.js" />
     <Content Include="Scripts\lib\knockout-sortable.min.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
     <Content Include="Scripts\lib\knockout.dirtyFlag.js" />
-    <Content Include="Scripts\lib\knockout.validation.js" />
     <Content Include="Scripts\lib\koExternalTemplateEngine.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\lib\sammy.js" />
