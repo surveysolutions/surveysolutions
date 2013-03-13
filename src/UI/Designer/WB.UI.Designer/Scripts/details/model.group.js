@@ -7,6 +7,7 @@
                 var self = this;
                 self.id = ko.observable(Math.uuid());
                 self.title = ko.observable('Title');
+                self.parent = ko.observable();
 
                 self.type = ko.observable("GroupView"); // Object type
                 self.template = "GroupView"; // inner html template name
