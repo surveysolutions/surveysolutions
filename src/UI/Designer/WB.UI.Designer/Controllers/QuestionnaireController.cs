@@ -15,6 +15,8 @@ using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
 {
+    using System.Web.Security;
+
     [Authorize]
     public class QuestionnaireController : BootstrapBaseController
     {
@@ -29,9 +31,7 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Index()
         {
-            QuestionnaireBrowseView model = Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
-                   new QuestionnaireBrowseInputModel());
-            return View(model.Items);
+            return this.View(this.GetItems(true));
         }
 
         public ActionResult Edit(Guid id)
@@ -41,7 +41,8 @@ namespace WB.UI.Designer.Controllers
                 throw new HttpException(404, "Invalid query string parameters");
             }
 
-            QuestionnaireView model = Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            QuestionnaireView model =
+                Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
 
             ReplaceGuidsInValidationAndComditionRules(id, model);
 
@@ -59,7 +60,10 @@ namespace WB.UI.Designer.Controllers
         {
             if (ModelState.IsValid)
             {
-                CommandService.Execute(new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title));
+                var user = Membership.GetUser(User.Identity.Name);
+                CommandService.Execute(
+                    new CreateQuestionnaireCommand(
+                        Guid.NewGuid(), model.Title, user != null ? (Guid?)user.ProviderUserKey : null));
                 return RedirectToActionPermanent("Index");
             }
             return View(model);
@@ -78,8 +82,10 @@ namespace WB.UI.Designer.Controllers
                 if (element is QuestionView)
                 {
                     var question = (QuestionView)element;
-                    question.ConditionExpression = transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, id);
-                    question.ValidationExpression = transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression, id);
+                    question.ConditionExpression =
+                        transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, id);
+                    question.ValidationExpression =
+                        transformator.ReplaceGuidsWithStataCaptions(question.ValidationExpression, id);
                 }
 
                 if (element is GroupView)
@@ -94,7 +100,55 @@ namespace WB.UI.Designer.Controllers
 
         public ActionResult Public()
         {
-            return RedirectToActionPermanent("Index");
+            return this.View(this.GetItems(false));
+        }
+
+        public ActionResult Delete(Guid id)
+        {
+            QuestionnaireView model =
+                Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return View(new DeleteQuestionnaireModel() { Id = model.PublicKey, Title = model.Title });
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult DeleteConfirmed(Guid id)
+        {
+            CommandService.Execute(new DeleteQuestionnaireCommand(id));
+
+            return RedirectToAction("Index");
+        }
+
+        private IEnumerable<QuestionnaireListViewModel> GetItems(bool isOnlyOwnerItems)
+        {
+            IEnumerable<QuestionnaireListViewModel> retVal = default(IEnumerable<QuestionnaireListViewModel>);
+
+            var user = Membership.GetUser(User.Identity.Name);
+            if (user != null)
+            {
+                QuestionnaireBrowseView model =
+                    this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+                        input:
+                            new QuestionnaireBrowseInputModel()
+                                {
+                                    CreatedBy = (Guid)user.ProviderUserKey,
+                                    IsOnlyOwnerItems = isOnlyOwnerItems,
+                                    IsAdminMode =
+                                        Roles.IsUserInRole(
+                                            user.UserName, UserHelper.ADMINROLENAME)
+                                });
+                retVal =
+                    model.Items.Select(
+                        x =>
+                        new QuestionnaireListViewModel()
+                            {
+                                Id = x.Id,
+                                CreationDate = x.CreationDate,
+                                LastEntryDate = x.LastEntryDate,
+                                Title = x.Title
+                            }).ToArray();
+            }
+            return retVal;
         }
     }
 }
