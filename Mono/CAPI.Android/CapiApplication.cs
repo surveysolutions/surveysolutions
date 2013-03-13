@@ -143,8 +143,7 @@ namespace CAPI.Android
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
           
-            var events = eventStore.GetAllEvents();
-            foreach (CommittedEvent committedEvent in events)
+            foreach (CommittedEvent committedEvent in eventStore.GetAllEvents())
             {
                 bus.Publish(committedEvent);
             }

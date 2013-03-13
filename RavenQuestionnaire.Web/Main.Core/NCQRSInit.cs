@@ -59,7 +59,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         public static void Init(IKernel kernel)
         {
 #if MONODROID
-			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             var store = InitializeEventStore(kernel.Get<DocumentStore>());
