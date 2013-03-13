@@ -6,6 +6,12 @@
 //   The ncqrs init.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+#if !MONODROID
+using Ncqrs.Eventing.Storage.RavenDB;
+using Raven.Client.Document;
+#endif
+
 namespace Main.Core
 {
     using System;
@@ -28,9 +34,9 @@ namespace Main.Core
 #if MONODROID
 using AndroidNcqrs.Eventing.Storage.SQLite;
 #else
-//using Ncqrs.Eventing.Storage.RavenDB;
+    //using Ncqrs.Eventing.Storage.RavenDB;
 #endif
-    
+
     //using Ncqrs.Eventing.Storage.RavenDB;
 
     using Ninject;
@@ -56,25 +62,27 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
-            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
-            //NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
+            var store = InitializeEventStore(kernel.Get<DocumentStore>());
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
+            NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
-            //NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
-            
-            //NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
-           NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-         
+
             var bus = new InProcessEventBus(true);
 
-            // RegisterEventHandlers(bus, kernel);
-
+#if !MONODROID
+            RegisterEventHandlers(bus, kernel);
+#endif
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
@@ -82,9 +90,6 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
         /// <exception cref="Exception">
         /// </exception>
         public static void RebuildReadLayer(IKernel kernel)
@@ -95,7 +100,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
-            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); 
+            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
 
             if (eventStore == null)
             {
@@ -124,8 +129,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-            foreach (Type type in commandSupplier.GetCommandList()){
-                   
+            foreach (Type type in commandSupplier.GetCommandList())
+            {
+
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
@@ -142,10 +148,10 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// <returns>
         /// The <see cref="IStreamableEventStore"/>.
         /// </returns>
-        //private static IStreamableEventStore InitializeEventStore(DocumentStore store)
-        //{
-        //    return new RavenDBEventStore(store);
-        //}
+        private static IStreamableEventStore InitializeEventStore(DocumentStore store)
+        {
+            return new RavenDBEventStore(store);
+        }
 
 #endif
 
