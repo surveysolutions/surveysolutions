@@ -6,7 +6,7 @@
             Group = function() {
                 var self = this;
                 self.id = ko.observable(Math.uuid());
-                self.title = ko.observable('Title');
+                self.title = ko.observable('Title').extend({ required: true });
                 self.parent = ko.observable();
 
                 self.type = ko.observable("GroupView"); // Object type
@@ -30,6 +30,9 @@
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type, self.description, self.condition]);
                 self.dirtyFlag().reset();
+                
+                self.errors = ko.validation.group(self);
+
                 return self;
             };
         
