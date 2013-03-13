@@ -11,6 +11,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
     public class AccountAR : AggregateRootMappedByConvention
     {
+        #warning Roma, please deal with not used fields which I commented. TLK.
 
         #region [Fields]
 
@@ -20,16 +21,16 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         private string _passwordAnswer;
         private string _comment;
         private DateTime _lastLoginAt;
-        private bool _isConfirmed;
+        //private bool _isConfirmed;
         private DateTime _lastPasswordChangeAt;
-        private bool _isLockedOut;
-        private bool _isOnline;
+        //private bool _isLockedOut;
+        //private bool _isOnline;
         private DateTime _lastLockedOutAt;
         private DateTime _failedPasswordWindowStartedAt;
         private int _failedPasswordWindowAttemptCount = 0;
         private DateTime _failedPasswordAnswerWindowStartedAt;
-        private int _failedPasswordAnswerWindowAttemptCount = 0;
-        private DateTime _createdAt;
+        //private int _failedPasswordAnswerWindowAttemptCount;
+        //private DateTime _createdAt;
         private DateTime _lastActivityAt;
         private object _providerUserKey;
         private string _userName;
@@ -193,12 +194,12 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
         public void OnAccountConfirmed(AccountConfirmed @event)
         {
-            _isConfirmed = true;
+            //_isConfirmed = true;
         }
 
         public void OnAccountLocked(AccountLocked @event)
         {
-            _isLockedOut = true;
+            //_isLockedOut = true;
             _lastLockedOutAt = @event.LastLockedOutAt;
         }
 
@@ -237,8 +238,8 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
         public void OnAccountUnlocked(AccountUnlocked @event)
         {
-            _isLockedOut = false;
-            _failedPasswordAnswerWindowAttemptCount = 0;
+            //_isLockedOut = false;
+            //_failedPasswordAnswerWindowAttemptCount = 0;
             _failedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             _failedPasswordWindowAttemptCount = 0;
             _failedPasswordWindowStartedAt = DateTime.MinValue;
