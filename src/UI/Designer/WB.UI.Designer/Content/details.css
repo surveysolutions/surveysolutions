@@ -166,9 +166,10 @@ body.loading .loading-backdrop {
     width: 100%;
     z-index: 40;
     padding-bottom: 43px;
-    height: 80%;
+    padding-top: 0;
+    height: 300px;
     top: auto;
-    bottom: -80%;
+    bottom: -300px;
 }
 
     #output .inner {
@@ -330,6 +331,11 @@ h1 {
     bottom: 0;
 }
 
+#stacks.output-visible #questionnaire,
+#stacks.output-visible #details-question,
+#stacks.output-visible #details-group {
+    bottom: 300px;
+}
 
 #stacks.detail-visible #questionnaire {
     right: 50%;
