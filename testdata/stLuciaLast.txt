@@ -1,14 +1,14 @@
 {
   "$type": "Questionnaire.Core.Web.Export.ZipFileData, Questionnaire.Core.Web",
-  "ClientGuid": "1a29871a-260e-4869-be42-e60f57f839f8",
+  "ClientGuid": "44b85c75-8aa8-432f-954a-9a77b6f1f38f",
   "Events": [
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
-      "CommitId": "236816b6-57a3-477f-b683-4bce1bdb288e",
-      "EventIdentifier": "8785af4f-9c25-4a05-a8d0-dc0886c9ddfc",
+      "CommitId": "7eba99d2-f663-4f44-ae00-d10dfed50436",
+      "EventIdentifier": "026f0f16-f9a3-46dd-8244-7be6af0ab344",
       "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
-      "EventTimeStamp": "2013-03-01T22:54:57.8706334Z",
+      "EventTimeStamp": "2013-03-13T23:32:25.6628514Z",
       "EventVersion": {
         "$type": "System.Version, mscorlib",
         "Major": 0,
@@ -177,7 +177,7 @@
                   {
                     "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
                     "Children": [
-			{
+                      {
                         "$type": "Main.Core.Entities.SubEntities.Question.TextQuestion, Main.Core",
                         "AddTextAttr": null,
                         "AnswerOrder": 0,
@@ -1110,19 +1110,7 @@
                         "StataExportCaption": "economic_activity ",
                         "ValidationExpression": null,
                         "ValidationMessage": null
-                      }
-                    ],
-                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
-                    "Enabled": true,
-                    "Description": null,
-                    "Propagated": 2,
-                    "PublicKey": "94d956cc-2b10-463c-a67a-1764d765577b",
-                    "Title": " ECONOMIC ACTIVITY",
-                    "Triggers": []
-                  },
-                  {
-                    "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
-                    "Children": [
+                      },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
                         "AddSingleAttr": null,
@@ -1153,7 +1141,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2",
+                        "ConditionExpression": "[59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1163,7 +1151,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "15. TEMPORARY ABSENCE\r\nDid you (...) have a job or business from which you were (... was) absent during the week\r\nending ..../.../.../ ?",
                         "QuestionType": 0,
-                        "StataExportCaption": "temporary_job_absence ",
+                        "StataExportCaption": "temporary_job_absence",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1227,7 +1215,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2",
+                        "ConditionExpression": "[6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1237,7 +1225,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "16. WHY ABSENT\r\nWhy were you (was...) absent from work during week ending .../.../...?",
                         "QuestionType": 0,
-                        "StataExportCaption": "job_absence_reason ",
+                        "StataExportCaption": "job_absence_reason",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1250,7 +1238,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[d8c11924-9b3f-4335-9c4c-bff11989de2a]==5 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2",
+                        "ConditionExpression": "[d8c11924-9b3f-4335-9c4c-bff11989de2a]==5 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1260,7 +1248,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "16.1. If other, please specify",
                         "QuestionType": 7,
-                        "StataExportCaption": "reason_of_job_absence ",
+                        "StataExportCaption": "reason_of_job_absence",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1304,7 +1292,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "\r\n [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)\r\n",
+                        "ConditionExpression": "\r\n [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1314,7 +1302,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "17. WANTING WORK\r\nDid you (...) want to work during week ending ... /.../...?",
                         "QuestionType": 0,
-                        "StataExportCaption": "wanting_work ",
+                        "StataExportCaption": "wanting_work",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1428,7 +1416,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
+                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1438,7 +1426,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "18. SEEKING WORK\r\nWhat steps did you ..... take during the last four weeks to look for work?",
                         "QuestionType": 0,
-                        "StataExportCaption": "seeking_work ",
+                        "StataExportCaption": "seeking_work",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1592,7 +1580,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [cc76f9bd-6e79-4b14-9e77-af1319aaba87]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
+                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [cc76f9bd-6e79-4b14-9e77-af1319aaba87]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1602,7 +1590,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "19. NOT SEEKING WORK\r\nWhy did you (...) not seek work during that period?",
                         "QuestionType": 0,
-                        "StataExportCaption": "not_seeking_work ",
+                        "StataExportCaption": "not_seeking_work",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1676,7 +1664,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
+                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1699,7 +1687,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5) and [ef16490b-e046-445e-aa8d-ec961581e306]==5",
+                        "ConditionExpression": "[532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==1 and [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5) and [ef16490b-e046-445e-aa8d-ec961581e306]==5",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1709,17 +1697,17 @@
                         "QuestionScope": 0,
                         "QuestionText": "20.1. If other, please specify",
                         "QuestionType": 7,
-                        "StataExportCaption": "other_reason ",
+                        "StataExportCaption": "other_reason",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       }
                     ],
-                    "ConditionExpression": "[59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
+                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
                     "Enabled": true,
                     "Description": null,
                     "Propagated": 2,
-                    "PublicKey": "d161d7d2-92f2-4db8-80ee-c022dc0bd6f0",
-                    "Title": "ABSENCE STATUS",
+                    "PublicKey": "94d956cc-2b10-463c-a67a-1764d765577b",
+                    "Title": " ECONOMIC ACTIVITY",
                     "Triggers": []
                   }
                 ],
@@ -2368,6 +2356,404 @@
                         "ValidationMessage": null
                       },
                       {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Complete set of written accounts",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "0bc646ad-d8f9-4a5c-b020-14510570cb25"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Simplified written accounts",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "82ae6b35-afa9-4657-854f-726a57616b71"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Only through informal records of orders, sales, purchases",
+                            "AnswerType": 0,
+                            "AnswerValue": "3",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "8bea779e-9701-41e5-9894-59dde417b384"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "No records are kept.",
+                            "AnswerType": 0,
+                            "AnswerValue": "4",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "69e2198d-79e8-4b31-8bea-4fd4c4327d10"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "e8320a92-62d5-4ec2-9fbc-280eb7e30992",
+                        "QuestionScope": 0,
+                        "QuestionText": "27A. ACCOUNTS\r\nWhat kind of accounts do you/does.... keep for this activity/business?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "accounts",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Yes, Written contract",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "97cefc58-3933-4d43-9f2e-5e227ec28436"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "No, Verbal agreement",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "6b386ecd-c4bf-4605-b5f5-e0de2de56bec"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "d7e65a03-8ff7-435d-bd26-230d6e9cc80a",
+                        "QuestionScope": 0,
+                        "QuestionText": "27B. EMPLOYMENT CONTRACT\r\nAre you/does..... employed on the basis of a written contract?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "conditions_of_employment",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Yes",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "fdc59ed7-da8a-4373-88ef-7cb633fbe99b"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "No",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "7d225986-511c-4357-8530-ba3f2dee3c84"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "de7a413b-d86a-4914-8381-55071fdbb3cb",
+                        "QuestionScope": 0,
+                        "QuestionText": "27C. PAY SLIP\r\nDo you/does... get a pay slip for this job?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "pay_slip",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Yes",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "73bc6333-326b-479f-afd6-cc9468190ce0"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "No",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "21288669-a9fc-4a09-885f-39624c2c7edb"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "I don't know",
+                            "AnswerType": 0,
+                            "AnswerValue": "3",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "40900de0-dc70-40ea-8cd6-5735bdb8769f"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "8596494d-83e8-4464-98a7-da321f032d50",
+                        "QuestionScope": 0,
+                        "QuestionText": "27D. Do you/does ...... benefit from paid annual leave?\r\n",
+                        "QuestionType": 0,
+                        "StataExportCaption": "benefit_from_annual_leave",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Yes, from the NIC",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "21b1b978-5e3d-4d3b-b6fb-e2da418339a6"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Yes from an Insurance other than NIC",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "6b099438-8d9b-4bed-b168-b84040a0b2d4"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "No",
+                            "AnswerType": 0,
+                            "AnswerValue": "3",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "204d7475-2150-4019-90de-52906d6e00f2"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "I don't know",
+                            "AnswerType": 0,
+                            "AnswerValue": "4",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "622978e7-1735-447c-928a-5b3f14d45122"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "cb5f2e58-a947-4ffe-916a-46ba39fbd86e",
+                        "QuestionScope": 0,
+                        "QuestionText": "27E. Do you/does... receive or are you/is... entitled to employment related insurance benefits?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "insurance_benefits",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Employer",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "81079c88-c6b8-45e2-9e69-df7417b5b4e5"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Self-Employed",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "8aeb0973-0a10-47e9-a62e-cfa789da9f08"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "Not Registered",
+                            "AnswerType": 0,
+                            "AnswerValue": "3",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "f0f58abd-35f1-4ffa-ba80-dc27569d9005"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "580fd46c-2dd8-4a9e-9603-3da4900bb06f",
+                        "QuestionScope": 0,
+                        "QuestionText": "27F. Are you/is... registered with the National Insurance Corporation as a self-employed person or an employer?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "registration_in_NIC",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
+                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
+                        "AddSingleAttr": null,
+                        "AnswerOrder": 0,
+                        "Answers": [
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "only one",
+                            "AnswerType": 0,
+                            "AnswerValue": "1",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "46543725-1ee8-461c-9652-0be4539ddc07"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "2-5",
+                            "AnswerType": 0,
+                            "AnswerValue": "2",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "ef8b0b3b-ea7a-4d2c-a995-5b1f2d8f218d"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "6-9",
+                            "AnswerType": 0,
+                            "AnswerValue": "3",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "e364dc2b-e23e-41a1-9f99-95b8ea823b85"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "10- 49",
+                            "AnswerType": 0,
+                            "AnswerValue": "4",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "0d8c09b1-707a-4c3c-8746-27ebaad237b8"
+                          },
+                          {
+                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
+                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerText": "50 or more",
+                            "AnswerType": 0,
+                            "AnswerValue": "5",
+                            "Mandatory": false,
+                            "NameCollection": null,
+                            "PublicKey": "89550da8-bce0-4a1b-b8a5-956da36f38c5"
+                          }
+                        ],
+                        "Capital": false,
+                        "Cards": [],
+                        "Children": [],
+                        "Comments": null,
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionalDependentGroups": [],
+                        "ConditionalDependentQuestions": [],
+                        "Featured": false,
+                        "Instructions": null,
+                        "Mandatory": false,
+                        "PublicKey": "8dc037e8-0e1e-41e7-880c-66a360240925",
+                        "QuestionScope": 0,
+                        "QuestionText": "27G. SIZE\r\nHow many persons (including yourself) usually work in the business where you work?",
+                        "QuestionType": 0,
+                        "StataExportCaption": "staff_qty",
+                        "ValidationExpression": null,
+                        "ValidationMessage": null
+                      },
+                      {
                         "$type": "Main.Core.Entities.SubEntities.Question.TextQuestion, Main.Core",
                         "AddTextAttr": null,
                         "AnswerOrder": 0,
@@ -2517,443 +2903,9 @@
                     "Description": null,
                     "Propagated": 2,
                     "PublicKey": "15f5db1a-93c8-46c8-85a5-d70d8344ac61",
-                    "Title": "SINGLE JOB HOLDING",
+                    "Title": "FIRST JOB HOLDING",
                     "Triggers": []
                   },
-                  {
-                    "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
-                    "Children": [
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Yes, Written contract",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "97cefc58-3933-4d43-9f2e-5e227ec28436"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "No, Verbal agreement",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "6b386ecd-c4bf-4605-b5f5-e0de2de56bec"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "d7e65a03-8ff7-435d-bd26-230d6e9cc80a",
-                        "QuestionScope": 0,
-                        "QuestionText": "27B. EMPLOYMENT CONTRACT\r\nAre you/does..... employed on the basis of a written contract?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "conditions_of_employment ",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      },
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Yes",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "fdc59ed7-da8a-4373-88ef-7cb633fbe99b"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "No",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "7d225986-511c-4357-8530-ba3f2dee3c84"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "de7a413b-d86a-4914-8381-55071fdbb3cb",
-                        "QuestionScope": 0,
-                        "QuestionText": "27C. PAY SLIP\r\nDo you/does... get a pay slip for this job?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "pay_slip ",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      },
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Yes",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "73bc6333-326b-479f-afd6-cc9468190ce0"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "No",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "21288669-a9fc-4a09-885f-39624c2c7edb"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "I don't know",
-                            "AnswerType": 0,
-                            "AnswerValue": "3",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "40900de0-dc70-40ea-8cd6-5735bdb8769f"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "8596494d-83e8-4464-98a7-da321f032d50",
-                        "QuestionScope": 0,
-                        "QuestionText": "27D. Do you/does ...... benefit from paid annual leave?\r\n",
-                        "QuestionType": 0,
-                        "StataExportCaption": "benefit_from_annual_leave",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      },
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Yes, from the NIC",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "21b1b978-5e3d-4d3b-b6fb-e2da418339a6"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Yes from an Insurance other than NIC",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "6b099438-8d9b-4bed-b168-b84040a0b2d4"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "No",
-                            "AnswerType": 0,
-                            "AnswerValue": "3",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "204d7475-2150-4019-90de-52906d6e00f2"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "I don't know",
-                            "AnswerType": 0,
-                            "AnswerValue": "4",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "622978e7-1735-447c-928a-5b3f14d45122"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "cb5f2e58-a947-4ffe-916a-46ba39fbd86e",
-                        "QuestionScope": 0,
-                        "QuestionText": "27E. Do you/does... receive or are you/is... entitled to employment related insurance benefits?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "insurance_benefits",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      }
-                    ],
-                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 1,2,3,4,7) ",
-                    "Enabled": true,
-                    "Description": null,
-                    "Propagated": 2,
-                    "PublicKey": "05b0f87e-cac5-488c-8761-91bfe6e8a68f",
-                    "Title": "FOR EMPLOYEES ONLY",
-                    "Triggers": []
-                  },
-                  {
-                    "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
-                    "Children": [
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Complete set of written accounts",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "0bc646ad-d8f9-4a5c-b020-14510570cb25"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Simplified written accounts",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "82ae6b35-afa9-4657-854f-726a57616b71"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Only through informal records of orders, sales, purchases",
-                            "AnswerType": 0,
-                            "AnswerValue": "3",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "8bea779e-9701-41e5-9894-59dde417b384"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "No records are kept.",
-                            "AnswerType": 0,
-                            "AnswerValue": "4",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "69e2198d-79e8-4b31-8bea-4fd4c4327d10"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "e8320a92-62d5-4ec2-9fbc-280eb7e30992",
-                        "QuestionScope": 0,
-                        "QuestionText": "27A. ACCOUNTS\r\nWhat kind of accounts do you/does.... keep for this activity/business?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "accounts",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      },
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Employer",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "81079c88-c6b8-45e2-9e69-df7417b5b4e5"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Self-Employed",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "8aeb0973-0a10-47e9-a62e-cfa789da9f08"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "Not Registered",
-                            "AnswerType": 0,
-                            "AnswerValue": "3",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "f0f58abd-35f1-4ffa-ba80-dc27569d9005"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "580fd46c-2dd8-4a9e-9603-3da4900bb06f",
-                        "QuestionScope": 0,
-                        "QuestionText": "27F. Are you/is... registered with the National Insurance Corporation as a self-employed person or an employer?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "registration_in_NIC",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      },
-                      {
-                        "$type": "Main.Core.Entities.SubEntities.Question.SingleQuestion, Main.Core",
-                        "AddSingleAttr": null,
-                        "AnswerOrder": 0,
-                        "Answers": [
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "only one",
-                            "AnswerType": 0,
-                            "AnswerValue": "1",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "46543725-1ee8-461c-9652-0be4539ddc07"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "2-5",
-                            "AnswerType": 0,
-                            "AnswerValue": "2",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "ef8b0b3b-ea7a-4d2c-a995-5b1f2d8f218d"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "6-9",
-                            "AnswerType": 0,
-                            "AnswerValue": "3",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "e364dc2b-e23e-41a1-9f99-95b8ea823b85"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "10- 49",
-                            "AnswerType": 0,
-                            "AnswerValue": "4",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "0d8c09b1-707a-4c3c-8746-27ebaad237b8"
-                          },
-                          {
-                            "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
-                            "AnswerText": "50 or more",
-                            "AnswerType": 0,
-                            "AnswerValue": "5",
-                            "Mandatory": false,
-                            "NameCollection": null,
-                            "PublicKey": "89550da8-bce0-4a1b-b8a5-956da36f38c5"
-                          }
-                        ],
-                        "Capital": false,
-                        "Cards": [],
-                        "Children": [],
-                        "Comments": null,
-                        "ConditionExpression": null,
-                        "ConditionalDependentGroups": [],
-                        "ConditionalDependentQuestions": [],
-                        "Featured": false,
-                        "Instructions": null,
-                        "Mandatory": false,
-                        "PublicKey": "8dc037e8-0e1e-41e7-880c-66a360240925",
-                        "QuestionScope": 0,
-                        "QuestionText": "27G. SIZE\r\nHow many persons (including yourself) usually work in the business where you work?",
-                        "QuestionType": 0,
-                        "StataExportCaption": "staff_qty ",
-                        "ValidationExpression": null,
-                        "ValidationMessage": null
-                      }
-                    ],
-                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 5,6,8,9)",
-                    "Enabled": true,
-                    "Description": null,
-                    "Propagated": 2,
-                    "PublicKey": "1bcad8bb-2ff2-4c68-98cc-a7e6dcdb9cc7",
-                    "Title": "FOR SELF EMPLOYEES ONLY",
-                    "Triggers": []
-                  }
-                ],
-                "ConditionExpression": null,
-                "Enabled": true,
-                "Description": "TO BE COMPLETED FOR PERSONS EMPLOYED DURING THE REFERENCE WEEK",
-                "Propagated": 0,
-                "PublicKey": "9f5c05b1-317a-4147-aebe-0580a888f95f",
-                "Title": "PART 3",
-                "Triggers": []
-              },
-              {
-                "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
-                "Children": [
                   {
                     "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
                     "Children": [
@@ -3385,10 +3337,10 @@
                 ],
                 "ConditionExpression": null,
                 "Enabled": true,
-                "Description": "FOR THOSE HOLDING MORE THAN ONE JOB DURING THE REFERENCE WEEK",
+                "Description": "TO BE COMPLETED FOR PERSONS EMPLOYED DURING THE REFERENCE WEEK",
                 "Propagated": 0,
-                "PublicKey": "1491f29c-598d-4604-b5f0-1f1d05f40120",
-                "Title": "PART 3A",
+                "PublicKey": "9f5c05b1-317a-4147-aebe-0580a888f95f",
+                "Title": "PART 3",
                 "Triggers": []
               },
               {
@@ -5113,6 +5065,6 @@
       }
     }
   ],
-  "ImportDate": "2013-03-01T18:03:07.8096563-05:00",
-  "CreationDate": "2013-03-01T23:03:07.8096563Z"
+  "ImportDate": "2013-03-13T19:32:26.9729264-04:00",
+  "CreationDate": "2013-03-13T23:32:26.9729264Z"
 }
