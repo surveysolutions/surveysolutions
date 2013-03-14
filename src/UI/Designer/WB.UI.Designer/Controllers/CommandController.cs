@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
-        public JsonResult Execute(string command)
+        public JsonResult Execute(string type, string command)
         {
             ICommand concreteCommand;
             try
