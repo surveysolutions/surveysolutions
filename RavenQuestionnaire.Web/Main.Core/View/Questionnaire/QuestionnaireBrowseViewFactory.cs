@@ -7,11 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
 using Main.DenormalizerStorage;
+using System;
+using System.Linq;
 
 namespace Main.Core.View.Questionnaire
 {
@@ -73,8 +71,11 @@ namespace Main.Core.View.Questionnaire
 
             if (input.IsAdminMode.HasValue)
             {
-                q = x => (input.IsOnlyOwnerItems ? x.CreatedBy == input.CreatedBy : x.CreatedBy != input.CreatedBy) &&
-                    (input.IsAdminMode.Value || !x.IsDeleted);
+                q =
+                    x =>
+                    (input.IsOnlyOwnerItems ? x.CreatedBy == input.CreatedBy : x.CreatedBy != input.CreatedBy)
+                    && (input.IsAdminMode.Value || !x.IsDeleted)
+                    && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
             }
 
             var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);

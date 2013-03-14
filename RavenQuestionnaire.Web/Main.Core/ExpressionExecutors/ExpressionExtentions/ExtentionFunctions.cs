@@ -20,7 +20,11 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
     /// </summary>
     public static class ExtensionFunctions
     {
-        private static Type[] CommonTypes = new[] { typeof(Int64), typeof(Double), typeof(Boolean), typeof(String), typeof(Decimal) };
+        private static Type[] CommonTypes = new[]
+                                                {
+                                                    typeof(Int64), typeof(Double), typeof(Boolean), typeof(String),
+                                                    typeof(Decimal)
+                                                };
 
         /// <summary>
         /// Gets the the most precise type.
@@ -43,8 +47,7 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
 
         public static int CompareUsingMostPreciseType(object a, object b)
         {
-            if (a == null || b == null)
-                return -1;
+            if (a == null || b == null) return -1;
             Type mpt = GetMostPreciseType(a.GetType(), b.GetType());
             return Comparer.Default.Compare(Convert.ChangeType(a, mpt), Convert.ChangeType(b, mpt));
         }
@@ -53,8 +56,7 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
         {
             if (name == "contains")
             {
-                if (args.Parameters.Length != 2)
-                    throw new ArgumentException("contains() takes 2 arguments");
+                if (args.Parameters.Length != 2) throw new ArgumentException("contains() takes 2 arguments");
 
                 object parameter = args.Parameters[0].Evaluate();
                 object argument = args.Parameters[1].Evaluate();
@@ -87,6 +89,16 @@ namespace Main.Core.ExpressionExecutors.ExpressionExtentions
 
                 args.Result = evaluation;
             }
+        }
+
+        public static Func<T, bool> AndAlso<T>(this Func<T, bool> predicate1, Func<T, bool> predicate2)
+        {
+            return arg => predicate1(arg) && predicate2(arg);
+        }
+
+        public static Func<T, bool> OrElse<T>(this Func<T, bool> predicate1, Func<T, bool> predicate2)
+        {
+            return arg => predicate1(arg) || predicate2(arg);
         }
     }
 }
