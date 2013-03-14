@@ -19,7 +19,7 @@ namespace WB.UI.Designer.Controllers
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
 
     [Authorize]
-    public class QuestionnaireController : BootstrapBaseController
+    public class QuestionnaireController : AlertController
     {
         //
         // GET: /Questionnaires/
@@ -125,6 +125,7 @@ namespace WB.UI.Designer.Controllers
         {
             ViewBag.PageIndex = pageIndex;
             ViewBag.SortBy = sortBy;
+            ViewBag.Filter = filter;
             ViewBag.SortOrder = sortOrder;
             if (ViewBag.SortOrder != null && ViewBag.SortOrder)
             {
@@ -149,6 +150,7 @@ namespace WB.UI.Designer.Controllers
                                     Page = pageIndex ?? 1,
                                     PageSize = GlobalHelper.GridPageItemsCount,
                                     Order = sortBy, 
+                                    Filter = filter
                                 });
                 retVal =
                     model.Items.Select(

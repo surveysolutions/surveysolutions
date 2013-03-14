@@ -8,7 +8,7 @@ using WebMatrix.WebData;
 namespace WB.UI.Designer.Controllers
 {
     [Authorize]
-    public class AccountController : BootstrapBaseController
+    public class AccountController : AlertController
     {
         public ActionResult Index()
         {

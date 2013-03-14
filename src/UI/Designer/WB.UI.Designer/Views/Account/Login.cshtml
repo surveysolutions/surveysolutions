@@ -2,7 +2,7 @@
 
 @{
     ViewBag.Title = "Login";
-    Layout = "~/Views/Shared/_BootstrapLayout.empty.cshtml";
+    Layout = "~/Views/Shared/Layout.empty.cshtml";
 }
 
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin" }))
