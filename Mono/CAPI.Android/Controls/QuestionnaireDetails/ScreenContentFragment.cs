@@ -104,10 +104,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
-        public override void OnDestroy()
+        public override void OnDetach()
         {
-           
-            base.OnDestroy();
+
+            base.OnDetach();
             foreach (AbstractQuestionView abstractQuestionView in bindableElements)
             {
                 abstractQuestionView.Dispose();

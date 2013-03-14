@@ -20,7 +20,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.selectedItem = selectedItem;
             this.model = model;
             this.items = new View[this.Count];
-            //  this.items.Add(new QuestionnaireNavigationPanelItem(Guid.Empty, "Complete", 0, 0));
         }
 
 
@@ -30,7 +29,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             return position;
         }
-
+        
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
 
@@ -71,8 +70,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     tvITem.Text = SurveyStatus.IsStatusAllowCapiSync(model.Status) ? "Summary" : "Complete";
                     tvCount.Visibility = ViewStates.Gone;
                 }
+                items[position] = view;
             }
-            items[position] = view;
             return view;
         }
         protected void UpdateCounter(TextView tvCount, QuestionnaireScreenViewModel item)

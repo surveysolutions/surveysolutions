@@ -27,7 +27,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             return myFragment;
         }
-
+        public override void OnCreate(Bundle p0)
+        {
+            base.OnCreate(p0);
+            //this.ListView.ChoiceMode = ChoiceMode.Single;
+            
+            if (p0 == null)
+            {
+                adapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
+                this.ListAdapter = adapter;
+            }
+        }
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
         public CompleteQuestionnaireView Model
         {
@@ -55,15 +65,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             var handler = ScreenChanged;
             if (handler != null)
                 handler(this, new ScreenChangedEventArgs(groupKey));
-        }
-
-        public override void OnResume()
-        {
-            base.OnResume();
-            this.ListView.ChoiceMode = ChoiceMode.Single;
-            adapter = new QuestionnaireNavigationAdapter(this.Activity, Model, selectedItemIndex);
-            this.ListAdapter = adapter;
-
         }
 
         public void SelectItem(int ind)
