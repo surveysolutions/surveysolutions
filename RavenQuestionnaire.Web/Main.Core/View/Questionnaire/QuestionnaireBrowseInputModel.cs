@@ -82,6 +82,11 @@ namespace Main.Core.View.Questionnaire
         /// </summary>
         public bool IsOnlyOwnerItems { get; set; }
 
+        /// <summary>
+        /// Gets or sets the filter.
+        /// </summary>
+        public string Filter { get; set; }
+
         #endregion
     }
 }

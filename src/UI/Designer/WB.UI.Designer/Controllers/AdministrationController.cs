@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers
     /// The administration controller.
     /// </summary>
     [Authorize(Roles = "Administrator")]
-    public class AdministrationController : BootstrapBaseController
+    public class AdministrationController : AlertController
     {
         // GET: /Administration/
 
@@ -228,8 +228,10 @@ namespace WB.UI.Designer.Controllers
         public ViewResult Index(int? p, string sb, bool? so, string f)
         {
             var page = p ?? 1;
+
             ViewBag.PageIndex = p;
             ViewBag.SortBy = sb;
+            ViewBag.Filter = f;
             ViewBag.SortOrder = so;
             if (ViewBag.SortOrder != null && ViewBag.SortOrder)
             {
@@ -239,6 +241,7 @@ namespace WB.UI.Designer.Controllers
             var users =
                 Membership.GetAllUsers()
                           .OfType<MembershipUser>()
+                          .Where(x => (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f))) || string.IsNullOrEmpty(f))
                           .AsQueryable()
                           .OrderUsingSortExpression(sb ?? string.Empty);
 

@@ -74,6 +74,11 @@ namespace Main.Core.Utility
             return string.Compare(source, compareTo, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
+        public static bool ContainsIgnoreCaseSensitive(this string source, string dest)
+        {
+            return source.ToLower().Contains(dest.ToLower());
+        }
+
         #endregion
     }
 }
