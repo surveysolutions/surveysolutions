@@ -233,6 +233,8 @@
     <Compile Include="Code\MembershipModule.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
+    <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\IActionItem.cs" />
     <Compile Include="Models\QuestionnaireListViewModel.cs" />
     <Compile Include="Models\DeleteQuestionnaireModel.cs" />
     <Compile Include="Models\DeleteAccountModel.cs" />
