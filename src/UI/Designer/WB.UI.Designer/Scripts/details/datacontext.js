@@ -133,24 +133,29 @@
 
         var sendCommand = function(commandName, args, callbacks) {
             return $.Deferred(function(def) {
-                var command = commands[commandName](args);
+                var command = {
+                    type: commandName,
+                    command: ko.toJSON(commands[commandName](args))
+                };
+                
                 dataservice.sendCommand({
-                    success: function(response) {
+                    success: function (response, status) {
                         logger.success(config.toasts.savedData);
                         if (callbacks && callbacks.success) {
                             callbacks.success();
                         }
                         def.resolve(response);
                     },
-                    error: function(response) {
+                    error: function (response, xhr) {
+                        console.log(xhr);
                         logger.error(config.toasts.errorSavingData);
                         if (callbacks && callbacks.error) {
-                            callbacks.error();
+                            callbacks.error(response);
                         }
                         def.reject(response);
                         return;
                     }
-                }, ko.toJSON(command));
+                }, command);
             }).promise();
         };
 
