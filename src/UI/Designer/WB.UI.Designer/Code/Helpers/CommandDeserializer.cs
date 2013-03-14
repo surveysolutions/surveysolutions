@@ -11,7 +11,7 @@ namespace WB.UI.Designer.Code.Helpers
 
     internal class CommandDeserializer : ICommandDeserializer
     {
-        public ICommand Deserialize(string serializedCommand)
+        public ICommand Deserialize(string type, string serializedCommand)
         {
             return JsonConvert.DeserializeObject<NewUpdateGroupCommand>(serializedCommand);
         }
