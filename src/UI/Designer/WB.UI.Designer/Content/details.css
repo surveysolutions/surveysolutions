@@ -184,6 +184,22 @@ body.loading .loading-backdrop {
         top: 41px;
         bottom: 0;
     }
+    #output .body .error-list {
+        margin: 0;
+        list-style: none;
+    }
+        #output .body .error-list .error {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            margin: 0 3px;
+            height: 40px;
+            line-height: 40px;
+            position: relative;
+            -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+            -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+            box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+        }
 
 .details.stack .body .input-append {
     display: inline;

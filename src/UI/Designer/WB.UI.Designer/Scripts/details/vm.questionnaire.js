@@ -7,6 +7,7 @@
             selectedQuestion = ko.observable(),
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
+            errors = ko.observableArray(),
             isInitialized = false;
         activate = function(routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
@@ -95,12 +96,14 @@
         saveGroup = function(group) {
             console.log(group);
             datacontext.sendCommand(config.commands.updateGroup, group, {
-                success: function (d) {
+                success: function () {
                     group.dirtyFlag().reset();
-                    console.log("ok");
                 },
-                error: function(d) {
-                    console.log("fail");
+                error: function (d) {
+                    console.log(d);
+                    errors.removeAll();
+                    errors.push(d);
+                    showOutput();
                 }
             });
         },
@@ -148,6 +151,7 @@
             saveQuestion: saveQuestion,
             deleteQuestion: deleteQuestion,
             showOutput: showOutput,
-            hideOutput: hideOutput
+            hideOutput: hideOutput,
+            errors : errors
         };
     });
