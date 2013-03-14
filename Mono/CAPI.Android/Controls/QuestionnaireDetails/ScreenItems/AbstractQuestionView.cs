@@ -118,9 +118,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         
         protected void SaveComment()
         {
-            CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
-                                                         etComments.Text, this.Model.PublicKey.PropagationKey,
-                                                         CapiApplication.Membership.CurrentUser));
+            string newComments = etComments.Text.Trim();
+            if (newComments != this.Model.Comments)
+            {
+                CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
+                                                             CapiApplication.Membership.CurrentUser));
+            }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
             

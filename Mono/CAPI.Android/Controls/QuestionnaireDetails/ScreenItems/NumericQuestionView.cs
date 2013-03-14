@@ -69,9 +69,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             try
             {
                 tvError.Visibility = ViewStates.Gone;
-                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                            null, etAnswer.Text,
-                                                            Model.PublicKey.PropagationKey));
+                string newValue = etAnswer.Text.Trim();
+                if (newValue != this.Model.AnswerString)
+                {
+                    CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                           null, newValue,
+                                                           Model.PublicKey.PropagationKey));
+                }
                 base.SaveAnswer();
               
             }

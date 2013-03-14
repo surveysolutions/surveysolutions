@@ -63,10 +63,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         // the event received when the user "sets" the date in the dialog
         void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
-            CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                        null, e.Date.ToString("d"),
-                                                        Model.PublicKey.PropagationKey));
-            dateDisplay.Text = Model.AnswerString;
+            string newValue = e.Date.ToString("d");
+            if (newValue != this.Model.AnswerString)
+            {
+                CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
+                                                          null, newValue,
+                                                          Model.PublicKey.PropagationKey));
+                dateDisplay.Text = newValue;
+            }
+            
             this.date = e.Date;
             SaveAnswer();
           //  UpdateDisplay();
