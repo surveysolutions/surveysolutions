@@ -1,6 +1,7 @@
 namespace WB.UI.Designer.Code.Helpers
 {
     using System;
+    using System.Collections.Generic;
 
     using Main.Core.Commands.Questionnaire.Group;
 
@@ -11,9 +12,24 @@ namespace WB.UI.Designer.Code.Helpers
 
     internal class CommandDeserializer : ICommandDeserializer
     {
-        public ICommand Deserialize(string type, string serializedCommand)
+        private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
-            return JsonConvert.DeserializeObject<NewUpdateGroupCommand>(serializedCommand);
+            { "UpdateGroup", typeof(NewUpdateGroupCommand) },
+        };
+
+        public ICommand Deserialize(string commandType, string serializedCommand)
+        {
+            Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
+
+            return (ICommand) JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+        }
+
+        private static Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
+        {
+            if (!knownCommandTypes.ContainsKey(commandType))
+                throw new ArgumentException(string.Format("Command type '{0}' is not supported.", commandType));
+
+            return knownCommandTypes[commandType];
         }
     }
 }
