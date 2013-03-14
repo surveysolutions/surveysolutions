@@ -59,7 +59,7 @@ namespace WB.UI.Designer
                                 "~/Scripts/lib/knockout.activity.js",
                                 "~/Scripts/lib/knockout.asyncCommand.js",
                                 "~/Scripts/lib/knockout.dirtyFlag.js",
-                                "~/Scripts/lib/knockout.validation.js",
+                                "~/Scripts/knockout.validation.debug.js",
                                 "~/Scripts/lib/koExternalTemplateEngine.js",
                                 "~/Scripts/lib/knockout-sortable.js",
 
