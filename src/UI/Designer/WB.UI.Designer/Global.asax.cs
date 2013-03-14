@@ -21,9 +21,6 @@ namespace WB.UI.Designer
             LayoutsRouteConfig.RegisterRoutes(RouteTable.Routes);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
-            
-            BootstrapBundleConfig.RegisterBundles(BundleTable.Bundles);
-
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             try

@@ -1,17 +1,16 @@
-﻿using System.Web.Mvc;
-using Main.Core.View;
-using WB.UI.Designer.BootstrapSupport;
+﻿using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
+using WB.UI.Designer.BootstrapSupport;
 
 namespace WB.UI.Designer.Controllers
 {
-    public class BootstrapBaseController: BaseController
+    public class AlertController: BaseController
     {
-        public BootstrapBaseController() : base(null, null)
+        public AlertController() : base(null, null)
         {   
         }
 
-        protected BootstrapBaseController(IViewRepository repository, ICommandService commandService) :
+        protected AlertController(IViewRepository repository, ICommandService commandService) :
             base(repository, commandService)
         {
         }
