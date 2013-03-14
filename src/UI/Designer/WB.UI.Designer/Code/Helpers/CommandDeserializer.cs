@@ -6,20 +6,13 @@ namespace WB.UI.Designer.Code.Helpers
 
     using Ncqrs.Commanding;
 
-    using Newtonsoft.Json.Linq;
+    using Newtonsoft.Json;
 
     internal class CommandDeserializer : ICommandDeserializer
     {
         public ICommand Deserialize(string serializedCommand)
         {
-            dynamic parsedCommand = JObject.Parse(serializedCommand);
-
-            ICommand concreteCommand = new NewUpdateGroupCommand(
-                Guid.Parse((string)parsedCommand.questionnaireId),
-                Guid.Parse((string)parsedCommand.groupId),
-                (string)parsedCommand.title);
-
-            return concreteCommand;
+            return JsonConvert.DeserializeObject<NewUpdateGroupCommand>(serializedCommand);
         }
     }
 }
