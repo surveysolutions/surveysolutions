@@ -6,25 +6,22 @@
 //   The questionnaire view model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace WB.UI.Designer.Models
 {
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// The questionnaire view model.
+    ///     The questionnaire view model.
     /// </summary>
     [DisplayName("Create Questionnaire")]
     public class QuestionnaireViewModel
     {
         #region Public Properties
-
         /// <summary>
-        /// Gets or sets the title.
+        ///     Gets or sets the title.
         /// </summary>
         [Required]
-        [Display(Name = "Title", Order = 1)]
         public string Title { get; set; }
 
         #endregion

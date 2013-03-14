@@ -13,6 +13,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WB.UI.Designer.BootstrapSupport
 {
+    using WB.UI.Designer.Models;
+
+    public class PropertyListInfo
+    {
+        public PropertyInfo[] VisibleProperties { get; set; }
+        public PropertyInfo[] ActionProperties { get; set; }
+    }
+
     public static class DefaultScaffoldingExtensions
     {
         public static string GetControllerName(this Type controllerType)
@@ -25,14 +33,27 @@ namespace WB.UI.Designer.BootstrapSupport
             return ((MethodCallExpression)actionExpression.Body).Method.Name;
         }
 
-        public static PropertyInfo[] VisibleProperties(this IEnumerable Model)
+        public static PropertyListInfo VisibleProperties(this IEnumerable Model)
         {
             var elementType = Model.GetType().GetElementType();
             if (elementType == null)
             {
                 elementType = Model.GetType().GetGenericArguments()[0];
             }
-            return elementType.GetProperties().Where(info => info.Name != elementType.IdentifierPropertyName()).OrderedByDisplayAttr().ToArray();
+            var actionProperties = typeof(IActionItem).GetProperties();
+            return new PropertyListInfo()
+                       {
+                           VisibleProperties =
+                               elementType.GetProperties()
+                                          .Where(
+                                              info =>
+                                              (info.Name != elementType.IdentifierPropertyName()) &&
+                                              !actionProperties.Select(x=>x.Name).Contains(info.Name))
+                                          .OrderedByDisplayAttr()
+                                          .ToArray(),
+                           ActionProperties = actionProperties
+                       };
+
         }
 
         public static PropertyInfo[] VisibleProperties(this Object model)

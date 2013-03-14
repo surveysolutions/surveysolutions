@@ -1,7 +1,13 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
-@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
 @model IPagedList
+@{
+    var PropertyInfo = Model.VisibleProperties();
+
+    var PropertyList = PropertyInfo.VisibleProperties;
+    var PropertyActions = PropertyInfo.ActionProperties;
+}
 <blockquote class="pull-right">
     <p>
         <b>@ViewBag.Title</b><small>Listing</small>
@@ -25,10 +31,18 @@ else
         <caption></caption>
         <thead>
             <tr>
-                @foreach (var property in Model.VisibleProperties())
+                @foreach (var property in PropertyList)
                 {
                     <th>
-                        @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = CustomExtensions.InvertSpecial(ViewBag.SortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
+                        @Html.ActionLink(property.GetLabel().ToSeparatedWords(),
+                        WB.UI.Designer.GlobalHelper.CurrentAction,
+                        new
+                        {
+                            p = ViewBag.PageIndex,
+                            sb = property.Name,
+                            so = WB.UI.Designer.Extensions.CustomExtensions.InvertSpecial(ViewBag.SortOrder, ViewBag.SortBy == property.Name),
+                            f = ViewBag.Filter
+                        })
                         @if (ViewBag.SortBy == property.Name)
                         {
                             if (ViewBag.SortOrder == null || !(bool)ViewBag.SortOrder)
@@ -51,33 +65,59 @@ else
         {
             ViewData[index.ToString()] = model;
             <tr>
-                @foreach (var property in model.VisibleProperties())
+                @foreach (var property in PropertyList)
                 {
                     <td>
                         @Html.Display(index + "." + property.Name)
                     </td>
                 }
+                
                 <td>
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            @{
-                                @Html.TryPartial("_actions", model)
-                var routevalues = model.GetIdValue();
-                                <li>@Html.ActionLink("Edit", "Edit", routevalues)</li>
-                                <li>@Html.ActionLink("Details", "Details", routevalues)</li>
-                                <li class="divider"></li>
-                                <li>@Html.ActionLink("Delete", "Delete", routevalues)</li>
-
+                    @{
+                        var actionModel = model as IActionItem;
+                        if (actionModel != null)
+                        {
+                            if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint)
+                            {
+                                <div class="btn-group">
+                                    <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @{
+                                            @Html.TryPartial("_actions", model)
+                                            var routevalues = model.GetIdValue();
+                                            if (actionModel.CanEdit)
+                                            {
+                                                <li>@Html.ActionLink("Edit", "Edit", routevalues)</li>
+                                            }
+                                            if (actionModel.CanPreview)
+                                            {
+                                                <li>@Html.ActionLink("Details", "Details", routevalues)</li>
+                                            }
+                                            if (actionModel.CanCopy)
+                                            {
+                                                <li>@Html.ActionLink("Clone", "Clone", routevalues)</li>
+                                            }
+                                            if (actionModel.CanExport)
+                                            {
+                                                <li class="divider"></li>
+                                                <li>@Html.ActionLink("Export", "Export", routevalues)</li>
+                                            }
+                                            if (actionModel.CanDelete)
+                                            {
+                                                <li class="divider"></li>
+                                                <li>@Html.ActionLink("Delete", "Delete", routevalues)</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
                             }
-                        </ul>
-                    </div>
-
+                        }
+                    }
                 </td>
             </tr>
-                index++;
+                    index++;
         }
 
     </table>
