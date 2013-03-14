@@ -4,6 +4,6 @@
 
     public interface ICommandDeserializer
     {
-        ICommand Deserialize(string serializedCommand);
+        ICommand Deserialize(string type, string serializedCommand);
     }
 }

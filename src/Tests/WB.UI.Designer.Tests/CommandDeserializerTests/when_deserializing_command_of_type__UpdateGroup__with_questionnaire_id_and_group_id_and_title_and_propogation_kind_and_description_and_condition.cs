@@ -11,7 +11,7 @@
 
     using WB.UI.Designer.Code.Helpers;
 
-    internal class when_deserializing_command_with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition : CommandDeserializerTestsContext
+    internal class when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition : CommandDeserializerTestsContext
     {
         Establish context = () =>
         {
@@ -35,7 +35,7 @@
         };
 
         Because of = () =>
-            result = deserializer.Deserialize(command);
+            result = deserializer.Deserialize("UpdateGroup", command);
 
         It should_return_NewUpdateGroupCommand = () =>
             result.ShouldBeOfType<NewUpdateGroupCommand>();
