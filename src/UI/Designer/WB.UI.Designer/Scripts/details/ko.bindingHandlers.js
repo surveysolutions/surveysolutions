@@ -7,12 +7,11 @@ function ($, ko) {
         update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             var options = ko.utils.unwrapObservable(valueAccessor());
             if (options) {
-                var control = '#' + options.command + 'Content';
-                $(element).attr('data-content', $(control).html());
-                $(element).attr('data-original-title', options.title || 'Title');
+                //$(element).attr('data-content', options.content || '');
+                $(element).attr('data-title', options.title || 'Title');
                 $(element).attr('data-placement', options.placement || 'right');
                 $(element).attr('data-trigger', options.trigger || 'click');
-                $(element).popover({ html: true });
+                $(element).popover({ html: false });
             }
         }
     };
