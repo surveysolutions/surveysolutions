@@ -414,15 +414,37 @@ h1 {
         background-color: #2a8fc8;
     }
 
-        .q-item-wrap.selected i[class^="icon-"] {
-            background-image: url("images/glyphicons-halflings-white.png");
-        }
+    .q-item-wrap.q-question.selected {
+        background-color: #61b1de;
+    }
 
-        .q-item-wrap.selected a.q-title {
-            color: #ffffff;
-            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
-        }
+    .q-item-wrap.new {
+        background-color: #5BB75B;
+    }
 
+    .q-item-wrap.q-question.new {
+        background-color:#b3deb3;
+    }
+     .q-item-wrap.new.selected
+    {
+        background-color:#449b44
+    }
+
+    .q-item-wrap.selected div > i[class^="icon-"],
+    .q-item-wrap.new div > i[class^="icon-"] {
+        background-image: url("images/glyphicons-halflings-white.png");
+    }
+
+    .q-item-wrap.selected a.q-title,
+    .q-item-wrap.new a.q-title,
+    .q-item-wrap.q-question.new.selected a.q-title  {
+        color: #ffffff;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+    }
+    .q-item-wrap.q-question.new a.q-title {
+        color: #423E3E;
+         text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
     .q-item-wrap.q-group a.q-title {
         /*color: #2a4a1d;*/
         font-weight: bold;
