@@ -1,4 +1,6 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿using System.Net;
+
+namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Web.Mvc;
@@ -24,13 +26,43 @@
         }
 
         [HttpPost]
-        public ActionResult Execute(string command)
+        public JsonResult Execute(string type, string command)
         {
-            ICommand concreteCommand = this.DeserializeCommand(command);
+            ICommand concreteCommand;
+            try
+            {
+                concreteCommand = this.DeserializeCommand(command);
+            }
+            catch (Exception e)
+            {
 
-            this.commandService.Execute(concreteCommand);
+                return Json(new { error = e.Message });
+            }
 
-            return new EmptyResult();
+            try
+            {
+                this.commandService.Execute(concreteCommand);
+            }
+            catch (Exception e)
+            {
+                this.SetErrorStatusCode();
+                if (e.InnerException is ArgumentException)
+                {
+                    var error = (ArgumentException) e.InnerException;
+                    return Json(new { error = error.Message });
+                }
+                else
+                {
+                    return Json(new { error = e.Message });
+                }
+            }
+
+            return Json(new { });
+        }
+
+        private void SetErrorStatusCode()
+        {
+            this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
         }
 
         private ICommand DeserializeCommand(string serializedCommand)

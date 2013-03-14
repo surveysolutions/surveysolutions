@@ -1,6 +1,6 @@
 ﻿define('config',
-    ['toastr', 'ko'],
-    function(toastr, ko) {
+    ['toastr', 'ko','amplify'],
+    function (toastr, ko, amplify) {
 
         var// properties
             //-----------------
@@ -34,7 +34,7 @@
                 "AutoPropagated"
             ],
             commands = {
-                updateGroup: "updateGroup"
+                updateGroup: "UpdateGroup"
             },
             hashes = {
                 details: '#/details',
@@ -72,6 +72,13 @@
 
             init = function () {
                 toastr.options.timeOut = toastrTimeout;
+                
+                ko.validation.configure({
+                    insertMessages: true,
+                    decorateElement: true,
+                    errorElementClass: 'error',
+                    errorMessageClass: "help-inline"
+                });
             };
 
         init();
