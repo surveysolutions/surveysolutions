@@ -7,6 +7,7 @@ namespace WB.UI.Designer.Code.Helpers
     using Ncqrs.Commanding;
 
     using Newtonsoft.Json;
+    using Newtonsoft.Json.Serialization;
 
     internal class CommandDeserializer : ICommandDeserializer
     {

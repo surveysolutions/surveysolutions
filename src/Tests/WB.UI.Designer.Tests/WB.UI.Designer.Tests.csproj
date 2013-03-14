@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
-    <Compile Include="CommandDeserializerTests\when_deserializing_command_with_questionnaire_id_and_group_id_and_title.cs" />
+    <Compile Include="CommandDeserializerTests\when_deserializing_command_with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

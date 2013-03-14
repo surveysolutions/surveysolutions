@@ -125,7 +125,7 @@
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
                 title: group.title(),
-                type : group.gtype(),
+                propagationKind: group.gtype(),
                 description: group.description(),
                 condition: group.condition()
             };
