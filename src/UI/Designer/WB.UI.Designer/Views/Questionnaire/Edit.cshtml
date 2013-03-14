@@ -49,6 +49,11 @@
                 <span>Errors log</span>
             </div>
             <div class="body">
+                 <ul data-bind="foreach: errors" class="error-list">
+                     <li class="error">
+                         <span data-bind="text: error"></span>
+                     </li>
+                </ul>
             </div>
         </div>
     </div>
