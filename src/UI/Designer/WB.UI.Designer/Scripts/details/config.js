@@ -1,6 +1,6 @@
 ﻿define('config',
-    ['toastr', 'ko'],
-    function(toastr, ko) {
+    ['toastr', 'ko','amplify'],
+    function (toastr, ko, amplify) {
 
         var// properties
             //-----------------
@@ -79,7 +79,6 @@
                     errorElementClass: 'error',
                     errorMessageClass: "help-inline"
                 });
-                
             };
 
         init();
