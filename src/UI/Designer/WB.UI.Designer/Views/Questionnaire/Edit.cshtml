@@ -93,28 +93,29 @@
                     </div>
                 </div>
             </div>
+            <!-- ko if : level() != 0 -->
             <div class="row-fluid">
-                <label class="required">Type</label>
+                <label class="required">Kind of propagation</label>
                 <select class="span12" data-bind="options: typeOptions, value: gtype"></select>
             </div>
+            <!-- /ko -->            
             <div class="row-fluid">
                 <label>Description</label>
                 <div class="note">
-                    <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                    <textarea rows="2" data-bind="autoGrowArea: description" class="span12"></textarea>
                 </div>
             </div>
             <div class="row-fluid">
                 <label>Condition expression</label>
                 <div class="note">
-                    <textarea rows="2" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                    <textarea rows="2" data-bind="autoGrowArea: condition" class="span12"></textarea>
                 </div>
             </div>
         </div>
         <div class="bottom">
             <div class="inner">
                 <button class="btn btn-danger" data-bind="click: deleteGroup"><i class="icon-white icon-remove"></i>Remove</button>
-                <button class="btn btn-success" data-bind="click: saveGroup"><i class="icon-white icon-ok"></i>Save</button>
-                <button class="btn btn-danger" data-bind="click: dirtyFlag().reset,visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left"></i>Undo</button>
+                <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty()"><i class="icon-white icon-ok"></i>Save</button>
             </div>
         </div>
     </div>

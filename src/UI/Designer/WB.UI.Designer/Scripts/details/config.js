@@ -34,7 +34,7 @@
                 "AutoPropagated"
             ],
             commands = {
-                updateGroup: "updateGroup"
+                updateGroup: "UpdateGroup"
             },
             hashes = {
                 details: '#/details',
