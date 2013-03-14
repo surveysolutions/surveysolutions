@@ -44,6 +44,31 @@ namespace CAPI.Android
             {
                 editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
             }
+
+
+            var buttonCollect = this.FindViewById<Button>(Resource.Id.btnCollect);
+            if (buttonCollect != null)
+            {
+                buttonCollect.Click += this.buttonCollect_Click;
+            }
+            var buttonCollectMajor = this.FindViewById<Button>(Resource.Id.btnCollectMajor);
+            if (buttonCollectMajor != null)
+            {
+                buttonCollectMajor.Click += this.buttonCollectMajor_Click;
+            }
+
+        }
+
+        private void buttonCollectMajor_Click(object sender, EventArgs e)
+        {
+            GC.Collect(GC.MaxGeneration);
+            GC.Collect(GC.MaxGeneration);
+        }
+
+        private void buttonCollect_Click(object sender, EventArgs e)
+        {
+            GC.Collect(0);
+            GC.Collect(0);
         }
 
         private void buttonChange_Click(object sender, EventArgs e)
