@@ -3,6 +3,20 @@
 function ($, ko) {
     var unwrap = ko.utils.unwrapObservable;
 
+    ko.bindingHandlers.popover = {
+        update: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+            var options = ko.utils.unwrapObservable(valueAccessor());
+            if (options) {
+                var control = '#' + options.command + 'Content';
+                $(element).attr('data-content', $(control).html());
+                $(element).attr('data-original-title', options.title || 'Title');
+                $(element).attr('data-placement', options.placement || 'right');
+                $(element).attr('data-trigger', options.trigger || 'click');
+                $(element).popover({ html: true });
+            }
+        }
+    };
+
     ko.bindingHandlers.autoGrowArea = {
         init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
             ko.applyBindingsToNode(element, { value: valueAccessor(), valueUpdate: 'afterkeydown' });

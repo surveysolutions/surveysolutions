@@ -6,7 +6,9 @@
             Group = function() {
                 var self = this;
                 self.id = ko.observable(Math.uuid());
-                self.title = ko.observable('Title').extend({ required: true });
+                self.isNew = ko.observable(true);
+
+                self.title = ko.observable('New Group').extend({ required: true });
                 self.parent = ko.observable();
 
                 self.type = ko.observable("GroupView"); // Object type
@@ -21,6 +23,11 @@
                 self.childrenID = ko.observableArray();
                 
                 // UI stuff
+                self.tip = ko.computed(function () {
+                    if (isNew()) return config.tips.newGroup;
+                    return null;
+                });
+                
                 self.getHref = function () {
                     return config.hashes.detailsGroup + "/" + self.id();
                 };
