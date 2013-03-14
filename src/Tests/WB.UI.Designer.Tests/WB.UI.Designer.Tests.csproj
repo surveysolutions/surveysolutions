@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="CommandDeserializerTests\CommandDeserializerTestsContext.cs" />
     <Compile Include="CommandDeserializerTests\when_deserializing_command_of_type__UpdateGroup__with_questionnaire_id_and_group_id_and_title_and_propogation_kind_and_description_and_condition.cs" />
+    <Compile Include="CommandDeserializerTests\when_deserializing_command_of_unknown_type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

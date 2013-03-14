@@ -15,6 +15,8 @@
     {
         Establish context = () =>
         {
+            type = "UpdateGroup";
+
             title = "MAIN";
             questionnaireId = "11111111-1111-1111-1111-111111111111";
             groupId = "22222222-2222-2222-2222-222222222222";
@@ -35,7 +37,7 @@
         };
 
         Because of = () =>
-            result = deserializer.Deserialize("UpdateGroup", command);
+            result = deserializer.Deserialize(type, command);
 
         It should_return_NewUpdateGroupCommand = () =>
             result.ShouldBeOfType<NewUpdateGroupCommand>();
@@ -67,5 +69,6 @@
         private static string propagationKind;
         private static string description;
         private static string condition;
+        private static string type;
     }
 }
