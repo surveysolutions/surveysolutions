@@ -7,6 +7,7 @@
             selectedQuestion = ko.observable(),
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
+            errors = ko.observableArray(),
             isInitialized = false;
         activate = function(routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
@@ -63,11 +64,11 @@
             $('#stacks').removeClass("show-question").removeClass("show-group");
             $('#stacks').removeClass('detail-visible');
         },
-        closeMenu = function() {
-            $('#stacks').addClass('menu-hidden');
+        showOutput = function () {
+            $('#stacks').addClass('output-visible');
         },
-        showMenu = function() {
-            $('#stacks').removeClass('menu-hidden');
+        hideOutput = function () {
+            $('#stacks').removeClass('output-visible');
         },
         addQuestion = function(parent) {
             console.log(parent);
@@ -95,12 +96,14 @@
         saveGroup = function(group) {
             console.log(group);
             datacontext.sendCommand(config.commands.updateGroup, group, {
-                success: function (d) {
+                success: function () {
                     group.dirtyFlag().reset();
-                    console.log("ok");
                 },
-                error: function(d) {
-                    console.log("fail");
+                error: function (d) {
+                    console.log(d);
+                    errors.removeAll();
+                    errors.push(d);
+                    showOutput();
                 }
             });
         },
@@ -146,6 +149,9 @@
             saveGroup: saveGroup,
             deleteGroup: deleteGroup,
             saveQuestion: saveQuestion,
-            deleteQuestion: deleteQuestion
+            deleteQuestion: deleteQuestion,
+            showOutput: showOutput,
+            hideOutput: hideOutput,
+            errors : errors
         };
     });
