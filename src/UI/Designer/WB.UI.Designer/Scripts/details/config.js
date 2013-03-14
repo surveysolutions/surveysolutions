@@ -51,7 +51,15 @@
             stateKeys = {
                 lastView: 'state.active-hash'
             },
-            logger = toastr, // use toastr for the logger
+            tips = {
+                newGroup: {
+                    title: "Save this group",
+                    content:  "" ,
+                    placement: "top",
+                    trigger: "hover"
+                }
+            },
+        logger = toastr, // use toastr for the logger
 
             storeExpirationMs = (1000 * 60 * 60 * 24), // 1 day
             throttle = 400,
@@ -97,6 +105,7 @@
             questionScopes: questionScopes,
             answerOrders: answerOrders,
             groupTypes: groupTypes,
-            commands: commands
+            commands: commands,
+            tips: tips
         };
     });

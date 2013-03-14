@@ -6,7 +6,9 @@
           Question = function () {
               var self = this;
               self.id = ko.observable(Math.uuid());
-              self.title = ko.observable('Title');
+              self.isNew = ko.observable(true);
+              
+              self.title = ko.observable('New Question');
               self.parent = ko.observable();
               self.alias = ko.observable();
               

@@ -62,6 +62,8 @@
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
                     }));
+                    
+                    item.isNew(false);
                     item.dirtyFlag().reset();
                     return item;
                 },
@@ -106,6 +108,8 @@
                     
                     item.validationExpression(dto.ValidationExpression);
                     item.validationMessage(dto.ValidationMessage);
+
+                    item.isNew(false);
                     item.dirtyFlag().reset();
                     return item;
                 },
