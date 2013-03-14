@@ -36,7 +36,7 @@
 <div id="stacks">
     <div id="footer">
         <div class="inner">
-            <button class="btn btn-success"><i class="icon-white icon-plus"></i>Chapter</button>
+            <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Chapter</button>
             <div class="pull-right">
                 <button class="btn btn-info" data-bind="click: showOutput">Show errors</button>
             </div>
@@ -186,7 +186,7 @@
 </div>
 
 <script type="text/html" id="GroupView">
-    <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}">
+    <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
         <div class="q-item">
             <div class="group-actions  pull-right">
                 <!-- ko ifnot : isNew -->

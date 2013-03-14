@@ -53,10 +53,9 @@
             },
             tips = {
                 newGroup: {
-                    command: "Hover",
                     title: "Save this group",
-                    content: { name: 'Tim', email: 'tim@msn.com' },
-                    placement: "bottom",
+                    content:  "" ,
+                    placement: "top",
                     trigger: "hover"
                 }
             },

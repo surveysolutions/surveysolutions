@@ -78,10 +78,12 @@
             parent.fillChildren();
             router.navigateTo(question.getHref());
         },
+        addChapter = function() {
+            
+        },
         addGroup = function(parent) {
             console.log(parent);
             var group = new model.Group();
-            debugger;
             datacontext.groups.add(group);
             parent.childrenID.push({ type: group.type(), id: group.id() });
             parent.fillChildren();
@@ -141,6 +143,7 @@
             closeDetails: closeDetails,
             addQuestion: addQuestion,
             addGroup: addGroup,
+            addChapter: addChapter,
             clearFilter: clearFilter,
             filter: filter,
             isFilterMode: isFilterMode,

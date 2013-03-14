@@ -24,7 +24,7 @@
                 
                 // UI stuff
                 self.tip = ko.computed(function () {
-                    if (isNew()) return config.tips.newGroup;
+                    if (self.isNew()) return config.tips.newGroup;
                     return null;
                 });
                 
