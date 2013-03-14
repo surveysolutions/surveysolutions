@@ -6,17 +6,18 @@
                 url: '/Command/Execute',
                 dataType: 'json',
                 type: 'POST',
-                contentType: 'application/json; charset=utf-8'
+                contentType: 'application/json; charset=utf-8',
+                decoder: function (data, status, xhr, success, error) {
+                    if (status === "success") {
+                        success(data, status);
+                    } else if (status === "fail" || status === "error") {
+                        error(JSON.parse(xhr.responseText), status);
+                    } else {
+                        error(status, xhr);
+                    }
+                }
             });
-        },
-             getGroup = function (callbacks, id) {
-                 return amplify.request({
-                     resourceId: 'group',
-                     data: { id: id },
-                     success: callbacks.success,
-                     error: callbacks.error
-                 });
-             };
+        };
 
         sendCommand = function (callbacks, commandJSON) {
             return amplify.request({
