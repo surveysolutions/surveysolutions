@@ -91,6 +91,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         public override void OnDetach()
         {
             ScreenChanged = null;
+            adapter.Detach();
             base.OnDetach();
         }
         public override void OnSaveInstanceState(Bundle p0)
@@ -102,7 +103,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             base.OnViewStateRestored(p0);
             if (p0 != null)
+            {
                 selectedItemIndex = p0.GetInt("SelectedItem");
+                adapter.Attach();
+            }
         }
 
     }

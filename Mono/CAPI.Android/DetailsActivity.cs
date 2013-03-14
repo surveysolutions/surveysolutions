@@ -88,9 +88,9 @@ namespace CAPI.Android
             {
                 NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
             }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId);
-            
-            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
+            VpContent.Adapter = Adapter;
+            VpContent.PageSelected += VpContent_PageSelected;
 
         }
 
@@ -123,7 +123,7 @@ namespace CAPI.Android
             }
 
             Adapter.UpdateScreenData(e.ScreenId);
-
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
             if (e.ScreenId.HasValue)
             {
                 var screen = ViewModel.Screens[e.ScreenId.Value];
@@ -152,6 +152,7 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            VpContent.PageSelected -= VpContent_PageSelected;
             GC.Collect();
         }
         public override void OnLowMemory()

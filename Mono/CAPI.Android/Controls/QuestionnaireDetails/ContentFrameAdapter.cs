@@ -19,24 +19,21 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     public class ContentFrameAdapter : FragmentStatePagerAdapter
     {
      //   private readonly Guid questionnaireId;
-        private readonly ViewPager target;
         private readonly CompleteQuestionnaireView questionnaire;
         private ItemPublicKey? screenId;
         private bool isRoot;
         private IList<ItemPublicKey> screensHolder;
         private AbstractScreenChangingFragment[] mFragments;
-        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ViewPager target, ItemPublicKey? screenId)
+        public ContentFrameAdapter(FragmentManager fm, CompleteQuestionnaireView questionnaire, ItemPublicKey? screenId)
             : base(fm)
         {
             this.questionnaire = questionnaire;
-            this.target = target;
             this.screensHolder = (screenId.HasValue
                                      ? questionnaire.Screens[screenId.Value].Siblings
                                      : questionnaire.Chapters.Select(c=>c.ScreenId)).ToList();
             this.screenId = screenId;
             this.isRoot = questionnaire.Chapters.Any(s => s.ScreenId == screenId) || !screenId.HasValue;
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
-            this.target.Adapter = this;
         }
 
 
@@ -116,7 +113,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.NotifyDataSetChanged();
-            target.CurrentItem = this.GetScreenIndex(newScreenId);
+          
         }
     }
 }
