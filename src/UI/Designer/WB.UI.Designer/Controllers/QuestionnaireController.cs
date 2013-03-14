@@ -160,7 +160,9 @@ namespace WB.UI.Designer.Controllers
                                 Id = x.Id,
                                 CreationDate = x.CreationDate,
                                 LastEntryDate = x.LastEntryDate,
-                                Title = x.Title
+                                Title = x.Title,
+                                CanDelete = isOnlyOwnerItems,
+                                CanEdit = isOnlyOwnerItems
                             })
                          .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
             }

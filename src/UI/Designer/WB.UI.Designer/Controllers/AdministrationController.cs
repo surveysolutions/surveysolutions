@@ -9,6 +9,7 @@
 
 namespace WB.UI.Designer.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Web.Mvc;
@@ -245,6 +246,8 @@ namespace WB.UI.Designer.Controllers
                           .AsQueryable()
                           .OrderUsingSortExpression(sb ?? string.Empty);
 
+            Func<MembershipUser, bool> editAction =
+                (user) => !Roles.GetRolesForUser(user.UserName).Contains(UserHelper.ADMINROLENAME);
 
             var retVal =
                 users.Skip((page - 1) * GlobalHelper.GridPageItemsCount)
@@ -259,7 +262,10 @@ namespace WB.UI.Designer.Controllers
                                  CreationDate = x.CreationDate.ToUIString(),
                                  LastLoginDate = x.LastLoginDate.ToUIString(),
                                  IsApproved = x.IsApproved,
-                                 IsLockedOut = x.IsLockedOut
+                                 IsLockedOut = x.IsLockedOut,
+                                 CanEdit = editAction(x),
+                                 CanDelete = editAction(x),
+                                 CanPreview = editAction(x)
                              });
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
         }
