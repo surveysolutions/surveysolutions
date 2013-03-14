@@ -72,6 +72,14 @@
 
             init = function () {
                 toastr.options.timeOut = toastrTimeout;
+                
+                ko.validation.configure({
+                    insertMessages: true,
+                    decorateElement: true,
+                    errorElementClass: 'error',
+                    errorMessageClass: "help-inline"
+                });
+                
             };
 
         init();
