@@ -22,7 +22,7 @@
         sendCommand = function (callbacks, commandJSON) {
             return amplify.request({
                 resourceId: 'updateGroup',
-                data: ko.toJSON({ command: commandJSON }),
+                data: ko.toJSON(commandJSON),
                 success: callbacks.success,
                 error: callbacks.error
             });

@@ -167,9 +167,9 @@ body.loading .loading-backdrop {
     z-index: 40;
     padding-bottom: 43px;
     padding-top: 0;
-    height: 300px;
+    height: 200px;
     top: auto;
-    bottom: -300px;
+    bottom: -200px;
 }
 
     #output .inner {
@@ -184,22 +184,24 @@ body.loading .loading-backdrop {
         top: 41px;
         bottom: 0;
     }
-    #output .body .error-list {
-        margin: 0;
-        list-style: none;
-    }
-        #output .body .error-list .error {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            margin: 0 3px;
-            height: 40px;
-            line-height: 40px;
-            position: relative;
-            -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
-            -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
-            box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+
+        #output .body .error-list {
+            margin: 0;
+            list-style: none;
         }
+
+            #output .body .error-list .error {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin: 0 3px;
+                height: 40px;
+                line-height: 40px;
+                position: relative;
+                -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+                -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+                box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+            }
 
 .details.stack .body .input-append {
     display: inline;
@@ -350,7 +352,7 @@ h1 {
 #stacks.output-visible #questionnaire,
 #stacks.output-visible #details-question,
 #stacks.output-visible #details-group {
-    bottom: 300px;
+    bottom: 200px;
 }
 
 #stacks.detail-visible #questionnaire {
@@ -411,6 +413,10 @@ h1 {
     .q-item-wrap.selected {
         background-color: #2a8fc8;
     }
+
+        .q-item-wrap.selected i[class^="icon-"] {
+            background-image: url("images/glyphicons-halflings-white.png");
+        }
 
         .q-item-wrap.selected a.q-title {
             color: #ffffff;
