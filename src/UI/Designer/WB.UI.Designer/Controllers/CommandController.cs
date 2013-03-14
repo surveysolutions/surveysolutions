@@ -31,11 +31,10 @@ namespace WB.UI.Designer.Controllers
             ICommand concreteCommand;
             try
             {
-                concreteCommand = this.DeserializeCommand(command);
+                concreteCommand = this.commandDeserializer.Deserialize(type, command);
             }
             catch (Exception e)
             {
-
                 return Json(new { error = e.Message });
             }
 
@@ -63,11 +62,6 @@ namespace WB.UI.Designer.Controllers
         private void SetErrorStatusCode()
         {
             this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
-        }
-
-        private ICommand DeserializeCommand(string serializedCommand)
-        {
-            return this.commandDeserializer.Deserialize(serializedCommand);
         }
     }
 }
