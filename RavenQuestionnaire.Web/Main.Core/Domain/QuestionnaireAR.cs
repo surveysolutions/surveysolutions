@@ -460,35 +460,22 @@ namespace Main.Core.Domain
                     });
         }
 
-        public void NewUpdateGroup(Guid groupId, string title)
+        public void NewUpdateGroup(Guid groupId,
+            string title, Propagate propagationKind, string description, string condition)
         {
-            throw new ArgumentException(string.Format("incorrect title: {0}", title));
+            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupId);
+
+            this.ApplyEvent(new GroupUpdated
+            {
+                QuestionnaireId = this.innerDocument.PublicKey.ToString(),
+                GroupPublicKey = groupId,
+                GroupText = title,
+                Propagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+            });
         }
 
-        /// <summary>
-        /// The update group.
-        /// </summary>
-        /// <param name="groupText">
-        /// The group text.
-        /// </param>
-        /// <param name="propagateble">
-        /// The propagateble.
-        /// </param>
-        /// <param name="groupPublicKey">
-        /// The group public key.
-        /// </param>
-        /// <param name="executor">
-        /// The executor.
-        /// </param>
-        /// <param name="conditionExpression">
-        /// The condition expression.
-        /// </param>
-        /// <param name="description">
-        /// The description.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Some exception
-        /// </exception>
         [Obsolete]
         public void UpdateGroup(
             string groupText,
