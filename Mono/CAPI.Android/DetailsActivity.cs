@@ -157,11 +157,5 @@ namespace CAPI.Android
             VpContent.PageSelected -= VpContent_PageSelected;
             GC.Collect();
         }
-        public override void OnLowMemory()
-        {
-            base.OnLowMemory();
-            Console.WriteLine("Low memory Details activities");
-            GC.Collect();
-        }
     }
 }

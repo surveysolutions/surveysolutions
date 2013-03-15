@@ -111,10 +111,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 }
 
             }
-          /*  foreach (RosterQuestionView rosterQuestionView in rosterQuestionViews)
+            foreach (RosterQuestionView rosterQuestionView in rosterQuestionViews)
             {
                 rosterQuestionView.Dispose();
-            }*/
+            }
             if (dialog != null)
             {
                 dialog.Dispose();
