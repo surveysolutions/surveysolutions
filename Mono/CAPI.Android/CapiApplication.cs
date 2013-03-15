@@ -210,6 +210,12 @@ namespace CAPI.Android
         {
         }
 
-   
+
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+            GC.Collect();
+        }
     }
 }

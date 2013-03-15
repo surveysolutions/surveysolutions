@@ -103,6 +103,7 @@ namespace CAPI.Android
                 return;
             outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
         }
+
         public override void OnAttachFragment(global::Android.Support.V4.App.Fragment p0)
         {
             var screen = p0 as IScreenChanging;
@@ -112,6 +113,7 @@ namespace CAPI.Android
             }
             base.OnAttachFragment(p0);
         }
+
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
 
@@ -155,6 +157,13 @@ namespace CAPI.Android
         {
             base.OnDestroy();
             VpContent.PageSelected -= VpContent_PageSelected;
+            GC.Collect();
+        }
+
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
             GC.Collect();
         }
     }
