@@ -5,7 +5,7 @@
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
       "CommitId": "f72be402-3d01-4e88-92dc-4118b233c543",
-      "EventIdentifier": "ce2e31d9-5c1c-40fa-86c7-1bea3bbf8a0e",
+      "EventIdentifier": "31f840bb-f8d3-4e2e-a101-b417988f71db",
       "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
       "EventTimeStamp": "2013-03-14T23:52:30.8734879Z",
