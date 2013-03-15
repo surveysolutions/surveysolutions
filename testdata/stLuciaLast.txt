@@ -1,14 +1,14 @@
 {
   "$type": "Questionnaire.Core.Web.Export.ZipFileData, Questionnaire.Core.Web",
-  "ClientGuid": "f76029e2-468d-47fa-a740-490bf24a6e59",
+  "ClientGuid": "a7bdaf2c-45e7-435d-8254-453ac7374797",
   "Events": [
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
-      "CommitId": "d13c372b-a994-467b-8740-d29b2d34ad70",
-      "EventIdentifier": "3343ac59-d958-4305-8d0f-8bb42c95096d",
+      "CommitId": "f72be402-3d01-4e88-92dc-4118b233c543",
+      "EventIdentifier": "ce2e31d9-5c1c-40fa-86c7-1bea3bbf8a0e",
       "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
-      "EventTimeStamp": "2013-03-14T19:20:51.1541973Z",
+      "EventTimeStamp": "2013-03-14T23:52:30.8734879Z",
       "EventVersion": {
         "$type": "System.Version, mscorlib",
         "Major": 0,
@@ -976,7 +976,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "9. TRAINING RECIEVED\r\nHave you (has ...) recieved training for any occupation?",
                         "QuestionType": 0,
-                        "StataExportCaption": "training_received ",
+                        "StataExportCaption": "training_received",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1284,7 +1284,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "[c9bd0934-b687-4446-a899-ef8baa3f8409]==6 and [e66efaf5-cab2-4693-ab4c-7c571241a2fc]>26 ",
+                        "ConditionExpression": "[c9bd0934-b687-4446-a899-ef8baa3f8409]==6 and [e66efaf5-cab2-4693-ab4c-7c571241a2fc]>26",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1338,7 +1338,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "14. ECONOMIC ACTIVITY Did you work for pay, profit or family gain, during the week ending.../.../...?\r\n NB. Domestic work at home is excluded",
                         "QuestionType": 0,
-                        "StataExportCaption": "economic_activity ",
+                        "StataExportCaption": "economic_activity",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -1523,7 +1523,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": "\r\n [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
+                        "ConditionExpression": "[59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==2 and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([6f8e931f-26aa-4ce7-a0c4-f8372db1428f]==2 or [d8c11924-9b3f-4335-9c4c-bff11989de2a]==5)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -1807,7 +1807,7 @@
                             "PublicKey": "517d32cc-b98c-4928-88ba-d236b693173a"
                           }
                         ],
-                        "Capital": false,
+                        "Capital": true,
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
@@ -1996,7 +1996,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "21. MULTIPLE JOB HOLDING Did you (...) have more than one job, enterprise or activity during the week ending .../.../...? ",
                         "QuestionType": 0,
-                        "StataExportCaption": "multiple_job_holding ",
+                        "StataExportCaption": "multiple_job_holding",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -2401,7 +2401,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "25.1. If other, please specify",
                         "QuestionType": 7,
-                        "StataExportCaption": "reason_for_less_than_35 ",
+                        "StataExportCaption": "reason_for_less_than_35",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -2559,7 +2559,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "27. STATUS IN EMPLOYMENT\r\nWhat category of worker are you (is...) in your (his/her) job?",
                         "QuestionType": 0,
-                        "StataExportCaption": "status_of_employment ",
+                        "StataExportCaption": "status_of_employment",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -2582,7 +2582,7 @@
                         "QuestionScope": 0,
                         "QuestionText": "27.1. If other, please specify",
                         "QuestionType": 7,
-                        "StataExportCaption": "other_status_of_employment ",
+                        "StataExportCaption": "other_status_of_employment",
                         "ValidationExpression": null,
                         "ValidationMessage": null
                       },
@@ -2636,7 +2636,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 5,6,8,9)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2644,7 +2644,7 @@
                         "Mandatory": false,
                         "PublicKey": "e8320a92-62d5-4ec2-9fbc-280eb7e30992",
                         "QuestionScope": 0,
-                        "QuestionText": "27A. ACCOUNTS\r\nWhat kind of accounts do you/does.... keep for this activity/business?",
+                        "QuestionText": "27A. ACCOUNTS What kind of accounts do you/does.... keep for this activity/business?",
                         "QuestionType": 0,
                         "StataExportCaption": "accounts",
                         "ValidationExpression": null,
@@ -2680,7 +2680,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 1,2,3,4,7)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2724,7 +2724,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 1,2,3,4,7)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2778,7 +2778,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 1,2,3,4,7)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2842,7 +2842,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 1,2,3,4,7)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 1,2,3,4,7)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2896,7 +2896,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 5,6,8,9)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -2970,7 +2970,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [economic_activity]==1) and in([status_of_employment], 5,6,8,9)",
+                        "ConditionExpression": " [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and ([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1) and in([b43d63b3-b1e2-42e2-8038-c37187e5c205], 5,6,8,9)",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
@@ -3175,7 +3175,7 @@
                         "ValidationMessage": null
                       }
                     ],
-                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and\r\n([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1)",
+                    "ConditionExpression": "[0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15 and([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==3 or [59a4ca35-c1cb-4e63-9949-8746c0e5d3d4]==1)",
                     "Enabled": true,
                     "Description": null,
                     "Propagated": 2,
@@ -4757,7 +4757,7 @@
                         "ValidationMessage": null
                       }
                     ],
-                    "ConditionExpression": "([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==2 or\r\n([ef16490b-e046-445e-aa8d-ec961581e306]==1 or \r\n[ef16490b-e046-445e-aa8d-ec961581e306]==2 or \r\n[ef16490b-e046-445e-aa8d-ec961581e306]==3 or \r\n[ef16490b-e046-445e-aa8d-ec961581e306]==4)) \r\nand [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
+                    "ConditionExpression": "([532c55a1-0fcf-4344-a2c8-d5276c8ebe9f]==2 or ([ef16490b-e046-445e-aa8d-ec961581e306]==1 or [ef16490b-e046-445e-aa8d-ec961581e306]==2 or [ef16490b-e046-445e-aa8d-ec961581e306]==3 or [ef16490b-e046-445e-aa8d-ec961581e306]==4)) and [0b4b8b4f-a0ef-45da-ba8c-4fa95806d8e2]>=15",
                     "Enabled": true,
                     "Description": null,
                     "Propagated": 2,
@@ -5376,7 +5376,7 @@
               }
             ],
             "CloseDate": null,
-            "ConditionExpression": "",
+            "ConditionExpression": null,
             "CreationDate": "2012-09-18T09:53:55.27Z",
             "LastEntryDate": "2012-09-19T15:15:45.017Z",
             "OpenDate": null,
@@ -5390,6 +5390,6 @@
       }
     }
   ],
-  "ImportDate": "2013-03-14T15:20:52.3122636-04:00",
-  "CreationDate": "2013-03-14T19:20:52.3122636Z"
+  "ImportDate": "2013-03-14T19:52:32.1725623-04:00",
+  "CreationDate": "2013-03-14T23:52:32.1725623Z"
 }
