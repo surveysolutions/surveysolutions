@@ -36,7 +36,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.bindableElements = new List<AbstractQuestionView>();
-            this.RetainInstance = true;
         }
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
