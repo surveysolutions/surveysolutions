@@ -1807,7 +1807,7 @@
                             "PublicKey": "517d32cc-b98c-4928-88ba-d236b693173a"
                           }
                         ],
-                        "Capital": true,
+                        "Capital": false,
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
