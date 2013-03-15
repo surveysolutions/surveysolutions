@@ -3,6 +3,8 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 
 namespace Ncqrs.Eventing
 {
+    using System.Data;
+
     /// <summary>
     /// Represents an event which has been persisted.
     /// </summary>
@@ -94,5 +96,6 @@ namespace Ncqrs.Eventing
         {
             return string.Format("{0}[{1}]", Payload.GetType().FullName, EventIdentifier.ToString("D"));
         }
+        
     }
 }
