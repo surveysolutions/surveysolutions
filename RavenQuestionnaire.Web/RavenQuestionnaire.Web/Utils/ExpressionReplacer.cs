@@ -365,8 +365,10 @@ namespace RavenQuestionnaire.Web.Controllers
             {
                 try
                 {
-#warning add StataExportCaption validation here
-                    model.StataExportCaption = model.StataExportCaption.Trim();
+                    #warning add StataExportCaption validation here
+
+                    if (model.StataExportCaption != null)
+                        model.StataExportCaption = model.StataExportCaption.Trim();
 
                     var ansverItems = new Answer[0];
                     if (answers != null)
