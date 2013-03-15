@@ -27,7 +27,7 @@ namespace WB.UI.Designer.Controllers
     /// The administration controller.
     /// </summary>
     [Authorize(Roles = "Administrator")]
-    public class AdministrationController : AlertController
+    public class AdminController : AlertController
     {
         // GET: /Administration/
 

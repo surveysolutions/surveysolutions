@@ -202,7 +202,6 @@
     <Compile Include="App_Start\AuthConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\LayoutsRouteConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
@@ -218,8 +217,11 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Code\GlobalHelper.cs" />
     <Compile Include="Code\Helpers\CommandDeserializer.cs" />
+    <Compile Include="Code\Helpers\Routes\AreaRegistrationContextExtensions.cs" />
+    <Compile Include="Code\Helpers\Routes\LowercaseRoute.cs" />
+    <Compile Include="Code\Helpers\Routes\RouteCollectionExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AlertController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
@@ -245,14 +247,7 @@
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Models\UserHelper.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
-    <Compile Include="NavigationRoutes\INavigationRouteFilter.cs" />
-    <Compile Include="NavigationRoutes\NamedRoute.cs" />
-    <Compile Include="NavigationRoutes\NavigationExtensions.cs" />
-    <Compile Include="NavigationRoutes\NavigationRouteConfigurationExtensions.cs" />
-    <Compile Include="NavigationRoutes\NavigationRouteFilter.cs" />
-    <Compile Include="NavigationRoutes\NavigationRouteOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RouteFilters\AdministrationRouteFilter.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
@@ -362,7 +357,6 @@
     <Content Include="Scripts\details\utils.js" />
     <Content Include="Scripts\details\vm.js" />
     <Content Include="Scripts\details\vm.questionnaire.js" />
-    <Content Include="Scripts\GPL-LICENSE.txt" />
     <Content Include="Scripts\html5shiv.js" />
     <Content Include="Scripts\infuser-amd.js" />
     <Content Include="Scripts\infuser-amd.min.gz.js" />
@@ -404,12 +398,10 @@
     <Content Include="Scripts\lib\sammy.title.js" />
     <Content Include="Scripts\lodash.js" />
     <Content Include="Scripts\lodash.min.js" />
-    <Content Include="Scripts\MIT-LICENSE.txt" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\moment.js" />
     <Content Include="Scripts\moment.min.js" />
     <Content Include="Scripts\r.js" />
-    <Content Include="Scripts\README.txt" />
     <Content Include="Scripts\require.js" />
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
