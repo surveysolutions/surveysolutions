@@ -120,6 +120,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 dialog.Dispose();
                 dialog = null;
             }
+            
         }
 
         protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)

@@ -89,6 +89,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
             return PositionNone;
         }
+        public override void DestroyItem(global::Android.Views.ViewGroup p0, int p1, Java.Lang.Object p2)
+        {
+            var fragment = p2 as Fragment;
+            
+            FragmentTransaction trans = fragment.FragmentManager.BeginTransaction();
+            trans.Remove(fragment);
+            trans.Commit();
+            base.DestroyItem(p0, p1, p2);
+           
+        }
         public int GetScreenIndex(ItemPublicKey? screenId)
         {
             if (!screenId.HasValue)
@@ -106,10 +116,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.screensHolder = this.questionnaire.Screens[screenIdNotNull].Siblings.ToList();
             this.screenId = newScreenId;
             this.isRoot = this.questionnaire.Chapters.Any(s => s.ScreenId == screenIdNotNull);
-          
             this.mFragments = new AbstractScreenChangingFragment[this.Count];
             this.NotifyDataSetChanged();
-          
         }
     }
 }

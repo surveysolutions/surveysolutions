@@ -1,5 +1,6 @@
 using System;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Widget;
@@ -16,7 +17,7 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi")]
+    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
@@ -136,6 +137,7 @@ namespace CAPI.Android
                     }
                 }
             }
+            GC.Collect(0);
         }
 
        
