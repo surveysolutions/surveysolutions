@@ -1,179 +1,169 @@
-﻿using System;
-using System.Web.Mvc;
-using System.Web.Security;
-using WB.UI.Designer.Extensions;
-using WB.UI.Designer.Models;
-using WebMatrix.WebData;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="AccountController.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The account controller.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace WB.UI.Designer.Controllers
 {
+    using System;
+    using System.Web.Mvc;
+    using System.Web.Security;
+
+    using Postal;
+
+    using Recaptcha;
+
+    using WB.UI.Designer.Extensions;
+    using WB.UI.Designer.Models;
+
+    using WebMatrix.WebData;
+
+    /// <summary>
+    /// The account controller.
+    /// </summary>
     [Authorize]
     public class AccountController : AlertController
     {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The confirmation failure.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult ConfirmationFailure()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        /// The confirmation success.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult ConfirmationSuccess()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Index()
         {
             return this.RedirectToAction("Index", "Questionnaire");
         }
-        //
-        // GET: /Account/Login
 
+        /// <summary>
+        /// The log off.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult LogOff()
+        {
+            WebSecurity.Logout();
+
+            return this.RedirectToAction("login", "account");
+        }
+
+        /// <summary>
+        /// The login.
+        /// </summary>
+        /// <param name="returnUrl">
+        /// The return url.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            this.ViewBag.ReturnUrl = returnUrl;
+            return this.View();
         }
 
-        //
-        // POST: /Account/Login
-
+        /// <summary>
+        /// The login.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="returnUrl">
+        /// The return url.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
-            if (ModelState.IsValid && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
+            if (this.ModelState.IsValid
+                && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-                return RedirectToLocal(returnUrl);
+                UserHelper.ResetUser();
+                return this.RedirectToLocal(returnUrl);
             }
 
             // If we got this far, something failed, redisplay form
-            Error("The user name or password provided is incorrect.");
+            this.Error("The user name or password provided is incorrect.");
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        public ActionResult LogOff()
-        {
-            WebSecurity.Logout();
-
-            return RedirectToAction("login", "account");
-        }
-
-        //
-        // GET: /Account/Register
-
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/Register
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        [Recaptcha.RecaptchaControlMvc.CaptchaValidator]
-        public ActionResult Register(RegisterModel model, bool captchaValid)
-        {
-            if (!captchaValid)
-            {
-                Error("You did not type the verification word correctly. Please try again.");
-            }
-            else
-            {
-                if (ModelState.IsValid)
-                {
-                    // Attempt to register the user
-                    try
-                    {
-                        string confirmationToken =
-                            WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new {Email = model.Email},
-                                                             true);
-
-                        if (!string.IsNullOrEmpty(confirmationToken))
-                        {
-                            Roles.Provider.AddUsersToRoles(new[] {model.UserName}, new[] {UserHelper.USERROLENAME});
-
-                            dynamic email = new Postal.Email("ConfirmationEmail");
-                            email.To = model.Email;
-                            email.UserName = model.UserName;
-                            email.ConfirmationToken = confirmationToken;
-                            email.Send();
-
-                            return RedirectToAction("registersteptwo", "account");
-                        }
-                    }
-                    catch (MembershipCreateUserException e)
-                    {
-                        Error(e.StatusCode.ToErrorCode());
-                    }
-                }
-            }
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterStepTwo()
-        {
-            return View();
-
-        }
-
-        [AllowAnonymous]
-        public ActionResult RegisterConfirmation(string Id)
-        {
-            if (WebSecurity.ConfirmAccount(Id))
-            {
-                return RedirectToAction("confirmationsuccess");
-            }
-            return RedirectToAction("confirmationfailure");
-        }
-
-        [AllowAnonymous]
-        public ActionResult ConfirmationSuccess()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult ConfirmationFailure()
-        {
-            return View();
-        }
-
-        public ActionResult ExternalManage()
-        {
-            return RedirectToActionPermanent("manage");
-        }
-
-        //
-        // GET: /Account/Manage
-
+        /// <summary>
+        /// The manage.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Manage(AccountManageMessageId? message)
         {
             if (message.HasValue)
             {
-                Success(message.Value.ToUIMessage());
+                this.Success(message.Value.ToUIMessage());
             }
-            ViewBag.ReturnUrl = Url.Action("manage");
-            return View(new LocalPasswordModel());
+
+            this.ViewBag.ReturnUrl = this.Url.Action("manage");
+            return this.View(new LocalPasswordModel());
         }
 
-        //
-        // POST: /Account/Manage
-
+        /// <summary>
+        /// The manage.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Manage(LocalPasswordModel model)
         {
-            ViewBag.ReturnUrl = Url.Action("manage");
-            if (ModelState.IsValid)
+            this.ViewBag.ReturnUrl = this.Url.Action("manage");
+            if (this.ModelState.IsValid)
             {
                 // ChangePassword will throw an exception rather than return false in certain failure scenarios.
                 bool changePasswordSucceeded;
                 try
                 {
-                    changePasswordSucceeded = WebSecurity.ChangePassword(User.Identity.Name, model.OldPassword,
-                                                                         model.NewPassword);
+                    changePasswordSucceeded = UserHelper.CurrentUser.ChangePassword(model.OldPassword, model.NewPassword);
                 }
                 catch (Exception)
                 {
@@ -182,12 +172,83 @@ namespace WB.UI.Designer.Controllers
 
                 if (changePasswordSucceeded)
                 {
-                    //Success();
-                    return RedirectToAction("manage", new {message = AccountManageMessageId.ChangePasswordSuccess});
+                    // Success();
+                    return this.RedirectToAction(
+                        "manage", new { message = AccountManageMessageId.ChangePasswordSuccess });
                 }
                 else
                 {
-                    Error("The current password is incorrect or the new password is invalid.");
+                    this.Error("The current password is incorrect or the new password is invalid.");
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return View(model);
+        }
+        
+        /// <summary>
+        /// The register.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return this.View();
+        }
+
+        // POST: /Account/Register
+
+        /// <summary>
+        /// The register.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <param name="captchaValid">
+        /// The captcha valid.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        [RecaptchaControlMvc.CaptchaValidatorAttribute]
+        public ActionResult Register(RegisterModel model, bool captchaValid)
+        {
+            if (!captchaValid)
+            {
+                this.Error("You did not type the verification word correctly. Please try again.");
+            }
+            else
+            {
+                if (this.ModelState.IsValid)
+                {
+                    // Attempt to register the user
+                    try
+                    {
+                        string confirmationToken = WebSecurity.CreateUserAndAccount(
+                            model.UserName, model.Password, new { model.Email }, true);
+
+                        if (!string.IsNullOrEmpty(confirmationToken))
+                        {
+                            Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
+
+                            dynamic email = new Email("ConfirmationEmail");
+                            email.To = model.Email;
+                            email.UserName = model.UserName;
+                            email.ConfirmationToken = confirmationToken;
+                            email.Send();
+
+                            return this.RedirectToAction("registersteptwo", "account");
+                        }
+                    }
+                    catch (MembershipCreateUserException e)
+                    {
+                        this.Error(e.StatusCode.ToErrorCode());
+                    }
                 }
             }
 
@@ -195,21 +256,63 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-       
+        /// <summary>
+        /// The register confirmation.
+        /// </summary>
+        /// <param name="Id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult RegisterConfirmation(string Id)
+        {
+            if (WebSecurity.ConfirmAccount(Id))
+            {
+                return this.RedirectToAction("confirmationsuccess");
+            }
 
-        #region Helpers
+            return this.RedirectToAction("confirmationfailure");
+        }
 
+        /// <summary>
+        /// The register step two.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult RegisterStepTwo()
+        {
+            return this.View();
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The redirect to local.
+        /// </summary>
+        /// <param name="returnUrl">
+        /// The return url.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         private ActionResult RedirectToLocal(string returnUrl)
         {
-            if (Url.IsLocalUrl(returnUrl))
+            if (this.Url.IsLocalUrl(returnUrl))
             {
-                return Redirect(returnUrl);
+                return this.Redirect(returnUrl);
             }
             else
             {
-                return RedirectToAction("Index");
+                return this.RedirectToAction("Index");
             }
         }
+
         #endregion
     }
 }
