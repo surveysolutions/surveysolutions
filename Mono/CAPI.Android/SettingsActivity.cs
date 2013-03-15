@@ -36,31 +36,53 @@ namespace CAPI.Android
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.settings_dialog);
+            buttonChange.Click += this.buttonChange_Click;
+            editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
+            buttonCollect.Click += this.buttonCollect_Click;
+            buttonCollectMajor.Click += this.buttonCollectMajor_Click;
+            textSyncPoint.Click += textSyncPoint_Click;
+            llContainer.Click += llContainer_Click;
+        }
 
-            var buttonChange = this.FindViewById<Button>(Resource.Id.btnSyncPoint);
-            if (buttonChange != null)
+        void llContainer_Click(object sender, EventArgs e)
+        {
+            clickCount = 0;
+        }
+
+        private void textSyncPoint_Click(object sender, EventArgs e)
+        {
+            clickCount++;
+            if (clickCount >= NUMBER_CLICK)
             {
-                buttonChange.Click += this.buttonChange_Click;
+                editSettingsSync.Enabled = true;
+                buttonCollectMajor.Visibility = buttonCollect.Visibility = buttonChange.Visibility = ViewStates.Visible;
             }
+        }
 
-            var editSettingsSync = this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint);
-            if (editSettingsSync != null)
-            {
-                editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
-            }
+        private int clickCount = 0;
+        const int NUMBER_CLICK=10;
 
-
-            var buttonCollect = this.FindViewById<Button>(Resource.Id.btnCollect);
-            if (buttonCollect != null)
-            {
-                buttonCollect.Click += this.buttonCollect_Click;
-            }
-            var buttonCollectMajor = this.FindViewById<Button>(Resource.Id.btnCollectMajor);
-            if (buttonCollectMajor != null)
-            {
-                buttonCollectMajor.Click += this.buttonCollectMajor_Click;
-            }
-
+        protected Button buttonChange
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSyncPoint); }
+        }
+        protected Button buttonCollect
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnCollect); }
+        }
+        protected Button buttonCollectMajor
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnCollectMajor); }
+        }
+        protected TextView textSyncPoint {
+            get { return this.FindViewById<TextView>(Resource.Id.textSyncPoint); }
+        }
+        protected EditText editSettingsSync
+        {
+            get { return this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint); }
+        }
+        protected LinearLayout llContainer {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
         }
 
         private void buttonCollectMajor_Click(object sender, EventArgs e)
