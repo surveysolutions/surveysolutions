@@ -1,14 +1,14 @@
 {
   "$type": "Questionnaire.Core.Web.Export.ZipFileData, Questionnaire.Core.Web",
-  "ClientGuid": "a7bdaf2c-45e7-435d-8254-453ac7374797",
+  "ClientGuid": "a046b54e-24ba-4daf-99cd-886d7d55181a",
   "Events": [
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
-      "CommitId": "f72be402-3d01-4e88-92dc-4118b233c243",
-      "EventIdentifier": "31f840bb-f8d3-4e2e-a101-b417988f53db",
+      "CommitId": "40fa5f94-2de8-452a-b2b8-07201d9f0d22",
+      "EventIdentifier": "f793ba41-6c60-4e7d-a269-527ca8e86034",
       "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
-      "EventTimeStamp": "2013-03-15T13:52:30.8734879Z",
+      "EventTimeStamp": "2013-03-15T16:23:22.1329608Z",
       "EventVersion": {
         "$type": "System.Version, mscorlib",
         "Major": 0,
@@ -286,7 +286,19 @@
                     "StataExportCaption": "phone",
                     "ValidationExpression": null,
                     "ValidationMessage": null
-                  },
+                  }
+                ],
+                "ConditionExpression": null,
+                "Enabled": true,
+                "Description": null,
+                "Propagated": 0,
+                "PublicKey": "62a22f4b-fcd6-45a3-abf4-3b00497ae091",
+                "Title": "Household Info",
+                "Triggers": []
+              },
+              {
+                "$type": "Main.Core.Entities.SubEntities.Group, Main.Core",
+                "Children": [
                   {
                     "$type": "Main.Core.Entities.SubEntities.Question.AutoPropagateQuestion, Main.Core",
                     "AddNumericAttr": null,
@@ -5390,6 +5402,6 @@
       }
     }
   ],
-  "ImportDate": "2013-03-14T19:52:32.1725623-04:00",
-  "CreationDate": "2013-03-14T23:52:32.1725623Z"
+  "ImportDate": "2013-03-15T12:23:23.3820322-04:00",
+  "CreationDate": "2013-03-15T16:23:23.3820322Z"
 }
