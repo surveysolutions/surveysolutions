@@ -4,11 +4,11 @@
   "Events": [
     {
       "$type": "Main.Core.Events.AggregateRootEvent, Main.Core",
-      "CommitId": "f72be402-3d01-4e88-92dc-4118b233c543",
-      "EventIdentifier": "31f840bb-f8d3-4e2e-a101-b417988f71db",
+      "CommitId": "f72be402-3d01-4e88-92dc-4118b233c243",
+      "EventIdentifier": "31f840bb-f8d3-4e2e-a101-b417988f53db",
       "EventSequence": 1,
       "EventSourceId": "8122fac8-a77b-479c-855c-e0cbcf3288f5",
-      "EventTimeStamp": "2013-03-14T23:52:30.8734879Z",
+      "EventTimeStamp": "2013-03-15T13:52:30.8734879Z",
       "EventVersion": {
         "$type": "System.Version, mscorlib",
         "Major": 0,
@@ -4246,7 +4246,7 @@
                         "Cards": [],
                         "Children": [],
                         "Comments": null,
-                        "ConditionExpression": null,
+                        "ConditionExpression": "[7992ab4d-dadd-4e3a-9ade-2b39db7c0d99]==7",
                         "ConditionalDependentGroups": [],
                         "ConditionalDependentQuestions": [],
                         "Featured": false,
