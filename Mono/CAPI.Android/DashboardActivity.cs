@@ -6,7 +6,10 @@ using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace CAPI.Android
 {
-    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
+    using global::Android.Content.PM;
+
+    [Activity(Label = "CAPI", Icon = "@drawable/capi",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)

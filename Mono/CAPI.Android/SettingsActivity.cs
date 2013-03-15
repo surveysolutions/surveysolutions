@@ -9,7 +9,11 @@ using CAPI.Android.Settings;
 
 namespace CAPI.Android
 {
-    [Activity(/*NoHistory = true,*/ Icon = "@drawable/capi")]
+    using global::Android.Content.PM;
+
+    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |
+                               ConfigChanges.KeyboardHidden |
+                                ConfigChanges.ScreenSize)]
     public class SettingsActivity : Activity
     {
         /// <summary>
@@ -76,14 +80,14 @@ namespace CAPI.Android
             var editSettingsSync = this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint);
             if (editSettingsSync != null)
             {
-               if(SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
-               {
-                   editSettingsSync.SetBackgroundColor(Color.Green);
-               }
-               else
-               {
-                   editSettingsSync.SetBackgroundColor(Color.Red);
-               }
+                if (SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
+                {
+                    editSettingsSync.SetBackgroundColor(Color.Green);
+                }
+                else
+                {
+                    editSettingsSync.SetBackgroundColor(Color.Red);
+                }
             }
         }
     }
