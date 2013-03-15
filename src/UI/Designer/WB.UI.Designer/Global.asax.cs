@@ -18,7 +18,6 @@ namespace WB.UI.Designer
             WebApiConfig.Register(GlobalConfiguration.Configuration);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
 
-            LayoutsRouteConfig.RegisterRoutes(RouteTable.Routes);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
