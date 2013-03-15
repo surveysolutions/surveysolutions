@@ -6,12 +6,12 @@
     ViewBag.Title = "Change state survey";
 }
 <h1>Approve survey</h1>
-<p><a href="@Url.Action("Documents", new { id = Model.TemplateId })">Back to list</a></p>
+<p><a href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Back to list</a></p>
 <div class="row-fluid">
     <div class="span6">
         @using (Html.BeginForm("ChangeState", "Survey", new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
-            <legend>Change state survey</legend>
+            <legend>Change survey status</legend>
             <div class="control-group">
                 @Html.LabelFor(x => x.StatusId, new { @class = "control-label" })
                 <div class="controls">
@@ -31,7 +31,7 @@
             </div>
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn">Cancel</button>
+                <a class="btn" href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Cancel</a>
             </div>
         }
         @Html.Partial("~/Views/Survey/_StatusHistory.cshtml", Model.Statistic.StatusHistory)
