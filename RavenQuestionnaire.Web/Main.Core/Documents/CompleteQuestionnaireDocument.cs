@@ -112,6 +112,11 @@ namespace Main.Core.Documents
         public DateTime? OpenDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        public Guid? CreatedBy { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         private IComposite parent;

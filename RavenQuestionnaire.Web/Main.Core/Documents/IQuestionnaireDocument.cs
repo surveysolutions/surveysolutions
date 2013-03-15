@@ -44,6 +44,11 @@ namespace Main.Core.Documents
         DateTime? OpenDate { get; set; }
 
         /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        Guid? CreatedBy { get; set; }
+
+        /// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">
