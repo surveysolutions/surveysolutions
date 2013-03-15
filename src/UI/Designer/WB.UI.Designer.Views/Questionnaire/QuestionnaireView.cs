@@ -17,6 +17,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             this.Title = doc.Title;
             this.CreationDate = doc.CreationDate;
             this.LastEntryDate = doc.LastEntryDate;
+            this.CreatedBy = doc.CreatedBy;
 
             this.Children = ConvertChildrenFromQuestionnaireDocument(doc).ToList();
         }
@@ -27,6 +28,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         public DateTime LastEntryDate { get; set; }
         public Guid PublicKey { get; set; }
         public string Title { get; set; }
+        public Guid? CreatedBy { get; set; }
 
         private static IEnumerable<ICompositeView> ConvertChildrenFromQuestionnaireDocument(IQuestionnaireDocument doc)
         {
