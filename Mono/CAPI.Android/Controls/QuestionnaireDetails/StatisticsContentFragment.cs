@@ -42,7 +42,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         public StatisticsContentFragment()
             : base()
         {
-            this.RetainInstance = true;
         }
 
         public void RecalculateStatistics()

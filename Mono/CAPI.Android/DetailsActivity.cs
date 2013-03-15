@@ -1,5 +1,6 @@
 using System;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Widget;
@@ -16,7 +17,7 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi")]
+    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
@@ -88,9 +89,9 @@ namespace CAPI.Android
             {
                 NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
             }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent, ScreenId);
-            
-            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
+            VpContent.Adapter = Adapter;
+            VpContent.PageSelected += VpContent_PageSelected;
 
         }
 
@@ -123,7 +124,7 @@ namespace CAPI.Android
             }
 
             Adapter.UpdateScreenData(e.ScreenId);
-
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
             if (e.ScreenId.HasValue)
             {
                 var screen = ViewModel.Screens[e.ScreenId.Value];
@@ -136,6 +137,7 @@ namespace CAPI.Android
                     }
                 }
             }
+            GC.Collect(0);
         }
 
        
@@ -152,6 +154,7 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            VpContent.PageSelected -= VpContent_PageSelected;
             GC.Collect();
         }
         public override void OnLowMemory()

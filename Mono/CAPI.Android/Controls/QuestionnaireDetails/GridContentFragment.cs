@@ -23,12 +23,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         protected TextView tvEmptyLabelDescription;
         protected LinearLayout llTablesContainer;
         protected LinearLayout top;
-        protected Dictionary<ItemPublicKey,IList<  PropertyChangedEventHandler>> rowEventHandlers;
-        protected List<RosterQuestionView>  rosterQuestionViews=new List<RosterQuestionView>();
+        protected Dictionary<ItemPublicKey, IList<PropertyChangedEventHandler>> rowEventHandlers;
+        protected List<RosterQuestionView> rosterQuestionViews = new List<RosterQuestionView>();
         protected RosterItemDialog dialog;
-
         private const string SCREEN_ID = "screenId";
         private const string QUESTIONNAIRE_ID = "questionnaireId";
+
         public static GridContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
         {
             GridContentFragment myFragment = new GridContentFragment();
@@ -40,14 +40,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
             return myFragment;
         }
+
         public GridContentFragment()
             : base()
         {
             this.rowEventHandlers = new Dictionary<ItemPublicKey, IList<PropertyChangedEventHandler>>();
-            this.rosterQuestionViews=new List<RosterQuestionView>();
+            this.rosterQuestionViews = new List<RosterQuestionView>();
             this.questionViewFactory = new DefaultQuestionViewFactory();
-            this.RetainInstance = true;
         }
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -56,6 +57,20 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 // reason to create our view.
                 return null;
             }
+         /*   if (top != null)
+            {
+               
+                foreach (var row in Model.Rows)
+                {
+                    var handlers = rowEventHandlers[row.ScreenId];
+                    foreach (PropertyChangedEventHandler propertyChangedEventHandler in handlers)
+                    {
+                        row.PropertyChanged += propertyChangedEventHandler;
+                    }
+                }
+                return top;
+            }*/
+
             top = new LinearLayout(inflater.Context);
             top.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                               ViewGroup.LayoutParams.FillParent);
@@ -79,8 +94,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             sv.AddView(ll);
             sv.EnableDisableView(!SurveyStatus.IsStatusAllowCapiSync(Questionnaire.Status));
             top.AddView(sv);
+
+
             return top;
         }
+
         public override void OnDetach()
         {
             base.OnDetach();
@@ -93,16 +111,16 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 }
 
             }
-            foreach (RosterQuestionView rosterQuestionView in rosterQuestionViews)
+          /*  foreach (RosterQuestionView rosterQuestionView in rosterQuestionViews)
             {
                 rosterQuestionView.Dispose();
-            }
-            rosterQuestionViews = new List<RosterQuestionView>();
+            }*/
             if (dialog != null)
             {
                 dialog.Dispose();
                 dialog = null;
             }
+            
         }
 
         protected void BuildEmptyLabelDescription(Context context, LinearLayout ll)

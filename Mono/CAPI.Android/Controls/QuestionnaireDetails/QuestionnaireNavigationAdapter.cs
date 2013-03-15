@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using Android.Content;
 using Android.Graphics;
 using Android.Views;
@@ -13,6 +15,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         private readonly Context context;
         private readonly int selectedItem;
         private View[] items;
+        private UpdateTotalClosure[] subscribers;
         public QuestionnaireNavigationAdapter(Context context, CompleteQuestionnaireView model, int selectedItem)
             : base()
         {
@@ -20,6 +23,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             this.selectedItem = selectedItem;
             this.model = model;
             this.items = new View[this.Count];
+            this.subscribers=new UpdateTotalClosure[this.model.Chapters.Count];
         }
 
 
@@ -51,18 +55,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 if (position < Count - 1)
                 {
                     var item = model.Chapters[position];
-                    item.PropertyChanged += (sender,e)=>
-                    {
-                        if (e.PropertyName != "Answered" && e.PropertyName != "Total")
-                            return;
-                        var question = sender as QuestionnaireScreenViewModel;
-                        if (question == null)
-                            return;
-                        UpdateCounter(tvCount, item);
-                    }
-                    ;
+                    var closure = new UpdateTotalClosure(tvCount, item);
+                    closure.UpdateCounter();
+                    this.subscribers[position] = closure;
                     tvITem.Text = item.ScreenName;
-                    UpdateCounter(tvCount, item);
+                    
                     view.SetTag(Resource.Id.ScreenId, item.ScreenId.ToString());
                 }
                 else
@@ -74,13 +71,25 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             }
             return view;
         }
-        protected void UpdateCounter(TextView tvCount, QuestionnaireScreenViewModel item)
+
+        public void Detach()
         {
-            tvCount.Text = string.Format("{0}/{1}", item.Answered, item.Total);
-            if(item.Total==item.Answered)
-                tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
-            else
-                tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            foreach (var subscriber in subscribers)
+            {
+                if(subscriber==null)
+                    continue;
+                subscriber.Detach();
+            }
+        }
+
+        public void Attach()
+        {
+            foreach (var subscriber in subscribers)
+            {
+                if (subscriber == null)
+                    continue;
+                subscriber.Attach();
+            }
         }
 
         public void SelectItem(int pos)
@@ -111,5 +120,43 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         }
 
         #endregion
+        public class  UpdateTotalClosure
+        {
+            private readonly TextView tvCount;
+            private readonly QuestionnaireScreenViewModel model;
+
+            public UpdateTotalClosure(TextView tvCount, QuestionnaireScreenViewModel model)
+            {
+                this.tvCount = tvCount;
+                this.model = model;
+                Attach();
+            }
+
+            protected void TotalChangedHandler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+                    return;
+
+                UpdateCounter();
+            }
+            public void UpdateCounter()
+            {
+                tvCount.Text = string.Format("{0}/{1}", model.Answered, model.Total);
+                if (model.Total == model.Answered)
+                    tvCount.SetBackgroundResource(Resource.Drawable.donecountershape);
+                else
+                    tvCount.SetBackgroundResource(Resource.Drawable.CounterRoundShape);
+            }
+
+            public void Attach()
+            {
+                this.model.PropertyChanged += TotalChangedHandler;
+            }
+
+            public void Detach()
+            {
+                this.model.PropertyChanged -= TotalChangedHandler;
+            }
+        }
     }
 }
