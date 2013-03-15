@@ -64,6 +64,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 
             }*/
         }
+
         protected override void SaveAnswer()
         {
             try
@@ -73,19 +74,26 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 if (newValue != this.Model.AnswerString)
                 {
                     CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
-                                                           null, newValue,
-                                                           Model.PublicKey.PropagationKey));
+                                                                null, newValue,
+                                                                Model.PublicKey.PropagationKey));
                 }
                 base.SaveAnswer();
-              
+
             }
             catch (Exception ex)
             {
                 // etAnswer.Text = Model.AnswerString;
                 tvError.Visibility = ViewStates.Visible;
                 etAnswer.Text = Model.AnswerString;
-                tvError.Text = (ex.InnerException ?? ex).Message;
+                tvError.Text = GetDippestException(ex).Message;
             }
+        }
+
+        private Exception GetDippestException(Exception e)
+        {
+            if (e.InnerException == null)
+                return e;
+            return GetDippestException(e.InnerException);
         }
 
         void etAnswer_EditorAction(object sender, TextView.EditorActionEventArgs e)
