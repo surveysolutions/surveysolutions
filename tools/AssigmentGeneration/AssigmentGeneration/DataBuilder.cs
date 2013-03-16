@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CsvHelper;
 using Ionic.Zip;
 using Ionic.Zlib;
 using Main.Core.Entities.SubEntities;
@@ -20,11 +22,22 @@ namespace AssigmentGeneration
         private KeyValuePair<string, string> supervisor;
         private IDictionary<string, string> interviewers;
         private readonly Guid commitid = Guid.NewGuid();
-
-        public DataBuilder(KeyValuePair<string, string> supervisor, IDictionary<string, string> interviewers)
+        private readonly Guid supervisorKey = Guid.NewGuid();
+        public DataBuilder(string filePath)
         {
-            this.supervisor = supervisor;
-            this.interviewers = interviewers;
+            this.interviewers = new Dictionary<string, string>();
+            KeyValuePair<string, string>? header = null;
+            using (var reader = new CsvReader(File.OpenText(filePath)))
+            {
+
+                while (reader.Read())
+                {
+                    if (!header.HasValue)
+                        header = new KeyValuePair<string, string>(reader.FieldHeaders[0], reader.FieldHeaders[1]);
+                    interviewers.Add(reader.CurrentRecord[0], reader.CurrentRecord[1]);
+                }
+            }
+            supervisor = header.Value;
         }
 
         public void CreateFile()
@@ -45,10 +58,18 @@ namespace AssigmentGeneration
             zipFile.Save("inidata.capi");
         }
 
+        public string SupervisorName {
+            get { return supervisor.Key; }
+        }
+
+        public Guid SupervisorKey {
+            get { return supervisorKey; }
+        }
+
         private IList<AggregateRootEvent> BuildUserEventStream()
         {
             var result = new List<AggregateRootEvent>();
-            var supervisorKey = Guid.NewGuid();
+            
             result.Add(BuildNewUserEvent(supervisorKey, supervisor.Key, supervisor.Value,
                                                          UserRoles.Supervisor, null));
             foreach (var interviewer in interviewers)
