@@ -131,6 +131,8 @@ function RunTestsFromProject($Project, $BuildConfiguration) {
         .\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe $assembly /result=$resultXml /nologo /nodots | Write-Host
         Write-Host "##teamcity[importData type='nunit' path='$resultXml']"
 
+        .\packages\Machine.Specifications.0.5.12\tools\mspec-clr4.exe --teamcity $assembly | Write-Host
+
         Write-Host "##teamcity[progressFinish 'Running tests from $assembly']"
     }
 
