@@ -19,7 +19,7 @@ namespace Main.Core.Documents
 
 #warning if MONODROID is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
-	using AndroidLogger;
+    using AndroidLogger;
 #else
     using NLog;
 #endif
@@ -32,7 +32,11 @@ namespace Main.Core.Documents
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
+#if MONODROID
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(QuestionnaireDocument));
+#else
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+#endif
 
         #region Fields
 
