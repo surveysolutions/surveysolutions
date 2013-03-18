@@ -148,6 +148,7 @@ namespace Main.Core.Domain
         /// <param name="description">
         /// The description.
         /// </param>
+        [Obsolete]
         public void AddGroup(
             Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
         {
@@ -459,6 +460,8 @@ namespace Main.Core.Domain
                         PublicKey = publicKey
                     });
         }
+
+        public void NewAddGroup(){}
 
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)

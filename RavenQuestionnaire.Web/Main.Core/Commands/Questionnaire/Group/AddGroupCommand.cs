@@ -19,6 +19,7 @@ namespace Main.Core.Commands.Questionnaire.Group
     /// <summary>
     /// The add group command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "AddGroup")]
     public class AddGroupCommand : CommandBase
