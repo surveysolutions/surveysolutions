@@ -228,6 +228,7 @@ body.loading .loading-backdrop {
     -ms-box-sizing: border-box;
     -o-box-sizing: border-box;
     box-sizing: border-box;
+    width: auto;
 }
 
     #questionnaire .inner {
@@ -427,7 +428,7 @@ h1 {
     }
      .q-item-wrap.new.selected
     {
-        background-color:#449b44
+        background-color:#347834
     }
 
     .q-item-wrap.selected div > i[class^="icon-"],
