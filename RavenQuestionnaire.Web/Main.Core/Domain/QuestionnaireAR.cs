@@ -462,7 +462,20 @@ namespace Main.Core.Domain
                     });
         }
 
-        public void NewAddGroup(){}
+        public void NewAddGroup(Guid groupId,
+            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
+        {
+            this.ApplyEvent(new NewGroupAdded
+            {
+                QuestionnairePublicKey = this.innerDocument.PublicKey,
+                PublicKey = groupId,
+                GroupText = title,
+                ParentGroupPublicKey = parentGroupId,
+                Paropagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+            });
+        }
 
         public void NewDeleteGroup(Guid groupId)
         {
