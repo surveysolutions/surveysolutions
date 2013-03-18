@@ -137,7 +137,14 @@
                 propagationKind: group.gtype(),
                 description: group.description(),
                 condition: group.condition(),
-                parentId: "" + group.parent()
+                parentGroupId: "" + group.parent()
+            };
+        };
+        
+        commands[config.commands.deleteGroup] = function (group) {
+            return {
+                questionnaireId: questionnaire.id(),
+                groupId: group.id()
             };
         };
 
