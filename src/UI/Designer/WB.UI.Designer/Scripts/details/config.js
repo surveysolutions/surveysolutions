@@ -34,11 +34,11 @@
                 "AutoPropagated"
             ],
             commands = {
-                createGroup: "CreateGroup",
+                createGroup: "AddGroup",
                 updateGroup: "UpdateGroup",
                 deleteGroup: "DeleteGroup",
                 moveGroup: "MoveGroup",
-                createQuestion: "CreateQuestion",
+                createQuestion: "AddQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
                 moveQuestion: "MoveQuestion"
