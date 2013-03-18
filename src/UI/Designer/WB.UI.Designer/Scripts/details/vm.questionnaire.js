@@ -105,25 +105,53 @@
             router.navigateTo(group.getHref());
         },
         deleteGroup = function (item) {
-            datacontext.groups.removeById(item.id());
-
-            var parent = item.parent();
-            if (!_.isUndefined(parent)) {
-                var child = _.find(parent.childrenID(), { 'id': item.id() });
-                parent.childrenID.remove(child);
-                parent.fillChildren();
-                router.navigateTo(parent.getHref());
-                datacontext.questions.cleanTriggers(child);
-            } else {
-                router.navigateTo(config.hashes.details);
-            }
+            datacontext.sendCommand(
+               config.commands.deleteGroup,
+               item,
+               {
+                   success: function () {
+                       datacontext.groups.removeById(item.id());
+                       
+                       var parent = item.parent();
+                       if (!_.isUndefined(parent)) {
+                           var child = _.find(parent.childrenID(), { 'id': item.id() });
+                           parent.childrenID.remove(child);
+                           parent.fillChildren();
+                           datacontext.questions.cleanTriggers(child);
+                           router.navigateTo(parent.getHref());
+                       } else {
+                           router.navigateTo(config.hashes.details);
+                       }
+                   },
+                   error: function (d) {
+                       console.log(d);
+                       errors.removeAll();
+                       errors.push(d);
+                       showOutput();
+                   }
+               });
         },
         deleteQuestion = function (item) {
-            var parent = item.parent();
-            var child = _.find(parent.childrenID(), { 'id': item.id() });
-            parent.childrenID.remove(child);
-            parent.fillChildren();
-            router.navigateTo(parent.getHref());
+            datacontext.sendCommand(
+               config.commands.deleteGroup,
+               item,
+               {
+                   success: function () {
+                       var parent = item.parent();
+                       var child = _.find(parent.childrenID(), { 'id': item.id() });
+                       parent.childrenID.remove(child);
+                       parent.fillChildren();
+                       router.navigateTo(parent.getHref());
+                   },
+                   error: function (d) {
+                       console.log(d);
+                       errors.removeAll();
+                       errors.push(d);
+                       showOutput();
+                   }
+               });
+            
+           
         },
         saveGroup = function (group) {
             console.log(group);
