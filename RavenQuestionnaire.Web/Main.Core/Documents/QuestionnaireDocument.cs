@@ -17,7 +17,12 @@ namespace Main.Core.Documents
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
 
+#warning if MONODROID is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
+#if MONODROID
+	using AndroidLogger;
+#else
     using NLog;
+#endif
 
     using Newtonsoft.Json;
 
