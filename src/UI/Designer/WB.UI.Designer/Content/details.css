@@ -585,3 +585,10 @@ h1 {
     #footer .inner {
         padding: 6px 8px 0 8px;
     }
+.control-group.error .controls input {
+    margin-bottom: 0;
+}
+.control-group.error .controls .help-inline {
+    font-size: 11px;
+    padding-left: 0;
+} 
