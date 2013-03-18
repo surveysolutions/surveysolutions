@@ -79,7 +79,7 @@ function BuildSolutions($BuildConfiguration) {
 
     $solutionsToBuild = GetSolutionsToBuild
 
-    $countOfFailedSolutions = 0
+    $failedSolutions = @()
 
     if ($solutionsToBuild -ne $null) {
         foreach ($solution in $solutionsToBuild) {
@@ -87,14 +87,14 @@ function BuildSolutions($BuildConfiguration) {
             $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
 
             if (-not $wasBuildSuccessfull) {
-                $countOfFailedSolutions += 1
+                $failedSolutions += $solution
             }
         }
     }
 
-    $wereAllSolutionsBuiltSuccessfully = $countOfFailedSolutions -eq 0
+    $wereAllSolutionsBuiltSuccessfully = $failedSolutions.Count -eq 0
     if (-not $wereAllSolutionsBuiltSuccessfully) {
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $countOfFailedSolutions solution(s)']"
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $($failedSolutions.Count) solution(s): $($failedSolutions -join ', ')']"
     }
 
     Write-Host "##teamcity[blockClosed name='Building solutions']"
