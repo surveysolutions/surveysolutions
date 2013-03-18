@@ -4,25 +4,16 @@
 
     using Main.Core.Entities.SubEntities;
 
-    using Ncqrs.Commanding;
-    using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
-    public class FullGroupDataCommand : CommandBase
+    public abstract class FullGroupDataCommand : GroupCommand
     {
-        public FullGroupDataCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)
+        protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)
+            : base(questionnaireId, groupId)
         {
-            this.QuestionnaireId = questionnaireId;
-            this.GroupId = groupId;
             this.Title = title;
             this.PropagationKind = propagationKind;
             this.Description = description;
             this.Condition = condition;
         }
-
-        [AggregateRootId]
-        public Guid QuestionnaireId { get; set; }
-
-        public Guid GroupId { get; set; }
 
         public string Title { get; set; }
 

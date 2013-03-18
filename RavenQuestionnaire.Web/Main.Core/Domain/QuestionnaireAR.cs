@@ -402,6 +402,7 @@ namespace Main.Core.Domain
         /// <param name="parentPublicKey">
         /// The parent Public Key.
         /// </param>
+        [Obsolete]
         public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
         #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
@@ -462,6 +463,8 @@ namespace Main.Core.Domain
         }
 
         public void NewAddGroup(){}
+
+        public void NewDeleteGroup() { }
 
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)

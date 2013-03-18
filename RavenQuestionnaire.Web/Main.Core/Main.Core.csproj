@@ -184,8 +184,11 @@
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\FullGroupDataCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewUpdateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
