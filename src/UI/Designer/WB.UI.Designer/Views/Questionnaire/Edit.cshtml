@@ -175,9 +175,9 @@
 
         <div class="bottom">
             <div class="inner">
-                <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
+                <button class="btn btn-danger" data-bind="click: deleteQuestion"><i class="icon-white icon-remove"></i>Remove</button>
                 <button class="btn btn-danger" data-bind="click: dirtyFlag().reset, visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left"></i>Undo</button>
-                <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
+                <button class="btn btn-success" data-bind="click: saveQuestion"><i class="icon-white icon-ok"></i>Save</button>
             </div>
         </div>
     </div>

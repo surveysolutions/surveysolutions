@@ -143,10 +143,10 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Edit(Guid id)
         {
             QuestionnaireView model = this.Get(id);
-            if (model.CreatedBy != UserHelper.CurrentUserId)
+            /*if (model.CreatedBy != UserHelper.CurrentUserId)
             {
                 throw new DesignerPermissionException();
-            }
+            }*/
 
             this.ReplaceGuidsInValidationAndConditionRules(model);
 
