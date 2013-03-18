@@ -15,6 +15,7 @@ namespace WB.UI.Designer.Code.Helpers
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
             { "UpdateGroup", typeof(NewUpdateGroupCommand) },
+            { "DeleteGroup", typeof(NewDeleteGroupCommand) },
         };
 
         public ICommand Deserialize(string commandType, string serializedCommand)
