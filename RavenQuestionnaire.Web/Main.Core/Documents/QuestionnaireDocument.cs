@@ -17,6 +17,8 @@ namespace Main.Core.Documents
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
 
+    using NLog;
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -25,6 +27,8 @@ namespace Main.Core.Documents
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         #region Fields
 
         /// <summary>
@@ -285,6 +289,44 @@ namespace Main.Core.Documents
                     parent.Children.RemoveAll(i => i.PublicKey == itemKey);
                 }
             }
+        }
+
+        public void RemoveGroup(Guid groupId)
+        {
+            var groupParent = this.GetParentOfGroup(groupId);
+
+            if (groupParent != null)
+            {
+                RemoveChildGroupBySpecifiedId(groupParent, groupId);
+            }
+            else
+            {
+                Logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
+            }
+        }
+
+        private static void RemoveChildGroupBySpecifiedId(IComposite container, Guid groupId)
+        {
+            container.Children.RemoveAll(child => IsGroupWithSpecifiedId(child, groupId));
+        }
+
+        private IComposite GetParentOfGroup(Guid groupId)
+        {
+            if (ContainsChildGroupWithSpecifiedId(this, groupId))
+                return this;
+
+            return this.Find<IGroup>(
+                group => ContainsChildGroupWithSpecifiedId(group, groupId)).SingleOrDefault();
+        }
+
+        private static bool ContainsChildGroupWithSpecifiedId(IComposite container, Guid groupId)
+        {
+            return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
+        }
+
+        private static bool IsGroupWithSpecifiedId(IComposite child, Guid groupId)
+        {
+            return child is IGroup && ((IGroup)child).PublicKey == groupId;
         }
 
         /// <summary>

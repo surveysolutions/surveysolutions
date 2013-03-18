@@ -464,7 +464,12 @@ namespace Main.Core.Domain
 
         public void NewAddGroup(){}
 
-        public void NewDeleteGroup() { }
+        public void NewDeleteGroup(Guid groupId)
+        {
+            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupId);
+
+            this.ApplyEvent(new GroupDeleted(groupId));
+        }
 
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)
@@ -595,7 +600,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnGroupDeleted(GroupDeleted e)
         {
-            this.innerDocument.Remove(e.GroupPublicKey, null, e.ParentPublicKey, null);
+            this.innerDocument.RemoveGroup(e.GroupPublicKey);
         }
 
         /// <summary>

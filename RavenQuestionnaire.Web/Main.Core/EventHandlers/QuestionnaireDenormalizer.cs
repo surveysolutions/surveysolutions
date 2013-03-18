@@ -255,7 +255,8 @@ namespace Main.Core.EventHandlers
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            item.Remove(evnt.Payload.GroupPublicKey, null, evnt.Payload.ParentPublicKey, null);
+            item.RemoveGroup(evnt.Payload.GroupPublicKey);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
