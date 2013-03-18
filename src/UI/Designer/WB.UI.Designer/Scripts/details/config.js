@@ -1,5 +1,5 @@
 ﻿define('config',
-    ['toastr', 'ko','amplify'],
+    ['toastr', 'ko', 'amplify'],
     function (toastr, ko, amplify) {
 
         var// properties
@@ -34,7 +34,14 @@
                 "AutoPropagated"
             ],
             commands = {
-                updateGroup: "UpdateGroup"
+                createGroup: "AddGroup",
+                updateGroup: "UpdateGroup",
+                deleteGroup: "DeleteGroup",
+                moveGroup: "MoveGroup",
+                createQuestion: "AddQuestion",
+                updateQuestion: "UpdateQuestion",
+                deleteQuestion: "DeleteQuestion",
+                moveQuestion: "MoveQuestion"
             },
             hashes = {
                 details: '#/details',
@@ -54,7 +61,7 @@
             tips = {
                 newGroup: {
                     title: "Save this group",
-                    content:  "" ,
+                    content: "",
                     placement: "top",
                     trigger: "hover"
                 }
@@ -80,7 +87,7 @@
 
             init = function () {
                 toastr.options.timeOut = toastrTimeout;
-                
+
                 ko.validation.configure({
                     insertMessages: true,
                     decorateElement: true,

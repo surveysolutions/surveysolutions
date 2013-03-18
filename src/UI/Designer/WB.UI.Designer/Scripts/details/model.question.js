@@ -10,7 +10,7 @@
               
               self.title = ko.observable('New Question');
               self.parent = ko.observable();
-              self.alias = ko.observable();
+              self.alias = ko.observable(Math.uuid(5));
               
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
