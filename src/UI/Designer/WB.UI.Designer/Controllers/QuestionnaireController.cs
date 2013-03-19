@@ -14,6 +14,7 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Mvc;
 
     using Main.Core.Commands.Questionnaire;
+    using Main.Core.Documents;
     using Main.Core.View;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
@@ -143,10 +144,10 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Edit(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
-            /*if (model.CreatedBy != UserHelper.CurrentUserId)
-            {
-                throw new DesignerPermissionException();
-            }*/
+            //if (model.CreatedBy != UserHelper.CurrentUserId)
+            //{
+            //    throw new DesignerPermissionException();
+            //}
 
             this.ReplaceGuidsInValidationAndConditionRules(model);
 
@@ -208,6 +209,57 @@ namespace WB.UI.Designer.Controllers
         }
 
         #endregion
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Clone(Guid id)
+        {
+            var model = this.Get(id);
+            return
+                this.View(
+                    new QuestionnaireCloneModel()
+                        {
+                            Title = string.Format("{0}_Copy", model.Title),
+                            Id = model.PublicKey
+                        });
+        }
+
+        /// <summary>
+        /// The clone.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Clone(QuestionnaireCloneModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var sourceModel = this.Get(model.Id);
+                if (sourceModel == null)
+                {
+                    throw new ArgumentNullException("model");
+                }
+
+                CommandService.Execute(
+                    new CloneQuestionnaireCommand(
+                        Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
+                return this.RedirectToAction("Index");
+            }
+
+            return this.View(model);
+        }
 
         #region Methods
 
