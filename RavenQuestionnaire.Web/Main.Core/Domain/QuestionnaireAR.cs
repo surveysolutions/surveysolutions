@@ -503,12 +503,12 @@ namespace Main.Core.Domain
         public void NewAddQuestion(Guid questionId,
             Guid groupId, string title, QuestionType type, string alias, 
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup, 
-            QuestionScope scope, string condition, string validationExpression, string validationMessage, 
-            string instructions)
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             alias = alias.Trim();
 
-            //this.ThrowArgumentExceptionIfAnswersNeededButAbsent(type, answers);
+            this.ThrowArgumentExceptionIfOptionsNeededButAbsent(type, options);
 
             this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
 
@@ -529,13 +529,12 @@ namespace Main.Core.Domain
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
-
-                //AnswerOrder = answerOrder,
-                //Triggers = triggers,
-                //MaxValue = maxValue,
-                //Answers = answers,
-
                 Instructions = instructions,
+
+                Answers = ConvertOptionsToAnswers(options),
+                AnswerOrder = optionsOrder,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggedGroupIds.ToList(),
             });
         }
 
@@ -550,7 +549,7 @@ namespace Main.Core.Domain
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             this.ThrowArgumentExceptionIfQuestionDoesNotExist(questionId);
 
@@ -558,7 +557,7 @@ namespace Main.Core.Domain
 
             this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
 
-            //this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+            this.ThrowArgumentExceptionIfOptionsNeededButAbsent(type, options);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -576,13 +575,12 @@ namespace Main.Core.Domain
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
+                Instructions = instructions,
 
-                //Triggers = triggers,
-                //MaxValue = maxValue,
-                //AnswerOrder = answerOrder,
-                //Answers = answers,
-
-                Instructions = instructions
+                Answers = ConvertOptionsToAnswers(options),
+                AnswerOrder = optionsOrder,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggedGroupIds.ToList(),
             });
         }
 
@@ -859,6 +857,25 @@ namespace Main.Core.Domain
 
         #endregion
 
+        private static Answer[] ConvertOptionsToAnswers(Option[] options)
+        {
+            if (options == null)
+                return null;
+
+            return options.Select(ConvertOptionToAnswer).ToArray();
+        }
+
+        private static Answer ConvertOptionToAnswer(Option option)
+        {
+            return new Answer
+            {
+                PublicKey = option.Id,
+                AnswerType = AnswerType.Select,
+                AnswerValue = option.Value,
+                AnswerText = option.Title,
+            };
+        }
+
         private void ThrowArgumentExceptionIfQuestionDoesNotExist(Guid publicKey)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
@@ -877,10 +894,15 @@ namespace Main.Core.Domain
             }
         }
 
+        private void ThrowArgumentExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
+        {
+            ThrowArgumentExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
+        }
+
         private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, Answer[] answerOptions)
         {
             var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
-            if (isQuestionWithOptions && answerOptions.Length == 0)
+            if (isQuestionWithOptions && (answerOptions == null || answerOptions.Length == 0))
             {
                 throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
             }
