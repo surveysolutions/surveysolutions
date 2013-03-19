@@ -114,7 +114,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.QuestionnairePublicKey);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
@@ -134,7 +134,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.Payload.QuestionnaireId);
+            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             // var questionnaire = new Questionnaire(item);
             item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);

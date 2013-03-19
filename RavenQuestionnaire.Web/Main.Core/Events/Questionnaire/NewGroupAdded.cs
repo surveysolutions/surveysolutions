@@ -1,12 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="NewGroupAdded.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The new group added.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Main.Core.Events.Questionnaire
+﻿namespace Main.Core.Events.Questionnaire
 {
     using System;
 
@@ -14,50 +6,23 @@ namespace Main.Core.Events.Questionnaire
 
     using Ncqrs.Eventing.Storage;
 
-    /// <summary>
-    /// The new group added.
-    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:NewGroupAdded")]
     public class NewGroupAdded
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
         public string ConditionExpression { get; set; }
 
-        /// <summary>
-        /// Gets or sets the group text.
-        /// </summary>
         public string GroupText { get; set; }
 
-        /// <summary>
-        /// Gets or sets the parent group public key.
-        /// </summary>
         public Guid? ParentGroupPublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the paropagateble.
-        /// </summary>
         public Propagate Paropagateble { get; set; }
 
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
         public Guid PublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the questionnaire public key.
-        /// </summary>
+        [Obsolete]
         public Guid QuestionnairePublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
         public string Description { get; set; }
-
-        #endregion
     }
 }

@@ -530,23 +530,6 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void MoveQuestionnaireItem_When_called_Then_raised_QuestionnaireItemMoved_event_contains_questionnaire_id()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var questionnaireId = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId: questionnaireId);
-
-                // act
-                questionnaire.MoveQuestionnaireItem(Guid.NewGuid(), null, null);
-
-                // assert
-                Assert.That(GetSingleEvent<QuestionnaireItemMoved>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId));
-            }
-        }
-
-        [Test]
         public void MoveQuestionnaireItem_When_public_key_specified_Then_raised_QuestionnaireItemMoved_event_with_same_public_key()
         {
             using (var eventContext = new EventContext())

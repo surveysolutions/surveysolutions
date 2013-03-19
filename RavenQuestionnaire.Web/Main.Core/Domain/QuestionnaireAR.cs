@@ -161,7 +161,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewGroupAdded
                     {
-                        QuestionnairePublicKey = this.innerDocument.PublicKey,
                         PublicKey = publicKey,
                         GroupText = text,
                         ParentGroupPublicKey = parentGroupKey,
@@ -457,7 +456,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireItemMoved
                     {
-                        QuestionnaireId = this.innerDocument.PublicKey,
                         AfterItemKey = afterItemKey,
                         GroupKey = groupKey,
                         PublicKey = publicKey
@@ -469,7 +467,6 @@ namespace Main.Core.Domain
         {
             this.ApplyEvent(new NewGroupAdded
             {
-                QuestionnairePublicKey = this.innerDocument.PublicKey,
                 PublicKey = groupId,
                 GroupText = title,
                 ParentGroupPublicKey = parentGroupId,
