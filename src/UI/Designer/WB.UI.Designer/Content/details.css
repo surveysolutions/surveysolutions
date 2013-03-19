@@ -459,6 +459,7 @@ h1 {
     background: -moz-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     background: linear-gradient(top, rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+    border-radius: 4px;
 }
 
     .q-item .icon-warning-sign {
@@ -610,3 +611,24 @@ h1 {
 .statistics .nav-pills > li > a {
     margin-top: 0;
 }
+.q-item-wrap .handler {
+    background: rgba(0,0,0,0.3);
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 15px;
+    border-right: 1px solid rgba(0,0,0,0.2);
+    box-shadow: -1px 0 0 rgba(255,255,255,0.3) inset;
+    cursor: move;
+    -webkit-border-radius: 4px 0 0 4px;
+    -moz-border-radius: 4px 0 0 4px;
+    -ms-border-radius: 4px 0 0 4px;
+    -o-border-radius: 4px 0 0 4px;
+    border-radius: 4px 0 0 4px;
+}
+
+ .ui-state-highlight { 
+     height: 1.5em; line-height: 1.2em;
+     background: red;
+ }
