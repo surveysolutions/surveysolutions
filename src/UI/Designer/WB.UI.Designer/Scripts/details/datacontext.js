@@ -47,6 +47,7 @@
                         items[newObj.id()] = newObj;
                     },
                     removeById = function (id) {
+                        console.log(items[id].title());
                         delete items[id];
                     },
                     getLocalById = function (id) {
@@ -104,6 +105,24 @@
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
 
+        // set parents
+        _.each(groups.getAllLocal(), function (parent) {
+            _.each(parent.childrenID(), function (children) {
+                var item = (children.type === "GroupView") ? groups.getLocalById(children.id) : questions.getLocalById(children.id);
+                item.parent(parent);
+            });
+        });
+
+        groups.removeGroup = function (id) {
+            var group = groups.getLocalById(id);
+            _.each(group.childrenID(), function (item) {
+                if (item.type === "GroupView")
+                    return groups.removeGroup(item.id);
+                return questions.removeById(item.id);
+            });
+            groups.removeById(id);
+        };
+
         groups.getChapters = function () {
             var chapters = _.filter(groups.getAllLocal(), function (item) {
                 return item.level() == 0;
@@ -118,6 +137,8 @@
             return propagatable;
         };
 
+
+
         questions.cleanTriggers = function (group) {
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });
@@ -130,6 +151,10 @@
         var commands = {};
 
         commands[config.commands.createGroup] = function (group) {
+            var parent = group.parent();
+            if (!_.isNull(parent))
+                parent = parent.id();
+
             return {
                 questionnaireId: questionnaire.id(),
                 groupId: group.id(),
@@ -137,10 +162,10 @@
                 propagationKind: group.gtype(),
                 description: group.description(),
                 condition: group.condition(),
-                parentGroupId: "" + group.parent()
+                parentGroupId: parent
             };
         };
-        
+
         commands[config.commands.deleteGroup] = function (group) {
             return {
                 questionnaireId: questionnaire.id(),
@@ -157,6 +182,86 @@
                 description: group.description(),
                 condition: group.condition()
             };
+        };
+
+        commands[config.commands.createQuestion] = function (question) {
+            var command = {
+                questionnaireId: questionnaire.id(),
+                groupId: question.parent().id(),
+                questionId: question.id(),
+                title: question.title(),
+                type: question.qtype(),
+                alias: question.alias(),
+                isHead: question.isHead(),
+                isFeatured: question.isFeatured(),
+                isMandatory: question.isMandatory(),
+                scope: question.scope(),
+                condition: question.condition(),
+                validationExpression: question.validationExpression(),
+                validationMessage: question.validationMessage(),
+                instructions: question.instruction()
+            };
+            switch (command.questionType) {
+                case "SingleOption":
+                case "YesNo":
+                case "DropDownList":
+                case "MultyOption":
+                    command.answerOrder = question.answerOrder();
+                    command.answerOptions = question.answerOptions();
+                    break;
+                case "Numeric":
+                case "DateTime":
+                case "GpsCoordinates":
+                case "Text": break;
+                case "AutoPropagate":
+                    command.maxValue = question.maxValue();
+                    command.triggers = question.triggers();
+                    break;
+            }
+            return command;
+        };
+
+        commands[config.commands.deleteQuestion] = function (question) {
+            return {
+                questionnaireId: questionnaire.id(),
+                questionId: question.id()
+            };
+        };
+
+        commands[config.commands.updateQuestion] = function (question) {
+            var command = {
+                questionnaireId: questionnaire.id(),
+                questionId: question.id(),
+                title: question.title(),
+                type: question.qtype(),
+                alias: question.alias(),
+                isHead: question.isHead(),
+                isFeatured: question.isFeatured(),
+                isMandatory: question.isMandatory(),
+                scope: question.scope(),
+                condition: question.condition(),
+                validationExpression: question.validationExpression(),
+                validationMessage: question.validationMessage(),
+                instructions: question.instruction()
+            };
+            switch (command.questionType) {
+                case "SingleOption":
+                case "YesNo":
+                case "DropDownList":
+                case "MultyOption":
+                    command.answerOrder = question.answerOrder();
+                    command.answerOptions = question.answerOptions();
+                    break;
+                case "Numeric":
+                case "DateTime":
+                case "GpsCoordinates":
+                case "Text": break;
+                case "AutoPropagate":
+                    command.maxValue = question.maxValue();
+                    command.triggers = question.triggers();
+                    break;
+            }
+            return command;
         };
 
         var sendCommand = function (commandName, args, callbacks) {

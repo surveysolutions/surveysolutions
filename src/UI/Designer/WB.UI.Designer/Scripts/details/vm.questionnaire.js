@@ -8,6 +8,10 @@
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
             errors = ko.observableArray(),
+            statistics = {
+                questions: ko.observable(),
+                groups: ko.observable(),
+            };
             isInitialized = false;
         activate = function (routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
@@ -15,6 +19,7 @@
             if (!isInitialized) {
                 getChapters();
                 questionnaire(datacontext.questionnaire);
+                calcStatistics();
                 $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
             }
             if (!_.isUndefined(selectedGroup())) {
@@ -86,6 +91,7 @@
             parent.childrenID.push({ type: question.type(), id: question.id() });
             parent.fillChildren();
             router.navigateTo(question.getHref());
+            calcStatistics();
         },
         addChapter = function () {
             var group = new model.Group();
@@ -94,6 +100,7 @@
             datacontext.groups.add(group);
             chapters.push(group);
             router.navigateTo(group.getHref());
+            calcStatistics();
         },
         addGroup = function (parent) {
             console.log(parent);
@@ -103,6 +110,7 @@
             parent.childrenID.push({ type: group.type(), id: group.id() });
             parent.fillChildren();
             router.navigateTo(group.getHref());
+            calcStatistics();
         },
         deleteGroup = function (item) {
             datacontext.sendCommand(
@@ -110,7 +118,7 @@
                item,
                {
                    success: function () {
-                       datacontext.groups.removeById(item.id());
+                       datacontext.groups.removeGroup(item.id());
                        
                        var parent = item.parent();
                        if (!_.isUndefined(parent)) {
@@ -120,8 +128,10 @@
                            datacontext.questions.cleanTriggers(child);
                            router.navigateTo(parent.getHref());
                        } else {
+                           chapters(datacontext.groups.getChapters());
                            router.navigateTo(config.hashes.details);
                        }
+                       calcStatistics();
                    },
                    error: function (d) {
                        console.log(d);
@@ -133,7 +143,7 @@
         },
         deleteQuestion = function (item) {
             datacontext.sendCommand(
-               config.commands.deleteGroup,
+               config.commands.deleteQuestion,
                item,
                {
                    success: function () {
@@ -142,6 +152,7 @@
                        parent.childrenID.remove(child);
                        parent.fillChildren();
                        router.navigateTo(parent.getHref());
+                       calcStatistics();
                    },
                    error: function (d) {
                        console.log(d);
@@ -150,8 +161,6 @@
                        showOutput();
                    }
                });
-            
-           
         },
         saveGroup = function (group) {
             console.log(group);
@@ -162,6 +171,7 @@
                     success: function () {
                         group.isNew(false);
                         group.dirtyFlag().reset();
+                        calcStatistics();
                     },
                     error: function (d) {
                         console.log(d);
@@ -171,8 +181,23 @@
                     }
                 });
         },
-        saveQuestion = function () {
-
+        saveQuestion = function (question) {
+            datacontext.sendCommand(
+                question.isNew() ? config.commands.createQuestion : config.commands.updateQuestion,
+                question,
+                {
+                    success: function () {
+                        question.isNew(false);
+                        question.dirtyFlag().reset();
+                        calcStatistics();
+                    },
+                    error: function (d) {
+                        console.log(d);
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                    }
+                });
         },
         clearFilter = function () {
             filter('');
@@ -188,6 +213,10 @@
             console.log("souce : " + arg.item.type());
 
             arg.cancelDrop = true;
+        },
+        calcStatistics = function() {
+            statistics.questions(datacontext.questions.getAllLocal().length);
+            statistics.groups(datacontext.groups.getAllLocal().length);
         },
         init = function () {
             filter.subscribe(filterContent);
@@ -217,6 +246,7 @@
             deleteQuestion: deleteQuestion,
             showOutput: showOutput,
             hideOutput: hideOutput,
-            errors: errors
+            errors: errors,
+            statistics: statistics
         };
     });
