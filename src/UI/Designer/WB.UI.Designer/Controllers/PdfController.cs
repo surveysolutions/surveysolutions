@@ -1,4 +1,4 @@
-﻿namespace RavenQuestionnaire.Web.Controllers
+﻿namespace WB.UI.Designer.Controllers
 {
     using System;
     using System.Configuration;
@@ -9,7 +9,7 @@
 
     using Main.Core.View;
 
-    using RavenQuestionnaire.Core.Views.Questionnaire;
+    using WB.UI.Designer.Views.Questionnaire;
 
     public class PdfController : Controller
     {

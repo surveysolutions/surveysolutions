@@ -105,7 +105,7 @@ namespace Main.Core.View.Questionnaire
         /// The new.
         /// </summary>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseItem.
+        /// The QuestionnaireBrowseItem.
         /// </returns>
         public static QuestionnaireBrowseItem New()
         {

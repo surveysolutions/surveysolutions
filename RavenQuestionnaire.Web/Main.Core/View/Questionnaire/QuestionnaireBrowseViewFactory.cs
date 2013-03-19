@@ -53,7 +53,7 @@ namespace Main.Core.View.Questionnaire
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseView.
+        /// The QuestionnaireBrowseView.
         /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
