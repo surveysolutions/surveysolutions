@@ -550,6 +550,9 @@
       <Link>Entities\SubEntities\LocationWithUserStatistic.cs</Link>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
+      <Link>Entities\SubEntities\Option.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Order.cs">
       <Link>Entities\SubEntities\Order.cs</Link>
       <SubType>Code</SubType>

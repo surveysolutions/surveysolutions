@@ -270,6 +270,7 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs" />
+    <Compile Include="Entities\SubEntities\Option.cs" />
     <Compile Include="Entities\SubEntities\QuestionScope.cs" />
     <Compile Include="Entities\SubEntities\IConditional.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />

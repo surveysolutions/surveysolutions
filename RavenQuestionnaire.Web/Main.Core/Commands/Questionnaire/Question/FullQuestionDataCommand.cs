@@ -6,7 +6,10 @@
 
     public abstract class FullQuestionDataCommand : QuestionCommand
     {
-        protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId, string title, QuestionType type, string @alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup, QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions)
+        protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,
+            string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
+            Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
             : base(questionnaireId, questionId)
         {
             this.Title = title;
@@ -20,6 +23,10 @@
             this.ValidationExpression = validationExpression;
             this.ValidationMessage = validationMessage;
             this.Instructions = instructions;
+            this.Options = options;
+            this.OptionsOrder = optionsOrder;
+            this.MaxValue = maxValue;
+            this.TriggedGroupIds = triggedGroupIds;
         }
 
         public string Title { get; set; }
@@ -43,5 +50,13 @@
         public string ValidationMessage { get; set; }
 
         public string Instructions { get; set; }
+
+        public Option[] Options { get; set; }
+
+        public Order OptionsOrder { get; set; }
+
+        public int? MaxValue { get; set; }
+
+        public Guid[] TriggedGroupIds { get; set; }
     }
 }
