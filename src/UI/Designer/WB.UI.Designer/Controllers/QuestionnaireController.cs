@@ -98,7 +98,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult Delete(Guid id)
         {
-            QuestionnaireView model = this.Get(id);
+            QuestionnaireView model = this.GetQuestionnaire(id);
             if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
             {
                 throw new DesignerPermissionException();
@@ -120,7 +120,7 @@ namespace WB.UI.Designer.Controllers
         [ActionName("Delete")]
         public ActionResult DeleteConfirmed(Guid id)
         {
-            QuestionnaireView model = this.Get(id);
+            QuestionnaireView model = this.GetQuestionnaire(id);
             if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
             {
                 throw new DesignerPermissionException();
@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult Edit(Guid id)
         {
-            QuestionnaireView model = this.Get(id);
+            QuestionnaireView model = this.GetQuestionnaire(id);
             if (model.CreatedBy != UserHelper.CurrentUserId)
             {
                 throw new DesignerPermissionException();
@@ -215,7 +215,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="QuestionnaireView"/>.
         /// </returns>
-        private QuestionnaireView Get(Guid id)
+        private QuestionnaireView GetQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire =
                 this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
