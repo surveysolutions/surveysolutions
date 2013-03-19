@@ -251,6 +251,7 @@
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Code\UserHelper.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
+    <Compile Include="PdfConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
