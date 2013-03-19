@@ -1,4 +1,4 @@
-﻿namespace Main.Core.Commands.Questionnaire.Group
+﻿namespace Main.Core.Commands.Questionnaire
 {
     using System;
 

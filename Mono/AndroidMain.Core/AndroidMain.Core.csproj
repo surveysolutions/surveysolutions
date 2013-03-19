@@ -147,41 +147,26 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\FullGroupDataCommand.cs">
       <Link>Commands\Questionnaire\Group\FullGroupDataCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\FullQuestionDataCommand.cs">
-      <Link>Commands\Questionnaire\Group\FullQuestionDataCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\GroupCommand.cs">
       <Link>Commands\Questionnaire\Group\GroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewAddGroupCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewAddQuestionCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewDeleteGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewDeleteGroupCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewDeleteQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewDeleteQuestionCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewUpdateGroupCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewUpdateQuestionCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\QuestionCommand.cs">
-      <Link>Commands\Questionnaire\Group\QuestionCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\QuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\Group\QuestionnaireCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\UpdateGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\UpdateGroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\MoveQuestionnaireItemCommand.cs">
       <Link>Commands\Questionnaire\MoveQuestionnaireItemCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\QuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\QuestionnaireCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\AddQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\AddQuestionCommand.cs</Link>
@@ -191,6 +176,21 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\DeleteQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\DeleteQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\FullQuestionDataCommand.cs">
+      <Link>Commands\Questionnaire\Question\FullQuestionDataCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewAddQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\NewAddQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\QuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\QuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\UpdateImageCommand.cs">
       <Link>Commands\Questionnaire\UpdateImageCommand.cs</Link>
@@ -1109,7 +1109,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,7 +4,7 @@
 
     using Machine.Specifications;
 
-    using Main.Core.Commands.Questionnaire.Group;
+    using Main.Core.Commands.Questionnaire.Question;
 
     using Ncqrs.Commanding;
 
