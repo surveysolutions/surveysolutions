@@ -95,9 +95,9 @@
                     errorMessageClass: "help-inline"
                 });
                 
-                ko.bindingHandlers.sortable.options = { cursor: "move" };
-                
-                
+                ko.bindingHandlers.sortable.options = { cursor: "move", handle: ".handler" };
+                ko.bindingHandlers.draggable.options = { cursor: "move", handle: ".handler" };
+
             };
 
         init();
