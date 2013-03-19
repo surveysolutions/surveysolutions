@@ -15,6 +15,7 @@ namespace WB.UI.Designer.Code.Helpers
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
             { "UpdateGroup", typeof(NewUpdateGroupCommand) },
+            { "AddGroup", typeof(NewAddGroupCommand) },
             { "DeleteGroup", typeof(NewDeleteGroupCommand) },
             { "DeleteQuestion", typeof(NewDeleteQuestionCommand) },
         };
