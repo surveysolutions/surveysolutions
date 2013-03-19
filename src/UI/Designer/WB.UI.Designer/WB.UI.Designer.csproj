@@ -232,6 +232,7 @@
     <Compile Include="Controllers\CommandController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Code\Helpers\ICommandDeserializer.cs" />
+    <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -470,6 +471,11 @@
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Questionnaire\_QuestionTypes.cshtml" />
+    <Content Include="Views\Pdf\_RenderChild.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
