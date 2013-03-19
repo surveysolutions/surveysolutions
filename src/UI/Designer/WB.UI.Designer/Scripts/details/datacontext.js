@@ -208,7 +208,13 @@
                 case "DropDownList":
                 case "MultyOption":
                     command.optionsOrder = question.answerOrder();
-                    command.options = question.answerOptions();
+                    command.options = _.map(question.answerOptions(), function(item) {
+                        return {
+                            id: item.id(),
+                            title: item.title(),
+                            value: item.value()
+                        };
+                    });
                     break;
 
                 case "Numeric":
@@ -219,7 +225,9 @@
 
                 case "AutoPropagate":
                     command.maxValue = question.maxValue();
-                    command.triggedGroupIds = question.triggers();
+                    command.triggedGroupIds = _.map(question.triggers(), function (trriger) {
+                        return trriger.key;
+                    });
                     break;
             }
 
