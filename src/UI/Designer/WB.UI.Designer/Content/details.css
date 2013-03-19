@@ -405,6 +405,7 @@ h1 {
 
     .q-item-wrap.q-group {
         background-color: #E3E3E3;
+        margin-left: 25px;
         /*
     background-image: -moz-linear-gradient(center top , #dff0d8, #d0e9c6);
     border-bottom: 1px solid #c1e2b3;
@@ -591,4 +592,21 @@ h1 {
 .control-group.error .controls .help-inline {
     font-size: 11px;
     padding-left: 0;
-} 
+}
+
+.ui-expander-head {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-top: 6px;
+}
+.ui-expander-head.ui-expander-head-collapsed i{
+    background-position: -408px -96px;
+}
+ 
+.statistics {
+    display: inline-block;
+    float: left;
+}
+.statistics .nav-pills > li > a {
+    margin-top: 0;
+}
