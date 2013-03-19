@@ -253,9 +253,9 @@ namespace Main.Core.AbstractFactories
         /// <param name="question">
         /// The question.
         /// </param>
-        private void UpdateAnswerList(IEnumerable<Answer> answers, IQuestion question)
+        private void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
         {
-            List<Answer> enumerable = answers != null ? answers.ToList() : new List<Answer>();
+            IEnumerable<IAnswer> enumerable = answers ?? new List<Answer>();
 
             if (answers != null && enumerable.Any())
             {

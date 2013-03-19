@@ -32,7 +32,7 @@ namespace Main.Core.Events.Questionnaire
         /// <summary>
         /// Gets or sets the answers.
         /// </summary>
-        public Answer[] Answers { get; set; }
+        public IEnumerable<IAnswer> Answers { get; set; }
 
         /// <summary>
         /// Gets or sets the condition expression.
