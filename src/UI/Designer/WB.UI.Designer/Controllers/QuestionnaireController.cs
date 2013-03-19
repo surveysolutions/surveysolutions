@@ -153,6 +153,11 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
+        public ActionResult Export(Guid id)
+        {
+            return this.RedirectToAction("PreviewQuestionnaire", "Pdf", new { id = id });
+        }
+
         /// <summary>
         /// The index.
         /// </summary>
