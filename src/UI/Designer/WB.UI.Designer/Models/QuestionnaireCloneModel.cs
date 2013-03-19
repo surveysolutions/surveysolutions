@@ -1,29 +1,29 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireViewModel.cs" company="">
+// <copyright file="QuestionnaireCloneModel.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   The questionnaire view model.
+//   The questionnaire clone model.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace WB.UI.Designer.Models
 {
+    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    ///     The questionnaire view model.
+    ///     The questionnaire clone model.
     /// </summary>
-    [DisplayName("Create Questionnaire")]
-    public class QuestionnaireViewModel
+    [DisplayName("Clone Questionnaire")]
+    public class QuestionnaireCloneModel : QuestionnaireViewModel
     {
         #region Public Properties
         /// <summary>
-        ///     Gets or sets the title.
+        ///     Gets or sets the id.
         /// </summary>
-        [Required]
-        [Display(Name = "Title")]
-        public string Title { get; set; }
+        [Key]
+        public Guid Id { get; set; }
 
         #endregion
     }
