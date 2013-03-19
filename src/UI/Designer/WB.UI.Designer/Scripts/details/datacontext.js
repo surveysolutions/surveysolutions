@@ -201,7 +201,7 @@
                 validationMessage: question.validationMessage(),
                 instructions: question.instruction()
             };
-            switch (command.questionType) {
+            switch (command.type) {
                 case "SingleOption":
                 case "YesNo":
                 case "DropDownList":
@@ -244,7 +244,7 @@
                 validationMessage: question.validationMessage(),
                 instructions: question.instruction()
             };
-            switch (command.questionType) {
+            switch (command.type) {
                 case "SingleOption":
                 case "YesNo":
                 case "DropDownList":

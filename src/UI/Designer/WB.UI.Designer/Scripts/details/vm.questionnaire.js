@@ -214,9 +214,6 @@
                 arg.cancelDrop = true;
                 return;
             }
-            console.log(arg.targetParent().title());
-            console.log("souce : " + arg.item.type());
-           
         },
         calcStatistics = function() {
             statistics.questions(datacontext.questions.getAllLocal().length);
