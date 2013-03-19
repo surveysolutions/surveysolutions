@@ -515,21 +515,26 @@ namespace Main.Core.Domain
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
+
                 GroupPublicKey = groupId,
                 QuestionText = title,
                 QuestionType = type,
                 StataExportCaption = alias,
+
                 Mandatory = isMandatory,
                 Featured = isFeatured,
                 Capital = isHeaderOfPropagatableGroup,
+
                 QuestionScope = scope,
                 ConditionExpression = condition,
                 ValidationExpression = validationExpression,
                 ValidationMessage = validationMessage,
+
                 //AnswerOrder = answerOrder,
                 //Triggers = triggers,
                 //MaxValue = maxValue,
                 //Answers = answers,
+
                 Instructions = instructions,
             });
         }
@@ -541,7 +546,45 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
 
-        public void NewUpdateQuestion(){}
+        public void NewUpdateQuestion(Guid questionId,
+            string title, QuestionType type, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions)
+        {
+            this.ThrowArgumentExceptionIfQuestionDoesNotExist(questionId);
+
+            alias = alias.Trim();
+
+            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            //this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            this.ApplyEvent(new QuestionChanged
+            {
+                PublicKey = questionId,
+
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+
+                //Triggers = triggers,
+                //MaxValue = maxValue,
+                //AnswerOrder = answerOrder,
+                //Answers = answers,
+
+                Instructions = instructions
+            });
+        }
 
         [Obsolete]
         public void UpdateGroup(
