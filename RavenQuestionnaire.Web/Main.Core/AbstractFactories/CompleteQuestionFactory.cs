@@ -255,12 +255,10 @@ namespace Main.Core.AbstractFactories
         /// </param>
         private void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
         {
-            IEnumerable<IAnswer> enumerable = answers ?? new List<Answer>();
-
-            if (answers != null && enumerable.Any())
+            if (answers != null && answers.Any())
             {
                 question.Answers.Clear();
-                foreach (Answer answer in enumerable)
+                foreach (var answer in answers)
                 {
                     question.AddAnswer(answer);
                 }
