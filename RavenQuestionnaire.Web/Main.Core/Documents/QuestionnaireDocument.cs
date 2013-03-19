@@ -302,7 +302,7 @@ namespace Main.Core.Documents
 
         public void RemoveGroup(Guid groupId)
         {
-            var groupParent = this.GetParentOfGroup(groupId);
+            IComposite groupParent = this.GetParentOfGroup(groupId);
 
             if (groupParent != null)
             {
@@ -314,9 +314,28 @@ namespace Main.Core.Documents
             }
         }
 
+        public void RemoveQuestion(Guid questionId)
+        {
+            IComposite questionParent = this.GetParentOfQuestion(questionId);
+
+            if (questionParent != null)
+            {
+                RemoveChildQuestionBySpecifiedId(questionParent, questionId);
+            }
+            else
+            {
+                Logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+            }
+        }
+
         private static void RemoveChildGroupBySpecifiedId(IComposite container, Guid groupId)
         {
             container.Children.RemoveAll(child => IsGroupWithSpecifiedId(child, groupId));
+        }
+
+        private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
+        {
+            container.Children.RemoveAll(child => IsQuestionWithSpecifiedId(child, questionId));
         }
 
         private IComposite GetParentOfGroup(Guid groupId)
@@ -324,8 +343,16 @@ namespace Main.Core.Documents
             if (ContainsChildGroupWithSpecifiedId(this, groupId))
                 return this;
 
-            return this.Find<IGroup>(
-                group => ContainsChildGroupWithSpecifiedId(group, groupId)).SingleOrDefault();
+            return this
+                .Find<IGroup>(group => ContainsChildGroupWithSpecifiedId(group, groupId))
+                .SingleOrDefault();
+        }
+
+        private IComposite GetParentOfQuestion(Guid questionId)
+        {
+            return this
+                .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
+                .SingleOrDefault();
         }
 
         private static bool ContainsChildGroupWithSpecifiedId(IComposite container, Guid groupId)
@@ -333,9 +360,19 @@ namespace Main.Core.Documents
             return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
         }
 
+        private static bool ContainsChildQuestionWithSpecifiedId(IComposite container, Guid questionId)
+        {
+            return container.Children.Any(child => IsQuestionWithSpecifiedId(child, questionId));
+        }
+
         private static bool IsGroupWithSpecifiedId(IComposite child, Guid groupId)
         {
             return child is IGroup && ((IGroup)child).PublicKey == groupId;
+        }
+
+        private static bool IsQuestionWithSpecifiedId(IComposite child, Guid questionId)
+        {
+            return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
         }
 
         /// <summary>

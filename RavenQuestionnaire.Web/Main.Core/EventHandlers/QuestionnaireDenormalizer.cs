@@ -150,7 +150,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            item.Remove(evnt.Payload.QuestionId, null, evnt.Payload.ParentPublicKey, null);
+            item.RemoveQuestion(evnt.Payload.QuestionId);
             this.UpdateQuestionnaire(evnt, item);
         }
 

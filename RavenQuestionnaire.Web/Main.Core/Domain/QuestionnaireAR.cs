@@ -346,7 +346,7 @@ namespace Main.Core.Domain
             Order answerOrder,
             Answer[] answers)
         {
-            ThrowArgumentExceptionIfQuestionDoesntExist(publicKey);
+            this.ThrowArgumentExceptionIfQuestionDoesNotExist(publicKey);
 
             stataExportCaption = stataExportCaption.Trim();
 
@@ -501,7 +501,12 @@ namespace Main.Core.Domain
             });
         }
 
-        public void NewDeleteQuestion(Guid questionId) {}
+        public void NewDeleteQuestion(Guid questionId)
+        {
+            this.ThrowArgumentExceptionIfQuestionDoesNotExist(questionId);
+
+            this.ApplyEvent(new QuestionDeleted(questionId));
+        }
 
         [Obsolete]
         public void UpdateGroup(
@@ -760,7 +765,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
-            this.innerDocument.Remove(e.QuestionId, null, e.ParentPublicKey, null);
+            this.innerDocument.RemoveQuestion(e.QuestionId);
         }
 
         /// <summary>
@@ -776,7 +781,7 @@ namespace Main.Core.Domain
 
         #endregion
 
-        private void ThrowArgumentExceptionIfQuestionDoesntExist(Guid publicKey)
+        private void ThrowArgumentExceptionIfQuestionDoesNotExist(Guid publicKey)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
