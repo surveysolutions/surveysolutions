@@ -221,7 +221,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult Clone(Guid id)
         {
-            var model = this.Get(id);
+            var model = this.GetQuestionnaire(id);
             return
                 this.View(
                     new QuestionnaireCloneModel()
@@ -246,7 +246,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (ModelState.IsValid)
             {
-                var sourceModel = this.Get(model.Id);
+                var sourceModel = this.GetQuestionnaire(model.Id);
                 if (sourceModel == null)
                 {
                     throw new ArgumentNullException("model");
