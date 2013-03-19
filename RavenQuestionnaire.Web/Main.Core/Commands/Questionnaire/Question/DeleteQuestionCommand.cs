@@ -18,6 +18,7 @@ namespace Main.Core.Commands.Questionnaire.Question
     /// <summary>
     /// The delete question command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteQuestion")]
     public class DeleteQuestionCommand : CommandBase

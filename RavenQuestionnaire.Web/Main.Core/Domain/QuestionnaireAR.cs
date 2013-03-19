@@ -432,6 +432,7 @@ namespace Main.Core.Domain
         /// <param name="parentPublicKey">
         /// The parent Public Key.
         /// </param>
+        [Obsolete]
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
 #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
@@ -499,6 +500,8 @@ namespace Main.Core.Domain
                 ConditionExpression = condition,
             });
         }
+
+        public void NewDeleteQuestion(Guid questionId) {}
 
         [Obsolete]
         public void UpdateGroup(
