@@ -192,7 +192,7 @@
                 title: question.title(),
                 type: question.qtype(),
                 alias: question.alias(),
-                isHead: question.isHead(),
+                isHeaderOfPropagatableGroup: question.isHead(),
                 isFeatured: question.isFeatured(),
                 isMandatory: question.isMandatory(),
                 scope: question.scope(),
