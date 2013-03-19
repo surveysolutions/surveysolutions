@@ -627,3 +627,8 @@ h1 {
     -o-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;
 }
+
+ .ui-state-highlight { 
+     height: 1.5em; line-height: 1.2em;
+     background: red;
+ }
