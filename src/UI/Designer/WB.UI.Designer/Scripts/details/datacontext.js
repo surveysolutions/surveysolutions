@@ -201,23 +201,29 @@
                 validationMessage: question.validationMessage(),
                 instructions: question.instruction()
             };
+
             switch (command.questionType) {
+
                 case "SingleOption":
                 case "YesNo":
                 case "DropDownList":
                 case "MultyOption":
-                    command.answerOrder = question.answerOrder();
-                    command.answerOptions = question.answerOptions();
+                    command.optionsOrder = question.answerOrder();
+                    command.options = question.answerOptions();
                     break;
+
                 case "Numeric":
                 case "DateTime":
                 case "GpsCoordinates":
-                case "Text": break;
+                case "Text":
+                    break;
+
                 case "AutoPropagate":
                     command.maxValue = question.maxValue();
-                    command.triggers = question.triggers();
+                    command.triggedGroupIds = question.triggers();
                     break;
             }
+
             return command;
         };
 
