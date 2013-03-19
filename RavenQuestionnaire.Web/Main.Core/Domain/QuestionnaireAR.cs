@@ -502,7 +502,39 @@ namespace Main.Core.Domain
             });
         }
 
-        public void NewAddQuestion(){}
+        public void NewAddQuestion(Guid questionId,
+            Guid groupId, string title, QuestionType type, string alias, 
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup, 
+            QuestionScope scope, string condition, string validationExpression, string validationMessage, 
+            string instructions)
+        {
+            alias = alias.Trim();
+
+            //this.ThrowArgumentExceptionIfAnswersNeededButAbsent(type, answers);
+
+            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ApplyEvent(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                //AnswerOrder = answerOrder,
+                //Triggers = triggers,
+                //MaxValue = maxValue,
+                //Answers = answers,
+                Instructions = instructions,
+            });
+        }
 
         public void NewDeleteQuestion(Guid questionId)
         {
