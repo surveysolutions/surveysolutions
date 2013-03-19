@@ -209,10 +209,14 @@
             console.log(arg);
         },
         isMovementPossible = function (arg) {
+            var target = arg.targetParent()[0].parent();
+            if (target.gtype() !== "None") {
+                arg.cancelDrop = true;
+                return;
+            }
             console.log(arg.targetParent().title());
             console.log("souce : " + arg.item.type());
-
-            arg.cancelDrop = true;
+           
         },
         calcStatistics = function() {
             statistics.questions(datacontext.questions.getAllLocal().length);
