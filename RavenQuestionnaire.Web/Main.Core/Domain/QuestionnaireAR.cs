@@ -17,9 +17,12 @@ namespace Main.Core.Domain
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Events.Questionnaire;
+    using Main.Core.Utility;
 
     using Ncqrs;
     using Ncqrs.Restoring.EventStapshoot;
@@ -78,6 +81,66 @@ namespace Main.Core.Domain
                         Title = title,
                         CreationDate = clock.UtcNow(),
                         CreatedBy = createdBy
+                    });
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
+            : this(publicKey, title, createdBy)
+        {
+            source.Children.ApplyAction(
+                x => x.Children,
+                (parent, x) =>
+                    {
+                        var parentId = parent == null ? (Guid?)null : parent.PublicKey;
+
+                        var q = x as IQuestion;
+                        if (q != null)
+                        {
+                            var autoQuestion = q as IAutoPropagate;
+                            this.AddQuestion(
+                                publicKey: q.PublicKey,
+                                questionText: q.QuestionText,
+                                stataExportCaption: q.StataExportCaption,
+                                questionType: q.QuestionType,
+                                questionScope: q.QuestionScope,
+                                conditionExpression: q.ConditionExpression,
+                                validationExpression: q.ValidationExpression,
+                                validationMessage: q.ValidationMessage,
+                                featured: q.Featured,
+                                mandatory: q.Mandatory,
+                                capital: q.Capital,
+                                answerOrder: q.AnswerOrder,
+                                instructions: q.Instructions,
+                                groupPublicKey: parentId,
+                                triggers: autoQuestion == null ? null : autoQuestion.Triggers,
+                                maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
+                                answers: q.Answers);
+                        }
+                        var g = x as IGroup;
+                        if (g != null)
+                        {
+                            this.AddGroup(
+                                publicKey: g.PublicKey,
+                                text: g.Title,
+                                propagateble: g.Propagated,
+                                parentGroupKey: parentId,
+                                conditionExpression: g.ConditionExpression,
+                                description: g.Description);
+                        }
                     });
         }
 
@@ -241,13 +304,13 @@ namespace Main.Core.Domain
             Guid? groupPublicKey,
             List<Guid> triggers,
             int maxValue,
-            Answer[] answers)
+            IEnumerable<IAnswer> answers)
         {
             stataExportCaption = stataExportCaption.Trim();
 
             this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
 
-            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
                 new NewQuestionAdded
@@ -389,7 +452,7 @@ namespace Main.Core.Domain
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
-            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
+            new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
         /// <summary>
@@ -767,10 +830,10 @@ namespace Main.Core.Domain
             }
         }
 
-        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, Answer[] answerOptions)
+        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, IEnumerable<IAnswer> answerOptions)
         {
             var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
-            if (isQuestionWithOptions && answerOptions.Length == 0)
+            if (isQuestionWithOptions && !answerOptions.Any())
             {
                 throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
             }
