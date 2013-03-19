@@ -147,11 +147,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\FullGroupDataCommand.cs">
       <Link>Commands\Questionnaire\Group\FullGroupDataCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\FullQuestionDataCommand.cs">
+      <Link>Commands\Questionnaire\Group\FullQuestionDataCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\GroupCommand.cs">
       <Link>Commands\Questionnaire\Group\GroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewAddGroupCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Group\NewAddQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewDeleteGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewDeleteGroupCommand.cs</Link>

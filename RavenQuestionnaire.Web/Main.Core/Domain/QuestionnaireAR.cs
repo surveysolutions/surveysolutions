@@ -225,6 +225,7 @@ namespace Main.Core.Domain
         /// <param name="answers">
         /// The answers.
         /// </param>
+        [Obsolete]
         public void AddQuestion(
             Guid publicKey,
             string questionText,
@@ -500,6 +501,8 @@ namespace Main.Core.Domain
                 ConditionExpression = condition,
             });
         }
+
+        public void NewAddQuestion(){}
 
         public void NewDeleteQuestion(Guid questionId)
         {
