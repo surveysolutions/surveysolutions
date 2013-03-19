@@ -94,6 +94,10 @@
                     errorElementClass: 'error',
                     errorMessageClass: "help-inline"
                 });
+                
+                ko.bindingHandlers.sortable.options = { cursor: "move" };
+                
+                
             };
 
         init();
