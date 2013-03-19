@@ -327,6 +327,7 @@ namespace Main.Core.Domain
         /// <param name="answers">
         /// The answers.
         /// </param>
+        [Obsolete]
         public void ChangeQuestion(
             Guid publicKey,
             string questionText,
@@ -539,6 +540,8 @@ namespace Main.Core.Domain
 
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
+
+        public void NewUpdateQuestion(){}
 
         [Obsolete]
         public void UpdateGroup(

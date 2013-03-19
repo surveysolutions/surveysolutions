@@ -191,6 +191,7 @@
     <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewDeleteQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewUpdateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\NewUpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\QuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />

@@ -20,6 +20,7 @@ namespace Main.Core.Commands.Questionnaire.Question
     /// <summary>
     /// The change question command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "ChangeQuestion")]
     public class ChangeQuestionCommand : CommandBase

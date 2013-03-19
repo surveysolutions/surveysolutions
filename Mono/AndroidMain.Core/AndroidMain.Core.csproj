@@ -168,6 +168,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewUpdateGroupCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Group\NewUpdateQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\QuestionCommand.cs">
       <Link>Commands\Questionnaire\Group\QuestionCommand.cs</Link>
     </Compile>
