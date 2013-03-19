@@ -610,3 +610,14 @@ h1 {
 .statistics .nav-pills > li > a {
     margin-top: 0;
 }
+.q-item-wrap .handler {
+    background: red;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 15px;
+    border-right: 1px solid red;
+    box-shadow: -1px 0 0 #000000 inset;
+    cursor: move;
+}
