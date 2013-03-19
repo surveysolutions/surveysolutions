@@ -9,8 +9,18 @@ using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer
 {
+    using NConfig;
+
     public class MvcApplication : HttpApplication
     {
+        /// <summary>
+        /// Initialization per AppDomain.
+        /// </summary>
+        static MvcApplication()
+        {
+            SetupNConfig();
+        }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -81,5 +91,9 @@ namespace WB.UI.Designer
             ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
 
+        private static void SetupNConfig()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Designer.Web.config").SetAsSystemDefault();
+        }
     }
 }
