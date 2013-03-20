@@ -74,6 +74,9 @@
     <Reference Include="Elmah">
       <HintPath>..\..\..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\..\..\..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
