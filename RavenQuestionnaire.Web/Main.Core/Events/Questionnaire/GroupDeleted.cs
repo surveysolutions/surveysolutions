@@ -17,6 +17,9 @@ namespace Main.Core.Events.Questionnaire
     [EventName("RavenQuestionnaire.Core:Events:GroupDeleted")]
     public class GroupDeleted
     {
+        /// <remarks>Needed for successfull deserialization from DB</remarks>>
+        public GroupDeleted() {}
+
         public GroupDeleted(Guid groupPublicKey)
         {
             this.GroupPublicKey = groupPublicKey;
