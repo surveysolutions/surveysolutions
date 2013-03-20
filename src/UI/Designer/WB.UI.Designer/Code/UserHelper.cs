@@ -13,25 +13,13 @@ namespace WB.UI.Designer.Models
 
     using WB.UI.Designer.Providers.Roles;
 
+    using WebMatrix.WebData;
+
     /// <summary>
     ///     The user helper.
     /// </summary>
     public static class UserHelper
     {
-        #region Static Fields
-
-        /// <summary>
-        /// The _ current user.
-        /// </summary>
-        private static MembershipUser _CurrentUser;
-
-        /// <summary>
-        /// The _ is admin.
-        /// </summary>
-        private static bool? _IsAdmin;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -59,7 +47,7 @@ namespace WB.UI.Designer.Models
         {
             get
             {
-                return _CurrentUser ?? (_CurrentUser = Membership.GetUser());
+                return Membership.GetUser();
             }
         }
 
@@ -81,7 +69,7 @@ namespace WB.UI.Designer.Models
         {
             get
             {
-                return _IsAdmin ?? (_IsAdmin = Roles.IsUserInRole(ADMINROLENAME)).Value;
+                return Roles.IsUserInRole(ADMINROLENAME);
             }
         }
 
@@ -92,17 +80,9 @@ namespace WB.UI.Designer.Models
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The reset user.
-        /// </summary>
-        public static void ResetUser()
+        public static void Logout()
         {
-            _CurrentUser = null;
-            _IsAdmin = null;
+            WebSecurity.Logout();
         }
-
-        #endregion
     }
 }
