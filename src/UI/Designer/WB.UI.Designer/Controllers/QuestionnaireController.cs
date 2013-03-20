@@ -23,6 +23,7 @@ namespace WB.UI.Designer.Controllers
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Code.Exceptions;
+    using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Utils;
     using WB.UI.Designer.Views.Questionnaire;
@@ -180,7 +181,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Index(int? p, string sb, bool? so, string f)
+        public ActionResult Index(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetItems(true, p, sb, so, f));
         }
@@ -203,7 +204,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Public(int? p, string sb, bool? so, string f)
+        public ActionResult Public(int? p, string sb, int? so, string f)
         {
             return this.View(this.GetItems(false, p, sb, so, f));
         }
@@ -303,13 +304,14 @@ namespace WB.UI.Designer.Controllers
         /// The <see cref="IPagedList"/>.
         /// </returns>
         private IPagedList<QuestionnaireListViewModel> GetItems(
-            bool isOnlyOwnerItems, int? pageIndex, string sortBy, bool? sortOrder, string filter)
+            bool isOnlyOwnerItems, int? pageIndex, string sortBy, int? sortOrder, string filter)
         {
             this.ViewBag.PageIndex = pageIndex;
             this.ViewBag.SortBy = sortBy;
             this.ViewBag.Filter = filter;
             this.ViewBag.SortOrder = sortOrder;
-            if (this.ViewBag.SortOrder != null && this.ViewBag.SortOrder)
+
+            if (sortOrder.ToBool())
             {
                 sortBy = string.Format("{0} Desc", sortBy);
             }
