@@ -26,7 +26,7 @@ namespace WB.UI.Designer.Controllers
     /// <summary>
     /// The administration controller.
     /// </summary>
-    [Authorize(Roles = "Administrator")]
+    [CustomAuthorize(Roles = "Administrator")]
     public class AdminController : AlertController
     {
         // GET: /Administration/
@@ -226,7 +226,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ViewResult"/>.
         /// </returns>
-        public ViewResult Index(int? p, string sb, bool? so, string f)
+        public ViewResult Index(int? p, string sb, int? so, string f)
         {
             var page = p ?? 1;
 
@@ -234,7 +234,8 @@ namespace WB.UI.Designer.Controllers
             ViewBag.SortBy = sb;
             ViewBag.Filter = f;
             ViewBag.SortOrder = so;
-            if (ViewBag.SortOrder != null && ViewBag.SortOrder)
+
+            if (so.ToBool())
             {
                 sb = string.Format("{0} Desc", sb);
             }

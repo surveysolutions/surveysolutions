@@ -221,6 +221,7 @@
     <Compile Include="BootstrapSupport\HtmlHelpers\Paging.cs" />
     <Compile Include="BootstrapSupport\ViewHelperExtensions.cs" />
     <Compile Include="Code\AccountManageMessageId.cs" />
+    <Compile Include="Code\CustomAuthorize.cs" />
     <Compile Include="Code\CustomExtensions.cs" />
     <Compile Include="Code\CustomHtmlHelper.cs" />
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
@@ -349,6 +350,9 @@
     </Content>
     <Content Include="Configuration\Dev.Designer.Web.config">
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />

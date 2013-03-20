@@ -17,22 +17,35 @@ namespace WB.UI.Designer.Controllers
 
         public void Attention(string message)
         {
-            TempData.Add(Alerts.ATTENTION, message);
+            WriteToTempData(Alerts.ATTENTION, message);
         }
 
         public void Success(string message)
         {
-            TempData.Add(Alerts.SUCCESS, message);
+            WriteToTempData(Alerts.SUCCESS, message);
         }
 
         public void Information(string message)
         {
-            TempData.Add(Alerts.INFORMATION, message);
+            WriteToTempData(Alerts.INFORMATION, message);
         }
 
         public void Error(string message)
         {
-            TempData.Add(Alerts.ERROR, message);
+            WriteToTempData(Alerts.ERROR, message);
+        }
+
+        private void WriteToTempData(string key, string message)
+        {
+            if (TempData.ContainsKey(key))
+            {
+                TempData[key] = message;
+            }
+            else
+            {
+                TempData.Add(key, message);
+            }
+            
         }
     }
 }

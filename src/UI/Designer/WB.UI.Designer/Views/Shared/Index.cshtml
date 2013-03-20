@@ -1,5 +1,6 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
+@using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
 @model IPagedList
 @{
@@ -7,6 +8,8 @@
 
     var PropertyList = PropertyInfo.VisibleProperties;
     var PropertyActions = PropertyInfo.ActionProperties;
+
+    int? sortOrder = (int?)ViewBag.SortOrder;
 }
 <blockquote class="pull-right">
     <p>
@@ -40,12 +43,12 @@ else
                         {
                             p = ViewBag.PageIndex,
                             sb = property.Name,
-                            so = WB.UI.Designer.Extensions.CustomExtensions.InvertSpecial(ViewBag.SortOrder, ViewBag.SortBy == property.Name),
+                            so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder,ViewBag.SortBy == property.Name),
                             f = ViewBag.Filter
                         })
                         @if (ViewBag.SortBy == property.Name)
                         {
-                            if (ViewBag.SortOrder == null || !(bool)ViewBag.SortOrder)
+                            if (!sortOrder.ToBool())
                             {
                             <i class="icon-chevron-up"></i>
                             }
