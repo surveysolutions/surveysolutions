@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Controllers
     /// <summary>
     /// The account controller.
     /// </summary>
-    [Authorize]
+    [CustomAuthorize]
     public class AccountController : AlertController
     {
         #region Public Methods and Operators
@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult LogOff()
         {
-            WebSecurity.Logout();
+            UserHelper.Logout();
 
             return this.RedirectToAction("login", "account");
         }
@@ -114,7 +114,6 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid
                 && WebSecurity.Login(model.UserName, model.Password, persistCookie: model.RememberMe))
             {
-                UserHelper.ResetUser();
                 return this.RedirectToLocal(returnUrl);
             }
 
