@@ -56,7 +56,7 @@
                   return self.propagatedGroups().length != 0;
               });
               self.addAnswer = function () {
-                  var answer = new answerOption().id('id').title(self.currentAnswerTitle()).value(self.currentAnswerValue());
+                  var answer = new answerOption().id(Math.uuid()).title(self.currentAnswerTitle()).value(self.currentAnswerValue());
                   self.answerOptions.push(answer);
                   self.currentAnswerTitle('');
                   self.currentAnswerValue('');
