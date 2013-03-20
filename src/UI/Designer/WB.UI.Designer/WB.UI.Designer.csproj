@@ -337,8 +337,12 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="HostMap.config" />
-    <Content Include="Configuration\Designer.Web.config" />
-    <Content Include="Configuration\Dev.Designer.Web.config" />
+    <Content Include="Configuration\Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Configuration\Dev.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
