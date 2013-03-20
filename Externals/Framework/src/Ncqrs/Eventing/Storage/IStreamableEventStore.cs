@@ -17,14 +17,6 @@
         /// </returns>
         IEnumerable<CommittedEvent> GetEventStream();
 
-        /// <summary>
-        /// The get event stream.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        IEnumerable<CommittedEvent> GetEventStreamByAR();
-
         #endregion
     }
 }

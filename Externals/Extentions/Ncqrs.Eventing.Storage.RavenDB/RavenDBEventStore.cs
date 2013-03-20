@@ -96,23 +96,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
         /// <summary>
-        /// The get event stream.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public IEnumerable<CommittedEvent> GetEventStreamByAR()
-        {
-            /*DocumentStore.CreateIndex();
-            var myEvents = DocumentStore.GetAllEvents();*/
-
-            return null;
-        }
-
-
-        /// <summary>
         /// The get stream by chunk.
         /// </summary>
         /// <returns>
@@ -127,7 +110,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 while (true)
                 {
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).OrderBy(i=>i.EventTimeStamp).Skip(page * PageSize).Take(PageSize);
+                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * PageSize).Take(PageSize);
 
                     if (!chunk.Any())
                     {
