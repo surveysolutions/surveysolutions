@@ -4,7 +4,7 @@
         var AnswerOption = function () {
             var self = this;
             
-            self.id = ko.observable();
+            self.id = ko.observable(Math.uuid());
             self.title = ko.observable();
             self.value = ko.observable();
             
