@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Controllers
     /// <summary>
     ///     The questionnaire controller.
     /// </summary>
-    [Authorize]
+    [CustomAuthorize]
     public class QuestionnaireController : AlertController
     {
         // GET: /Questionnaires/
