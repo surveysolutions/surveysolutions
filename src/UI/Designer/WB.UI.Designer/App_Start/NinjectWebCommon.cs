@@ -56,10 +56,13 @@ namespace WB.UI.Designer.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            #warning TLK: delete this when NCQRS initialization moved to Global.asax
+            MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
+
             kernel.Load(new DesignerRegistry(
                             repositoryPath: WebConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
 
-#warning TLK: move NCQRS initialization to Global.asax
+            #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
 
             kernel.Load<MembershipModule>();
