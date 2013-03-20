@@ -39,7 +39,6 @@ namespace WB.UI.Designer
             catch (Exception ex)
             {
                 NLog.LogManager.GetCurrentClassLogger().Error(ex);
-                throw;
                 #warning TLK: should not we rethrow exception here?
             }
         }
