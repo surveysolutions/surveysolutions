@@ -597,7 +597,7 @@ namespace Main.Core.Domain
                 Answers = ConvertOptionsToAnswers(options),
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds.ToList(),
+                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
             });
         }
 
@@ -643,7 +643,7 @@ namespace Main.Core.Domain
                 Answers = ConvertOptionsToAnswers(options),
                 AnswerOrder = optionsOrder,
                 MaxValue = maxValue ?? 10,
-                Triggers = triggedGroupIds.ToList(),
+                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
             });
         }
 

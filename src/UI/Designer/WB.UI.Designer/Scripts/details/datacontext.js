@@ -185,9 +185,26 @@
         };
 
         commands[config.commands.createQuestion] = function (question) {
+            var command = converQuestionToCommand(question);
+            command.groupId = question.parent().id();
+            return command;
+        };
+
+        commands[config.commands.deleteQuestion] = function (question) {
+            return {
+                questionnaireId: questionnaire.id(),
+                questionId: question.id()
+            };
+        };
+
+        commands[config.commands.updateQuestion] = function (question) {
+            return converQuestionToCommand(question);
+        };
+
+        var converQuestionToCommand = function(question) {
             var command = {
                 questionnaireId: questionnaire.id(),
-                groupId: question.parent().id(),
+
                 questionId: question.id(),
                 title: question.title(),
                 type: question.qtype(),
@@ -202,81 +219,34 @@
                 instructions: question.instruction()
             };
             switch (command.type) {
-           
-                case "SingleOption":
-                case "YesNo":
-                case "DropDownList":
-                case "MultyOption":
-                    command.optionsOrder = question.answerOrder();
-                    command.options = _.map(question.answerOptions(), function(item) {
-                        return {
-                            id: item.id(),
-                            title: item.title(),
-                            value: item.value()
-                        };
-                    });
-                    break;
-
-                case "Numeric":
-                case "DateTime":
-                case "GpsCoordinates":
-                case "Text":
-                    break;
-
-                case "AutoPropagate":
-                    command.maxValue = question.maxValue();
-                    command.triggedGroupIds = _.map(question.triggers(), function (trriger) {
-                        return trriger.key;
-                    });
-                    break;
-            }
-
-            return command;
-        };
-
-        commands[config.commands.deleteQuestion] = function (question) {
-            return {
-                questionnaireId: questionnaire.id(),
-                questionId: question.id()
-            };
-        };
-
-        commands[config.commands.updateQuestion] = function (question) {
-            var command = {
-                questionnaireId: questionnaire.id(),
-                questionId: question.id(),
-                title: question.title(),
-                type: question.qtype(),
-                alias: question.alias(),
-                isHead: question.isHead(),
-                isFeatured: question.isFeatured(),
-                isMandatory: question.isMandatory(),
-                scope: question.scope(),
-                condition: question.condition(),
-                validationExpression: question.validationExpression(),
-                validationMessage: question.validationMessage(),
-                instructions: question.instruction()
-            };
-            switch (command.type) {
-                case "SingleOption":
-                case "YesNo":
-                case "DropDownList":
-                case "MultyOption":
-                    command.answerOrder = question.answerOrder();
-                    command.answerOptions = question.answerOptions();
-                    break;
-                case "Numeric":
-                case "DateTime":
-                case "GpsCoordinates":
-                case "Text": break;
-                case "AutoPropagate":
-                    command.maxValue = question.maxValue();
-                    command.triggers = question.triggers();
-                    break;
+            case "SingleOption":
+            case "YesNo":
+            case "DropDownList":
+            case "MultyOption":
+                command.optionsOrder = question.answerOrder();
+                command.options = _.map(question.answerOptions(), function(item) {
+                    return {
+                        id: item.id(),
+                        title: item.title(),
+                        value: item.value()
+                    };
+                });
+                break;
+            case "Numeric":
+            case "DateTime":
+            case "GpsCoordinates":
+            case "Text":
+                break;
+            case "AutoPropagate":
+                command.maxValue = question.maxValue();
+                command.triggedGroupIds = _.map(question.triggers(), function(trriger) {
+                    return trriger.key;
+                });
+                break;
             }
             return command;
         };
-
+        
         var sendCommand = function (commandName, args, callbacks) {
             return $.Deferred(function (def) {
                 var command = {

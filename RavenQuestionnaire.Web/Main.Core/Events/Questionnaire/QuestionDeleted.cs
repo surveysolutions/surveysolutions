@@ -16,6 +16,8 @@ namespace Main.Core.Events.Questionnaire
     [EventName("RavenQuestionnaire.Core:Events:QuestionDeleted")]
     public class QuestionDeleted
     {
+        public QuestionDeleted() {}
+
         public QuestionDeleted(Guid questionId)
         {
             this.QuestionId = questionId;
