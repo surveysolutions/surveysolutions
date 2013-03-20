@@ -10,6 +10,10 @@
 footer {
     display: none;
 }
+::-moz-focus-inner
+{
+  border: 0;
+}
 
 ::-webkit-scrollbar {
     width: 8px;

@@ -210,7 +210,7 @@
         },
         isMovementPossible = function (arg) {
             var target = arg.targetParent()[0].parent();
-            if (target.gtype() !== "None") {
+            if (target.gtype() !== "None" && arg.item.type() == "GroupView") {
                 arg.cancelDrop = true;
                 return;
             }
