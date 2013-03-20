@@ -40,7 +40,7 @@ namespace WB.UI.Designer.Controllers
 
             try
             {
-                //this.commandService.Execute(concreteCommand);
+                this.commandService.Execute(concreteCommand);
             }
             catch (Exception e)
             {
