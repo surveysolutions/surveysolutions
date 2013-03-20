@@ -96,5 +96,8 @@ namespace WB.UI.Designer
         {
             NConfigurator.UsingFiles(@"~\Configuration\Designer.Web.config").SetAsSystemDefault();
         }
+
+        #warning TLK: delete this when NCQRS initialization moved to Global.asax
+        public static void Initialize() { }
     }
 }
