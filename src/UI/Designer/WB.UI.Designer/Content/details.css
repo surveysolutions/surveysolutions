@@ -63,7 +63,7 @@ body:before {
     right: 0;
     top: 0;
     z-index: -99999;
-    background-color: #164B69;
+    background-color: #1a5a7e;
 }
 
 body.loading .loading-backdrop {
@@ -504,6 +504,7 @@ h1 {
     color: #423e3e;
     position: relative;
     text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    outline: none;
 }
 
 .alias {
