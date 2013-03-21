@@ -145,10 +145,10 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Edit(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
-            //if (model.CreatedBy != UserHelper.CurrentUserId)
-            //{
-            //    throw new DesignerPermissionException();
-            //}
+            if (model.CreatedBy != UserHelper.CurrentUserId)
+            {
+                throw new DesignerPermissionException();
+            }
 
             this.ReplaceGuidsInValidationAndConditionRules(model);
 
@@ -356,7 +356,13 @@ namespace WB.UI.Designer.Controllers
         {
             var transformator = new ExpressionReplacer(this.Repository);
 
-            var elements = new Queue<ICompositeView>(model.Children.OfType<GroupView>());
+            var elements = new Queue<ICompositeView>();
+
+            foreach (var compositeView in model.Children)
+            {
+                elements.Enqueue(compositeView);
+            }
+
 
             while (elements.Count > 0)
             {
@@ -365,6 +371,7 @@ namespace WB.UI.Designer.Controllers
                 if (element is QuestionView)
                 {
                     var question = (QuestionView)element;
+                    
                     question.ConditionExpression =
                         transformator.ReplaceGuidsWithStataCaptions(question.ConditionExpression, model.PublicKey);
                     question.ValidationExpression =

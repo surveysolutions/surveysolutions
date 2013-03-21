@@ -6,18 +6,28 @@
     <label>Answers</label>
     <!-- ko foreach: answerOptions -->
     <div class="row-fluid">
-        <input type="number" placeholder="value" class="span3" data-bind="value: value">
-        <div class="input-append">
-            <input type="text" placeholder="title" class="span8" data-bind="value: title">
-            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        <div class="row-fluid">
+            <div class="controls  controls-row">
+                <div class="span3 control-group"  data-bind="validationElement: value">
+                    <input type="number" placeholder="value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
+                </div>
+                <div class="span8 control-group"  data-bind="validationElement: title">
+                    <input type="text" placeholder="title" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
+                </div>
+                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+            </div>
         </div>
     </div>
     <!-- /ko -->
     <div class="row-fluid">
-        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
-        <div class="input-append">
-            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
-            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        <div class="controls controls-row ">
+            <div class="span3">
+                <input id="currentAnswerValue"  type="number" placeholder="value" class="input-block-level" data-bind="value: $parent.currentAnswerValue">
+            </div>
+            <div class="span8" >
+                <input type="text" placeholder="title" class="input-block-level" data-bind="value: $parent.currentAnswerTitle">
+            </div>
+           <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
         </div>
     </div>
 </script>
@@ -29,12 +39,17 @@
     <label>Answers</label>
     <!-- ko foreach: answerOptions -->
     <div class="row-fluid">
-        <input type="number" placeholder="value" class="span3" data-bind="value: value">
-        <div class="input-append">
-            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+        <div class="controls controls-row">
+            <div>
+                <input type="number" placeholder="value" class="span3" data-bind="value: value">
+            </div>
+            <div>
+                <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            </div>
             <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
         </div>
     </div>
+
     <!-- /ko -->
     <div class="row-fluid">
         <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">

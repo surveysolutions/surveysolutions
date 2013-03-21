@@ -1,5 +1,5 @@
 ﻿define('config',
-    ['toastr', 'ko', 'amplify'],
+    ['pnotify', 'ko', 'amplify'],
     function (toastr, ko, amplify) {
 
         var// properties
@@ -66,19 +66,22 @@
                     trigger: "hover"
                 }
             },
-        logger = toastr, // use toastr for the logger
+            logger = $.pnotify, // use pnotify for the logger
 
             storeExpirationMs = (1000 * 60 * 60 * 24), // 1 day
             throttle = 400,
             title = 'Details',
-            toastrTimeout = 2000,
+            loggerTmeout = 2000,
 
-            toasts = {
-                changesPending: 'Please save or cancel your changes before leaving the page.',
-                errorSavingData: 'Data could not be saved. Please check the logs.',
-                errorGettingData: 'Could not retrieve data.  Please check the logs.',
-                invalidRoute: 'Cannot navigate. Invalid route',
-                retreivedData: 'Data retrieved successfully',
+            warnings = {
+                cantMoveQuestionOutsideGroup: {
+                    title: 'Cant move',
+                    text:  "You can't move question outside any group"
+                },
+                cantMoveGroupIntoPropagatedGroup: {
+                    title: 'Cant move',
+                    text: "You can't move group into propagated group"
+                },
                 savedData: 'Data saved successfully'
             },
 
@@ -86,7 +89,7 @@
             //-----------------
 
             init = function () {
-                toastr.options.timeOut = toastrTimeout;
+                logger.defaults.delay = loggerTmeout;
 
                 ko.validation.configure({
                     insertMessages: true,
@@ -107,7 +110,7 @@
             storeExpirationMs: storeExpirationMs,
             throttle: throttle,
             title: title,
-            toasts: toasts,
+            warnings: warnings,
             hashes: hashes,
             viewIds: viewIds,
             messages: messages,
