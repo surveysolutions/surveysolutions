@@ -21,7 +21,8 @@
         define('input', [], function() {
             var q = @Html.Raw(serializer.Serialize(Model));
             return {
-                questionnaire: q
+                questionnaire: q,
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
             };
         });
     </script>
