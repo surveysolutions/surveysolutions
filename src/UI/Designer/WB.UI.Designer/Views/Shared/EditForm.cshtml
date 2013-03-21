@@ -1,0 +1,14 @@
+﻿@using WB.UI.Designer.BootstrapSupport
+@model Object
+
+@foreach (var property in Model.VisibleProperties())
+{
+    using (Html.ControlGroupFor(property.Name))
+    {
+    @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
+    <div class="controls">
+        @Html.Editor(property.Name, new { @class = "input-xlarge" })
+        @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
+    </div>
+    }
+}
