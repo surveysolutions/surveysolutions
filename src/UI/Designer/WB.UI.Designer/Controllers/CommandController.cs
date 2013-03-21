@@ -5,7 +5,10 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
 
+    using Elmah;
+
     using Main.Core.Commands.Questionnaire.Group;
+    using Main.Core.Domain;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
@@ -35,6 +38,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
+                #warning TLK: register to Elmah or rethrow (better rethrow)
                 return Json(new { error = e.Message });
             }
 
@@ -45,14 +49,14 @@ namespace WB.UI.Designer.Controllers
             catch (Exception e)
             {
                 this.SetErrorStatusCode();
-                if (e.InnerException is ArgumentException)
+                if (e.InnerException is DomainException)
                 {
-                    var error = (ArgumentException) e.InnerException;
-                    return Json(new { error = error.Message });
+                    return this.Json(new { error = e.InnerException.Message });
                 }
                 else
                 {
-                    return Json(new { error = e.Message });
+                    #warning TLK: register to Elmah or rethrow (better rethrow)
+                    return this.Json(new { error = e.Message });
                 }
             }
 
