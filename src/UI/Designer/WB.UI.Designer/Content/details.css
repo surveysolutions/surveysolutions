@@ -616,12 +616,15 @@ h1 {
     #footer .inner {
         padding: 6px 8px 0 8px;
     }
-.control-group.error .controls input {
+.control-group.error .controls input,
+.controls .error input{
     margin-bottom: 0;
 }
+.controls .error .help-inline,
 .control-group.error .controls .help-inline {
     font-size: 11px;
     padding-left: 0;
+    line-height: 13px;
 }
 
 .ui-expander-head {
@@ -655,4 +658,9 @@ h1 {
     -ms-border-radius: 4px 0 0 4px;
     -o-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;
+}
+.controls .btn.btn-danger {
+    margin-left: 5px;
+    padding-left: 6px;
+    padding-left: 6px;
 }
