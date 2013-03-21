@@ -1,3 +1,4 @@
+using System.Configuration;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using StackExchange.Profiling;
 using StackExchange.Profiling.MVCHelpers;
@@ -16,8 +17,21 @@ namespace WB.UI.Designer.App_Start
 {
     public static class MiniProfilerPackage
     {
+        public static bool IsEnabled()
+        {
+            #warning TLK: deal with NConfig initialization order (should already be initialized here) and get rid of this line
+            MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
+
+            bool isMiniProfilerEnabled;
+            return bool.TryParse(ConfigurationManager.AppSettings["EnableMiniProfiler"], out isMiniProfilerEnabled)
+                ? isMiniProfilerEnabled
+                : false;
+        }
+
         public static void PreStart()
         {
+            if (!IsEnabled())
+                return;
 
             // Be sure to restart you ASP.NET Developement server, this code will not run until you do that. 
 
@@ -57,6 +71,9 @@ namespace WB.UI.Designer.App_Start
 
         public static void PostStart()
         {
+            if (!IsEnabled())
+                return;
+
             // Intercept ViewEngines to profile all partial views and regular views.
             // If you prefer to insert your profiling blocks manually you can comment this out
             var copy = ViewEngines.Engines.ToList();
@@ -72,6 +89,9 @@ namespace WB.UI.Designer.App_Start
     {
         public void Init(HttpApplication context)
         {
+            if (!MiniProfilerPackage.IsEnabled())
+                return;
+
             context.BeginRequest += (sender, e) =>
             {
                 var request = ((HttpApplication)sender).Request;
