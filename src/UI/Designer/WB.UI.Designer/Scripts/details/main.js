@@ -13,8 +13,9 @@
         define('infuser', [], function () { return root.infuser; });
         define('moment', [], function () { return root.moment; });
         define('sammy', [], function () { return root.Sammy; });
-        define('toastr', [], function () { return root.toastr; });
+        define('pnotify', [], function () { return root.jQuery.pnotify; });
         define('underscore', [], function () { return root._; });
+        define('bootbox', [], function () { return root.bootbox; });
     }
 
     function loadPluginsAndBoot() {

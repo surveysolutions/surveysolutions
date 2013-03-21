@@ -68,7 +68,8 @@ namespace WB.UI.Designer
                                 "~/Scripts/lib/sammy.js",
                                 "~/Scripts/lib/sammy.title.js",
                                 "~/Scripts/amplify.*",
-                                "~/Scripts/toastr.js",
+                                "~/Scripts/jquery.pnotify.js",
+                                "~/Scripts/bootbox.js",
 
                                 //Plugins
                                 "~/Scripts/lib/jquery.autogrow-textarea.js",
@@ -79,7 +80,9 @@ namespace WB.UI.Designer
                    .IncludeDirectory("~/Scripts/details/", "*.js", searchSubdirectories: false));
 
             bundles.Add(new StyleBundle("~/Content/edit").Include(
-               "~/Content/details.css"));
+               "~/Content/details.css",
+               "~/Content/jquery.pnotify.css",
+               "~/Content/jquery.pnotify.icons.css"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"
