@@ -269,6 +269,8 @@
     <Content Include="Content\details.css" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
+    <Content Include="Content\jquery.pnotify.css" />
+    <Content Include="Content\jquery.pnotify.icons.css" />
     <Content Include="Content\pdf.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -346,6 +348,8 @@
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\details\binder.js" />
@@ -388,6 +392,8 @@
     <Content Include="Scripts\jquery-migrate-1.1.1.min.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.1.min.js" />
+    <Content Include="Scripts\jquery.pnotify.js" />
+    <Content Include="Scripts\jquery.pnotify.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
