@@ -483,6 +483,7 @@
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Shared\EditForm.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
