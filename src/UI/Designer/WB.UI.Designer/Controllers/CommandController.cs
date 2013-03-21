@@ -43,7 +43,9 @@ namespace WB.UI.Designer.Controllers
             catch (CommandDeserializationException e)
             {
                 Logger.ErrorException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
-                return Json(new { error = "Unexpected error occurred: " + e.Message });
+
+                this.SetErrorStatusCode();
+                return this.Json(new { error = "Unexpected error occurred: " + e.Message });
             }
 
             try
@@ -52,19 +54,18 @@ namespace WB.UI.Designer.Controllers
             }
             catch (Exception e)
             {
-                this.SetErrorStatusCode();
                 if (e.InnerException is DomainException)
                 {
+                    this.SetErrorStatusCode();
                     return this.Json(new { error = e.InnerException.Message });
                 }
                 else
                 {
-                    #warning TLK: register to Elmah or rethrow (better rethrow)
-                    return this.Json(new { error = e.Message });
+                    throw;
                 }
             }
 
-            return Json(new { });
+            return this.Json(new { });
         }
 
         private void SetErrorStatusCode()
