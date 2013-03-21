@@ -14,7 +14,7 @@
         }
 
         .form-signin {
-            max-width: 300px;
+            max-width: 650px;
             padding: 19px 29px 29px;
             margin: 0 auto 20px;
             background-color: #fff;
@@ -27,18 +27,18 @@
             box-shadow: 0 1px 2px rgba(0,0,0,.05);
         }
 
-            .form-signin .form-signin-heading,
-            .form-signin .checkbox {
-                margin-bottom: 10px;
-            }
+        .form-actions {
+            margin-top: 20px;
+            margin-bottom: 0px;
+        }
 
-            .form-signin input[type="text"],
-            .form-signin input[type="password"] {
-                font-size: 16px;
-                height: auto;
-                margin-bottom: 15px;
-                padding: 7px 9px;
-            }
+        .form-horizontal .form-actions {
+            padding-left: 30px;
+        }
+
+        p {
+            margin: 10px 0 0 0;
+        }
     </style>
     @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
