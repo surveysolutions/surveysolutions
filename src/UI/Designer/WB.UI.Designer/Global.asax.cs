@@ -13,7 +13,6 @@ namespace WB.UI.Designer
 
     public class MvcApplication : HttpApplication
     {
-        private bool isInitiaslized = false;
         /// <summary>
         /// Initialization per AppDomain.
         /// </summary>
@@ -40,18 +39,11 @@ namespace WB.UI.Designer
             catch (Exception ex)
             {
                 NLog.LogManager.GetCurrentClassLogger().Error(ex);
-                throw;
-                #warning TLK: should not we rethrow exception here?
             }
-
-            isInitiaslized = true;
         }
 
         protected void Application_Error(object sender, EventArgs e)
         {
-            if (!isInitiaslized)
-                return;
-            
             var httpContext = ((MvcApplication)sender).Context;
             var currentController = string.Empty;
             var currentAction = string.Empty;
