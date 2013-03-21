@@ -635,7 +635,9 @@ h1 {
 .ui-expander-head.ui-expander-head-collapsed i{
     background-position: -408px -96px;
 }
- 
+ ul.list.ui-sortable:empty {
+     min-height: 24px;
+ }
 .statistics {
     display: inline-block;
     float: left;
@@ -643,6 +645,7 @@ h1 {
 .statistics .nav-pills > li > a {
     margin-top: 0;
 }
+
 .q-item-wrap .handler {
     background: rgba(0,0,0,0.3);
     bottom: 0;
