@@ -13,7 +13,7 @@
                 // Check the active view model to see if we can leave it
                 var
                     val = canleaveCallback ? canleaveCallback() : true,
-                    response = { val: val, message: config.toasts.changesPending };
+                    response = { val: val };
                 return response;
             },
 
