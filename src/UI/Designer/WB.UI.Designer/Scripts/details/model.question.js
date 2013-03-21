@@ -10,7 +10,7 @@
               
               self.title = ko.observable('New Question').extend({ minLength: 3, require: true });
               self.parent = ko.observable();
-              self.alias = ko.observable(Math.uuid(5)).extend({
+              self.alias = ko.observable('').extend({
                   require: true, maxLength: 32,
                   pattern: {
                       message: "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit",
@@ -22,21 +22,21 @@
               self.template = "QuestionView"; // tempate id in html file
 
               self.qtype = ko.observable("Text"); // Questoin type
-              self.isHead = ko.observable();
-              self.isFeatured = ko.observable();
-              self.isMandatory = ko.observable();
+              self.isHead = ko.observable(false);
+              self.isFeatured = ko.observable(false);
+              self.isMandatory = ko.observable(false);
               self.scope = ko.observable();
-              self.condition = ko.observable();
-              self.validationExpression = ko.observable();
-              self.validationMessage = ko.observable();
-              self.instruction = ko.observable();
+              self.condition = ko.observable('');
+              self.validationExpression = ko.observable('');
+              self.validationMessage = ko.observable('');
+              self.instruction = ko.observable('');
 
               self.answerOrder = ko.observable();
-              self.answerOptions = ko.observableArray();
-              self.cards = ko.observableArray();
+              self.answerOptions = ko.observableArray([]);
+              self.cards = ko.observableArray([]);
 
               self.maxValue = ko.observable();
-              self.triggers = ko.observableArray();
+              self.triggers = ko.observableArray([]);
 
               // UI stuff
               self.currentTrigger = ko.observable();

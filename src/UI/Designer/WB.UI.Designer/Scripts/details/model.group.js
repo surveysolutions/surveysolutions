@@ -16,8 +16,8 @@
                 self.gtype = ko.observable("None"); // Group type
 
                 self.level = ko.observable();
-                self.description = ko.observable();
-                self.condition = ko.observable();
+                self.description = ko.observable('');
+                self.condition = ko.observable('');
                 
                 self.children = ko.observableArray();
                 self.childrenID = ko.observableArray();

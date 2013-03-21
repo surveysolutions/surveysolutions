@@ -152,6 +152,7 @@
                 router.navigateTo(config.hashes.details);
             }
             calcStatistics();
+            hideOutput();
         },
         deleteQuestion = function (item) {
             bootbox.confirm("Are you sure you want to delete this question?", function (result) {
@@ -167,6 +168,7 @@
                         {
                             success: function () {
                                 deleteQuestionSuccessCallback(item);
+                                
                             },
                             error: function (d) {
                                 console.log(d);
@@ -185,6 +187,7 @@
             parent.fillChildren();
             router.navigateTo(parent.getHref());
             calcStatistics();
+            hideOutput();
         },
         saveGroup = function (group) {
             console.log(group);
@@ -196,6 +199,7 @@
                         group.isNew(false);
                         group.dirtyFlag().reset();
                         calcStatistics();
+                        hideOutput();
                     },
                     error: function (d) {
                         console.log(d);
@@ -214,6 +218,7 @@
                         question.isNew(false);
                         question.dirtyFlag().reset();
                         calcStatistics();
+                        hideOutput();
                     },
                     error: function (d) {
                         console.log(d);
