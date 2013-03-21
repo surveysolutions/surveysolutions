@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Code.Helpers
         private static Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)
         {
             if (!knownCommandTypes.ContainsKey(commandType))
-                throw new ArgumentException(string.Format("Command type '{0}' is not supported.", commandType));
+                throw new CommandDeserializationException(string.Format("Command type '{0}' is not supported.", commandType));
 
             return knownCommandTypes[commandType];
         }
