@@ -9,4 +9,5 @@ Subject: Complete Registration Process
 Hello @ViewBag.UserName,
  
 To complete the registration process click on this link 
-http://localhost:8011/Account/RegisterConfirmation/@ViewBag.ConfirmationToken
+@Url.Action("RegisterConfirmation", "Account", new { id = ViewBag.ConfirmationToken }, Request.Url.Scheme)
+

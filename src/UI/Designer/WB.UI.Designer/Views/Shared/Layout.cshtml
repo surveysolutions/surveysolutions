@@ -31,9 +31,9 @@
                         <li class="divider-vertical"></li>
                         @this.Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")
                         <li class="divider-vertical"></li>
-                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">My Account <b class="caret"></b></a>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, @User.Identity.Name <b class="caret"></b></a>
                             <ul class="dropdown-menu">
-                                <li>@this.Html.ActionLink("Manage", "Manage", "Account")</li>
+                                <li>@this.Html.ActionLink("Change password", "Manage", "Account")</li>
                                 <li>@this.Html.ActionLink("Logout", "LogOff", "Account")</li>
                             </ul>
                         </li>

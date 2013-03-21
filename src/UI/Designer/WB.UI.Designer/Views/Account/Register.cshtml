@@ -1,4 +1,5 @@
 ﻿@using Recaptcha
+@using WB.UI.Designer.BootstrapSupport
 @model WB.UI.Designer.Models.RegisterModel
 
 @{
@@ -9,17 +10,30 @@
 @using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin" }))
 {
     @Html.AntiForgeryToken()
-    <h2 class="form-signin-heading">Register</h2>
-    @Html.TextBoxFor(x => x.UserName, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.UserName) })
-    @Html.PasswordFor(x => x.Password, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.Password) })
-    @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.ConfirmPassword) })
-    @Html.TextBoxFor(x => x.Email, new { @class = "input-block-level", placeholder = Html.DisplayNameFor(m => m.Email) })
-    <p>
-        @Html.Raw(Html.GenerateCaptcha())
-    </p>
-    <button class="btn btn-large btn-primary" type="submit">Register</button>
+    <legend>@Model.GetLabel()</legend>
+    <fieldset class="form-horizontal">
+        @{
+    this.Html.RenderPartial("EditForm");
+        }
+        <p>
+            @Html.Raw(Html.GenerateCaptcha())
+        </p>
+        <div class="form-actions">
+            <button class="btn btn-large btn-primary pull-right" type="submit">Register</button>
+        </div>
+    </fieldset>
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+}
+
+@section Styles
+{
+    <style>
+        #recaptcha_area {
+            margin-left: 175px;
+        }
+    </style>
+
 }
