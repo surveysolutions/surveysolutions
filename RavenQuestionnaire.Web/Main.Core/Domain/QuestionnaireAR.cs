@@ -309,9 +309,9 @@ namespace Main.Core.Domain
         {
             stataExportCaption = stataExportCaption.Trim();
 
-            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
 
-            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
                 new NewQuestionAdded
@@ -410,13 +410,13 @@ namespace Main.Core.Domain
             Order answerOrder,
             Answer[] answers)
         {
-            this.ThrowArgumentExceptionIfQuestionDoesNotExist(publicKey);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(publicKey);
 
             stataExportCaption = stataExportCaption.Trim();
 
-            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
-            this.ThrowArgumentExceptionIfAnswersNeededButAbsent(questionType, answers);
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -542,7 +542,7 @@ namespace Main.Core.Domain
 
         public void NewDeleteGroup(Guid groupId)
         {
-            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ApplyEvent(new GroupDeleted(groupId));
         }
@@ -550,7 +550,7 @@ namespace Main.Core.Domain
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)
         {
-            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -571,9 +571,9 @@ namespace Main.Core.Domain
         {
             alias = alias.Trim();
 
-            this.ThrowArgumentExceptionIfOptionsNeededButAbsent(type, options);
+            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
 
-            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -603,7 +603,7 @@ namespace Main.Core.Domain
 
         public void NewDeleteQuestion(Guid questionId)
         {
-            this.ThrowArgumentExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
 
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
@@ -614,13 +614,13 @@ namespace Main.Core.Domain
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
-            this.ThrowArgumentExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
 
             alias = alias.Trim();
 
-            this.ThrowArgumentExceptionIfStataCaptionIsInvalid(questionId, alias);
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
-            this.ThrowArgumentExceptionIfOptionsNeededButAbsent(type, options);
+            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -657,7 +657,7 @@ namespace Main.Core.Domain
             string description)
 #warning get rid of executor here and create a common mechanism for handling it if needed
         {
-            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
 
             this.ApplyEvent(
                 new GroupUpdated
@@ -939,61 +939,61 @@ namespace Main.Core.Domain
             };
         }
 
-        private void ThrowArgumentExceptionIfQuestionDoesNotExist(Guid publicKey)
+        private void ThrowDomainExceptionIfQuestionDoesNotExist(Guid publicKey)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new ArgumentException(string.Format("Question with public key {0} can't be found", publicKey));
+                throw new DomainException(string.Format("Question with public key {0} can't be found", publicKey));
             }
         }
 
-        private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
+        private void ThrowDomainExceptionIfGroupDoesNotExist(Guid groupPublicKey)
         {
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+                throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
             }
         }
 
-        private void ThrowArgumentExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
+        private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
         {
-            ThrowArgumentExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
         }
 
-        private void ThrowArgumentExceptionIfAnswersNeededButAbsent(QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType, IEnumerable<IAnswer> answerOptions)
         {
             var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
             if (isQuestionWithOptions && !answerOptions.Any())
             {
-                throw new ArgumentException("Questions with options should have one answer option at least", "QuestionType");
+                throw new DomainException("Questions with options should have one answer option at least");
             }
         }
 
-        private void ThrowArgumentExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
+        private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces", "StataExportCaption");
+                throw new DomainException("Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters", "StataExportCaption");
+                throw new DomainException("Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character", "StataExportCaption");
+                throw new DomainException("Valid variable name should contains only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit", "StataExportCaption");
+                throw new DomainException("Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -1003,7 +1003,7 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope", "StataExportCaption");
+                throw new DomainException("Variable name should be unique in questionnaire's scope");
             }
         }
     }

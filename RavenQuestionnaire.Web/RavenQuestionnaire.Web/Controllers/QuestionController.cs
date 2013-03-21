@@ -25,6 +25,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using Main.Core.Commands.File;
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.Answer;
@@ -478,15 +479,15 @@ namespace RavenQuestionnaire.Web.Controllers
                         }
                     }
                 }
-                catch (ArgumentException e)
+                catch (DomainException e)
                 {
-                    this.AddModelErrorUsingArgumentException(model, e);
+                    this.AddModelErrorUsingDomainException(model, e);
                 }
                 catch (Exception e)
                 {
-                    if (e.InnerException is ArgumentException)
+                    if (e.InnerException is DomainException)
                     {
-                        this.AddModelErrorUsingArgumentException(model, (ArgumentException) e.InnerException);
+                        this.AddModelErrorUsingDomainException(model, (DomainException) e.InnerException);
                     }
                     else
                     {
@@ -508,9 +509,9 @@ namespace RavenQuestionnaire.Web.Controllers
             this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
         }
 
-        private void AddModelErrorUsingArgumentException(QuestionView model, ArgumentException e)
+        private void AddModelErrorUsingDomainException(QuestionView model, DomainException e)
         {
-            this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
+            this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
         }
 
         /// <summary>
