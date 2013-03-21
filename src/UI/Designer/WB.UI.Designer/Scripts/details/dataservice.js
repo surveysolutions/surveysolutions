@@ -1,9 +1,8 @@
-﻿define('dataservice', ['amplify'],
-    function (amplify) {
+﻿define('dataservice', ['amplify', 'input'],
+    function (amplify, input) {
         var init = function () {
-
             amplify.request.define('updateGroup', 'ajax', {
-                url: '/Command/Execute',
+                url: input.commandExecutionUrl,
                 dataType: 'json',
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
