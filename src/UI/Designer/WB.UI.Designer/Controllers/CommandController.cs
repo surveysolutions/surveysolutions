@@ -5,7 +5,12 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
 
+    using Elmah;
+
     using Main.Core.Commands.Questionnaire.Group;
+    using Main.Core.Domain;
+
+    using NLog;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
@@ -16,6 +21,8 @@ namespace WB.UI.Designer.Controllers
 
     public class CommandController : Controller
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
 
@@ -33,9 +40,10 @@ namespace WB.UI.Designer.Controllers
             {
                 concreteCommand = this.commandDeserializer.Deserialize(type, command);
             }
-            catch (Exception e)
+            catch (CommandDeserializationException e)
             {
-                return Json(new { error = e.Message });
+                Logger.ErrorException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
+                return Json(new { error = "Unexpected error occurred: " + e.Message });
             }
 
             try
@@ -45,14 +53,14 @@ namespace WB.UI.Designer.Controllers
             catch (Exception e)
             {
                 this.SetErrorStatusCode();
-                if (e.InnerException is ArgumentException)
+                if (e.InnerException is DomainException)
                 {
-                    var error = (ArgumentException) e.InnerException;
-                    return Json(new { error = error.Message });
+                    return this.Json(new { error = e.InnerException.Message });
                 }
                 else
                 {
-                    return Json(new { error = e.Message });
+                    #warning TLK: register to Elmah or rethrow (better rethrow)
+                    return this.Json(new { error = e.Message });
                 }
             }
 

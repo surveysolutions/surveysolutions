@@ -227,6 +227,7 @@
     <Compile Include="Code\Exceptions\CustomHandleErrorAttribute.cs" />
     <Compile Include="Code\Exceptions\DesignerPermissionException.cs" />
     <Compile Include="Code\GlobalHelper.cs" />
+    <Compile Include="Code\Helpers\CommandDeserializationException.cs" />
     <Compile Include="Code\Helpers\CommandDeserializer.cs" />
     <Compile Include="Code\Helpers\Routes\AreaRegistrationContextExtensions.cs" />
     <Compile Include="Code\Helpers\Routes\LowercaseRoute.cs" />
