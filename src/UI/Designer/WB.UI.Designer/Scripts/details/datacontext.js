@@ -256,7 +256,6 @@
 
                 dataservice.sendCommand({
                     success: function (response, status) {
-                        logger.success(config.toasts.savedData);
                         if (callbacks && callbacks.success) {
                             callbacks.success();
                         }
@@ -264,7 +263,6 @@
                     },
                     error: function (response, xhr) {
                         console.log(xhr);
-                        logger.error(config.toasts.errorSavingData);
                         if (callbacks && callbacks.error) {
                             callbacks.error(response);
                         }
