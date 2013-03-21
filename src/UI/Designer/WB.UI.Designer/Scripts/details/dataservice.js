@@ -8,7 +8,9 @@
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 decoder: function (data, status, xhr, success, error) {
-                    if (status === "success") {
+                    if (xhr.status == 500) {
+                        error({error : "Unexpected error occured. Try to refresh page to continue. If this problem persists, plese contact support."}, status);
+                    } else if (status === "success") {
                         success(data, status);
                     } else if (status === "fail" || status === "error") {
                         error(JSON.parse(xhr.responseText), status);
