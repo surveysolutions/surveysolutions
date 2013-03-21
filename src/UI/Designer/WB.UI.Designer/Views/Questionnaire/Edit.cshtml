@@ -21,7 +21,8 @@
         define('input', [], function() {
             var q = @Html.Raw(serializer.Serialize(Model));
             return {
-                questionnaire: q
+                questionnaire: q,
+                url : @Url.Action("Index", "Questionnaire", new { }, "http")
             };
         });
     </script>
