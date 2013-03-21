@@ -258,16 +258,16 @@ namespace WB.UI.Designer.Controllers
         /// <summary>
         /// The register confirmation.
         /// </summary>
-        /// <param name="Id">
-        /// The id.
+        /// <param name="token">
+        /// The token.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [AllowAnonymous]
-        public ActionResult RegisterConfirmation(string Id)
+        public ActionResult RegisterConfirmation(string token)
         {
-            if (WebSecurity.ConfirmAccount(Id))
+            if (WebSecurity.ConfirmAccount(token))
             {
                 return this.RedirectToAction("confirmationsuccess");
             }
