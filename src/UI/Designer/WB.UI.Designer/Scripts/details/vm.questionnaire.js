@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model'],
-    function (ko, _, config, datacontext, router, messenger, store, model) {
+    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
+    function (ko, _, config, datacontext, router, messenger, store, model, bootbox) {
         var filter = ko.observable('').extend({ throttle: 400 }),
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -12,7 +12,7 @@
                 questions: ko.observable(),
                 groups: ko.observable(),
             };
-            isInitialized = false;
+        isInitialized = false;
         activate = function (routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
 
@@ -113,54 +113,78 @@
             calcStatistics();
         },
         deleteGroup = function (item) {
-            datacontext.sendCommand(
-               config.commands.deleteGroup,
-               item,
-               {
-                   success: function () {
-                       datacontext.groups.removeGroup(item.id());
-                       
-                       var parent = item.parent();
-                       if (!_.isUndefined(parent)) {
-                           var child = _.find(parent.childrenID(), { 'id': item.id() });
-                           parent.childrenID.remove(child);
-                           parent.fillChildren();
-                           datacontext.questions.cleanTriggers(child);
-                           router.navigateTo(parent.getHref());
-                       } else {
-                           chapters(datacontext.groups.getChapters());
-                           router.navigateTo(config.hashes.details);
-                       }
-                       calcStatistics();
-                   },
-                   error: function (d) {
-                       console.log(d);
-                       errors.removeAll();
-                       errors.push(d);
-                       showOutput();
-                   }
-               });
+            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+                if (result == false)
+                    return;
+
+                if (item.isNew()) {
+                    deleteGroupSuccessCallback(item);
+                } else {
+                    datacontext.sendCommand(
+                        config.commands.deleteGroup,
+                        item,
+                        {
+                            success: function() {
+                                deleteGroupSuccessCallback(item);
+                            },
+                            error: function(d) {
+                                console.log(d);
+                                errors.removeAll();
+                                errors.push(d);
+                                showOutput();
+                            }
+                        });
+                }
+            });
+        },
+        deleteGroupSuccessCallback = function (item) {
+            datacontext.groups.removeGroup(item.id());
+
+            var parent = item.parent();
+            if (!_.isUndefined(parent)) {
+                var child = _.find(parent.childrenID(), { 'id': item.id() });
+                parent.childrenID.remove(child);
+                parent.fillChildren();
+                datacontext.questions.cleanTriggers(child);
+                router.navigateTo(parent.getHref());
+            } else {
+                chapters(datacontext.groups.getChapters());
+                router.navigateTo(config.hashes.details);
+            }
+            calcStatistics();
         },
         deleteQuestion = function (item) {
-            datacontext.sendCommand(
-               config.commands.deleteQuestion,
-               item,
-               {
-                   success: function () {
-                       var parent = item.parent();
-                       var child = _.find(parent.childrenID(), { 'id': item.id() });
-                       parent.childrenID.remove(child);
-                       parent.fillChildren();
-                       router.navigateTo(parent.getHref());
-                       calcStatistics();
-                   },
-                   error: function (d) {
-                       console.log(d);
-                       errors.removeAll();
-                       errors.push(d);
-                       showOutput();
-                   }
-               });
+            bootbox.confirm("Are you sure you want to delete this question?", function (result) {
+                if (result == false)
+                    return;
+
+                if (item.isNew()) {
+                    deleteQuestionSuccessCallback(item);
+                } else {
+                    datacontext.sendCommand(
+                        config.commands.deleteQuestion,
+                        item,
+                        {
+                            success: function () {
+                                deleteQuestionSuccessCallback(item);
+                            },
+                            error: function (d) {
+                                console.log(d);
+                                errors.removeAll();
+                                errors.push(d);
+                                showOutput();
+                            }
+                        });
+                }
+            });
+        },
+        deleteQuestionSuccessCallback = function (item) {
+            var parent = item.parent();
+            var child = _.find(parent.childrenID(), { 'id': item.id() });
+            parent.childrenID.remove(child);
+            parent.fillChildren();
+            router.navigateTo(parent.getHref());
+            calcStatistics();
         },
         saveGroup = function (group) {
             console.log(group);
@@ -210,12 +234,18 @@
         },
         isMovementPossible = function (arg) {
             var target = arg.targetParent()[0].parent();
-            if (target.gtype() !== "None") {
+            if ((_.isNull(target) || _.isUndefined(target)) && arg.item.type() == "QuestionView") {
                 arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveQuestionOutsideGroup);
+                return;
+            }
+            if (target.gtype() !== "None" && arg.item.type() == "GroupView") {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                 return;
             }
         },
-        calcStatistics = function() {
+        calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
             statistics.groups(datacontext.groups.getAllLocal().length);
         },

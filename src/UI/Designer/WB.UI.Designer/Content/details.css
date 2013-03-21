@@ -10,6 +10,10 @@
 footer {
     display: none;
 }
+::-moz-focus-inner
+{
+  border: 0;
+}
 
 ::-webkit-scrollbar {
     width: 8px;
@@ -612,12 +616,15 @@ h1 {
     #footer .inner {
         padding: 6px 8px 0 8px;
     }
-.control-group.error .controls input {
+.control-group.error .controls input,
+.controls .error input{
     margin-bottom: 0;
 }
+.controls .error .help-inline,
 .control-group.error .controls .help-inline {
     font-size: 11px;
     padding-left: 0;
+    line-height: 13px;
 }
 
 .ui-expander-head {
@@ -628,7 +635,9 @@ h1 {
 .ui-expander-head.ui-expander-head-collapsed i{
     background-position: -408px -96px;
 }
- 
+ ul.list.ui-sortable:empty {
+     min-height: 24px;
+ }
 .statistics {
     display: inline-block;
     float: left;
@@ -636,6 +645,7 @@ h1 {
 .statistics .nav-pills > li > a {
     margin-top: 0;
 }
+
 .q-item-wrap .handler {
     background: rgba(0,0,0,0.3);
     bottom: 0;
@@ -651,4 +661,9 @@ h1 {
     -ms-border-radius: 4px 0 0 4px;
     -o-border-radius: 4px 0 0 4px;
     border-radius: 4px 0 0 4px;
+}
+.controls .btn.btn-danger {
+    margin-left: 5px;
+    padding-left: 6px;
+    padding-left: 6px;
 }
