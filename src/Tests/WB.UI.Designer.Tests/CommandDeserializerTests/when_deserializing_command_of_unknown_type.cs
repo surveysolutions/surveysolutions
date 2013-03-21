@@ -21,8 +21,8 @@
             exception = Catch.Exception(() =>
                 deserializer.Deserialize(type, command));
 
-        It should_throw_ArgumentException = () =>
-            exception.ShouldBeOfType<ArgumentException>();
+        It should_throw_CommandDeserializationException = () =>
+            exception.ShouldBeOfType<CommandDeserializationException>();
 
         private static Exception exception;
         private static CommandDeserializer deserializer;

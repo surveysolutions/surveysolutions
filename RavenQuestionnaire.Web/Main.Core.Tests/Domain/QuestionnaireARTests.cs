@@ -23,7 +23,7 @@ namespace Main.Core.Tests.Domain
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_ArgumentException_should_be_thrown(QuestionType questionType)
+        public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
             var emptyAnswersList = new Answer[0];
@@ -37,7 +37,7 @@ namespace Main.Core.Tests.Domain
                                                                emptyAnswersList);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
@@ -109,7 +109,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void AddQuestion_When_stata_export_caption_has_33_chars_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_stata_export_caption_has_33_chars_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -123,11 +123,11 @@ namespace Main.Core.Tests.Domain
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void AddQuestion_When_stata_export_caption_starts_with_digit_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_stata_export_caption_starts_with_digit_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -142,11 +142,11 @@ namespace Main.Core.Tests.Domain
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void AddQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_stata_export_caption_is_empty_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -161,11 +161,11 @@ namespace Main.Core.Tests.Domain
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void AddQuestion_When_stata_export_caption_contains_any_non_underscore_letter_or_digit_character_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_stata_export_caption_contains_any_non_underscore_letter_or_digit_character_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -181,11 +181,11 @@ namespace Main.Core.Tests.Domain
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void AddQuestion_When_questionnaire_has_another_question_with_same_stata_export_caption_Then_ArgumentException_should_be_thrown()
+        public void AddQuestion_When_questionnaire_has_another_question_with_same_stata_export_caption_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -204,7 +204,7 @@ namespace Main.Core.Tests.Domain
                                                                new List<Guid>(), 0, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         #endregion
@@ -214,7 +214,7 @@ namespace Main.Core.Tests.Domain
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_ArgumentException_should_be_thrown(QuestionType questionType)
+        public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
             var emptyAnswersList = new Answer[0];
@@ -229,7 +229,7 @@ namespace Main.Core.Tests.Domain
                                              emptyAnswersList);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
 
@@ -282,7 +282,7 @@ namespace Main.Core.Tests.Domain
 
 
         [Test]
-        public void ChangeQuestion_When_we_updating_absent_question_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_we_updating_absent_question_Then_DomainException_should_be_thrown()
         {
             // Arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -296,11 +296,11 @@ namespace Main.Core.Tests.Domain
                                                             new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void ChangeQuestion_When_stata_export_caption_has_33_chars_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_stata_export_caption_has_33_chars_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid targetQuestionPublicKey;
@@ -316,11 +316,11 @@ namespace Main.Core.Tests.Domain
                                                             new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void ChangeQuestion_When_stata_export_caption_starts_with_digit_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_stata_export_caption_starts_with_digit_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid targetQuestionPublicKey;
@@ -335,7 +335,7 @@ namespace Main.Core.Tests.Domain
                                                             Order.AZ, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
@@ -363,7 +363,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void ChangeQuestion_When_stata_export_caption_is_empty_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_stata_export_caption_is_empty_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid targetQuestionPublicKey;
@@ -378,11 +378,11 @@ namespace Main.Core.Tests.Domain
                                                             Order.AZ, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void ChangeQuestion_When_stata_export_caption_contains_any_non_underscore_letter_or_digit_character_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_stata_export_caption_contains_any_non_underscore_letter_or_digit_character_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid targetQuestionPublicKey;
@@ -397,11 +397,11 @@ namespace Main.Core.Tests.Domain
                                                             Order.AZ, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         [Test]
-        public void ChangeQuestion_When_questionnaire_has_another_question_with_same_stata_export_caption_Then_ArgumentException_should_be_thrown()
+        public void ChangeQuestion_When_questionnaire_has_another_question_with_same_stata_export_caption_Then_DomainException_should_be_thrown()
         {
             // Arrange
             Guid targetQuestionPublicKey;
@@ -420,7 +420,7 @@ namespace Main.Core.Tests.Domain
                                                             Order.AZ, new Answer[0]);
 
             // Assert
-            Assert.Throws<ArgumentException>(act);
+            Assert.Throws<DomainException>(act);
         }
 
         #endregion
@@ -581,7 +581,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void UpdateGroup_When_group_does_not_exist_Then_throws_ArgumentException()
+        public void UpdateGroup_When_group_does_not_exist_Then_throws_DomainException()
         {
             // arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -592,7 +592,7 @@ namespace Main.Core.Tests.Domain
                 questionnaire.UpdateGroup(null, Propagate.None, notExistingGroupPublicKey, null, null, null);
 
             // assert
-            Assert.That(act, Throws.ArgumentException);
+            Assert.That(act, Throws.InstanceOf<DomainException>());
         }
 
         [Test]
