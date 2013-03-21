@@ -5,8 +5,8 @@
             var self = this;
             
             self.id = ko.observable(Math.uuid());
-            self.title = ko.observable();
-            self.value = ko.observable();
+            self.title = ko.observable().extend({ required: true });
+            self.value = ko.observable().extend({ required: true, number: true });
             
             self.image = ko.observable();
             
