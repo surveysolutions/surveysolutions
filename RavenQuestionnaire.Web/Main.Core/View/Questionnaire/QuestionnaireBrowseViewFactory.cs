@@ -73,7 +73,7 @@ namespace Main.Core.View.Questionnaire
             {
                 q =
                     x =>
-                    (input.IsOnlyOwnerItems ? x.CreatedBy == input.CreatedBy : x.CreatedBy != input.CreatedBy)
+                    (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
                     && (input.IsAdminMode.Value || !x.IsDeleted)
                     && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
             }

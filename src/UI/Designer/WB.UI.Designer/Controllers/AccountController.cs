@@ -91,7 +91,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Login(string returnUrl)
         {
             this.ViewBag.ReturnUrl = returnUrl;
-            return this.View();
+            return this.View(new LoginModel());
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return this.View();
+            return this.View(new RegisterModel());
         }
 
         // POST: /Account/Register
