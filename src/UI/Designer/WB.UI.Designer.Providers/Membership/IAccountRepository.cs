@@ -122,5 +122,16 @@ namespace WB.UI.Designer.Providers.Membership
         /// <param name="email">Email address</param>
         /// <returns>Created account</returns>
         IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email);
+
+        /// <summary>
+        /// The get user by reset password token.
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="string"/>.
+        /// </returns>
+        IMembershipAccount GetUserByResetPasswordToken(string token);
     }
 }

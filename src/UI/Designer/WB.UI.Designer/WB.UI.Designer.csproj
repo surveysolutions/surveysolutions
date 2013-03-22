@@ -258,6 +258,8 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
+    <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
     <Compile Include="Models\IActionItem.cs" />
     <Compile Include="Models\QuestionnaireListViewModel.cs" />
@@ -472,7 +474,6 @@
     </Content>
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
@@ -506,6 +507,11 @@
     <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
+    <Content Include="Views\Account\PasswordReset.cshtml" />
+    <Content Include="Views\Account\ResetPasswordStepTwo.cshtml" />
+    <Content Include="Views\Emails\ResetPasswordEmail.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

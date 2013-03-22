@@ -47,8 +47,9 @@ namespace WB.UI.Designer.BootstrapSupport
                                elementType.GetProperties()
                                           .Where(
                                               info =>
-                                              (info.Name != elementType.IdentifierPropertyName()) &&
-                                              !actionProperties.Select(x=>x.Name).Contains(info.Name))
+                                              (info.Name != elementType.IdentifierPropertyName())
+                                              && !actionProperties.Select(x => x.Name)
+                                                                  .Contains(info.Name))
                                           .OrderedByDisplayAttr()
                                           .ToArray(),
                            ActionProperties = actionProperties
@@ -58,7 +59,12 @@ namespace WB.UI.Designer.BootstrapSupport
 
         public static PropertyInfo[] VisibleProperties(this Object model)
         {
-            return model.GetType().GetProperties().Where(info => info.Name != model.IdentifierPropertyName()).OrderedByDisplayAttr().ToArray();
+            return
+                model.GetType()
+                     .GetProperties()
+                     .Where(info => info.Name != model.IdentifierPropertyName())
+                     .OrderedByDisplayAttr()
+                     .ToArray();
         }
 
         // Support for Order property in DisplayAttribute ([Display(..., Order = n)])
