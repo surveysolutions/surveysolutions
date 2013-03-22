@@ -16,56 +16,24 @@ namespace Main.Core.Entities.SubEntities
     /// </summary>
     public class Answer : IAnswer
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Answer"/> class.
-        /// </summary>
         public Answer(/*Question owner*/)
         {
             this.PublicKey = Guid.NewGuid();
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the answer image.
-        /// </summary>
         public string AnswerImage { get; set; }
 
-        /// <summary>
-        /// Gets or sets the answer text.
-        /// </summary>
         public string AnswerText { get; set; }
 
-        /// <summary>
-        /// Gets or sets the answer type.
-        /// </summary>
         public AnswerType AnswerType { get; set; }
 
-        /// <summary>
-        /// Gets or sets the answer value.
-        /// </summary>
         public string AnswerValue { get; set; }
        
-        /// <summary>
-        /// Gets or sets a value indicating whether mandatory.
-        /// </summary>
         public bool Mandatory { get; set; }
 
-        /// <summary>
-        /// Gets or sets the name collection.
-        /// </summary>
         public string NameCollection { get; set; }
         
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
         public Guid PublicKey { get; set; }
-
-        #endregion
 
         #region Implementation of ICloneable
 
@@ -81,5 +49,19 @@ namespace Main.Core.Entities.SubEntities
         }
 
         #endregion
+
+        public static Answer CreateFromOther(IAnswer answer)
+        {
+            return new Answer
+            {
+                AnswerImage = answer.AnswerImage,
+                AnswerText = answer.AnswerText,
+                AnswerType = answer.AnswerType,
+                AnswerValue = answer.AnswerValue,
+                Mandatory = answer.Mandatory,
+                NameCollection = answer.NameCollection,
+                PublicKey = answer.PublicKey,
+            };
+        }
     }
 }

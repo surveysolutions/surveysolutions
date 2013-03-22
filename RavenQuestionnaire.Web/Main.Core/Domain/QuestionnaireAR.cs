@@ -128,7 +128,7 @@ namespace Main.Core.Domain
                                 groupPublicKey: parentId,
                                 triggers: autoQuestion == null ? null : autoQuestion.Triggers,
                                 maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                                answers: q.Answers);
+                                answers: q.Answers.Select(Answer.CreateFromOther).ToArray());
                         }
                         var g = x as IGroup;
                         if (g != null)
@@ -305,7 +305,7 @@ namespace Main.Core.Domain
             Guid? groupPublicKey,
             List<Guid> triggers,
             int maxValue,
-            IEnumerable<IAnswer> answers)
+            Answer[] answers)
         {
             stataExportCaption = stataExportCaption.Trim();
 
