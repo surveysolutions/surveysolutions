@@ -139,6 +139,16 @@ namespace WB.UI.Designer.Providers.Membership
         string PasswordSalt { get; set; }
 
         /// <summary>
+        /// Gets or sets the password reset token.
+        /// </summary>
+        string PasswordResetToken { get; set; }
+
+        /// <summary>
+        /// Gets or sets the password reset created at.
+        /// </summary>
+        DateTime PasswordResetExpirationDate { get; set; }
+
+        /// <summary>
         /// A token that can be sent to the user to confirm the account.
         /// </summary>
         string ConfirmationToken { get; set; }
