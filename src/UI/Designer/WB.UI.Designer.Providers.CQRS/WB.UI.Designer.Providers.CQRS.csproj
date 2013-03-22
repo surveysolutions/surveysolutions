@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Accounts\AccountAR.cs" />
     <Compile Include="Accounts\Commands\AddRoleToAccountCommnad.cs" />
+    <Compile Include="Accounts\Commands\ChangePasswordResetTokenCommand.cs" />
     <Compile Include="Accounts\Commands\ConfirmAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangeOnlineAccountCommand.cs" />
     <Compile Include="Accounts\Commands\ChangePasswordAccountCommand.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="Accounts\Commands\LockAccountCommand.cs" />
     <Compile Include="Accounts\Events\AccountConfirmed.cs" />
     <Compile Include="Accounts\Events\AccountLoginFailed.cs" />
+    <Compile Include="Accounts\Events\AccountPasswordResetTokenChanged.cs" />
     <Compile Include="Accounts\Events\AccountRoleAdded.cs" />
     <Compile Include="Accounts\Events\AccountRoleRemoved.cs" />
     <Compile Include="Accounts\Events\AccountUpdated.cs" />
