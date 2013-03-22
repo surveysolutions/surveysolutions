@@ -360,6 +360,9 @@
     <Content Include="Configuration\Slava.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\TLK.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
