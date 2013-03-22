@@ -628,7 +628,22 @@ namespace WB.UI.Designer.Providers.Membership
         /// </exception>
         public override string GeneratePasswordResetToken(string userName, int tokenExpirationInMinutesFromNow)
         {
-            throw new NotImplementedException();
+            string token = string.Empty;
+
+            if (!this.PasswordPolicy.IsPasswordResetEnabled)
+            {
+                throw new NotSupportedException("Password reset is not supported.");
+            }
+
+            IMembershipAccount user = this.AccountRepository.Get(userName);
+            if (user != null)
+            {
+                user.PasswordResetToken = token = GenerateToken();
+                user.PasswordResetExpirationDate = DateTime.UtcNow.AddMinutes(tokenExpirationInMinutesFromNow);
+                this.AccountRepository.Update(user, MembershipEventType.ChangePasswordResetToken);
+            }
+
+            return token;
         }
 
         /// <summary>
@@ -953,7 +968,26 @@ namespace WB.UI.Designer.Providers.Membership
         /// </exception>
         public override bool ResetPasswordWithToken(string token, string newPassword)
         {
-            throw new NotImplementedException();
+            if (!this.PasswordPolicy.IsPasswordResetEnabled)
+            {
+                throw new NotSupportedException("Password reset is not supported.");
+            }
+
+            bool isPasswordChanged = false;
+            IMembershipAccount user = this.AccountRepository.GetUserByResetPasswordToken(token);
+            if (user != null && user.PasswordResetExpirationDate > DateTime.UtcNow && user.PasswordResetToken == token)
+            {
+                this.ValidatePassword(user.UserName, newPassword);
+
+                var info = new AccountPasswordInfo(user.UserName, newPassword);
+                user.Password = this.PasswordStrategy.Encrypt(info);
+                user.PasswordSalt = info.PasswordSalt;
+                this.AccountRepository.Update(user, MembershipEventType.ResetPassword);
+
+                isPasswordChanged = true;
+            }
+
+            return isPasswordChanged;
         }
 
         /// <summary>

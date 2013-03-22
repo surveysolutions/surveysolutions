@@ -39,6 +39,10 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         private string _confirmationToken;
         private List<SimpleRoleEnum> _roles;
 
+        private string _passwordResetToken;
+
+        private DateTime _passwordResetExpirationDate;
+
         #endregion
 
         public AccountAR()
@@ -190,6 +194,21 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                 {
                     FailedPasswordWindowStartedAt = DateTime.UtcNow
                 });
+        }
+
+        public void ChangePasswordResetToken(string passwordResetToken, DateTime passwordResetExpirationDate)
+        {
+            this.ApplyEvent(new AccountPasswordResetTokenChanged()
+                                {
+                                    PasswordResetToken = passwordResetToken,
+                                    PasswordResetExpirationDate = passwordResetExpirationDate
+                                });
+        }
+
+        public void OnChangePasswordResetToken(AccountPasswordResetTokenChanged @event)
+        {
+            _passwordResetToken = @event.PasswordResetToken;
+            _passwordResetExpirationDate = @event.PasswordResetExpirationDate;
         }
 
         public void OnAccountConfirmed(AccountConfirmed @event)

@@ -68,6 +68,10 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             {
                 query = (x) => x.ConfirmationToken == input.ConfirmationToken;
             }
+            else if (!string.IsNullOrEmpty(input.ResetPasswordToken))
+            {
+                query = (x) => x.PasswordResetToken == input.ResetPasswordToken;
+            }
 
             return _accounts.Query().Where(query).Select(x=>new AccountView()
                 {
@@ -93,6 +97,8 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                     PasswordSalt = x.PasswordSalt,
                     PasswordQuestion = x.PasswordQuestion,
                     PasswordAnswer = x.PasswordAnswer,
+                    PasswordResetToken = x.PasswordResetToken,
+                    PasswordResetExpirationDate = x.PasswordResetExpirationDate,
                     SimpleRoles = x.SimpleRoles
                 }).FirstOrDefault();
         }
