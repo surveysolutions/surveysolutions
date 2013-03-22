@@ -119,6 +119,12 @@ namespace Web.Supervisor
             catch (Exception e)
             {
                 this.logger.Fatal("Initialization failed", e);
+                this.logger.Fatal("Initialization failed", e.StackTrace);
+                if (e.InnerException != null)
+                {
+                    this.logger.Fatal("Initialization failed", e.InnerException);
+                    this.logger.Fatal("Initialization failed", e.InnerException.StackTrace);
+                }
                 correctlyInitialized = false;
 
                 // due to the bug in iis7 moved to Application_BeginRequest
