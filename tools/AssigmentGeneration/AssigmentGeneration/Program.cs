@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,16 +21,37 @@ namespace AssigmentGeneration
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Enter path to file with users. Firs user have to be supervisor:");
-            var usersPath = Console.ReadLine();
+            Console.WriteLine("Create new users? (Y/N)");
+            var answer = Console.ReadLine();
+            Guid supervisorKey;
+            string supervisorName;
+            if (string.Compare(answer,"Y",true)==0)
+            {
+                Console.WriteLine("Enter path to file with users. Firs user have to be supervisor:");
+                var usersPath = Console.ReadLine();
 
-            var builder = new DataBuilder(usersPath);
-            builder.CreateFile();
+                var builder = new DataBuilder(usersPath);
+                builder.CreateFile();
+                supervisorKey = builder.SupervisorKey;
+                supervisorName = builder.SupervisorName;
+            }
+            else if(string.Compare(answer,"N", true)==0)
+            {
+                Console.WriteLine("Enter supervisorKey and login name:");
+                var supervisor = Console.ReadLine().Split(' ');
+                supervisorKey = Guid.Parse(supervisor[0].Trim());
+                supervisorName = supervisor[1].Trim();
+
+            }
+            else
+            {
+                return;
+            }
 
             Console.WriteLine("Enter questionnaire template path and assigment values path:");
             var files = Console.ReadLine().Split(' ');
-            AssigmentBuilder assigments = new AssigmentBuilder(files[0].Trim(), files[1].Trim(), builder.SupervisorKey,
-                                                               builder.SupervisorName);
+            AssigmentBuilder assigments = new AssigmentBuilder(files[0].Trim(), files[1].Trim(), supervisorKey,
+                                                               supervisorName);
             assigments.CreateFile();
             Console.ReadLine();
         }
