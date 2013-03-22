@@ -39,6 +39,8 @@ namespace WB.UI.Designer
             catch (Exception ex)
             {
                 NLog.LogManager.GetCurrentClassLogger().Error(ex);
+                Elmah.ErrorLog.GetDefault(HttpContext.Current).Log(new Elmah.Error(ex));
+                throw; // DO NOT DELETE THIS RETHROW!! -- TLK
             }
         }
 
