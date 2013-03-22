@@ -48,6 +48,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
     /// </summary>
     public static class NcqrsInit
     {
+        private static bool isReadLayerBuilt = false;
+        private static object lockObject = new object();
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -87,6 +90,20 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
+        public static void EnsureReadLayerIsBuilt()
+        {
+            if (!isReadLayerBuilt)
+            {
+                lock (lockObject)
+                {
+                    if (!isReadLayerBuilt)
+                    {
+                        RebuildReadLayer();
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
@@ -110,7 +127,11 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
             eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
+
+            isReadLayerBuilt = true;
         }
+
+
 
         #endregion
 
