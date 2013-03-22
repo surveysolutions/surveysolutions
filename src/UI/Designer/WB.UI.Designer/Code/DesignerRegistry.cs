@@ -7,6 +7,11 @@ using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.Code
 {
+    using System;
+    using System.Web.Mvc;
+
+    using WB.UI.Designer.Filters;
+
     public class DesignerRegistry : CoreRegistry
     {
         public DesignerRegistry(string repositoryPath, bool isEmbeded)
@@ -22,6 +27,14 @@ namespace WB.UI.Designer.Code
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
                     });
+        }
+
+        protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        {
+            return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
+            {
+                { typeof(IFilterProvider), typeof(FilterProvider) },
+            });
         }
     }
 }
