@@ -30,6 +30,8 @@ using Raven.Client.Document;
 
 namespace Main.Core
 {
+    using Ninject.Planning.Bindings;
+
     /// <summary>
     /// The core registry.
     /// </summary>
@@ -80,6 +82,16 @@ namespace Main.Core
         }
 
         /// <summary>
+        /// Gets pairs of interface/type which should be registered.
+        /// Usually is used to return implementation of interfaces declared not in assemblies returned by GetAssemblies method.
+        /// </summary>
+        /// <returns>Pairs of interface/implementation.</returns>
+        protected virtual IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        {
+            return Enumerable.Empty<KeyValuePair<Type, Type>>();
+        }
+
+        /// <summary>
         /// The load.
         /// </summary>
         public override void Load()
@@ -117,7 +129,10 @@ namespace Main.Core
                 x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
                     new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
 
-
+            foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
+            {
+                this.Kernel.Bind(customBindType.Key).To(customBindType.Value);
+            }
         }
 
         protected virtual void RegisterViewFactories()

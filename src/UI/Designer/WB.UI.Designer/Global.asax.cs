@@ -31,16 +31,6 @@ namespace WB.UI.Designer
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-            try
-            {
-                NcqrsInit.RebuildReadLayer();
-            }
-            catch (Exception ex)
-            {
-                Elmah.ErrorLog.GetDefault(HttpContext.Current).Log(new Elmah.Error(ex));
-                throw; // DO NOT DELETE THIS RETHROW!! -- TLK
-            }
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -87,16 +77,8 @@ namespace WB.UI.Designer
             routeData.Values["controller"] = "Error";
             routeData.Values["action"] = action;
 
-            try
-            {
-                controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
-                ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
-            }
-            catch
-            {
-                httpContext.Response.Redirect(UrlHelper.GenerateUrl("default", "Index", "Error",
-                    new RouteValueDictionary(), RouteTable.Routes, httpContext.Request.RequestContext, true));
-            }
+            controller.ViewData.Model = new HandleErrorInfo(ex, currentController, currentAction);
+            ((IController)controller).Execute(new RequestContext(new HttpContextWrapper(httpContext), routeData));
         }
 
         private static void SetupNConfig()
