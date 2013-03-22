@@ -63,6 +63,8 @@ namespace WB.UI.Designer.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             #warning TLK: delete this when NCQRS initialization moved to Global.asax
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
