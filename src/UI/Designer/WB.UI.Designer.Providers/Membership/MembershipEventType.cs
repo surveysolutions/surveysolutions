@@ -1,17 +1,72 @@
-﻿
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="MembershipEventType.cs" company="">
+//   
+// </copyright>
+// <summary>
+//   The membership event type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace WB.UI.Designer.Providers.Membership
 {
+    /// <summary>
+    /// The membership event type.
+    /// </summary>
     public enum MembershipEventType
     {
-        ChangePasswordQuestionAndAnswer,
-        ChangePassword,
-        ResetPassword,
-        LockUser,
-        UnlockUser,
-        FailedLogin,
-        UserValidated,
-        UpdateOnlineState,
-        ConfirmAccount,
+        /// <summary>
+        /// The change password question and answer.
+        /// </summary>
+        ChangePasswordQuestionAndAnswer, 
+
+        /// <summary>
+        /// The change password.
+        /// </summary>
+        ChangePassword, 
+
+        /// <summary>
+        /// The reset password.
+        /// </summary>
+        ResetPassword, 
+
+        /// <summary>
+        /// The change reset password.
+        /// </summary>
+        ChangePasswordResetToken, 
+
+        /// <summary>
+        /// The lock user.
+        /// </summary>
+        LockUser, 
+
+        /// <summary>
+        /// The unlock user.
+        /// </summary>
+        UnlockUser, 
+
+        /// <summary>
+        /// The failed login.
+        /// </summary>
+        FailedLogin, 
+
+        /// <summary>
+        /// The user validated.
+        /// </summary>
+        UserValidated, 
+
+        /// <summary>
+        /// The update online state.
+        /// </summary>
+        UpdateOnlineState, 
+
+        /// <summary>
+        /// The confirm account.
+        /// </summary>
+        ConfirmAccount, 
+
+        /// <summary>
+        /// The update.
+        /// </summary>
         Update
     }
 }

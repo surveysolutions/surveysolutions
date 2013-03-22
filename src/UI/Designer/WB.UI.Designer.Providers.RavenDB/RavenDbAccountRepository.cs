@@ -225,6 +225,11 @@ namespace WB.UI.Designer.Providers.RavenDB
             return account;
         }
 
+        public IMembershipAccount GetUserByResetPasswordToken(string token)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Invoked when a member has been deleted.
         /// </summary>

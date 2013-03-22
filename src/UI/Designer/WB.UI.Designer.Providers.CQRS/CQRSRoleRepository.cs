@@ -95,7 +95,8 @@ namespace WB.UI.Designer.Providers.CQRS
             return _viewRepository.Load<AccountViewInputModel, AccountView>(new AccountViewInputModel(
                                                                                 accountName: username,
                                                                                 accountEmail: null,
-                                                                                confirmationToken: null));
+                                                                                confirmationToken: null,
+                                                                                resetPasswordToken:null));
         }
 
         private SimpleRoleEnum GetRoleByRoleName(string roleName)

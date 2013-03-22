@@ -6,7 +6,6 @@
 //   The account controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -23,7 +22,7 @@ namespace WB.UI.Designer.Controllers
     using WebMatrix.WebData;
 
     /// <summary>
-    /// The account controller.
+    ///     The account controller.
     /// </summary>
     [CustomAuthorize]
     public class AccountController : AlertController
@@ -31,10 +30,10 @@ namespace WB.UI.Designer.Controllers
         #region Public Methods and Operators
 
         /// <summary>
-        /// The confirmation failure.
+        ///     The confirmation failure.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
         public ActionResult ConfirmationFailure()
@@ -43,10 +42,10 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        /// The confirmation success.
+        ///     The confirmation success.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
         public ActionResult ConfirmationSuccess()
@@ -55,10 +54,10 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        /// The index.
+        ///     The index.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         public ActionResult Index()
         {
@@ -66,10 +65,10 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        /// The log off.
+        ///     The log off.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         public ActionResult LogOff()
         {
@@ -162,7 +161,8 @@ namespace WB.UI.Designer.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    changePasswordSucceeded = UserHelper.CurrentUser.ChangePassword(model.OldPassword, model.NewPassword);
+                    changePasswordSucceeded = UserHelper.CurrentUser.ChangePassword(
+                        model.OldPassword, model.NewPassword);
                 }
                 catch (Exception)
                 {
@@ -184,12 +184,106 @@ namespace WB.UI.Designer.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
+
         /// <summary>
-        /// The register.
+        ///     The password reset.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
+        /// </returns>
+        /// <exception cref="NotImplementedException">
+        /// </exception>
+        [AllowAnonymous]
+        public ActionResult PasswordReset()
+        {
+            if (!Membership.EnablePasswordReset)
+            {
+                throw new Exception("Password reset is not allowed");
+            }
+
+            return this.View(new ResetPasswordModel());
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult PasswordReset(ResetPasswordModel model)
+        {
+            if (!Membership.EnablePasswordReset)
+            {
+                throw new Exception("Password reset is not allowed");
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                var user = Membership.GetUser(model.UserName);
+                if (user == null)
+                {
+                    this.Error(string.Format("User {0} does not exist. Please enter a valid user name", model.UserName));
+                }
+                else
+                {
+
+                    var token = WebSecurity.GeneratePasswordResetToken(user.UserName);
+
+                    dynamic email = new Email("ResetPasswordEmail");
+                    email.To = user.Email;
+                    email.UserName = model.UserName;
+                    email.ResetPasswordToken = token;
+                    email.Send();
+
+                    return this.RedirectToAction("ResetPasswordStepTwo", "Account");
+                }
+            }
+
+            return this.View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPasswordStepTwo()
+        {
+            return this.View();
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation(string token)
+        {
+            return this.View(new ResetPasswordConfirmationModel() { Token = token });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPasswordConfirmation(ResetPasswordConfirmationModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (WebSecurity.ResetPassword(model.Token, model.NewPassword))
+                {
+                    this.Success("Your password successfully changed. Now you can login with your new password");
+                    return this.RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    return this.RedirectToAction("ResetPasswordConfirmationFailure");
+                }
+            }
+
+            return this.View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmationFailure()
+        {
+            return this.View();
+        }
+
+        /// <summary>
+        ///     The register.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
         public ActionResult Register()
@@ -248,6 +342,10 @@ namespace WB.UI.Designer.Controllers
                     {
                         this.Error(e.StatusCode.ToErrorCode());
                     }
+                    catch (Exception e)
+                    {
+                        this.Error(e.Message);
+                    }
                 }
             }
 
@@ -269,17 +367,18 @@ namespace WB.UI.Designer.Controllers
         {
             if (WebSecurity.ConfirmAccount(token))
             {
-                return this.RedirectToAction("confirmationsuccess");
+                this.Success("You have completed the registration process. You can now logon to the system");
+                return this.RedirectToAction("Login");
             }
 
-            return this.RedirectToAction("confirmationfailure");
+            return this.RedirectToAction("ConfirmationFailure");
         }
 
         /// <summary>
-        /// The register step two.
+        ///     The register step two.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
         public ActionResult RegisterStepTwo()
