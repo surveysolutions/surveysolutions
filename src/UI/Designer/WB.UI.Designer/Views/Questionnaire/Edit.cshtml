@@ -121,7 +121,7 @@
             </div>
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew()"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
@@ -133,7 +133,7 @@
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
-                <div class="row-fluid">
+                <div class="row-fluid control-group"  data-bind="validationElement: title">
                     <label class="control-label required">Title</label>
                     <div class="note">
                         <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
@@ -185,7 +185,7 @@
 
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty()"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>

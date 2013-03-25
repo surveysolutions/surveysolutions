@@ -8,10 +8,10 @@
               self.id = ko.observable(Math.uuid());
               self.isNew = ko.observable(true);
               
-              self.title = ko.observable('New Question').extend({ minLength: 3, require: true });
+              self.title = ko.observable('New Question').extend({ required: true });
               self.parent = ko.observable();
               self.alias = ko.observable('').extend({
-                  require: true, maxLength: 32,
+                  required: true, maxLength: 32,
                   pattern: {
                       message: "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit",
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
