@@ -181,12 +181,13 @@
             });
         },
         deleteQuestionSuccessCallback = function (item) {
+            datacontext.questions.removeById(item.id());
             var parent = item.parent();
             var child = _.find(parent.childrenID(), { 'id': item.id() });
             parent.childrenID.remove(child);
             parent.fillChildren();
-            router.navigateTo(parent.getHref());
             calcStatistics();
+            router.navigateTo(parent.getHref());
             hideOutput();
         },
         saveGroup = function (group) {
