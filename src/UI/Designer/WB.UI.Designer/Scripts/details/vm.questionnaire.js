@@ -8,6 +8,7 @@
             questionnaire = ko.observable(model.Questionnaire.Nullo),
             chapters = ko.observableArray(),
             errors = ko.observableArray(),
+            searchResult = ko.observableArray(),
             statistics = {
                 questions: ko.observable(),
                 groups: ko.observable(),
@@ -234,7 +235,12 @@
             filter('');
         },
         filterContent = function () {
-            isFilterMode(filter().trim() !== '');
+            var query = filter().trim().toLowerCase();
+            isFilterMode(query !== '');
+            searchResult.removeAll();
+            if (query != '') {
+                searchResult(datacontext.questions.search(query));
+            }
         },
         afterMove = function (arg) {
             console.log(arg);
@@ -258,7 +264,6 @@
         },
         init = function () {
             filter.subscribe(filterContent);
-
         };
 
         init();
@@ -285,6 +290,7 @@
             showOutput: showOutput,
             hideOutput: hideOutput,
             errors: errors,
-            statistics: statistics
+            statistics: statistics,
+            searchResult: searchResult
         };
     });
