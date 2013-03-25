@@ -87,7 +87,7 @@
               self.isSelected = ko.observable();
               self.isNullo = false;
 
-              self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
+              self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
               
