@@ -1,4 +1,7 @@
 ﻿using System.Net;
+using Main.Core.Commands.Questionnaire.Question;
+using Main.Core.View;
+using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -25,11 +28,13 @@ namespace WB.UI.Designer.Controllers
 
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
+        private readonly IViewRepository _repository;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IViewRepository repository)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
+            this._repository = repository;
         }
 
         [HttpPost]
@@ -47,6 +52,8 @@ namespace WB.UI.Designer.Controllers
                 this.SetErrorStatusCode();
                 return this.Json(new { error = "Unexpected error occurred: " + e.Message });
             }
+
+            this.PrepareCommandForExecution(concreteCommand);
 
             try
             {
@@ -66,6 +73,17 @@ namespace WB.UI.Designer.Controllers
             }
 
             return this.Json(new { });
+        }
+
+        private void PrepareCommandForExecution(ICommand command)
+        {
+            if ((!(command is FullQuestionDataCommand))) return;
+
+            var questionDataCommand = (FullQuestionDataCommand) command;
+            var transformator = new ExpressionReplacer(this._repository);
+
+            questionDataCommand.Condition = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.Condition, questionDataCommand.QuestionnaireId);
+            questionDataCommand.ValidationExpression = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.ValidationExpression, questionDataCommand.QuestionnaireId);
         }
 
         private void SetErrorStatusCode()
