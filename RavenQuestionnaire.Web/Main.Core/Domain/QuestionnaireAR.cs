@@ -893,7 +893,8 @@ namespace Main.Core.Domain
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            this.questionFactory.UpdateQuestionByEvent(question, e);
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, e);
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
         /// <summary>

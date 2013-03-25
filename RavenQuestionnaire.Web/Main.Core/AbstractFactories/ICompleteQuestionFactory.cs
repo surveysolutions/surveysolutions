@@ -53,16 +53,7 @@ namespace Main.Core.AbstractFactories
         /// </param>
         void UpdateQuestionByEvent(IQuestion question, NewQuestionAdded e);*/
 
-        /// <summary>
-        /// The update question by event.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        void UpdateQuestionByEvent(IQuestion question, QuestionChanged e);
+        IQuestion CreateQuestionFromExistingUsingDataFromEvent(IQuestion question, QuestionChanged e);
 
         #endregion
 

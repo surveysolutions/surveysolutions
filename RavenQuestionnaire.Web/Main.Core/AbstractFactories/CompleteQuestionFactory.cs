@@ -68,7 +68,7 @@ namespace Main.Core.AbstractFactories
             }
 
             completeQuestion.PublicKey = question.PublicKey;
-            this.UpdateQuestion(
+            UpdateQuestion(
                 completeQuestion,
                 question.QuestionType,
                 question.QuestionScope,
@@ -131,11 +131,11 @@ namespace Main.Core.AbstractFactories
         /// </returns>
         public AbstractQuestion Create(NewQuestionAdded e)
         {
-            AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+            AbstractQuestion q = CreateQuestion(e.QuestionType);
 
             q.PublicKey = e.PublicKey;
 
-            this.UpdateQuestion(
+            UpdateQuestion(
                 q,
                 e.QuestionType,
                 e.QuestionScope,
@@ -152,28 +152,19 @@ namespace Main.Core.AbstractFactories
                 e.Triggers,
                 e.MaxValue);
 
-            this.UpdateAnswerList(e.Answers, q);
+            UpdateAnswerList(e.Answers, q);
 
             return q;
         }
 
-        /// <summary>
-        /// The update question by event.
-        /// </summary>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        public void UpdateQuestionByEvent(IQuestion question, QuestionChanged e)
+        public IQuestion CreateQuestionFromExistingUsingDataFromEvent(IQuestion question, QuestionChanged e)
         {
-            // AbstractQuestion q = this.CreateQuestion(e.QuestionType);
+            AbstractQuestion q = CreateQuestion(e.QuestionType);
 
-            // q.PublicKey = question.PublicKey;
+            q.PublicKey = question.PublicKey;
 
-            this.UpdateQuestion(
-                question,
+            UpdateQuestion(
+                q,
                 e.QuestionType,
                 e.QuestionScope,
                 e.QuestionText,
@@ -189,9 +180,9 @@ namespace Main.Core.AbstractFactories
                 e.Triggers,
                 e.MaxValue);
 
-            this.UpdateAnswerList(e.Answers, question);
+            UpdateAnswerList(e.Answers, q);
 
-            //question = q;
+            return q;
         }
 
         /// <summary>
@@ -203,41 +194,36 @@ namespace Main.Core.AbstractFactories
         /// <returns>
         /// The <see cref="AbstractQuestion"/>.
         /// </returns>
-        private AbstractQuestion CreateQuestion(QuestionType type)
+        private static AbstractQuestion CreateQuestion(QuestionType type)
         {
-            AbstractQuestion q = null;
             switch (type)
             {
                 case QuestionType.MultyOption:
-                    q = new MultyOptionsQuestion();
-                    break;
-                case QuestionType.DropDownList:
-                    q = new SingleQuestion();
-                    break;
-                case QuestionType.SingleOption:
-                    q = new SingleQuestion();
-                    break;
-                case QuestionType.YesNo:
-                    q = new SingleQuestion();
-                    break;
-                case QuestionType.Text:
-                    q = new TextQuestion();
-                    break;
-                case QuestionType.DateTime:
-                    q = new DateTimeQuestion();
-                    break;
-                case QuestionType.Numeric:
-                    q = new NumericQuestion();
-                    break;
-                case QuestionType.AutoPropagate:
-                    q = new AutoPropagateQuestion();
-                    break;
-                case QuestionType.GpsCoordinates:
-                    q = new GpsCoordinateQuestion();
-                    break;
-            }
+                    return new MultyOptionsQuestion();
 
-            return q;
+                case QuestionType.DropDownList:
+                case QuestionType.SingleOption:
+                case QuestionType.YesNo:
+                    return new SingleQuestion();
+
+                case QuestionType.Text:
+                    return new TextQuestion();
+
+                case QuestionType.DateTime:
+                    return new DateTimeQuestion();
+
+                case QuestionType.Numeric:
+                    return new NumericQuestion();
+
+                case QuestionType.AutoPropagate:
+                    return new AutoPropagateQuestion();
+
+                case QuestionType.GpsCoordinates:
+                    return new GpsCoordinateQuestion();
+
+                default:
+                    throw new NotSupportedException(string.Format("Question type is not supported: {0}", type));
+            }
         }
 
         #endregion
@@ -253,7 +239,7 @@ namespace Main.Core.AbstractFactories
         /// <param name="question">
         /// The question.
         /// </param>
-        private void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
+        private static void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
         {
             if (question.Answers != null)
             {
@@ -269,7 +255,7 @@ namespace Main.Core.AbstractFactories
             }
         }
 
-        private void UpdateQuestion(
+        private static void UpdateQuestion(
             IQuestion question,
             QuestionType questionType,
             QuestionScope questionScope,
@@ -315,8 +301,8 @@ namespace Main.Core.AbstractFactories
                     }
                 }
             }
-
-            #endregion
         }
+
+        #endregion
     }
 }

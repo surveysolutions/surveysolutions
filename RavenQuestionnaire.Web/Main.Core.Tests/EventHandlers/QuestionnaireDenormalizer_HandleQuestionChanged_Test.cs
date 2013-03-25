@@ -94,15 +94,17 @@ namespace Main.DenormalizerStorage.Tests
 
             target.Handle(e);
 
-            Assert.AreEqual(evnt.QuestionText, question.QuestionText, "QuestionText is not updated");
-            Assert.AreEqual(evnt.QuestionType, question.QuestionType, "QuestionType is not updated");
-            Assert.AreEqual(evnt.Featured, question.Featured, "Featured is not updated");
-            Assert.AreEqual(evnt.AnswerOrder, question.AnswerOrder, "AnswerOrder is not updated");
-            Assert.AreEqual(evnt.ConditionExpression, question.ConditionExpression, "ConditionExpression is not updated");
-            Assert.AreEqual(evnt.Instructions, question.Instructions, "Instructions is not updated");
-            Assert.AreEqual(evnt.StataExportCaption, question.StataExportCaption, "StataExportCaption is not updated");
-            Assert.AreEqual(evnt.ValidationExpression, question.ValidationExpression, "ValidationExpression is not updated");
-            Assert.AreEqual(evnt.ValidationMessage, question.ValidationMessage, "ValidationMessage is not updated");
+            var resultQuestion = group.Find<IQuestion>(question.PublicKey);
+
+            Assert.AreEqual(evnt.QuestionText, resultQuestion.QuestionText, "QuestionText is not updated");
+            Assert.AreEqual(evnt.QuestionType, resultQuestion.QuestionType, "QuestionType is not updated");
+            Assert.AreEqual(evnt.Featured, resultQuestion.Featured, "Featured is not updated");
+            Assert.AreEqual(evnt.AnswerOrder, resultQuestion.AnswerOrder, "AnswerOrder is not updated");
+            Assert.AreEqual(evnt.ConditionExpression, resultQuestion.ConditionExpression, "ConditionExpression is not updated");
+            Assert.AreEqual(evnt.Instructions, resultQuestion.Instructions, "Instructions is not updated");
+            Assert.AreEqual(evnt.StataExportCaption, resultQuestion.StataExportCaption, "StataExportCaption is not updated");
+            Assert.AreEqual(evnt.ValidationExpression, resultQuestion.ValidationExpression, "ValidationExpression is not updated");
+            Assert.AreEqual(evnt.ValidationMessage, resultQuestion.ValidationMessage, "ValidationMessage is not updated");
 
         }
 
@@ -151,10 +153,12 @@ namespace Main.DenormalizerStorage.Tests
 
             target.Handle(e);
 
-            Assert.AreEqual(evnt.Featured, question.Featured);
-            Assert.AreEqual(evnt.MaxValue, question.MaxValue);
-            Assert.AreEqual(evnt.Triggers.Count, question.Triggers.Count);
-            Assert.IsTrue(question.Triggers.Except(triggers).Count() == 0, "Triiggers list is not updated");
+            var resultQuestion = group.Find<AutoPropagateQuestion>(question.PublicKey);
+
+            Assert.AreEqual(evnt.Featured, resultQuestion.Featured);
+            Assert.AreEqual(evnt.MaxValue, resultQuestion.MaxValue);
+            Assert.AreEqual(evnt.Triggers.Count, resultQuestion.Triggers.Count);
+            Assert.IsTrue(resultQuestion.Triggers.Except(triggers).Count() == 0, "Triiggers list is not updated");
         }
     }
 }

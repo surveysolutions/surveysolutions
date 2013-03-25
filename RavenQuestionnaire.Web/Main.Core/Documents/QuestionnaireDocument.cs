@@ -268,6 +268,25 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
+        public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
+        {
+            Guid oldQuestionId = oldQuestion.PublicKey;
+
+            IComposite questionParent = this.GetParentOfQuestion(oldQuestionId);
+
+            if (questionParent != null)
+            {
+                int indexOfQuestion = questionParent.Children.FindIndex(child => IsQuestionWithSpecifiedId(child, oldQuestionId));
+                questionParent.Children[indexOfQuestion] = newQuestion;
+            }
+            else
+            {
+                Logger.Warn(string.Format(
+                    "Failed to replace question '{0}' with new because it's parent is not found.",
+                    oldQuestionId));
+            }
+        }
+
         /// <summary>
         /// The remove.
         /// </summary>
