@@ -88,7 +88,6 @@ else
                                     </a>
                                     <ul class="dropdown-menu">
                                         @{
-                                            @Html.TryPartial("_actions", model)
                                             var routevalues = model.GetIdValue();
                                             if (actionModel.CanEdit)
                                             {
