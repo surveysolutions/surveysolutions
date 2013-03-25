@@ -113,6 +113,13 @@
             });
         });
 
+        groups.search = function (query) {
+            var items = _.filter(groups.getAllLocal(), function (item) {
+                return item.title().toLowerCase().indexOf(query) !== -1;
+            });
+            return items;
+        };
+        
         groups.removeGroup = function (id) {
             var group = groups.getLocalById(id);
             _.each(group.childrenID(), function (item) {
@@ -137,8 +144,13 @@
             return propagatable;
         };
 
-
-
+        questions.search = function (query) {
+            var items = _.filter(questions.getAllLocal(), function (item) {
+                return item.title().toLowerCase().indexOf(query) !== -1;
+            });
+            return items;
+        };
+        
         questions.cleanTriggers = function (group) {
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });

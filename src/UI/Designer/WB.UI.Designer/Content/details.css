@@ -675,3 +675,7 @@ h1 {
 .control-group.error .note input, .control-group.error  .note select, .control-group.error  .note textarea {
     box-shadow: none;
 }
+
+#search-results .q-item-wrap{
+    margin-left: 0;
+}
