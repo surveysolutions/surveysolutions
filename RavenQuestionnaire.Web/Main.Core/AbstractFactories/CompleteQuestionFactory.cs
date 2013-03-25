@@ -255,9 +255,13 @@ namespace Main.Core.AbstractFactories
         /// </param>
         private void UpdateAnswerList(IEnumerable<IAnswer> answers, IQuestion question)
         {
-            if (answers != null && answers.Any())
+            if (question.Answers != null)
             {
                 question.Answers.Clear();
+            }
+
+            if (answers != null && answers.Any())
+            {
                 foreach (var answer in answers)
                 {
                     question.AddAnswer(answer);
