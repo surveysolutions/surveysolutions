@@ -37,7 +37,7 @@
 <div id="stacks">
     <div id="footer">
         <div class="inner">
-            <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Chapter</button>
+            <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Add chapter</button>
             <div class="statistics">
                 <ul class="nav nav-pills" data-bind="with: statistics">
                     <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
@@ -121,7 +121,6 @@
             </div>
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-danger" data-bind="click: deleteGroup"><i class="icon-white icon-remove"></i>Remove</button>
                     <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
@@ -186,7 +185,6 @@
 
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-danger" data-bind="click: deleteQuestion"><i class="icon-white icon-remove"></i>Remove</button>
                     <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
@@ -201,16 +199,15 @@
             <div class="handler"></div>
             <div class="q-item">
                 <div class="group-actions  pull-right">
-                    <!-- ko ifnot : isNew -->
                     <div class="btn-group">
                         <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
-                            <li><a data-bind="click: addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Group</a></li>
+                            <li><a data-bind="click: addQuestion, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
+                            <li><a data-bind="click: addGroup, visible: gtype()=='None' &&  isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
-                    <!-- /ko -->
                 </div>
                 <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
                 <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
@@ -225,6 +222,15 @@
     <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
         <div class="handler"></div>
         <div class="q-item">
+             <div class="group-actions  pull-right">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        </ul>
+                    </div>
+                </div>
             <span class="alias" data-bind="text: alias"></span>
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
             <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
