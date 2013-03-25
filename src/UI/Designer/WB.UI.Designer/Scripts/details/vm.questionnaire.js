@@ -96,6 +96,7 @@
         addChapter = function () {
             var group = new model.Group();
             group.level(0);
+            group.title('New Chapter');
             group.parent(null);
             datacontext.groups.add(group);
             chapters.push(group);
