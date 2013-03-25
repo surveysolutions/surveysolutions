@@ -679,3 +679,10 @@ h1 {
 #search-results .q-item-wrap{
     margin-left: 0;
 }
+.details.stack .answer-options [class*="span"].control-group {
+    margin-bottom: 0
+}
+.details.stack .answer-options{
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
