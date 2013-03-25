@@ -191,7 +191,10 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            this.questionFactory.UpdateQuestionByEvent(question, evnt.Payload);
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, evnt.Payload);
+
+            item.ReplaceQuestionWithNew(question, newQuestion);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 
