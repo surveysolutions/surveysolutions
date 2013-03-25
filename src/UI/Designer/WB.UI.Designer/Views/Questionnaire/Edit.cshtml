@@ -155,7 +155,7 @@
                 <div class="row-fluid">
                     <div class="btn-group">
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: $data.parent().gtype()!='None' " class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
                     </div>
                 </div>
@@ -222,15 +222,15 @@
     <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
         <div class="handler"></div>
         <div class="q-item">
-             <div class="group-actions  pull-right">
-                    <div class="btn-group">
-                        <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        </ul>
-                    </div>
+            <div class="group-actions  pull-right">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                    </ul>
                 </div>
+            </div>
             <span class="alias" data-bind="text: alias"></span>
             <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
             <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
