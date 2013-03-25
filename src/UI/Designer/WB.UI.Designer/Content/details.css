@@ -672,3 +672,6 @@ h1 {
     content: '*';
     color: #DA4F49;
 }
+.control-group.error .note input, .control-group.error  .note select, .control-group.error  .note textarea {
+    box-shadow: none;
+}
