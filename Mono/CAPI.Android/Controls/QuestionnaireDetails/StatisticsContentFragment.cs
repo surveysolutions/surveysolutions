@@ -13,23 +13,35 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
     public class StatisticsContentFragment : AbstractScreenChangingFragment
     {
         public StatisticsViewModel Model { get; private set; }
-        protected Guid questionnaireKey;
+        private const string QUESTIONNAIRE_ID = "questionnaireId";
+        private Guid? questionnaireKey;
+        protected Guid QuestionnaireKey {
+            get
+            {
+                if (!questionnaireKey.HasValue)
+                {
+                    questionnaireKey = Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID));
+                }
+                return questionnaireKey.Value;
+            }
+        }
+    
         protected AlertDialog answeredDilog;
         protected AlertDialog unansweredDilog;
         protected AlertDialog invaliDilog;
-       // protected AlertDialog.Builder popupBuilder;
-        public StatisticsContentFragment(Guid questionnaireKey)
-            : this()
+        public static StatisticsContentFragment NewInstance(Guid questionnaireKey)
         {
-            this.questionnaireKey = questionnaireKey;
-         /*   this.Model =
-                CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(questionnaireKey));*/
-        }
+            StatisticsContentFragment myFragment = new StatisticsContentFragment();
 
+            Bundle args = new Bundle();
+            args.PutString(QUESTIONNAIRE_ID, questionnaireKey.ToString());
+            myFragment.Arguments = args;
+
+            return myFragment;
+        }
         public StatisticsContentFragment()
             : base()
         {
-            this.RetainInstance = true;
         }
 
         public void RecalculateStatistics()
@@ -38,7 +50,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                 return;
             this.Model =
                 CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(
-                    new StatisticsInput(questionnaireKey));
+                    new StatisticsInput(QuestionnaireKey));
             if (SurveyStatus.IsStatusAllowCapiSync(this.Model.Status))
             {
                 btnComplete.Text = "Reinit";
@@ -106,19 +118,11 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 
         }
 
-      /*  private void DestroyDialog(AlertDialog dialog)
-        {
-            if (dialog != null)
-            {
-                dialog.Dispose();
-                dialog = null;
-            }
-        }*/
 
-        public override void OnSaveInstanceState(Bundle p0)
+    /*    public override void OnSaveInstanceState(Bundle p0)
         {
             base.OnSaveInstanceState(p0);
-            p0.PutString("questionnaireKey", questionnaireKey.ToString());
+            p0.PutString("questionnaireKey", QuestionnaireKey.ToString());
         }
         public override void OnViewStateRestored(Bundle p0)
         {
@@ -129,9 +133,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             if (string.IsNullOrEmpty(publicKey))
                 return;
             questionnaireKey = Guid.Parse(publicKey);
-          /*  this.Model =
-                CapiApplication.LoadView<StatisticsInput, StatisticsViewModel>(new StatisticsInput(Guid.Parse(publicKey)));*/
-        }
+        }*/
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -149,9 +151,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             btnInvalid.Click += btnInvalid_Click;
             RecalculateStatistics();
             return containerView;
-            /*inflater.Inflate(Resource.Layout.ScreenNavigationView, null);
-            this.Container.ItemClick += new EventHandler<AdapterView.ItemClickEventArgs>(Container_ItemClick);*/
-            //  return retval;
         }
 
         void btnComplete_Click(object sender, EventArgs e)
@@ -168,9 +167,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
-         /*   var m = this.Activity.GetSystemService(Context.ActivityService) as ActivityManager;
-            var tasks = m.GetRunningTasks(1);
-            var dashboard = tasks.Last();*/
             this.Activity.Finish();
             
         }

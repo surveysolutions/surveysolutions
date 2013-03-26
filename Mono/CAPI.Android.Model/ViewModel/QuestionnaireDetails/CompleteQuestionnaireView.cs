@@ -300,17 +300,24 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
-            
+
             var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                         rosterKey, group.Enabled,
                                                         siblings,
                                                         breadcrumbs,
-                                                       // this.Chapters,
-                                                        Enumerable.ToList<HeaderItem>(@group.Children.OfType<ICompleteQuestion>().Select(
-                                                                BuildHeader)),
+                                                        // this.Chapters,
+                                                        Enumerable.ToList<HeaderItem>(@group.Children
+                                                                                            .OfType<ICompleteQuestion>()
+                                                                                            .Where(
+                                                                                                q =>
+                                                                                                q.QuestionScope ==
+                                                                                                QuestionScope
+                                                                                                    .Interviewer)
+                                                                                            .Select(
+                                                                                                BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));
 
-            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { roster.ScreenId }).ToList();
+            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] {roster.ScreenId}).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
                                                                       rosterKey, screenItems,
                                                                       GetSiblings,

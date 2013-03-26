@@ -93,13 +93,14 @@
                 using (var c = connection.CreateCommand())
                 {
                     c.CommandText = query;
-                    var r = c.ExecuteReader();
-
-                    while (r.Read())
+                    using (var r = c.ExecuteReader())
                     {
-                        var values = new object[r.FieldCount];
-                        var i = r.GetValues(values);
-                        yield return values;
+                        while (r.Read())
+                        {
+                            var values = new object[r.FieldCount];
+                            var i = r.GetValues(values);
+                            yield return values;
+                        } 
                     }
                 }
             }

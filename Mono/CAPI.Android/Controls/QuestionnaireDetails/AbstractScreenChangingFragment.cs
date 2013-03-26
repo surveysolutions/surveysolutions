@@ -23,10 +23,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             ScreenChanged = null;
             base.OnDetach();
         }
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-        }
         public event EventHandler<ScreenChangedEventArgs> ScreenChanged;
     }
 }

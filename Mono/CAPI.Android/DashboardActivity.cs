@@ -6,17 +6,18 @@ using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace CAPI.Android
 {
-    [Activity(Label = "CAPI", Icon = "@drawable/capi")]
+    using global::Android.Content.PM;
+
+    [Activity(Label = "CAPI", Icon = "@drawable/capi",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)
         {
+          
             base.OnCreate(bundle);
-            if (!CapiApplication.Membership.IsLoggedIn)
-            {
-                StartActivity(typeof(LoginActivity));
-            }
-
+            if (this.FinishIfNotLoggedIn())
+                return;
             ViewModel =
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));

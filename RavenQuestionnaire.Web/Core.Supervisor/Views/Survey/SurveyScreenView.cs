@@ -162,7 +162,8 @@ namespace Core.Supervisor.Views.Survey
                 var subGroups = node.Group.Children.OfType<ICompleteGroup>().Reverse().ToArray();
                 foreach (var completeGroup in subGroups.Where(completeGroup => completeGroup.HasVisibleItemsForScope(scope)))
                 {
-                    //validator.Execute(completeGroup);
+                    var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);
+                    validator.Execute(completeGroup);
                     treeStack.Push(new NodeWithLevel(completeGroup, node.Level + 1));
                 }
             }
