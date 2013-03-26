@@ -1,0 +1,65 @@
+@using StackExchange.Profiling
+@using WB.UI.Designer
+@using WB.UI.Designer.Models
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@this.ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
+    @this.RenderSection("Styles", required: false)
+    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
+    @this.RenderSection("Scripts", required: false)
+    @MiniProfiler.RenderIncludes()
+    @this.Html.Partial("_html5shiv")
+    @* favicons and touch icons go here *@
+</head>
+<body class="loading">
+    <div class="loading-backdrop"></div>
+    <div class="navbar  navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"><span
+                    class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </a>
+                @Html.ActionLink("Designer", "Index", "Questionnaire", null, new { @class = "brand" })
+                <div class="nav-collapse ">
+                    <ul class="nav nav-pills pull-right">
+                        <li class="divider-vertical"></li>
+                        @this.Html.MenuActionLink("My Questionnaires", "Index", "Questionnaire")
+                        <li class="divider-vertical"></li>
+                        @this.Html.MenuActionLink("Public Questionnaires", "Public", "Questionnaire")
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Hello, @User.Identity.Name <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@this.Html.ActionLink("Change password", "Manage", "Account")</li>
+                                <li>@this.Html.ActionLink("Logout", "LogOff", "Account")</li>
+                            </ul>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        @if (UserHelper.IsAdmin)
+                        {
+                            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li>@this.Html.ActionLink("Manage users", "Index", "Admin")</li>
+                                </ul>
+                            </li>
+                            <li class="divider-vertical"></li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        @this.Html.Partial("_alerts")
+        @this.RenderBody()
+    </div>
+    <footer>
+        <hr>
+        <p>&copy; The World Bank Group @DateTime.Now.ToString("yyyy")</p>
+    </footer>
+</body>
+</html>

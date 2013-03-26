@@ -1,0 +1,151 @@
+﻿<script type="text/html" id="SingleOption">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label class="control-label required">Answers</label>
+    <div class="answer-options">
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <div class="row-fluid">
+            <div class="controls  controls-row">
+                <div class="span3 control-group"  data-bind="validationElement: value">
+                    <input type="number" placeholder="value" class="input-block-level" data-bind="value: value, valueUpdate: 'afterkeydown'">
+                </div>
+                <div class="span8 control-group"  data-bind="validationElement: title">
+                    <input type="text" placeholder="title" class="input-block-level" data-bind="value: title, valueUpdate: 'afterkeydown'">
+                </div>
+                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+            </div>
+        </div>
+    </div>
+    <!-- /ko -->
+    </div>
+
+    <div class="row-fluid">
+        <div class="controls controls-row ">
+            <div class="span3">
+                <input id="currentAnswerValue"  type="number" placeholder="value" class="input-block-level" data-bind="value: $parent.currentAnswerValue">
+            </div>
+            <div class="span8" >
+                <input type="text" placeholder="title" class="input-block-level" data-bind="value: $parent.currentAnswerTitle">
+            </div>
+           <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="YesNo">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label class="control-label required">Answers</label>
+    <div class="answer-options">
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <div class="controls controls-row">
+            <div>
+                <input type="number" placeholder="value" class="span3" data-bind="value: value">
+            </div>
+            <div>
+                <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            </div>
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+
+    <!-- /ko -->
+        </div>
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="DropDownList">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label class="control-label required">Answers</label>
+    <div class="answer-options">
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+        </div>
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="MultyOption">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label class="control-label required">Answers</label>
+    <div class="answer-options">
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+        </div>
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="Numeric">
+    <div></div>
+</script>
+<script type="text/html" id="DateTime">
+    <div></div>
+</script>
+<script type="text/html" id="GpsCoordinates">
+    <div></div>
+</script>
+<script type="text/html" id="Text">
+    <div></div>
+</script>
+<script type="text/html" id="AutoPropagate">
+    <div class="row-fluid">
+        <label>Max answer value</label>
+        <input type="text" placeholder="max value" class="span12" data-bind="value: maxValue">
+    </div>
+    <div class="edit-triggers">
+        <label>Triggers</label>
+        <!-- ko foreach: triggers -->
+        <div class="row-fluid">
+            <div class="input-append">
+                <input class="span11" disabled type="text" data-bind="value: value">
+                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeTrigger"><i class="icon-remove icon-white"></i></button>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="row-fluid" data-bind="visible: hasPropagatedGroups">
+        <div class="input-append">
+            <select data-bind="options: propagatedGroups, optionsText: 'value', value: currentTrigger, enable: hasPropagatedGroups" class="span11"></select>
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addTrigger, enable: hasPropagatedGroups"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
