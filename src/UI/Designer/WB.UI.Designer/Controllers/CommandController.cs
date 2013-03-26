@@ -21,6 +21,7 @@ namespace WB.UI.Designer.Controllers
 
     using WB.UI.Designer.Code.Helpers;
 
+    [CustomAuthorize]
     public class CommandController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
