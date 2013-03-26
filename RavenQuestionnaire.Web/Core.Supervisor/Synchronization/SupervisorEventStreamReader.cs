@@ -126,7 +126,7 @@ namespace Core.Supervisor.Synchronization
                     continue;
                 }
 
-                retval.AddRange(this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
             }
         }
 
@@ -141,7 +141,7 @@ namespace Core.Supervisor.Synchronization
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
             foreach (FileDescription item in model)
             {
-                retval.AddRange(this.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
+                retval.AddRange(this.GetEventStreamById<FileAR>(Guid.Parse(item.PublicKey)));
             }
         }
 
@@ -165,7 +165,7 @@ namespace Core.Supervisor.Synchronization
                         if (item.Responsible.Id == guid)
                         {
                             retval.AddRange(
-                                this.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                                this.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
                         }
                     }
                 }
@@ -187,7 +187,7 @@ namespace Core.Supervisor.Synchronization
                 this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == syncKey);
             foreach (UserDocument item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                retval.AddRange(this.GetEventStreamById<UserAR>(item.PublicKey));
             }
         }
 
@@ -203,7 +203,7 @@ namespace Core.Supervisor.Synchronization
 
             foreach (QuestionnaireBrowseItem item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
             }
         }
 
@@ -218,7 +218,7 @@ namespace Core.Supervisor.Synchronization
             IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
             foreach (SyncDeviceRegisterDocument item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(DeviceAR)));
+                retval.AddRange(this.GetEventStreamById<DeviceAR>(item.PublicKey));
             }
         }
 
@@ -233,7 +233,7 @@ namespace Core.Supervisor.Synchronization
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                retval.AddRange(this.GetEventStreamById<UserAR>(item.PublicKey));
             }
         }
 
