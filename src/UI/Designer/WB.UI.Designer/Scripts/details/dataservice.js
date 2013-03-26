@@ -10,9 +10,12 @@
                     if (xhr.status == 500) {
                         error({error : "Unexpected error occured. Try to refresh page to continue. If this problem persists, plese contact support."}, status);
                     } else if (status === "success") {
-                        success(data, status);
-                    } else if (status === "fail" || status === "error") {
-                        error(JSON.parse(xhr.responseText), status);
+                        var result = JSON.parse(xhr.responseText);
+                        if (result.error == null) {
+                            success(data, status);
+                        } else {
+                            error(result, status);
+                        }
                     } else {
                         error(status, xhr);
                     }

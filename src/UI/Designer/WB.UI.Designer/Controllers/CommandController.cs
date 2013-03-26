@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Main.Core.Commands.Questionnaire.Question;
+﻿using Main.Core.Commands.Questionnaire.Question;
 using Main.Core.View;
 using WB.UI.Designer.Utils;
 
@@ -49,7 +48,6 @@ namespace WB.UI.Designer.Controllers
             {
                 Logger.ErrorException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
 
-                this.SetErrorStatusCode();
                 return this.Json(new { error = "Unexpected error occurred: " + e.Message });
             }
 
@@ -63,7 +61,6 @@ namespace WB.UI.Designer.Controllers
             {
                 if (e.InnerException is DomainException)
                 {
-                    this.SetErrorStatusCode();
                     return this.Json(new { error = e.InnerException.Message });
                 }
                 else
@@ -84,11 +81,6 @@ namespace WB.UI.Designer.Controllers
 
             questionDataCommand.Condition = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.Condition, questionDataCommand.QuestionnaireId);
             questionDataCommand.ValidationExpression = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.ValidationExpression, questionDataCommand.QuestionnaireId);
-        }
-
-        private void SetErrorStatusCode()
-        {
-            this.Response.StatusCode = (int) HttpStatusCode.BadRequest;
         }
     }
 }
