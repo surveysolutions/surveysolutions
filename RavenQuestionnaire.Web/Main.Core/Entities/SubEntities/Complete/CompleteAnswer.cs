@@ -100,21 +100,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// Gets or sets the name collection.
         /// </summary>
         public string NameCollection { get; set; }
-
-        /// <summary>
-        /// Gets the parent.
-        /// </summary>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        [JsonIgnore]
-        public IComposite Parent
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        
         /// <summary>
         /// Gets or sets the propagation public key.
         /// </summary>

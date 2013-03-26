@@ -65,17 +65,22 @@ namespace Core.CAPI.Views.Grouped
         public CQGroupedBrowseView Load(CQGroupedBrowseInputModel input)
         {
             var questionnairesGroupedByTemplate =
-                this.documentItemSession.Query().Where(BuildPredicate(input)).GroupBy(x => x.TemplateId);
+                this.documentItemSession.Query().ToList()/*.Where(BuildPredicate(input)).GroupBy(x => x.TemplateId)*/;
 
             var retval = new CQGroupedBrowseView(0, 100, 100, new List<CQGroupItem>());
-            foreach (var templateGroup in questionnairesGroupedByTemplate)
+
+            CQGroupItem item = new CQGroupItem(1, 100, questionnairesGroupedByTemplate.Count,
+                                                   "", Guid.NewGuid());
+            item.Items = questionnairesGroupedByTemplate;
+            retval.Groups.Add(item);
+           /* foreach (var templateGroup in questionnairesGroupedByTemplate)
             {
 
                 CQGroupItem item = new CQGroupItem(1, 100, templateGroup.Count(),
                                                    templateGroup.FirstOrDefault().QuestionnaireTitle, templateGroup.Key);
                 item.Items = templateGroup.ToList();
                 retval.Groups.Add(item);
-            }
+            }*/
 
             return retval;
         }

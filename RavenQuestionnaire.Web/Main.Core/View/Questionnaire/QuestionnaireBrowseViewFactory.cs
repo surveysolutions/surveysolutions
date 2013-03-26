@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Main.Core.Documents;
 using Main.DenormalizerStorage;
+using System;
+using System.Linq;
 
 namespace Main.Core.View.Questionnaire
 {
+    using Main.Core.Utility;
+
     /// <summary>
     /// The questionnaire browse view factory.
     /// </summary>
@@ -53,12 +53,10 @@ namespace Main.Core.View.Questionnaire
         /// The input.
         /// </param>
         /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Questionnaire.QuestionnaireBrowseView.
+        /// The QuestionnaireBrowseView.
         /// </returns>
         public QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input)
         {
-            
-
             // Adjust the model appropriately
             int count = this.documentGroupSession.Count();
             if (count == 0)
@@ -67,31 +65,25 @@ namespace Main.Core.View.Questionnaire
                     input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            // Perform the paged query
-
-            /*   if (input.Orders.Count > 0)
-            {
-                query = input.Orders[0].Direction == OrderDirection.Asc
-                            ? query.OrderBy(input.Orders[0].Field)
-                            : query.OrderByDescending(input.Orders[0].Field);
-
-            }
-            if (input.Orders.Count > 1)
-                foreach (var order in input.Orders.Skip(1))
-                {
-                    query = order.Direction == OrderDirection.Asc
-                                ? query.ThenBy(order.Field)
-                                : query.ThenByDescending(order.Field);
-                }*/
             IQueryable<QuestionnaireBrowseItem> query = this.documentGroupSession.Query();
-            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
 
-            // And enact this query
-            QuestionnaireBrowseItem[] items = page.ToArray();
-          /*      page.Select(x => new QuestionnaireBrowseItem(x.PublicKey, x.Title, DateTime.Now, DateTime.Now)).
-                    ToArray();*/
+            Func<QuestionnaireBrowseItem, bool> q = (ret) => true;
 
-            return new QuestionnaireBrowseView(input.Page, input.PageSize, count, items, input.Order);
+            if (input.IsAdminMode.HasValue)
+            {
+                q =
+                    x =>
+                    (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
+                    && (input.IsAdminMode.Value || !x.IsDeleted)
+                    && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+            }
+
+            var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
+
+            var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+
+
+            return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
         }
 
         #endregion

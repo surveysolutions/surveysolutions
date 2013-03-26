@@ -9,7 +9,6 @@
 
 using System.CodeDom.Compiler;
 using System.Linq;
-using System.Management.Instrumentation;
 
 namespace Main.Core.Domain
 {
@@ -18,9 +17,12 @@ namespace Main.Core.Domain
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Complete;
     using Main.Core.Events.Questionnaire;
+    using Main.Core.Utility;
 
     using Ncqrs;
     using Ncqrs.Restoring.EventStapshoot;
@@ -50,7 +52,6 @@ namespace Main.Core.Domain
             this.questionFactory = new CompleteQuestionFactory();
         }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
         /// </summary>
@@ -60,7 +61,10 @@ namespace Main.Core.Domain
         /// <param name="title">
         /// The text.
         /// </param>
-        public QuestionnaireAR(Guid publicKey, string title)
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null)
             : base(publicKey)
         {
             var clock = NcqrsEnvironment.Get<IClock>();
@@ -75,7 +79,68 @@ namespace Main.Core.Domain
                     {
                         PublicKey = publicKey,
                         Title = title,
-                        CreationDate = clock.UtcNow()
+                        CreationDate = clock.UtcNow(),
+                        CreatedBy = createdBy
+                    });
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireAR"/> class.
+        /// </summary>
+        /// <param name="publicKey">
+        /// The public key.
+        /// </param>
+        /// <param name="title">
+        /// The title.
+        /// </param>
+        /// <param name="createdBy">
+        /// The created by.
+        /// </param>
+        /// <param name="source">
+        /// </param>
+        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
+            : this(publicKey, title, createdBy)
+        {
+            source.Children.ApplyAction(
+                x => x.Children,
+                (parent, x) =>
+                    {
+                        var parentId = parent == null ? (Guid?)null : parent.PublicKey;
+
+                        var q = x as IQuestion;
+                        if (q != null)
+                        {
+                            var autoQuestion = q as IAutoPropagate;
+                            this.AddQuestion(
+                                publicKey: q.PublicKey,
+                                questionText: q.QuestionText,
+                                stataExportCaption: q.StataExportCaption,
+                                questionType: q.QuestionType,
+                                questionScope: q.QuestionScope,
+                                conditionExpression: q.ConditionExpression,
+                                validationExpression: q.ValidationExpression,
+                                validationMessage: q.ValidationMessage,
+                                featured: q.Featured,
+                                mandatory: q.Mandatory,
+                                capital: q.Capital,
+                                answerOrder: q.AnswerOrder,
+                                instructions: q.Instructions,
+                                groupPublicKey: parentId,
+                                triggers: autoQuestion == null ? null : autoQuestion.Triggers,
+                                maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
+                                answers: q.Answers.Select(Answer.CreateFromOther).ToArray());
+                        }
+                        var g = x as IGroup;
+                        if (g != null)
+                        {
+                            this.AddGroup(
+                                publicKey: g.PublicKey,
+                                text: g.Title,
+                                propagateble: g.Propagated,
+                                parentGroupKey: parentId,
+                                conditionExpression: g.ConditionExpression,
+                                description: g.Description);
+                        }
                     });
         }
 
@@ -118,6 +183,14 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
+        /// The delete questionnaire.
+        /// </summary>
+        public void DeleteQuestionnaire()
+        {
+            this.ApplyEvent(new QuestionnaireDeleted());
+        }
+
+        /// <summary>
         /// The add group.
         /// </summary>
         /// <param name="publicKey">
@@ -138,6 +211,7 @@ namespace Main.Core.Domain
         /// <param name="description">
         /// The description.
         /// </param>
+        [Obsolete]
         public void AddGroup(
             Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
         {
@@ -150,7 +224,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewGroupAdded
                     {
-                        QuestionnairePublicKey = this.innerDocument.PublicKey,
                         PublicKey = publicKey,
                         GroupText = text,
                         ParentGroupPublicKey = parentGroupKey,
@@ -214,6 +287,7 @@ namespace Main.Core.Domain
         /// <param name="answers">
         /// The answers.
         /// </param>
+        [Obsolete]
         public void AddQuestion(
             Guid publicKey,
             string questionText,
@@ -235,7 +309,9 @@ namespace Main.Core.Domain
         {
             stataExportCaption = stataExportCaption.Trim();
 
-            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
                 new NewQuestionAdded
@@ -314,6 +390,7 @@ namespace Main.Core.Domain
         /// <param name="answers">
         /// The answers.
         /// </param>
+        [Obsolete]
         public void ChangeQuestion(
             Guid publicKey,
             string questionText,
@@ -333,11 +410,13 @@ namespace Main.Core.Domain
             Order answerOrder,
             Answer[] answers)
         {
-            ThrowArgumentExceptionIfQuestionDoesntExist(publicKey);
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(publicKey);
 
             stataExportCaption = stataExportCaption.Trim();
 
-            ThrowArgumentExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
+
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -375,7 +454,7 @@ namespace Main.Core.Domain
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
-            var cq = new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
+            new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
         /// <summary>
@@ -387,6 +466,7 @@ namespace Main.Core.Domain
         /// <param name="parentPublicKey">
         /// The parent Public Key.
         /// </param>
+        [Obsolete]
         public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
         #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
@@ -416,6 +496,7 @@ namespace Main.Core.Domain
         /// <param name="parentPublicKey">
         /// The parent Public Key.
         /// </param>
+        [Obsolete]
         public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
 #warning we should not supply parent here. that is because question is unique, and parent has no business sense
         {
@@ -439,37 +520,134 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new QuestionnaireItemMoved
                     {
-                        QuestionnaireId = this.innerDocument.PublicKey,
                         AfterItemKey = afterItemKey,
                         GroupKey = groupKey,
                         PublicKey = publicKey
                     });
         }
 
-        /// <summary>
-        /// The update group.
-        /// </summary>
-        /// <param name="groupText">
-        /// The group text.
-        /// </param>
-        /// <param name="propagateble">
-        /// The propagateble.
-        /// </param>
-        /// <param name="groupPublicKey">
-        /// The group public key.
-        /// </param>
-        /// <param name="executor">
-        /// The executor.
-        /// </param>
-        /// <param name="conditionExpression">
-        /// The condition expression.
-        /// </param>
-        /// <param name="description">
-        /// The description.
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// Some exception
-        /// </exception>
+        public void NewAddGroup(Guid groupId,
+            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
+        {
+            this.ApplyEvent(new NewGroupAdded
+            {
+                PublicKey = groupId,
+                GroupText = title,
+                ParentGroupPublicKey = parentGroupId,
+                Paropagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+            });
+        }
+
+        public void NewDeleteGroup(Guid groupId)
+        {
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            this.ApplyEvent(new GroupDeleted(groupId));
+        }
+
+        public void NewUpdateGroup(Guid groupId,
+            string title, Propagate propagationKind, string description, string condition)
+        {
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            this.ApplyEvent(new GroupUpdated
+            {
+                QuestionnaireId = this.innerDocument.PublicKey.ToString(),
+                GroupPublicKey = groupId,
+                GroupText = title,
+                Propagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+            });
+        }
+
+        public void NewAddQuestion(Guid questionId,
+            Guid groupId, string title, QuestionType type, string alias, 
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup, 
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
+        {
+            alias = alias.Trim();
+
+            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ApplyEvent(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+
+                Answers = ConvertOptionsToAnswers(options),
+                AnswerOrder = optionsOrder,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+            });
+        }
+
+        public void NewDeleteQuestion(Guid questionId)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+
+            this.ApplyEvent(new QuestionDeleted(questionId));
+        }
+
+        public void NewUpdateQuestion(Guid questionId,
+            string title, QuestionType type, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+            QuestionScope scope, string condition, string validationExpression, string validationMessage,
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+
+            alias = alias.Trim();
+
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+
+            this.ApplyEvent(new QuestionChanged
+            {
+                PublicKey = questionId,
+
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+
+                Answers = ConvertOptionsToAnswers(options),
+                AnswerOrder = optionsOrder,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+            });
+        }
+
+        [Obsolete]
         public void UpdateGroup(
             string groupText,
             Propagate propagateble,
@@ -479,7 +657,7 @@ namespace Main.Core.Domain
             string description)
 #warning get rid of executor here and create a common mechanism for handling it if needed
         {
-            this.ThrowArgumentExceptionIfGroupDoesNotExist(groupPublicKey);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
 
             this.ApplyEvent(
                 new GroupUpdated
@@ -564,6 +742,17 @@ namespace Main.Core.Domain
         }
 
         /// <summary>
+        /// The on questionnaire deleted.
+        /// </summary>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        protected void OnQuestionnaireDeleted(QuestionnaireDeleted e)
+        {
+            this.innerDocument.IsDeleted = true;
+        }
+
+        /// <summary>
         /// The on group deleted.
         /// </summary>
         /// <param name="e">
@@ -571,7 +760,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnGroupDeleted(GroupDeleted e)
         {
-            this.innerDocument.Remove(e.GroupPublicKey, null, e.ParentPublicKey, null);
+            this.innerDocument.RemoveGroup(e.GroupPublicKey);
         }
 
         /// <summary>
@@ -692,6 +881,7 @@ namespace Main.Core.Domain
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
             this.innerDocument.LastEntryDate = e.CreationDate;
+            this.innerDocument.CreatedBy = e.CreatedBy;
         }
 
         /// <summary>
@@ -703,7 +893,8 @@ namespace Main.Core.Domain
         protected void OnQuestionChanged(QuestionChanged e)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(e.PublicKey);
-            this.questionFactory.UpdateQuestionByEvent(question, e);
+            IQuestion newQuestion = this.questionFactory.CreateQuestionFromExistingUsingDataFromEvent(question, e);
+            this.innerDocument.ReplaceQuestionWithNew(question, newQuestion);
         }
 
         /// <summary>
@@ -714,7 +905,7 @@ namespace Main.Core.Domain
         /// </param>
         protected void OnQuestionDeleted(QuestionDeleted e)
         {
-            this.innerDocument.Remove(e.QuestionId, null, e.ParentPublicKey, null);
+            this.innerDocument.RemoveQuestion(e.QuestionId);
         }
 
         /// <summary>
@@ -730,47 +921,80 @@ namespace Main.Core.Domain
 
         #endregion
 
-        private void ThrowArgumentExceptionIfQuestionDoesntExist(Guid publicKey)
+        private static Answer[] ConvertOptionsToAnswers(Option[] options)
+        {
+            if (options == null)
+                return null;
+
+            return options.Select(ConvertOptionToAnswer).ToArray();
+        }
+
+        private static Answer ConvertOptionToAnswer(Option option)
+        {
+            return new Answer
+            {
+                PublicKey = option.Id,
+                AnswerType = AnswerType.Select,
+                AnswerValue = option.Value,
+                AnswerText = option.Title,
+            };
+        }
+
+        private void ThrowDomainExceptionIfQuestionDoesNotExist(Guid publicKey)
         {
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new ArgumentException(string.Format("Question with public key {0} can't be found", publicKey));
+                throw new DomainException(string.Format("Question with public key {0} can't be found", publicKey));
             }
         }
 
-        private void ThrowArgumentExceptionIfGroupDoesNotExist(Guid groupPublicKey)
+        private void ThrowDomainExceptionIfGroupDoesNotExist(Guid groupPublicKey)
         {
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new ArgumentException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+                throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
             }
         }
 
-        private void ThrowArgumentExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
+        private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
+        {
+            this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
+        }
+
+        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+            if (isQuestionWithOptions && !answerOptions.Any())
+            {
+                throw new DomainException("Questions with options should have one answer option at least");
+            }
+        }
+
+        private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new ArgumentException("Variable name shouldn't be empty or contains white spaces");
+                throw new DomainException("Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new ArgumentException("Variable name shouldn't be longer than 32 characters");
+                throw new DomainException("Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new ArgumentException("Valid variable name should contains only letters, digits and underscore character");
+                throw new DomainException("Valid variable name should contains only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new ArgumentException("Variable name shouldn't starts with digit");
+                throw new DomainException("Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -780,7 +1004,7 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new ArgumentException("Variable name should be unique in questionnaire's scope");
+                throw new DomainException("Variable name should be unique in questionnaire's scope");
             }
         }
     }

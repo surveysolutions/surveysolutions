@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C500A144-E8B6-41C1-8776-DC468E1D4889}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidNcqrs.Spec</RootNamespace>
+    <AssemblyName>AndroidNcqrs.Spec</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
+    <OutputPath>bin\MONODROID\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\AggregateRootTestFixture.cs">
+      <Link>AggregateRootTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\AndAttribute.cs">
+      <Link>AndAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\AutoMappedCommandTestFixture.cs">
+      <Link>AutoMappedCommandTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\BaseTestFixture.cs">
+      <Link>BaseTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\BigBangTestFixture.cs">
+      <Link>BigBangTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\CommandTestFixture.cs">
+      <Link>CommandTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\DomainTestFixture.cs">
+      <Link>DomainTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\EventContext.cs">
+      <Link>EventContext.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\EventSerializationFixture.cs">
+      <Link>EventSerializationFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\ExceptionTestFixture.cs">
+      <Link>ExceptionTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\Fakes\EnvironmentConfigurationWrapper.cs">
+      <Link>Fakes\EnvironmentConfigurationWrapper.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\Fakes\FrozenClock.cs">
+      <Link>Fakes\FrozenClock.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\GivenAttribute.cs">
+      <Link>GivenAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\JsonEventSerializationFixture.cs">
+      <Link>JsonEventSerializationFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\OneEventTestFixture.cs">
+      <Link>OneEventTestFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\Prepare.cs">
+      <Link>Prepare.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\SpecificationAttribute.cs">
+      <Link>SpecificationAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Externals\Framework\src\Ncqrs.Spec\ThenAttribute.cs">
+      <Link>ThenAttribute.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
+      <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
+      <Name>NUnitLite.MonoDroid</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkReference="aa90754b-ca47-429e-bdc8-2a83e94179b7" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

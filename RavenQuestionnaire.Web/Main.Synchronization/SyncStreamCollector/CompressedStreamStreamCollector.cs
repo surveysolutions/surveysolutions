@@ -20,7 +20,7 @@ namespace Main.Synchronization.SyncStreamCollector
 
     using Newtonsoft.Json;
 
-    using Questionnaire.Core.Web.Export;
+    using SynchronizationMessages.Export;
 
     using SynchronizationMessages.Export;
 
@@ -113,7 +113,7 @@ namespace Main.Synchronization.SyncStreamCollector
 
             return true;
         }
-        
+
         /// <summary>
         /// The finish.
         /// </summary>
@@ -132,18 +132,26 @@ namespace Main.Synchronization.SyncStreamCollector
             var zip = new ZipFile();
 
             zip.CompressionLevel = CompressionLevel.BestSpeed;
+            zip.ParallelDeflateThreshold = -1;
 
-            zip.AddEntry(
-                "backup.txt",
-                JsonConvert.SerializeObject(
-                    new ZipFileData { ClientGuid = this.ProcessGuid, Events = this.eventStore },
-                    Formatting.Indented,
-                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects }));
+            var result = JsonConvert.SerializeObject(
+                new ZipFileData
+                    {
+                        ClientGuid = this.ProcessGuid, Events = this.eventStore
+                    }, 
+                Formatting.None, 
+                new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.Objects
+                    });
+
+
+            zip.AddEntry("backup.txt", result);
 
             var outputStream = new MemoryStream();
             zip.Save(outputStream);
 
-            outputStream.Seek(0, SeekOrigin.Begin);
+            outputStream.Position = 0;
 
             return outputStream;
         }

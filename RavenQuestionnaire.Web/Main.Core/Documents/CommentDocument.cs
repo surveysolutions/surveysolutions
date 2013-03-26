@@ -15,7 +15,7 @@ namespace Main.Core.Documents
     /// <summary>
     /// The comment document.
     /// </summary>
-    public class CommentDocument
+    public class CommentDocument 
     {
         #region Public Properties
 

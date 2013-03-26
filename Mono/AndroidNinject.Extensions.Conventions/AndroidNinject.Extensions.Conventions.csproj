@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E21BC003-84B5-41BE-928C-75874418ACD2}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidNinject.Extensions.Conventions</RootNamespace>
+    <AssemblyName>AndroidNinject.Extensions.Conventions</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\LibrariesPortedToAndroid\Bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT_20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindingBuilder\AssemblyFinder.cs" />
+    <Compile Include="BindingBuilder\BindingGeneratorFactory.cs" />
+    <Compile Include="BindingBuilder\ConventionBindingBuilder.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.Bind.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.Configure.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.Filter.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.From.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.IncludeExclude.cs" />
+    <Compile Include="BindingBuilder\ConventionSyntax.Select.cs" />
+    <Compile Include="BindingBuilder\IAssemblyFinder.cs" />
+    <Compile Include="BindingBuilder\IBindingCreator.cs" />
+    <Compile Include="BindingBuilder\IBindingGeneratorFactory.cs" />
+    <Compile Include="BindingBuilder\IConventionBindingBuilder.cs" />
+    <Compile Include="BindingBuilder\ITypeFilter.cs" />
+    <Compile Include="BindingBuilder\ITypeSelector.cs" />
+    <Compile Include="BindingBuilder\MultipleConfigurationBindingCreator.cs" />
+    <Compile Include="BindingBuilder\SingleConfigurationBindingCreator.cs" />
+    <Compile Include="BindingBuilder\TypeFilter.cs" />
+    <Compile Include="BindingBuilder\TypeSelector.cs" />
+    <Compile Include="BindingGenerators\AbstractInterfaceBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\AllInterfacesBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\BaseBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\BindableTypeSelector.cs" />
+    <Compile Include="BindingGenerators\DefaultInterfaceBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\DefaultInterfacesBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\FactoryBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\IBindableTypeSelector.cs" />
+    <Compile Include="BindingGenerators\IBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\SelectorBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\SelfBindingGenerator.cs" />
+    <Compile Include="BindingGenerators\SingleInterfaceBindingGenerator.cs" />
+    <Compile Include="Extensions\ExtensionsForAssembly.cs" />
+    <Compile Include="Extensions\ExtensionsForIKernel.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Syntax\IBindSyntax.cs" />
+    <Compile Include="Syntax\IConfigureForSyntax.cs" />
+    <Compile Include="Syntax\IConfigureSyntax.cs" />
+    <Compile Include="Syntax\IExcludeIncludeBindSyntax.cs" />
+    <Compile Include="Syntax\IExcludeSyntax.cs" />
+    <Compile Include="Syntax\IFilterSyntax.cs" />
+    <Compile Include="Syntax\IFromSyntax.cs" />
+    <Compile Include="Syntax\IIncludeSyntax.cs" />
+    <Compile Include="Syntax\IIncludingNonePublicTypesSelectSyntax.cs" />
+    <Compile Include="Syntax\IIncludingNonePublicTypesSyntax.cs" />
+    <Compile Include="Syntax\IJoinExcludeIncludeBindSyntax.cs" />
+    <Compile Include="Syntax\IJoinFilterWhereExcludeIncludeBindSyntax.cs" />
+    <Compile Include="Syntax\IJoinSyntax.cs" />
+    <Compile Include="Syntax\IJoinWhereExcludeIncludeBindSyntax.cs" />
+    <Compile Include="Syntax\ISelectSyntax.cs" />
+    <Compile Include="Syntax\IWhereSyntax.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidNinject.Extensions.Factory\AndroidNinject.Extensions.Factory.csproj">
+      <Project>{1A39EA94-3A3C-4C3C-8DC5-AF21268A3C1B}</Project>
+      <Name>AndroidNinject.Extensions.Factory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
+      <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

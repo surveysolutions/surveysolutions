@@ -17,6 +17,13 @@ namespace Main.Core.Documents
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
 
+#warning if MONODROID is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
+#if MONODROID
+    using AndroidLogger;
+#else
+    using NLog;
+#endif
+
     using Newtonsoft.Json;
 
     /// <summary>
@@ -25,6 +32,12 @@ namespace Main.Core.Documents
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
+#if MONODROID
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(QuestionnaireDocument));
+#else
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+#endif
+
         #region Fields
 
         /// <summary>
@@ -85,15 +98,23 @@ namespace Main.Core.Documents
         public DateTime? OpenDate { get; set; }
 
         /// <summary>
+        /// Gets or sets deleted document flag
+        /// </summary>
+        public bool IsDeleted { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        public Guid? CreatedBy { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent.
         /// </summary>
-        [JsonIgnore]
-        public IComposite Parent { get; set; }
+        private IComposite parent;
 
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
-        [JsonIgnore]
         public Propagate Propagated
         {
             get
@@ -105,7 +126,17 @@ namespace Main.Core.Documents
             {
             }
         }
-        
+
+        public IComposite GetParent()
+        {
+            return parent;
+        }
+
+        public void SetParent(IComposite parent)
+        {
+            this.parent = parent;
+        }
+
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
@@ -156,7 +187,7 @@ namespace Main.Core.Documents
             if (!parent.HasValue || this.PublicKey == parent)
             {
                 ////add to the root
-                c.Parent = this;
+                c.SetParent(this);
                 this.Children.Add(c);
                 return;
             }
@@ -237,60 +268,24 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public void Remove(IComposite c)
+        public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
         {
-            // this.Remove(c.PublicKey, null);
-        }*/
-        
-       /* /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        public void Remove(Guid publicKey, Guid? propagationKey)
-        {
+            Guid oldQuestionId = oldQuestion.PublicKey;
 
-            if (this.PublicKey == publicKey)
+            IComposite questionParent = this.GetParentOfQuestion(oldQuestionId);
+
+            if (questionParent != null)
             {
-                IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-                if (group != null)
-                {
-                    this.Children.Remove(group);
-                    return;
-                }
+                int indexOfQuestion = questionParent.Children.FindIndex(child => IsQuestionWithSpecifiedId(child, oldQuestionId));
+                questionParent.Children[indexOfQuestion] = newQuestion;
             }
-
-            var group1 = this.Find<IComposite>(g => g.PublicKey == publicKey);
-            if (group != null)
+            else
             {
-                this.Children.Remove(group);
-                return;
+                Logger.Warn(string.Format(
+                    "Failed to replace question '{0}' with new because it's parent is not found.",
+                    oldQuestionId));
             }
-
-            foreach (IComposite child in this.Children)
-            {
-                try
-                {
-                    child.Remove(publicKey, null);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException();
-        }*/
+        }
 
         /// <summary>
         /// The remove.
@@ -324,6 +319,81 @@ namespace Main.Core.Documents
             }
         }
 
+        public void RemoveGroup(Guid groupId)
+        {
+            IComposite groupParent = this.GetParentOfGroup(groupId);
+
+            if (groupParent != null)
+            {
+                RemoveChildGroupBySpecifiedId(groupParent, groupId);
+            }
+            else
+            {
+                Logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
+            }
+        }
+
+        public void RemoveQuestion(Guid questionId)
+        {
+            IComposite questionParent = this.GetParentOfQuestion(questionId);
+
+            if (questionParent != null)
+            {
+                RemoveChildQuestionBySpecifiedId(questionParent, questionId);
+            }
+            else
+            {
+                Logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+            }
+        }
+
+        private static void RemoveChildGroupBySpecifiedId(IComposite container, Guid groupId)
+        {
+            container.Children.RemoveAll(child => IsGroupWithSpecifiedId(child, groupId));
+        }
+
+        private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
+        {
+            container.Children.RemoveAll(child => IsQuestionWithSpecifiedId(child, questionId));
+        }
+
+        private IComposite GetParentOfGroup(Guid groupId)
+        {
+            if (ContainsChildGroupWithSpecifiedId(this, groupId))
+                return this;
+
+            return this
+                .Find<IGroup>(group => ContainsChildGroupWithSpecifiedId(group, groupId))
+                .SingleOrDefault();
+        }
+
+        private IComposite GetParentOfQuestion(Guid questionId)
+        {
+            return this
+                .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
+                .SingleOrDefault();
+        }
+
+        private static bool ContainsChildGroupWithSpecifiedId(IComposite container, Guid groupId)
+        {
+            return container.Children.Any(child => IsGroupWithSpecifiedId(child, groupId));
+        }
+
+        private static bool ContainsChildQuestionWithSpecifiedId(IComposite container, Guid questionId)
+        {
+            return container.Children.Any(child => IsQuestionWithSpecifiedId(child, questionId));
+        }
+
+        private static bool IsGroupWithSpecifiedId(IComposite child, Guid groupId)
+        {
+            return child is IGroup && ((IGroup)child).PublicKey == groupId;
+        }
+
+        private static bool IsQuestionWithSpecifiedId(IComposite child, Guid questionId)
+        {
+            return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
+        }
+
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
@@ -331,7 +401,7 @@ namespace Main.Core.Documents
         {
             foreach (var item in this.Children)
             {
-                item.Parent = this;
+                item.SetParent(this);
                 item.ConnectChildsWithParent();
             }
         }
@@ -344,25 +414,10 @@ namespace Main.Core.Documents
         /// </returns>
         public IComposite Clone()
         {
-/*
-            var doc = new QuestionnaireDocument
-                {
-                    CreationDate = this.CreationDate,
-                    LastEntryDate = this.LastEntryDate,
-                    PublicKey = this.PublicKey,
-                    ConditionExpression = this.ConditionExpression,
-                    Title = this.Title,
-                    OpenDate = this.OpenDate,
-                    Propagated = this.Propagated,
-                    Parent = this.Parent,
-                    Triggers = new List<Guid>(this.Triggers)
-                };
-*/
-
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
 
             doc.Triggers = new List<Guid>(this.Triggers);
-            doc.Parent = null;
+            doc.SetParent(null);
 
             doc.Children = new List<IComposite>();
             foreach (var composite in this.Children)
@@ -372,19 +427,7 @@ namespace Main.Core.Documents
 
             return doc;
         }
-
-        /*/// <summary>
-        /// The on deserializing.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        [OnDeserialized]
-        void OnDeserialized(StreamingContext context)
-        {
-            this.ConnectChildsWithParent();
-        }*/
-
+        
         #endregion
     }
 }

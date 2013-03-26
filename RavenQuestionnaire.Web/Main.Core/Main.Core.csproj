@@ -108,28 +108,37 @@
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Conventions">
-      <HintPath>..\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Conventions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
     <Reference Include="NLog">
-      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Embedded">
-      <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
+    <Reference Include="Raven.Client.Embedded, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Embedded.2.0.2261\lib\net40\Raven.Client.Embedded.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Database, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\RavenDB.Database.2.0.2261\lib\net40\Raven.Database.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -165,6 +174,8 @@
     <Compile Include="Commands\Questionnaire\Completed\DeleteCompleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetAnswerCommand.cs" />
     <Compile Include="Commands\Questionnaire\Completed\SetCommentCommand.cs" />
+    <Compile Include="Commands\Questionnaire\CloneQuestionnaireCommand.cs" />
+    <Compile Include="Commands\Questionnaire\DeleteQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\CreateQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
@@ -173,6 +184,17 @@
     <Compile Include="Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\FullGroupDataCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\FullQuestionDataCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\GroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\NewAddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\NewUpdateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\QuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
@@ -228,6 +250,7 @@
     <Compile Include="Domain\CollectionAR.cs" />
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
+    <Compile Include="Domain\Exceptions\DomainException.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\QuestionnaireAR.cs" />
@@ -249,6 +272,7 @@
     <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs" />
+    <Compile Include="Entities\SubEntities\Option.cs" />
     <Compile Include="Entities\SubEntities\QuestionScope.cs" />
     <Compile Include="Entities\SubEntities\IConditional.cs" />
     <Compile Include="Entities\SubEntities\Order.cs" />
@@ -312,7 +336,6 @@
     <Compile Include="Events\AbstractEventStreamReader.cs" />
     <Compile Include="Events\AbstractSnapshotableEventStreamReader.cs" />
     <Compile Include="Events\AggregateRootEvent.cs" />
-    <Compile Include="Events\AggregateRootEventStream.cs" />
     <Compile Include="Events\Collection\CollectionItemRemoved.cs" />
     <Compile Include="Events\Collection\CollectionRemoved.cs" />
     <Compile Include="Events\Collection\NewCollectionCreated.cs" />
@@ -337,6 +360,7 @@
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs" />
+    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
     <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
     <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
     <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
@@ -497,7 +521,9 @@
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

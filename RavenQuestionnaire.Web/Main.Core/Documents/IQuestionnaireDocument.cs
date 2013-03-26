@@ -10,6 +10,7 @@
 namespace Main.Core.Documents
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
 
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
@@ -41,6 +42,11 @@ namespace Main.Core.Documents
         /// Gets or sets the open date.
         /// </summary>
         DateTime? OpenDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        Guid? CreatedBy { get; set; }
 
         /// <summary>
         /// The add.

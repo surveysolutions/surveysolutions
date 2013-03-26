@@ -23,7 +23,8 @@ namespace Main.Core.EventHandlers
     /// </summary>
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                                        IEventHandler<SnapshootLoaded>,
-                                                       IEventHandler<QuestionnaireUpdated>
+                                                       IEventHandler<QuestionnaireUpdated>,
+        IEventHandler<QuestionnaireDeleted>
     {
         #region Fields
 
@@ -44,7 +45,12 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             this.documentStorage.Store(
-                new QuestionnaireBrowseItem(evnt.EventSourceId, evnt.Payload.Title, evnt.Payload.CreationDate, DateTime.Now),
+                new QuestionnaireBrowseItem(
+                    evnt.EventSourceId,
+                    evnt.Payload.Title,
+                    evnt.Payload.CreationDate,
+                    DateTime.Now,
+                    evnt.Payload.CreatedBy),
                 evnt.EventSourceId);
         }
 
@@ -64,7 +70,12 @@ namespace Main.Core.EventHandlers
             var browseItem = this.documentStorage.GetByGuid(document.PublicKey);
             if (browseItem == null)
             {
-                browseItem = new QuestionnaireBrowseItem(document.PublicKey, document.Title, document.CreationDate, document.LastEntryDate);
+                browseItem = new QuestionnaireBrowseItem(
+                    document.PublicKey,
+                    document.Title,
+                    document.CreationDate,
+                    document.LastEntryDate,
+                    document.CreatedBy);
                 this.documentStorage.Store(browseItem, document.PublicKey);
             }
         }
@@ -84,5 +95,13 @@ namespace Main.Core.EventHandlers
 
         #endregion
 
+        public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
+        {
+            var browseItem = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            if (browseItem != null)
+            {
+                browseItem.IsDeleted = true;
+            }
+        }
     }
 }

@@ -1,101 +1,327 @@
 ﻿@using System.Web.Script.Serialization
-@using Main.Core.View.Question
-@using Questionnaire.Core.Web.Helpers
-@using RavenQuestionnaire.Core.Views.Group
+@using ClientDependency.Core.Mvc
 @using RavenQuestionnaire.Core.Views.Questionnaire
 @using RavenQuestionnaire.Web.Utils
 @model QuestionnaireView
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
-
+    Html.RequiresCss("jquery-ui.min.css", "Base");
+    Html.RequiresCss("toastr.css", "Content");
+    Html.RequiresCss("toastr-responsive.css", "Content");
+    Html.RequiresCss("details.css", "Content");
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
-<script type="text/javascript">
-    
-    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
+<script src="../../Scripts/details/lib/Math.uuid.js"></script>
+<script src="../../Scripts/jquery-ui-1.8.16.custom.min.js"></script>
+<script src="../../Scripts/details/lib/knockout-2.1.0.js"></script>
 
+<script src="../../Scripts/details/lib/json2.js"></script>
 
-    !function ($) {
+<script src="../../Scripts/details/lib/moment.js"></script>
+<script src="../../Scripts/details/lib/jquery.autogrow-textarea.js"></script>
+<script src="../../Scripts/details/lib/TrafficCop.js"></script>
+<script src="../../Scripts/details/lib/infuser.js"></script>
 
-        $(function () {
-            var $window = $(window);
-            // Disable certain links in docs
-            $('section [href^=#]').click(function (e) {
-                e.preventDefault();
-            });
+<script src="../../Scripts/details/lib/lodash.min.js"></script>
 
-            // side bar
-            $('.bs-docs-sidenav').affix({
-                offset: {
-                    top: function () { return $window.width() <= 980 ? 290 : 210; },
-                    bottom: 270
-                }
-            });
+<script src="../../Scripts/details/lib/knockout.activity.js"></script>
+<script src="../../Scripts/details/lib/knockout.asyncCommand.js"></script>
+<script src="../../Scripts/details/lib/knockout.dirtyFlag.js"></script>
+<script src="../../Scripts/details/lib/knockout.validation.js"></script>
+<script src="../../Scripts/details/lib/koExternalTemplateEngine.js"></script>
+<script src="../../Scripts/details/lib/knockout-sortable.js"></script>
 
-            function getUrlVars() {
-                var vars = [], hash;
-                var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-                for (var i = 0; i < hashes.length; i++) {
-                    hash = hashes[i].split('=');
-                    vars.push(hash[0]);
-                    vars[hash[0]] = hash[1];
-                }
-                return vars;
-            }
-            $(document).ready(function() {
-                var vars = getUrlVars();
-                $('#' + vars['qid']).focus();
-            })
-        });
-        ;
+<script src="../../Scripts/details/lib/sammy.js"></script>
+<script src="../../Scripts/details/lib/sammy.title.js"></script>
+<script src="../../Scripts/details/lib/amplify.core.js"></script>
+<script src="../../Scripts/details/lib/amplify.request.js"></script>
+<script src="../../Scripts/details/lib/amplify.store.js"></script>
 
-    } (window.jQuery)
+<script src="../../Scripts/details/lib/toastr.js"></script>
+
+<script src="../../Scripts/details/lib/require.js"></script>
+
+<script>
+    define('input', [], function () {
+        var q= @Html.Raw(serializer.Serialize(Model)) ;
+        return {
+            questionnaire: q
+        };
+    });
 </script>
+<script src="../../Scripts/details/main.js"></script>
 
-<div class="row-fluid">
-    <div class="span3 bs-docs-sidebar">
-        <ul class="nav nav-list bs-docs-sidenav">
-            @foreach (var item in Model.Children)
-            {
-                if ((item as GroupView) != null)
-                {
-                    var @group = @item as GroupView;
-                <li><a href="#group-@(group.PublicKey)"><i class="icon-chevron-right"></i>@group.Title</a></li>
-                @this.RenderTOC(@group)
-                }
-            }
-        </ul>
-        <p></p>
+
+<div id="busyindicator"></div>
+<div id="stacks">
+    <div id="questionnaire" class="stack">
+        <div class="inner">
+            <div class="body">
+                <!-- ko with: questionnaire -->
+                <h1 data-bind="text: title"></h1>
+                <!-- /ko -->
+                <div id="filter">
+                    <button type="button" class="close" data-bind="click: clearFilter">&times</button>
+                    <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                </div>
+                <!-- ko ifnot: isFilterMode -->
+                <ul data-bind="foreach: chapters" class="list">
+                    <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
+                </ul>
+                <!-- /ko -->
+                <!-- ko if: isFilterMode -->
+
+                <!-- /ko -->
+            </div>
+        </div>
     </div>
-    <div class="span9">
-        <h1>@Model.Title</h1>
-        <div class="control-group">
-            <label class="control-label">Creation Date:</label>
-            <div class="controls">
-                <p class="text-block">@Model.CreationDate.ToLocalTime()</p>
+    <div id="details-group" class="details stack" data-bind="with:selectedGroup ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
+            </div>
+            <div class="body container-fluid">
+                <div class="row-fluid">
+                    <label class="required">Title</label>
+                    <input type="text" data-bind="value: title" class="span12" />
+                </div>
+                <div class="row-fluid">
+                    <label class="required">Type</label>
+                    <select class="span12" data-bind="options: typeOptions, value: type"></select>
+                </div>
+                <div class="row-fluid">
+                    <label>Description</label>
+                    <textarea rows="2" data-bind="value: description" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Condition expression</label>
+                    <textarea rows="2" data-bind="value: condition" class="span12"></textarea>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
+                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset,visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left" ></i>Undo</button>
+                    <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
+                </div>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label">Last edit Date:</label>
-            <div class="controls">
-                <p class="text-block">@Model.LastEntryDate.ToLocalTime()</p>
+    </div>
+    <div id="details-question" class="details stack" data-bind="with:selectedQuestion ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
             </div>
-        </div>
-        <p>
-        @Html.ActionLink("Add Chapter", "Create", "Group", new { id = Model.PublicKey }, new { @class = "btn " })
-                        <a href="@Url.Action("Edit", new { id = Model.PublicKey })" class="btn btn-primary">
-                            <i class="icon-pencil icon-white"></i>Edit</a></p>
-        <div>
-            @{ Html.RenderPartial("~/Views/Questionnaire/_RenderChildren.cshtml", Model.Children); }
+            <div class="body container-fluid">
+                <div class="row-fluid">
+                    <label class="required">Title</label>
+                     <div class="note">
+                        <textarea rows="1" data-bind="value: title, autoGrowArea: {}" class="span12"></textarea>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <label class="required">Variable name</label>
+                    <input type="text" placeholder="var. name" class="span12" data-bind="value: alias">
+                </div>
+                <div class="row-fluid">
+                    <label class="required">Type</label>
+                    <select class="span12" data-bind="options: typeOptions, value: type"></select>
+                </div>
+                <div data-bind="template: { name: type(), data: $data}"></div>
+                <div class="row-fluid">
+                    <div class="btn-group">
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <label>Who should answer this question?</label>
+                    <select data-bind="options: scopeOptions, value: scope" class="span12"></select>
+                </div>
+                <div class="row-fluid">
+                    <label>Condition expression</label>
+                    <textarea rows="2" data-bind="value: condition" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Validation expression</label>
+                    <textarea rows="2" data-bind="value: validationExpression" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Validation message</label>
+                    <textarea rows="2" data-bind="value: validationMessage" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Instruction</label>
+                    <div class="note">
+                        <textarea rows="1" data-bind="value: instruction, autoGrowArea: {}" class="span12"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-danger"><i class="icon-white icon-remove"></i>Remove</button>
+                    <button class="btn btn-danger" data-bind="click: dirtyFlag().reset, visible: dirtyFlag().isDirty()"><i class="icon-white icon-arrow-left" ></i>Undo</button>
+                    <button class="btn btn-success"><i class="icon-white icon-ok"></i>Save</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-@helper RenderTOC(GroupView block)
-    {
-        foreach (var @group in from item in block.Children where (item as GroupView) != null select @item as GroupView)
-        {
-    <li><a href="#group-@(group.PublicKey)"><i class="icon-chevron-right"></i>@group.Title</a></li>
-    @this.RenderTOC(@group)
-        }
-}
+<script type="text/html" id="GroupView">
+    <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected}">
+        <div class="q-item">
+            <div class="group-actions  pull-right">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Question</a></li>
+                        <li><a data-bind="click: addGroup" tabindex="-1" href="#"><i class="icon-plus"></i>Group</a></li>
+                    </ul>
+                </div>
+            </div>
+            @*  <span class="alias" data-bind="text: id"></span>*@
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+            <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+        </div>
+    </div>
+    <ul data-bind="sortable: children" class="list">
+        <li data-bind="template: { name: $data.template}, allowDrop : true"></li>
+    </ul>
+</script>
+<script type="text/html" id="QuestionView">
+    <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected}">
+        <div class="q-item">
+            <span class="alias" data-bind="text: alias"></span>
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+            <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="SingleOption">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label>Answers</label>
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="YesNo">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label>Answers</label>
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="DropDownList">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label>Answers</label>
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="MultyOption">
+    <div class="row-fluid">
+        <label>Answer order</label>
+        <select class="span12" data-bind="options: orderOptions, value: answerOrder"></select>
+    </div>
+    <label>Answers</label>
+    <!-- ko foreach: answerOptions -->
+    <div class="row-fluid">
+        <input type="number" placeholder="value" class="span3" data-bind="value: value">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: title">
+            <button class="btn btn-danger" type="button" data-bind="click: $parent.removeAnswer"><i class="icon-remove icon-white"></i></button>
+        </div>
+    </div>
+    <!-- /ko -->
+    <div class="row-fluid">
+        <input id="currentAnswerValue" type="number" placeholder="value" class="span3" data-bind="value: $parent.currentAnswerValue">
+        <div class="input-append">
+            <input type="text" placeholder="title" class="span8" data-bind="value: $parent.currentAnswerTitle">
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addAnswer"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+</script>
+<script type="text/html" id="Numeric"></script>
+<script type="text/html" id="DateTime"></script>
+<script type="text/html" id="GpsCoordinates"></script>
+<script type="text/html" id="Text"></script>
+<script type="text/html" id="AutoPropagate">
+    <div class="row-fluid">
+        <label>Max answer value</label>
+        <input type="text" placeholder="max value" class="span12" data-bind="value: maxValue">
+    </div>
+    <div class="edit-triggers">
+        <label>Triggers</label>
+        <!-- ko foreach: triggers -->
+        <div class="row-fluid">
+            <div class="input-append">
+                <input class="span11" disabled type="text" data-bind="value: value">
+                <button class="btn btn-danger" type="button" data-bind="click: $parent.removeTrigger"><i class="icon-remove icon-white"></i></button>
+            </div>
+        </div>
+        <!-- /ko -->
+    </div>
+    <div class="row-fluid" data-bind="visible: hasPropagatedGroups">
+        <div class="input-append">
+            <select data-bind="options: propagatedGroups, optionsText: 'value', value: currentTrigger, enable: hasPropagatedGroups" class="span11"></select>
+            <button class="btn btn-success" type="button" data-bind="click: $parent.addTrigger, enable: hasPropagatedGroups"><i class="icon-plus icon-white"></i></button>
+        </div>
+    </div>
+
+</script>
+
+

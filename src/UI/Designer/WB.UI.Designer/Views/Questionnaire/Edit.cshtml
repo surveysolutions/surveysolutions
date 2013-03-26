@@ -1,0 +1,265 @@
+﻿@using System.Web.Script.Serialization
+@using WB.UI.Designer.Utils
+@model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
+
+@{
+    ViewBag.Title = "Edit";
+    var serializer = new JavaScriptSerializer(new TypeResolver());
+}
+@section Styles{
+    @Styles.Render("~/Content/edit")
+}
+@section Scripts{
+    @Scripts.Render(
+        "~/bundles/jqueryui",
+        "~/bundles/jqueryval",
+        "~/bundles/jsextlibs",
+        "~/bundles/modernizr",
+        "~/Scripts/require.js"
+         )
+    <script>
+        define('input', [], function() {
+            var q = @Html.Raw(serializer.Serialize(Model));
+            return {
+                questionnaire: q,
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
+            };
+        });
+    </script>
+
+    @Scripts.Render(
+        "~/bundles/jsappdetails",
+        "~/Scripts/details/main.js"
+         )
+}
+
+<div id="busyindicator"></div>
+<div id="stacks">
+    <div id="footer">
+        <div class="inner">
+            <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Add chapter</button>
+            <div class="statistics">
+                <ul class="nav nav-pills" data-bind="with: statistics">
+                    <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
+                    <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
+                </ul>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-info" data-bind="click: showOutput">Show errors</button>
+            </div>
+        </div>
+    </div>
+    <div id="output" class="stack">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+                <span>Errors log</span>
+            </div>
+            <div class="body">
+                <ul data-bind="foreach: errors" class="error-list">
+                    <li class="error">
+                        <span data-bind="text: error"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id="questionnaire" class="stack">
+        <div class="inner">
+            <div class="body">
+                <!-- ko with: questionnaire -->
+                <h1 data-bind="text: title"></h1>
+                <!-- /ko -->
+                <div id="filter">
+                    <button type="button" class="close" data-bind="click: clearFilter">&times</button>
+                    <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
+                </div>
+                <!-- ko ifnot: isFilterMode -->
+                @*<ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">*@
+                <ul data-bind="foreach: chapters" class="list">
+                    <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
+                </ul>
+                <!-- /ko -->
+                <!-- ko if: isFilterMode -->
+                <ul id="search-results" data-bind="foreach: searchResult" class="list">
+                    <li data-bind="template: { name: template + 'Search' }"></li>
+                </ul>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <div id="details-group" class="details stack" data-bind="with:selectedGroup ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
+            </div>
+            <div class="body container-fluid">
+                <div class="row-fluid">
+                    <div class="control-group" data-bind="validationElement: title">
+                        <label class="control-label required">Title</label>
+                        <div class="controls">
+                            <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
+                        </div>
+                    </div>
+                </div>
+                <!-- ko if : level() != 0 -->
+                <div class="row-fluid">
+                    <label class="required">Kind of propagation</label>
+                    <select class="span12" data-bind="options: typeOptions, value: gtype"></select>
+                </div>
+                <!-- /ko -->
+                <div class="row-fluid">
+                    <label>Description</label>
+                    <div class="note">
+                        <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <label>Condition expression</label>
+                    <div class="note">
+                        <textarea rows="2" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="details-question" class="details stack" data-bind="with:selectedQuestion ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
+            </div>
+            <div class="body container-fluid">
+                <div class="row-fluid control-group"  data-bind="validationElement: title">
+                    <label class="control-label required">Title</label>
+                    <div class="note">
+                        <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="control-group" data-bind="validationElement: alias">
+                        <label class="control-label required">Variable</label>
+                        <div class="controls">
+                            <input placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <label class="control-label required">Type</label>
+                    <select class="span12" data-bind="options: typeOptions, value: qtype"></select>
+                </div>
+                <div data-bind="template: { name: qtype(), data: $data}"></div>
+                <div class="row-fluid">
+                    <div class="btn-group">
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: $data.parent().gtype()!='None' " class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                    </div>
+                </div>
+                @*  <div class="row-fluid">
+                    <label>Who should answer this question?</label>
+                    <select data-bind="options: scopeOptions, value: scope" class="span12"></select>
+                </div>*@
+                <div class="row-fluid">
+                    <label>Condition expression</label>
+                    <textarea rows="2" data-bind="value: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Validation expression</label>
+                    <textarea rows="2" data-bind="value: validationExpression, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Validation message</label>
+                    <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Instruction</label>
+                    <div class="note">
+                        <textarea rows="1" data-bind="autoGrowArea: instruction, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="GroupView">
+    <div class="ui-expander" data-bind="expand: true">
+        <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-minus icon-white"></i></button>
+        <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
+            @*<div class="handler"></div>*@
+            <div class="q-item">
+                <div class="group-actions  pull-right">
+                    <div class="btn-group">
+                        <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a data-bind="click: addQuestion, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
+                            <li><a data-bind="click: addGroup, visible: gtype()=='None' &&  isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+                <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+            </div>
+        </div>
+        @*<ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">*@
+        <ul data-bind="foreach: children" class="list ui-expander-content">
+            <li data-bind="template: { name: $data.template}"></li>
+        </ul>
+    </div>
+</script>
+<script type="text/html" id="QuestionView">
+    <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
+        @*<div class="handler"></div>*@
+        <div class="q-item">
+            <div class="group-actions  pull-right">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                    </ul>
+                </div>
+            </div>
+            <span class="alias" data-bind="text: alias"></span>
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+            <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="QuestionViewSearch">
+    <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
+        <div class="q-item">
+            <div class="group-actions  pull-right">
+                <div class="btn-group">
+                    <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                    </ul>
+                </div>
+            </div>
+            <span class="alias" data-bind="text: alias"></span>
+            <a class="q-title" data-bind="attr: {href: getHref() },text: title"></a>
+            <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+        </div>
+    </div>
+</script>
+@{
+    this.Html.RenderPartial("_QuestionTypes");
+}

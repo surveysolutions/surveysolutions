@@ -212,8 +212,9 @@ namespace Main.Core.ExpressionExecutors
 
                 foreach (ICompleteGroup group in elementsToExecute)
                 {
+                    var completeItem = @group.GetParent() as ICompleteItem;
                     this.CollectGroupHierarhicallyStates(
-                        group, (group.Parent as ICompleteItem).Enabled, resultGroupsStatus, resultQuestionsStatus);
+                        group, completeItem != null && completeItem.Enabled, resultGroupsStatus, resultQuestionsStatus);
                 }
             }
         }
@@ -522,7 +523,7 @@ namespace Main.Core.ExpressionExecutors
                     break;
                 }*/
 
-                parent = parent.Parent;
+                parent = parent.GetParent();
             }
 
             return result;

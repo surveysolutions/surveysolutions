@@ -38,7 +38,8 @@ namespace Main.Core
         {
             IDenormalizerStorage<T> result;
 
-            if (this.GetWeekBinding())
+                #if !MONODROID
+                if (GetWeekBinding())
             {
                 result = context.Kernel.Get<PersistentDenormalizer<T>>();
             }
@@ -46,6 +47,9 @@ namespace Main.Core
             {
                 result = context.Kernel.Get<InMemoryDenormalizer<T>>();
             }
+#else
+                result = context.Kernel.Get<InMemoryDenormalizer<T>>();
+#endif
 
             return result;
         }

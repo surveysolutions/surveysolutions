@@ -152,13 +152,22 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
-        [JsonIgnore]
-        public IComposite Parent { get; set; }
+        private IComposite parent;
 
         /// <summary>
         /// Gets or sets the propogation public key.
         /// </summary>
         public Guid? PropagationPublicKey { get; set; }
+
+        public IComposite GetParent()
+        {
+            return parent;
+        }
+
+        public void SetParent(IComposite parent)
+        {
+            this.parent = parent;
+        }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -229,21 +238,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// <exception cref="NotImplementedException">
         /// </exception>
         public abstract void AddAnswer(IAnswer answer);
-
-
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
-        {
-            throw new NotImplementedException();
-        }*/
 
         /// <summary>
         /// The find.
@@ -316,33 +310,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         /// The System.String.
         /// </returns>
         public abstract string GetAnswerString();
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public void Remove(IComposite c)
-        {
-            throw new NotImplementedException();
-        }*/
         
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Remove(Guid publicKey, Guid? propagationKey)
-        {
-            throw new NotImplementedException();
-        }*/
 
         /// <summary>
         /// The connect childs with parent.
@@ -362,7 +330,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         {
             var question = this.MemberwiseClone() as ICompleteQuestion;
 
-            question.Parent = null;
+            question.SetParent(null);
 
             if (this.Cards != null)
             {

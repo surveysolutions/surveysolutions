@@ -1,5 +1,4 @@
-﻿
-namespace Ncqrs.Eventing.Storage
+﻿namespace Ncqrs.Eventing.Storage
 {
     using System.Collections.Generic;
 
@@ -11,7 +10,7 @@ namespace Ncqrs.Eventing.Storage
         #region Public Methods and Operators
 
         /// <summary>
-        /// Retrieves all events as a stream from the storage.
+        /// The get event stream.
         /// </summary>
         /// <returns>
         /// The <see cref="IEnumerable"/>.

@@ -19,6 +19,7 @@ namespace Main.Synchronization.SyncSreamProvider
 
     using Ncqrs;
     using Ncqrs.Eventing.Storage;
+    
 
     /// <summary>
     /// The int client event stream provider.

@@ -18,6 +18,7 @@ namespace Main.Core.Commands.Questionnaire.Group
     /// <summary>
     /// The delete group command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "DeleteGroup")]
     public class DeleteGroupCommand : CommandBase

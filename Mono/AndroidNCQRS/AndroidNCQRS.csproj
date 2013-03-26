@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Ncqrs</RootNamespace>
+    <AssemblyName>Ncqrs</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
+    <OutputPath>bin\MONODROID\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BasicGuidGenerator.cs" />
+    <Compile Include="Commanding\AllCommandsInAppDomainEnumerator.cs" />
+    <Compile Include="Commanding\CommandBase.cs" />
+    <Compile Include="Commanding\CommandExecution\CommandExecutorBase.cs" />
+    <Compile Include="Commanding\CommandExecution\CommandExecutorWrapper.cs" />
+    <Compile Include="Commanding\CommandExecution\DefaultTransactionService.cs" />
+    <Compile Include="Commanding\CommandExecution\ExecutorForCommandNotFoundException.cs" />
+    <Compile Include="Commanding\CommandExecution\ICommandExecutor.cs" />
+    <Compile Include="Commanding\CommandExecution\ICommandExecutorExtensions.cs" />
+    <Compile Include="Commanding\CommandExecution\ITransactionService.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AggregateRootIdAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributeBasedCommandMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\AttributePropertyMappingStrategy.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\CommandServiceExtensions.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ExcludeInMappingAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\IMappingAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootConstructorAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootMethodOrConstructorAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\MapsToAggregateRootStaticCreateAttributeHandler.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\ParameterAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Attributes\TransactionalAttribute.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\CommandMappingException.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\Map.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommand.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRoot.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootConstructor.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethod.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\Fluent\MappedCommandToAggregateRootMethodOrConstructor.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\ICommandMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\MappingNotFoundException.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\PropertiesToMethodMapper.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\PropertyToParameterMappingInfo.cs" />
+    <Compile Include="Commanding\CommandExecution\Mapping\UoWMappedCommandExecutor.cs" />
+    <Compile Include="Commanding\CommandExecution\TransactionalCommandExecutorWrapper.cs" />
+    <Compile Include="Commanding\ICommand.cs" />
+    <Compile Include="Commanding\IKnownCommandsEnumerator.cs" />
+    <Compile Include="Commanding\ServiceModel\CommandContext.cs" />
+    <Compile Include="Commanding\ServiceModel\CommandService.cs" />
+    <Compile Include="Commanding\ServiceModel\ICommandService.cs" />
+    <Compile Include="Commanding\ServiceModel\ICommandServiceInterceptor.cs" />
+    <Compile Include="Config\IEnvironmentConfiguration.cs" />
+    <Compile Include="Config\InstanceNotFoundInEnvironment.cs" />
+    <Compile Include="DateTimeBasedClock.cs" />
+    <Compile Include="Domain\AggregateExtensions.cs" />
+    <Compile Include="Domain\AggregateRoot.cs" />
+    <Compile Include="Domain\AggregateRootMappedByConvention.cs" />
+    <Compile Include="Domain\AggregateRootMappedWithAttributes.cs" />
+    <Compile Include="Domain\AggregateRootMappedWithExpressions.cs" />
+    <Compile Include="Domain\Entity.cs" />
+    <Compile Include="Domain\EntityMappedByConvention.cs" />
+    <Compile Include="Eventing\Storage\IStreamableEventStore.cs" />
+    <Compile Include="Domain\IUnitOfWorkContext.cs" />
+    <Compile Include="Domain\IUnitOfWorkFactory.cs" />
+    <Compile Include="Domain\NoUnitOfWorkAvailableInThisContextException.cs" />
+    <Compile Include="Domain\Storage\AggregateRootCreationException.cs" />
+    <Compile Include="Domain\Storage\AggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\AggregateRootNotFoundException.cs" />
+    <Compile Include="Domain\Storage\AggregateSupportsSnapshotValidator.cs" />
+    <Compile Include="Domain\Storage\DefaultAggregateSnapshotter.cs" />
+    <Compile Include="Domain\Storage\DelegateAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\DomainRepository.cs" />
+    <Compile Include="Domain\Storage\IAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\Storage\IAggregateSnapshotter.cs" />
+    <Compile Include="Domain\Storage\IAggregateSupportsSnapshotValidator.cs" />
+    <Compile Include="Domain\Storage\IDomainRepository.cs" />
+    <Compile Include="Domain\Storage\SimpleAggregateRootCreationStrategy.cs" />
+    <Compile Include="Domain\UnitOfWork.cs" />
+    <Compile Include="Domain\UnitOfWorkBase.cs" />
+    <Compile Include="Domain\UnitOfWorkContext.cs" />
+    <Compile Include="Domain\UnitOfWorkFactory.cs" />
+    <Compile Include="Eventing\CommittedEvent.cs" />
+    <Compile Include="Eventing\CommittedEventStream.cs" />
+    <Compile Include="Eventing\Event.cs" />
+    <Compile Include="Eventing\EventNotHandledException.cs" />
+    <Compile Include="Eventing\EventSourceInformation.cs" />
+    <Compile Include="Eventing\IEvent.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\CompositeEventBus.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IEventBus.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IEventHandler.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\InProcessEventBus.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\IPublishableEvent.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\PublishedEvent.cs" />
+    <Compile Include="Eventing\ServiceModel\Bus\RegisterAllHandlersInAssemblyExtension.cs" />
+    <Compile Include="Eventing\Sourcing\EntitySourcedEventBase.cs" />
+    <Compile Include="Eventing\Sourcing\EntityThresholdedDomainEventHandlerWrapper.cs" />
+    <Compile Include="Eventing\Sourcing\EventAppliedEventArgs.cs" />
+    <Compile Include="Eventing\Sourcing\EventSource.cs" />
+    <Compile Include="Eventing\Sourcing\IEntitySourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\IEventSource.cs" />
+    <Compile Include="Eventing\Sourcing\ISourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\ISourcedEventHandler.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\AttributeBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ConventionBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\EventHandlerAttribute.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ExpressionBasedEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\ExpressionHandler.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\IEventHandlerMappingStrategy.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\InvalidEventHandlerMappingException.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\MappedAggregateRoot.cs" />
+    <Compile Include="Eventing\Sourcing\Mapping\NoEventHandlerAttribute.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshot.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshotable.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\ISnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\NoSnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\SimpleSnapshottingPolicy.cs" />
+    <Compile Include="Eventing\Sourcing\Snapshotting\Snapshot.cs" />
+    <Compile Include="Eventing\Sourcing\SourcedEvent.cs" />
+    <Compile Include="Eventing\Sourcing\SourcedEventHandler.cs" />
+    <Compile Include="Eventing\Sourcing\TypeThresholdedActionBasedSourcedEventHandler.cs" />
+    <Compile Include="Eventing\Sourcing\UndefinedValues.cs" />
+    <Compile Include="Eventing\Storage\AttributeEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\ConcurrencyException.cs" />
+    <Compile Include="Eventing\Storage\DuplicateCommitException.cs" />
+    <Compile Include="Eventing\Storage\IEventStore.cs" />
+    <Compile Include="Eventing\Storage\IEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
+    <Compile Include="Eventing\Storage\IPropertyBagConverter.cs" />
+    <Compile Include="Eventing\Storage\IPropertyBagPostConverter.cs" />
+    <Compile Include="Eventing\Storage\ISnapshotStore.cs" />
+    <Compile Include="Eventing\Storage\NoDB\NoDBEventStore.cs" />
+    <Compile Include="Eventing\Storage\NoDB\NoDBSnapshotStore.cs" />
+    <Compile Include="Eventing\Storage\NoDB\StoredEventExtensions.cs" />
+    <Compile Include="Eventing\Storage\NullSnapshotStore.cs" />
+    <Compile Include="Eventing\Storage\PropertyBag.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagConverter.cs" />
+    <Compile Include="Eventing\Storage\PropertyBagConvertionException.cs" />
+    <Compile Include="Eventing\Storage\Serialization\EventConverter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventConverter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventFormatter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\IEventTranslator.cs" />
+    <Compile Include="Eventing\Storage\Serialization\JsonEventFormatter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\NullEventConverter.cs" />
+    <Compile Include="Eventing\Storage\Serialization\StringEventTranslator.cs" />
+    <Compile Include="Eventing\Storage\SimpleEventTypeResolver.cs" />
+    <Compile Include="Eventing\Storage\StoredEvent.cs" />
+    <Compile Include="Eventing\UncommittedEvent.cs" />
+    <Compile Include="Eventing\UncommittedEventStream.cs" />
+    <Compile Include="GuidCombGenerator.cs" />
+    <Compile Include="IClock.cs" />
+    <Compile Include="InternalExtensions.cs" />
+    <Compile Include="IUniqueIdentifierGenerator.cs" />
+    <Compile Include="NamespaceDoc.cs" />
+    <Compile Include="NcqrsEnvironment.cs" />
+    <Compile Include="NcqrsEnvironmentException.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+      <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
+      <Name>AndroidLogger</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

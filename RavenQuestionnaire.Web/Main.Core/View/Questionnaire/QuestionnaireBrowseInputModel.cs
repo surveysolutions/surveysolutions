@@ -7,12 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using Main.Core.Entities;
-using Main.Core.Utility;
-
 namespace Main.Core.View.Questionnaire
 {
+    using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities;
+    using Main.Core.Utility;
+
     /// <summary>
     /// The questionnaire browse input model.
     /// </summary>
@@ -21,19 +23,14 @@ namespace Main.Core.View.Questionnaire
         #region Fields
 
         /// <summary>
-        /// The _orders.
+        /// Initializes a new instance of the <see cref="QuestionnaireBrowseInputModel"/> class.
         /// </summary>
-        private List<OrderRequestItem> _orders = new List<OrderRequestItem>();
-
-        /// <summary>
-        /// The _page.
-        /// </summary>
-        private int _page = 1;
-
-        /// <summary>
-        /// The _page size.
-        /// </summary>
-        private int _pageSize = 20;
+        public QuestionnaireBrowseInputModel()
+        {
+            this.Orders = new List<OrderRequestItem>();
+            this.PageSize = 20;
+            this.Page = 1;
+        }
 
         #endregion
 
@@ -46,62 +43,49 @@ namespace Main.Core.View.Questionnaire
         {
             get
             {
-                return StringUtil.GetOrderRequestString(this._orders);
+                return StringUtil.GetOrderRequestString(this.Orders);
             }
 
             set
             {
-                this._orders = StringUtil.ParseOrderRequestString(value);
+                this.Orders = StringUtil.ParseOrderRequestString(value);
             }
         }
 
         /// <summary>
         /// Gets or sets the orders.
         /// </summary>
-        public List<OrderRequestItem> Orders
-        {
-            get
-            {
-                return this._orders;
-            }
-
-            set
-            {
-                this._orders = value;
-            }
-        }
+        public List<OrderRequestItem> Orders { get; set; }
 
         /// <summary>
         /// Gets or sets the page.
         /// </summary>
-        public int Page
-        {
-            get
-            {
-                return this._page;
-            }
-
-            set
-            {
-                this._page = value;
-            }
-        }
+        public int Page { get; set; }
 
         /// <summary>
         /// Gets or sets the page size.
         /// </summary>
-        public int PageSize
-        {
-            get
-            {
-                return this._pageSize;
-            }
+        public int PageSize { get; set; }
 
-            set
-            {
-                this._pageSize = value;
-            }
-        }
+        /// <summary>
+        /// Gets or sets the is admin mode.
+        /// </summary>
+        public bool? IsAdminMode { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created by.
+        /// </summary>
+        public Guid CreatedBy { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is only owner items.
+        /// </summary>
+        public bool IsOnlyOwnerItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets the filter.
+        /// </summary>
+        public string Filter { get; set; }
 
         #endregion
     }

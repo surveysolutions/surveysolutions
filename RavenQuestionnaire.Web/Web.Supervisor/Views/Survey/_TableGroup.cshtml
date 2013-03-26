@@ -61,11 +61,7 @@
                            href="#" ><i class="icon-random icon-white"></i>Assign</a>
 
                     }
-                    @if (fitem.Status.PublicId == SurveyStatus.Complete.PublicId || fitem.Status.PublicId == SurveyStatus.Error.PublicId)
-                    {
-                        <a class="btn  btn-small btn-success" href="@Url.Action("ChangeState", new { id = fitem.Id, template = fitem.TemplateId })">
-                            <i class="icon-ok-sign icon-white"></i>Change state</a>
-                    }
+                  
                 </td>
             </tr>
         }

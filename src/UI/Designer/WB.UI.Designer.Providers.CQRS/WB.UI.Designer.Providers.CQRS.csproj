@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{400CDE74-7407-4388-8D57-BF429E7C508D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WB.UI.Designer.Providers.CQRS</RootNamespace>
+    <AssemblyName>WB.UI.Designer.Providers.CQRS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Accounts\AccountAR.cs" />
+    <Compile Include="Accounts\Commands\AddRoleToAccountCommnad.cs" />
+    <Compile Include="Accounts\Commands\ChangePasswordResetTokenCommand.cs" />
+    <Compile Include="Accounts\Commands\ConfirmAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\ChangeOnlineAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\ChangePasswordAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\ChangePasswordQuestionAndAnswerAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\LoginFailedAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\RemoveRoleFromAccountCommnad.cs" />
+    <Compile Include="Accounts\Commands\ValidateAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\UpdateAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\RegisterAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\ResetPasswordAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\DeleteAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\UnlockAccountCommand.cs" />
+    <Compile Include="Accounts\Commands\LockAccountCommand.cs" />
+    <Compile Include="Accounts\Events\AccountConfirmed.cs" />
+    <Compile Include="Accounts\Events\AccountLoginFailed.cs" />
+    <Compile Include="Accounts\Events\AccountPasswordResetTokenChanged.cs" />
+    <Compile Include="Accounts\Events\AccountRoleAdded.cs" />
+    <Compile Include="Accounts\Events\AccountRoleRemoved.cs" />
+    <Compile Include="Accounts\Events\AccountUpdated.cs" />
+    <Compile Include="Accounts\Events\AccountDeleted.cs" />
+    <Compile Include="Accounts\AccountDenormalizer.cs" />
+    <Compile Include="Accounts\View\AccountListItem.cs" />
+    <Compile Include="Accounts\Events\AccountRegistered.cs" />
+    <Compile Include="Accounts\Events\AccountUnlocked.cs" />
+    <Compile Include="Accounts\View\AccountView.cs" />
+    <Compile Include="Accounts\AccountViewFactory.cs" />
+    <Compile Include="Accounts\View\AccountViewInputModel.cs" />
+    <Compile Include="Accounts\View\AccountListView.cs" />
+    <Compile Include="Accounts\AccountListViewFactory.cs" />
+    <Compile Include="Accounts\View\AccountListViewInputModel.cs" />
+    <Compile Include="Accounts\AccountDocument.cs" />
+    <Compile Include="CQRSAccountRepository.cs" />
+    <Compile Include="CQRSRoleRepository.cs" />
+    <Compile Include="Accounts\Events\AccountPasswordChanged.cs" />
+    <Compile Include="Accounts\Events\AccountPasswordQuestionAndAnswerChanged.cs" />
+    <Compile Include="Accounts\Events\AccountPasswordReset.cs" />
+    <Compile Include="Accounts\Events\AccountValidated.cs" />
+    <Compile Include="Accounts\Events\AccountOnlineUpdated.cs" />
+    <Compile Include="Accounts\Events\AccountLocked.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roles\Commands\RemoveRoleCommand.cs" />
+    <Compile Include="Roles\Commands\CreateRoleCommand.cs" />
+    <Compile Include="Roles\Events\RoleCreated.cs" />
+    <Compile Include="Roles\Events\RoleRemoved.cs" />
+    <Compile Include="Roles\RoleAR.cs" />
+    <Compile Include="Roles\RoleDenormalizer.cs" />
+    <Compile Include="Roles\RoleDocument.cs" />
+    <Compile Include="Roles\RoleListViewFactory.cs" />
+    <Compile Include="Roles\RoleViewFactory.cs" />
+    <Compile Include="Roles\View\RoleListItem.cs" />
+    <Compile Include="Roles\View\RoleListView.cs" />
+    <Compile Include="Roles\View\RoleListViewInputModel.cs" />
+    <Compile Include="Roles\View\RoleView.cs" />
+    <Compile Include="Roles\View\RoleViewInputModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
+      <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
+      <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
+      <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
+      <Name>WB.UI.Designer.Providers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

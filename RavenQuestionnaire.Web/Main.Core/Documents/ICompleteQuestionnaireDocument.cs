@@ -43,14 +43,20 @@ namespace Main.Core.Documents
         Guid TemplateId { get; set; }
 
         /// <summary>
-        /// Gets the questions.
+        /// The get questions.
         /// </summary>
-        IEnumerable<ICompleteQuestion> Questions { get; }
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<ICompleteQuestion> GetQuestions();
 
         /// <summary>
-        /// Gets the questions.
+        /// The wrapped questions.
         /// </summary>
-        IEnumerable<CompleteQuestionWrapper> WrappedQuestions { get; }
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        IEnumerable<CompleteQuestionWrapper> WrappedQuestions();
 
         /// <summary>
         /// The get question.

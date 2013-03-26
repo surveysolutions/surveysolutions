@@ -68,7 +68,6 @@ namespace Main.Core.Tests.Domain
                     var evnt = item.Payload as NewGroupAdded;
                     if (evnt != null)
                     {
-                        Assert.AreEqual(evnt.QuestionnairePublicKey, key);
                         Assert.AreEqual(evnt.PublicKey, publicKey);
                         Assert.AreEqual(evnt.Paropagateble, propagateble);
                         Assert.AreEqual(evnt.ParentGroupPublicKey, parentGroupKey);

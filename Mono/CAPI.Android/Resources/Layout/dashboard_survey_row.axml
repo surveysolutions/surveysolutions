@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+               android:orientation="vertical"
+    >
+
+<RelativeLayout 
+      android:id="@+id/MyLayout"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      android:padding="8px"
+      android:background="@drawable/surveyshape"
+      >
+
+   
+    <TextView
+         android:id="@+id/txtSurveyName"
+        android:textColor="#000"
+         android:textSize="22dp"
+         android:layout_alignParentLeft="true"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         local:MvxBind="{'Text':{'Path':'SurveyTitle'}}"/>
+
+
+    <TextView
+        android:id="@+id/txtSurveyCount"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textColor="#000"
+      
+        android:background="@drawable/counterroundshape"
+     
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        local:MvxBind="{'Text':{'Path':'Items.Count'}}"/>
+  </RelativeLayout>
+  <!---->
+<Mvx.MvxBindableLinearLayout
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       local:MvxItemTemplate="@layout/dashboard_survey_item"
+       local:MvxBind="{'ItemsSource':{'Path':'Items'}}"
+      />
+<!--android:numColumns="1"
+       android:gravity="center"
+       android:listSelector="#00000000"-->
+  <!--,'ItemClick':{'Path':'CustomerSelectedCommand'}-->
+  <!--<AndroidApp.Controls.Dashboard.DashboardSurveyItems android:id="@+id/tlTableContainer"
+    android:layout_width="fill_parent"
+    android:padding="10px"
+    android:background="@drawable/surveyshape"
+    android:layout_height="wrap_content"
+    local:MvxBind="{'Items':{'Path':'Items'}}">
+    
+  </AndroidApp.Controls.Dashboard.DashboardSurveyItems>-->
+
+
+</LinearLayout>

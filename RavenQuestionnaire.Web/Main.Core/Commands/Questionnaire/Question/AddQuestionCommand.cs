@@ -20,6 +20,7 @@ namespace Main.Core.Commands.Questionnaire.Question
     /// <summary>
     /// The add question command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "AddQuestion")]
     public class AddQuestionCommand : CommandBase

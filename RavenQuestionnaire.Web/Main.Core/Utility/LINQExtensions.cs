@@ -9,12 +9,13 @@
 namespace Main.Core.Utility
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
 
     /// <summary>
-    /// The string field name sorting support.
+    ///     The string field name sorting support.
     /// </summary>
     public static class StringFieldNameSortingSupport
     {
@@ -76,12 +77,12 @@ namespace Main.Core.Utility
         /// <returns>
         /// The System.Linq.IOrderedQueryable`1[T -&gt; TEntity].
         /// </returns>
-        public static IOrderedQueryable<TEntity> OrderUsingSortExpression<TEntity>(
+        public static IEnumerable<TEntity> OrderUsingSortExpression<TEntity>(
             this IQueryable<TEntity> source, string sortExpression) where TEntity : class
         {
-            string[] orderFields = sortExpression.Split(',');
+            string[] orderFields = sortExpression.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             IOrderedQueryable<TEntity> result = null;
-            for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Length; currentFieldIndex++)
+            for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Count(); currentFieldIndex++)
             {
                 string[] expressionPart = orderFields[currentFieldIndex].Trim().Split(' ');
                 string sortField = expressionPart[0];
@@ -99,7 +100,7 @@ namespace Main.Core.Utility
                 }
             }
 
-            return result;
+            return result ?? source;
         }
 
         /// <summary>
@@ -228,6 +229,51 @@ namespace Main.Core.Utility
 
             // Create the order by expression.
             return Expression.Lambda(propertyAccess, parameter);
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// The linq helper.
+    /// </summary>
+    public static class LinqHelper
+    {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The descendants.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <param name="descendBy">
+        /// The descend by.
+        /// </param>
+        /// <param name="action">
+        /// The action.
+        /// </param>
+        /// <param name="rootElement">
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        public static void ApplyAction<T>(
+            this IEnumerable<T> source, 
+            Func<T, IEnumerable<T>> descendBy, 
+            Action<T, T> action, 
+            T rootElement = default(T))
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            foreach (T value in source)
+            {
+                action(rootElement, value);
+
+                descendBy(value).ApplyAction(descendBy, action, value);
+            }
         }
 
         #endregion

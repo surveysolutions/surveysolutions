@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B1606F2F-DA6A-400D-9313-F7822D326931}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidMoq</RootNamespace>
+    <AssemblyName>AndroidMoq</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\LibrariesPortedToAndroid\Bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AdvancedMatcherAttribute.cs" />
+    <Compile Include="AsInterface.cs" />
+    <Compile Include="ConditionalContext.cs" />
+    <Compile Include="DefaultValue.cs" />
+    <Compile Include="EmptyDefaultValueProvider.cs" />
+    <Compile Include="Evaluator.cs" />
+    <Compile Include="ExpressionExtensions.cs" />
+    <Compile Include="ExpressionStringBuilder.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="FluentMockContext.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Guard.cs" />
+    <Compile Include="IDefaultValueProvider.cs" />
+    <Compile Include="IHideObjectMembers.cs" />
+    <Compile Include="IMatcher.cs" />
+    <Compile Include="IMocked.cs" />
+    <Compile Include="Interceptor.cs" />
+    <Compile Include="IProxyCall.cs" />
+    <Compile Include="It.cs" />
+    <Compile Include="Language\Flow\ICallbackResult.cs" />
+    <Compile Include="Language\Flow\IReturnsResult.cs" />
+    <Compile Include="Language\Flow\IReturnsThrows.cs" />
+    <Compile Include="Language\Flow\ISetup.cs" />
+    <Compile Include="Language\Flow\IThrowsResult.cs" />
+    <Compile Include="Language\ICallback.cs" />
+    <Compile Include="Language\ICallback.Generated.cs">
+      <DependentUpon>ICallback.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Language\ICallbackGetter.cs" />
+    <Compile Include="Language\ICallbackSetter.cs" />
+    <Compile Include="Language\IRaise.cs" />
+    <Compile Include="Language\IRaise.Generated.cs">
+      <DependentUpon>IRaise.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Language\IReturns.cs" />
+    <Compile Include="Language\IReturns.Generated.cs">
+      <DependentUpon>IReturns.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Language\IReturnsGetter.cs" />
+    <Compile Include="Language\ISetupConditionResult.cs" />
+    <Compile Include="Language\ISetupSequentialResult.cs" />
+    <Compile Include="Language\IThrows.cs" />
+    <Compile Include="Language\IVerifies.cs" />
+    <Compile Include="Linq\FluentMockVisitor.cs" />
+    <Compile Include="Linq\Mock.cs" />
+    <Compile Include="Linq\MockQuery.cs" />
+    <Compile Include="Linq\MockRepository.cs" />
+    <Compile Include="Linq\Mocks.cs" />
+    <Compile Include="Linq\MockSetupsBuilder.cs" />
+    <Compile Include="Match.cs" />
+    <Compile Include="MatcherAttribute.cs" />
+    <Compile Include="MatcherFactory.cs" />
+    <Compile Include="Matchers\ConstantMatcher.cs" />
+    <Compile Include="Matchers\ExpressionComparer.cs" />
+    <Compile Include="Matchers\ExpressionMatcher.cs" />
+    <Compile Include="Matchers\LazyEvalMatcher.cs" />
+    <Compile Include="Matchers\Matcher.cs" />
+    <Compile Include="Matchers\MatcherAttributeMatcher.cs" />
+    <Compile Include="Matchers\ParamArrayMatcher.cs" />
+    <Compile Include="Matchers\PredicateMatcher.cs" />
+    <Compile Include="Matchers\RefMatcher.cs" />
+    <Compile Include="MatchExpression.cs" />
+    <Compile Include="MemberInfoExtensions.cs" />
+    <Compile Include="MethodCall.cs" />
+    <Compile Include="MethodCall.Generated.cs">
+      <DependentUpon>MethodCall.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MethodCallReturn.cs" />
+    <Compile Include="MethodCallReturn.Generated.cs">
+      <DependentUpon>MethodCallReturn.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Microsoft\Delegates.cs">
+      <DependentUpon>Delegates.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Microsoft\ExpressionVisitor.cs" />
+    <Compile Include="Mock.cs" />
+    <Compile Include="Mock.Generic.cs" />
+    <Compile Include="MockBehavior.cs" />
+    <Compile Include="MockDefaultValueProvider.cs" />
+    <Compile Include="MockException.cs" />
+    <Compile Include="MockRepository.cs" />
+    <Compile Include="MockSequence.cs" />
+    <Compile Include="Obsolete\IOccurrence.cs" />
+    <Compile Include="Obsolete\Mock.Generic.Legacy.cs" />
+    <Compile Include="Obsolete\Mock.Legacy.cs" />
+    <Compile Include="Obsolete\MockExtensions.cs" />
+    <Compile Include="Obsolete\MockFactory.cs" />
+    <Compile Include="PexProtector.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Protected\IProtectedMock.cs" />
+    <Compile Include="Protected\ItExpr.cs" />
+    <Compile Include="Protected\ProtectedExtension.cs" />
+    <Compile Include="Protected\ProtectedMock.cs" />
+    <Compile Include="Proxy\CastleProxyFactory.cs" />
+    <Compile Include="Proxy\ICallContext.cs" />
+    <Compile Include="Proxy\ICallInterceptor.cs" />
+    <Compile Include="Proxy\IProxyFactory.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="SequenceExtensions.cs" />
+    <Compile Include="SetterMethodCall.cs" />
+    <Compile Include="SetupKind.cs" />
+    <Compile Include="SetupSequentialContext.cs" />
+    <Compile Include="Times.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="IDefaultValueProvider.xdoc">
+      <DependentUpon>IDefaultValueProvider.cs</DependentUpon>
+    </None>
+    <None Include="ilmerge.exclude" />
+    <None Include="Includes\GenericTypeParameters.tt" />
+    <None Include="It.xdoc">
+      <DependentUpon>It.cs</DependentUpon>
+    </None>
+    <None Include="Language\ICallback.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ICallback.Generated.cs</LastGenOutput>
+    </None>
+    <None Include="Language\IRaise.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IRaise.Generated.cs</LastGenOutput>
+    </None>
+    <None Include="Language\IReturns.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IReturns.Generated.cs</LastGenOutput>
+    </None>
+    <None Include="Match.xdoc">
+      <DependentUpon>Match.cs</DependentUpon>
+    </None>
+    <None Include="MethodCall.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MethodCall.Generated.cs</LastGenOutput>
+    </None>
+    <None Include="MethodCallReturn.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MethodCallReturn.Generated.cs</LastGenOutput>
+    </None>
+    <None Include="Microsoft\Delegates.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Delegates.cs</LastGenOutput>
+    </None>
+    <None Include="Mock.Generic.xdoc">
+      <DependentUpon>Mock.Generic.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Mock.xdoc">
+      <DependentUpon>Mock.cs</DependentUpon>
+    </None>
+    <None Include="Times.xdoc">
+      <DependentUpon>Times.cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidCastle.Core\AndroidCastle.Core.csproj">
+      <Project>{C9FA7474-8407-4C32-A946-DF47591FCC89}</Project>
+      <Name>AndroidCastle.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

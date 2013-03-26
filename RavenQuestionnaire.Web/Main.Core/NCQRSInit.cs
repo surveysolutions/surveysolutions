@@ -6,6 +6,12 @@
 //   The ncqrs init.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+#if !MONODROID
+using Ncqrs.Eventing.Storage.RavenDB;
+using Raven.Client.Document;
+#endif
+
 namespace Main.Core
 {
     using System;
@@ -16,23 +22,35 @@ namespace Main.Core
     using Main.Core.Services;
 
     using Ncqrs;
+    using Ncqrs.Commanding;
     using Ncqrs.Commanding.CommandExecution.Mapping;
     using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
     using Ncqrs.Commanding.ServiceModel;
+    using Ncqrs.Eventing;
     using Ncqrs.Eventing.ServiceModel.Bus;
     using Ncqrs.Eventing.Sourcing.Snapshotting;
     using Ncqrs.Eventing.Storage;
-    using Ncqrs.Eventing.Storage.RavenDB;
+
+#if MONODROID
+using AndroidNcqrs.Eventing.Storage.SQLite;
+#else
+//using Ncqrs.Eventing.Storage.RavenDB;
+#endif
+    
+    //using Ncqrs.Eventing.Storage.RavenDB;
 
     using Ninject;
 
-    using Raven.Client.Document;
+    /*using Raven.Client.Document;*/
 
     /// <summary>
     /// The ncqrs init.
     /// </summary>
     public static class NcqrsInit
     {
+        private static bool isReadLayerBuilt = false;
+        private static object lockObject = new object();
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -43,33 +61,55 @@ namespace Main.Core
         /// </param>
         public static void Init(IKernel kernel)
         {
+#if MONODROID
+			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
+#else
             var store = InitializeEventStore(kernel.Get<DocumentStore>());
-
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+            
+            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+#endif
+
+           NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-            NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
+         
             var bus = new InProcessEventBus(true);
+
+#if !MONODROID
             RegisterEventHandlers(bus, kernel);
+#endif
 
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
+        }
+
+        public static void EnsureReadLayerIsBuilt()
+        {
+            if (!isReadLayerBuilt)
+            {
+                lock (lockObject)
+                {
+                    if (!isReadLayerBuilt)
+                    {
+                        RebuildReadLayer();
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// The rebuild read layer.
         /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
         /// <exception cref="Exception">
         /// </exception>
-        public static void RebuildReadLayer(IKernel kernel)
+        public static void RebuildReadLayer()
         {
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
@@ -86,8 +126,12 @@ namespace Main.Core
 
             // store.CreateIndex();
             // var myEvents = store.GetAllEvents();
-            eventBus.Publish(eventStore.GetEventStream());
+            eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
+
+            isReadLayerBuilt = true;
         }
+
+
 
         #endregion
 
@@ -106,15 +150,15 @@ namespace Main.Core
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-
-            foreach (Type type in commandSupplier.GetCommandList())
-            {
+            foreach (Type type in commandSupplier.GetCommandList()){
+                   
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
             return service;
         }
 
+#if !MONODROID
         /// <summary>
         /// The initialize event store.
         /// </summary>
@@ -128,6 +172,9 @@ namespace Main.Core
         {
             return new RavenDBEventStore(store);
         }
+
+#endif
+
 
         /// <summary>
         /// The is i event handler interface.

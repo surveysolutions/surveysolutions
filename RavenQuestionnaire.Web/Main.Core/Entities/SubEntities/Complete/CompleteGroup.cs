@@ -23,6 +23,11 @@ namespace Main.Core.Entities.SubEntities.Complete
     /// </summary>
     public class CompleteGroup : ICompleteGroup
     {
+        /// <summary>
+        /// Gets or sets the parent.
+        /// </summary>
+        private IComposite parent;
+
         #region Constructors and Destructors
 
         /// <summary>
@@ -34,7 +39,6 @@ namespace Main.Core.Entities.SubEntities.Complete
             this.PublicKey = Guid.NewGuid();
             this.Triggers = new List<Guid>();
             this.Enabled = true;
-            // this.iteratorContainer = new IteratorContainer();
         }
 
         /// <summary>
@@ -77,13 +81,8 @@ namespace Main.Core.Entities.SubEntities.Complete
                 {
                     ICompleteQuestion newQuestion = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
                     newQuestion.PropagationPublicKey = propogationPublicKey;
-
-                    /*foreach (ICompleteAnswer completeAnswer in newQuestion.Answers)
-                    {
-                        completeAnswer.PropogationPublicKey = propogationPublicKey;
-                    }*/
-
-                    newQuestion.Parent = this;
+                    
+                    newQuestion.SetParent(this);
                     this.Children.Add(newQuestion);
                     continue;
                 }
@@ -92,7 +91,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 if (groupChild != null)
                 {
                     IComposite groupItem = new CompleteGroup(groupChild, propogationPublicKey);
-                    groupItem.Parent = this;
+                    groupItem.SetParent(this);
                     this.Children.Add(group);
                     continue;
                 }
@@ -131,12 +130,6 @@ namespace Main.Core.Entities.SubEntities.Complete
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
-        [JsonIgnore]
-        public IComposite Parent { get; set; }
-
-        /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
@@ -160,6 +153,16 @@ namespace Main.Core.Entities.SubEntities.Complete
             var count = this.Children.OfType<ICompleteGroup>().Where(g => g.HasVisibleItemsForScope(questionScope)).Count()
                 + this.Children.OfType<ICompleteQuestion>().Where(q => q.QuestionScope <= questionScope).Count();
             return count != 0 || this.Children.Count == 0;
+        }
+
+        public IComposite GetParent()
+        {
+            return parent;
+        }
+
+        public void SetParent(IComposite parent)
+        {
+            this.parent = parent;
         }
 
         /// <summary>
@@ -209,7 +212,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 if (question != null)
                 {
                     IComposite questionItem = new CompleteQuestionFactory().ConvertToCompleteQuestion(question);
-                    questionItem.Parent = result;
+                    questionItem.SetParent(result);
                     result.Children.Add(questionItem);
                     continue;
                 }
@@ -218,7 +221,7 @@ namespace Main.Core.Entities.SubEntities.Complete
                 if (group != null)
                 {
                     IComposite groupItem = new CompleteGroupFactory().ConvertToCompleteGroup(group);
-                    groupItem.Parent = result;
+                    groupItem.SetParent(result);
                     result.Children.Add(groupItem);
                     continue;
                 }
@@ -228,48 +231,7 @@ namespace Main.Core.Entities.SubEntities.Complete
 
             return result;
         }
-
-        // private IIteratorContainer iteratorContainer;
-
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public virtual void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
-        {
-            if (!parent.HasValue || parent.Value == this.PublicKey)
-            {
-                var propogateGroup = c as ICompleteGroup;
-                if (propogateGroup != null && propogateGroup.PropagationPublicKey.HasValue)
-                {
-                    IComposite group = this.Children.FirstOrDefault(g => g.PublicKey == propogateGroup.PublicKey);
-                    if (group != null)
-                    {
-                        if (
-                            !this.Children.OfType<ICompleteGroup>().Any(
-                                g =>
-                                g.PublicKey == propogateGroup.PublicKey &&
-                                g.PropagationPublicKey == propogateGroup.PropagationPublicKey))
-                        {
-                            propogateGroup.Parent = this;
-                            this.Children.Add(propogateGroup);
-                        }
-
-                        return;
-                    }
-                }
-            }
-
-            throw new CompositeException();
-        }*/
-
+        
         /// <summary>
         /// The find.
         /// </summary>
@@ -334,86 +296,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public virtual void Remove(IComposite c)
-        {
-            var propogate = c as ICompleteGroup;
-            if (propogate != null && propogate.PropagationPublicKey.HasValue)
-            {
-                bool isremoved = false;
-                List<IComposite> propagatedGroups =
-                    this.Children.Where(
-                        g =>
-                        g.PublicKey == propogate.PublicKey && g is ICompleteGroup
-                        && ((ICompleteGroup)g).PropagationPublicKey == propogate.PropagationPublicKey).ToList();
-                foreach (ICompleteGroup propagatableCompleteGroup in propagatedGroups)
-                {
-                    this.Children.Remove(propagatableCompleteGroup);
-                    isremoved = true;
-                }
-
-                if (isremoved)
-                {
-                    return;
-                }
-            }
-
-            /*foreach (IComposite child in Children)
-            {
-                try
-                {
-                    child.Remove(c);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }#1#
-            throw new CompositeException();
-        }*/
         
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        public virtual void Remove(Guid publicKey, Guid? propagationKey)
-        {
-            IComposite forRemove = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (forRemove != null && forRemove is ICompleteGroup
-                && ((ICompleteGroup)forRemove).PropagationPublicKey.HasValue)
-            {
-                this.Children.Remove(forRemove);
-                return;
-            }
-
-            foreach (CompleteGroup completeGroup in this.Children)
-            {
-                try
-                {
-                    completeGroup.Remove(publicKey, null);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException();
-        }*/
-
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
@@ -421,7 +304,7 @@ namespace Main.Core.Entities.SubEntities.Complete
         {
             foreach (var item in this.Children)
             {
-                item.Parent = this;
+                item.SetParent(this);
                 item.ConnectChildsWithParent();
             }
         }
@@ -445,7 +328,7 @@ namespace Main.Core.Entities.SubEntities.Complete
             foreach (var composite in this.Children)
             {
                 var item = composite.Clone();
-                item.Parent = group;
+                item.SetParent(group);
                 group.Children.Add(composite.Clone());
             }
 

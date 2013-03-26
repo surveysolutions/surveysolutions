@@ -6,14 +6,16 @@
 //   Repeates command execution until success.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Main.Core.Commands
 {
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
     using Ncqrs.Eventing.Storage;
-
+#if MONODROID
+	using AndroidLogger;
+#else
     using NLog;
+#endif
 
     /// <summary>
     /// Repeates command execution until success.
@@ -30,7 +32,11 @@ namespace Main.Core.Commands
         /// <summary>
         /// The logger.
         /// </summary>
+#if MONODROID
+		private readonly ILog logger = LogManager.GetLogger(typeof(ConcurrencyResolveCommandService));
+#else
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
+#endif
         
         #endregion
 

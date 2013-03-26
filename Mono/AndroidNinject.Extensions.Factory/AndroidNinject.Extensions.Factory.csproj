@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1A39EA94-3A3C-4C3C-8DC5-AF21268A3C1B}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidNinject.Extensions.Factory</RootNamespace>
+    <AssemblyName>AndroidNinject.Extensions.Factory</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\LibrariesPortedToAndroid\Bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT_20</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindToExtensions.cs" />
+    <Compile Include="Factory\FactoryInterceptor.cs" />
+    <Compile Include="Factory\IFactoryProxy.cs" />
+    <Compile Include="Factory\IInstanceProvider.cs" />
+    <Compile Include="Factory\IInstanceResolver.cs" />
+    <Compile Include="Factory\InstanceResolver.cs" />
+    <Compile Include="Factory\ProxyTargetParameter.cs" />
+    <Compile Include="Factory\StandardInstanceProvider.cs" />
+    <Compile Include="FuncModule.cs" />
+    <Compile Include="Func\ArgumentPositionCalculator.cs" />
+    <Compile Include="Func\ConstructorInfoExtensions.cs" />
+    <Compile Include="Func\FuncConstructorArgument.cs" />
+    <Compile Include="Func\FuncConstructorArgumentFactory.cs" />
+    <Compile Include="Func\FuncProvider.cs" />
+    <Compile Include="Func\FunctionFactory.cs" />
+    <Compile Include="Func\IArgumentPositionCalculator.cs" />
+    <Compile Include="Func\IFunctionFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
+      <Project>{DC128FDF-0F94-4B63-B79E-DDD02E5E1F0F}</Project>
+      <Name>AndroidNinject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -20,7 +20,6 @@ using Main.Core.View.Card;
 
 namespace Main.Core.View.Question
 {
-    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The abstract question view.
@@ -65,7 +64,7 @@ namespace Main.Core.View.Question
             : this()
         {
             this.PublicKey = doc.PublicKey;
-            this.Title = doc.QuestionText;
+            this.Title = doc.QuestionText.Replace(System.Environment.NewLine, " ");
             this.QuestionType = doc.QuestionType;
             this.QuestionScope = doc.QuestionScope;
             this.QuestionnaireKey = questionnaire.PublicKey;
@@ -149,7 +148,6 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
-        [Required]
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
@@ -165,10 +163,6 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the stata export caption.
         /// </summary>
-        [Required(ErrorMessage = "Variable name shouldn't be empty or contains white spaces")]
-        [DisplayName("Variable name")]
-        [StringLength(32, ErrorMessage = "Variable name shouldn't be longer than 32 characters")]
-        [RegularExpression(@"^[a-zA-Z_][a-zA-Z0-9_]*$", ErrorMessage = "Valid variable name should contains only letters, digits and underscore character and shouldn't starts with digit")]
         public string StataExportCaption { get; set; }
 
         /// <summary>
@@ -179,7 +173,6 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the title.
         /// </summary>
-        [Required]
         public string Title { get; set; }
 
         /// <summary>
@@ -200,7 +193,6 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets MaxValue
         /// </summary>
-        [Range(0, 2147483647, ErrorMessage = "MaxValue must be between 0 and 2147483647")]
         public int MaxValue { get; set; }
 
         /// <summary>
@@ -219,7 +211,7 @@ namespace Main.Core.View.Question
         public bool IsPropagated { get; set; }
 
         #endregion
-      
+
     }
 
     /// <summary>
@@ -290,7 +282,7 @@ namespace Main.Core.View.Question
             this.IsPropagated = parent.Propagated != Propagate.None;
         }
 
-        
+
 
         /// <summary>
         /// The get question group.
@@ -388,7 +380,9 @@ namespace Main.Core.View.Question
     /// <typeparam name="TQuestion">
     /// </typeparam>
     public abstract class QuestionView<T, TGroup, TQuestion> : AbstractQuestionView<T>
-        where T : AnswerView where TQuestion : IQuestion where TGroup : IGroup
+        where T : AnswerView
+        where TQuestion : IQuestion
+        where TGroup : IGroup
     {
         #region Constructors and Destructors
 
@@ -445,12 +439,6 @@ namespace Main.Core.View.Question
 
         #region Methods
 
-        /// <summary>
-        /// LoadAllGroups
-        /// </summary>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
         protected Dictionary<string, Guid> LoadGroups(IQuestionnaireDocument questionnaire, Guid? questionPublicKey, Guid? groupPublicKey)
         {
             try
@@ -474,7 +462,7 @@ namespace Main.Core.View.Question
 
                 return groups;
             }
-            catch 
+            catch
             {
                 return null;
             }
@@ -514,7 +502,7 @@ namespace Main.Core.View.Question
         }
 
         #endregion
-   }
+    }
 
     /// <summary>
     /// The question view.
@@ -539,7 +527,8 @@ namespace Main.Core.View.Question
         /// <param name="groupPublicKey">
         /// The group public key.
         /// </param>
-        public QuestionView(string questionnaireId, Guid? groupPublicKey) : base(questionnaireId, groupPublicKey)
+        public QuestionView(string questionnaireId, Guid? groupPublicKey)
+            : base(questionnaireId, groupPublicKey)
         {
         }
 
@@ -578,7 +567,7 @@ namespace Main.Core.View.Question
                     this.Triggers = autoQuestion.Triggers.ToList();
                 }
             }
-            
+
             this.Groups = this.LoadGroups(questionnaire, doc.PublicKey, null);
         }
 

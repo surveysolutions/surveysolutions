@@ -24,7 +24,7 @@ namespace Ncqrs.Spec
         [Then]
         public void it_should_throw_the_expected_exception()
         {
-            Assert.That(CaughtException, Is.InstanceOf<TException>());
+            Assert.That(CaughtException, Is.TypeOf(typeof(TException)));
         }
 
     }

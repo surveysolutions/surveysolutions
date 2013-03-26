@@ -1,0 +1,39 @@
+﻿@using Recaptcha
+@using WB.UI.Designer.BootstrapSupport
+@model WB.UI.Designer.Models.RegisterModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/Layout.empty.cshtml";
+}
+
+@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin" }))
+{
+    @Html.AntiForgeryToken()
+    <legend>@Model.GetLabel()</legend>
+    <fieldset class="form-horizontal">
+        @{
+    this.Html.RenderPartial("EditForm");
+        }
+        <p>
+            @Html.Raw(Html.GenerateCaptcha())
+        </p>
+        <div class="form-actions">
+            <button class="btn btn-large btn-primary pull-right" type="submit">Register</button>
+        </div>
+    </fieldset>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+@section Styles
+{
+    <style>
+        #recaptcha_area {
+            margin-left: 175px;
+        }
+    </style>
+
+}

@@ -12,41 +12,27 @@ namespace Main.Core.Events.Questionnaire
 
     using Ncqrs.Eventing.Storage;
 
-    /// <summary>
-    /// The question deleted.
-    /// </summary>
     [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionDeleted")]
     public class QuestionDeleted
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionDeleted"/> class.
-        /// </summary>
-        /// <param name="questionId">
-        /// The question id.
-        /// </param>
-        /// <param name="parentPublicKey">
-        /// The parent public key.
-        /// </param>
-        public QuestionDeleted(Guid questionId, Guid parentPublicKey)
+        public QuestionDeleted() {}
+
+        public QuestionDeleted(Guid questionId)
         {
             this.QuestionId = questionId;
+        }
+
+        [Obsolete]
+        public QuestionDeleted(Guid questionId, Guid parentPublicKey)
+            : this(questionId)
+        {
             this.ParentPublicKey = parentPublicKey;
         }
 
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the question id.
-        /// </summary>
         public Guid QuestionId { get; set; }
 
-        /// <summary>
-        /// Gets or sets the group public key.
-        /// </summary>
+        [Obsolete]
         public Guid ParentPublicKey { get; set; }
-        
-        #endregion
     }
 }

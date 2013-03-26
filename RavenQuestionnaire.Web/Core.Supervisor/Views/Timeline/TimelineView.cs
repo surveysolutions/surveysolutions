@@ -149,7 +149,7 @@ namespace Core.Supervisor.Views.Timeline
         /// </param>
         protected void HandleQuestionTree(CompleteQuestionnaireStoreDocument target)
         {
-            foreach (CompleteQuestionWrapper question in target.WrappedQuestions)
+            foreach (CompleteQuestionWrapper question in target.WrappedQuestions())
             {
                 this.ProccessQuestions(target, question.Question, question.GroupKey);
             }

@@ -6,7 +6,7 @@
 //   The raven mock utils.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
+#if !MONODROID
 namespace RavenQuestionnaire.Core.Tests.Utils
 {
     using System;
@@ -46,7 +46,7 @@ namespace RavenQuestionnaire.Core.Tests.Utils
             ravenQueryableMock.Setup(x => x.Customize(It.IsAny<Action<object>>()).GetEnumerator()).Returns(
                 () => result.GetEnumerator());
 
-            documentSession.Setup(s => s.Query<T>(indexName)).Returns(ravenQueryableMock.Object).Verifiable();
+            documentSession.Setup(s => s.Query<T>(indexName, false)).Returns(ravenQueryableMock.Object).Verifiable();
         }
 
         /// <summary>
@@ -72,3 +72,4 @@ namespace RavenQuestionnaire.Core.Tests.Utils
         #endregion
     }
 }
+#endif

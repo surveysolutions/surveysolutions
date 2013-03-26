@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8237C4D5-6F0E-4DE4-B145-F471D49EBAAC}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AndroidAntlr3.Runtime</RootNamespace>
+    <AssemblyName>AndroidAntlr3.Runtime</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\LibrariesPortedToAndroid\Bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
+    <OutputPath>bin\MONODROID\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ANTLRFileStream.cs">
+      <Link>Antlr\Runtime\ANTLRFileStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ANTLRInputStream.cs">
+      <Link>Antlr\Runtime\ANTLRInputStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ANTLRReaderStream.cs">
+      <Link>Antlr\Runtime\ANTLRReaderStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ANTLRStringStream.cs">
+      <Link>Antlr\Runtime\ANTLRStringStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\BaseRecognizer.cs">
+      <Link>Antlr\Runtime\BaseRecognizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\BitSet.cs">
+      <Link>Antlr\Runtime\BitSet.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\CharStreamConstants.cs">
+      <Link>Antlr\Runtime\CharStreamConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\CharStreamState.cs">
+      <Link>Antlr\Runtime\CharStreamState.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ClassicToken.cs">
+      <Link>Antlr\Runtime\ClassicToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Collections\CollectionUtils.cs">
+      <Link>Antlr\Runtime\Collections\CollectionUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Collections\HashList.cs">
+      <Link>Antlr\Runtime\Collections\HashList.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Collections\StackList.cs">
+      <Link>Antlr\Runtime\Collections\StackList.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\CommonErrorNode.cs">
+      <Link>Antlr\Runtime\CommonErrorNode.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\CommonToken.cs">
+      <Link>Antlr\Runtime\CommonToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\CommonTokenStream.cs">
+      <Link>Antlr\Runtime\CommonTokenStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Constants.cs">
+      <Link>Antlr\Runtime\Constants.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\DFA.cs">
+      <Link>Antlr\Runtime\DFA.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\EarlyExitException.cs">
+      <Link>Antlr\Runtime\EarlyExitException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\FailedPredicateException.cs">
+      <Link>Antlr\Runtime\FailedPredicateException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ICharStream.cs">
+      <Link>Antlr\Runtime\ICharStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\IIntStream.cs">
+      <Link>Antlr\Runtime\IIntStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\IToken.cs">
+      <Link>Antlr\Runtime\IToken.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ITokenSource.cs">
+      <Link>Antlr\Runtime\ITokenSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ITokenStream.cs">
+      <Link>Antlr\Runtime\ITokenStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Lexer.cs">
+      <Link>Antlr\Runtime\Lexer.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Misc\ErrorManager.cs">
+      <Link>Antlr\Runtime\Misc\ErrorManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Misc\Stats.cs">
+      <Link>Antlr\Runtime\Misc\Stats.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MismatchedNotSetException.cs">
+      <Link>Antlr\Runtime\MismatchedNotSetException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MismatchedRangeException.cs">
+      <Link>Antlr\Runtime\MismatchedRangeException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MismatchedSetException.cs">
+      <Link>Antlr\Runtime\MismatchedSetException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MismatchedTokenException.cs">
+      <Link>Antlr\Runtime\MismatchedTokenException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MismatchedTreeNodeException.cs">
+      <Link>Antlr\Runtime\MismatchedTreeNodeException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\MissingTokenException.cs">
+      <Link>Antlr\Runtime\MissingTokenException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\NoViableAltException.cs">
+      <Link>Antlr\Runtime\NoViableAltException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Parser.cs">
+      <Link>Antlr\Runtime\Parser.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\ParserRuleReturnScope.cs">
+      <Link>Antlr\Runtime\ParserRuleReturnScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\RecognitionException.cs">
+      <Link>Antlr\Runtime\RecognitionException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\RecognizerSharedState.cs">
+      <Link>Antlr\Runtime\RecognizerSharedState.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\RuleReturnScope.cs">
+      <Link>Antlr\Runtime\RuleReturnScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\SynPredPointer.cs">
+      <Link>Antlr\Runtime\SynPredPointer.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Token.cs">
+      <Link>Antlr\Runtime\Token.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\TokenRewriteStream.cs">
+      <Link>Antlr\Runtime\TokenRewriteStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\BaseTree.cs">
+      <Link>Antlr\Runtime\Tree\BaseTree.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\BaseTreeAdaptor.cs">
+      <Link>Antlr\Runtime\Tree\BaseTreeAdaptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\CommonTree.cs">
+      <Link>Antlr\Runtime\Tree\CommonTree.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\CommonTreeAdaptor.cs">
+      <Link>Antlr\Runtime\Tree\CommonTreeAdaptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\CommonTreeNodeStream.cs">
+      <Link>Antlr\Runtime\Tree\CommonTreeNodeStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\ITree.cs">
+      <Link>Antlr\Runtime\Tree\ITree.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\ITreeAdaptor.cs">
+      <Link>Antlr\Runtime\Tree\ITreeAdaptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\ITreeNodeStream.cs">
+      <Link>Antlr\Runtime\Tree\ITreeNodeStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\ITreeVisitorAction.cs">
+      <Link>Antlr\Runtime\Tree\ITreeVisitorAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\ParseTree.cs">
+      <Link>Antlr\Runtime\Tree\ParseTree.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteCardinalityException.cs">
+      <Link>Antlr\Runtime\Tree\RewriteCardinalityException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteEarlyExitException.cs">
+      <Link>Antlr\Runtime\Tree\RewriteEarlyExitException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteEmptyStreamException.cs">
+      <Link>Antlr\Runtime\Tree\RewriteEmptyStreamException.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteRuleElementStream!1.cs">
+      <Link>Antlr\Runtime\Tree\RewriteRuleElementStream!1.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteRuleNodeStream.cs">
+      <Link>Antlr\Runtime\Tree\RewriteRuleNodeStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteRuleSubtreeStream.cs">
+      <Link>Antlr\Runtime\Tree\RewriteRuleSubtreeStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\RewriteRuleTokenStream.cs">
+      <Link>Antlr\Runtime\Tree\RewriteRuleTokenStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\Tree.cs">
+      <Link>Antlr\Runtime\Tree\Tree.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreeParser.cs">
+      <Link>Antlr\Runtime\Tree\TreeParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreePatternLexer.cs">
+      <Link>Antlr\Runtime\Tree\TreePatternLexer.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreePatternParser.cs">
+      <Link>Antlr\Runtime\Tree\TreePatternParser.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreeRuleReturnScope.cs">
+      <Link>Antlr\Runtime\Tree\TreeRuleReturnScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreeVisitor.cs">
+      <Link>Antlr\Runtime\Tree\TreeVisitor.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\TreeWizard.cs">
+      <Link>Antlr\Runtime\Tree\TreeWizard.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\Tree\UnBufferedTreeNodeStream.cs">
+      <Link>Antlr\Runtime\Tree\UnBufferedTreeNodeStream.cs</Link>
+    </Compile>
+    <Compile Include="..\Antlr3.Runtime\Antlr\Runtime\UnwantedTokenException.cs">
+      <Link>Antlr\Runtime\UnwantedTokenException.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="755354b2-b249-448f-83d5-7e9b26a86d95" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

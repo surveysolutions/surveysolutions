@@ -10,6 +10,10 @@ using RavenQuestionnaire.Web.Tests.Stubs;
 
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
+    using Microsoft.Practices.ServiceLocation;
+
+    using NinjectAdapter;
+
     public class AccountControllerTest
     {
         //public Mock<ICommandInvoker> CommandInvokerMock { get; set; }
@@ -30,7 +34,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             //kernel.Bind<ICommandInvoker>().ToConstant(CommandInvokerMock.Object);
             kernel.Bind<IRoleProviderMock>().ToConstant(RoleProviderMock.Object);
             //kernel.Bind<RoleProvider>().ToConstant(RoleProvider.Object);
-            KernelLocator.SetKernel(kernel);
+            ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             Controller = new AccountController(Authentication.Object);
         }
 

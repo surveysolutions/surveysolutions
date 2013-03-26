@@ -76,14 +76,22 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// Gets or sets the parent.
         /// </summary>
-        [JsonIgnore]
-        public IComposite Parent { get; set; }
+        private IComposite parent;
         
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
         public Propagate Propagated { get; set; }
 
+        public IComposite GetParent()
+        {
+            return parent;
+        }
+
+        public void SetParent(IComposite parent)
+        {
+            this.parent = parent;
+        }
 
         /// <summary>
         /// Gets or sets the public key.
@@ -103,36 +111,6 @@ namespace Main.Core.Entities.SubEntities
         #endregion
 
         #region Public Methods and Operators
-
-        /*/// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <exception cref="CompositeException">
-        /// </exception>
-        public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
-        {
-            if (!parent.HasValue || this.PublicKey == parent)
-            {
-                c.Parent = this;
-                this.Children.Add(c);
-            }
-            else
-            {
-                var group = this.Find<Group>(parent.Value);
-                if (group != null)
-                {
-                    group.Add(c, null, null);
-                }
-                //// leave legacy for awhile
-                throw new CompositeException();
-            }
-        }*/
 
         /// <summary>
         /// The find.
@@ -230,51 +208,7 @@ namespace Main.Core.Entities.SubEntities
 
             throw new CompositeException();
         }
-
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        public void Remove(IComposite c)
-        {
-            this.Remove(c.PublicKey, null);
-        }*/
         
-        /*/// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        public void Remove(Guid publicKey, Guid? propagationKey)
-        {
-            IComposite group = this.Children.FirstOrDefault(g => g.PublicKey.Equals(publicKey));
-            if (group != null)
-            {
-                this.Children.Remove(group);
-                return;
-            }
-
-            foreach (IComposite child in this.Children)
-            {
-                try
-                {
-                    child.Remove(publicKey, null);
-                    return;
-                }
-                catch (CompositeException)
-                {
-                }
-            }
-
-            throw new CompositeException();
-        }*/
-
         /// <summary>
         /// The connect childs with parent.
         /// </summary>
@@ -282,7 +216,7 @@ namespace Main.Core.Entities.SubEntities
         {
             foreach (var item in this.Children)
             {
-                item.Parent = this;
+                item.SetParent(this);
                 item.ConnectChildsWithParent();
             }
         }

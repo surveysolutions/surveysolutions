@@ -22,10 +22,16 @@ using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+
+#if !MONODROID
+using Raven.Client;
 using Raven.Client.Document;
+#endif
 
 namespace Main.Core
 {
+    using Ninject.Planning.Bindings;
+
     /// <summary>
     /// The core registry.
     /// </summary>
@@ -76,6 +82,16 @@ namespace Main.Core
         }
 
         /// <summary>
+        /// Gets pairs of interface/type which should be registered.
+        /// Usually is used to return implementation of interfaces declared not in assemblies returned by GetAssemblies method.
+        /// </summary>
+        /// <returns>Pairs of interface/implementation.</returns>
+        protected virtual IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        {
+            return Enumerable.Empty<KeyValuePair<Type, Type>>();
+        }
+
+        /// <summary>
         /// The load.
         /// </summary>
         public override void Load()
@@ -98,16 +114,25 @@ namespace Main.Core
 
         protected virtual void RegisterAdditionalElements()
         {
+#if !MONODROID
             var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
+#endif
 
-            ICommandListSupplier commands=new CommandListSupplier(RegisteredCommandList());
+
+            ICommandListSupplier commands = new CommandListSupplier(RegisteredCommandList());
             this.Bind<ICommandListSupplier>().ToConstant(commands);
+
             this.Kernel.Bind(
                 x =>
-                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
+                x.From(GetAssweblysForRegister()).SelectAllInterfaces().Excluding<ICommandListSupplier>().BindWith(
+                    new RegisterFirstInstanceOfInterface(GetAssweblysForRegister())));
 
+            foreach (KeyValuePair<Type, Type> customBindType in this.GetTypesForRegistration())
+            {
+                this.Kernel.Bind(customBindType.Key).To(customBindType.Value);
+            }
         }
 
         protected virtual void RegisterViewFactories()
@@ -203,10 +228,7 @@ namespace Main.Core
         }
         protected object ActivteDenormalizerFromProvider(IContext ctx)
         {
-            return
-                (ctx.Kernel.Get(
-                    typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments))
-                 as IProvider).Create(ctx);
+            return (ctx.Kernel.Get(typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
         }
     }
 }

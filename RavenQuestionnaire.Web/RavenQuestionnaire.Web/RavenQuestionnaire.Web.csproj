@@ -125,19 +125,11 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ClientDependency.Core, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ClientDependency.1.5.1.0\lib\ClientDependency.Core.dll</HintPath>
+    <Reference Include="ClientDependency.Core">
+      <HintPath>..\..\packages\ClientDependency.1.5.1.0\lib\ClientDependency.Core.dll</HintPath>
     </Reference>
-    <Reference Include="ClientDependency.Core.Mvc, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="Esent.Interop, Version=1.7.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Esent.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.NRefactory, Version=3.0.0.3800, Culture=neutral, PublicKeyToken=efe927acf176eea2, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\ICSharpCode.NRefactory.dll</HintPath>
+    <Reference Include="ClientDependency.Core.Mvc">
+      <HintPath>..\..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip">
       <HintPath>..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
@@ -145,72 +137,50 @@
     <Reference Include="Kaliko.ImageLibrary">
       <HintPath>..\..\ExternalLibs\Kaliko.ImageLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net, Version=2.9.4.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.Spatial, Version=2.9.1.2, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.Spatial.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net.Contrib.SpellChecker, Version=2.9.2.1, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Lucene.Net.Contrib.SpellChecker.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="MvcPaging, Version=2.0.3.14, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MvcPaging">
+      <HintPath>..\..\packages\MvcPaging.2.0.3\lib\net40\MvcPaging.dll</HintPath>
+    </Reference>
+    <Reference Include="NConfig">
+      <HintPath>..\..\packages\NConfig.1.0.14\lib\Net40\NConfig.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MvcPaging.2.0.3\lib\net40\MvcPaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.8.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Ninject.Extensions.Wcf">
-      <HintPath>..\packages\Ninject.Extensions.Wcf.3.0.0.5\lib\net40-full\Ninject.Extensions.Wcf.dll</HintPath>
+    <Reference Include="Ninject.Extensions.Wcf, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.Extensions.Wcf.3.0.0.5\lib\net40-full\Ninject.Extensions.Wcf.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Web.Common, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
     <Reference Include="Ninject.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Ninject.MVC3.3.0.0.6\lib\net40-full\Ninject.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="NinjectAdapter">
+      <HintPath>..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Embedded, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Embedded.1.0.960\lib\net40\Raven.Client.Embedded.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Client.1.0.960\lib\net40\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Database, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Munin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=974fec519e29970d, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Munin.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Smuggler, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Smuggler.exe</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Esent, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Esent.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Storage.Managed, Version=1.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Raven.Storage.Managed.dll</HintPath>
-    </Reference>
-    <Reference Include="Spatial4n.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9f9456e1ca16d45e, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.1.0.960\lib\net40\Spatial4n.Core.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity" />
@@ -221,9 +191,8 @@
     <Reference Include="System.ServiceModel.Discovery" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="System.Web.Mvc.Html5, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MVCHtml5Toolkit.1.6\lib\System.Web.Mvc.Html5.dll</HintPath>
+    <Reference Include="System.Web.Mvc.Html5">
+      <HintPath>..\..\packages\MVCHtml5Toolkit.1.6\lib\System.Web.Mvc.Html5.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -245,8 +214,9 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WebActivator, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+    <Reference Include="WebActivator, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +224,8 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CollectionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\WillBeApiController.cs" />
+    <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Models\FileBrowseItemClient.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
@@ -279,11 +251,13 @@
     <Content Include="Content\Bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\Bootstrap\bootstrap.css" />
     <Content Include="Content\Bootstrap\bootstrap.min.css" />
+    <Content Include="Content\details.css" />
     <Content Include="Content\img\bar-chart.png" />
     <Content Include="Content\img\bill.jpg" />
     <Content Include="Content\img\lock.png" />
     <Content Include="Content\jquery.mobile.simpledialog.min.css" />
     <Content Include="Content\mobile.css" />
+    <Content Include="Content\pdf.css" />
     <Content Include="Content\themes\base\images\animated-overlay.gif" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -368,8 +342,69 @@
     <Content Include="Content\themes\jquerymobile\images\1336075556_calendar.png" />
     <Content Include="Content\themes\jquerymobile\images\ajax-loader.gif" />
     <Content Include="Content\themes\jquerymobile\images\comment.gif" />
+    <Content Include="Content\toastr-responsive.css" />
+    <Content Include="Content\toastr.css" />
     <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Scripts\details\app\binder.js" />
+    <Content Include="Scripts\details\app\bootstrapper.js" />
+    <Content Include="Scripts\details\app\config.js" />
+    <Content Include="Scripts\details\app\model.questionnaire.js" />
+    <Content Include="Scripts\details\app\model.answerOption.js" />
+    <Content Include="Scripts\details\app\messenger.js" />
+    <Content Include="Scripts\details\app\dataservice.questionnaire.js" />
+    <Content Include="Scripts\details\app\datacontext.js" />
+    <Content Include="Scripts\details\app\dataprimer.js" />
+    <Content Include="Scripts\details\app\dataservice.group.js" />
+    <Content Include="Scripts\details\app\dataservice.js" />
+    <Content Include="Scripts\details\app\dataservice.question.js" />
+    <Content Include="Scripts\details\app\model.group.js" />
+    <Content Include="Scripts\details\app\model.js" />
+    <Content Include="Scripts\details\app\model.mapper.js" />
+    <Content Include="Scripts\details\app\model.question.js" />
+    <Content Include="Scripts\details\app\presenter.js" />
+    <Content Include="Scripts\details\app\route-config.js" />
+    <Content Include="Scripts\details\app\route-mediator.js" />
+    <Content Include="Scripts\details\app\router.js" />
+    <Content Include="Scripts\details\app\store.js" />
+    <Content Include="Scripts\details\app\utils.js" />
+    <Content Include="Scripts\details\app\vm.questionnaire.js" />
+    <Content Include="Scripts\details\app\ko.bindingHandlers.js" />
+    <Content Include="Scripts\details\app\ko.debug.helpers.js" />
+    <Content Include="Scripts\details\app\vm.js" />
+    <Content Include="Scripts\details\lib\amplify.core.js" />
+    <Content Include="Scripts\details\lib\amplify.request.js" />
+    <Content Include="Scripts\details\lib\amplify.store.js" />
+    <Content Include="Scripts\details\lib\infuser.js" />
+    <None Include="Scripts\details\lib\jquery-1.7.2-vsdoc.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.js" />
+    <Content Include="Scripts\details\lib\jquery-1.7.2.min.js" />
+    <Content Include="Scripts\details\lib\jquery.autogrow-textarea.js" />
+    <Content Include="Scripts\details\lib\jquery.mockjson.js" />
+    <Content Include="Scripts\details\lib\json2.js" />
+    <Content Include="Scripts\details\lib\knockout-2.1.0.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.js" />
+    <Content Include="Scripts\details\lib\knockout-sortable.min.js" />
+    <Content Include="Scripts\details\lib\knockout.activity.js" />
+    <Content Include="Scripts\details\lib\knockout.asyncCommand.js" />
+    <Content Include="Scripts\details\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\details\lib\knockout.validation.js" />
+    <Content Include="Scripts\details\lib\koExternalTemplateEngine.js" />
+    <Content Include="Scripts\details\lib\lodash.min.js" />
+    <Content Include="Scripts\details\lib\Math.uuid.js" />
+    <Content Include="Scripts\details\lib\modernizr-2.5.3.js" />
+    <Content Include="Scripts\details\lib\moment.js" />
+    <Content Include="Scripts\details\lib\require.js" />
+    <Content Include="Scripts\details\lib\sammy.js" />
+    <Content Include="Scripts\details\lib\sammy.title.js" />
+    <Content Include="Scripts\details\lib\toastr.js" />
+    <Content Include="Scripts\details\lib\TrafficCop.js" />
+    <Content Include="Scripts\details\lib\underscore.js" />
+    <Content Include="Scripts\details\main.js" />
     <Content Include="Scripts\Html5\jquery.mobile.simpledialog2.min.js" />
+    <Content Include="Configuration\Designer.Web.config" />
+    <Content Include="Configuration\Dev.Designer.Web.config" />
+    <Content Include="Configuration\Slava.Designer.Web.config" />
+    <Content Include="HostMap.config" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -379,7 +414,9 @@
     <Content Include="Scripts\jquery.caret.js" />
     <Content Include="Scripts\jquery.client.js" />
     <Compile Include="Models\ViewDataUploadFilesResult.cs" />
+    <Compile Include="PdfConvert.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
+    <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -562,7 +599,7 @@
     <Content Include="Views\Questionnaire\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Questionnaire\Details.cshtml" />
+    <Content Include="Views\Questionnaire\DetailsOld.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\_Create.cshtml" />
@@ -613,7 +650,6 @@
     <Content Include="Views\Answer\AnswerListView\_DropDownList.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Text.cshtml" />
     <Content Include="Views\Answer\AnswerView\_Select.cshtml" />
-    <Content Include="Views\Questionnaire\Export.cshtml" />
     <Content Include="Views\Question\_GetAnswers.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_CompleteGroup.cshtml" />
     <Content Include="Views\Group\CompleteGroupTemplates\_PropagatedCompleteGroup.cshtml" />
@@ -693,6 +729,12 @@
     <Content Include="Views\Question\Create.cshtml" />
     <Content Include="Views\Question\MainBlock.cshtml" />
     <Content Include="Views\Question\MultiSelectBlock.cshtml" />
+    <Content Include="Views\Questionnaire\Details.cshtml" />
+    <Content Include="Views\Pdf\PreviewQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
+    <Content Include="Views\Pdf\_RenderChild.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
+    <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

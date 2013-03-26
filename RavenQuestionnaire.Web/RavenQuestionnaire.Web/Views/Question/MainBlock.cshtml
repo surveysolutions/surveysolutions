@@ -24,6 +24,7 @@
                             html.Add("class", "span12");
                             @Html.EnumDropDownListFor(model => Model.QuestionType, html)
                         }
+                        @Html.ValidationMessageFor(model => model.QuestionType)
                     </div>
                 </div>
                 <div class="control-group">

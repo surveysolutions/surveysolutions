@@ -9,7 +9,6 @@
 namespace Web.Supervisor
 {
     using System;
-    using System.ServiceModel.Activation;
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
@@ -17,8 +16,6 @@ namespace Web.Supervisor
     using NLog;
 
     using Questionnaire.Core.Web.Helpers;
-
-    using Web.Supervisor.WCF;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -116,7 +113,7 @@ namespace Web.Supervisor
 
             try
             {
-                SuccessMarker.Start(KernelLocator.Kernel);
+                SuccessMarker.Start();
                 correctlyInitialized = true;
             }
             catch (Exception e)

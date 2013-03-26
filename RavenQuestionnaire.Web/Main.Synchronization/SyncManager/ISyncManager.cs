@@ -25,19 +25,9 @@ namespace Main.Synchronization.SyncManager
         #region Public Methods and Operators
 
         /// <summary>
-        /// The pull.
-        /// </summary>
-        void StartPull();
-
-        /// <summary>
         /// The push.
         /// </summary>
-        void StartPush();
-
-        /// <summary>
-        /// The start sync.
-        /// </summary>
-        void StartSynchronization();
+        void StartPump();
 
         /// <summary>
         /// The stop sync.

@@ -37,7 +37,8 @@ namespace Core.CAPI.Views
         /// </param>
         public CapiScreenGroupView(
             CompleteQuestionnaireStoreDocument doc, ICompleteGroup currentGroup, ScreenNavigation navigation)
-            : base(doc,
+            : base(
+                doc,
                 currentGroup,
                 new ScreenNavigationView(
                     doc.Children.OfType<ICompleteGroup>().Select(g => new CompleteGroupHeaders(g)), navigation))
@@ -62,7 +63,6 @@ namespace Core.CAPI.Views
             if (currentGroup.Propagated != Propagate.None /* && !currentGroup.PropogationPublicKey.HasValue*/)
             {
                /* var executor = new CompleteQuestionnaireConditionExecutor(doc);
-
                 executor.ExecuteAndChangeStateRecursive(doc, DateTime.UtcNow);*/
 
                 var validator = new CompleteQuestionnaireValidationExecutor(doc, QuestionScope.Interviewer);

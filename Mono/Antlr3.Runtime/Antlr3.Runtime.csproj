@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{755354B2-B249-448F-83D5-7E9B26A86D95}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>Antlr3.Runtime</AssemblyName>
+    <OutputType>Library</OutputType>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="System" />
+    <Compile Include="Antlr\Runtime\ANTLRFileStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ANTLRInputStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ANTLRReaderStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ANTLRStringStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\BaseRecognizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\BitSet.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\CharStreamConstants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\CharStreamState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ClassicToken.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Collections\CollectionUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Collections\HashList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Collections\StackList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\CommonErrorNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\CommonToken.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\CommonTokenStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Constants.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\DFA.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\EarlyExitException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\FailedPredicateException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ICharStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\IIntStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\IToken.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ITokenSource.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ITokenStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Lexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Misc\ErrorManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Misc\Stats.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MismatchedNotSetException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MismatchedRangeException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MismatchedSetException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MismatchedTokenException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MismatchedTreeNodeException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\MissingTokenException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\NoViableAltException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Parser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\ParserRuleReturnScope.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\RecognitionException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\RecognizerSharedState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\RuleReturnScope.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\SynPredPointer.cs" />
+    <Compile Include="Antlr\Runtime\Token.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\TokenRewriteStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\BaseTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\BaseTreeAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\CommonTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\CommonTreeAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\CommonTreeNodeStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\ITree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\ITreeAdaptor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\ITreeNodeStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\ITreeVisitorAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\ParseTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteCardinalityException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteEarlyExitException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteEmptyStreamException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleElementStream!1.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleNodeStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleSubtreeStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\RewriteRuleTokenStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\Tree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreeParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreePatternLexer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreePatternParser.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreeRuleReturnScope.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreeVisitor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\TreeWizard.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\Tree\UnBufferedTreeNodeStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Antlr\Runtime\UnwantedTokenException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+</Project>
