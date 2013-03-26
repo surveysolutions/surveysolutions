@@ -90,26 +90,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Delete(Guid id)
-        {
-            QuestionnaireView model = this.GetQuestionnaire(id);
-            if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
-            {
-                throw new DesignerPermissionException();
-            }
-
-            return this.View(new DeleteQuestionnaireModel { Id = model.PublicKey, Title = model.Title });
-        }
-
-        /// <summary>
         /// The delete confirmed.
         /// </summary>
         /// <param name="id">
@@ -120,17 +100,21 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirmed(Guid id)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
             if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
             {
-                throw new DesignerPermissionException();
+                this.Error("You don't  have permissions to delete this questionnaire.");
+            }
+            else
+            {
+                this.CommandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
+                this.Success(string.Format("Questionnaire \"{0}\" successfully deleted", model.Title));
             }
 
-            this.CommandService.Execute(new DeleteQuestionnaireCommand(model.PublicKey));
-
-            return this.RedirectToAction("Index");
+            return this.Redirect(Request.UrlReferrer.ToString());
         }
 
         /// <summary>
