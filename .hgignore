@@ -7,11 +7,15 @@ bin
 obj
 *.csproj.user
 obj.Wpf
+*.sdf
+*.opensdf
 
 *.StyleCop
 StyleCop.Cache
 *.suo
-Installation/SupervisorInstallProj/_ReSharper.Setup/*
+
+*.userprefs
+*.cache
 
 *.DotSettings.user
 *.dotCover
@@ -27,3 +31,6 @@ ClientDependency
 success.marker
 
 Externals/lib/*
+Bin
+lib/Release
+lib/Debug

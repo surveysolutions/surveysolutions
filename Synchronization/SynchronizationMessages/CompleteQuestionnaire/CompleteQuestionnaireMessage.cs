@@ -68,7 +68,7 @@ namespace SynchronizationMessages.CompleteQuestionnaire
             var settings = new JsonSerializerSettings();
             settings.TypeNameHandling = TypeNameHandling.Objects;
 
-            string command = JsonConvert.SerializeObject(this.Command, Formatting.Indented, settings);
+            string command = JsonConvert.SerializeObject(this.Command, Formatting.None, settings);
             FormatHelper.WriteString(stream, command);
         }
 

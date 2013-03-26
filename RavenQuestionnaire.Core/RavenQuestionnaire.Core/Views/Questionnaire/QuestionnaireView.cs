@@ -17,7 +17,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
     using Main.Core.Entities.SubEntities;
     using Main.Core.View.Question;
 
-    using RavenQuestionnaire.Core.Views.Group;
+    using Group;
 
     /// <summary>
     /// The questionnaire view.

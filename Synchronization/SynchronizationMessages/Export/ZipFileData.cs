@@ -24,14 +24,14 @@ namespace SynchronizationMessages.Export
     /// <summary>
     /// The zip file data.
     /// </summary>
-    public class _ZipFileData // will be moved here later
+    public class ZipFileData // will be moved here later
     {
         #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ZipFileData"/> class.
         /// </summary>
-        public _ZipFileData()
+        public ZipFileData()
         {
             this.ImportDate = DateTime.Now;
             this.CreationDate = DateTime.UtcNow;
@@ -94,7 +94,7 @@ namespace SynchronizationMessages.Export
         /// </returns>
         public static string EventsToString(Guid? clientGuid, IEnumerable<AggregateRootEvent> events)
         {
-            var data = new _ZipFileData
+            var data = new ZipFileData
                 {
                     ClientGuid = clientGuid == null ? Guid.Empty : clientGuid.Value,
                     Events = events

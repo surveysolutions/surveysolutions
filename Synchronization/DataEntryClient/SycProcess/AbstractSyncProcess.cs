@@ -14,7 +14,7 @@ namespace DataEntryClient.SycProcess
     using System.Linq;
 
     using DataEntryClient.SycProcess.Interfaces;
-    
+
     using Main.Core.Commands.Synchronization;
     using Main.Core.Documents;
     using Main.Core.Events;
@@ -130,7 +130,12 @@ namespace DataEntryClient.SycProcess
             {
                 Logger logger = NLog.LogManager.GetCurrentClassLogger();
                 logger.Fatal("Import error: " + ex.Message, ex);
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, ex.Message));
+                this.Invoker.Execute(
+                    new EndProcessComand(
+                        this.ProcessGuid,
+                        EventState.Error,
+                        (ex.InnerException != null) ? ex.Message + "Inner: " + ex.InnerException.Message : ex.Message));
+                
                 return ErrorCodes.Fail;
             }
 

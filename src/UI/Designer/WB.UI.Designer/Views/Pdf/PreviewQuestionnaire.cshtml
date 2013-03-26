@@ -1,0 +1,25 @@
+﻿@model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
+
+@{
+    this.ViewBag.Title = "PDF Preview";
+    this.Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<link href="~/Content/pdf.css" rel="stylesheet" />
+
+<div class="pdf-preview">
+
+    <div class="buttons">
+        @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    </div>
+
+    <div class="content">
+        @{ Html.RenderPartial("_RenderQuestionnaire", this.Model); }
+    </div>
+
+    <div class="buttons">
+        @Html.ActionLink("Download PDF", "ExportQuestionnaire", new { id = Model.PublicKey }, new { @class = "btn" })
+    </div>
+
+</div>
+

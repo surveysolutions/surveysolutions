@@ -1,0 +1,13 @@
+﻿@{
+    Layout = null;
+}
+ 
+To: @ViewBag.To
+From: noreplay@questionnire.com
+Subject: Complete Registration Process
+ 
+Hello @ViewBag.UserName,
+ 
+To complete the registration process click on this link 
+@Url.Action("RegisterConfirmation", "Account", new { token = ViewBag.ConfirmationToken }, Request.Url.Scheme)
+
