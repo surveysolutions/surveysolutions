@@ -188,7 +188,7 @@
 
             <div class="bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
