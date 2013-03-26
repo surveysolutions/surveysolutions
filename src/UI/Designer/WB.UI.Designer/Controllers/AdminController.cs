@@ -80,26 +80,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        // GET: /Administration/Edit/john
-
-        // GET: /Administration/Delete/john
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Delete(string id)
-        {
-            MembershipUser user = this.GetUser(id);
-            return this.View(
-                new DeleteAccountModel { Id = user.UserName, UserName = user.UserName, Email = user.Email });
-        }
-
         // POST: /Administration/Delete/john
 
         /// <summary>
@@ -113,9 +93,26 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirmed(string id)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(string id)
         {
-            Membership.DeleteUser(id);
+            if (string.IsNullOrEmpty(id))
+            {
+                this.Error("Invalid request");
+            }
+            else
+            {
+                MembershipUser user = this.GetUser(id);
+                if (user == null)
+                {
+                    this.Error(string.Format("User \"{0}\" doesn't exist", id));
+                }
+                else
+                {
+                    Membership.DeleteUser(id);
+                    this.Success(string.Format("User \"{0}\" successfully deleted", user.UserName));
+                }   
+            }
 
             return this.RedirectToAction("Index");
         }

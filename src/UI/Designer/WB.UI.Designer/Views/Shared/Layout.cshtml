@@ -1,4 +1,3 @@
-@using StackExchange.Profiling
 @using WB.UI.Designer
 @using WB.UI.Designer.Models
 <!DOCTYPE html>
@@ -11,7 +10,6 @@
     @this.RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
     @this.RenderSection("Scripts", required: false)
-    @MiniProfiler.RenderIncludes()
     @this.Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
 </head>
