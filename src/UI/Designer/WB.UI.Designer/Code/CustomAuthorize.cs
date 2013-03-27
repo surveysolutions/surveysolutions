@@ -25,25 +25,31 @@ namespace WB.UI.Designer
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var isInvalidUser = false;
+            var user = UserHelper.CurrentUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                isInvalidUser = UserHelper.CurrentUser == null || UserHelper.CurrentUser.IsLockedOut
-                                      || !UserHelper.CurrentUser.IsApproved;
+                isInvalidUser = user == null || user.IsLockedOut
+                                      || !user.IsApproved;
 
-                if (UserHelper.CurrentUser != null)
+                if (user != null)
                 {
                     var baseController = filterContext.Controller as AlertController;
                     if (baseController != null)
                     {
-                        if (!UserHelper.CurrentUser.IsApproved)
+                        if (!user.IsApproved)
                         {
-                            baseController.Error("Please, confirm your account first. Check your emails.");
+                            baseController.Attention(
+                                string.Format(
+                                    "Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a>",
+                                    user.Email,
+                                    GlobalHelper.GenerateUrl(
+                                        "ResendConfirmation", "Account", new { id = user.UserName })));
                         }
-                        else if (UserHelper.CurrentUser.IsLockedOut)
+                        else if (user.IsLockedOut)
                         {
-                            baseController.Error(
-                                "Your account is blocked. Contact the administrator for unblocking account");
+                            baseController.Attention(
+                                "Your account is blocked. Contact the administrator to unblock your account");
                         }
                     }
                 }

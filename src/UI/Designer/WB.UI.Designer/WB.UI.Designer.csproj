@@ -218,6 +218,7 @@
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
+    <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
