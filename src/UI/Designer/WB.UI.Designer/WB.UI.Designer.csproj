@@ -485,8 +485,6 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
-    <Content Include="Views\Account\ConfirmationSuccess.cshtml" />
-    <Content Include="Views\Account\RegisterStepTwo.cshtml" />
     <Content Include="Views\Shared\Index.cshtml" />
     <Content Include="Views\Emails\ConfirmationEmail.cshtml" />
     <Content Include="Views\Shared\Delete.cshtml" />
@@ -513,7 +511,6 @@
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
-    <Content Include="Views\Account\ResetPasswordStepTwo.cshtml" />
     <Content Include="Views\Emails\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
