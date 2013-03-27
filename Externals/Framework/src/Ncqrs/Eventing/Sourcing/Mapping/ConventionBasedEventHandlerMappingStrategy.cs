@@ -4,7 +4,9 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Eventing.Sourcing.Mapping
 {
     /// <summary>
@@ -45,9 +47,10 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
             Contract.Ensures(Contract.Result<IEnumerable<ISourcedEventHandler>>() != null, "The result should never be null.");
-
+#endif
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
 

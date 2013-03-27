@@ -75,8 +75,9 @@ namespace Ncqrs.Commanding
         /// <param name="idGenerator">The id generator. This cannot be <c>null</c>.</param>
         protected CommandBase(IUniqueIdentifierGenerator idGenerator)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(idGenerator != null);
-
+#endif
             CommandIdentifier = idGenerator.GenerateNewId();
         }
 

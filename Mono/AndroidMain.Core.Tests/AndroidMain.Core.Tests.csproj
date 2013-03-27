@@ -136,10 +136,6 @@
       <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
       <Name>AndroidNcqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
-      <Name>AndroidNCQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\AndroidNinject\AndroidNinject.csproj">
       <Project>{dc128fdf-0f94-4b63-b79e-ddd02e5e1f0f}</Project>
       <Name>AndroidNinject</Name>
@@ -153,7 +149,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="abd380d9-b4f3-410f-af37-3635b6c5449c" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

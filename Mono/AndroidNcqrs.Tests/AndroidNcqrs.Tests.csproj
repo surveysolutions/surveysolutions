@@ -134,10 +134,6 @@
       <Project>{C500A144-E8B6-41C1-8776-DC468E1D4889}</Project>
       <Name>AndroidNcqrs.Spec</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
-      <Name>AndroidNCQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>

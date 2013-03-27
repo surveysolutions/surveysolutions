@@ -47,13 +47,16 @@ namespace Ncqrs.Commanding.ServiceModel
         {
             get
             {
+#if USE_CONTRACTS
                 Contract.Ensures(Contract.Result<ICommand>() != null, "The result cannot be null.");
-
+#endif
                 return _theCommand;
             }
             set
             {
+                #if USE_CONTRACTS
                 Contract.Requires<InvalidOperationException>(!ExecutorResolved, "Cannot override command when a command executor has already been resolved.");
+                #endif
                 _theCommand = value;
             }
         }
@@ -98,8 +101,9 @@ namespace Ncqrs.Commanding.ServiceModel
         /// <param name="exception">Any exception which may have been thrown while executing</param>
         public CommandContext(ICommand theCommand, CommandExecutionState state = CommandExecutionState.None, Exception exception = null)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(theCommand != null, "The theCommand cannot be null.");
-
+            #endif
             _theCommand = theCommand;
             Exception = exception;
             if (state == CommandExecutionState.Resolved) ExecutorResolved = true;

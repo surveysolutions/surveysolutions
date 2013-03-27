@@ -45,6 +45,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\CreateSnapshotForAR.cs">
+      <Link>CreateSnapshotForAR.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\EventStores\ISnapshootEventStore.cs">
+      <Link>ISnapshootEventStore.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\InMemorySnapshootStore.cs">
+      <Link>InMemorySnapshootStore.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\SnapshootableAggregateRoot.cs">
       <Link>SnapshootableAggregateRoot.cs</Link>
     </Compile>
@@ -57,6 +66,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\SnapshootLoaded.cs">
       <Link>SnapshootLoaded.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\SnapshotCommandMapper.cs">
+      <Link>SnapshotCommandMapper.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +80,7 @@
       <Name>AndroidLogger</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
     </ProjectReference>
   </ItemGroup>

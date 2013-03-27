@@ -71,10 +71,6 @@
       <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
       <Name>AndroidMoq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
-      <Project>{1B9537F5-8650-467A-A280-DF6EA396D6C5}</Project>
-      <Name>AndroidNCQRS</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>
@@ -83,7 +79,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" />
+      <UserProperties ProjectLinkReference="fd52af46-2a79-4ca1-bfc0-fa4bb95c1a87" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,10 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-#if !MONODROID
-using Ncqrs.Eventing.Storage.RavenDB;
 using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
+
+#if !MONODROID
+using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Document;
 #endif
 

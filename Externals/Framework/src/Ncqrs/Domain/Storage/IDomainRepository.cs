@@ -8,7 +8,9 @@ namespace Ncqrs.Domain.Storage
     /// <summary>
     /// A repository that can be used to get and save aggregate roots.
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IDomainRepositoryContracts))]
+#endif
     public interface IDomainRepository
     {
         /// <summary>
@@ -27,7 +29,7 @@ namespace Ncqrs.Domain.Storage
         /// <returns>Snapshot instance if aggregate root supports snapthotting. Otherwise null.</returns>
         Snapshot TryTakeSnapshot(AggregateRoot aggregateRoot);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IDomainRepository))]
     internal abstract class IDomainRepositoryContracts : IDomainRepository
     {
@@ -43,5 +45,5 @@ namespace Ncqrs.Domain.Storage
             return default(Snapshot);
         }
     }
-
+    #endif
 }
