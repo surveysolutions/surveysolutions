@@ -488,6 +488,7 @@ h1 {
     background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     background: linear-gradient(top, rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     border-radius: 4px;
+    min-height: 34px;
 }
 
     .q-item .icon-warning-sign {
