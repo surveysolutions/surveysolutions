@@ -6,6 +6,10 @@
 //   The questionnaire controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Net;
+using System.Web.Http;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -145,6 +149,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Edit(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
+
             if (model.CreatedBy != UserHelper.CurrentUserId)
             {
                 throw new DesignerPermissionException();
@@ -278,6 +283,11 @@ namespace WB.UI.Designer.Controllers
             QuestionnaireView questionnaire =
                 this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(
                     new QuestionnaireViewInputModel(id));
+
+            if (questionnaire == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+            }
 
             return questionnaire;
         }
