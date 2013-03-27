@@ -93,9 +93,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="MiniProfiler">
-      <HintPath>..\..\..\..\packages\MiniProfiler.2.0.2\lib\net40\MiniProfiler.dll</HintPath>
-    </Reference>
     <Reference Include="NConfig">
       <HintPath>..\..\..\..\packages\NConfig.1.0.14\lib\Net40\NConfig.dll</HintPath>
     </Reference>
@@ -219,8 +216,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
-    <Compile Include="App_Start\MiniProfiler.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Code\DefaultAttribute.cs" />
+    <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -385,6 +383,7 @@
     <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\common.js" />
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\bootstrapper.js" />
     <Content Include="Scripts\details\config.js" />
@@ -467,6 +466,9 @@
     <Content Include="Scripts\TrafficCop.js" />
     <Content Include="Scripts\TrafficCop.min.gz.js" />
     <Content Include="Scripts\TrafficCop.min.js" />
+    <Content Include="Views\Questionnaire\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -489,7 +491,6 @@
     <Content Include="Views\Emails\ConfirmationEmail.cshtml" />
     <Content Include="Views\Shared\Delete.cshtml" />
     <Content Include="Views\Emails\_ViewStart.cshtml" />
-    <Content Include="Views\Questionnaire\Index.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\Layout.empty.cshtml" />
@@ -498,7 +499,7 @@
     <Content Include="Views\Shared\Create.cshtml" />
     <Content Include="Views\Shared\Details.cshtml" />
     <Content Include="Views\Questionnaire\Edit.cshtml" />
-    <Content Include="Views\Administration\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Shared\Edit.cshtml" />
     <Content Include="Views\Error\AccessDenied.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
@@ -516,6 +517,7 @@
     <Content Include="Views\Emails\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
+    <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

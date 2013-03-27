@@ -1044,7 +1044,7 @@ namespace WB.UI.Designer.Providers.Membership
         public override bool ValidateUser(string username, string password)
         {
             IMembershipAccount account = this.AccountRepository.Get(username);
-            if (account == null || account.IsLockedOut)
+            if (account == null)
             {
                 return false;
             }
