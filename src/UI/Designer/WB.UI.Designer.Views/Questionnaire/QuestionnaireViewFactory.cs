@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Views.Questionnaire
             {
                 return this._questionnaireStorage.GetByGuid(input.QuestionnaireId);
             }
-            catch (InvalidOperationException e)
+            catch (InvalidOperationException)
             {
                 return null;
             }

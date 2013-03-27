@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Net;
+using System.Web;
 using System.Web.Http;
 
 namespace WB.UI.Designer.Controllers
@@ -286,7 +287,7 @@ namespace WB.UI.Designer.Controllers
 
             if (questionnaire == null)
             {
-                throw new HttpResponseException(HttpStatusCode.NotFound);
+                throw new HttpException((int)HttpStatusCode.NotFound, string.Format("Questionnaire with id={0} cannot be found", id));
             }
 
             return questionnaire;
