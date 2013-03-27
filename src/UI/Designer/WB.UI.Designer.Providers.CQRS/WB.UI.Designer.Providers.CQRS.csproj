@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -80,7 +80,7 @@
     <Compile Include="Accounts\Events\AccountPasswordChanged.cs" />
     <Compile Include="Accounts\Events\AccountPasswordQuestionAndAnswerChanged.cs" />
     <Compile Include="Accounts\Events\AccountPasswordReset.cs" />
-    <Compile Include="Accounts\Events\AccountValidated.cs" />
+    <Compile Include="Accounts\Events\UserLoggedIn.cs" />
     <Compile Include="Accounts\Events\AccountOnlineUpdated.cs" />
     <Compile Include="Accounts\Events\AccountLocked.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

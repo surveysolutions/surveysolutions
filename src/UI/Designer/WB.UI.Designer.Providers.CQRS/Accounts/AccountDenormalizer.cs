@@ -32,7 +32,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                                        IEventHandler<AccountRegistered>, 
                                        IEventHandler<AccountUnlocked>, 
                                        IEventHandler<AccountUpdated>, 
-                                       IEventHandler<AccountValidated>, 
+                                       IEventHandler<UserLoggedIn>, 
                                        IEventHandler<AccountRoleAdded>, 
                                        IEventHandler<AccountRoleRemoved>, 
                                        IEventHandler<AccountLoginFailed>, 
@@ -220,7 +220,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="event">
         /// The event.
         /// </param>
-        public void Handle(IPublishedEvent<AccountValidated> @event)
+        public void Handle(IPublishedEvent<UserLoggedIn> @event)
         {
             AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
 
