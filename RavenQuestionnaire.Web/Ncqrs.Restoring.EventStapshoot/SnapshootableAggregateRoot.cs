@@ -46,12 +46,17 @@ namespace Ncqrs.Restoring.EventStapshoot
             base.InitializeFromSnapshot(snapshot);
             isLastSnapshotSavedToStream = true;
         }
+        protected override void ValidateHistoricalEvent(CommittedEvent evnt)
+        {
+            base.ValidateHistoricalEvent(evnt);
+            if (evnt.Payload is SnapshootLoaded)
+                throw new InvalidCommittedEventException("event stream can't contain snapshots");
+        }
         public override void InitializeFromHistory(CommittedEventStream history)
         {
             if(!history.Any())
                 return;
-            if(history.Any(e => e.Payload is SnapshootLoaded))
-                throw new InvalidCommittedEventException("event stream can't contain snapshots");
+         
             base.InitializeFromHistory(history);
             isLastSnapshotSavedToStream = false;
             /*   var lastSnapshoot = history.LastOrDefault(e => e.Payload is SnapshootLoaded);
