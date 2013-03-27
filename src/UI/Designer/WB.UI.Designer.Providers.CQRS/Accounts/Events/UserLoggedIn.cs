@@ -2,7 +2,7 @@
 
 namespace WB.UI.Designer.Providers.CQRS.Accounts.Events
 {
-    public class AccountValidated
+    public class UserLoggedIn
     {
         public DateTime LastLoginAt { get; set; }
     }
