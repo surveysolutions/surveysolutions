@@ -333,6 +333,7 @@ namespace WB.UI.Designer.Controllers
                             CreationDate = x.CreationDate, 
                             LastEntryDate = x.LastEntryDate, 
                             Title = x.Title, 
+                            IsDeleted = x.IsDeleted,
                             CanDelete = isOnlyOwnerItems || UserHelper.IsAdmin, 
                             CanEdit = isOnlyOwnerItems
                         })

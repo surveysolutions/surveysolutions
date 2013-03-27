@@ -48,13 +48,14 @@ namespace WB.UI.Designer.BootstrapSupport
                                           .Where(
                                               info =>
                                               (info.Name != elementType.IdentifierPropertyName())
-                                              && !actionProperties.Select(x => x.Name)
-                                                                  .Contains(info.Name))
+                                              && actionProperties.All(x => x.Name != info.Name)
+                                              && (UserHelper.IsAdmin
+                                                  || info.GetAttribute<OnlyForAdminAttribute>()
+                                                  == null))
                                           .OrderedByDisplayAttr()
                                           .ToArray(),
                            ActionProperties = actionProperties
                        };
-
         }
 
         public static PropertyInfo[] VisibleProperties(this Object model)
