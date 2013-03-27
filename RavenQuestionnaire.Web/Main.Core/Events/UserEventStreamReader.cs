@@ -86,7 +86,7 @@ namespace Main.Core.Events
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                usersList.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                usersList.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
             }
 
             return usersList;
