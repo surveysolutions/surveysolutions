@@ -379,7 +379,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     else
                     {
-                        this.Error(string.Format("Unexpected problem. Contact with administrator to solve this problem.", model.UserName));
+                        this.Error("Unexpected problem. Contact with administrator to solve this problem.");
                     }
                 }
                 else
