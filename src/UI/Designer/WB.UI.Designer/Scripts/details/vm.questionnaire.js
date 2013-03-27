@@ -1,7 +1,7 @@
 ﻿define('vm.questionnaire',
     ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
     function (ko, _, config, datacontext, router, messenger, store, model, bootbox) {
-        var filter = ko.observable('').extend({ throttle: 400 }),
+        var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
             selectedQuestion = ko.observable(),
@@ -184,12 +184,19 @@
         },
         deleteQuestionSuccessCallback = function (item) {
             datacontext.questions.removeById(item.id());
+
             var parent = item.parent();
             var child = _.find(parent.childrenID(), { 'id': item.id() });
             parent.childrenID.remove(child);
             parent.fillChildren();
             calcStatistics();
-            router.navigateTo(parent.getHref());
+            
+            if (isFilterMode() == true) {
+                filter.valueHasMutated();
+            } else {
+                router.navigateTo(parent.getHref());
+            }
+            
             hideOutput();
         },
         saveGroup = function (group) {
