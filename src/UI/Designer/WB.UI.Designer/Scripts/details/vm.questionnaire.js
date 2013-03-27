@@ -143,7 +143,7 @@
             datacontext.groups.removeGroup(item.id());
 
             var parent = item.parent();
-            if (!_.isUndefined(parent)) {
+            if (!(_.isUndefined(parent) || (_.isNull(parent)))) {
                 var child = _.find(parent.childrenID(), { 'id': item.id() });
                 parent.childrenID.remove(child);
                 parent.fillChildren();
