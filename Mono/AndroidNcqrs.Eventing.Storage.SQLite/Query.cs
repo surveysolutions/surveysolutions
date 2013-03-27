@@ -31,8 +31,9 @@ ORDER BY Sequence";
 FROM Events
 WHERE [EventSourceId] = '{0}'
 AND Name='{1}'
+ORDER BY Sequence DESC
 LIMIT 1 
-ORDER BY Sequence DESC";
+";
 
             return string.Format(template, id, name);
         }
