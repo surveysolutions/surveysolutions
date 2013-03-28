@@ -75,8 +75,8 @@
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
                 <!-- ko ifnot: isFilterMode -->
-                @*<ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">*@
-                <ul data-bind="foreach: chapters" class="list">
+                <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
+                @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
@@ -199,7 +199,7 @@
     <div class="ui-expander" data-bind="expand: true">
         <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-minus icon-white"></i></button>
         <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
-            @*<div class="handler"></div>*@
+            <div class="handler"></div>
             <div class="q-item">
                 <div class="group-actions  pull-right">
                     <div class="btn-group">
@@ -216,15 +216,15 @@
                 <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
             </div>
         </div>
-        @*<ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">*@
-        <ul data-bind="foreach: children" class="list ui-expander-content">
+        <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
+        @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
     </div>
 </script>
 <script type="text/html" id="QuestionView">
     <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
-        @*<div class="handler"></div>*@
+        <div class="handler"></div>
         <div class="q-item">
             <div class="group-actions  pull-right">
                 <div class="btn-group">
