@@ -6,7 +6,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-         android:id="@+id/llContainer">
+        android:id="@+id/llContainer">
         <TextView
             android:text="Synchronization Point"
             android:layout_width="fill_parent"
@@ -47,5 +47,16 @@
             android:layout_margin="10px"
             android:visibility="gone"
             android:text="Free Memory" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25px" />
+        <TextView
+            android:text="."
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:id="@+id/textMem" />
     </LinearLayout>
 </ScrollView>
