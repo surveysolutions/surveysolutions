@@ -10,6 +10,8 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
+using Main.Core.Domain;
+using Ncqrs.Restoring.EventStapshoot;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -113,7 +115,11 @@ namespace CAPI.Android
             }
             base.OnAttachFragment(p0);
         }
-
+        public override void Finish()
+        {
+            CapiApplication.CommandService.Execute(new CreateSnapshotForAR(QuestionnaireId, typeof(CompleteQuestionnaireAR)));
+            base.Finish();
+        }
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
 

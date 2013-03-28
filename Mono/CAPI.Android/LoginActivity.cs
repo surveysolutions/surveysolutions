@@ -32,7 +32,8 @@ namespace CAPI.Android
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi",ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(NoHistory = true, Icon = "@drawable/capi",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
         #region Properties
@@ -42,10 +43,7 @@ namespace CAPI.Android
         /// </summary>
         protected Button btnLogin
         {
-            get
-            {
-                return this.FindViewById<Button>(Resource.Id.btnLogin);
-            }
+            get { return this.FindViewById<Button>(Resource.Id.btnLogin); }
         }
 
         /// <summary>
@@ -53,10 +51,7 @@ namespace CAPI.Android
         /// </summary>
         protected EditText teLogin
         {
-            get
-            {
-                return this.FindViewById<EditText>(Resource.Id.teLogin);
-            }
+            get { return this.FindViewById<EditText>(Resource.Id.teLogin); }
         }
 
         /// <summary>
@@ -64,10 +59,7 @@ namespace CAPI.Android
         /// </summary>
         protected EditText tePassword
         {
-            get
-            {
-                return this.FindViewById<EditText>(Resource.Id.tePassword);
-            }
+            get { return this.FindViewById<EditText>(Resource.Id.tePassword); }
         }
 
         #endregion
@@ -105,7 +97,7 @@ namespace CAPI.Android
             this.ViewModel = new LoginViewModel();
             if (CapiApplication.Membership.IsLoggedIn)
             {
-                this.StartActivity(typeof(DashboardActivity));
+                this.StartActivity(typeof (DashboardActivity));
             }
 
             this.SetContentView(Resource.Layout.Login);
@@ -126,14 +118,31 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
-                this.StartActivity(typeof(DashboardActivity));
+                restore = () =>
+                    {
+                        CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
+                        this.StartActivity(typeof (DashboardActivity));
+                    };
+                ProgressBar pb = new ProgressBar(this);
+                this.AddContentView(pb,
+                                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                               ViewGroup.LayoutParams.FillParent));
+                restore.BeginInvoke(Callback, restore);
+
                 return;
             }
 
             this.teLogin.SetBackgroundColor(Color.Red);
             this.tePassword.SetBackgroundColor(Color.Red);
         }
+
+        private void Callback(IAsyncResult asyncResult)
+        {
+            Action<Guid> asyncAction = (Action<Guid>) asyncResult.AsyncState;
+            asyncAction.EndInvoke(asyncResult);
+        }
+
+        private Action restore;
 
         #endregion
     }
