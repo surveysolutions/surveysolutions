@@ -174,6 +174,7 @@ namespace CAPI.Android
             
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore;
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
             var persistanceStorage = CapiApplication.Kernel.Get<IProjectionStorage>();
             var roots = persistanceStorage.RestoreProjection<List<Guid>>(userKey) ?? new List<Guid>();
             foreach (Guid root in roots)
@@ -183,6 +184,8 @@ namespace CAPI.Android
                 if (snapshot != null)
                 {
                     bus.Publish(snapshot);
+                    snapshotStore.SaveShapshot((snapshot.Payload as SnapshootLoaded).Template);
+              
                     minVersion = snapshot.EventSequence + 1;
                 }
                 foreach (CommittedEvent committedEvent in
