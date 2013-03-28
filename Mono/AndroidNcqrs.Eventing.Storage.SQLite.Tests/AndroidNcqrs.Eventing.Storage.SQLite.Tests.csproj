@@ -62,6 +62,14 @@
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
+      <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
+      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
+      <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
+      <Name>AndroidNCQRS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NUnitLite.MonoDroid\NUnitLite.MonoDroid.csproj">
       <Project>{26327C81-7655-443D-9E04-443AC07BD6CC}</Project>
       <Name>NUnitLite.MonoDroid</Name>

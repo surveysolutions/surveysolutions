@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Android.App;
 using Android.Content;
@@ -6,6 +7,7 @@ using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.EventHandlers;
+using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Unmanaged;
@@ -27,6 +29,7 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
 using Ninject;
 using Main.Synchronization.SycProcessRepository;
 
@@ -66,6 +69,19 @@ namespace CAPI.Android
             }
         }
 
+        static IList<Guid> DashboardsRestored
+        {
+            get
+            {
+                if (Context == null)
+                    return null;
+                var capiApp = Context.ApplicationContext as CapiApplication;
+                if (capiApp == null)
+                    return null;
+                return capiApp.dashboardsRestored;
+            }
+        }
+
         #endregion
 
 
@@ -93,16 +109,18 @@ namespace CAPI.Android
             bus.RegisterHandler(eventHandler, typeof(PropagatableGroupDeleted));
             bus.RegisterHandler(eventHandler, typeof(QuestionnaireStatusChanged));
 
-            var dashboardeventHandler =
-                new DashboardDenormalizer(kernel.Get<IDenormalizerStorage<DashboardModel>>());
-            bus.RegisterHandler(dashboardeventHandler, typeof(SnapshootLoaded));
-            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireStatusChanged));
+         
 
 
             var usereventHandler =
-                new UserDenormalizer(kernel.Get<IDenormalizerStorage<UserView>>());
+                new UserDenormalizer(kernel.Get<IProjectionStorage>(), kernel.Get<IDenormalizerStorage<UserView>>());
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
 
+            var dashboardeventHandler =
+             new DashboardDenormalizer( kernel.Get<IDenormalizerStorage<DashboardModel>>());
+            bus.RegisterHandler(dashboardeventHandler, typeof(SnapshootLoaded));
+            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireStatusChanged));
+            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireAssignmentChanged));
             #endregion
 
            
@@ -123,7 +141,7 @@ namespace CAPI.Android
         }
         
         private readonly IKernel kernel;
-        
+        private readonly IList<Guid> dashboardsRestored = new List<Guid>();
         public  static void Restart()
         {
             Intent i = Context.PackageManager.GetLaunchIntentForPackage(Context.PackageName);
@@ -131,67 +149,50 @@ namespace CAPI.Android
             Context.StartActivity(i);
             
         }
-        
-        public static void GenerateEvents()
+        public static  void SaveProjections()
         {
-            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(CapiApplication.Context);
+            var persistanceStorage = CapiApplication.Kernel.Get<IProjectionStorage>();
+            persistanceStorage.SaveOrUpdateProjection(
+                CapiApplication.Kernel.Get<IDenormalizerStorage<UserView>>().Query().ToList(), Guid.Empty);
+            var dashboards = CapiApplication.Kernel.Get<IDenormalizerStorage<DashboardModel>>().Query().ToList();
 
-                // initialize app if necessary
-                if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
-                {
-                    _setup.Initialize();
-                }
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
-          
-            foreach (CommittedEvent committedEvent in eventStore.GetAllEvents())
+            foreach (DashboardModel dashboardModel in dashboards)
             {
-                bus.Publish(committedEvent);
+                DashboardsRestored.Add(dashboardModel.OwnerKey);
+                var roots = new List<Guid>();
+                foreach (DashboardSurveyItem dashboardSurveyItem in dashboardModel.Surveys)
+                {
+                    roots.AddRange(dashboardSurveyItem.ActiveItems.Select(d => d.PublicKey));
+                }
+                persistanceStorage.SaveOrUpdateProjection(roots, dashboardModel.OwnerKey);
             }
-      /*      eventStore.ClearDB();
-               var stream = new UncommittedEventStream(Guid.NewGuid());
-               //  var payload = new NewCompleteQuestionnaireCreated();
-
-               #region init
-
-               CompleteQuestionnaireDocument root = DesserializeEmbededResource<CompleteQuestionnaireDocument>("initEvent.txt");
-               CompleteQuestionnaireDocument researchQ = DesserializeEmbededResource<CompleteQuestionnaireDocument>("researchDeptSurvey.txt");
-               NewUserCreated userEvent = DesserializeEmbededResource<NewUserCreated>("userEvent.txt");
-
-               for (int i = 0; i < 10; i++)
-               {
-
-                   root.PublicKey = Guid.NewGuid();
-
-                   var eventTempl = new UncommittedEvent(Guid.NewGuid(),
-                                                         root.PublicKey, 1, 0, DateTime.Now,
-                                                         new SnapshootLoaded()
-                                                         {
-                                                             Template = new Snapshot(root.PublicKey, 1, root)
-                                                         }, new Version());
-                   stream.Append(eventTempl);
-                   bus.Publish(eventTempl);
-               }
-               var rEventTempl = new UncommittedEvent(Guid.NewGuid(),
-                                                researchQ.PublicKey, 1, 0, DateTime.Now,
-                                                new SnapshootLoaded()
-                                                {
-                                                    Template = new Snapshot(researchQ.PublicKey, 1, researchQ)
-                                                }, new Version());
-
-               var userEventUcmt = new UncommittedEvent(Guid.NewGuid(), userEvent.PublicKey, 1, 0, DateTime.Now, userEvent,
-                                                    new Version());
-               #endregion
-               stream.Append(userEventUcmt);
-
-               stream.Append(rEventTempl);
-
-               eventStore.Store(stream);
-               bus.Publish(userEventUcmt);
-
-               bus.Publish(rEventTempl);*/
-
         }
+        public static void GenerateEvents(Guid userKey)
+        {
+            if(DashboardsRestored.Contains(userKey))
+                return;
+            
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore;
+            var persistanceStorage = CapiApplication.Kernel.Get<IProjectionStorage>();
+            var roots = persistanceStorage.RestoreProjection<List<Guid>>(userKey) ?? new List<Guid>();
+            foreach (Guid root in roots)
+            {
+                long minVersion = 0;
+                var snapshot = eventStore.GetLatestSnapshoot(root);
+                if (snapshot != null)
+                {
+                    bus.Publish(snapshot);
+                    minVersion = snapshot.EventSequence + 1;
+                }
+                foreach (CommittedEvent committedEvent in
+                        eventStore.ReadFrom(root, minVersion, long.MaxValue))
+                {
+                    bus.Publish(committedEvent);
+                }
+            }
+            DashboardsRestored.Add(userKey);
+       }
    /*     protected static T DesserializeEmbededResource<T>(string fileName)
         {
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using System;
 using Android.App;
@@ -16,6 +18,12 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+using Ninject;
 
 namespace CAPI.Android
 {
@@ -118,6 +126,7 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
+                CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
                 this.StartActivity(typeof(DashboardActivity));
                 return;
             }
