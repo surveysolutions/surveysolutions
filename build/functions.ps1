@@ -55,8 +55,8 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
-function BuildSolution($Solution, $BuildConfiguration) {
-    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $Solution) + 1) of $($solutionsToBuild.Count) $Solution"
+function BuildSolution($Solution, $BuildConfiguration, $IndexOfSolution = 0, $CountOfSolutions = 1) {
+    $progressMessage = "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution"
     Write-Host "##teamcity[blockOpened name='$Solution']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
@@ -84,7 +84,7 @@ function BuildSolutions($BuildConfiguration) {
     if ($solutionsToBuild -ne $null) {
         foreach ($solution in $solutionsToBuild) {
 
-            $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
+            $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration -IndexOfSolution ([array]::IndexOf($solutionsToBuild, $solution)) -CountOfSolutions $solutionsToBuild.Count
 
             if (-not $wasBuildSuccessfull) {
                 $failedSolutions += $solution
