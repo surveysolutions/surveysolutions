@@ -49,11 +49,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         private string _email;
 
         /// <summary>
-        ///     The _failed password answer window attempt count.
-        /// </summary>
-        private int _failedPasswordAnswerWindowAttemptCount;
-
-        /// <summary>
         ///     The _failed password answer window started at.
         /// </summary>
         private DateTime _failedPasswordAnswerWindowStartedAt;
@@ -67,16 +62,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         ///     The _failed password window started at.
         /// </summary>
         private DateTime _failedPasswordWindowStartedAt;
-
-        /// <summary>
-        ///     The _is confirmed.
-        /// </summary>
-        private bool _isConfirmed;
-
-        /// <summary>
-        ///     The _is locked out.
-        /// </summary>
-        private bool _isLockedOut;
 
         /// <summary>
         ///     The _last activity at.
@@ -313,9 +298,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// The event.
         /// </param>
         public void OnAccountConfirmed(AccountConfirmed @event)
-        {
-            this._isConfirmed = true;
-        }
+        {}
 
         /// <summary>
         /// The on account deleted.
@@ -335,7 +318,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void OnAccountLocked(AccountLocked @event)
         {
-            this._isLockedOut = true;
             this._lastLockedOutAt = @event.LastLockedOutAt;
         }
 
@@ -445,8 +427,6 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void OnAccountUnlocked(AccountUnlocked @event)
         {
-            this._isLockedOut = false;
-            this._failedPasswordAnswerWindowAttemptCount = 0;
             this._failedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             this._failedPasswordWindowAttemptCount = 0;
             this._failedPasswordWindowStartedAt = DateTime.MinValue;
