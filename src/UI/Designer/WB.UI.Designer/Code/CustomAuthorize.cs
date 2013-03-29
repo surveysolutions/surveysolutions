@@ -34,7 +34,7 @@ namespace WB.UI.Designer
 
                 if (user != null)
                 {
-                    var baseController = filterContext.Controller as AlertController;
+                    var baseController = filterContext.Controller as BaseController;
                     if (baseController != null)
                     {
                         if (!user.IsApproved)
