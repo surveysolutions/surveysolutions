@@ -1,12 +1,11 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AdministrationController.cs" company="">
+// <copyright file="AdminController.cs" company="">
 //   
 // </copyright>
 // <summary>
 //   The administration controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -16,6 +15,9 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Security;
 
     using Main.Core.Utility;
+    using Main.Core.View;
+
+    using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Extensions;
@@ -24,28 +26,41 @@ namespace WB.UI.Designer.Controllers
     using WebMatrix.WebData;
 
     /// <summary>
-    /// The administration controller.
+    ///     The administration controller.
     /// </summary>
     [CustomAuthorize(Roles = "Administrator")]
-    public class AdminController : AlertController
+    public class AdminController : BaseController
     {
-        // GET: /Administration/
+        #region Constructors and Destructors
 
-        // GET: /Administration/Create
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminController"/> class.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="commandService">
+        /// The command service.
+        /// </param>
+        public AdminController(IViewRepository repository, ICommandService commandService)
+            : base(repository, commandService)
+        {
+        }
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
-        /// The create.
+        ///     The create.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         public ActionResult Create()
         {
             return this.View(new RegisterModel());
         }
-
-        // POST: /Administration/Create
 
         /// <summary>
         /// The create.
@@ -79,8 +94,6 @@ namespace WB.UI.Designer.Controllers
 
             return View(model);
         }
-
-        // POST: /Administration/Delete/john
 
         /// <summary>
         /// The delete confirmed.
@@ -122,23 +135,29 @@ namespace WB.UI.Designer.Controllers
         public ViewResult Details(Guid id)
         {
             MembershipUser account = this.GetUser(id);
+            var questionnaires = QuestionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
+            foreach (var questionnaireListViewModel in questionnaires)
+            {
+                questionnaireListViewModel.CanDelete = false;
+            }
+
             return
                 this.View(
                     new AccountViewModel
                         {
-                            Id = account.ProviderUserKey.AsGuid(), 
-                            CreationDate = account.CreationDate, 
-                            Email = account.Email, 
-                            IsApproved = account.IsApproved, 
-                            IsLockedOut = account.IsLockedOut, 
-                            LastLoginDate = account.LastLoginDate, 
-                            UserName = account.UserName, 
-                            IsOnline = account.IsOnline, 
-                            LastActivityDate = account.LastActivityDate, 
-                            LastLockoutDate = account.LastLockoutDate, 
-                            PasswordQuestion = account.PasswordQuestion, 
-                            LastPasswordChangedDate = account.LastPasswordChangedDate, 
-                            Comment = account.Comment
+                            Id = account.ProviderUserKey.AsGuid(),
+                            CreationDate = account.CreationDate.ToUIString(),
+                            Email = account.Email,
+                            IsApproved = account.IsApproved,
+                            IsLockedOut = account.IsLockedOut,
+                            IsOnline = account.IsOnline,
+                            LastLoginDate = account.LastLoginDate.ToUIString(),
+                            UserName = account.UserName,
+                            LastActivityDate = account.LastActivityDate.ToUIString(),
+                            LastLockoutDate = account.LastLockoutDate.ToUIString(),
+                            LastPasswordChangedDate = account.LastPasswordChangedDate.ToUIString(),
+                            Comment = account.Comment ?? GlobalHelper.EmptyString,
+                            Questionnaires = questionnaires
                         });
         }
 
@@ -162,12 +181,10 @@ namespace WB.UI.Designer.Controllers
                             Email = intUser.Email, 
                             IsApproved = intUser.IsApproved, 
                             IsLockedOut = intUser.IsLockedOut, 
-                            UserName = intUser.UserName,
-                            UserId = intUser.ProviderUserKey.AsGuid()
+                            UserName = intUser.UserName, 
+                            Id = id
                         });
         }
-
-        // POST: /Administration/Edit/john
 
         /// <summary>
         /// The edit.
@@ -179,27 +196,28 @@ namespace WB.UI.Designer.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(UpdateAccountModel user)
         {
             if (this.ModelState.IsValid)
             {
-                MembershipUser intUser = this.GetUser(user.UserId);
+                MembershipUser intUser = this.GetUser(user.Id);
                 if (intUser != null)
                 {
                     Membership.UpdateUser(
                         new MembershipUser(
-                            providerName: intUser.ProviderName,
-                            name: intUser.UserName,
-                            providerUserKey: intUser.ProviderUserKey,
-                            email: user.Email,
-                            passwordQuestion: intUser.PasswordQuestion,
-                            comment: user.Comment,
-                            isApproved: user.IsApproved,
-                            isLockedOut: user.IsLockedOut,
-                            creationDate: intUser.CreationDate,
-                            lastLoginDate: intUser.LastLoginDate,
-                            lastActivityDate: intUser.LastActivityDate,
-                            lastPasswordChangedDate: intUser.LastPasswordChangedDate,
+                            providerName: intUser.ProviderName, 
+                            name: intUser.UserName, 
+                            providerUserKey: intUser.ProviderUserKey, 
+                            email: user.Email, 
+                            passwordQuestion: intUser.PasswordQuestion, 
+                            comment: user.Comment, 
+                            isApproved: user.IsApproved, 
+                            isLockedOut: user.IsLockedOut, 
+                            creationDate: intUser.CreationDate, 
+                            lastLoginDate: intUser.LastLoginDate, 
+                            lastActivityDate: intUser.LastActivityDate, 
+                            lastPasswordChangedDate: intUser.LastPasswordChangedDate, 
                             lastLockoutDate: intUser.LastLockoutDate));
                 }
 
@@ -214,49 +232,64 @@ namespace WB.UI.Designer.Controllers
         /// <summary>
         /// The index.
         /// </summary>
+        /// <param name="p">
+        /// The p.
+        /// </param>
+        /// <param name="sb">
+        /// The sb.
+        /// </param>
+        /// <param name="so">
+        /// The so.
+        /// </param>
+        /// <param name="f">
+        /// The f.
+        /// </param>
         /// <returns>
         /// The <see cref="ViewResult"/>.
         /// </returns>
         public ViewResult Index(int? p, string sb, int? so, string f)
         {
-            var page = p ?? 1;
+            int page = p ?? 1;
 
-            ViewBag.PageIndex = p;
-            ViewBag.SortBy = sb;
-            ViewBag.Filter = f;
-            ViewBag.SortOrder = so;
+            this.ViewBag.PageIndex = p;
+            this.ViewBag.SortBy = sb;
+            this.ViewBag.Filter = f;
+            this.ViewBag.SortOrder = so;
 
             if (so.ToBool())
             {
                 sb = string.Format("{0} Desc", sb);
             }
 
-            var users =
+            IEnumerable<MembershipUser> users =
                 Membership.GetAllUsers()
                           .OfType<MembershipUser>()
-                          .Where(x => (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f))) || string.IsNullOrEmpty(f))
+                          .Where(
+                              x =>
+                              (!string.IsNullOrEmpty(f) && (x.UserName.Contains(f) || x.Email.Contains(f)))
+                              || string.IsNullOrEmpty(f))
                           .AsQueryable()
                           .OrderUsingSortExpression(sb ?? string.Empty);
 
             Func<MembershipUser, bool> editAction =
                 (user) => !Roles.GetRolesForUser(user.UserName).Contains(UserHelper.ADMINROLENAME);
 
-            var retVal =
+            IEnumerable<AccountListViewItemModel> retVal =
                 users.Skip((page - 1) * GlobalHelper.GridPageItemsCount)
                      .Take(GlobalHelper.GridPageItemsCount)
                      .Select(
                          x =>
                          new AccountListViewItemModel
                              {
-                                 Id = x.ProviderUserKey.AsGuid(),
-                                 UserName = x.UserName,
-                                 Email = x.Email,
-                                 CreationDate = x.CreationDate.ToUIString(),
-                                 LastLoginDate = x.LastLoginDate.ToUIString(),
-                                 IsApproved = x.IsApproved,
-                                 IsLockedOut = x.IsLockedOut,
-                                 CanEdit = editAction(x),
-                                 CanDelete = editAction(x),
+                                 Id = x.ProviderUserKey.AsGuid(), 
+                                 UserName = x.UserName, 
+                                 Email = x.Email, 
+                                 CreationDate = x.CreationDate.ToUIString(), 
+                                 LastLoginDate = x.LastLoginDate.ToUIString(), 
+                                 IsApproved = x.IsApproved, 
+                                 IsLockedOut = x.IsLockedOut, 
+                                 CanEdit = editAction(x), 
+                                 CanDelete = editAction(x), 
                                  CanPreview = editAction(x)
                              });
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.Count()));
@@ -277,7 +310,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         private MembershipUser GetUser(Guid id)
         {
-            return Membership.GetUser(id);
+            return Membership.GetUser(id, false);
         }
 
         #endregion

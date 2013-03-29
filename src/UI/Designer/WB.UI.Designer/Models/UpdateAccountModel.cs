@@ -53,12 +53,13 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the user id.
         /// </summary>
         [Key]
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets the user name.
         /// </summary>
         [Display(Name = "User name", Order = 1)]
+        [ReadOnly(true)]
         public string UserName { get; set; }
 
         #endregion

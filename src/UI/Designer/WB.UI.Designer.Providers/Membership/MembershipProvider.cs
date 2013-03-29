@@ -1290,7 +1290,7 @@ namespace WB.UI.Designer.Providers.Membership
         /// </param>
         private void UpdateOnlineState(bool userIsOnline, IMembershipAccount user)
         {
-            if (userIsOnline)
+            if (!userIsOnline)
             {
                 return;
             }
