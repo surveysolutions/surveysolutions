@@ -88,6 +88,13 @@ namespace WB.UI.Designer
                 "~/Scripts/bootstrap.js"
                 ));
 
+            bundles.Add(new ScriptBundle("~/bundles/ace").Include(
+                "~/Scripts/lib/ace/ace.js",
+                "~/Scripts/lib/ace/knockout-ace.js",
+                "~/Scripts/lib/ace/mode-ncalc.js",
+                "~/Scripts/lib/ace/theme-designer.js"
+            ));
+
             bundles.Add(new StyleBundle("~/content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/body.css",

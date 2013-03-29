@@ -29,6 +29,7 @@
 
     @Scripts.Render(
         "~/bundles/jsappdetails",
+        "~/bundles/ace",
         "~/Scripts/details/main.js"
          )
 }
@@ -75,8 +76,8 @@
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
                 <!-- ko ifnot: isFilterMode -->
-                @*<ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">*@
-                <ul data-bind="foreach: chapters" class="list">
+                <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
+                    @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
@@ -115,12 +116,12 @@
                         <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <label>Condition expression</label>
-                    <div class="note">
-                        <textarea rows="2" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                    </div>
+                
+                <label>Condition expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
+                
             </div>
             <div class="bottom">
                 <div class="inner">
@@ -136,7 +137,7 @@
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
-                <div class="row-fluid control-group"  data-bind="validationElement: title">
+                <div class="row-fluid control-group" data-bind="validationElement: title">
                     <label class="control-label required">Title</label>
                     <div class="note">
                         <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
@@ -158,22 +159,28 @@
                 <div class="row-fluid">
                     <div class="btn-group">
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: $data.parent().gtype()!='None' " class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <!-- ko if : $data.parent().gtype()=='None' -->
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                        <!-- /ko -->
+                        <!-- ko ifnot : $data.parent().gtype()=='None' -->
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <!-- /ko -->
                     </div>
                 </div>
                 @*  <div class="row-fluid">
                     <label>Who should answer this question?</label>
                     <select data-bind="options: scopeOptions, value: scope" class="span12"></select>
                 </div>*@
-                <div class="row-fluid">
-                    <label>Condition expression</label>
-                    <textarea rows="2" data-bind="value: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                <label>Condition expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
-                <div class="row-fluid">
-                    <label>Validation expression</label>
-                    <textarea rows="2" data-bind="value: validationExpression, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                
+                <label>Validation expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
+                
                 <div class="row-fluid">
                     <label>Validation message</label>
                     <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
@@ -199,7 +206,7 @@
     <div class="ui-expander" data-bind="expand: true">
         <button class="btn btn-info btn-mini ui-expander-head pull-left"><i class="icon-minus icon-white"></i></button>
         <div class="q-item-wrap q-group" data-bind="css: {selected : isSelected, new : isNew}, popover : tip">
-            @*<div class="handler"></div>*@
+            <div class="handler"></div>
             <div class="q-item">
                 <div class="group-actions  pull-right">
                     <div class="btn-group">
@@ -216,15 +223,15 @@
                 <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
             </div>
         </div>
-        @*<ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">*@
-        <ul data-bind="foreach: children" class="list ui-expander-content">
+        <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
+            @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
     </div>
 </script>
 <script type="text/html" id="QuestionView">
     <div class="q-item-wrap q-question" data-bind="css: {selected : isSelected, new : isNew}">
-        @*<div class="handler"></div>*@
+        <div class="handler"></div>
         <div class="q-item">
             <div class="group-actions  pull-right">
                 <div class="btn-group">

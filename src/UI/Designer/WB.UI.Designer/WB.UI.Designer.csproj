@@ -440,7 +440,12 @@
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
+    <Content Include="Scripts\lib\ace\ace.js" />
+    <Content Include="Scripts\lib\ace\knockout-ace.js" />
+    <Content Include="Scripts\lib\ace\mode-ncalc.js" />
+    <Content Include="Scripts\lib\ace\theme-designer.js" />
     <Content Include="Scripts\lib\jquery.autogrow-textarea.js" />
+    <Content Include="Scripts\lib\knockout-ace.js" />
     <Content Include="Scripts\lib\knockout-sortable.js" />
     <Content Include="Scripts\lib\knockout-sortable.min.js" />
     <Content Include="Scripts\lib\knockout.activity.js" />
