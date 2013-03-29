@@ -615,6 +615,11 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             this.ApplyEvent(new UserLoggedIn { LastLoginAt = DateTime.UtcNow });
         }
 
+        [Obsolete]
+        public void OnAccountValidated(AccountValidated @event)
+        {
+        }
+
         #endregion
     }
 }
