@@ -67,7 +67,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='failed to build $Solution']"
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build $Solution']"
 
         if (-not $MultipleSolutions) {
             Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $Solution']"
