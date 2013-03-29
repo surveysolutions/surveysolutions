@@ -36,6 +36,7 @@ namespace Web.Supervisor.Controllers
     using SynchronizationMessages.CompleteQuestionnaire;
 
     using Web.Supervisor.Models;
+    using Web.Supervisor.Utils.Attributes;
 
     /// <summary>
     /// The import export controller.
@@ -397,6 +398,17 @@ namespace Web.Supervisor.Controllers
 
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public FileResult GetARKeys()
+        {
+            var stream = new MemoryStream();
+            this.GetList().WriteTo(stream);
+            stream.Position = 0L;
+
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+
+        }
+
 
         /// <summary>
         /// The get item.
@@ -443,8 +455,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 result = process.Export("Supervisor export AR events", key, ln);
             }
@@ -481,6 +492,51 @@ namespace Web.Supervisor.Controllers
             stream.Position = 0L;
             return new FileStreamResult(stream, "application/json; charset=utf-8");
         }
+
+
+        /// <summary>
+        /// The get item.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        [CompressContent]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GetAR(string firstEventPulicKey, string length)
+        {
+            var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var stream = new MemoryStream();
+            item.WriteTo(stream);
+            stream.Position = 0L;
+            
+            return new FileStreamResult(stream, "application/octet-stream");
+        }
+
+
+        /// <summary>
+        /// Determines if GZip is supported
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsGZipSupported(HttpRequestBase request)
+        {
+            string AcceptEncoding = request.Headers["Accept-Encoding"];
+            if (!string.IsNullOrEmpty(AcceptEncoding) &&
+                    (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
+                return true;
+            return false;
+        }
+
 
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)
