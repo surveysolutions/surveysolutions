@@ -76,7 +76,7 @@
                 </div>
                 <!-- ko ifnot: isFilterMode -->
                 <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
-                @*<ul data-bind="foreach: chapters" class="list">*@
+                    @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
@@ -136,7 +136,7 @@
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
-                <div class="row-fluid control-group"  data-bind="validationElement: title">
+                <div class="row-fluid control-group" data-bind="validationElement: title">
                     <label class="control-label required">Title</label>
                     <div class="note">
                         <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
@@ -158,8 +158,12 @@
                 <div class="row-fluid">
                     <div class="btn-group">
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: $data.parent().gtype()!='None' " class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                    <!-- ko if : $data.parent().gtype()=='None' -->
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                    <!-- /ko -->
+                    <!-- ko ifnot : $data.parent().gtype()=='None' -->
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                    <!-- /ko -->
                     </div>
                 </div>
                 @*  <div class="row-fluid">
@@ -217,7 +221,7 @@
             </div>
         </div>
         <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
-        @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
+            @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
     </div>
