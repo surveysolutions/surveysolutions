@@ -10,6 +10,8 @@
 namespace WB.UI.Designer
 {
     using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
 
     /// <summary>
     /// The global helper.
@@ -47,6 +49,12 @@ namespace WB.UI.Designer
             {
                 return (string)HttpContext.Current.Request.RequestContext.RouteData.Values["controller"];
             }
+        }
+
+        public static string GenerateUrl(string action, string controller, object routes)
+        {
+            UrlHelper url = new UrlHelper(HttpContext.Current.Request.RequestContext);
+            return url.Action(action, controller, new RouteValueDictionary(routes));
         }
 
         #endregion

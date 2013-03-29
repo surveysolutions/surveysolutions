@@ -2,6 +2,7 @@
 @using WB.UI.Designer.BootstrapSupport.HtmlHelpers
 @using WB.UI.Designer.Extensions
 @using WB.UI.Designer.Models
+
 @model IPagedList
 @{
     var PropertyInfo = Model.VisibleProperties();
@@ -37,15 +38,7 @@ else
                 @foreach (var property in PropertyList)
                 {
                     <th>
-                        @Html.ActionLink(property.GetLabel().ToSeparatedWords(),
-                        WB.UI.Designer.GlobalHelper.CurrentAction,
-                        new
-                        {
-                            p = ViewBag.PageIndex,
-                            sb = property.Name,
-                            so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder,ViewBag.SortBy == property.Name),
-                            f = ViewBag.Filter
-                        })
+                        @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
                         @if (ViewBag.SortBy == property.Name)
                         {
                             if (!sortOrder.ToBool())
@@ -74,7 +67,7 @@ else
                         @Html.Display(index + "." + property.Name)
                     </td>
                 }
-                
+
                 <td style="width: 110px">
                     @{
                         var actionModel = model as IActionItem;
@@ -82,17 +75,22 @@ else
                         {
                             if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint)
                             {
-                                <div class="btn-group">
+                                <div class="btn-group pull-right">
                                     <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
                                         <span class="caret"></span>
                                     </a>
                                     <ul class="dropdown-menu">
                                         @{
                                             var routevalues = model.GetIdValue();
+                                            var itemId = model.GetId();
+                                            var itemType = model.GetLabel();
+                                            var itemName = model.GetName();
+
                                             if (actionModel.CanEdit)
                                             {
                                                 <li>@Html.ActionLink("Edit", "Edit", routevalues)</li>
                                             }
+                                          
                                             if (actionModel.CanPreview)
                                             {
                                                 <li>@Html.ActionLink("Details", "Details", routevalues)</li>
@@ -109,7 +107,7 @@ else
                                             if (actionModel.CanDelete)
                                             {
                                                 <li class="divider"></li>
-                                                <li>@Html.ActionLink("Delete", "Delete", routevalues)</li>
+                                                <li><a  href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
                                             }
                                         }
                                     </ul>
@@ -117,15 +115,15 @@ else
                             }
                         }
                     }
-                </td>
             </tr>
-                    index++;
+                index++;
         }
-
     </table>
     @Html.Pager(Model.PageIndex, Model.TotalPages, x => Url.Action(WB.UI.Designer.GlobalHelper.CurrentAction, WB.UI.Designer.GlobalHelper.CurrentController, new { p = x, sb = ViewBag.SortBy, so = ViewBag.SortOrder, f = ViewBag.Filter }), " pagination-right")
 }
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn" })
 </p>
-
+@{
+    this.Html.RenderPartial("DeleteModalDialog");
+}

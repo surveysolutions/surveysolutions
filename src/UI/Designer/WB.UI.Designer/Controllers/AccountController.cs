@@ -42,18 +42,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        ///     The confirmation success.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
-        [AllowAnonymous]
-        public ActionResult ConfirmationSuccess()
-        {
-            return this.View();
-        }
-
-        /// <summary>
         ///     The index.
         /// </summary>
         /// <returns>
@@ -204,6 +192,17 @@ namespace WB.UI.Designer.Controllers
             return this.View(new ResetPasswordModel());
         }
 
+        /// <summary>
+        /// The password reset.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// </exception>
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -214,18 +213,16 @@ namespace WB.UI.Designer.Controllers
                 throw new Exception("Password reset is not allowed");
             }
 
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-
-                var user = Membership.GetUser(model.UserName);
+                MembershipUser user = Membership.GetUser(model.UserName);
                 if (user == null)
                 {
                     this.Error(string.Format("User {0} does not exist. Please enter a valid user name", model.UserName));
                 }
                 else
                 {
-
-                    var token = WebSecurity.GeneratePasswordResetToken(user.UserName);
+                    string token = WebSecurity.GeneratePasswordResetToken(user.UserName);
 
                     dynamic email = new Email("ResetPasswordEmail");
                     email.To = user.Email;
@@ -233,50 +230,12 @@ namespace WB.UI.Designer.Controllers
                     email.ResetPasswordToken = token;
                     email.Send();
 
-                    return this.RedirectToAction("ResetPasswordStepTwo", "Account");
+                    this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
+                    return this.RedirectToAction("Login");
                 }
             }
 
             return this.View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult ResetPasswordStepTwo()
-        {
-            return this.View();
-        }
-
-        [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation(string token)
-        {
-            return this.View(new ResetPasswordConfirmationModel() { Token = token });
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ResetPasswordConfirmation(ResetPasswordConfirmationModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                if (WebSecurity.ResetPassword(model.Token, model.NewPassword))
-                {
-                    this.Success("Your password successfully changed. Now you can login with your new password");
-                    return this.RedirectToAction("Login", "Account");
-                }
-                else
-                {
-                    return this.RedirectToAction("ResetPasswordConfirmationFailure");
-                }
-            }
-
-            return this.View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult ResetPasswordConfirmationFailure()
-        {
-            return this.View();
         }
 
         /// <summary>
@@ -329,13 +288,10 @@ namespace WB.UI.Designer.Controllers
                         {
                             Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
 
-                            dynamic email = new Email("ConfirmationEmail");
-                            email.To = model.Email;
-                            email.UserName = model.UserName;
-                            email.ConfirmationToken = confirmationToken;
-                            email.Send();
+                            this.SendConfirmationEmail(
+                                to: model.Email, userName: model.UserName, token: confirmationToken);
 
-                            return this.RedirectToAction("registersteptwo", "account");
+                            return this.RegisterStepTwo();
                         }
                     }
                     catch (MembershipCreateUserException e)
@@ -375,13 +331,100 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        ///     The register step two.
+        /// The resend confirmation.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult ResendConfirmation(string id)
+        {
+            MembershipUser model = Membership.GetUser(id);
+            if (model != null)
+            {
+                if (!model.IsApproved)
+                {
+                    string token =
+                        ((DesignerMembershipProvider)Membership.Provider).GetConfirmationTokenByUserName(model.UserName);
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        this.SendConfirmationEmail(to: model.Email, userName: model.UserName, token: token);
+                        return this.RegisterStepTwo();
+                    }
+                    else
+                    {
+                        this.Error("Unexpected problem. Contact with administrator to solve this problem.");
+                    }
+                }
+                else
+                {
+                    this.Error(string.Format("User {0} already confirmed in system.", model.UserName));
+                }
+            }
+            else
+            {
+                this.Error(string.Format("User {0} does not exist. Please enter a valid user name.", id));
+            }
+
+            return this.RedirectToAction("Login");
+        }
+
+        /// <summary>
+        /// The reset password confirmation.
+        /// </summary>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [AllowAnonymous]
+        public ActionResult ResetPasswordConfirmation(string token)
+        {
+            return this.View(new ResetPasswordConfirmationModel { Token = token });
+        }
+
+        /// <summary>
+        /// The reset password confirmation.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ResetPasswordConfirmation(ResetPasswordConfirmationModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                if (WebSecurity.ResetPassword(model.Token, model.NewPassword))
+                {
+                    this.Success("Your password successfully changed. Now you can login with your new password");
+                    return this.RedirectToAction("Login");
+                }
+                else
+                {
+                    return this.RedirectToAction("ResetPasswordConfirmationFailure");
+                }
+            }
+
+            return this.View(model);
+        }
+
+        /// <summary>
+        ///     The reset password confirmation failure.
         /// </summary>
         /// <returns>
         ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
-        public ActionResult RegisterStepTwo()
+        public ActionResult ResetPasswordConfirmationFailure()
         {
             return this.View();
         }
@@ -409,6 +452,40 @@ namespace WB.UI.Designer.Controllers
             {
                 return this.RedirectToAction("Index");
             }
+        }
+
+        /// <summary>
+        ///     The register step two.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="ActionResult" />.
+        /// </returns>
+        private ActionResult RegisterStepTwo()
+        {
+            this.Attention(
+                "To complete the registration process look for an email in your inbox that provides further instructions.");
+            return this.RedirectToAction("Login");
+        }
+
+        /// <summary>
+        /// The send confirmation email.
+        /// </summary>
+        /// <param name="to">
+        /// The to.
+        /// </param>
+        /// <param name="userName">
+        /// The user name.
+        /// </param>
+        /// <param name="token">
+        /// The token.
+        /// </param>
+        private async void SendConfirmationEmail(string to, string userName, string token)
+        {
+            dynamic email = new Email("ConfirmationEmail");
+            email.To = to;
+            email.UserName = userName;
+            email.ConfirmationToken = token;
+            await email.SendAsync();
         }
 
         #endregion

@@ -9,11 +9,13 @@
 namespace WB.UI.Designer.Models
 {
     using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     ///     The questionnaire list view model.
     /// </summary>
+    [DisplayName("questionnaire")]
     public class QuestionnaireListViewModel : ActionItem
     {
         #region Public Properties
@@ -32,6 +34,7 @@ namespace WB.UI.Designer.Models
         ///     Gets or sets the title.
         /// </summary>
         [Display(Name = "Title", Order = 1)]
+        [Default]
         public string Title { get; set; }
 
         /// <summary>
@@ -51,6 +54,13 @@ namespace WB.UI.Designer.Models
         /// </summary>
         [Display(Name = "Last Entry Date", Order = 3)]
         public DateTime LastEntryDate { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the last entry date.
+        /// </summary>
+        [Display(Name = "Deleted?", Order = 4)]
+        [OnlyForAdmin]
+        public bool IsDeleted { get; set; }
 
         #endregion
     }
