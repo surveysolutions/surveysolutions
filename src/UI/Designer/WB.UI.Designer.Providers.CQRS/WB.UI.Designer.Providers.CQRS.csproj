@@ -65,6 +65,7 @@
     <Compile Include="Accounts\Events\AccountUpdated.cs" />
     <Compile Include="Accounts\Events\AccountDeleted.cs" />
     <Compile Include="Accounts\AccountDenormalizer.cs" />
+    <Compile Include="Accounts\Events\AccountValidated.cs" />
     <Compile Include="Accounts\View\AccountListItem.cs" />
     <Compile Include="Accounts\Events\AccountRegistered.cs" />
     <Compile Include="Accounts\Events\AccountUnlocked.cs" />
