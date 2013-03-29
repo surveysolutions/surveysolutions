@@ -1,4 +1,3 @@
-@using StackExchange.Profiling
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +42,6 @@
     @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
     @RenderSection("Scripts", required: false)
-    @MiniProfiler.RenderIncludes()
     @Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
 </head>

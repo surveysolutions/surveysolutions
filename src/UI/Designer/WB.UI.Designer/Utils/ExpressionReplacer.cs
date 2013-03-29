@@ -6,7 +6,7 @@ using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer.Utils
 {
-    public class ExpressionReplacer
+    public class ExpressionReplacer : IExpressionReplacer
     {
         /// <summary>
         /// The view repository.

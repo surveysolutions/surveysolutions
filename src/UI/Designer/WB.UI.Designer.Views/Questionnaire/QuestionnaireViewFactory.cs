@@ -1,4 +1,5 @@
-﻿using Main.Core.Documents;
+﻿using System;
+using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
@@ -17,20 +18,25 @@ namespace WB.UI.Designer.Views.Questionnaire
         QuestionnaireView IViewFactory<QuestionnaireViewInputModel, QuestionnaireView>.Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-
-            return new QuestionnaireView(doc);
+            return doc == null ? null : new QuestionnaireView(doc);
         }
 
         QuestionnaireStataMapView IViewFactory<QuestionnaireViewInputModel, QuestionnaireStataMapView>.Load(QuestionnaireViewInputModel input)
         {
             var doc = GetQuestionnaireDocument(input);
-
-            return new QuestionnaireStataMapView(doc);
+            return doc == null ? null : new QuestionnaireStataMapView(doc);
         }
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
         {
-            return this._questionnaireStorage.GetByGuid(input.QuestionnaireId);
+            try
+            {
+                return this._questionnaireStorage.GetByGuid(input.QuestionnaireId);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
         }
     }
 }

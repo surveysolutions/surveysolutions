@@ -80,26 +80,6 @@ namespace WB.UI.Designer.Controllers
             return View(model);
         }
 
-        // GET: /Administration/Edit/john
-
-        // GET: /Administration/Delete/john
-
-        /// <summary>
-        /// The delete.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        public ActionResult Delete(string id)
-        {
-            MembershipUser user = this.GetUser(id);
-            return this.View(
-                new DeleteAccountModel { Id = user.UserName, UserName = user.UserName, Email = user.Email });
-        }
-
         // POST: /Administration/Delete/john
 
         /// <summary>
@@ -113,9 +93,19 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         [HttpPost]
         [ActionName("Delete")]
-        public ActionResult DeleteConfirmed(string id)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(Guid id)
         {
-            Membership.DeleteUser(id);
+            MembershipUser user = this.GetUser(id);
+            if (user == null)
+            {
+                this.Error(string.Format("User \"{0}\" doesn't exist", id));
+            }
+            else
+            {
+                Membership.DeleteUser(user.UserName);
+                this.Success(string.Format("User \"{0}\" successfully deleted", user.UserName));
+            }
 
             return this.RedirectToAction("Index");
         }
@@ -129,14 +119,14 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ViewResult"/>.
         /// </returns>
-        public ViewResult Details(string id)
+        public ViewResult Details(Guid id)
         {
             MembershipUser account = this.GetUser(id);
             return
                 this.View(
                     new AccountViewModel
                         {
-                            Id = account.UserName, 
+                            Id = account.ProviderUserKey.AsGuid(), 
                             CreationDate = account.CreationDate, 
                             Email = account.Email, 
                             IsApproved = account.IsApproved, 
@@ -161,7 +151,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Edit(string id)
+        public ActionResult Edit(Guid id)
         {
             MembershipUser intUser = this.GetUser(id);
             return
@@ -172,7 +162,8 @@ namespace WB.UI.Designer.Controllers
                             Email = intUser.Email, 
                             IsApproved = intUser.IsApproved, 
                             IsLockedOut = intUser.IsLockedOut, 
-                            UserName = intUser.UserName
+                            UserName = intUser.UserName,
+                            UserId = intUser.ProviderUserKey.AsGuid()
                         });
         }
 
@@ -192,23 +183,23 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                MembershipUser intUser = Membership.GetUser(user.UserName);
+                MembershipUser intUser = this.GetUser(user.UserId);
                 if (intUser != null)
                 {
                     Membership.UpdateUser(
                         new MembershipUser(
-                            providerName: intUser.ProviderName, 
-                            name: user.UserName, 
-                            providerUserKey: intUser.ProviderUserKey, 
-                            email: user.Email, 
-                            passwordQuestion: intUser.PasswordQuestion, 
-                            comment: user.Comment, 
-                            isApproved: user.IsApproved, 
-                            isLockedOut: user.IsLockedOut, 
-                            creationDate: intUser.CreationDate, 
-                            lastLoginDate: intUser.LastLoginDate, 
-                            lastActivityDate: intUser.LastActivityDate, 
-                            lastPasswordChangedDate: intUser.LastPasswordChangedDate, 
+                            providerName: intUser.ProviderName,
+                            name: intUser.UserName,
+                            providerUserKey: intUser.ProviderUserKey,
+                            email: user.Email,
+                            passwordQuestion: intUser.PasswordQuestion,
+                            comment: user.Comment,
+                            isApproved: user.IsApproved,
+                            isLockedOut: user.IsLockedOut,
+                            creationDate: intUser.CreationDate,
+                            lastLoginDate: intUser.LastLoginDate,
+                            lastActivityDate: intUser.LastActivityDate,
+                            lastPasswordChangedDate: intUser.LastPasswordChangedDate,
                             lastLockoutDate: intUser.LastLockoutDate));
                 }
 
@@ -257,7 +248,7 @@ namespace WB.UI.Designer.Controllers
                          x =>
                          new AccountListViewItemModel
                              {
-                                 Id = x.UserName,
+                                 Id = x.ProviderUserKey.AsGuid(),
                                  UserName = x.UserName,
                                  Email = x.Email,
                                  CreationDate = x.CreationDate.ToUIString(),
@@ -284,7 +275,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="MembershipUser"/>.
         /// </returns>
-        private MembershipUser GetUser(string id)
+        private MembershipUser GetUser(Guid id)
         {
             return Membership.GetUser(id);
         }
