@@ -7,8 +7,10 @@ function PublishZipPackage($SourceFolder, $TargetFile) {
     Write-Host "##teamcity[blockOpened name='Publishing zip package artifact']"
     Write-Host "##teamcity[progressStart 'Publishing zip package artifact']"
 
-    Remove-Item $TargetFile
-
+	IF (Test-Path $TargetFile){
+		Remove-Item $TargetFile
+	}	
+    
     [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
     [System.AppDomain]::CurrentDomain.GetAssemblies()
 
