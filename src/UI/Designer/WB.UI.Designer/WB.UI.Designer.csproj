@@ -441,8 +441,6 @@
     <Content Include="Scripts\knockout.validation.debug.js" />
     <Content Include="Scripts\knockout.validation.js" />
     <Content Include="Scripts\lib\ace\ace.js" />
-    <Content Include="Scripts\lib\ace\ext-static_highlight.js" />
-    <Content Include="Scripts\lib\ace\ext-textarea.js" />
     <Content Include="Scripts\lib\ace\knockout-ace.js" />
     <Content Include="Scripts\lib\ace\mode-ncalc.js" />
     <Content Include="Scripts\lib\ace\theme-designer.js" />
