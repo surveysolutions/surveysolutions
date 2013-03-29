@@ -68,6 +68,10 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
 
     if (-not $wasBuildSuccessfull) {
         Write-Host "##teamcity[message status='ERROR' text='failed to build $Solution']"
+
+        if (-not $MultipleSolutions) {
+            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $Solution']"
+        }
     }
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"

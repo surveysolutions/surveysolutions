@@ -7,12 +7,7 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     CleanBinAndObjFolders
 
-    BuildSolution $Solution $BuildConfiguration | %{
-        if (-not $_) {
-            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $Solution']"
-            Exit
-        }
-    }
+    BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
     RunTests $BuildConfiguration
 
