@@ -3,9 +3,9 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 
-function CreateZipPackage($SourceFolder, $TargetFile) {
-    Write-Host "##teamcity[blockOpened name='Creating zip package']"
-    Write-Host "##teamcity[progressStart 'Creating zip package']"
+function PublishZipPackage($SourceFolder, $TargetFile) {
+    Write-Host "##teamcity[blockOpened name='Publishing zip package artifact']"
+    Write-Host "##teamcity[progressStart 'Publishing zip package artifact']"
 
     Remove-Item $TargetFile
 
@@ -14,8 +14,10 @@ function CreateZipPackage($SourceFolder, $TargetFile) {
 
     [System.IO.Compression.ZipFile]::CreateFromDirectory((Join-Path (Get-Location).Path $SourceFolder), (Join-Path (Get-Location).Path $TargetFile), [System.IO.Compression.CompressionLevel]::Optimal, $false)
 
-    Write-Host "##teamcity[progressFinish 'Creating zip package']"
-    Write-Host "##teamcity[blockClosed name='Creating zip package']"
+    Write-Host "##teamcity[publishArtifacts '$TargetFile']"
+
+    Write-Host "##teamcity[progressFinish 'Publishing zip package artifact']"
+    Write-Host "##teamcity[blockClosed name='Publishing zip package artifact']"
 }
 
 function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $TargetFolder) {
@@ -28,7 +30,7 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" | Write-Host
 
-    CreateZipPackage $SourceFolder 'package.zip'
+    PublishZipPackage $SourceFolder 'package.zip'
 
     Remove-Item "$TargetFolder\*" -Force -Recurse
 
