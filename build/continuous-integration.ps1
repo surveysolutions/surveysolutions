@@ -5,6 +5,6 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 CleanBinAndObjFolders
 
-BuildSolutions 'Debug' | %{ if (-not $_) { Exit } }
+BuildSolutions 'Release' | %{ if (-not $_) { Exit } }
 
-RunTests 'Debug'
+RunTests 'Release'
