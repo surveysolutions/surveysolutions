@@ -612,7 +612,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                         UserName = userName
                     });
 
-            if (!isConfirmed)
+            if (isConfirmed)
             {
                 this.ApplyEvent(new AccountConfirmed());
             }
