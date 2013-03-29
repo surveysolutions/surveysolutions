@@ -3,7 +3,10 @@ using Cirrious.MvvmCross.Droid.Views;
 
 namespace CAPI.Android
 {
-    [Activity(Label = "CAPI", MainLauncher = true, NoHistory = true, Icon = "@drawable/capi")]
+    using global::Android.Content.PM;
+
+    [Activity(Label = "CAPI", MainLauncher = true, NoHistory = true, Icon = "@drawable/capi",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class SplashScreenActivity : MvxBaseSplashScreenActivity
     {
         public SplashScreenActivity()

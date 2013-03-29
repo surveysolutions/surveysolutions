@@ -14,24 +14,30 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
 {
     public class ScreenContentFragment : AbstractScreenChangingFragment
     {
+        public static ScreenContentFragment NewInstance(ItemPublicKey screenId, Guid questionnaireId)
+        {
+            ScreenContentFragment myFragment = new ScreenContentFragment();
+
+            Bundle args = new Bundle();
+            args.PutString(SCREEN_ID, screenId.ToString());
+            args.PutString(QUESTIONNAIRE_ID, questionnaireId.ToString());
+            myFragment.Arguments = args;
+
+            return myFragment;
+        }
+
+        private const string SCREEN_ID = "screenId";
+        private const string QUESTIONNAIRE_ID = "questionnaireId";
         private readonly IQuestionViewFactory questionViewFactory;
-        private readonly CompleteQuestionnaireView questionnaire;
+        
         protected List<AbstractQuestionView> bindableElements = new List<AbstractQuestionView>();
         protected View top;
         public ScreenContentFragment()
         {
             this.questionViewFactory = new DefaultQuestionViewFactory();
             this.bindableElements = new List<AbstractQuestionView>();
-            this.RetainInstance = true;
         }
 
-        public ScreenContentFragment(QuestionnaireScreenViewModel model, CompleteQuestionnaireView questionnaire)
-            : this()
-        {
-           
-            this.Model = model;
-            this.questionnaire = questionnaire;
-        }
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             if (container == null)
@@ -97,10 +103,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             return top;
         }
 
-        public override void OnDestroy()
+        public override void OnDetach()
         {
-           
-            base.OnDestroy();
+
+            base.OnDetach();
             foreach (AbstractQuestionView abstractQuestionView in bindableElements)
             {
                 abstractQuestionView.Dispose();
@@ -112,8 +118,33 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
             OnScreenChanged(e);
         }
 
+        private QuestionnaireScreenViewModel model;
+        public QuestionnaireScreenViewModel Model
+        {
+            get {
+                if (model == null)
+                {
+                    model = Questionnaire.Screens[ItemPublicKey.Parse(Arguments.GetString(SCREEN_ID))] as QuestionnaireScreenViewModel;
+                }
+                return model;
+            }
+        }
 
-        public QuestionnaireScreenViewModel Model { get; private set; }
+        private CompleteQuestionnaireView questionnaire;
+
+        protected CompleteQuestionnaireView Questionnaire
+        {
+            get
+            {
+                if (questionnaire == null)
+                {
+                    questionnaire = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                        new QuestionnaireScreenInput(Guid.Parse(Arguments.GetString(QUESTIONNAIRE_ID))));
+                }
+                return questionnaire;
+            }
+        }
+
         protected QuestionnairePropagatedScreenViewModel PropagatedModel
         {
             get { return Model as QuestionnairePropagatedScreenViewModel; }

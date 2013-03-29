@@ -98,7 +98,7 @@ namespace Web.Supervisor
         {
             AppDomain current = AppDomain.CurrentDomain;
             current.UnhandledException += this.CurrentUnhandledException;
-
+            
             AreaRegistration.RegisterAllAreas();
 
 
@@ -119,6 +119,12 @@ namespace Web.Supervisor
             catch (Exception e)
             {
                 this.logger.Fatal("Initialization failed", e);
+                this.logger.Fatal("Initialization failed", e.StackTrace);
+                if (e.InnerException != null)
+                {
+                    this.logger.Fatal("Initialization failed", e.InnerException);
+                    this.logger.Fatal("Initialization failed", e.InnerException.StackTrace);
+                }
                 correctlyInitialized = false;
 
                 // due to the bug in iis7 moved to Application_BeginRequest
@@ -158,7 +164,18 @@ namespace Web.Supervisor
         /// </param>
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            this.logger.Fatal(e.ExceptionObject);
+            try
+            {
+                var exp = (Exception)e.ExceptionObject;
+                this.logger.Fatal("Global Unhandled:", exp);
+                //this.logger.Fatal(e.ExceptionObject);
+            }
+            catch (Exception)
+            {
+                
+                //throw;
+            }
+            
         }
 
         #endregion

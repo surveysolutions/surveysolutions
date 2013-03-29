@@ -12,6 +12,11 @@ function ($, ko) {
                 $(element).attr('data-placement', options.placement || 'right');
                 $(element).attr('data-trigger', options.trigger || 'click');
                 $(element).popover({ html: false });
+            } else {
+                $(element).removeAttr('data-title');
+                $(element).removeAttr('data-placement');
+                $(element).removeAttr('data-trigger');
+                $(element).popover('destroy');
             }
         }
     };

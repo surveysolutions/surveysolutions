@@ -6,6 +6,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -18,16 +20,39 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            Items = items;
+            allItems = items;
         }
         public DashboardSurveyItem(Guid publicKey, string surveyTitle)
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            Items = new List<DashboardQuestionnaireItem>();
+            allItems = new List<DashboardQuestionnaireItem>();
         }
         public Guid PublicKey { get; private set; }
         public string SurveyTitle { get; private set; }
-        public IList<DashboardQuestionnaireItem> Items { get; private set; }
+        public IList<DashboardQuestionnaireItem> VisibleItems
+        {
+            get { return allItems.Where(i => i.Visible).ToList(); }
+        }
+
+        public IList<DashboardQuestionnaireItem> AllItems {
+            get { return allItems; }
+        }
+
+        public void AddItem(DashboardQuestionnaireItem item)
+        {
+            RemoveItem(item.PublicKey);
+            allItems.Add(item);
+        }
+
+        public void RemoveItem(Guid key)
+        {
+            var currentItem = allItems.FirstOrDefault(i => i.PublicKey == key);
+            if (currentItem != null)
+                allItems.Remove(currentItem);
+        }
+
+
+        private IList<DashboardQuestionnaireItem> allItems;
     }
 }

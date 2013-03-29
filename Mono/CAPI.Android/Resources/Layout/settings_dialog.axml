@@ -5,17 +5,20 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+         android:id="@+id/llContainer">
         <TextView
             android:text="Synchronization Point"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:textSize="20dp"
             android:id="@+id/textSyncPoint" />
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dip"
             android:layout_marginBottom="20dip"
+            android:enabled="false"
             android:id="@+id/editSettingsSyncPoint"
             android:singleLine="true" />
         <Button
@@ -23,6 +26,26 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10px"
+            android:visibility="gone"
             android:text="Save" />
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_margin="25px" />
+        <Button
+            android:id="@+id/btnCollect"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:visibility="gone"
+            android:text="Free Memory Light" />
+        <Button
+            android:id="@+id/btnCollectMajor"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10px"
+            android:visibility="gone"
+            android:text="Free Memory" />
     </LinearLayout>
 </ScrollView>

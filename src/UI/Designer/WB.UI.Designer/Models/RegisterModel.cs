@@ -50,6 +50,7 @@ namespace WB.UI.Designer.Models
         /// </summary>
         [Required]
         [Display(Name = "User name", Order = 1)]
+        [RegularExpression("^[a-z0-9_]{3,15}$", ErrorMessage = "User name need to be between 3 and 15 characters and contains only letters, digits and symbol \"_\".")]
         public string UserName { get; set; }
 
         #endregion

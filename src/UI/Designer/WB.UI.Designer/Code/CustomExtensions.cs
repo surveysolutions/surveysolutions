@@ -6,7 +6,6 @@
 //   The custom extensions.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace WB.UI.Designer.Extensions
 {
     using System;
@@ -14,11 +13,25 @@ namespace WB.UI.Designer.Extensions
     using System.Web.Security;
 
     /// <summary>
-    /// The custom extensions.
+    ///     The custom extensions.
     /// </summary>
     public static class CustomExtensions
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        /// The as guid.
+        /// </summary>
+        /// <param name="source">
+        /// The source.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Guid"/>.
+        /// </returns>
+        public static Guid AsGuid(this object source)
+        {
+            return (Guid)source;
+        }
 
         /// <summary>
         /// The invert special.
@@ -30,7 +43,8 @@ namespace WB.UI.Designer.Extensions
         /// The need value.
         /// </param>
         /// <returns>
-        /// The <see>
+        /// The
+        ///     <see>
         ///         <cref>int?</cref>
         ///     </see>
         ///     .

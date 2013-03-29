@@ -19,10 +19,12 @@ using Cirrious.MvvmCross.Binding.Droid.Simple;
 
 namespace CAPI.Android
 {
+    using global::Android.Content.PM;
+
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi")]
+    [Activity(NoHistory = true, Icon = "@drawable/capi",ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
         #region Properties

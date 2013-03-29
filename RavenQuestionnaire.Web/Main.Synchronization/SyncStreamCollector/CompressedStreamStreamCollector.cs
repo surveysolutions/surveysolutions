@@ -129,32 +129,32 @@ namespace Main.Synchronization.SyncStreamCollector
         /// </returns>
         public MemoryStream GetExportedStream()
         {
-            var zip = new ZipFile();
+            if (zipStream == null)
+            {
+               var zipFile = new ZipFile();
 
-            zip.CompressionLevel = CompressionLevel.BestSpeed;
-            zip.ParallelDeflateThreshold = -1;
+                zipFile.CompressionLevel = CompressionLevel.BestSpeed;
+                zipFile.ParallelDeflateThreshold = -1;
 
-            var result = JsonConvert.SerializeObject(
-                new ZipFileData
-                    {
-                        ClientGuid = this.ProcessGuid, Events = this.eventStore
-                    }, 
-                Formatting.None, 
-                new JsonSerializerSettings
-                    {
-                        TypeNameHandling = TypeNameHandling.Objects
-                    });
+                var result =
+                    JsonConvert.SerializeObject(
+                        new ZipFileData { ClientGuid = this.ProcessGuid, Events = this.eventStore },
+                        Formatting.None,
+                        new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
+                zipFile.AddEntry("backup.txt", result);
 
-            zip.AddEntry("backup.txt", result);
+                zipStream = new MemoryStream();
+                zipFile.Save(zipStream);
+            }
 
-            var outputStream = new MemoryStream();
-            zip.Save(outputStream);
-
-            outputStream.Position = 0;
-
-            return outputStream;
+            zipStream.Position = 0;
+            return zipStream;
         }
+
+
+        private MemoryStream zipStream;
+
 
         /// <summary>
         /// The prepare to collect.
