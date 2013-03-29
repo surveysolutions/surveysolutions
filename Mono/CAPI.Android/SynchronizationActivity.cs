@@ -296,6 +296,7 @@ namespace CAPI.Android
                                     finally
                                     {
                                         result.Progress = 100;
+                                        GC.Collect();
                                     }
                                 });
 
