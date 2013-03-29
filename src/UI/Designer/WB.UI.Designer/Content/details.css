@@ -687,3 +687,11 @@ h1 {
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
+.editor {
+    height: 100px;
+    width: 100%;
+}
+.editor-container{
+    height: 100px;
+    margin-bottom: 10px;
+}
