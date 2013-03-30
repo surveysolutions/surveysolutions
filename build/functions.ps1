@@ -55,9 +55,11 @@ function GetSolutionsToBuild() {
     return $solutionsToBuild
 }
 
-function BuildSolution($Solution, $BuildConfiguration) {
-    $progressMessage = "Building solution $([array]::IndexOf($solutionsToBuild, $Solution) + 1) of $($solutionsToBuild.Count) $Solution"
-    Write-Host "##teamcity[blockOpened name='$Solution']"
+function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutions, $IndexOfSolution = 0, $CountOfSolutions = 1) {
+    $progressMessage = if ($MultipleSolutions) { "Building solution $($IndexOfSolution + 1) of $CountOfSolutions $Solution" } else { "Building solution $Solution" }
+    $blockMessage = if ($MultipleSolutions) { $Solution } else { "Building solution $Solution" }
+
+    Write-Host "##teamcity[blockOpened name='$blockMessage']"
     Write-Host "##teamcity[progressStart '$progressMessage']"
 
     & (GetPathToMSBuild) $Solution '/t:Build' "/p:Configuration=$BuildConfiguration" | Write-Host
@@ -65,11 +67,15 @@ function BuildSolution($Solution, $BuildConfiguration) {
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='failed to build $Solution']"
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build $Solution']"
+
+        if (-not $MultipleSolutions) {
+            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $Solution']"
+        }
     }
 
     Write-Host "##teamcity[progressFinish '$progressMessage']"
-    Write-Host "##teamcity[blockClosed name='$Solution']"
+    Write-Host "##teamcity[blockClosed name='$blockMessage']"
 
     return $wasBuildSuccessfull
 }
@@ -84,7 +90,12 @@ function BuildSolutions($BuildConfiguration) {
     if ($solutionsToBuild -ne $null) {
         foreach ($solution in $solutionsToBuild) {
 
-            $wasBuildSuccessfull = BuildSolution $solution $BuildConfiguration
+            $wasBuildSuccessfull = BuildSolution `
+                -Solution $solution `
+                -BuildConfiguration $BuildConfiguration `
+                -MultipleSolutions `
+                -IndexOfSolution ([array]::IndexOf($solutionsToBuild, $solution)) `
+                -CountOfSolutions $solutionsToBuild.Count `
 
             if (-not $wasBuildSuccessfull) {
                 $failedSolutions += $solution
