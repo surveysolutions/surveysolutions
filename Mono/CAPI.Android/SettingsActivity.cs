@@ -9,7 +9,11 @@ using CAPI.Android.Settings;
 
 namespace CAPI.Android
 {
-    [Activity(/*NoHistory = true,*/ Icon = "@drawable/capi")]
+    using global::Android.Content.PM;
+
+    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |
+                               ConfigChanges.KeyboardHidden |
+                                ConfigChanges.ScreenSize)]
     public class SettingsActivity : Activity
     {
         /// <summary>
@@ -32,18 +36,65 @@ namespace CAPI.Android
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.settings_dialog);
+            buttonChange.Click += this.buttonChange_Click;
+            editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
+            buttonCollect.Click += this.buttonCollect_Click;
+            buttonCollectMajor.Click += this.buttonCollectMajor_Click;
+            textSyncPoint.Click += textSyncPoint_Click;
+            llContainer.Click += llContainer_Click;
+        }
 
-            var buttonChange = this.FindViewById<Button>(Resource.Id.btnSyncPoint);
-            if (buttonChange != null)
-            {
-                buttonChange.Click += this.buttonChange_Click;
-            }
+        void llContainer_Click(object sender, EventArgs e)
+        {
+            clickCount = 0;
+        }
 
-            var editSettingsSync = this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint);
-            if (editSettingsSync != null)
+        private void textSyncPoint_Click(object sender, EventArgs e)
+        {
+            clickCount++;
+            if (clickCount >= NUMBER_CLICK)
             {
-                editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
+                editSettingsSync.Enabled = true;
+                buttonCollectMajor.Visibility = buttonCollect.Visibility = buttonChange.Visibility = ViewStates.Visible;
             }
+        }
+
+        private int clickCount = 0;
+        const int NUMBER_CLICK=10;
+
+        protected Button buttonChange
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnSyncPoint); }
+        }
+        protected Button buttonCollect
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnCollect); }
+        }
+        protected Button buttonCollectMajor
+        {
+            get { return this.FindViewById<Button>(Resource.Id.btnCollectMajor); }
+        }
+        protected TextView textSyncPoint {
+            get { return this.FindViewById<TextView>(Resource.Id.textSyncPoint); }
+        }
+        protected EditText editSettingsSync
+        {
+            get { return this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint); }
+        }
+        protected LinearLayout llContainer {
+            get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
+        }
+
+        private void buttonCollectMajor_Click(object sender, EventArgs e)
+        {
+            GC.Collect(GC.MaxGeneration);
+            GC.Collect(GC.MaxGeneration);
+        }
+
+        private void buttonCollect_Click(object sender, EventArgs e)
+        {
+            GC.Collect(0);
+            GC.Collect(0);
         }
 
         private void buttonChange_Click(object sender, EventArgs e)
@@ -51,14 +102,14 @@ namespace CAPI.Android
             var editSettingsSync = this.FindViewById<EditText>(Resource.Id.editSettingsSyncPoint);
             if (editSettingsSync != null)
             {
-               if(SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
-               {
-                   editSettingsSync.SetBackgroundColor(Color.Green);
-               }
-               else
-               {
-                   editSettingsSync.SetBackgroundColor(Color.Red);
-               }
+                if (SettingsManager.SetSyncAddressPoint(editSettingsSync.Text))
+                {
+                    editSettingsSync.SetBackgroundColor(Color.Green);
+                }
+                else
+                {
+                    editSettingsSync.SetBackgroundColor(Color.Red);
+                }
             }
         }
     }

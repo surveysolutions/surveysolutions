@@ -1,0 +1,19 @@
+﻿@using WB.UI.Designer
+<div id="mDelete" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Delete <small>confirmation</small></h3>
+    </div>
+    <div class="modal-body">
+        Do you really want to delete "<strong data-bind="text: itemName"></strong>" <small data-bind="text: itemType"></small>?
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        @using (Html.BeginForm("delete", GlobalHelper.CurrentController, FormMethod.Post, new { style = "display: inline-block; height: 20px" }))
+        {
+            @Html.AntiForgeryToken()
+            <input name="id" data-bind="value: itemId" type="hidden"/>
+            <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
+        }
+    </div>
+</div>

@@ -11,6 +11,7 @@ using CAPI.Android.Core.Model.Authorization;
 using System;
 using System.Collections.Generic;
 using Android.Content;
+using CAPI.Android.Extensions;
 
 namespace CAPI.Android.Controls.Navigation
 {
@@ -143,14 +144,7 @@ namespace CAPI.Android.Controls.Navigation
         protected bool LogOff(object sender, EventArgs e)
         {
             this.membership.LogOff();
-            Intent intent = new Intent(this.context, typeof(LoginActivity));
-            intent.PutExtra("finish", true); // if you are checking for this in your other Activities
-            intent.SetFlags(ActivityFlags.ClearTop |
-                            ActivityFlags.ClearTask |
-                            ActivityFlags.NewTask);
-            
-            this.context.StartActivity(intent);
-            
+            this.context.ClearAllBackStack<LoginActivity>();
             //this.context.StartActivity(typeof(LoginActivity));
             return true;
         }

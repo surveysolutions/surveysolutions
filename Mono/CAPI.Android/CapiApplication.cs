@@ -9,6 +9,7 @@ using CAPI.Android.Core.Model.EventHandlers;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Unmanaged;
+using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
@@ -117,8 +118,8 @@ namespace CAPI.Android
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             var manager = this.GetSystemService(Context.ActivityService) as ActivityManager;
             var topActivity = manager.GetRunningTasks(1).Last().TopActivity;
-            if (!topActivity.ClassName.Contains(typeof(SplashScreenActivity).Name))
-                GenerateEvents();
+            if (!topActivity.ClassName.Contains(typeof (SplashScreenActivity).Name))
+                this.ClearAllBackStack<SplashScreenActivity>();
         }
         
         private readonly IKernel kernel;
@@ -143,8 +144,7 @@ namespace CAPI.Android
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
           
-            var events = eventStore.GetAllEvents();
-            foreach (CommittedEvent committedEvent in events)
+            foreach (CommittedEvent committedEvent in eventStore.GetAllEvents())
             {
                 bus.Publish(committedEvent);
             }
@@ -208,10 +208,14 @@ namespace CAPI.Android
 
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-          
-            
         }
 
-   
+
+
+        public override void OnLowMemory()
+        {
+            base.OnLowMemory();
+            GC.Collect();
+        }
     }
 }

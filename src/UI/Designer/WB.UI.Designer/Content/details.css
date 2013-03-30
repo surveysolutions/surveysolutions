@@ -488,6 +488,7 @@ h1 {
     background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     background: linear-gradient(top, rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     border-radius: 4px;
+    min-height: 34px;
 }
 
     .q-item .icon-warning-sign {
@@ -685,4 +686,12 @@ h1 {
 .details.stack .answer-options{
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
+}
+.editor {
+    height: 100px;
+    width: 100%;
+}
+.editor-container{
+    height: 100px;
+    margin-bottom: 10px;
 }

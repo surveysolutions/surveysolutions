@@ -20,8 +20,8 @@ namespace WB.UI.Designer
                         "~/Scripts/jquery-ui-{version}.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.unobtrusive*",
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/jquery.validate.js",
+                        "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
@@ -87,6 +87,13 @@ namespace WB.UI.Designer
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Scripts/bootstrap.js"
                 ));
+
+            bundles.Add(new ScriptBundle("~/bundles/ace").Include(
+                "~/Scripts/lib/ace/ace.js",
+                "~/Scripts/lib/ace/knockout-ace.js",
+                "~/Scripts/lib/ace/mode-ncalc.js",
+                "~/Scripts/lib/ace/theme-designer.js"
+            ));
 
             bundles.Add(new StyleBundle("~/content/css").Include(
                 "~/Content/bootstrap.css",

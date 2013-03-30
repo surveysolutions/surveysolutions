@@ -48,13 +48,14 @@ namespace WB.UI.Designer.BootstrapSupport
                                           .Where(
                                               info =>
                                               (info.Name != elementType.IdentifierPropertyName())
-                                              && !actionProperties.Select(x => x.Name)
-                                                                  .Contains(info.Name))
+                                              && actionProperties.All(x => x.Name != info.Name)
+                                              && (UserHelper.IsAdmin
+                                                  || info.GetAttribute<OnlyForAdminAttribute>()
+                                                  == null))
                                           .OrderedByDisplayAttr()
                                           .ToArray(),
                            ActionProperties = actionProperties
                        };
-
         }
 
         public static PropertyInfo[] VisibleProperties(this Object model)
@@ -89,6 +90,12 @@ namespace WB.UI.Designer.BootstrapSupport
             return model.GetType().GetProperty(model.IdentifierPropertyName()).GetValue(model, new object[0]);
         }
 
+        public static object GetName(this object model)
+        {
+            var property = model.GetType().GetProperties().First(info => info.AttributeExists<DefaultAttribute>()).Name;
+            return model.GetType().GetProperty(property).GetValue(model, new object[0]);
+        }
+
 
         public static string IdentifierPropertyName(this Object model)
         {
@@ -97,11 +104,11 @@ namespace WB.UI.Designer.BootstrapSupport
 
         public static string IdentifierPropertyName(this Type type)
         {
-            if (type.GetProperties().Any(info => info.AttributeExists<System.ComponentModel.DataAnnotations.KeyAttribute>()))
+            if (type.GetProperties().Any(info => info.AttributeExists<KeyAttribute>()))
             {
                 return
                     type.GetProperties().First(
-                        info => info.AttributeExists<System.ComponentModel.DataAnnotations.KeyAttribute>())
+                        info => info.AttributeExists<KeyAttribute>())
                         .Name;
             }
             else if (type.GetProperties().Any(p => p.Name.Equals("id", StringComparison.CurrentCultureIgnoreCase)))

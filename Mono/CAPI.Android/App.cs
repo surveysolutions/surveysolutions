@@ -5,9 +5,7 @@ using Cirrious.MvvmCross.Interfaces.ViewModels;
 
 namespace CAPI.Android
 {
-    public class App
-         : MvxApplication
-         , IMvxServiceProducer
+    public class App: MvxApplication, IMvxServiceProducer
     {
         public App()
         {

@@ -8,7 +8,7 @@ namespace WB.UI.Designer.Models
     public class AccountViewModel
     {
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         [Display(Name = "Name")]
         public string UserName { get; set; }
