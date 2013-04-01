@@ -3,12 +3,17 @@
 
 @if (this.Model.Answers != null && this.Model.Answers.Length > 0)
 {
-    <ul>
+    <dl class="dl-horizontal pdf-dl-horizontal">
 
         @foreach (AnswerView answer in this.Model.Answers)
         {
-            <li>@answer.Title</li>
+            <dt>
+                @answer.AnswerValue
+            </dt>
+            <dd>
+                @answer.Title
+            </dd>
         }
 
-    </ul>
+    </dl>
 }
