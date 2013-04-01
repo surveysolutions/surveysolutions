@@ -18,5 +18,10 @@ namespace WB.UI.Designer.Controllers
     {
       return View();
     }
+
+      public ActionResult Forbidden()
+      {
+          return this.View();
+      }
   }
 }

@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Controllers
     ///     The account controller.
     /// </summary>
     [CustomAuthorize]
-    public class AccountController : AlertController
+    public class AccountController : BaseController
     {
         #region Public Methods and Operators
 
@@ -215,7 +215,7 @@ namespace WB.UI.Designer.Controllers
 
             if (this.ModelState.IsValid)
             {
-                MembershipUser user = Membership.GetUser(model.UserName);
+                MembershipUser user = Membership.GetUser(model.UserName, false);
                 if (user == null)
                 {
                     this.Error(string.Format("User {0} does not exist. Please enter a valid user name", model.UserName));
@@ -342,7 +342,7 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         public ActionResult ResendConfirmation(string id)
         {
-            MembershipUser model = Membership.GetUser(id);
+            MembershipUser model = Membership.GetUser(id, false);
             if (model != null)
             {
                 if (!model.IsApproved)
