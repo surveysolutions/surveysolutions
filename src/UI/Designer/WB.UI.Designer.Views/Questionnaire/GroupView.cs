@@ -5,6 +5,8 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Main.Core.View.Question;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace WB.UI.Designer.Views.Questionnaire
 {
@@ -26,6 +28,7 @@ namespace WB.UI.Designer.Views.Questionnaire
 
         public string ConditionExpression { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public Propagate Propagated { get; set; }
 
         public string Description { get; set; }

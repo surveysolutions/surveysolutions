@@ -77,7 +77,7 @@
               self.currentAnswerValue = ko.observable();
               self.currentAnswerTitle = ko.observable();
 
-              self.typeOptions = config.questionTypes;
+              self.typeOptions = _.keys(config.questionTypes);
               self.scopeOptions = config.questionScopes;
               self.orderOptions = config.answerOrders;
 
