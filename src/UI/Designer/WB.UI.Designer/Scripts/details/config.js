@@ -6,12 +6,12 @@
             //-----------------
             questionTypes = [
                 "SingleOption",
-                "YesNo",
-                "DropDownList",
+                "",
+                "",
                 "MultyOption",
                 "Numeric",
                 "DateTime",
-                "GpsCoordinates",
+                "",
                 "Text",
                 "AutoPropagate"
             ],
