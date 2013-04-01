@@ -36,12 +36,29 @@ namespace CAPI.Android
             base.OnCreate(bundle);
 
             this.SetContentView(Resource.Layout.settings_dialog);
+
             buttonChange.Click += this.buttonChange_Click;
             editSettingsSync.Text = SettingsManager.GetSyncAddressPoint();
             buttonCollect.Click += this.buttonCollect_Click;
             buttonCollectMajor.Click += this.buttonCollectMajor_Click;
             textSyncPoint.Click += textSyncPoint_Click;
             llContainer.Click += llContainer_Click;
+
+            textMem.Click += textMem_Click;
+
+            textMem.Text = String.Format(
+                "Memory:{0} bytes, assemblies loaded:{1}", 
+                GC.GetTotalMemory(false), 
+                AppDomain.CurrentDomain.GetAssemblies().Length);
+
+        }
+
+        private void textMem_Click(object sender, EventArgs e)
+        {
+            textMem.Text = String.Format(
+                "Memory:{0} bytes, assemblies loaded:{1}",
+                GC.GetTotalMemory(false),
+                AppDomain.CurrentDomain.GetAssemblies().Length);
         }
 
         void llContainer_Click(object sender, EventArgs e)
@@ -76,6 +93,11 @@ namespace CAPI.Android
         }
         protected TextView textSyncPoint {
             get { return this.FindViewById<TextView>(Resource.Id.textSyncPoint); }
+        }
+
+        protected TextView textMem
+        {
+            get { return this.FindViewById<TextView>(Resource.Id.textMem); }
         }
         protected EditText editSettingsSync
         {
