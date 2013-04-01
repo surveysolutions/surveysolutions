@@ -11,3 +11,11 @@
     padding: 15px;
     text-align: center;
 }
+
+.pdf-dl-horizontal dt {
+    width: 30px;
+}
+
+.pdf-dl-horizontal dd {
+    margin-left: 40px;
+}
