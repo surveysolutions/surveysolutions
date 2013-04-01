@@ -220,6 +220,7 @@
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
+    <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -242,7 +243,6 @@
     <Compile Include="Code\Helpers\Routes\RouteCollectionExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
-    <Compile Include="Controllers\AlertController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Code\DesignerRegistry.cs" />
     <Compile Include="Controllers\CommandController.cs" />
@@ -521,6 +521,9 @@
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
+    <Content Include="Views\Shared\ListView.cshtml" />
+    <Content Include="Views\Error\Forbidden.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
