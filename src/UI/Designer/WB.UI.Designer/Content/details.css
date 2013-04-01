@@ -141,7 +141,7 @@ body.loading .loading-backdrop {
         overflow-y: scroll;
     }
 
-    .stack .bottom {
+    .stack .pane-bottom {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -161,7 +161,7 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        .stack .bottom .inner {
+        .stack .pane-bottom .inner {
             padding: 6px 8px 0 8px;
         }
 
@@ -253,7 +253,7 @@ body.loading .loading-backdrop {
         padding-right: 8px;
     }
 
-    #questionnaire .bottom {
+    #questionnaire .pane-bottom {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -273,7 +273,7 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        #questionnaire .bottom .inner {
+        #questionnaire .pane-bottom .inner {
             padding: 6px 8px 0 8px;
         }
 

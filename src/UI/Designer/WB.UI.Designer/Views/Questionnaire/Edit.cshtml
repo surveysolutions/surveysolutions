@@ -107,7 +107,19 @@
                 <!-- ko if : level() != 0 -->
                 <div class="row-fluid">
                     <label class="required">Kind of propagation</label>
-                    <select class="span12" data-bind="options: typeOptions, value: gtype"></select>
+                    <div class="btn-group">
+                        <button
+                            data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
+                            None</button>
+                        <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
+                    </div>
+
+                    <a href="#" class="btn btn-warning btn-small"
+                       data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
+                       data-original-title="Kind of propagation"
+                       data-html="true"
+                       data-placement="bottom"
+                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
                 </div>
                 <!-- /ko -->
                 <div class="row-fluid">
@@ -116,14 +128,14 @@
                         <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
                     </div>
                 </div>
-                
+
                 <label>Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
-                
+
             </div>
-            <div class="bottom">
+            <div class="pane-bottom">
                 <div class="inner">
                     <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
@@ -175,12 +187,12 @@
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
-                
+
                 <label>Validation expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
-                
+
                 <div class="row-fluid">
                     <label>Validation message</label>
                     <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
@@ -193,7 +205,7 @@
                 </div>
             </div>
 
-            <div class="bottom">
+            <div class="pane-bottom">
                 <div class="inner">
                     <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>

@@ -30,7 +30,7 @@
             ],
             groupTypes = [
                 "None",
-                "Propagated",
+                "",
                 "AutoPropagated"
             ],
             commands = {
