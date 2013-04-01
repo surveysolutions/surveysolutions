@@ -50,12 +50,12 @@ namespace Ncqrs.Restoring.EventStapshoot
                 LastPersistedSnapshot = snapshot.Version;
         }
 
-        protected override void ValidateHistoricalEvent(CommittedEvent evnt)
+      /*  protected override void ValidateHistoricalEvent(CommittedEvent evnt)
         {
             base.ValidateHistoricalEvent(evnt);
             if (evnt.Payload is SnapshootLoaded)
                 throw new InvalidCommittedEventException("event stream can't contain snapshots");
-        }
+        }*/
         protected void OnCreateNewSnapshot(SnapshootLoaded e)
         {
             LastPersistedSnapshot = this.Version;

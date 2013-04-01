@@ -51,7 +51,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             aggregateRoot.InitializeFromHistory(eventStream);
             Assert.IsTrue(aggregateRoot.EventHandlingCounter == 1);
         }
-        [Test]
+   /*     [Test]
         public void InitializeFromHistory_OneSnatshotIsAvalible_ExceptionThrowed()
         {
             Guid aggreagateRootId = Guid.NewGuid();
@@ -84,7 +84,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                            new Version()));
             DummyAR aggregateRoot = new DummyAR();
             Assert.Throws<InvalidCommittedEventException>(() => aggregateRoot.InitializeFromHistory(eventStream));
-        }
+        }*/
 
         [Test]
         public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_SnapshotSaved()

@@ -27,7 +27,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
-            TryToRemoveFromOtherDashboard(evnt.EventSourceId);
+          
             PropeedCompleteQuestionnaire(document);
         }
 
@@ -42,19 +42,23 @@ namespace CAPI.Android.Core.Model.EventHandlers
             AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
         }
 
-        protected void TryToRemoveFromOtherDashboard(Guid questionnarieKey)
+        protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
         {
-            foreach (var dashboard in _documentStorage.Query())
+            foreach (var dashboard in _documentStorage.Query().Where(d=>d.OwnerKey!=owner))
             {
-                foreach (var dashboardSurveyItem in dashboard.Surveys)
+                var survey = dashboard.GetSurvey(template);
+                if (survey != null)
                 {
-                    dashboardSurveyItem.Remove(questionnarieKey);
+                    if(survey.Remove(questionnarieKey))
+                        return;
                 }
             }
         }
 
         protected void AddToDashboard(DashboardQuestionnaireItem item, Guid dashbordOwner, Guid templateKey, string templateTitle)
         {
+            TryToRemoveFromOtherDashboards(item.PublicKey, templateKey, dashbordOwner);
+
             var dashboard = _documentStorage.GetByGuid(dashbordOwner);
             if (dashboard == null)
             {
@@ -81,8 +85,14 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 return;
             foreach (var dashboardSurveyItem in dashboard.Surveys)
             {
-                if (dashboardSurveyItem.TryToChangeQuestionnaireState(evnt.EventSourceId, evnt.Payload.Status))
-                    break;
+                var questionnarie = dashboardSurveyItem[evnt.EventSourceId];
+                if (questionnarie != null)
+                {
+                    questionnarie.SetStatus(evnt.Payload.Status);
+                    return;
+                }
+                /* if (dashboardSurveyItem.TryToChangeQuestionnaireState(evnt.EventSourceId, evnt.Payload.Status))
+                    break;*/
             }
         }
 

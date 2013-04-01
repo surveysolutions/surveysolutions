@@ -15,44 +15,61 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DashboardSurveyItem 
+    public class DashboardSurveyItem :MvxViewModel
     {
         public DashboardSurveyItem(Guid publicKey, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items)
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            allItems = items.ToList();
+            allItems = items.ToDictionary(k => k.PublicKey, v => v);
         }
         public DashboardSurveyItem(Guid publicKey, string surveyTitle)
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            allItems = new List<DashboardQuestionnaireItem>();
+            allItems = new Dictionary<Guid, DashboardQuestionnaireItem>();
         }
         public Guid PublicKey { get; private set; }
         public string SurveyTitle { get; private set; }
-      /*  public IList<DashboardQuestionnaireItem> VisibleItems
-        {
-            get { return allItems.Where(i => i.Visible).ToList(); }
-        }*/
 
         public IList<DashboardQuestionnaireItem> ActiveItems {
-            get { return allItems.Where(i=>IsVisible(i.Status)).ToList(); }
+            get { return cacheddItems; }
         }
 
-        public DashboardQuestionnaireItem GetItem(Guid key)
+        private IList<DashboardQuestionnaireItem> cacheddItems = new List<DashboardQuestionnaireItem>();
+
+        private void RecacheItems()
         {
-            return allItems.FirstOrDefault(i => i.PublicKey == key);
+            cacheddItems = allItems.Where(i => IsVisible(i.Value.Status)).Select(i => i.Value).ToList();
+            this.RaisePropertyChanged("ActiveItems");
+        }
+
+        public DashboardQuestionnaireItem this[Guid key]
+        {
+            get
+            {
+                {
+                    if (!allItems.ContainsKey(key))
+                        return null;
+                    return allItems[key];
+                }
+            }
         }
 
         public void AddItem(DashboardQuestionnaireItem item)
         {
-            if (GetItem(item.PublicKey) != null)
-                Remove(item.PublicKey);
-            allItems.Add(item);
+            if (!allItems.ContainsKey(item.PublicKey))
+            {
+                allItems[item.PublicKey] = item;             
+            }
+            else
+            {
+                allItems[item.PublicKey].SetStatus(item.Status);
+            }
+            RecacheItems();
         }
 
-        public bool TryToChangeQuestionnaireState(Guid key, SurveyStatus status)
+        /* public bool TryToChangeQuestionnaireState(Guid key, SurveyStatus status)
         {
             var questionnaire = allItems.FirstOrDefault(i => i.PublicKey == key);
             if (questionnaire != null)
@@ -61,28 +78,23 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                 return true;
             }
             return false;
-        }
-
-
+        }*/
 
         public bool Remove(Guid key)
         {
-            var currentItem = allItems.FirstOrDefault(i => i.PublicKey == key);
-            if (currentItem != null)
-            {
-                return allItems.Remove(currentItem);
-            }
-            return false;
+            if (!allItems.ContainsKey(key))
+                return false;
+            allItems.Remove(key);
+            RecacheItems();
+            return true;
         }
 
         protected bool IsVisible(SurveyStatus status)
         {
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
                    status == SurveyStatus.Error;
-
-
         }
 
-        private IList<DashboardQuestionnaireItem> allItems;
+        private IDictionary<Guid,DashboardQuestionnaireItem> allItems;
     }
 }
