@@ -51,7 +51,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             aggregateRoot.InitializeFromHistory(eventStream);
             Assert.IsTrue(aggregateRoot.EventHandlingCounter == 1);
         }
-        [Test]
+   /*     [Test]
         public void InitializeFromHistory_OneSnatshotIsAvalible_ExceptionThrowed()
         {
             Guid aggreagateRootId = Guid.NewGuid();
@@ -84,10 +84,10 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                            new Version()));
             DummyAR aggregateRoot = new DummyAR();
             Assert.Throws<InvalidCommittedEventException>(() => aggregateRoot.InitializeFromHistory(eventStream));
-        }
+        }*/
 
         [Test]
-        public void CreateNewSnapshot_LastEventIsSnapshot_Nothing()
+        public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_SnapshotSaved()
         {
             // arrange
             DummyAR ar =new DummyAR();
@@ -95,9 +95,54 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             ar.InitializeFromSnapshot(snapshot);
             ar.RestoreFromSnapshot(snapshot);
             ar.CreateNewSnapshot();
+            Assert.That(this.eventContext.Events.Count(), Is.EqualTo(1));
+            Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
+        }
+
+        [Test]
+        public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_Nothing()
+        {
+            // arrange
+            DummyAR ar = new DummyAR();
+            var snapshot = new CommitedSnapshot(ar.EventSourceId, 1, new object());
+            ar.InitializeFromSnapshot(snapshot);
+            ar.RestoreFromSnapshot(snapshot);
+            ar.CreateNewSnapshot();
             Assert.That(this.eventContext.Events.Count(), Is.EqualTo(0));
             Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
         }
+        [Test]
+        public void CreateNewSnapshot_SnpshotEventSequence_NewSnpapshotIsCreate()
+        {
+            // arrange
+            DummyAR ar = new DummyAR();
+            var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
+            ar.InitializeFromSnapshot(snapshot);
+            ar.RestoreFromSnapshot(snapshot);
+            ar.DummyCommand();
+            ar.CreateNewSnapshot();
+            var snapshotEvent = this.eventContext.Events.Last();
+            Assert.AreEqual(snapshotEvent.EventSequence, 3);
+            Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
+        }
+    /*    [Test]
+        public void CreateNewSnapshot_SnpshotEventSnpshotSequence_NewSnpapshotIsCreate()
+
+        [Test]
+        public void CreateNewSnapshot_LastEventIsNotSnapshot_EventsHasTheSameUtsTime()
+        {
+            // arrange
+            DummyAR ar = new DummyAR();
+            var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
+            ar.InitializeFromSnapshot(snapshot);
+            ar.RestoreFromSnapshot(snapshot);
+            ar.DummyCommand();
+            ar.CreateNewSnapshot();
+            ar.CreateNewSnapshot();
+            var snapshotEvent = this.eventContext.Events.Last();
+            Assert.AreEqual(snapshotEvent.EventSequence, 3);
+            Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
+        }*/
         [Test]
         public void CreateNewSnapshot_LastEventIsNotSnapshot_SnapshotIsCreatedAndStored()
         {
@@ -146,6 +191,11 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             protected void OnDummyEventHandler(object evt)
             {
                 this.EventHandlingCounter++;
+            }
+
+            public void DummyCommand()
+            {
+                ApplyEvent(new object());
             }
 
             #region Overrides of SnapshootableAggregateRoot<object>

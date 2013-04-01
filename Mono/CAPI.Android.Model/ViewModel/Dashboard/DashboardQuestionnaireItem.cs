@@ -60,22 +60,14 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         /// <summary>
         /// Gets the status.
         /// </summary>
-        public string Status
+        public SurveyStatus Status
         {
-            get { return status.Name; }
+            get { return status; }
         }
 
         private SurveyStatus status;
-
-        public bool Visible
-        {
-            get
-            {
-                return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                       status == SurveyStatus.Error;
-
-            }
-        }
+        
+     
 
         /// <summary>
         /// Gets the view detail command.

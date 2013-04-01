@@ -7,6 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using Main.Core.View.User;
+
 namespace CAPI.Android
 {
     using System;
@@ -344,6 +350,7 @@ namespace CAPI.Android
             {
                 var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
                 manager.StartPump();
+                CapiApplication.SaveProjections();
                 return true;
             }
             catch (Exception ex)
@@ -353,6 +360,8 @@ namespace CAPI.Android
                 return false;
             }
         }
+
+       
 
         /// <summary>
         ///     The pull.

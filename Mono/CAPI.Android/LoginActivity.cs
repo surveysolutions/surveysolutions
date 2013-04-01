@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Collections.Generic;
+using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using System;
 using Android.App;
@@ -16,6 +18,12 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+using Ninject;
 
 namespace CAPI.Android
 {
@@ -24,7 +32,8 @@ namespace CAPI.Android
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi",ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
+    [Activity(NoHistory = true, Icon = "@drawable/capi",
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
         #region Properties
@@ -34,10 +43,7 @@ namespace CAPI.Android
         /// </summary>
         protected Button btnLogin
         {
-            get
-            {
-                return this.FindViewById<Button>(Resource.Id.btnLogin);
-            }
+            get { return this.FindViewById<Button>(Resource.Id.btnLogin); }
         }
 
         /// <summary>
@@ -45,10 +51,7 @@ namespace CAPI.Android
         /// </summary>
         protected EditText teLogin
         {
-            get
-            {
-                return this.FindViewById<EditText>(Resource.Id.teLogin);
-            }
+            get { return this.FindViewById<EditText>(Resource.Id.teLogin); }
         }
 
         /// <summary>
@@ -56,10 +59,7 @@ namespace CAPI.Android
         /// </summary>
         protected EditText tePassword
         {
-            get
-            {
-                return this.FindViewById<EditText>(Resource.Id.tePassword);
-            }
+            get { return this.FindViewById<EditText>(Resource.Id.tePassword); }
         }
 
         #endregion
@@ -97,7 +97,7 @@ namespace CAPI.Android
             this.ViewModel = new LoginViewModel();
             if (CapiApplication.Membership.IsLoggedIn)
             {
-                this.StartActivity(typeof(DashboardActivity));
+                this.StartActivity(typeof (DashboardActivity));
             }
 
             this.SetContentView(Resource.Layout.Login);
@@ -118,13 +118,31 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                this.StartActivity(typeof(DashboardActivity));
+                restore = () =>
+                    {
+                        CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
+                        this.StartActivity(typeof (DashboardActivity));
+                    };
+                ProgressBar pb = new ProgressBar(this);
+                this.AddContentView(pb,
+                                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                               ViewGroup.LayoutParams.FillParent));
+                restore.BeginInvoke(Callback, restore);
+
                 return;
             }
 
             this.teLogin.SetBackgroundColor(Color.Red);
             this.tePassword.SetBackgroundColor(Color.Red);
         }
+
+        private void Callback(IAsyncResult asyncResult)
+        {
+            Action asyncAction = (Action)asyncResult.AsyncState;
+            asyncAction.EndInvoke(asyncResult);
+        }
+
+        private Action restore;
 
         #endregion
     }

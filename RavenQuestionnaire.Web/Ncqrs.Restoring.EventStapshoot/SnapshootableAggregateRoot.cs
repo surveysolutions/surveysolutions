@@ -24,16 +24,17 @@ namespace Ncqrs.Restoring.EventStapshoot
         /// Initializes a new instance of the <see cref="SnapshootableAggregateRoot"/> class.
         /// </summary>
         protected SnapshootableAggregateRoot()
-            : base(/*new SnapshootableEventHandlerMappingStrategy(*/new ConventionBasedEventHandlerMappingStrategy()/*)*/)
+            : base(new ConventionBasedEventHandlerMappingStrategy())
         {
         }
 
         protected SnapshootableAggregateRoot(Guid id)
-            : base(id, /*new SnapshootableEventHandlerMappingStrategy(*/new ConventionBasedEventHandlerMappingStrategy()/*)*/)
+            : base(id, new ConventionBasedEventHandlerMappingStrategy())
         {
         }
 
-        private bool isLastSnapshotSavedToStream = false;
+        public long? LastPersistedSnapshot { get; private set; }
+   //     private bool isLastEventSnapshot = false;
         #region Implementation of ISnapshotable<T>
 
         public abstract T CreateSnapshot();
@@ -41,8 +42,8 @@ namespace Ncqrs.Restoring.EventStapshoot
         public abstract void RestoreFromSnapshot(T snapshot);
 
         #endregion
+
         public override void InitializeFromSnapshot(Snapshot snapshot)
-        {
             base.InitializeFromSnapshot(snapshot);
             isLastSnapshotSavedToStream = true;
         }
@@ -52,33 +53,34 @@ namespace Ncqrs.Restoring.EventStapshoot
             if (evnt.Payload is SnapshootLoaded)
                 throw new InvalidCommittedEventException("event stream can't contain snapshots");
         }
-        public override void InitializeFromHistory(CommittedEventStream history)
         {
-            if(!history.Any())
-                return;
-         
-            base.InitializeFromHistory(history);
-            isLastSnapshotSavedToStream = false;
-            /*   var lastSnapshoot = history.LastOrDefault(e => e.Payload is SnapshootLoaded);
-               if (lastSnapshoot == null)
-               {
-                   base.InitializeFromHistory(history);
-                   return;
-               }
+            base.InitializeFromSnapshot(snapshot);
+            if (snapshot is CommitedSnapshot)
+                LastPersistedSnapshot = snapshot.Version;
+        }
 
-               var newHistory = new CommittedEventStream(history.SourceId,
-                                                         history.SkipWhile(e => e != lastSnapshoot).Skip(1).Select(
-                                                             (e, i) =>
-                                                             new CommittedEvent(e.CommitId, e.EventIdentifier,
-                                                                                e.EventSourceId, e.EventSequence, e.EventTimeStamp,
-                                                                                e.Payload, e.EventVersion)));
-               Snapshot snapshotEvent = ((SnapshootLoaded)lastSnapshoot.Payload).Template;
-               this.InitializeFromSnapshot(new Snapshot(snapshotEvent.EventSourceId, lastSnapshoot.EventSequence, null));
-               this.RestoreFromSnapshot((T)snapshotEvent.Payload);
+      /*  protected override void ValidateHistoricalEvent(CommittedEvent evnt)
+        {
+            base.ValidateHistoricalEvent(evnt);
+            if (evnt.Payload is SnapshootLoaded)
+                throw new InvalidCommittedEventException("event stream can't contain snapshots");
+        }*/
+        protected void OnCreateNewSnapshot(SnapshootLoaded e)
+        {
+            LastPersistedSnapshot = this.Version;
+        }
+        public virtual void CreateNewSnapshot()
+        {
+            if (LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value==Version)
+                return;
+            
+            var snapshoot = CreateSnapshot();
+            var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(this.EventSourceId, this.Version + 1, snapshoot) };
+          
+            ApplyEvent(eventSnapshoot);
            
                if (newHistory.Any())
                {
-                   base.InitializeFromHistory(newHistory);
                }
                else
                {

@@ -15,7 +15,9 @@ namespace Ncqrs.Eventing.Storage
     /// you have an event directory for all your SOA services with a common naming schema).
     /// </remarks>
     /// <seealso cref="AttributeEventTypeResolver"/>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IEventTypeResolverContracts))]
+#endif
     public interface IEventTypeResolver
     {
         /// <summary>
@@ -46,7 +48,7 @@ namespace Ncqrs.Eventing.Storage
         /// <exception cref="ArgumentNullException">If <paramref name="type"/> is <value>null</value>.</exception>
         string EventNameFor(Type type);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IEventTypeResolver))]
     internal abstract class IEventTypeResolverContracts : IEventTypeResolver
     {
@@ -64,4 +66,5 @@ namespace Ncqrs.Eventing.Storage
             return default(string);
         }
     }
+#endif
 }
