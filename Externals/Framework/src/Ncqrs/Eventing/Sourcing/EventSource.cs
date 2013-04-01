@@ -208,7 +208,7 @@ namespace Ncqrs.Eventing.Sourcing
             _currentVersion++;
         }
 
-        private void ValidateHistoricalEvent(CommittedEvent evnt)
+        protected virtual void ValidateHistoricalEvent(CommittedEvent evnt)
         {
             if (evnt.EventSourceId != EventSourceId)
             {
