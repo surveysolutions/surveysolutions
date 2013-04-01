@@ -1,4 +1,7 @@
-﻿@using System.Web.Script.Serialization
+﻿@using System.Runtime.Serialization.Formatters
+@using System.Web.Script.Serialization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Converters
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
@@ -19,7 +22,11 @@
          )
     <script>
         define('input', [], function() {
-            var q = @Html.Raw(serializer.Serialize(Model));
+            var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings ()
+                        {
+                            TypeNameHandling = TypeNameHandling.Objects,
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        })) ;
             return {
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
