@@ -22,6 +22,8 @@
                 questionnaire(datacontext.questionnaire);
                 calcStatistics();
                 $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
+
+
             }
             if (!_.isUndefined(selectedGroup())) {
                 selectedGroup().isSelected(false);
@@ -37,6 +39,12 @@
                 editGroup(routeData.group);
             }
             isInitialized = true;
+
+            $("a[data-toggle=popover]")
+                    .popover()
+                    .click(function (e) {
+                        e.preventDefault();
+                    });
         },
         canLeave = function () {
             return true;
@@ -115,7 +123,7 @@
             calcStatistics();
         },
         deleteGroup = function (item) {
-            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+            bootbox.confirm("Are you sure you want to delete this question?", function (result) {
                 if (result == false)
                     return;
 
@@ -126,10 +134,10 @@
                         config.commands.deleteGroup,
                         item,
                         {
-                            success: function() {
+                            success: function () {
                                 deleteGroupSuccessCallback(item);
                             },
-                            error: function(d) {
+                            error: function (d) {
                                 console.log(d);
                                 errors.removeAll();
                                 errors.push(d);
@@ -170,7 +178,7 @@
                         {
                             success: function () {
                                 deleteQuestionSuccessCallback(item);
-                                
+
                             },
                             error: function (d) {
                                 console.log(d);
@@ -190,13 +198,13 @@
             parent.childrenID.remove(child);
             parent.fillChildren();
             calcStatistics();
-            
+
             if (isFilterMode() == true) {
                 filter.valueHasMutated();
             } else {
                 router.navigateTo(parent.getHref());
             }
-            
+
             hideOutput();
         },
         saveGroup = function (group) {
