@@ -66,7 +66,7 @@
                         var routevalues = model.GetIdValue();
                         var itemId = model.GetId();
                         var itemType = model.GetLabel();
-                        var itemName = model.GetName();
+                        var itemName = Url.Encode(model.GetName());
 
                         if (actionModel.CanEdit)
                         {
