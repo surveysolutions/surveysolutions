@@ -73,6 +73,10 @@
       <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
       <Name>Main.Synchronization</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
