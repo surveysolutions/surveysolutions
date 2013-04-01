@@ -138,7 +138,7 @@ namespace CAPI.Android
 
         private void Callback(IAsyncResult asyncResult)
         {
-            Action<Guid> asyncAction = (Action<Guid>) asyncResult.AsyncState;
+            Action asyncAction = (Action)asyncResult.AsyncState;
             asyncAction.EndInvoke(asyncResult);
         }
 

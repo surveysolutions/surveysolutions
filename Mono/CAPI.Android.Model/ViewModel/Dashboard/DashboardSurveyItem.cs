@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cirrious.MvvmCross.ViewModels;
 using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
@@ -14,7 +15,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DashboardSurveyItem
+    public class DashboardSurveyItem 
     {
         public DashboardSurveyItem(Guid publicKey, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items)
         {
@@ -35,8 +36,8 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             get { return allItems.Where(i => i.Visible).ToList(); }
         }*/
 
-        public IEnumerable<DashboardQuestionnaireItem> ActiveItems {
-            get { return allItems.Where(i=>IsVisible(i.Status)); }
+        public IList<DashboardQuestionnaireItem> ActiveItems {
+            get { return allItems.Where(i=>IsVisible(i.Status)).ToList(); }
         }
 
         public DashboardQuestionnaireItem GetItem(Guid key)
@@ -68,7 +69,9 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             var currentItem = allItems.FirstOrDefault(i => i.PublicKey == key);
             if (currentItem != null)
+            {
                 return allItems.Remove(currentItem);
+            }
             return false;
         }
 

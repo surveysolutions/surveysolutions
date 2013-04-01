@@ -27,6 +27,7 @@ using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
@@ -120,7 +121,6 @@ namespace CAPI.Android
              new DashboardDenormalizer( kernel.Get<IDenormalizerStorage<DashboardModel>>());
             bus.RegisterHandler(dashboardeventHandler, typeof(SnapshootLoaded));
             bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireStatusChanged));
-            bus.RegisterHandler(dashboardeventHandler, typeof(QuestionnaireAssignmentChanged));
             #endregion
 
            
@@ -174,7 +174,7 @@ namespace CAPI.Android
             
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
             var eventStore = NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore;
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as InMemorySnapshootStore;
             var persistanceStorage = CapiApplication.Kernel.Get<IProjectionStorage>();
             var roots = persistanceStorage.RestoreProjection<List<Guid>>(userKey) ?? new List<Guid>();
             foreach (Guid root in roots)
@@ -183,9 +183,14 @@ namespace CAPI.Android
                 var snapshot = eventStore.GetLatestSnapshoot(root);
                 if (snapshot != null)
                 {
+                    /*
+                    bus.Publish(new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), root, snapshot.Version, DateTime.Now,
+                                                   new SnapshootLoaded() {Template = snapshot}, new Version(1, 1)));*/
+              //      snapshotStore.SaveShapshot((snapshot.Payload as SnapshootLoaded).Template);
                     bus.Publish(snapshot);
-                    snapshotStore.SaveShapshot((snapshot.Payload as SnapshootLoaded).Template);
-              
+                    snapshotStore.SaveEventToSnapshotStore(snapshot);
+                   /* var newSnapshot = new Snapshot(root, snapshot.EventSequence, (snapshot.Payload as SnapshootLoaded).Template.Payload);*/
+          //          snapshotStore.SaveShapshot((snapshot.Payload as SnapshootLoaded).Template);
                     minVersion = snapshot.EventSequence + 1;
                 }
                 foreach (CommittedEvent committedEvent in

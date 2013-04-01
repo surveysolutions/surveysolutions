@@ -38,6 +38,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\CommitedAggregateSnapshotter.cs">
+      <Link>CommitedAggregateSnapshotter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\CommitedSnapshot.cs">
+      <Link>CommitedSnapshot.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\CreateSnapshotForAR.cs">
       <Link>CreateSnapshotForAR.cs</Link>
     </Compile>
@@ -87,7 +94,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="7598c70b-5772-4ed5-81de-c0d7718bc164" />
+      <UserProperties ProjectLinkReference="7598c70b-5772-4ed5-81de-c0d7718bc164" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

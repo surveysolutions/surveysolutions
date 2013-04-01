@@ -12,8 +12,7 @@ using Ncqrs.Restoring.EventStapshoot;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>, IEventHandler<QuestionnaireAssignmentChanged>
-    {
+    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>{
         private readonly IDenormalizerStorage<DashboardModel> _documentStorage;
 
         public DashboardDenormalizer(IDenormalizerStorage<DashboardModel> documentStorage)
@@ -28,33 +27,30 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
             if (document == null)
                 return;
+            TryToRemoveFromOtherDashboard(evnt.EventSourceId);
             PropeedCompleteQuestionnaire(document);
-
-           
         }
 
         #endregion
         protected void PropeedCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
         {
-          /*  var dashboard = _documentStorage.GetByGuid(doc.Responsible.Id);
-            if (dashboard == null)
-            {
-                dashboard = new DashboardModel();
-                _documentStorage.Store(dashboard, doc.Responsible.Id);
-            }
-            var survey = dashboard.Surveys.FirstOrDefault(s => s.PublicKey == doc.TemplateId);*/
             var featuredItems = doc.Find<ICompleteQuestion>(q => q.Featured);
-           /* if (survey == null)
-            {
-                survey = new DashboardSurveyItem(doc.TemplateId, doc.Title);
-                dashboard.Surveys.Add(survey);
-            }*/
             var item = new DashboardQuestionnaireItem(doc.PublicKey, doc.Status, featuredItems.Select(
               q =>
               new FeaturedItem(q.PublicKey, q.QuestionText,
                                q.GetAnswerString())).ToList());
             AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
-            //  survey.AddItem(item);
+        }
+
+        protected void TryToRemoveFromOtherDashboard(Guid questionnarieKey)
+        {
+            foreach (var dashboard in _documentStorage.Query())
+            {
+                foreach (var dashboardSurveyItem in dashboard.Surveys)
+                {
+                    dashboardSurveyItem.Remove(questionnarieKey);
+                }
+            }
         }
 
         protected void AddToDashboard(DashboardQuestionnaireItem item, Guid dashbordOwner, Guid templateKey, string templateTitle)
@@ -91,7 +87,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         }
 
         #endregion
-
+        /*
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
             var dashboard = _documentStorage.GetByGuid(evnt.Payload.PreviousResponsible.Id);
@@ -107,6 +103,6 @@ namespace CAPI.Android.Core.Model.EventHandlers
                     break;
                 }
             }
-        }
+        }*/
     }
 }
