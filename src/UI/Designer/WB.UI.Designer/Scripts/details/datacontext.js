@@ -1,6 +1,18 @@
 ﻿define('datacontext',
     ['jquery', 'underscore', 'ko', 'model', 'config', 'dataservice', 'model.mapper', 'utils', 'input'],
     function ($, _, ko, model, config, dataservice, modelmapper, utils, input) {
+
+        var stack = [input.questionnaire];
+        while (stack.length > 0) {
+            var item = stack.pop();
+            var type = item['$type'].split(",")[0];
+            item["__type"] = type.substring(type.lastIndexOf('.') + 1);
+            _.each(item.Children, function (q) {
+                stack.push(q);
+            });
+        }
+
+
         var logger = config.logger,
             itemsToArray = function (items, observableArray, filter, sortFunction) {
                 // Maps the memo to an observableArray, 

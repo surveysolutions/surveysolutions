@@ -17,6 +17,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
 using Main.Core.View.Card;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Main.Core.View.Question
 {
@@ -148,6 +150,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
