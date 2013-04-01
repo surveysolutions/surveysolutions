@@ -95,6 +95,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Order AnswerOrder { get; set; }
 
         /// <summary>
@@ -156,6 +157,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets question scope.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QuestionScope QuestionScope { get; set; }
 
         /// <summary>

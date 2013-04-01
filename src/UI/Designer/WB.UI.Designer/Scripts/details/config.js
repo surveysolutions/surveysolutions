@@ -4,17 +4,14 @@
 
         var// properties
             //-----------------
-            questionTypes = [
-                "SingleOption",
-                "",
-                "",
-                "MultyOption",
-                "Numeric",
-                "DateTime",
-                "",
-                "Text",
-                "AutoPropagate"
-            ],
+            questionTypes = {
+                "SingleOption": "SingleOption",
+                "MultyOption" : "MultyOption",
+                "Numeric" : "Numeric",
+                "DateTime" : "DateTime",
+                "Text" : "Text",
+                "AutoPropagate": "AutoPropagate"
+            },
             questionScopes = [
                 "Interviewer",
                 "Supervisor",
