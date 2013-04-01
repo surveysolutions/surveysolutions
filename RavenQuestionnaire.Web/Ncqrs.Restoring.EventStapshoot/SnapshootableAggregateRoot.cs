@@ -34,7 +34,6 @@ namespace Ncqrs.Restoring.EventStapshoot
         }
 
         public long? LastPersistedSnapshot { get; private set; }
-   //     private bool isLastEventSnapshot = false;
         #region Implementation of ISnapshotable<T>
 
         public abstract T CreateSnapshot();
@@ -43,9 +42,10 @@ namespace Ncqrs.Restoring.EventStapshoot
 
         #endregion
 
-        public override void InitializeFromSnapshot(Snapshot snapshot)
+        public override void InitializeFromSnapshot(Snapshot snapshot){
             base.InitializeFromSnapshot(snapshot);
-            isLastSnapshotSavedToStream = true;
+            if (snapshot is CommitedSnapshot)
+                LastPersistedSnapshot = snapshot.Version;
         }
         protected override void ValidateHistoricalEvent(CommittedEvent evnt)
         {
@@ -53,18 +53,7 @@ namespace Ncqrs.Restoring.EventStapshoot
             if (evnt.Payload is SnapshootLoaded)
                 throw new InvalidCommittedEventException("event stream can't contain snapshots");
         }
-        {
-            base.InitializeFromSnapshot(snapshot);
-            if (snapshot is CommitedSnapshot)
-                LastPersistedSnapshot = snapshot.Version;
-        }
-
-      /*  protected override void ValidateHistoricalEvent(CommittedEvent evnt)
-        {
-            base.ValidateHistoricalEvent(evnt);
-            if (evnt.Payload is SnapshootLoaded)
-                throw new InvalidCommittedEventException("event stream can't contain snapshots");
-        }*/
+     
         protected void OnCreateNewSnapshot(SnapshootLoaded e)
         {
             LastPersistedSnapshot = this.Version;
@@ -78,70 +67,9 @@ namespace Ncqrs.Restoring.EventStapshoot
             var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(this.EventSourceId, this.Version + 1, snapshoot) };
           
             ApplyEvent(eventSnapshoot);
-           
-               if (newHistory.Any())
-               {
-               }
-               else
-               {
-                   isLastSnapshotSavedToStream = true;
-               }*/
         }
 
-        protected void OnCreateNewSnapshot(SnapshootLoaded e)
-        {
-            /*if(e.Template.Version!=this.Version)
-                RestoreFromSnapshot(e.Template.Payload as T);*/
-        }
-       /* protected override void OnEventApplied(UncommittedEvent appliedEvent)
-        {
-            base.OnEventApplied(appliedEvent);
-            isLastSnapshotSavedToStream = !(appliedEvent.Payload is SnapshootLoaded);
-        }*/
-        public virtual void CreateNewSnapshot()
-        {
-            if (isLastSnapshotSavedToStream)
-                return;
-            var snapshoot = CreateSnapshot();// arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
-            var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(this.EventSourceId, this.Version + 1, snapshoot) };
-          /*  Guid commitId = Guid.NewGuid();
-            Guid eventId = Guid.NewGuid();
-          //  var uncommitedStream = new UncommittedEventStream(commitId);
-            var dateOfEvent = NcqrsEnvironment.Get<IClock>().UtcNow();*/
-
-            ApplyEvent(eventSnapshoot);
-           /* uncommitedStream.Append(
-                new UncommittedEvent(
-                    eventId,
-                    this.EventSourceId,
-                    this.Version + 1,
-                    this.InitialVersion,
-                    dateOfEvent,
-                    eventSnapshoot,
-                    GetType().Assembly.GetName().Version));*/
-           /* return new CommittedEvent(
-                        commitId,
-                        eventId,
-                        EventSourceId,
-                        1,
-                        dateOfEvent,
-                        eventSnapshoot,
-                        this.GetType().Assembly.GetName().Version);*/
-            /*this.myEventStore.Store(uncommitedStream);
-
-            return new List<AggregateRootEvent>()
-                {
-                    new AggregateRootEvent(
-                        new CommittedEvent(
-                        commitId,
-                        eventId,
-                        aggregateRootId,
-                        1,
-                        dateOfEvent,
-                        eventSnapshoot,
-                        events.Last().GetType().Assembly.GetName().Version))
-                       };*/
-        }
+      
     }
 
 }
