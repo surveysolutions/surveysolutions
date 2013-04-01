@@ -27,7 +27,9 @@
       if ( options.mode ) editor.getSession().setMode("ace/mode/" + options.mode);
 
       editor.setValue(value);
-      editor.gotoLine( 0 );
+      editor.gotoLine(0);
+      editor.renderer.setShowGutter(false);
+      editor.setShowPrintMargin(false);
 
       editor.getSession().on("change",function(delta){
         if (ko.isWriteableObservable(modelValue)) {
