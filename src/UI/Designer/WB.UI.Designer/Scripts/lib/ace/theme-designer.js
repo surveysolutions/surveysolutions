@@ -30,121 +30,115 @@
 
 define('ace/theme/designer', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
 
-exports.isDark = true;
+exports.isDark = false;
 exports.cssClass = "ace-designer";
-exports.cssText = ".ace-designer .ace_gutter {\
-background: #011e3a;\
-color: #fff\
-}\
-.ace-designer .ace_print-margin {\
-width: 1px;\
-background: #011e3a\
+exports.cssText = "/* CSS style content from designer's default pygments highlighter template.\
+Cursor and selection styles from textmate.css. */\
+.ace-designer .ace_gutter {\
+background: #e8e8e8;\
+color: #AAA;\
 }\
 .ace-designer .ace_scroller {\
-background-color: #164b69\
+background: #fff;\
+}\
+.ace-designer .ace_keyword {\
+font-weight: bold;\
+}\
+.ace-designer .ace_string {\
+color: #D14;\
+}\
+.ace-designer .ace_variable.ace_class {\
+color: teal;\
+}\
+.ace-designer .ace_identifier{\
+	color: #AAAAAA;\
+}\
+.ace-designer .ace_variable{\
+	color: blue;\
+    font-weight: bold;\
+}\
+.ace-designer .ace_constant.ace_numeric {\
+color: #099;\
+}\
+.ace-designer .ace_constant.ace_buildin {\
+color: #0086B3;\
+}\
+.ace-designer .ace_support.ace_function {\
+color: #0086B3;\
+}\
+.ace-designer .ace_comment {\
+color: #998;\
+font-style: italic;\
+}\
+.ace-designer .ace_variable.ace_language  {\
+color: #0086B3;\
+}\
+.ace-designer .ace_paren {\
+font-weight: bold;\
+color: #0086B3;\
+}\
+.ace-designer .ace_boolean {\
+font-weight: bold;\
+}\
+.ace-designer .ace_string.ace_regexp {\
+color: #009926;\
+font-weight: normal;\
+}\
+.ace-designer .ace_variable.ace_instance {\
+color: teal;\
+}\
+.ace-designer .ace_constant.ace_language {\
+font-weight: bold;\
 }\
 .ace-designer .ace_text-layer {\
-color: #FFFFFF\
 }\
 .ace-designer .ace_cursor {\
-border-left: 2px solid #FFFFFF\
+border-left: 2px solid black;\
 }\
 .ace-designer .ace_overwrite-cursors .ace_cursor {\
 border-left: 0px;\
-border-bottom: 1px solid #FFFFFF\
+border-bottom: 1px solid black;\
+}\
+.ace-designer .ace_marker-layer .ace_active-line {\
+background: rgb(255, 255, 204);\
 }\
 .ace-designer .ace_marker-layer .ace_selection {\
-background: rgba(179, 101, 57, 0.75)\
+background: rgb(181, 213, 255);\
 }\
 .ace-designer.ace_multiselect .ace_selection.ace_start {\
-box-shadow: 0 0 3px 0px #002240;\
-border-radius: 2px\
+box-shadow: 0 0 3px 0px white;\
+border-radius: 2px;\
+}\
+/* bold keywords cause cursor issues for some fonts */\
+/* this disables bold style for editor and keeps for static highlighter */\
+.ace-designer.ace_nobold .ace_line > span {\
+font-weight: normal !important;\
 }\
 .ace-designer .ace_marker-layer .ace_step {\
-background: rgb(127, 111, 19)\
+background: rgb(252, 255, 0);\
+}\
+.ace-designer .ace_marker-layer .ace_stack {\
+background: rgb(164, 229, 101);\
 }\
 .ace-designer .ace_marker-layer .ace_bracket {\
 margin: -1px 0 0 -1px;\
-border: 1px solid rgba(255, 255, 255, 0.15)\
-}\
-.ace-designer .ace_marker-layer .ace_active-line {\
-background: rgba(0, 0, 0, 0.35)\
+border: 1px solid rgb(192, 192, 192);\
 }\
 .ace-designer .ace_gutter-active-line {\
-background-color: rgba(0, 0, 0, 0.35)\
+background-color : rgba(0, 0, 0, 0.07);\
 }\
 .ace-designer .ace_marker-layer .ace_selected-word {\
-border: 1px solid rgba(179, 101, 57, 0.75)\
+background: rgb(250, 250, 255);\
+border: 1px solid rgb(200, 200, 250);\
 }\
-.ace-designer .ace_invisible {\
-color: rgba(255, 255, 255, 0.15)\
-}\
-.ace-designer .ace_keyword,\
-.ace-designer .ace_meta {\
-color: #FF9D00\
-}\
-.ace-designer .ace_constant,\
-.ace-designer .ace_constant.ace_character,\
-.ace-designer .ace_constant.ace_character.ace_escape,\
-.ace-designer .ace_constant.ace_other {\
-color: #FF628C\
-}\
-.ace-designer .ace_invalid {\
-color: #F8F8F8;\
-background-color: #800F00\
-}\
-.ace-designer .ace_support {\
-color: #80FFBB\
-}\
-.ace-designer .ace_support.ace_constant {\
-color: #EB939A\
-}\
-.ace-designer .ace_fold {\
-background-color: #FF9D00;\
-border-color: #FFFFFF\
-}\
-.ace-designer .ace_support.ace_function {\
-color: #FFB054\
-}\
-.ace-designer .ace_storage {\
-color: #FFEE80\
-}\
-.ace-designer .ace_entity {\
-color: #FFDD00\
-}\
-.ace-designer .ace_string {\
-color: #3AD900\
-}\
-.ace-designer .ace_string.ace_regexp {\
-color: #80FFC2\
-}\
-.ace-designer .ace_comment {\
-font-style: italic;\
-color: #0088FF\
-}\
-.ace-designer .ace_variable {\
-color: #CCCCCC\
-}\
-.ace-designer .ace_variable.ace_language {\
-color: #FF80E1\
-}\
-.ace-designer .ace_meta.ace_tag {\
-color: #9EFFFF\
-}\
-.ace-designer .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
-.ace-designer .ace_markup.ace_heading {\
-color: #C8E4FD;\
-background-color: #001221\
-}\
-.ace-designer .ace_markup.ace_list {\
-background-color: #130D26\
+.ace-designer .ace_print-margin {\
+width: 1px;\
+background: #e8e8e8;\
 }\
 .ace-designer .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgUHL4zzBz5sz/AA80BCzv+WXhAAAAAElFTkSuQmCC) right repeat-y\
+background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
 }";
 
-var dom = require("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass);
+    var dom = require("../lib/dom");
+    dom.importCssString(exports.cssText, exports.cssClass);
 });
