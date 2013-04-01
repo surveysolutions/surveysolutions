@@ -40,17 +40,17 @@ namespace AndroidMain.Synchronization
         /// <summary>
         /// The item path 1.
         /// </summary>
-        private const string itemPath1 = "importexport/GetItem1";
+        private const string GetItem1Path = "importexport/GetItem1";
 
         /// <summary>
         /// The list path.
         /// </summary>
-        private const string listPath = "importexport/GetRootsList";
+        private const string GetRootsListPath = "importexport/GetRootsList";
 
         /// <summary>
-        /// The list path 1.
+        /// The list path.
         /// </summary>
-        private const string listPath1 = "importexport/GetRootsList1";
+        private const string GetARKeysPath = "importexport/GetARKeys";
 
         #endregion
 
@@ -168,8 +168,8 @@ namespace AndroidMain.Synchronization
         protected IEnumerable<AggregateRootEvent> GetEventStreamWithProxy()
         {
             var restClient = new RestClient(this.baseAddress);
-            
-            var request = new RestRequest(listPath, Method.GET);
+
+            var request = new RestRequest(GetARKeysPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
@@ -201,7 +201,7 @@ namespace AndroidMain.Synchronization
                         continue;
                     }
 
-                    var itemRequest = new RestRequest(itemPath1, Method.POST);
+                    var itemRequest = new RestRequest(GetItem1Path, Method.POST);
                     itemRequest.AddParameter("firstEventPulicKey", root.EventKeys.First());
                     itemRequest.AddParameter("length", root.EventKeys.Count);
 

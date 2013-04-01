@@ -358,7 +358,7 @@ namespace Web.Supervisor.Controllers
             return 100;
         }
 
-        private ListOfAggregateRootsForImportMessage GetList()
+        private ListOfAggregateRootsForImportMessage GetListOfARIDs()
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -381,32 +381,13 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetRootsList()
         {
-            return Json(this.GetList(), JsonRequestBehavior.AllowGet);
+            return Json(this.GetListOfARIDs(), JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public FileResult GetRootsList1()
-        {
-            var stream = new MemoryStream();
-            this.GetList().WriteTo(stream);
-            stream.Position = 0L;
-
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-
-        }
-
+        
         [AcceptVerbs(HttpVerbs.Post)]
-        public FileResult GetARKeys()
+        public JsonResult GetARKeys()
         {
-            var stream = new MemoryStream();
-            this.GetList().WriteTo(stream);
-            stream.Position = 0L;
-
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-
+            return Json(this.GetListOfARIDs());
         }
 
 
@@ -434,6 +415,7 @@ namespace Web.Supervisor.Controllers
             var outResult = Json(item, JsonRequestBehavior.AllowGet);
             return outResult;
         }
+
 
         private ImportSynchronizationMessage GetItemInt(string firstEventPulicKey, string length)
         {
@@ -522,21 +504,6 @@ namespace Web.Supervisor.Controllers
             
             return new FileStreamResult(stream, "application/octet-stream");
         }
-
-
-        /// <summary>
-        /// Determines if GZip is supported
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsGZipSupported(HttpRequestBase request)
-        {
-            string AcceptEncoding = request.Headers["Accept-Encoding"];
-            if (!string.IsNullOrEmpty(AcceptEncoding) &&
-                    (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
-                return true;
-            return false;
-        }
-
 
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)

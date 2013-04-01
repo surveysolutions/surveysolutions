@@ -13,7 +13,11 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" | Write-Host
 
-    Remove-Item "$TargetFolder\*" -Force -Recurse
+	Set-content -path "$TargetFolder\app_offline.htm" -value "Maintenance is in progress. Wait for awhile, please."	
+	
+    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude "app_offline.htm"
 
     Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
+	
+	Remove-Item "$TargetFolder\app_offline.htm"
 }
