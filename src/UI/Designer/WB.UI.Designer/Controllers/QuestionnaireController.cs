@@ -21,7 +21,6 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-    using WB.UI.Designer.Code.Exceptions;
     using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Utils;
