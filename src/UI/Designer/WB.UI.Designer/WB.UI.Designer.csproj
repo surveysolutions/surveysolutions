@@ -257,6 +257,7 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
     <Compile Include="Models\QuestionnaireCloneModel.cs" />
