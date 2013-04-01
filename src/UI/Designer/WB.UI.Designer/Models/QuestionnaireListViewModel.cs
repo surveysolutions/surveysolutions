@@ -55,6 +55,13 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Last Entry Date", Order = 3)]
         public DateTime LastEntryDate { get; set; }
 
+        /// <summary>
+        ///     Gets or sets the last entry date.
+        /// </summary>
+        [Display(Name = "Deleted?", Order = 4)]
+        [OnlyForAdmin]
+        public bool IsDeleted { get; set; }
+
         #endregion
     }
 }

@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Controllers
     ///     The account controller.
     /// </summary>
     [CustomAuthorize]
-    public class AccountController : AlertController
+    public class AccountController : BaseController
     {
         #region Public Methods and Operators
 
@@ -37,18 +37,6 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         [AllowAnonymous]
         public ActionResult ConfirmationFailure()
-        {
-            return this.View();
-        }
-
-        /// <summary>
-        ///     The confirmation success.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
-        [AllowAnonymous]
-        public ActionResult ConfirmationSuccess()
         {
             return this.View();
         }
@@ -227,7 +215,7 @@ namespace WB.UI.Designer.Controllers
 
             if (this.ModelState.IsValid)
             {
-                MembershipUser user = Membership.GetUser(model.UserName);
+                MembershipUser user = Membership.GetUser(model.UserName, false);
                 if (user == null)
                 {
                     this.Error(string.Format("User {0} does not exist. Please enter a valid user name", model.UserName));
@@ -242,7 +230,8 @@ namespace WB.UI.Designer.Controllers
                     email.ResetPasswordToken = token;
                     email.Send();
 
-                    return this.RedirectToAction("ResetPasswordStepTwo", "Account");
+                    this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
+                    return this.RedirectToAction("Login");
                 }
             }
 
@@ -302,7 +291,7 @@ namespace WB.UI.Designer.Controllers
                             this.SendConfirmationEmail(
                                 to: model.Email, userName: model.UserName, token: confirmationToken);
 
-                            return this.RedirectToAction("RegisterStepTwo");
+                            return this.RegisterStepTwo();
                         }
                     }
                     catch (MembershipCreateUserException e)
@@ -342,18 +331,6 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        ///     The register step two.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
-        [AllowAnonymous]
-        public ActionResult RegisterStepTwo()
-        {
-            return this.View();
-        }
-
-        /// <summary>
         /// The resend confirmation.
         /// </summary>
         /// <param name="id">
@@ -365,7 +342,7 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         public ActionResult ResendConfirmation(string id)
         {
-            MembershipUser model = Membership.GetUser(id);
+            MembershipUser model = Membership.GetUser(id, false);
             if (model != null)
             {
                 if (!model.IsApproved)
@@ -375,7 +352,7 @@ namespace WB.UI.Designer.Controllers
                     if (!string.IsNullOrEmpty(token))
                     {
                         this.SendConfirmationEmail(to: model.Email, userName: model.UserName, token: token);
-                        return this.RedirectToAction("RegisterStepTwo");
+                        return this.RegisterStepTwo();
                     }
                     else
                     {
@@ -429,7 +406,7 @@ namespace WB.UI.Designer.Controllers
                 if (WebSecurity.ResetPassword(model.Token, model.NewPassword))
                 {
                     this.Success("Your password successfully changed. Now you can login with your new password");
-                    return this.RedirectToAction("Login", "Account");
+                    return this.RedirectToAction("Login");
                 }
                 else
                 {
@@ -441,25 +418,13 @@ namespace WB.UI.Designer.Controllers
         }
 
         /// <summary>
-        /// The reset password confirmation failure.
+        ///     The reset password confirmation failure.
         /// </summary>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        ///     The <see cref="ActionResult" />.
         /// </returns>
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmationFailure()
-        {
-            return this.View();
-        }
-
-        /// <summary>
-        /// The reset password step two.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="ActionResult"/>.
-        /// </returns>
-        [AllowAnonymous]
-        public ActionResult ResetPasswordStepTwo()
         {
             return this.View();
         }
@@ -487,6 +452,19 @@ namespace WB.UI.Designer.Controllers
             {
                 return this.RedirectToAction("Index");
             }
+        }
+
+        /// <summary>
+        ///     The register step two.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="ActionResult" />.
+        /// </returns>
+        private ActionResult RegisterStepTwo()
+        {
+            this.Attention(
+                "To complete the registration process look for an email in your inbox that provides further instructions.");
+            return this.RedirectToAction("Login");
         }
 
         /// <summary>

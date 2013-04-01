@@ -20,6 +20,8 @@ namespace WB.UI.Designer
     {
         #region Constants
 
+        public const string EmptyString = "--//--";
+
         /// <summary>
         /// The grid page items count.
         /// </summary>

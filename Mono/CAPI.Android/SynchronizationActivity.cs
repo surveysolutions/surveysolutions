@@ -91,6 +91,12 @@ namespace CAPI.Android
 
             this.SetContentView(Resource.Layout.sync_dialog);
 
+            var buttonSync = this.FindViewById<Button>(Resource.Id.btnSync);
+            if (buttonSync != null)
+            {
+                buttonSync.Click += this.ButtonSyncClick;
+            }
+
             var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
             if (buttonPull != null)
             {
@@ -114,6 +120,12 @@ namespace CAPI.Android
             {
                 buttonRestore.Click += this.buttonRestore_Click;
             }
+        }
+
+        private void ButtonSyncClick(object sender, EventArgs e)
+        {
+            this.DoSync(PumpimgType.Push);
+            this.DoSync(PumpimgType.Pull);
         }
 
         /// <summary>
@@ -290,6 +302,7 @@ namespace CAPI.Android
                                     finally
                                     {
                                         result.Progress = 100;
+                                        GC.Collect();
                                     }
                                 });
 
@@ -414,6 +427,7 @@ namespace CAPI.Android
         /// </param>
         private void buttonPull_Click(object sender, EventArgs e)
         {
+            return;
             this.DoSync(PumpimgType.Pull);
         }
 
@@ -428,6 +442,7 @@ namespace CAPI.Android
         /// </param>
         private void buttonPush_Click(object sender, EventArgs e)
         {
+            return;
             this.DoSync(PumpimgType.Push);
         }
 

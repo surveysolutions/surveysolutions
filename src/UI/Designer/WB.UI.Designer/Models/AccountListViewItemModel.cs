@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the id.
         /// </summary>
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether is approved.

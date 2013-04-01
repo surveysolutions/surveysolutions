@@ -1,4 +1,5 @@
-﻿@using WB.UI.Designer.BootstrapSupport
+﻿@using System.ComponentModel
+@using WB.UI.Designer.BootstrapSupport
 @model Object
 
 @foreach (var property in Model.VisibleProperties())
@@ -13,8 +14,18 @@
         {
             @Html.Label(property.Name.ToSeparatedWords(), new { @class = "control-label" })
             <div class="controls">
-                @Html.Editor(property.Name, new { @class = "input-xlarge" })
-                @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
+                @if (property.GetAttribute<ReadOnlyAttribute>() == null)
+                {
+                    @Html.Editor(property.Name, new { @class = "input-xlarge" })
+                    @Html.ValidationMessage(property.Name, null, new { @class = "help-inline" })
+
+                }
+                else
+                {
+                    <div style="margin-top: 5px;">
+                        @Html.Display(property.Name)
+                    </div>
+                }
             </div>
         }
     }

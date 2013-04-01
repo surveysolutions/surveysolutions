@@ -36,6 +36,7 @@ namespace Web.Supervisor.Controllers
     using SynchronizationMessages.CompleteQuestionnaire;
 
     using Web.Supervisor.Models;
+    using Web.Supervisor.Utils.Attributes;
 
     /// <summary>
     /// The import export controller.
@@ -357,7 +358,7 @@ namespace Web.Supervisor.Controllers
             return 100;
         }
 
-        private ListOfAggregateRootsForImportMessage GetList()
+        private ListOfAggregateRootsForImportMessage GetListOfARIDs()
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -380,21 +381,13 @@ namespace Web.Supervisor.Controllers
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetRootsList()
         {
-            return Json(this.GetList(), JsonRequestBehavior.AllowGet);
+            return Json(this.GetListOfARIDs(), JsonRequestBehavior.AllowGet);
         }
-
-
-
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public FileResult GetRootsList1()
+        
+        [AcceptVerbs(HttpVerbs.Post)]
+        public JsonResult GetARKeys()
         {
-            var stream = new MemoryStream();
-            this.GetList().WriteTo(stream);
-            stream.Position = 0L;
-
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-
+            return Json(this.GetListOfARIDs());
         }
 
 
@@ -423,6 +416,7 @@ namespace Web.Supervisor.Controllers
             return outResult;
         }
 
+
         private ImportSynchronizationMessage GetItemInt(string firstEventPulicKey, string length)
         {
             Guid syncProcess = Guid.NewGuid();
@@ -443,8 +437,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 result = process.Export("Supervisor export AR events", key, ln);
             }
@@ -480,6 +473,36 @@ namespace Web.Supervisor.Controllers
             item.WriteTo(stream);
             stream.Position = 0L;
             return new FileStreamResult(stream, "application/json; charset=utf-8");
+        }
+
+
+        /// <summary>
+        /// The get item.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        [CompressContent]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GetAR(string firstEventPulicKey, string length)
+        {
+            var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var stream = new MemoryStream();
+            item.WriteTo(stream);
+            stream.Position = 0L;
+            
+            return new FileStreamResult(stream, "application/octet-stream");
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

@@ -19,7 +19,7 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
+    [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
