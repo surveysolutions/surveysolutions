@@ -129,6 +129,7 @@ namespace Main.Core.Tests.Domain
                 Assert.AreEqual("not empty", risedEvent.QuestionText);
             }
         }
+
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption
             ()
@@ -146,6 +147,7 @@ namespace Main.Core.Tests.Domain
                 Assert.AreEqual("not empty", risedEvent.QuestionText);
             }
         }
+
         [Test]
         public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
             ()
@@ -160,6 +162,7 @@ namespace Main.Core.Tests.Domain
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
             Assert.Throws<DomainException>(act);
         }
+
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
             ()

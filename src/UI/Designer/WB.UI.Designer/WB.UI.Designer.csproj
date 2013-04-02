@@ -378,6 +378,7 @@
     <Content Include="Configuration\Dev-Stable.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\Stacy.Designer.Web.config" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
