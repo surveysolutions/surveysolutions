@@ -6,14 +6,19 @@ using Android.Runtime;
 using AndroidNcqrs.Eventing.Storage.SQLite;
 using CAPI.Android.Core.Model.Authorization;
 using CAPI.Android.Core.Model.EventHandlers;
+using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using CAPI.Android.Core.Unmanaged;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
 using Main.Core;
+using Main.Core.Documents;
+using Main.Core.EventHandlers;
+using Main.Core.Events.File;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.Core.Events.User;
+using Main.Core.Services;
 using Main.Core.View;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
@@ -28,6 +33,7 @@ using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Main.Synchronization.SycProcessRepository;
+using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
 {
@@ -50,6 +56,10 @@ namespace CAPI.Android
         public static IAuthentication Membership
         {
             get { return Kernel.Get<IAuthentication>(); }
+        }
+        public static IFileStorageService FileStorageService
+        {
+            get { return Kernel.Get<IFileStorageService>(); }
         }
 
         public static IKernel Kernel
@@ -101,6 +111,11 @@ namespace CAPI.Android
             var usereventHandler =
                 new UserDenormalizer(kernel.Get<IDenormalizerStorage<UserView>>());
             bus.RegisterHandler(usereventHandler, typeof(NewUserCreated));
+
+            var fileSorage = new FileStoreDenormalizer(kernel.Get<IDenormalizerStorage<FileDescription>>(),
+                                                    new FileStorageService());
+            bus.RegisterHandler(fileSorage, typeof(FileUploaded));
+            bus.RegisterHandler(fileSorage, typeof(FileDeleted));
 
             #endregion
 

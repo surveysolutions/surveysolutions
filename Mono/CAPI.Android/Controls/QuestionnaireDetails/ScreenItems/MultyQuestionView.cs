@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
 using Android.Content;
+using Android.Views;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
@@ -35,18 +37,38 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            typedMode = Model as SelectebleQuestionViewModel;
+            this.Orientation = Orientation.Horizontal;
 
+            typedMode = Model as SelectebleQuestionViewModel;
+            var rl = new RelativeLayout(this.Context);
+            rl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+           
+            int i = 1;
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
+                cb.Id = i;
+                var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                                                                   ViewGroup.LayoutParams.WrapContent);
+                if (i>1)
+                {
+                    layoutParams.AddRule(LayoutRules.AlignTop, i-1);
+                    layoutParams.AddRule(LayoutRules.RightOf, i-1);
+                }
+                else
+                    layoutParams.AddRule(LayoutRules.AlignLeft);
+                cb.LayoutParameters = layoutParams;
                 cb.Text = answer.Title;
                 cb.Checked = answer.Selected;
                 cb.CheckedChange += cb_CheckedChange;
                 cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
-                llWrapper.AddView(cb);
+
+                cb.AttachImage(answer);
+                rl.AddView(cb);
+                i++;
             }
-           
+            llWrapper.AddView(rl);
         }
 
         private SelectebleQuestionViewModel typedMode;
@@ -66,7 +88,6 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                          answered, "",
                                                          Model.PublicKey.PropagationKey));
-            SaveAnswer();
             //typedMode.SelectAnswer(answerGuid);
         }
 
