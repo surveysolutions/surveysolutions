@@ -1472,7 +1472,8 @@ namespace Main.Core.Tests.Domain
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     AnswerType = AnswerType.Select,
-                                    AnswerValue = "some text"
+                                    AnswerValue = "some text",
+                                    AnswerText = "text"
                                 }
                         });
 
@@ -1513,7 +1514,8 @@ namespace Main.Core.Tests.Domain
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     AnswerType = AnswerType.Select,
-                                    AnswerValue = "some text"
+                                    AnswerValue = "some text",
+                                    AnswerText = "text"
                                 }
                         });
 
@@ -1621,7 +1623,8 @@ namespace Main.Core.Tests.Domain
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     AnswerType = AnswerType.Select,
-                                    AnswerValue = "some text"
+                                    AnswerValue = "some text",
+                                    AnswerText = "text"
                                 }
                         });
 
@@ -1664,7 +1667,8 @@ namespace Main.Core.Tests.Domain
                                 {
                                     PublicKey = Guid.NewGuid(),
                                     AnswerType = AnswerType.Select,
-                                    AnswerValue = "some text"
+                                    AnswerValue = "some text",
+                                    AnswerText = "text"
                                 }
                         });
 
