@@ -1440,6 +1440,7 @@ namespace Main.Core.Tests.Domain
             return questionnaire;
         }
 
+        #region [Answer option values allows only numbers]
         [Test]
         public void AddQuestion_When_answer_multi_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
         {
@@ -1471,7 +1472,6 @@ namespace Main.Core.Tests.Domain
                             new Answer()
                                 {
                                     PublicKey = Guid.NewGuid(),
-                                    AnswerType = AnswerType.Select,
                                     AnswerValue = "some text",
                                     AnswerText = "text"
                                 }
@@ -1513,7 +1513,6 @@ namespace Main.Core.Tests.Domain
                             new Answer()
                                 {
                                     PublicKey = Guid.NewGuid(),
-                                    AnswerType = AnswerType.Select,
                                     AnswerValue = "some text",
                                     AnswerText = "text"
                                 }
@@ -1622,7 +1621,6 @@ namespace Main.Core.Tests.Domain
                             new Answer()
                                 {
                                     PublicKey = Guid.NewGuid(),
-                                    AnswerType = AnswerType.Select,
                                     AnswerValue = "some text",
                                     AnswerText = "text"
                                 }
@@ -1666,7 +1664,6 @@ namespace Main.Core.Tests.Domain
                             new Answer()
                                 {
                                     PublicKey = Guid.NewGuid(),
-                                    AnswerType = AnswerType.Select,
                                     AnswerValue = "some text",
                                     AnswerText = "text"
                                 }
@@ -1676,5 +1673,127 @@ namespace Main.Core.Tests.Domain
             var domainException = Assert.Throws<DomainException>(act);
             Assert.That(domainException.Message, Is.StringContaining("only number characters"));
         }
+        #endregion
+
+
+        #region [Answer option value is required]
+       
+        [Test]
+        public void AddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.AddQuestion(
+                    publicKey: Guid.NewGuid(),
+                    questionText: "What is your last name?",
+                    stataExportCaption: "name",
+                    questionType: QuestionType.SingleOption,
+                    questionScope: QuestionScope.Interviewer,
+                    conditionExpression: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    featured: false,
+                    mandatory: false,
+                    capital: false,
+                    answerOrder: Order.AZ,
+                    instructions: string.Empty,
+                    groupPublicKey: null,
+                    triggers: new List<Guid>(),
+                    maxValue: 0,
+                    answers:
+                    new Answer[1]
+                        {
+                            new Answer()
+                                {
+                                    PublicKey = Guid.NewGuid(),
+                                    AnswerText = "text"
+                                }
+                        });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+        }
+
+       
+        [Test]
+        public void
+            NewAddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: Guid.NewGuid(),
+                    title: "What is your last name?",
+                    type: QuestionType.SingleOption,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: 0,
+                    triggedGroupIds: new Guid[0],
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: null, title: "text") });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+        }
+
+       
+        [Test]
+        public void ChangeQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.ChangeQuestion(
+                    publicKey: targetQuestionPublicKey,
+                    questionText: "What is your last name?",
+                    stataExportCaption: "name",
+                    questionType: QuestionType.SingleOption,
+                    questionScope: QuestionScope.Interviewer,
+                    conditionExpression: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    featured: false,
+                    mandatory: false,
+                    capital: false,
+                    answerOrder: Order.AZ,
+                    instructions: string.Empty,
+                    groupPublicKey: null,
+                    triggers: new List<Guid>(),
+                    maxValue: 0,
+                    answers:
+                    new Answer[1]
+                        {
+                            new Answer()
+                                {
+                                    PublicKey = Guid.NewGuid(),
+                                    AnswerText = "text"
+                                }
+                        });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+        }
+        #endregion
     }
 }
