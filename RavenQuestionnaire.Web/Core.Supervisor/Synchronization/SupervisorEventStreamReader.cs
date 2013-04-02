@@ -163,7 +163,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (Guid item in questionnaries)
             {
-               retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
+               retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
             }
         }
 
@@ -233,7 +233,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (var item in users)
             {
-                retval.AddRange(this.GetEventStreamById<UserAR>(item.PublicKey));
+                retval.AddRange(this.GetEventStreamById<UserAR>(item));
             }
         }
 
