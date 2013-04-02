@@ -329,7 +329,7 @@ namespace Main.Core.Documents
 
             if (groupParent != null)
             {
-                var group = groupParent.Children.Single(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
+                var group = groupParent.Children.First(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
                 RemoveChildGroupBySpecifiedId(groupParent, groupId);
                 this.UpdateAutoPropagateQuestionsTriggersIfNeeded(group);
             }
