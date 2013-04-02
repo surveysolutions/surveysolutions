@@ -158,6 +158,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
 
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
+
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ApplyEvent(
@@ -210,6 +212,8 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -325,6 +329,8 @@ namespace Main.Core.Domain
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+
+            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
@@ -725,6 +731,23 @@ namespace Main.Core.Domain
             if (isNotUnique)
             {
                 throw new DomainException("Variable name should be unique in questionnaire's scope");
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsContainsInvalidCharacters(QuestionType type, Option[] options)
+        {
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(type, ConvertOptionsToAnswers(options));
+        }
+
+        private void ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(
+            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption
+                                        || questionType == QuestionType.SingleOption;
+            int iAnswerValue = 0;
+            if (isQuestionWithOptions && answerOptions.Any(x=>!int.TryParse(x.AnswerValue, out iAnswerValue)))
+            {
+                throw new DomainException("Answer values should have only number characters");
             }
         }
     }
