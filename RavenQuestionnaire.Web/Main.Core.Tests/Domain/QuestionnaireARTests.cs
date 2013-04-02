@@ -22,6 +22,36 @@ namespace Main.Core.Tests.Domain
         [TestCase("")]
         [TestCase("   ")]
         [TestCase("      ")] /* contains \t symbol */
+        public void QuestionnaireARConstructor_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException(string emptyTitle)
+        {
+            // arrange
+
+            // act
+            TestDelegate act = () => new QuestionnaireAR(Guid.NewGuid(), emptyTitle);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [Test]
+        public void QuestionnaireARConstructor_When_questionnaire_title_is_not_empty_Then_raised_NewQuestionnaireCreated_event_contains_questionnaire_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var nonEmptyTitle = "Title";
+
+                // act
+                new QuestionnaireAR(Guid.NewGuid(), nonEmptyTitle, Guid.NewGuid());
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
+            }
+        }
+
+        [TestCase("")]
+        [TestCase("   ")]
+        [TestCase("      ")] /* contains \t symbol */
         public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException(string emptyTitle)
         {
             // arrange

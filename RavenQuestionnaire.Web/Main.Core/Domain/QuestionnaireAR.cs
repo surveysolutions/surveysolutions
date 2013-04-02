@@ -48,6 +48,8 @@ namespace Main.Core.Domain
         public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy)
         {
+            this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
+
             source.Children.ApplyAction(
                 x => x.Children,
                 (parent, x) =>
