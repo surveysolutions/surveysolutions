@@ -11,7 +11,10 @@ namespace CAPI.Android.Extensions
         {
             if (!string.IsNullOrEmpty(answer.ImagePublicKey))
             {
-                using (var img = CapiApplication.FileStorageService.RetrieveFile(answer.ImagePublicKey).Content)
+                var file = CapiApplication.FileStorageService.RetrieveFile(answer.ImagePublicKey);
+                if(file==null)
+                    return;
+                using (var img = file.Content)
                 {
                     using (Bitmap bm =
                         BitmapFactory.DecodeStream(img))

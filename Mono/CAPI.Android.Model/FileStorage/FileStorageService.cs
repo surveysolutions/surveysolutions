@@ -15,6 +15,9 @@ namespace CAPI.Android.Core.Model.FileStorage
 
         public FileDescription RetrieveFile(string filename)
         {
+            var longFileName = BuildFileName(filename);
+            if (!File.Exists(longFileName))
+                return null;
             var file = new FileDescription();
 
             file.Content = File.OpenRead(BuildFileName(filename));
