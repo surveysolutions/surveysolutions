@@ -19,6 +19,38 @@ namespace Main.Core.Tests.Domain
     [TestFixture]
     public class QuestionnaireARTests
     {
+        [TestCase("")]
+        [TestCase("   ")]
+        [TestCase("      ")] /* contains \t symbol */
+        public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException(string emptyTitle)
+        {
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            // act
+            TestDelegate act = () => questionnaire.UpdateQuestionnaire(emptyTitle);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [Test]
+        public void UpdateQuestionnaire_When_questionnaire_title_is_not_empty_Then_raised_QuestionnaireUpdated_event_contains_questionnaire_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var nonEmptyTitle = "Title";
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+                // act
+                questionnaire.UpdateQuestionnaire(nonEmptyTitle);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionnaireUpdated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
+            }
+        }
+
         #region AddQuestion tests
         [Test]
         [TestCase(QuestionType.SingleOption)]
