@@ -82,13 +82,13 @@ namespace Main.Core.Domain
                         var g = x as IGroup;
                         if (g != null)
                         {
-                            this.AddGroup(
-                                publicKey: g.PublicKey,
-                                text: g.Title,
-                                propagateble: g.Propagated,
-                                parentGroupKey: parentId,
-                                conditionExpression: g.ConditionExpression,
-                                description: g.Description);
+                            this.NewAddGroup(
+                                groupId: g.PublicKey,
+                                parentGroupId: parentId,
+                                title: g.Title,
+                                propagationKind: g.Propagated,
+                                description: g.Description,
+                                condition: g.ConditionExpression);
                         }
                     });
         }
@@ -114,24 +114,6 @@ namespace Main.Core.Domain
         public void DeleteQuestionnaire()
         {
             this.ApplyEvent(new QuestionnaireDeleted());
-        }
-
-        [Obsolete]
-        public void AddGroup(
-            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
-        {
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(text);
-            
-            this.ApplyEvent(
-                new NewGroupAdded
-                    {
-                        PublicKey = publicKey,
-                        GroupText = text,
-                        ParentGroupPublicKey = parentGroupKey,
-                        Paropagateble = propagateble,
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
         }
 
         [Obsolete]

@@ -1101,7 +1101,7 @@ namespace Main.Core.Tests.Domain
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
 
-            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), "New group", Propagate.None, null, null, null);
+            questionnaire.NewAddGroup(groupPublicKey ?? Guid.NewGuid(), null, "New group", Propagate.None, null, null);
 
             return questionnaire;
         }
@@ -1110,7 +1110,7 @@ namespace Main.Core.Tests.Domain
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(Guid.NewGuid(), "Title");
 
-            questionnaire.AddGroup(autoGroupId, "New auto group", Propagate.AutoPropagated, null, null, null);
+            questionnaire.NewAddGroup(autoGroupId, null, "New auto group", Propagate.AutoPropagated, null, null);
 
             return questionnaire;
         }

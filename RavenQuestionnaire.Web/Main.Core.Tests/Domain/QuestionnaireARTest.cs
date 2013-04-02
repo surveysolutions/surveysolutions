@@ -59,7 +59,7 @@ namespace Main.Core.Tests.Domain
                 string conditionExpression = "1=1";
                 string description = "group desct";
 
-                questionnaire.AddGroup(publicKey, text, propagateble, parentGroupKey, conditionExpression, description);
+                questionnaire.NewAddGroup(publicKey, parentGroupKey, text, propagateble, description, conditionExpression);
 
                 Assert.True(ctx.Events.Count() == 1);
 
