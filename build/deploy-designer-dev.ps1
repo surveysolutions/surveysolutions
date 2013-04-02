@@ -1,4 +1,5 @@
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
+$ErrorActionPreference = "Stop"
 
 . "$scriptFolder\deployment-functions.ps1"
 
