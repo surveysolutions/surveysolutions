@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -65,6 +65,7 @@
     <Compile Include="Accounts\Events\AccountUpdated.cs" />
     <Compile Include="Accounts\Events\AccountDeleted.cs" />
     <Compile Include="Accounts\AccountDenormalizer.cs" />
+    <Compile Include="Accounts\Events\AccountValidated.cs" />
     <Compile Include="Accounts\View\AccountListItem.cs" />
     <Compile Include="Accounts\Events\AccountRegistered.cs" />
     <Compile Include="Accounts\Events\AccountUnlocked.cs" />

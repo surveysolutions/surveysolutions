@@ -21,7 +21,6 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
-    using WB.UI.Designer.Code.Exceptions;
     using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Utils;
@@ -182,7 +181,7 @@ namespace WB.UI.Designer.Controllers
             }
             else
             {
-                this.ReplaceGuidsInValidationAndConditionRules(model);    
+                this.ReplaceGuidsInValidationAndConditionRules(model);
             }
 
             return View(model);
@@ -225,7 +224,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult Index(int? p, string sb, int? so, string f)
         {
-            return this.View(this.GetItems(true, p, sb, so, f));
+            return this.View(this.GetQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
         /// <summary>
@@ -248,7 +247,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         public ActionResult Public(int? p, string sb, int? so, string f)
         {
-            return this.View(this.GetItems(false, p, sb, so, f));
+            return this.View(this.GetPublicQuestionnaires(pageIndex: p, sortBy: sb, sortOrder: so, filter: f));
         }
 
         #endregion
@@ -256,11 +255,8 @@ namespace WB.UI.Designer.Controllers
         #region Methods
 
         /// <summary>
-        /// The get items.
+        /// The get public questionnaires.
         /// </summary>
-        /// <param name="isOnlyOwnerItems">
-        /// The is only owner items.
-        /// </param>
         /// <param name="pageIndex">
         /// The page index.
         /// </param>
@@ -276,22 +272,13 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="IPagedList"/>.
         /// </returns>
-        private IPagedList<QuestionnaireListViewModel> GetItems(
-            bool isOnlyOwnerItems, int? pageIndex, string sortBy, int? sortOrder, string filter)
+        private IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
+            int? pageIndex, string sortBy, int? sortOrder, string filter)
         {
-            this.ViewBag.PageIndex = pageIndex;
-            this.ViewBag.SortBy = sortBy;
-            this.ViewBag.Filter = filter;
-            this.ViewBag.SortOrder = sortOrder;
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            if (sortOrder.ToBool())
-            {
-                sortBy = string.Format("{0} Desc", sortBy);
-            }
-
-            return QuestionnaireHelper.GetQuestionnaires(
+            return QuestionnaireHelper.GetPublicQuestionnaires(
                 repository: this.Repository, 
-                isOnlyOwnerItems: isOnlyOwnerItems, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -321,6 +308,38 @@ namespace WB.UI.Designer.Controllers
             }
 
             return questionnaire;
+        }
+
+        /// <summary>
+        /// The get items.
+        /// </summary>
+        /// <param name="pageIndex">
+        /// The page index.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortOrder">
+        /// The sort order.
+        /// </param>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPagedList"/>.
+        /// </returns>
+        private IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
+            int? pageIndex, string sortBy, int? sortOrder, string filter)
+        {
+            this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
+
+            return QuestionnaireHelper.GetQuestionnaires(
+                repository: this.Repository, 
+                pageIndex: pageIndex, 
+                sortBy: sortBy, 
+                sortOrder: sortOrder, 
+                filter: filter, 
+                userId: UserHelper.CurrentUserId);
         }
 
         /// <summary>
@@ -361,6 +380,34 @@ namespace WB.UI.Designer.Controllers
                         elements.Enqueue(child);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// The save request.
+        /// </summary>
+        /// <param name="pageIndex">
+        /// The page index.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortOrder">
+        /// The sort order.
+        /// </param>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        private void SaveRequest(int? pageIndex, ref string sortBy, int? sortOrder, string filter)
+        {
+            this.ViewBag.PageIndex = pageIndex;
+            this.ViewBag.SortBy = sortBy;
+            this.ViewBag.Filter = filter;
+            this.ViewBag.SortOrder = sortOrder;
+
+            if (sortOrder.ToBool())
+            {
+                sortBy = string.Format("{0} Desc", sortBy);
             }
         }
 

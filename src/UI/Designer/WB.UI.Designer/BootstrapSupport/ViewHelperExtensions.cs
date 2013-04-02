@@ -74,10 +74,10 @@ namespace WB.UI.Designer.BootstrapSupport
             return model.GetType().GetProperty(model.IdentifierPropertyName()).GetValue(model, new object[0]);
         }
 
-        public static object GetName(this object model)
+        public static string GetName(this object model)
         {
             var property = model.GetType().GetProperties().First(info => info.AttributeExists<DefaultAttribute>()).Name;
-            return model.GetType().GetProperty(property).GetValue(model, new object[0]);
+            return ((string)model.GetType().GetProperty(property).GetValue(model, new object[0])) ?? string.Empty;
         }
 
 

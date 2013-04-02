@@ -4,17 +4,14 @@
 
         var// properties
             //-----------------
-            questionTypes = [
-                "SingleOption",
-                "YesNo",
-                "DropDownList",
-                "MultyOption",
-                "Numeric",
-                "DateTime",
-                "GpsCoordinates",
-                "Text",
-                "AutoPropagate"
-            ],
+            questionTypes = {
+                "SingleOption": "SingleOption",
+                "MultyOption" : "MultyOption",
+                "Numeric" : "Numeric",
+                "DateTime" : "DateTime",
+                "Text" : "Text",
+                "AutoPropagate": "AutoPropagate"
+            },
             questionScopes = [
                 "Interviewer",
                 "Supervisor",
@@ -30,7 +27,7 @@
             ],
             groupTypes = [
                 "None",
-                "Propagated",
+                "",
                 "AutoPropagated"
             ],
             commands = {
