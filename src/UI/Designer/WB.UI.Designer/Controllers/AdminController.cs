@@ -135,12 +135,15 @@ namespace WB.UI.Designer.Controllers
         public ViewResult Details(Guid id)
         {
             MembershipUser account = this.GetUser(id);
-            var questionnaires = QuestionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
-            foreach (var questionnaireListViewModel in questionnaires)
-            {
-                questionnaireListViewModel.CanDelete = false;
-            }
 
+            var questionnaires = QuestionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
+            questionnaires.ToList().ForEach(
+                x =>
+                    {
+                        x.CanEdit = false;
+                        x.CanDelete = false;
+                    });
+            
             return
                 this.View(
                     new AccountViewModel
