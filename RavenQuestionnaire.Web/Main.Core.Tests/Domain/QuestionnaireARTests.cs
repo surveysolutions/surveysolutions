@@ -285,6 +285,101 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+        #region answer title is unique in question scope
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_AnswerTitleIsNotUnique_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            var groupKey = Guid.NewGuid();
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupKey);
+
+            Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"),new Option(Guid.NewGuid(), "2", "title") };
+
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                         string.Empty, options, Order.AsIs, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+            // assert
+            
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_AnswerTitleIsUnique_Then_event_contains_the_same_answer_titles(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var groupKey = Guid.NewGuid();
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupKey);
+
+                Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
+                // act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                         string.Empty, options, Order.AsIs, null, new Guid[0]);
+                // assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Assert.IsTrue(options[i].Title == risedEvent.Answers[i].AnswerText);
+                }
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_AnswerTitleIsNotUnique_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            Guid questionKey;
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+            Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
+                                                QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                string.Empty, options, Order.AsIs, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+            // assert
+
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_AnswerTitleIsUnique_Then_event_contains_the_same_answer_titles(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                Guid questionKey;
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+                Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
+                // act
+                questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
+                                                QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                string.Empty, options, Order.AsIs, null, new Guid[0]);
+                // assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                for (int i = 0; i < options.Length; i++)
+                {
+                    Assert.IsTrue(options[i].Title == risedEvent.Answers[i].AnswerText);
+                }
+            }
+        }
+
+        #endregion
+
        
         [Test]
         public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()

@@ -699,10 +699,14 @@ namespace Main.Core.Domain
                 return;
             if (!answerOptions.Any())
                 throw new DomainException("Questions with options should have one answer option at least");
+            Dictionary<string, int> uniquniesTitleCounter = new Dictionary<string, int>();
             foreach (var answerOption in answerOptions)
             {
                 if(string.IsNullOrEmpty(answerOption.AnswerText))
                     throw new DomainException("Answer title can't be empty");
+                if (uniquniesTitleCounter.ContainsKey(answerOption.AnswerText))
+                    throw new DomainException("Answer title is not unique");
+                uniquniesTitleCounter[answerOption.AnswerText] = 1;
             }
 
         }
