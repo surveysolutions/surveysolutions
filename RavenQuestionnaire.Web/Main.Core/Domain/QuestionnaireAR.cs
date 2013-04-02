@@ -328,6 +328,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
+
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
@@ -368,12 +370,15 @@ namespace Main.Core.Domain
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-
+          
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
+
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -581,6 +586,29 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(Guid questionId, bool isFeatured, Guid? groupId)
+        {
+            if (!isFeatured)
+                return;
+            
+            IGroup group;
+            if (groupId.HasValue)
+            {
+                group = this.innerDocument.Find<Group>(groupId.Value);
+            }
+            else
+            {
+                this.innerDocument.ConnectChildsWithParent();
+                var question = this.innerDocument.Find<AbstractQuestion>(questionId);
+                group = question.GetParent() as IGroup;
+            }
+
+            if (group.Propagated != Propagate.None)
+            {
+                throw new DomainException("Question inside propagated group can not be featured");
+            }
         }
 
         private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
