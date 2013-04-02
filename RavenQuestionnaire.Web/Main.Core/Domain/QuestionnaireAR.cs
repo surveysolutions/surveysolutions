@@ -158,6 +158,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
 
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
+
             this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
@@ -212,6 +214,8 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
 
             this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
 
@@ -330,6 +334,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
+            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
             this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
@@ -767,6 +772,23 @@ namespace Main.Core.Domain
             if (isQuestionWithOptions && answerOptions.Any(x=>!int.TryParse(x.AnswerValue, out iAnswerValue)))
             {
                 throw new DomainException("Answer values should have only number characters");
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
+        {
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(type, ConvertOptionsToAnswers(options));
+        }
+
+        private void ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(
+            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption
+                                        || questionType == QuestionType.SingleOption;
+
+            if (isQuestionWithOptions && answerOptions.Any(x => string.IsNullOrEmpty(x.AnswerValue)))
+            {
+                throw new DomainException("Answer value is required");
             }
         }
     }
