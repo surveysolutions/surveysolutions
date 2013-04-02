@@ -774,6 +774,10 @@ namespace Main.Core.Domain
             var group = this.innerDocument.Find<Group>(e.GroupPublicKey);
             if (group != null)
             {
+                if (group.Propagated != Propagate.None)
+                {
+                    this.innerDocument.UpdateAutoPropagateQuestionsTriggersIfNeeded(group);
+                }
                 group.Propagated = e.Propagateble;
 
                 //// if(e.Triggers!=null)

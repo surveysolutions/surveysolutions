@@ -271,6 +271,7 @@
   <ItemGroup>
     <Compile Include="AbstractFactories\QuestionFactoryTest.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocumentTest.cs" />
+    <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="Domain\CompleteQuestionnaireARTest.cs" />
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\QuestionnaireARTest.cs" />
