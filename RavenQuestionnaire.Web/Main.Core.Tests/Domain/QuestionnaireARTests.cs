@@ -65,7 +65,6 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-
         [Test]
         public void NewAddQuestion_when_question_is_featured_but_inside_propagated_group_then_DomainException_should_be_thrown()
         {
@@ -108,6 +107,48 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
+        public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            Guid groupId = Guid.NewGuid();
+            bool isHeadOfPropagatedGroup = true;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
+                                             "name", false, false,
+                                             isHeadOfPropagatedGroup,
+                                             QuestionScope.Interviewer, "", "", "", "",
+                                             new Option[0], Order.AsIs, 0, new Guid[0]);
+
+            // Assert
+            Assert.Throws<DomainException>(act);
+        }
+
+        [Test]
+        public void NewAddQuestion_when_question_is_head_of_propagated_group_and_inside_propagated_group_then_raised_NewQuestionAdded_event_contains_the_same_header_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                Guid autoGroupId = Guid.NewGuid();
+                bool isHeadOfPropagatedGroup = true;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?",
+                                                 QuestionType.Text, "name",
+                                                 false, false, isHeadOfPropagatedGroup, QuestionScope.Interviewer, "", "", "", "",
+                                                 new Option[0], Order.AsIs, 0, new Guid[0]);
+
+                // Assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
+            }
+        }
+
+        [Test]
         public void NewUpdateQuestion_when_qustion_in_propagated_group_is_featured_then_DomainException_should_be_thrown()
         {
             // Arrange
@@ -116,7 +157,7 @@ namespace Main.Core.Tests.Domain
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
 
             // Act
-            TestDelegate act = () =>  questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
                                                isFeatured,
                                                false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
@@ -143,6 +184,44 @@ namespace Main.Core.Tests.Domain
                 Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Featured, Is.EqualTo(isFeatured));
             }
         }
+
+        [Test]
+        public void NewUpdateQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            Guid updatedQuestion = Guid.NewGuid();
+            bool isHeadOfPropagatedGroup = true;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
+
+            // Act
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
+                                                isHeadOfPropagatedGroup,
+                                                QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
+
+            // Assert
+            Assert.Throws<DomainException>(act);
+        }
+
+        [Test]
+        public void NewUpdateQuestion_when_question_is_head_of_propagated_group_and_inside_propagated_group_then_raised_QuestionChanged_event_contains_the_same_header_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                Guid updatedQuestion = Guid.NewGuid();
+                bool isHeadOfPropagatedGroup = true;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
+
+                // Act
+                questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
+                                               isHeadOfPropagatedGroup, 
+                                               QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
+
+                // Assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
+            }
+        }
+
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
@@ -1081,6 +1160,6 @@ namespace Main.Core.Tests.Domain
 
             return questionnaire;
         }
-        
+
     }
 }

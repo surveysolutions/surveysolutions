@@ -330,6 +330,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
 
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
+
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
@@ -378,6 +380,8 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
+
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
 
 
             this.ApplyEvent(new QuestionChanged
@@ -586,6 +590,29 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(Guid questionId, bool isHeadOfGroup, Guid? groupId)
+        {
+            if (!isHeadOfGroup)
+                return;
+
+            IGroup group;
+            if (groupId.HasValue)
+            {
+                group = this.innerDocument.Find<Group>(groupId.Value);
+            }
+            else
+            {
+                this.innerDocument.ConnectChildsWithParent();
+                var question = this.innerDocument.Find<AbstractQuestion>(questionId);
+                group = question.GetParent() as IGroup;
+            }
+
+            if (group.Propagated == Propagate.None)
+            {
+                throw new DomainException("Question inside propagated group can not be featured");
+            }
         }
 
         private void ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(Guid questionId, bool isFeatured, Guid? groupId)
