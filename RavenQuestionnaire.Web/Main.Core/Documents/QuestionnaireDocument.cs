@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Utility;
+
 namespace Main.Core.Documents
 {
     using System;
@@ -180,6 +183,7 @@ namespace Main.Core.Documents
         /// <param name="parent">
         /// The parent.
         /// </param>
+        /// <param name="parentPropagationKey"></param>
         /// <exception cref="CompositeException">
         /// </exception>
         public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
@@ -191,7 +195,7 @@ namespace Main.Core.Documents
                 this.Children.Add(c);
                 return;
             }
-            
+
             var group = this.Find<Group>(parent.Value);
             if (@group != null)
             {
@@ -325,11 +329,25 @@ namespace Main.Core.Documents
 
             if (groupParent != null)
             {
+                var group = groupParent.Children.First(child => IsGroupWithSpecifiedId(child, groupId)) as IGroup;
                 RemoveChildGroupBySpecifiedId(groupParent, groupId);
+                this.UpdateAutoPropagateQuestionsTriggersIfNeeded(group);
             }
             else
             {
                 Logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
+            }
+        }
+
+        public void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group)
+        {
+            if (group.Propagated == Propagate.None)
+                return;
+
+            var questions = this.GetAllQuestions().Where(question => question is IAutoPropagate).Cast<IAutoPropagate>().ToList();
+            foreach (var question in questions.Where(question => question.Triggers.Contains(group.PublicKey)))
+            {
+                question.Triggers.Remove(group.PublicKey);
             }
         }
 
@@ -372,6 +390,28 @@ namespace Main.Core.Documents
             return this
                 .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
                 .SingleOrDefault();
+        }
+
+        private IEnumerable<IQuestion> GetAllQuestions()
+        {
+            var treeStack = new Stack<IComposite>();
+            treeStack.Push(this);
+            while (treeStack.Count > 0)
+            {
+                var node = treeStack.Pop();
+
+                foreach (var child in node.Children)
+                {
+                    if (child is IGroup)
+                    {
+                        treeStack.Push(child);
+                    }
+                    else if (child is IQuestion)
+                    {
+                        yield return (child as IQuestion);
+                    }
+                }
+            }
         }
 
         private static bool ContainsChildGroupWithSpecifiedId(IComposite container, Guid groupId)
@@ -427,7 +467,7 @@ namespace Main.Core.Documents
 
             return doc;
         }
-        
+
         #endregion
     }
 }

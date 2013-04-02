@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using Newtonsoft.Json.Converters;
 
 namespace WB.UI.Designer.Utils
 {
@@ -28,8 +29,8 @@ namespace WB.UI.Designer.Utils
 
             if (this.Data == null) return;
 
-            var serializer = new JavaScriptSerializer(new TypeResolver());
-            response.Write(serializer.Serialize(this.Data));
+            response.Write(Newtonsoft.Json.JsonConvert.SerializeObject(this.Data, Newtonsoft.Json.Formatting.None,
+                new StringEnumConverter()));
         }
     }
 }

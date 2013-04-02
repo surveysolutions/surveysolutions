@@ -1,4 +1,7 @@
-﻿@using System.Web.Script.Serialization
+﻿@using System.Runtime.Serialization.Formatters
+@using System.Web.Script.Serialization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Converters
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
@@ -19,7 +22,11 @@
          )
     <script>
         define('input', [], function() {
-            var q = @Html.Raw(serializer.Serialize(Model));
+            var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings ()
+                        {
+                            TypeNameHandling = TypeNameHandling.Objects,
+                            TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
+                        })) ;
             return {
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
@@ -29,6 +36,7 @@
 
     @Scripts.Render(
         "~/bundles/jsappdetails",
+        "~/bundles/ace",
         "~/Scripts/details/main.js"
          )
 }
@@ -76,7 +84,7 @@
                 </div>
                 <!-- ko ifnot: isFilterMode -->
                 <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
-                @*<ul data-bind="foreach: chapters" class="list">*@
+                    @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
                 <!-- /ko -->
@@ -106,7 +114,19 @@
                 <!-- ko if : level() != 0 -->
                 <div class="row-fluid">
                     <label class="required">Kind of propagation</label>
-                    <select class="span12" data-bind="options: typeOptions, value: gtype"></select>
+                    <div class="btn-group">
+                        <button
+                            data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
+                            None</button>
+                        <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
+                    </div>
+
+                    <a href="#" class="btn btn-warning btn-small"
+                       data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
+                       data-original-title="Kind of propagation"
+                       data-html="true"
+                       data-placement="bottom"
+                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
                 </div>
                 <!-- /ko -->
                 <div class="row-fluid">
@@ -115,14 +135,14 @@
                         <textarea rows="2" data-bind="autoGrowArea: description, valueUpdate: 'afterkeydown'" class="span12"></textarea>
                     </div>
                 </div>
-                <div class="row-fluid">
-                    <label>Condition expression</label>
-                    <div class="note">
-                        <textarea rows="2" data-bind="autoGrowArea: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
-                    </div>
+
+                <label>Condition expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
+
             </div>
-            <div class="bottom">
+            <div class="pane-bottom">
                 <div class="inner">
                     <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
@@ -136,7 +156,7 @@
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
-                <div class="row-fluid control-group"  data-bind="validationElement: title">
+                <div class="row-fluid control-group" data-bind="validationElement: title">
                     <label class="control-label required">Title</label>
                     <div class="note">
                         <textarea rows="1" data-bind="autoGrowArea: title" class="span12"></textarea>
@@ -158,22 +178,28 @@
                 <div class="row-fluid">
                     <div class="btn-group">
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isMandatory" class="btn btn-small"><i class="icon-leaf"></i>mandatory</button>
-                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead, visible: $data.parent().gtype()!='None' " class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <!-- ko if : $data.parent().gtype()=='None' -->
                         <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isFeatured" class="btn btn-small"><i class="icon-star"></i>featured</button>
+                        <!-- /ko -->
+                        <!-- ko ifnot : $data.parent().gtype()=='None' -->
+                        <button data-value="true" data-toggle="checkbox" data-bind="checkedButtons: isHead" class="btn btn-small"><i class="icon-bullhorn"></i>head</button>
+                        <!-- /ko -->
                     </div>
                 </div>
                 @*  <div class="row-fluid">
                     <label>Who should answer this question?</label>
                     <select data-bind="options: scopeOptions, value: scope" class="span12"></select>
                 </div>*@
-                <div class="row-fluid">
-                    <label>Condition expression</label>
-                    <textarea rows="2" data-bind="value: condition, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+                <label>Condition expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
-                <div class="row-fluid">
-                    <label>Validation expression</label>
-                    <textarea rows="2" data-bind="value: validationExpression, valueUpdate: 'afterkeydown'" class="span12"></textarea>
+
+                <label>Validation expression</label>
+                <div class="editor-container">
+                    <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
+
                 <div class="row-fluid">
                     <label>Validation message</label>
                     <textarea rows="2" data-bind="value: validationMessage, valueUpdate: 'afterkeydown'" class="span12"></textarea>
@@ -186,7 +212,7 @@
                 </div>
             </div>
 
-            <div class="bottom">
+            <div class="pane-bottom">
                 <div class="inner">
                     <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
@@ -217,7 +243,7 @@
             </div>
         </div>
         <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
-        @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
+            @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
     </div>
