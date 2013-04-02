@@ -120,12 +120,8 @@ namespace Main.Core.Domain
         public void AddGroup(
             Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
         {
-            //// performe checka before event raising
-
-            // Apply a NewGroupAdded event that reflects the
-            // creation of this instance. The state of this
-            // instance will be update in the handler of 
-            // this event (the OnNewGroupAdded method).
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(text);
+            
             this.ApplyEvent(
                 new NewGroupAdded
                     {
@@ -278,6 +274,8 @@ namespace Main.Core.Domain
         public void NewAddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
         {
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+
             this.ApplyEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
@@ -300,6 +298,8 @@ namespace Main.Core.Domain
             string title, Propagate propagationKind, string description, string condition)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -407,6 +407,8 @@ namespace Main.Core.Domain
         #warning get rid of executor here and create a common mechanism for handling it if needed
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
+
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(groupText);
 
             this.ApplyEvent(
                 new GroupUpdated
@@ -575,6 +577,14 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new DomainException("The titles of groups and chapters can not be empty or contains whitespaces only");
+            }
         }
 
         private void ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(string title)

@@ -643,6 +643,70 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
+        public void NewUpdateGroup_When_groups_new_title_is_empty_Then_throws_DomainException()
+        {
+            // arrange
+            var groupPublicKey = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupPublicKey);
+            string emptyTitle = string.Empty;
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, emptyTitle, Propagate.None, null, null);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [Test]
+        public void NewUpdateGroup_When_groups_new_title_is_not_empty_Then_raised_GroupUpdated_event_contains_the_same_group_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupPublicKey);
+                string notEmptyNewTitle = "Some new title";
+
+                // act
+                questionnaire.NewUpdateGroup(groupPublicKey, notEmptyNewTitle, Propagate.None, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
+            }
+        }
+
+        [Test]
+        public void NewAddGroup_When_groups_title_is_empty_Then_throws_DomainException()
+        {
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            string emptyTitle = string.Empty;
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [Test]
+        public void NewAddGroup_When_groups_title_is_not_empty_Then_raised_NewAddGroup_event_contains_the_same_group_title()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                string notEmptyNewTitle = "Some new title";
+
+                // act
+                questionnaire.NewAddGroup(Guid.NewGuid(), null, notEmptyNewTitle, Propagate.None, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
+            }
+        }
+
+        [Test]
         public void UpdateGroup_When_group_does_not_exist_Then_throws_DomainException()
         {
             // arrange
@@ -657,6 +721,7 @@ namespace Main.Core.Tests.Domain
             Assert.That(act, Throws.InstanceOf<DomainException>());
         }
 
+
         [Test]
         public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_questionnaire_id()
         {
@@ -668,7 +733,7 @@ namespace Main.Core.Tests.Domain
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireId, existingGroupPublicKey);
 
                 // act
-                questionnaire.UpdateGroup(null, Propagate.None, existingGroupPublicKey, null, null, null);
+                questionnaire.UpdateGroup("Title", Propagate.None, existingGroupPublicKey, null, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
@@ -757,7 +822,7 @@ namespace Main.Core.Tests.Domain
                 var description = "hardest questionnaire in the world";
 
                 // act
-                questionnaire.UpdateGroup(null, Propagate.None, groupPublicKey, null, null, description);
+                questionnaire.UpdateGroup("Title", Propagate.None, groupPublicKey, null, null, description);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));
@@ -859,7 +924,7 @@ namespace Main.Core.Tests.Domain
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
 
-            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), null, Propagate.None, null, null, null);
+            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), "New group", Propagate.None, null, null, null);
 
             return questionnaire;
         }
