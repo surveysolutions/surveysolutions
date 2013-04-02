@@ -90,9 +90,9 @@ namespace WB.UI.Designer
 
             bundles.Add(new ScriptBundle("~/bundles/ace").Include(
                 "~/Scripts/lib/ace/ace.js",
-                "~/Scripts/lib/ace/knockout-ace.js",
                 "~/Scripts/lib/ace/mode-ncalc.js",
-                "~/Scripts/lib/ace/theme-designer.js"
+                "~/Scripts/lib/ace/theme-designer.js",
+                "~/Scripts/lib/ace/knockout-ace.js"
             ));
 
             bundles.Add(new StyleBundle("~/content/css").Include(
