@@ -9,8 +9,8 @@
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CAPI.Android</RootNamespace>
-    <AssemblyName>CAPI.Android</AssemblyName>
+    <RootNamespace>AndroidApp</RootNamespace>
+    <AssemblyName>AndroidApp</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <AndroidApplication>true</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
@@ -29,7 +29,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
+    <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
@@ -45,8 +45,6 @@
     <AndroidUseSharedRuntime>False</AndroidUseSharedRuntime>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <AndroidLinkSkip />
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'MONODROID|AnyCPU'">
     <OutputPath>bin\MONODROID\</OutputPath>
@@ -100,9 +98,6 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\LibrariesPortedToAndroid\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="RestSharp.MonoDroid">
-      <HintPath>..\..\ExternalsMonodroid\RestSharp.MonoDroid.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -179,8 +174,6 @@
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
-    <Compile Include="Syncronization\Provider.cs" />
-    <Compile Include="Syncronization\RemoteCollector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -238,6 +231,10 @@
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidApp.Core.Model\AndroidApp.Core.Model.csproj">
+      <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
+      <Name>AndroidApp.Core.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidCore.Capi\AndroidCore.Capi.csproj">
       <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
       <Name>AndroidCore.Capi</Name>
@@ -293,10 +290,6 @@
     <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
       <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
       <Name>AndroidSynchronizationMessages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CAPI.Android.Model\CAPI.Android.Core.Model.csproj">
-      <Project>{ea102e79-6ccf-49f7-9b12-c26320c91ca2}</Project>
-      <Name>CAPI.Android.Core.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mono.Android.Crasher\Mono.Android.Crasher.csproj">
       <Project>{4ece2c97-13a0-46d6-95d1-7bb50a48267b}</Project>

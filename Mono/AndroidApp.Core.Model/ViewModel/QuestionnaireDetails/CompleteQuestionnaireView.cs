@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails.Validation;
+using System.Threading;
+using AndroidApp.Core.Model.ProjectionStorage;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.GridItems;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails.Validation;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 
-namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
+namespace AndroidApp.Core.Model.ViewModel.QuestionnaireDetails
 {
     public class CompleteQuestionnaireView : Cirrious.MvvmCross.ViewModels.MvxViewModel
     {
@@ -186,9 +188,6 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public void SetQuestionStatus(ItemPublicKey key, bool enebled)
         {
-            if (!this.Questions.ContainsKey(key))
-                return;
-
             var question =
                 this.Questions[key];
             question.SetEnabled(enebled);
@@ -301,24 +300,17 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
-
+            
             var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                         rosterKey, group.Enabled,
                                                         siblings,
                                                         breadcrumbs,
-                                                        // this.Chapters,
-                                                        Enumerable.ToList<HeaderItem>(@group.Children
-                                                                                            .OfType<ICompleteQuestion>()
-                                                                                            .Where(
-                                                                                                q =>
-                                                                                                q.QuestionScope ==
-                                                                                                QuestionScope
-                                                                                                    .Interviewer)
-                                                                                            .Select(
-                                                                                                BuildHeader)),
+                                                       // this.Chapters,
+                                                        Enumerable.ToList<HeaderItem>(@group.Children.OfType<ICompleteQuestion>().Select(
+                                                                BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));
 
-            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] {roster.ScreenId}).ToList();
+            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { roster.ScreenId }).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
                                                                       rosterKey, screenItems,
                                                                       GetSiblings,

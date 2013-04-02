@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
 using Android.Widget;
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Extensions;
+using AndroidApp.Core.Model.ViewModel.QuestionnaireDetails;
+using AndroidApp.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
-namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
+namespace AndroidApp.Controls.QuestionnaireDetails.ScreenItems
 {
     public class SingleChoiseQuestionView : AbstractQuestionView
     {
