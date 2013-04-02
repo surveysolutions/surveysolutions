@@ -276,6 +276,8 @@ namespace Main.Core.Domain
         {
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
+            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
+
             this.ApplyEvent(new NewGroupAdded
             {
                 PublicKey = groupId,
@@ -300,6 +302,8 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+
+            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
 
             this.ApplyEvent(new GroupUpdated
             {
@@ -577,6 +581,12 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
+        {
+            if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
+                throw new DomainException(string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)

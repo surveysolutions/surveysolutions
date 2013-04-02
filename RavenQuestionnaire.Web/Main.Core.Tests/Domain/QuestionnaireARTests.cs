@@ -676,6 +676,39 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
+        public void NewUpdateGroup_When_groups_propagation_kind_is_unsupported_Then_throws_DomainException()
+        {
+            // arrange
+            var groupPublicKey = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupPublicKey);
+            var unsupportedPropagationKing = Propagate.Propagated;
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, "Title", unsupportedPropagationKing, null, null);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [TestCase(Propagate.None)]
+        [TestCase(Propagate.AutoPropagated)]
+        public void NewUpdateGroup_When_groups_propagation_kind_is_supported_Then_raised_GroupUpdated_event_contains_the_same_propagation_kind(Propagate supportedPopagationKind)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupPublicKey);
+
+                // act
+                questionnaire.NewUpdateGroup(groupPublicKey, "Title", supportedPopagationKind, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(supportedPopagationKind));
+            }
+        }
+
+        [Test]
         public void NewAddGroup_When_groups_title_is_empty_Then_throws_DomainException()
         {
             // arrange
@@ -707,6 +740,37 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
+        public void NewAddGroup_When_groups_propagation_kind_is_unsupported_Then_throws_DomainException()
+        {
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            var unsupportedPropagationKing = Propagate.Propagated;
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, "Title", unsupportedPropagationKing, null, null);
+
+            // assert
+            Assert.That(act, Throws.InstanceOf<DomainException>());
+        }
+
+        [TestCase(Propagate.None)]
+        [TestCase(Propagate.AutoPropagated)]
+        public void NewAddGroup_When_groups_propagation_kind_is_supported_Then_raised_NewAddGroup_event_contains_the_same_propagation_kind(Propagate supportedPopagationKind)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+                // act
+                questionnaire.NewAddGroup(Guid.NewGuid(), null, "Title", supportedPopagationKind, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).Paropagateble, Is.EqualTo(supportedPopagationKind));
+            }
+        }
+
+        [Test]
         public void UpdateGroup_When_group_does_not_exist_Then_throws_DomainException()
         {
             // arrange
@@ -720,7 +784,6 @@ namespace Main.Core.Tests.Domain
             // assert
             Assert.That(act, Throws.InstanceOf<DomainException>());
         }
-
 
         [Test]
         public void UpdateGroup_When_group_exists_Then_raised_GroupUpdated_event_contains_questionnaire_id()
