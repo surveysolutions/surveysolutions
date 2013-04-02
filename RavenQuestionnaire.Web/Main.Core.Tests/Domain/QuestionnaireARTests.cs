@@ -33,22 +33,6 @@ namespace Main.Core.Tests.Domain
             Assert.That(act, Throws.InstanceOf<DomainException>());
         }
 
-        [Test]
-        public void QuestionnaireARConstructor_When_questionnaire_title_is_not_empty_Then_raised_NewQuestionnaireCreated_event_contains_questionnaire_title()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                var nonEmptyTitle = "Title";
-
-                // act
-                new QuestionnaireAR(Guid.NewGuid(), nonEmptyTitle, Guid.NewGuid());
-
-                // assert
-                Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
-            }
-        }
-
         [TestCase("")]
         [TestCase("   ")]
         [TestCase("      ")] /* contains \t symbol */
@@ -81,7 +65,85 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        #region AddQuestion tests
+
+        [Test]
+        public void NewAddQuestion_when_question_is_featured_but_inside_propagated_group_then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            Guid autoGroupId = Guid.NewGuid();
+            bool isFeatured = true;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text,
+                                             "name",
+                                             false, isFeatured, false, QuestionScope.Interviewer, "", "", "", "",
+                                             new Option[0], Order.AsIs, 0, new Guid[0]);
+
+            // Assert
+            Assert.Throws<DomainException>(act);
+        }
+
+        [Test]
+        public void NewAddQuestion_when_question_is_featured_and_inside_non_propagated_group_then_raised_NewQuestionAdded_event_contains_the_same_featured_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                Guid groupId = Guid.NewGuid();
+                bool isFeatured = true;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
+                                                 QuestionType.Text, "name",
+                                                 false, isFeatured, false, QuestionScope.Interviewer, "", "", "", "",
+                                                 new Option[0], Order.AsIs, 0, new Guid[0]);
+
+                // Assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Featured, Is.EqualTo(isFeatured));
+            }
+        }
+
+        [Test]
+        public void NewUpdateQuestion_when_qustion_in_propagated_group_is_featured_then_DomainException_should_be_thrown()
+        {
+            // Arrange
+            Guid updatedQuestion = Guid.NewGuid();
+            bool isFeatured = true;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
+
+            // Act
+            TestDelegate act = () =>  questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
+                                               isFeatured,
+                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
+
+            // Assert
+            Assert.Throws<DomainException>(act);
+        }
+
+        [Test]
+        public void NewUpdateQuestion_when_question_inside_non_propagated_group_is_featured_then_raised_QuestionChanged_event_contains_the_same_featured_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                Guid updatedQuestion = Guid.NewGuid();
+                bool isFeatured = true;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
+
+                // Act
+                questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
+                                               isFeatured,
+                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
+
+                // Assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Featured, Is.EqualTo(isFeatured));
+            }
+        }
+
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
@@ -95,7 +157,7 @@ namespace Main.Core.Tests.Domain
             // Act
             TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?", "name",
                                                                questionType,
-                                                               QuestionScope.Interviewer, "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, 
+                                                               QuestionScope.Interviewer, "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0,
                                                                emptyAnswersList);
 
             // Assert
@@ -269,9 +331,6 @@ namespace Main.Core.Tests.Domain
             Assert.Throws<DomainException>(act);
         }
 
-        #endregion
-
-        #region ChangeQuestion tests
 
         [Test]
         [TestCase(QuestionType.SingleOption)]
@@ -285,15 +344,14 @@ namespace Main.Core.Tests.Domain
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,"name", "", 
+            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0, "name", "",
                                              questionType,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false, false, Order.AZ, 
+                                             QuestionScope.Interviewer, null, "", "", "", false, false, false, Order.AZ,
                                              emptyAnswersList);
 
             // Assert
             Assert.Throws<DomainException>(act);
         }
-
 
         [Test]
         public void ChangeQuestion_When_capital_parameter_is_true_Then_in_QuestionChanged_event_capital_property_should_be_set_in_true_too()
@@ -341,7 +399,6 @@ namespace Main.Core.Tests.Domain
                 Assert.AreEqual(validStataExportCaption, risedEvent.StataExportCaption);
             }
         }
-
 
         [Test]
         public void ChangeQuestion_When_we_updating_absent_question_Then_DomainException_should_be_thrown()
@@ -484,8 +541,6 @@ namespace Main.Core.Tests.Domain
             // Assert
             Assert.Throws<DomainException>(act);
         }
-
-        #endregion
 
         [Test]
         public void DeleteGroup_When_group_public_key_specified_Then_raised_GroupDeleted_event_with_same_group_public_key()
@@ -945,7 +1000,7 @@ namespace Main.Core.Tests.Domain
 
         private static T GetSingleEvent<T>(EventContext eventContext)
         {
-            return (T) eventContext.Events.Single(e => e.Payload is T).Payload;
+            return (T)eventContext.Events.Single(e => e.Payload is T).Payload;
         }
 
         private static QuestionnaireAR CreateQuestionnaireAR()
@@ -976,7 +1031,7 @@ namespace Main.Core.Tests.Domain
             questionnaire.AddQuestion(questionKey, "What is your middle name?", "middlename",
                 QuestionType.Text, QuestionScope.Interviewer, null, null, null,
                 false, false, false, Order.AZ, null, null,
-                new List<Guid>(), 0, new Answer[] {});
+                new List<Guid>(), 0, new Answer[] { });
 
             questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
 
@@ -991,5 +1046,41 @@ namespace Main.Core.Tests.Domain
 
             return questionnaire;
         }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroup(Guid autoGroupId)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR(Guid.NewGuid(), "Title");
+
+            questionnaire.AddGroup(autoGroupId, "New auto group", Propagate.AutoPropagated, null, null, null);
+
+            return questionnaire;
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(Guid questionId)
+        {
+            var autoGroupId = Guid.NewGuid();
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
+
+            questionnaire.NewAddQuestion(questionId, autoGroupId, "Title", QuestionType.Text, "text", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
+                                         new Guid[0]);
+
+            return questionnaire;
+        }
+
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroupAndQuestionInIt(Guid questionId)
+        {
+            var groupId = Guid.NewGuid();
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupId);
+
+            questionnaire.NewAddQuestion(questionId, groupId, "Title", QuestionType.Text, "text", false, false,
+                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
+                                         new Guid[0]);
+
+            return questionnaire;
+        }
+        
     }
 }
