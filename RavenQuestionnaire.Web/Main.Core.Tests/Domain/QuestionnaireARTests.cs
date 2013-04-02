@@ -773,7 +773,7 @@ namespace Main.Core.Tests.Domain
                 var publicKey = Guid.NewGuid();
 
                 // act
-                new QuestionnaireAR(publicKey, null);
+                new QuestionnaireAR(publicKey, "title");
 
                 // assert
                 Assert.That(GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
@@ -857,7 +857,7 @@ namespace Main.Core.Tests.Domain
 
         private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupPublicKey = null)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), null);
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
 
             questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), null, Propagate.None, null, null, null);
 
