@@ -44,7 +44,7 @@ namespace WB.UI.Designer
 
             // 3rd Party JavaScript files
             bundles.Add(new ScriptBundle("~/bundles/jsextlibs")
-                            //.IncludeDirectory("~/Scripts/lib", "*.js", searchSubdirectories: false));
+                //.IncludeDirectory("~/Scripts/lib", "*.js", searchSubdirectories: false));
                             .Include(
                                 "~/Scripts/lib/json2.js", // IE7 needs this
 
@@ -88,12 +88,12 @@ namespace WB.UI.Designer
                 "~/Scripts/bootstrap.js"
                 ));
 
-            bundles.Add(new ScriptBundle("~/bundles/ace").Include(
-                "~/Scripts/lib/ace/ace.js",
-                "~/Scripts/lib/ace/mode-ncalc.js",
-                "~/Scripts/lib/ace/theme-designer.js",
-                "~/Scripts/lib/ace/knockout-ace.js"
-            ));
+            var bundle = new ScriptBundle("~/bundles/ace").Include("~/Scripts/lib/ace/ace.js",
+                //"~/Scripts/lib/ace/mode-ncalc.js", 
+                //"~/Scripts/lib/ace/theme-designer.js", 
+"~/Scripts/lib/ace/knockout-ace.js");
+            bundle.Transforms.Clear();
+            bundles.Add(bundle);
 
             bundles.Add(new StyleBundle("~/content/css").Include(
                 "~/Content/bootstrap.css",
