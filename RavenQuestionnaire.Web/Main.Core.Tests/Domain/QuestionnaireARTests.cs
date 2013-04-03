@@ -48,6 +48,7 @@ namespace Main.Core.Tests.Domain
             Assert.That(act, Throws.InstanceOf<DomainException>());
         }
 
+
         [Test]
         public void UpdateQuestionnaire_When_questionnaire_title_is_not_empty_Then_raised_QuestionnaireUpdated_event_contains_questionnaire_title()
         {
@@ -106,6 +107,75 @@ namespace Main.Core.Tests.Domain
             }
         }
 
+        #region empty title tests
+
+        [Test]
+        public void
+            NewAddQuestion_When_Title_is_not_empty_Then_rised_Then_NewQuestionAdded_event_contains_the_same_title_caption
+            ()
+        {
+            using (var eventContext = new EventContext())
+            {
+                var questionnaireKey = Guid.NewGuid();
+                var groupKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
+
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "not empty", QuestionType.Text, "test", false,
+                                             false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty,
+                                             string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual("not empty", risedEvent.QuestionText);
+            }
+        }
+        [Test]
+        public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption
+            ()
+        {
+            using (var eventContext = new EventContext())
+            {
+                Guid questionKey;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionKey);
+
+                questionnaire.NewUpdateQuestion(questionKey, "not empty", QuestionType.Text, "test", false, false,
+                                                false, QuestionScope.Interviewer, string.Empty, string.Empty,
+                                                string.Empty,
+                                                string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual("not empty", risedEvent.QuestionText);
+            }
+        }
+        [Test]
+        public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
+            ()
+        {
+            var questionnaireKey = Guid.NewGuid();
+            var groupKey = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "", QuestionType.Text, "test", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+        }
+        [Test]
+        public void NewUpdateQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
+            ()
+        {
+            Guid questionKey;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionKey);
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(questionKey, "", QuestionType.Text, "test", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+        }
+        #endregion
+
+       
         [Test]
         public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
         {

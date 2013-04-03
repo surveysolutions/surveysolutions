@@ -258,7 +258,7 @@ namespace Main.Core.Domain
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
-
+            this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
@@ -309,7 +309,7 @@ namespace Main.Core.Domain
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
-
+            this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
@@ -341,6 +341,8 @@ namespace Main.Core.Domain
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
             });
         }
+
+        
 
         [Obsolete]
         public void UpdateGroup(
@@ -615,7 +617,11 @@ namespace Main.Core.Domain
                 throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
             }
         }
-
+        private void ThrowDomainExceptionIfTitleisEmpty(string title)
+        {
+           if(string.IsNullOrEmpty(title))
+               throw new DomainException("Question title can't be empty");
+        }
         private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
         {
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
