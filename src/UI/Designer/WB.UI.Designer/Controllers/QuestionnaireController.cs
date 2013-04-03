@@ -6,6 +6,9 @@
 //   The questionnaire controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Domain;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -90,11 +93,24 @@ namespace WB.UI.Designer.Controllers
                 {
                     throw new ArgumentNullException("model");
                 }
-
-                this.CommandService.Execute(
-                    new CloneQuestionnaireCommand(
-                        Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
-                return this.RedirectToAction("Index");
+                try
+                {
+                    this.CommandService.Execute(
+                        new CloneQuestionnaireCommand(
+                            Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
+                    return this.RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException is DomainException)
+                    {
+                        this.Error(e.InnerException.Message);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
 
             return this.View(model);
