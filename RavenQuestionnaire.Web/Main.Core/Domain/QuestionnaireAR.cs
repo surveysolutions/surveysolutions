@@ -117,10 +117,6 @@ namespace Main.Core.Domain
         }
 
         [Obsolete]
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
-
         public void ChangeQuestion(
             Guid publicKey,
             string questionText,
