@@ -311,6 +311,7 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+            
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
 
@@ -627,13 +628,21 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
         }
 
-        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType,
+                                                                  IEnumerable<IAnswer> answerOptions)
         {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
-            if (isQuestionWithOptions && !answerOptions.Any())
-            {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption ||
+                                        questionType == QuestionType.SingleOption;
+            if (!isQuestionWithOptions)
+                return;
+            if (!answerOptions.Any())
                 throw new DomainException("Questions with options should have one answer option at least");
+            foreach (var answerOption in answerOptions)
+            {
+                if(string.IsNullOrEmpty(answerOption.AnswerText))
+                    throw new DomainException("Answer title can't be empty");
             }
+
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)

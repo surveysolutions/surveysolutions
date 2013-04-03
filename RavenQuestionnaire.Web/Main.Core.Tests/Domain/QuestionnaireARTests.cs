@@ -129,6 +129,7 @@ namespace Main.Core.Tests.Domain
                 Assert.AreEqual("not empty", risedEvent.QuestionText);
             }
         }
+
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption
             ()
@@ -146,6 +147,7 @@ namespace Main.Core.Tests.Domain
                 Assert.AreEqual("not empty", risedEvent.QuestionText);
             }
         }
+
         [Test]
         public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
             ()
@@ -160,6 +162,7 @@ namespace Main.Core.Tests.Domain
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
             Assert.Throws<DomainException>(act);
         }
+
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
             ()
@@ -173,6 +176,113 @@ namespace Main.Core.Tests.Domain
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
             Assert.Throws<DomainException>(act);
         }
+        #endregion
+
+        #region answer option title is required
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            var questionnaireKey = Guid.NewGuid();
+            var groupKey = Guid.NewGuid();
+            // arrange
+            QuestionnaireAR questionnsire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
+
+            Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
+            // act
+            TestDelegate act =
+                () =>
+                questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, options, Order.AsIs, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+            // assert
+            
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewAddQuestion_When_AnswerTitleIsNotEmpty_Then_event_contains_the_same_answer_title(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                var questionnaireKey = Guid.NewGuid();
+                var groupKey = Guid.NewGuid();
+                // arrange
+                QuestionnaireAR questionnsire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
+                Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+
+                // act
+                questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, options, Order.AsIs, null, new Guid[0]);
+                // assert
+                var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
+                Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            Guid questionKey;
+            // arrange
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+            Option[] options = new Option[1] {new Option(Guid.NewGuid(), "1", string.Empty)};
+            // act
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
+                                                QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                string.Empty, options, Order.AsIs, null, new Guid[0]);
+            Assert.Throws<DomainException>(act);
+            // assert
+            
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_AnswerTitleIsNotEmpty_Then_event_contains_the_same_answer_title(QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                Guid questionKey;
+                Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
+                // arrange
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey,
+                                                                                                      questionType,
+                                                                                                      new Answer[1]
+                                                                                                          {
+                                                                                                              new Answer
+                                                                                                          ()
+                                                                                                                  {
+                                                                                                                      AnswerText
+                                                                                                                          = "t",
+                                                                                                                      AnswerValue
+                                                                                                                          = "1"
+                                                                                                                  }
+                                                                                                          });
+               
+
+                // act
+                questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
+                                                QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                                string.Empty, options, Order.AsIs, null, new Guid[0]);
+                // assert
+                var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
+                Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
+            }
+
+            
+
+        }
+
         #endregion
 
        
@@ -1140,6 +1250,22 @@ namespace Main.Core.Tests.Domain
         {
             questionId = Guid.NewGuid();
             return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
+        }
+        
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInType(out Guid targetQuestionPublicKey, QuestionType questionType)
+        {
+            return CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out targetQuestionPublicKey, QuestionType.Text, new Answer[0]);
+        }
+        
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out Guid targetQuestionPublicKey, QuestionType questionType, Answer[] options)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            targetQuestionPublicKey = Guid.NewGuid();
+
+            questionnaire.AddQuestion(targetQuestionPublicKey, "What is your last name?", "lastName", questionType,
+                                      QuestionScope.Interviewer,
+                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, options);
+            return questionnaire;
         }
 
         private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
