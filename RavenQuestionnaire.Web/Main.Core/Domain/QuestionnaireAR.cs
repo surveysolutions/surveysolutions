@@ -332,6 +332,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
 
+            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
+
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
@@ -383,6 +385,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
 
+            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -590,6 +593,26 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
+        {
+            if (triggedGroupIds == null || triggedGroupIds.Length == 0) 
+                return;
+
+            foreach (var groupId in triggedGroupIds)
+            {
+                var group = this.innerDocument.Find<Group>(groupId);
+                if (@group == null)
+                {
+                    throw new DomainException("Question can trigger only existing");
+                }
+
+                if (@group.Propagated == Propagate.None)
+                {
+                    throw new DomainException("Question can trigger only propagated groups");
+                }
+            }
         }
 
         private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(Guid questionId, bool isHeadOfGroup, Guid? groupId)
