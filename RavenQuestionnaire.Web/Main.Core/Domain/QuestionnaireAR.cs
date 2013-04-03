@@ -183,13 +183,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
         }
 
-        [Obsolete]
-        public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
-        }
-
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(

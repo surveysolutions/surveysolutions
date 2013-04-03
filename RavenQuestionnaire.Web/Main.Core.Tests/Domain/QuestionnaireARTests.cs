@@ -927,31 +927,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                var questionId = Guid.NewGuid();
+                Guid questionId;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
 
                 // act
-                questionnaire.DeleteQuestion(questionId, Guid.NewGuid());
+                Guid parentPublicKey = Guid.NewGuid();
+                questionnaire.NewDeleteQuestion(questionId);
 
                 // assert
                 Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
-            }
-        }
-
-        [Test]
-        public void DeleteQuestion_When_parent_element_public_key_specified_Then_raised_QuestionDeleted_event_with_same_parent_element_public_key()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                var parentPublicKey = Guid.NewGuid();
-
-                // act
-                questionnaire.DeleteQuestion(Guid.NewGuid(), parentPublicKey);
-
-                // assert
-                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentPublicKey));
             }
         }
 
