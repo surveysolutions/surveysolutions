@@ -1,0 +1,20 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>ViewTestUploadFile</title>
+</head>
+<body>
+    <div>
+         @using (Html.BeginForm("Import", "Synchronization", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {       
+                <input type="file" name="myfile" />   
+                <input type="submit" name="Submit" value="Upload" />
+            }
+    </div>
+</body>
+</html>

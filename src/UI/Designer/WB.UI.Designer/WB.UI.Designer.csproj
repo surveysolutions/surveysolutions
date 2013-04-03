@@ -80,6 +80,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\MonoCapi\ExternalLibs\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
@@ -221,6 +225,9 @@
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
+    <Compile Include="Controllers\SynchronizationController.cs">
+      <DependentUpon>AdminController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -526,6 +533,7 @@
     <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
     <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
