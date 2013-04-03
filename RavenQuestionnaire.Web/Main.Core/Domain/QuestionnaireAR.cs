@@ -117,6 +117,10 @@ namespace Main.Core.Domain
         }
 
         [Obsolete]
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
+
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
+
         public void ChangeQuestion(
             Guid publicKey,
             string questionText,
@@ -143,6 +147,10 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
 
             this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
+
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
+
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
 
             this.ApplyEvent(
                 new QuestionChanged
@@ -259,11 +267,16 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
+            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
+            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
+
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
+
+            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -317,6 +330,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
 
+            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -533,6 +547,26 @@ namespace Main.Core.Domain
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
+        private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
+        {
+            if (triggedGroupIds == null || triggedGroupIds.Length == 0) 
+                return;
+
+            foreach (var groupId in triggedGroupIds)
+            {
+                var group = this.innerDocument.Find<Group>(groupId);
+                if (@group == null)
+                {
+                    throw new DomainException("Question can trigger only existing");
+                }
+
+                if (@group.Propagated == Propagate.None)
+                {
+                    throw new DomainException("Question can trigger only propagated groups");
+                }
+            }
+        }
+
         private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(Guid questionId, bool isHeadOfGroup, Guid? groupId)
         {
             if (!isHeadOfGroup)
@@ -637,10 +671,14 @@ namespace Main.Core.Domain
                 return;
             if (!answerOptions.Any())
                 throw new DomainException("Questions with options should have one answer option at least");
+            Dictionary<string, int> uniquniesTitleCounter = new Dictionary<string, int>();
             foreach (var answerOption in answerOptions)
             {
                 if(string.IsNullOrEmpty(answerOption.AnswerText))
                     throw new DomainException("Answer title can't be empty");
+                if (uniquniesTitleCounter.ContainsKey(answerOption.AnswerText))
+                    throw new DomainException("Answer title is not unique");
+                uniquniesTitleCounter[answerOption.AnswerText] = 1;
             }
 
         }
@@ -678,6 +716,40 @@ namespace Main.Core.Domain
             if (isNotUnique)
             {
                 throw new DomainException("Variable name should be unique in questionnaire's scope");
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsContainsInvalidCharacters(QuestionType type, Option[] options)
+        {
+            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(type, ConvertOptionsToAnswers(options));
+        }
+
+        private void ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(
+            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption
+                                        || questionType == QuestionType.SingleOption;
+            int iAnswerValue = 0;
+            if (isQuestionWithOptions && answerOptions.Any(x=>!int.TryParse(x.AnswerValue, out iAnswerValue)))
+            {
+                throw new DomainException("Answer values should have only number characters");
+            }
+        }
+
+        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
+        {
+            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(type, ConvertOptionsToAnswers(options));
+        }
+
+        private void ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(
+            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        {
+            var isQuestionWithOptions = questionType == QuestionType.MultyOption
+                                        || questionType == QuestionType.SingleOption;
+
+            if (isQuestionWithOptions && answerOptions.Any(x => string.IsNullOrEmpty(x.AnswerValue)))
+            {
+                throw new DomainException("Answer value is required");
             }
         }
     }
