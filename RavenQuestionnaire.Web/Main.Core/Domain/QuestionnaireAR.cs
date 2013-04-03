@@ -611,7 +611,7 @@ namespace Main.Core.Domain
 
             if (group.Propagated == Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException("Question inside propagated group can not be head.");
             }
         }
 
@@ -634,21 +634,21 @@ namespace Main.Core.Domain
 
             if (group.Propagated != Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException("Question inside propagated group can not be featured.");
             }
         }
 
         private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
         {
             if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new DomainException(string.Format("Group's propagation kind {0} is unsupported", propagationKind));
+                throw new DomainException(string.Format("Group's propagation kind {0} is unsupported.", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("The titles of groups and chapters can not be empty or contains whitespaces only");
+                throw new DomainException("The titles of groups and chapters can not be empty or contains whitespaces only.");
             }
         }
 
@@ -656,7 +656,7 @@ namespace Main.Core.Domain
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("Questionnaire's title can not be empty or contains whitespaces only");
+                throw new DomainException("Questionnaire's title can not be empty or contains whitespaces only.");
             }
         }
 
@@ -665,7 +665,7 @@ namespace Main.Core.Domain
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new DomainException(string.Format("Question with public key {0} can't be found", publicKey));
+                throw new DomainException(string.Format("Question with public key {0} can't be found.", publicKey));
             }
         }
 
@@ -674,7 +674,7 @@ namespace Main.Core.Domain
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+                throw new DomainException(string.Format("Group with public key {0} can't be found.", groupPublicKey));
             }
         }
 
@@ -688,7 +688,7 @@ namespace Main.Core.Domain
             var isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
             if (isQuestionWithOptions && !answerOptions.Any())
             {
-                throw new DomainException("Questions with options should have one answer option at least");
+                throw new DomainException("Questions with options should have one answer option at least.");
             }
         }
 
@@ -696,25 +696,25 @@ namespace Main.Core.Domain
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new DomainException("Variable name shouldn't be empty or contains white spaces");
+                throw new DomainException("Variable name should be not empty or contains white spaces.");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new DomainException("Variable name shouldn't be longer than 32 characters");
+                throw new DomainException("Variable name shouldn't be longer than 32 characters.");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new DomainException("Valid variable name should contains only letters, digits and underscore character");
+                throw new DomainException("Valid variable name should contain only letters, digits and underscore characters.");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new DomainException("Variable name shouldn't starts with digit");
+                throw new DomainException("Variable name shouldn't start with a digit.");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -724,7 +724,7 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new DomainException("Variable name should be unique in questionnaire's scope");
+                throw new DomainException("Variable name should be unique in questionnaire's scope.");
             }
         }
     }
