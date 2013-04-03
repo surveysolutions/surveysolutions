@@ -1159,7 +1159,9 @@ namespace Main.Core.Tests.Domain
 
             // act
             TestDelegate act = () =>
-                questionnaire.UpdateGroup(null, Propagate.None, notExistingGroupPublicKey, null, null, null);
+            {
+                questionnaire.NewUpdateGroup(notExistingGroupPublicKey, null, Propagate.None, null, null);
+            };
 
             // assert
             Assert.That(act, Throws.InstanceOf<DomainException>());
@@ -1176,7 +1178,7 @@ namespace Main.Core.Tests.Domain
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireId, existingGroupPublicKey);
 
                 // act
-                questionnaire.UpdateGroup("Title", Propagate.None, existingGroupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(existingGroupPublicKey, "Title", Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
@@ -1193,7 +1195,7 @@ namespace Main.Core.Tests.Domain
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
-                questionnaire.UpdateGroup("group text", Propagate.None, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "group text", Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
@@ -1211,7 +1213,7 @@ namespace Main.Core.Tests.Domain
                 var groupText = "new group text";
 
                 // act
-                questionnaire.UpdateGroup(groupText, Propagate.None, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, groupText, Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupText, Is.EqualTo(groupText));
@@ -1229,7 +1231,7 @@ namespace Main.Core.Tests.Domain
                 var propagatability = Propagate.AutoPropagated;
 
                 // act
-                questionnaire.UpdateGroup("new text", propagatability, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "new text", propagatability, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(propagatability));
@@ -1247,7 +1249,7 @@ namespace Main.Core.Tests.Domain
                 var conditionExpression = "2 < 7";
 
                 // act
-                questionnaire.UpdateGroup("text of a group", Propagate.None, groupPublicKey, null, conditionExpression, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "text of a group", Propagate.None, null, conditionExpression);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).ConditionExpression, Is.EqualTo(conditionExpression));
@@ -1265,7 +1267,7 @@ namespace Main.Core.Tests.Domain
                 var description = "hardest questionnaire in the world";
 
                 // act
-                questionnaire.UpdateGroup("Title", Propagate.None, groupPublicKey, null, null, description);
+                questionnaire.NewUpdateGroup(groupPublicKey, "Title", Propagate.None, description, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));

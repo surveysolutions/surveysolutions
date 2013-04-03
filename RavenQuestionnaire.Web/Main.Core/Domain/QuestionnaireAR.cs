@@ -353,35 +353,6 @@ namespace Main.Core.Domain
             });
         }
 
-        
-
-        [Obsolete]
-        public void UpdateGroup(
-            string groupText,
-            Propagate propagateble,
-            Guid groupPublicKey,
-            UserLight executor,
-            string conditionExpression,
-            string description)
-        #warning get rid of executor here and create a common mechanism for handling it if needed
-        {
-            this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
-
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(groupText);
-
-            this.ApplyEvent(
-                new GroupUpdated
-                    {
-                        QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                        GroupPublicKey = groupPublicKey,
-                        GroupText = groupText,
-                        Propagateble = propagateble,
-                        /*Executor = executor,*/
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
-        }
-
         public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
         {
             this.ApplyEvent(
