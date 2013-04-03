@@ -670,16 +670,18 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Answer[0];
+            var emptyAnswersList = new Option[] {};
 
             Guid targetQuestionPublicKey;
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0, "name", "",
-                                             questionType,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false, false, Order.AZ,
-                                             emptyAnswersList);
+            TestDelegate act = () =>
+            {
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", questionType, "name",
+                    false, false, false, QuestionScope.Interviewer, "", "", "",
+                    "", emptyAnswersList, Order.AZ, 0, new List<Guid>().ToArray());
+            };
 
             // Assert
             Assert.Throws<DomainException>(act);
@@ -691,17 +693,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                Guid targetQuestionPublicKey;
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(targetQuestionPublicKey);
 
                 bool capital = true;
 
                 // Act
-                questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
-                                             "title", "", QuestionType.Text,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false, capital,
-                                             Order.AZ, new Answer[0]);
-
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text, "title",
+                    false, false, capital, QuestionScope.Interviewer, "", "", "",
+                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
 
                 // Assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
@@ -738,12 +738,12 @@ namespace Main.Core.Tests.Domain
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(Guid.NewGuid(), "Title", new List<Guid>(), 0,
-                                                            "valid", "",
-                                                            QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
-                                                            Order.AZ,
-                                                            new Answer[0]);
+            TestDelegate act = () =>
+            {
+                questionnaire.NewUpdateQuestion(Guid.NewGuid(), "Title", QuestionType.Text, "valid",
+                    false, false, false, QuestionScope.Interviewer, "", "", "",
+                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
+            };
 
             // Assert
             Assert.Throws<DomainException>(act);
@@ -1525,35 +1525,11 @@ namespace Main.Core.Tests.Domain
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act =
-                () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.MultyOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
+            TestDelegate act = () =>
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "What is your last name?", QuestionType.MultyOption, "name",
+                    false, false, false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                    string.Empty, new [] { new Option(Guid.NewGuid(), "text value", "text") }, 
+                    Order.AZ, 0, new List<Guid>().ToArray());
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1568,35 +1544,11 @@ namespace Main.Core.Tests.Domain
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act =
-                () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
+            TestDelegate act = () =>
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "What is your last name?", QuestionType.SingleOption, "name",
+                    false, false, false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                    string.Empty, new [] { new Option(Guid.NewGuid(), "text value", "text") },
+                    Order.AZ, 0, new List<Guid>().ToArray());
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
@@ -1681,34 +1633,11 @@ namespace Main.Core.Tests.Domain
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act =
-                () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerText = "text"
-                                }
-                        });
+            TestDelegate act = () =>
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "What is your last name?", QuestionType.SingleOption, "name",
+                    false, false, false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                    string.Empty, new [] { new Option(Guid.NewGuid(), null, "text") }, 
+                    Order.AZ, 0, new List<Guid>().ToArray());
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);

@@ -116,60 +116,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
-        [Obsolete]
-        public void ChangeQuestion(
-            Guid publicKey,
-            string questionText,
-            List<Guid> triggers,
-            int maxValue,
-            string stataExportCaption,
-            string instructions,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            Guid? groupPublicKey,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            bool featured,
-            bool mandatory,
-            bool capital,
-            Order answerOrder,
-            Answer[] answers)
-        {
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(publicKey);
-
-            stataExportCaption = stataExportCaption.Trim();
-
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
-
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
-
-            this.ApplyEvent(
-                new QuestionChanged
-                    {
-                        PublicKey = publicKey,
-                        QuestionText = questionText,
-                        Triggers = triggers,
-                        MaxValue = maxValue,
-                        StataExportCaption = stataExportCaption,
-                        QuestionType = questionType,
-                        QuestionScope = questionScope,
-                        ConditionExpression = conditionExpression,
-                        ValidationExpression = validationExpression,
-                        ValidationMessage = validationMessage,
-                        Featured = featured,
-                        Mandatory = mandatory,
-                        Capital = capital,
-                        AnswerOrder = answerOrder,
-                        Answers = answers,
-                        Instructions = instructions
-                    });
-        }
-
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         #warning probably a factory should be used here
         {
@@ -306,7 +252,9 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
-            
+
+            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
+            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
 
@@ -612,28 +560,21 @@ namespace Main.Core.Domain
         }
         private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
         {
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
-        }
-
-        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType,
-                                                                  IEnumerable<IAnswer> answerOptions)
-        {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption ||
-                                        questionType == QuestionType.SingleOption;
+            var isQuestionWithOptions = type == QuestionType.MultyOption ||
+                type == QuestionType.SingleOption;
             if (!isQuestionWithOptions)
                 return;
-            if (!answerOptions.Any())
+            if (!options.Any())
                 throw new DomainException("Questions with options should have one answer option at least");
             Dictionary<string, int> uniquniesTitleCounter = new Dictionary<string, int>();
-            foreach (var answerOption in answerOptions)
+            foreach (var answerOption in options)
             {
-                if(string.IsNullOrEmpty(answerOption.AnswerText))
+                if(string.IsNullOrEmpty(answerOption.Title))
                     throw new DomainException("Answer title can't be empty");
-                if (uniquniesTitleCounter.ContainsKey(answerOption.AnswerText))
+                if (uniquniesTitleCounter.ContainsKey(answerOption.Title))
                     throw new DomainException("Answer title is not unique");
-                uniquniesTitleCounter[answerOption.AnswerText] = 1;
+                uniquniesTitleCounter[answerOption.Title] = 1;
             }
-
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
@@ -674,33 +615,25 @@ namespace Main.Core.Domain
 
         private void ThrowDomainExceptionIfOptionsContainsInvalidCharacters(QuestionType type, Option[] options)
         {
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(type, ConvertOptionsToAnswers(options));
-        }
+            var isQuestionWithOptions = type == QuestionType.MultyOption || type == QuestionType.SingleOption;
 
-        private void ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(
-            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
-        {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption
-                                        || questionType == QuestionType.SingleOption;
-            int iAnswerValue = 0;
-            if (isQuestionWithOptions && answerOptions.Any(x=>!int.TryParse(x.AnswerValue, out iAnswerValue)))
+            if (isQuestionWithOptions && options.Any(option => !IsInteger(option.Value)))
             {
                 throw new DomainException("Answer values should have only number characters");
             }
         }
 
-        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
+        private static bool IsInteger(string value)
         {
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(type, ConvertOptionsToAnswers(options));
+            int _;
+            return int.TryParse(value, out _);
         }
 
-        private void ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(
-            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
+        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
         {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption
-                                        || questionType == QuestionType.SingleOption;
+            var isQuestionWithOptions = type == QuestionType.MultyOption || type == QuestionType.SingleOption;
 
-            if (isQuestionWithOptions && answerOptions.Any(x => string.IsNullOrEmpty(x.AnswerValue)))
+            if (isQuestionWithOptions && options.Any(option => string.IsNullOrEmpty(option.Value)))
             {
                 throw new DomainException("Answer value is required");
             }
