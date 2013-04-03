@@ -54,30 +54,30 @@ namespace Main.Core.Domain
                 x => x.Children,
                 (parent, x) =>
                     {
-                        var parentId = parent == null ? (Guid?)null : parent.PublicKey;
+                        Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
                         var q = x as IQuestion;
                         if (q != null)
                         {
                             var autoQuestion = q as IAutoPropagate;
-                            this.AddQuestion(
-                                publicKey: q.PublicKey,
-                                questionText: q.QuestionText,
-                                stataExportCaption: q.StataExportCaption,
-                                questionType: q.QuestionType,
-                                questionScope: q.QuestionScope,
-                                conditionExpression: q.ConditionExpression,
+                            this.NewAddQuestion(
+                                questionId: q.PublicKey,
+                                groupId: parentId.Value,
+                                title: q.QuestionText,
+                                type: q.QuestionType,
+                                alias: q.StataExportCaption,
+                                isMandatory: q.Mandatory,
+                                isFeatured: q.Featured,
+                                isHeaderOfPropagatableGroup: q.Capital,
+                                scope: q.QuestionScope,
+                                condition: q.ConditionExpression,
                                 validationExpression: q.ValidationExpression,
                                 validationMessage: q.ValidationMessage,
-                                featured: q.Featured,
-                                mandatory: q.Mandatory,
-                                capital: q.Capital,
-                                answerOrder: q.AnswerOrder,
                                 instructions: q.Instructions,
-                                groupPublicKey: parentId,
-                                triggers: autoQuestion == null ? null : autoQuestion.Triggers,
+                                options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
+                                optionsOrder: q.AnswerOrder,
                                 maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                                answers: q.Answers.Select(Answer.CreateFromOther).ToArray());
+                                triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
                         }
                         var g = x as IGroup;
                         if (g != null)
@@ -114,55 +114,6 @@ namespace Main.Core.Domain
         public void DeleteQuestionnaire()
         {
             this.ApplyEvent(new QuestionnaireDeleted());
-        }
-
-        [Obsolete]
-        public void AddQuestion(
-            Guid publicKey,
-            string questionText,
-            string stataExportCaption,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            bool featured,
-            bool mandatory,
-            bool capital,
-            Order answerOrder,
-            string instructions,
-            Guid? groupPublicKey,
-            List<Guid> triggers,
-            int maxValue,
-            Answer[] answers)
-        {
-            stataExportCaption = stataExportCaption.Trim();
-
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
-
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
-
-            this.ApplyEvent(
-                new NewQuestionAdded
-                    {
-                        PublicKey = publicKey,
-                        QuestionText = questionText,
-                        StataExportCaption = stataExportCaption,
-                        QuestionType = questionType,
-                        QuestionScope = questionScope,
-                        ConditionExpression = conditionExpression,
-                        ValidationExpression = validationExpression,
-                        ValidationMessage = validationMessage,
-                        Featured = featured,
-                        Mandatory = mandatory,
-                        Capital = capital,
-                        AnswerOrder = answerOrder,
-                        GroupPublicKey = groupPublicKey,
-                        Triggers = triggers,
-                        MaxValue = maxValue,
-                        Answers = answers,
-                        Instructions = instructions
-                    });
         }
 
         [Obsolete]
@@ -572,6 +523,11 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private static Option ConvertAnswerToOption(IAnswer answer)
+        {
+            return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
         private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(Guid questionId, bool isHeadOfGroup, Guid? groupId)

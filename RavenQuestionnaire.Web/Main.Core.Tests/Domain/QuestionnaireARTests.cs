@@ -93,7 +93,7 @@ namespace Main.Core.Tests.Domain
                 // Arrange
                 Guid groupId = Guid.NewGuid();
                 bool isFeatured = true;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
@@ -112,7 +112,7 @@ namespace Main.Core.Tests.Domain
             // Arrange
             Guid groupId = Guid.NewGuid();
             bool isHeadOfPropagatedGroup = true;
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
             // Act
             TestDelegate act =
@@ -154,16 +154,13 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid groupId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(groupId: groupId);
                 bool capital = true;
 
                 // Act
-                questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
-                                          "name", QuestionType.Text,
-                                          QuestionScope.Interviewer,
-                                          "", "", "", false, false, capital, Order.AZ, "", null, new List<Guid>(), 0,
-                                          new Answer[0]);
-
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text, "name",
+                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] {}, Order.AZ, null, new Guid[]{});
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -180,7 +177,7 @@ namespace Main.Core.Tests.Domain
             {
                 // Arrange
                 var groupId = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
@@ -384,15 +381,16 @@ namespace Main.Core.Tests.Domain
         public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Answer[0];
+            var emptyAnswersList = new Option[] {};
+            Guid groupId = Guid.NewGuid();
 
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
             // Act
-            TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?", "name",
-                                                               questionType,
-                                                               QuestionScope.Interviewer, "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0,
-                                                               emptyAnswersList);
+            TestDelegate act = () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
+                    questionType, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                    emptyAnswersList, Order.AZ, null, new Guid[] { });
 
             // Assert
             Assert.Throws<DomainException>(act);
@@ -924,7 +922,7 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
                 questionnaire.UpdateGroup("group text", Propagate.None, groupPublicKey, null, null, null);
@@ -941,7 +939,7 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var groupText = "new group text";
 
                 // act
@@ -959,7 +957,7 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var propagatability = Propagate.AutoPropagated;
 
                 // act
@@ -977,7 +975,7 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var conditionExpression = "2 < 7";
 
                 // act
@@ -995,7 +993,7 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var description = "hardest questionnaire in the world";
 
                 // act
@@ -1067,15 +1065,11 @@ namespace Main.Core.Tests.Domain
             return new QuestionnaireAR();
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid targetQuestionPublicKey)
+        #warning Slava: remove out parameter. replace it with optional in parameter
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid questionId)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            targetQuestionPublicKey = Guid.NewGuid();
-
-            questionnaire.AddQuestion(targetQuestionPublicKey, "What is your last name?", "lastName", QuestionType.Text,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, new Answer[0]);
-            return questionnaire;
+            questionId = Guid.NewGuid();
+            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
         }
 
         private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
@@ -1085,32 +1079,27 @@ namespace Main.Core.Tests.Domain
 
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-
-            questionnaire.AddQuestion(questionKey, "What is your middle name?", "middlename",
-                QuestionType.Text, QuestionScope.Interviewer, null, null, null,
-                false, false, false, Order.AZ, null, null,
-                new List<Guid>(), 0, new Answer[] { });
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionKey);
 
             questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
 
             return questionnaire;
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupPublicKey = null)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupId = null)
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
 
-            questionnaire.NewAddGroup(groupPublicKey ?? Guid.NewGuid(), null, "New group", Propagate.None, null, null);
+            questionnaire.NewAddGroup(groupId ?? Guid.NewGuid(), null, "New group", Propagate.None, null, null);
 
             return questionnaire;
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroup(Guid autoGroupId)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroup(Guid groupId)
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(Guid.NewGuid(), "Title");
 
-            questionnaire.NewAddGroup(autoGroupId, null, "New auto group", Propagate.AutoPropagated, null, null);
+            questionnaire.NewAddGroup(groupId, null, "New auto group", Propagate.AutoPropagated, null, null);
 
             return questionnaire;
         }

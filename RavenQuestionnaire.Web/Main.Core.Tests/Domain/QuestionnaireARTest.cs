@@ -94,6 +94,9 @@ namespace Main.Core.Tests.Domain
             string title = "test q 22";
             var questionnaire = new QuestionnaireAR(key, title);
 
+            Guid groupPublicKey = Guid.NewGuid();
+            questionnaire.NewAddGroup(groupPublicKey, null, "title", Propagate.None, "description", null);
+
             using (var ctx = new EventContext())
             {
                 Guid publicKey = Guid.NewGuid();
@@ -105,34 +108,18 @@ namespace Main.Core.Tests.Domain
                 var questionScope = QuestionScope.Interviewer;
                 string validationExpression = "2=2";
                 string validationMessage = "not valid";
-                bool featured = true;
+                bool featured = false;
                 bool mandatory = true;
                 var answerOrder = Order.AsIs;
                 string instructions = "do it";
-                Guid? groupPublicKey = null;
-                List<Guid> triggers = null;
+                Guid[] triggers = null;
                 int maxValue = 3;
-                Answer[] answers = null;
+                Option[] answers = null;
                 bool capital = false;
 
-                questionnaire.AddQuestion(
-                    publicKey, 
-                    questionText, 
-                    stataExportCaption, 
-                    questionType, 
-                    questionScope, 
-                    conditionExpression, 
-                    validationExpression, 
-                    validationMessage, 
-                    featured, 
-                    mandatory,
-                    capital,
-                    answerOrder, 
-                    instructions, 
-                    groupPublicKey, 
-                    triggers, 
-                    maxValue, 
-                    answers);
+                questionnaire.NewAddQuestion(publicKey, groupPublicKey, questionText, questionType,
+                    stataExportCaption, mandatory, featured, capital, questionScope, conditionExpression,
+                    validationExpression, validationMessage, instructions, answers, answerOrder, maxValue, triggers);
 
                 Assert.True(ctx.Events.Count() == 1);
 
