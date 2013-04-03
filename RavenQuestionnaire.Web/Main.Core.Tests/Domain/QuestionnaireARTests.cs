@@ -873,31 +873,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
                 Guid groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
-                questionnaire.DeleteGroup(groupPublicKey, Guid.NewGuid());
+                Guid parentPublicKey = Guid.NewGuid();
+                questionnaire.NewDeleteGroup(groupPublicKey);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
-            }
-        }
-
-        [Test]
-        public void DeleteGroup_When_parent_element_public_key_specified_Then_raised_GroupDeleted_event_with_same_parent_element_public_key()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                Guid parentElementPublicKey = Guid.NewGuid();
-
-                // act
-                questionnaire.DeleteGroup(Guid.NewGuid(), parentElementPublicKey);
-
-                // assert
-                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentElementPublicKey));
             }
         }
 

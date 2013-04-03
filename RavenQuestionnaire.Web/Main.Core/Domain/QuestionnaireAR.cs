@@ -178,13 +178,6 @@ namespace Main.Core.Domain
             new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
-        [Obsolete]
-        public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
-        }
-
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
