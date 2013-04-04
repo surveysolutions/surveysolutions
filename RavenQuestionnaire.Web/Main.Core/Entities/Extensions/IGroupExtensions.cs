@@ -17,14 +17,16 @@ namespace Main.Core.Entities.Extensions
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
 
-    using NLog;
-
     /// <summary>
     /// The i group extensions.
     /// </summary>
     public static class IGroupExtensions
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+#if MONODROID
+		private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
 
         #region Public Methods and Operators
 
