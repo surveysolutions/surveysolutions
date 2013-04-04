@@ -54,41 +54,41 @@ namespace Main.Core.Domain
                 x => x.Children,
                 (parent, x) =>
                     {
-                        var parentId = parent == null ? (Guid?)null : parent.PublicKey;
+                        Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
                         var q = x as IQuestion;
                         if (q != null)
                         {
                             var autoQuestion = q as IAutoPropagate;
-                            this.AddQuestion(
-                                publicKey: q.PublicKey,
-                                questionText: q.QuestionText,
-                                stataExportCaption: q.StataExportCaption,
-                                questionType: q.QuestionType,
-                                questionScope: q.QuestionScope,
-                                conditionExpression: q.ConditionExpression,
+                            this.NewAddQuestion(
+                                questionId: q.PublicKey,
+                                groupId: parentId.Value,
+                                title: q.QuestionText,
+                                type: q.QuestionType,
+                                alias: q.StataExportCaption,
+                                isMandatory: q.Mandatory,
+                                isFeatured: q.Featured,
+                                isHeaderOfPropagatableGroup: q.Capital,
+                                scope: q.QuestionScope,
+                                condition: q.ConditionExpression,
                                 validationExpression: q.ValidationExpression,
                                 validationMessage: q.ValidationMessage,
-                                featured: q.Featured,
-                                mandatory: q.Mandatory,
-                                capital: q.Capital,
-                                answerOrder: q.AnswerOrder,
                                 instructions: q.Instructions,
-                                groupPublicKey: parentId,
-                                triggers: autoQuestion == null ? null : autoQuestion.Triggers,
+                                options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
+                                optionsOrder: q.AnswerOrder,
                                 maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                                answers: q.Answers.Select(Answer.CreateFromOther).ToArray());
+                                triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
                         }
                         var g = x as IGroup;
                         if (g != null)
                         {
-                            this.AddGroup(
-                                publicKey: g.PublicKey,
-                                text: g.Title,
-                                propagateble: g.Propagated,
-                                parentGroupKey: parentId,
-                                conditionExpression: g.ConditionExpression,
-                                description: g.Description);
+                            this.NewAddGroup(
+                                groupId: g.PublicKey,
+                                parentGroupId: parentId,
+                                title: g.Title,
+                                propagationKind: g.Propagated,
+                                description: g.Description,
+                                condition: g.ConditionExpression);
                         }
                     });
         }
@@ -114,77 +114,6 @@ namespace Main.Core.Domain
         public void DeleteQuestionnaire()
         {
             this.ApplyEvent(new QuestionnaireDeleted());
-        }
-
-        [Obsolete]
-        public void AddGroup(
-            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
-        {
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(text);
-            
-            this.ApplyEvent(
-                new NewGroupAdded
-                    {
-                        PublicKey = publicKey,
-                        GroupText = text,
-                        ParentGroupPublicKey = parentGroupKey,
-                        Paropagateble = propagateble,
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
-        }
-
-        [Obsolete]
-        public void AddQuestion(
-            Guid publicKey,
-            string questionText,
-            string stataExportCaption,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            bool featured,
-            bool mandatory,
-            bool capital,
-            Order answerOrder,
-            string instructions,
-            Guid? groupPublicKey,
-            List<Guid> triggers,
-            int maxValue,
-            Answer[] answers)
-        {
-            stataExportCaption = stataExportCaption.Trim();
-
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
-
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
-
-            this.ApplyEvent(
-                new NewQuestionAdded
-                    {
-                        PublicKey = publicKey,
-                        QuestionText = questionText,
-                        StataExportCaption = stataExportCaption,
-                        QuestionType = questionType,
-                        QuestionScope = questionScope,
-                        ConditionExpression = conditionExpression,
-                        ValidationExpression = validationExpression,
-                        ValidationMessage = validationMessage,
-                        Featured = featured,
-                        Mandatory = mandatory,
-                        Capital = capital,
-                        AnswerOrder = answerOrder,
-                        GroupPublicKey = groupPublicKey,
-                        Triggers = triggers,
-                        MaxValue = maxValue,
-                        Answers = answers,
-                        Instructions = instructions
-                    });
         }
 
         [Obsolete]
@@ -249,23 +178,9 @@ namespace Main.Core.Domain
             new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
-        [Obsolete]
-        public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
-        }
-
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
-        }
-
-        [Obsolete]
-        public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
         }
 
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
@@ -424,35 +339,6 @@ namespace Main.Core.Domain
             });
         }
 
-        
-
-        [Obsolete]
-        public void UpdateGroup(
-            string groupText,
-            Propagate propagateble,
-            Guid groupPublicKey,
-            UserLight executor,
-            string conditionExpression,
-            string description)
-        #warning get rid of executor here and create a common mechanism for handling it if needed
-        {
-            this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
-
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(groupText);
-
-            this.ApplyEvent(
-                new GroupUpdated
-                    {
-                        QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                        GroupPublicKey = groupPublicKey,
-                        GroupText = groupText,
-                        Propagateble = propagateble,
-                        /*Executor = executor,*/
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
-        }
-
         public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
         {
             this.ApplyEvent(
@@ -607,6 +493,11 @@ namespace Main.Core.Domain
                 AnswerValue = option.Value,
                 AnswerText = option.Title,
             };
+        }
+
+        private static Option ConvertAnswerToOption(IAnswer answer)
+        {
+            return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
         private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
