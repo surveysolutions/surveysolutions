@@ -30,7 +30,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => new QuestionnaireAR(Guid.NewGuid(), emptyTitle);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
 
         [TestCase("")]
@@ -45,7 +46,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.UpdateQuestionnaire(emptyTitle);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
 
 
@@ -83,7 +85,8 @@ namespace Main.Core.Tests.Domain
                                              new Option[0], Order.AsIs, 0, new Guid[0]);
 
             // Assert
-            Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
         }
 
         [Test]
@@ -160,7 +163,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "", QuestionType.Text, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
 
         [Test]
@@ -174,7 +179,10 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "", QuestionType.Text, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
         #endregion
 
@@ -197,9 +205,10 @@ namespace Main.Core.Tests.Domain
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
         }
 
         [Test]
@@ -241,9 +250,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
         }
 
         [Test]
@@ -271,9 +280,6 @@ namespace Main.Core.Tests.Domain
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
             }
-
-            
-
         }
 
         #endregion
@@ -297,9 +303,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                          false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                          string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextNotUnique));
         }
 
         [Test]
@@ -342,9 +348,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextNotUnique));
         }
 
         [Test]
@@ -391,8 +397,9 @@ namespace Main.Core.Tests.Domain
                                              QuestionScope.Interviewer, "", "", "", "",
                                              new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
         }
 
         [Test]
@@ -493,8 +500,9 @@ namespace Main.Core.Tests.Domain
                                                                false, false, false, QuestionScope.Interviewer,
                                                                "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameMaxLength));
         }
 
         [Test]
@@ -511,8 +519,9 @@ namespace Main.Core.Tests.Domain
                                              false, false, false, QuestionScope.Interviewer,
                                              "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameStartWithDigit));
         }
 
         [Test]
@@ -530,8 +539,9 @@ namespace Main.Core.Tests.Domain
                                              "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameRequired));
         }
 
         [Test]
@@ -547,8 +557,9 @@ namespace Main.Core.Tests.Domain
                 nonValidVariableNameWithBannedSymbols,
                 false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameSpecialCharacters));
         }
 
         [Test]
@@ -565,8 +576,9 @@ namespace Main.Core.Tests.Domain
                 false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
         [Test]
@@ -582,8 +594,9 @@ namespace Main.Core.Tests.Domain
                                                isFeatured,
                                                false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
         }
 
         [Test]
@@ -619,8 +632,9 @@ namespace Main.Core.Tests.Domain
                                                 isHeadOfPropagatedGroup,
                                                 QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
         }
 
         [Test]
@@ -660,8 +674,9 @@ namespace Main.Core.Tests.Domain
                     questionType, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "",
                     emptyAnswersList, Order.AZ, null, new Guid[] { });
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
         }
 
         [Test]
@@ -683,8 +698,9 @@ namespace Main.Core.Tests.Domain
                     "", emptyAnswersList, Order.AZ, 0, new List<Guid>().ToArray());
             };
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
         }
 
         [Test]
@@ -745,8 +761,9 @@ namespace Main.Core.Tests.Domain
                     "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
             };
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionNotFound));
         }
 
         [Test]
@@ -763,8 +780,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameMaxLength));
         }
 
         [Test]
@@ -782,8 +800,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameStartWithDigit));
         }
 
         [Test]
@@ -824,10 +843,11 @@ namespace Main.Core.Tests.Domain
                                                 emptyVariableName,
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
-            
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameRequired));
         }
 
         [Test]
@@ -845,8 +865,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameSpecialCharacters));
         }
 
         [Test]
@@ -863,8 +884,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
         [Test]
@@ -1002,7 +1024,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, emptyTitle, Propagate.None, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
@@ -1035,7 +1058,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, "Title", unsupportedPropagationKing, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedPropagationGroup));
         }
 
         [TestCase(Propagate.None)]
@@ -1067,7 +1091,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
@@ -1098,7 +1123,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, "Title", unsupportedPropagationKing, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedPropagationGroup));
         }
 
         [TestCase(Propagate.None)]
@@ -1132,7 +1158,8 @@ namespace Main.Core.Tests.Domain
             };
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupNotFound));
         }
 
         [Test]
@@ -1416,9 +1443,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[] { },
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some text", title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
@@ -1448,9 +1475,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[] {},
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some text", title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
@@ -1480,9 +1507,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[0],
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
@@ -1513,9 +1540,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[0],
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
@@ -1531,9 +1558,9 @@ namespace Main.Core.Tests.Domain
                     string.Empty, new [] { new Option(Guid.NewGuid(), "text value", "text") }, 
                     Order.AZ, 0, new List<Guid>().ToArray());
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
@@ -1550,9 +1577,9 @@ namespace Main.Core.Tests.Domain
                     string.Empty, new [] { new Option(Guid.NewGuid(), "text value", "text") },
                     Order.AZ, 0, new List<Guid>().ToArray());
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
         #endregion
 
@@ -1586,9 +1613,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[] { },
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: null, title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueRequired));
         }
 
        
@@ -1619,9 +1646,9 @@ namespace Main.Core.Tests.Domain
                     triggedGroupIds: new Guid[0],
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: null, title: "text") });
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueRequired));
         }
 
        
@@ -1639,9 +1666,9 @@ namespace Main.Core.Tests.Domain
                     string.Empty, new [] { new Option(Guid.NewGuid(), null, "text") }, 
                     Order.AZ, 0, new List<Guid>().ToArray());
 
-            // Assert
+            // assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueRequired));
         }
         #endregion
     }
