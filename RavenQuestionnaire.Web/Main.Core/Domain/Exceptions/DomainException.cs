@@ -9,15 +9,57 @@
     [Serializable]
     public class DomainException : Exception
     {
-        public DomainException() {}
+        public readonly DomainExceptionType ErrorType;
 
-        public DomainException(string message)
-            : base(message) {}
+        public DomainException(DomainExceptionType errorType, string message)
+            : base(message)
+        {
+            ErrorType = errorType;
+        }
+    }
 
-        public DomainException(string message, Exception innerException)
-            : base(message, innerException) {}
+    public enum DomainExceptionType
+    {
+        TriggerLinksToNotExistingGroup,
 
-        protected DomainException(SerializationInfo info, StreamingContext context)
-            : base(info, context) {}
+        TriggerLinksToNotPropagatedGroup,
+
+        QuestionIsFeaturedButNotInsideNonPropagateGroup,
+
+        QuestionIsHeadOfGroupButNotInsidePropagateGroup,
+
+        NotSupportedPropagationGroup,
+
+        GroupTitle_Required,
+
+        QuestionnaireTitle_Required,
+
+        Question_NotFound,
+
+        Group_NotFound,
+
+        QuestionTitle_Required,
+
+        VariableName_Required,
+
+        VariableName_MaxLength,
+
+        VariableName_SpecialCharacters,
+
+        VariableName_StartWithDigit,
+
+        VarialbeName_NotUnique,
+
+        Selector_Empty,
+
+        SelectorValue_Required,
+
+        SelectorValue_SpecialCharacters,
+
+        SelectorValue_NotUnique,
+
+        SelectorText_Required,
+
+        SelectorText_NotUnique
     }
 }
