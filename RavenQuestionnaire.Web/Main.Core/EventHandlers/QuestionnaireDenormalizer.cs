@@ -137,7 +137,18 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
             // var questionnaire = new Questionnaire(item);
-            item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
+
+            bool isLegacyEvent = evnt.Payload.AfterItemKey != null || evnt.Payload.GroupKey == null;
+
+            if (isLegacyEvent)
+            {
+                item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
+            }
+            else
+            {
+                item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey.Value, evnt.Payload.TargetIndex);
+            }
+
             this.UpdateQuestionnaire(evnt, item);
         }
 

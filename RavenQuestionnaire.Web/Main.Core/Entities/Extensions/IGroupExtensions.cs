@@ -13,14 +13,19 @@ namespace Main.Core.Entities.Extensions
     using System.Collections.Generic;
     using System.Linq;
 
+    using Main.Core.Documents;
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
+
+    using NLog;
 
     /// <summary>
     /// The i group extensions.
     /// </summary>
     public static class IGroupExtensions
     {
+        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -41,10 +46,43 @@ namespace Main.Core.Entities.Extensions
         /// <returns>
         /// The System.Boolean.
         /// </returns>
+        [Obsolete]
         public static bool MoveItem(this IComposite root, Guid itemPublicKey, Guid? groupKey, Guid? after)
         {
 
             return MoveItem(root, itemPublicKey, groupKey, after, root);
+        }
+
+        public static void MoveItem(this QuestionnaireDocument questionnaire, Guid itemId, Guid targetGroupId, int targetIndex)
+        {
+            Guid? idOfItemToPutAfter = GetIdOfItemToPutAfter(questionnaire, targetGroupId, targetIndex);
+
+            questionnaire.MoveItem(itemId, targetGroupId, idOfItemToPutAfter);
+        }
+
+        private static Guid? GetIdOfItemToPutAfter(QuestionnaireDocument questionnaire, Guid targetGroupId, int targetIndex)
+        {
+            if (targetIndex == 0)
+                return null;
+
+            IGroup targetGroup = questionnaire.Find<IGroup>(group => @group.PublicKey == targetGroupId).FirstOrDefault();
+            if (targetGroup == null)
+            {
+                Logger.Warn(string.Format("Failed to correctly move item to group {0} because group is missing.",
+                    targetGroupId));
+
+                return null;
+            }
+
+            if (targetGroup.Children.Count < targetIndex)
+            {
+                Logger.Warn(string.Format("Failed to correctly move item to group {0} to index {1} because group has only {2} children.",
+                    targetGroupId, targetIndex, targetGroup.Children.Count));
+
+                return null;
+            }
+
+            return targetGroup.Children[targetIndex - 1].PublicKey;
         }
 
         /// <summary>

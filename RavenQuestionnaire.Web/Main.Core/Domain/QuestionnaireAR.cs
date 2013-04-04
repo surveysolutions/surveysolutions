@@ -240,7 +240,18 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
 
-        public void MoveQuestion(){}
+        public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId);
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = questionId,
+                GroupKey = targetGroupId,
+                TargetIndex = targetIndex,
+            });
+        }
 
         public void NewUpdateQuestion(Guid questionId,
             string title, QuestionType type, string alias,
@@ -424,7 +435,16 @@ namespace Main.Core.Domain
 
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
-            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            bool isLegacyEvent = e.AfterItemKey != null || e.GroupKey == null;
+
+            if (isLegacyEvent)
+            {
+                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            }
+            else
+            {
+                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey.Value, e.TargetIndex);
+            }
         }
 
         private static Answer[] ConvertOptionsToAnswers(Option[] options)
