@@ -193,12 +193,11 @@ namespace Main.Core.Domain
         {
             alias = alias.Trim();
 
-            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
-            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
-            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
-
+            
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
 
@@ -251,10 +250,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
-            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
-
-            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
-            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
+            
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
 
@@ -458,12 +455,14 @@ namespace Main.Core.Domain
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
                 {
-                    throw new DomainException("Question can trigger only existing");
+                    throw new DomainException(
+                        DomainExceptionType.TriggerLinksToNotExistingGroup, "Question can trigger only existing");
                 }
 
                 if (@group.Propagated == Propagate.None)
                 {
-                    throw new DomainException("Question can trigger only propagated groups");
+                    throw new DomainException(
+                        DomainExceptionType.TriggerLinksToNotPropagatedGroup, "Question can trigger only propagated groups");
                 }
             }
         }
@@ -487,7 +486,9 @@ namespace Main.Core.Domain
 
             if (group.Propagated == Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException(
+                     DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
+                     "Question inside propagated group can not be head of group");
             }
         }
 
@@ -510,21 +511,27 @@ namespace Main.Core.Domain
 
             if (group.Propagated != Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException(
+                    DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
+                    "Question inside propagated group can not be featured");
             }
         }
 
         private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
         {
             if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new DomainException(string.Format("Group's propagation kind {0} is unsupported", propagationKind));
+                throw new DomainException(
+                    DomainExceptionType.NotSupportedPropagationGroup,
+                    string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("The titles of groups and chapters can not be empty or contains whitespaces only");
+                throw new DomainException(
+                    DomainExceptionType.GroupTitle_Required,
+                    "The titles of groups and chapters can not be empty or contains whitespaces only");
             }
         }
 
@@ -532,7 +539,9 @@ namespace Main.Core.Domain
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("Questionnaire's title can not be empty or contains whitespaces only");
+                throw new DomainException(
+                   DomainExceptionType.QuestionnaireTitle_Required,
+                   "Questionnaire's title can not be empty or contains whitespaces only");
             }
         }
 
@@ -541,7 +550,9 @@ namespace Main.Core.Domain
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new DomainException(string.Format("Question with public key {0} can't be found", publicKey));
+                throw new DomainException(
+                    DomainExceptionType.Question_NotFound,
+                    string.Format("Question with public key {0} can't be found", publicKey));
             }
         }
 
@@ -550,56 +561,45 @@ namespace Main.Core.Domain
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+                throw new DomainException(
+                    DomainExceptionType.Group_NotFound,
+                    string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
         private void ThrowDomainExceptionIfTitleisEmpty(string title)
         {
            if(string.IsNullOrEmpty(title))
-               throw new DomainException("Question title can't be empty");
-        }
-        private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
-        {
-            var isQuestionWithOptions = type == QuestionType.MultyOption ||
-                type == QuestionType.SingleOption;
-            if (!isQuestionWithOptions)
-                return;
-            if (!options.Any())
-                throw new DomainException("Questions with options should have one answer option at least");
-            Dictionary<string, int> uniquniesTitleCounter = new Dictionary<string, int>();
-            foreach (var answerOption in options)
-            {
-                if(string.IsNullOrEmpty(answerOption.Title))
-                    throw new DomainException("Answer title can't be empty");
-                if (uniquniesTitleCounter.ContainsKey(answerOption.Title))
-                    throw new DomainException("Answer title is not unique");
-                uniquniesTitleCounter[answerOption.Title] = 1;
-            }
+               throw new DomainException(DomainExceptionType.QuestionTitle_Required, "Question title can't be empty");
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new DomainException("Variable name shouldn't be empty or contains white spaces");
+                throw new DomainException(
+                    DomainExceptionType.VariableName_Required, "Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new DomainException("Variable name shouldn't be longer than 32 characters");
+                throw new DomainException(
+                    DomainExceptionType.VariableName_MaxLength, "Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new DomainException("Valid variable name should contains only letters, digits and underscore character");
+                throw new DomainException(
+                    DomainExceptionType.VariableName_SpecialCharacters,
+                    "Valid variable name should contains only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new DomainException("Variable name shouldn't starts with digit");
+                throw new DomainException(
+                    DomainExceptionType.VariableName_StartWithDigit, "Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -609,33 +609,51 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new DomainException("Variable name should be unique in questionnaire's scope");
+                throw new DomainException(
+                   DomainExceptionType.VarialbeName_NotUnique, "Variable name should be unique in questionnaire's scope");
             }
         }
 
-        private void ThrowDomainExceptionIfOptionsContainsInvalidCharacters(QuestionType type, Option[] options)
+        private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
+            QuestionType questionType, Option[] options)
         {
-            var isQuestionWithOptions = type == QuestionType.MultyOption || type == QuestionType.SingleOption;
-
-            if (isQuestionWithOptions && options.Any(option => !IsInteger(option.Value)))
+            if (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)
             {
-                throw new DomainException("Answer values should have only number characters");
-            }
-        }
+                if (!options.Any())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.Selector_Empty, "Question with options should have one option at least");
+                }
 
-        private static bool IsInteger(string value)
-        {
-            int _;
-            return int.TryParse(value, out _);
-        }
+                if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValue_Required, "Answer option value is required");
+                }
 
-        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
-        {
-            var isQuestionWithOptions = type == QuestionType.MultyOption || type == QuestionType.SingleOption;
+                if (options.Any(x => !x.Value.IsInteger()))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValue_SpecialCharacters,
+                        "Answer option value should have only number characters");
+                }
 
-            if (isQuestionWithOptions && options.Any(option => string.IsNullOrEmpty(option.Value)))
-            {
-                throw new DomainException("Answer value is required");
+                if (options.Select(x => x.Value).Distinct().Count() != options.Count())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValue_NotUnique,
+                        "Answer option value should have unique in options scope");
+                }
+
+                if (options.Any(x => string.IsNullOrEmpty(x.Title)))
+                {
+                    throw new DomainException(DomainExceptionType.SelectorText_Required, "Answer title can't be empty");
+                }
+
+                if (options.Select(x => x.Title).Distinct().Count() != options.Count())
+                {
+                    throw new DomainException(DomainExceptionType.SelectorText_NotUnique, "Answer title is not unique");
+                }
             }
         }
     }
