@@ -129,6 +129,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
         }
 
+        [Obsolete]
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(
