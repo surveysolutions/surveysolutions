@@ -39,17 +39,8 @@ namespace WB.UI.Designer.Controllers
         // GET: /Questionnaires/
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        public QuestionnaireController(IViewRepository repository, ICommandService commandService)
-            : base(repository, commandService)
+        public QuestionnaireController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
+            : base(repository, commandService,userHelper)
         {
         }
 

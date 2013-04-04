@@ -67,7 +67,6 @@ namespace WB.Core.Questionnaire.Tests
             ValidateFirstEventStored(validateEventFunk);
             ValidateFirstEventPublished(validateEventFunk);
         }
-
         [Test]
         public void Execute_When_QuestionnairePresentWithSameId_Then_ArgumentException_should_be_thrown()
         {

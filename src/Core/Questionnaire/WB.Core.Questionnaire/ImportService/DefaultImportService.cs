@@ -29,6 +29,12 @@ namespace WB.Core.Questionnaire.ImportService
             bus = NcqrsEnvironment.Get<IEventBus>();
         }
 
+        public DefaultImportService(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+        {
+            store = NcqrsEnvironment.Get<IEventStore>();
+            bus = NcqrsEnvironment.Get<IEventBus>();
+        }
+
         protected override void ExecuteInContext(IUnitOfWorkContext context, ImportQuestionnaireCommand command)
         {
             var document = command.Source as QuestionnaireDocument;
