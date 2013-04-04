@@ -17,7 +17,6 @@ namespace Core.Supervisor.Synchronization
     using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Events;
-    using Main.Core.Events.User;
     using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.Questionnaire;
     using Main.DenormalizerStorage;
@@ -48,7 +47,7 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
-        private List<Guid> ARKeys; 
+        //private List<Guid> ARKeys; 
 
 
         #endregion
@@ -69,7 +68,7 @@ namespace Core.Supervisor.Synchronization
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
             this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
-            this.ARKeys = new List<Guid>();
+            //this.ARKeys = new List<Guid>();
 
             if (this.myEventStore == null)
             {
@@ -101,11 +100,57 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            this.AddFiles(retval);
+            List<Guid> fileNames = GetFiles(questionnaires);
+
+            this.AddFiles(retval, fileNames);
             
             //this.AddRegisterDevice(retval);
             
-            return retval/*OrderBy(x => x.EventSequence).*/.ToList();
+            return retval.OrderBy(x => x.EventSequence).ToList(); // not good but allows to push correctly
+        }
+
+        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        {
+            var result = new List<Tuple<string, Guid>>();
+
+            List<Guid> users = GetUsers();
+            result.AddRange(users.Select(i => new Tuple<string, Guid>("u", i)));
+
+            List<Guid> questionnaires = GetQuestionnaires(users);
+            result.AddRange(questionnaires.Select(i => new Tuple<string, Guid>("q", i)));
+
+            List<Guid> files = GetFiles(questionnaires);
+            result.AddRange(files.Select(i => new Tuple<string, Guid>("f", i)));
+
+            return result;
+        }
+
+        public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
+        {
+            switch (ARType)
+            {
+                case "f":
+                    return this.GetEventStreamById<FileAR>(ARId);
+                    break;
+                case "q":
+                    return this.GetEventStreamById<CompleteQuestionnaireAR>(ARId);
+                    break;
+                case "u":
+                    return this.GetEventStreamById<UserAR>(ARId);
+                    break;
+                default:
+                    return null;
+            }
+            //return null;
+        }
+
+        private List<Guid> GetFiles(List<Guid> questionnaires)
+        {
+            #warning select only files used in questionnaires
+            
+            IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
+            
+            return model.Select(m => Guid.Parse(m.FileName)).ToList();
         }
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
@@ -114,11 +159,10 @@ namespace Core.Supervisor.Synchronization
                 this.denormalizer.Query<CompleteQuestionnaireBrowseItem>()
                 .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id));
             
-            return model.Select(i =>i.CompleteQuestionnaireId).ToList();
+            return model.Select(i => i.CompleteQuestionnaireId).ToList();
         }
 
-        private
-            List<Guid> GetUsers()
+        private List<Guid> GetUsers()
         {
             Guid? supervisorKey = this.GetSupervisor();
 
@@ -126,9 +170,7 @@ namespace Core.Supervisor.Synchronization
 
             if (supervisorKey.HasValue)
             {
-                model =
-                    this.denormalizer.Query<UserDocument>()
-                        .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorKey.Value);
+                model = this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorKey.Value);
             }
             else
             {
@@ -143,19 +185,16 @@ namespace Core.Supervisor.Synchronization
 
         #region Methods
 
-        
         /// <summary>
-        /// Responsible for upload and added files from database
+        /// Retrieves files from db.
         /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
-        protected void AddFiles(List<AggregateRootEvent> retval)
+        /// <param name="retval"></param>
+        /// <param name="fileNames"></param>
+        protected void AddFiles(List<AggregateRootEvent> retval, List<Guid> fileNames)
         {
-            IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
-            foreach (FileDescription item in model)
+            foreach (var item in fileNames)
             {
-                retval.AddRange(this.GetEventStreamById<FileAR>(Guid.Parse(item.PublicKey)));
+                retval.AddRange(this.GetEventStreamById<FileAR>(item));
             }
         }
         

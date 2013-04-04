@@ -71,7 +71,7 @@ namespace RavenQuestionnaire.Core.Views.Event.File
 
             // And enact this query
             FileBrowseItem[] items =
-                query.Select(x => new FileBrowseItem( /*x.PublicKey,*/ x.Title, x.Description, x.PublicKey)).ToArray();
+                query.Select(x => new FileBrowseItem( /*x.PublicKey,*/ x.Title, x.Description, x.FileName)).ToArray();
 
             return new FileBrowseView(input.Page, input.PageSize, count, items);
         }

@@ -128,7 +128,9 @@ namespace Main.Core.Domain
         {
             this.innerDocument = new FileDescription
                 {
-                   PublicKey = e.PublicKey.ToString(), Description = e.Description, Title = e.Title 
+                   FileName = e.PublicKey.ToString(), 
+                   Description = e.Description, 
+                   Title = e.Title 
                 };
 
             //// storage.StoreFile(originalFile);

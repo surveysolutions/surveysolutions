@@ -40,7 +40,7 @@ namespace AndroidMain.Synchronization
         /// <summary>
         /// The item path 1.
         /// </summary>
-        private const string GetItem1Path = "importexport/GetItem1";
+        private const string GetItemAsStreamPath = "importexport/GetItemAsStream";
 
         /// <summary>
         /// The list path.
@@ -51,6 +51,11 @@ namespace AndroidMain.Synchronization
         /// The list path.
         /// </summary>
         private const string GetARKeysPath = "importexport/GetARKeys";
+
+        /// <summary>
+        /// The list path.
+        /// </summary>
+        private const string GetARPath = "importexport/GetAR";
 
         #endregion
 
@@ -178,32 +183,30 @@ namespace AndroidMain.Synchronization
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("Event list is empty");
+                throw new Exception("Event list is empty.");
             }
 
-            var listOfAggregateRootsForImportMessage =
-                JsonConvert.DeserializeObject<ListOfAggregateRootsForImportMessage>(
+            var syncItemsMetaContainer =
+                JsonConvert.DeserializeObject<SyncItemsMetaContainer>(
                     response.Content, new JsonSerializerSettings());
 
             /*var roots = JsonConvert.DeserializeObject<IList<ProcessedEventChunk>>(
                 response.Content.Substring(pos), new JsonSerializerSettings());*/
-            if (listOfAggregateRootsForImportMessage == null)
+            if (syncItemsMetaContainer == null)
             {
                 throw new Exception("aggregate roots list is empty");
             }
 
             //var events = new List<AggregateRootEvent>();
 
-            foreach (ProcessedEventChunk root in listOfAggregateRootsForImportMessage.Roots)
+            foreach (var root in syncItemsMetaContainer.ARId)
             {
-                    if (root.EventKeys.Count == 0)
-                    {
-                        continue;
-                    }
 
-                    var itemRequest = new RestRequest(GetItem1Path, Method.POST);
-                    itemRequest.AddParameter("firstEventPulicKey", root.EventKeys.First());
-                    itemRequest.AddParameter("length", root.EventKeys.Count);
+                var itemRequest = new RestRequest(GetARPath, Method.POST);
+                    itemRequest.AddParameter("ARKey", root.Item2);
+                    //itemRequest.AddParameter("length", root.EventKeys.Count);
+                    itemRequest.AddParameter("rootType", root.Item1);
+
 
                     itemRequest.RequestFormat = DataFormat.Json;
                     itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
@@ -212,7 +215,7 @@ namespace AndroidMain.Synchronization
                     if (string.IsNullOrWhiteSpace(responseStream.Content)
                         || responseStream.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new Exception("Error stream for item " + root.EventKeys.First());
+                        throw new Exception("Error stream for item " + root.Item2);
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };

@@ -76,6 +76,9 @@
     <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs">
       <Link>CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs</Link>
     </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\CompleteQuestionnaire\SyncItemsMetaContainer.cs">
+      <Link>CompleteQuestionnaire\SyncItemsMetaContainer.cs</Link>
+    </Compile>
     <Compile Include="..\..\Synchronization\SynchronizationMessages\Discover\ISpotSync.cs">
       <Link>Discover\ISpotSync.cs</Link>
     </Compile>
@@ -120,7 +123,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="ad672732-3d12-48bc-8612-09547f0065d3" />
+      <UserProperties ProjectLinkReference="ad672732-3d12-48bc-8612-09547f0065d3" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

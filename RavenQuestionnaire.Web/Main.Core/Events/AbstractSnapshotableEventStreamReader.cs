@@ -57,20 +57,19 @@ namespace Main.Core.Events
             if (this.myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
             this.commandInvoker = NcqrsEnvironment.Get<ICommandService>();
-            //    this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
         }
 
         #endregion
 
         protected List<AggregateRootEvent> ReturnAllEventStream(Guid aggregateRootId)
         {
-              var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
+            var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);
 
             if (!events.Any())
             {
                 return new List<AggregateRootEvent>(0);
             }
-            return  this.BuildEventStream(events);
+            return this.BuildEventStream(events);
         }
 
         #region PublicMethods
@@ -84,12 +83,16 @@ namespace Main.Core.Events
         public virtual List<AggregateRootEvent> GetEventStreamById<T>(Guid aggregateRootId) where T : AggregateRoot
         {
             var snapshotableEventStore = this.myEventStore as ISnapshootEventStore;
-            if(snapshotableEventStore==null)
+            if (snapshotableEventStore == null)
+            {
                 return ReturnAllEventStream(aggregateRootId);
+            }
+
             Type arType = typeof (T);
             var snapshotables = from i in arType.GetInterfaces()
                                 where i.IsGenericType && i.GetGenericTypeDefinition() == typeof (ISnapshotable<>)
                                 select i;
+
             if (!snapshotables.Any())
             {
                 return ReturnAllEventStream(aggregateRootId);

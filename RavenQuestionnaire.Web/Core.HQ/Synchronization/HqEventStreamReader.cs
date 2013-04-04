@@ -90,6 +90,16 @@ namespace Core.HQ.Synchronization
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
 
+        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Methods
@@ -156,9 +166,10 @@ namespace Core.HQ.Synchronization
         protected void AddFiles(List<AggregateRootEvent> retval)
         {
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
+            
             foreach (FileDescription item in model)
             {
-                retval.AddRange(base.GetEventStreamById<FileAR>(Guid.Parse(item.PublicKey)));
+                retval.AddRange(base.GetEventStreamById<FileAR>(Guid.Parse(item.FileName)));
             }
         }
 

@@ -21,7 +21,7 @@ namespace CAPI.Android.Core.Model.FileStorage
             var file = new FileDescription();
 
             file.Content = File.OpenRead(BuildFileName(filename));
-            file.PublicKey = filename;
+            file.FileName = filename;
             //     file.Description = a.Metadata["Description"].Value<string>();
             //    file.Title = a.Metadata["Description"].Value<string>();
             return file;
@@ -34,11 +34,11 @@ namespace CAPI.Android.Core.Model.FileStorage
 
         public void StoreFile(FileDescription file)
         {
-            var longFileName = BuildFileName(file.PublicKey);
+            var longFileName = BuildFileName(file.FileName);
             if (File.Exists(longFileName))
-                DeleteFile(file.PublicKey);
+                DeleteFile(file.FileName);
             using (var o = File.Open(
-                BuildFileName(file.PublicKey),
+                BuildFileName(file.FileName),
                 FileMode.Create)
                 )
             {

@@ -358,7 +358,7 @@ namespace Web.Supervisor.Controllers
             return 100;
         }
 
-        private ListOfAggregateRootsForImportMessage GetListOfARIDs()
+        private ListOfAggregateRootsForImportMessage GetList()
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -366,8 +366,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 result = process.Export("Supervisor export AR events");
             }
@@ -378,16 +377,49 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
+
+
+        private SyncItemsMetaContainer GetListOfAR()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new SyncItemsMetaContainer();
+
+            try
+            {
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.GetListOfAggregateRoots("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
+        }
+
+
+
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetRootsList()
         {
-            return Json(this.GetListOfARIDs(), JsonRequestBehavior.AllowGet);
+            return Json(this.GetList(), JsonRequestBehavior.AllowGet);
         }
-        
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public FileResult GetRootsList1()
+        {
+            var stream = new MemoryStream();
+            this.GetList().WriteTo(stream);
+            stream.Position = 0L;
+
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+        }
+
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult GetARKeys()
         {
-            return Json(this.GetListOfARIDs());
+            return Json(this.GetListOfAR());
         }
 
 
@@ -415,7 +447,6 @@ namespace Web.Supervisor.Controllers
             var outResult = Json(item, JsonRequestBehavior.AllowGet);
             return outResult;
         }
-
 
         private ImportSynchronizationMessage GetItemInt(string firstEventPulicKey, string length)
         {
@@ -448,31 +479,36 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
-        /// <summary>
-        /// The get item.
-        /// </summary>
-        /// <param name="firstEventPulicKey">
-        /// The first event pulic key.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public FileResult GetItem1(string firstEventPulicKey, string length)
+
+        private ImportSynchronizationMessage GetARInt(string aRKey, string length, string rootType)
         {
-            var item = this.GetItemInt(firstEventPulicKey, length);
-            if (item == null)
+            Guid syncProcess = Guid.NewGuid();
+
+            Guid key;
+            if (!Guid.TryParse(aRKey, out key))
             {
                 return null;
             }
 
-            var stream = new MemoryStream();
-            item.WriteTo(stream);
-            stream.Position = 0L;
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
+            int ln;
+            if (!int.TryParse(length, out ln))
+            {
+                return null;
+            }
+
+            var result = new ImportSynchronizationMessage();
+
+            try
+            {
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.GetAR("Supervisor export AR events", key,rootType, ln);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
         }
 
 
@@ -488,11 +524,35 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="Stream"/>.
         /// </returns>
-        [CompressContent]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult GetAR(string firstEventPulicKey, string length)
+        public FileResult GetItemAsStream(string firstEventPulicKey, string length)
         {
             var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var stream = new MemoryStream();
+            item.WriteTo(stream);
+            stream.Position = 0L;
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+        }
+
+
+        /// <summary>
+        /// Retrive Item
+        /// </summary>
+        /// <param name="aRKey"></param>
+        /// <param name="length"></param>
+        /// <param name="rootType"></param>
+        /// <returns></returns>
+        [CompressContent]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GetAR(string aRKey, string length, string rootType)
+        {
+            var item = this.GetARInt(aRKey, length, rootType);
+            
             if (item == null)
             {
                 return null;
@@ -510,11 +570,6 @@ namespace Web.Supervisor.Controllers
         {
             Guid syncProcess = Guid.NewGuid();
 
-            /*if (string.IsNullOrWhiteSpace(request))
-            {
-                return false;
-            }
-*/
             try
             {
                 Request.InputStream.Position = 0;
@@ -542,7 +597,7 @@ namespace Web.Supervisor.Controllers
                     (IEventSyncProcess)
                     this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
 
-                process.Import("Direct controller syncronization", message.Command);
+                process.Import("Direct controller syncronization.", message.Command);
 
                 return true;
             }

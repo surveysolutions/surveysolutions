@@ -55,6 +55,10 @@ namespace Main.Core.Events
         /// </returns>
         public abstract IEnumerable<AggregateRootEvent> ReadEvents();
 
+        public abstract IEnumerable<Tuple<string, Guid>> GetAllARIds();
+
+        public abstract IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType ,Guid? startFrom);
+
         #endregion
     }
 }
