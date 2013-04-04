@@ -6,6 +6,9 @@
 //   The questionnaire helper.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer
 {
     using System;

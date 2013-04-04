@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Domain;
+using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {

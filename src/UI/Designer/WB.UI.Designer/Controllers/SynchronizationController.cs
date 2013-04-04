@@ -12,6 +12,7 @@ using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using RazorEngine;
 using WB.Core.Questionnaire.ImportService.Commands;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
 using WB.UI.Designer.Utils;
 
@@ -61,6 +62,8 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Import(HttpPostedFileBase uploadFile)
         {
             var document = this.ZipUtils.UnzipTemplate<IQuestionnaireDocument>(this.Request, uploadFile);
+            if(document==null)
+                return this.RedirectToAction("Index", "Error");
             CommandService.Execute(new ImportQuestionnaireCommand(UserHelper.CurrentUserId, document));
             return this.RedirectToAction("Index", "Questionnaire");
         }
