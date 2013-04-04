@@ -76,9 +76,6 @@ namespace Main.Core.Events
         /// <summary>
         /// Responsible for load and added users from database
         /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
         protected List<AggregateRootEvent> ExtractUsers()
         {
             var usersList = new List<AggregateRootEvent>();

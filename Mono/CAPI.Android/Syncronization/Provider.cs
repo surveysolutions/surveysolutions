@@ -204,7 +204,7 @@ namespace AndroidMain.Synchronization
 
                 var itemRequest = new RestRequest(GetARPath, Method.POST);
                     itemRequest.AddParameter("ARKey", root.Item2);
-                    //itemRequest.AddParameter("length", root.EventKeys.Count);
+                    itemRequest.AddParameter("length", 0);
                     itemRequest.AddParameter("rootType", root.Item1);
 
 
@@ -212,10 +212,10 @@ namespace AndroidMain.Synchronization
                     itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
                     
                     IRestResponse responseStream = restClient.Execute(itemRequest);
-                    if (string.IsNullOrWhiteSpace(responseStream.Content)
-                        || responseStream.StatusCode != HttpStatusCode.OK)
+                    if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new Exception("Error stream for item " + root.Item2);
+                        //logging
+                        throw new Exception("Operation finished unsuccessfully.");
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
