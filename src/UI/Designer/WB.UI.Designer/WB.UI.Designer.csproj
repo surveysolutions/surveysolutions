@@ -285,6 +285,7 @@
     <Compile Include="Utils\IExpressionReplacer.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
+    <Compile Include="Utils\ZipUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
@@ -549,6 +550,10 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
+      <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
+      <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
