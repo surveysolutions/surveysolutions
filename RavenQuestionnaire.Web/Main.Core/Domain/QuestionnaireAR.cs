@@ -239,6 +239,8 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
 
+        public void MoveQuestion(){}
+
         public void NewUpdateQuestion(Guid questionId,
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,

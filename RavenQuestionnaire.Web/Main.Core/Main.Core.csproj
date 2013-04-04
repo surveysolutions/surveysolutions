@@ -188,6 +188,9 @@
     <Compile Include="Commands\Questionnaire\Question\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\Questionnaire\Question\NewAddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs" />
