@@ -77,8 +77,11 @@ namespace WB.UI.Designer.App_Start
 
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
+
+            #warning Nastya: invent a new way of domain service registration
             var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
             commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand),new DefaultImportService());
+
             kernel.Load<MembershipModule>();
             kernel.Load<MainModule>();
         }
