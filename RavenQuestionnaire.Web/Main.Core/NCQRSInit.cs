@@ -155,7 +155,6 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
-
             return service;
         }
 
