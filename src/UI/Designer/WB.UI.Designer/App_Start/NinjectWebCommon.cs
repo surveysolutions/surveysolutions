@@ -3,8 +3,12 @@ using System.Web;
 using System.Web.Configuration;
 using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Ninject.Web.Common;
+using WB.Core.Questionnaire.ImportService;
+using WB.Core.Questionnaire.ImportService.Commands;
 using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WebActivator;
@@ -73,7 +77,8 @@ namespace WB.UI.Designer.App_Start
 
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
-
+            var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
+            commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand),new DefaultImportService());
             kernel.Load<MembershipModule>();
             kernel.Load<MainModule>();
         }
