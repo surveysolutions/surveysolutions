@@ -530,7 +530,7 @@ namespace Main.Core.Domain
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new DomainException(
-                    DomainExceptionType.GroupTitle_Required,
+                    DomainExceptionType.GroupTitleRequired,
                     "The titles of groups and chapters can not be empty or contains whitespaces only");
             }
         }
@@ -540,7 +540,7 @@ namespace Main.Core.Domain
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new DomainException(
-                   DomainExceptionType.QuestionnaireTitle_Required,
+                   DomainExceptionType.QuestionnaireTitleRequired,
                    "Questionnaire's title can not be empty or contains whitespaces only");
             }
         }
@@ -551,7 +551,7 @@ namespace Main.Core.Domain
             if (question == null)
             {
                 throw new DomainException(
-                    DomainExceptionType.Question_NotFound,
+                    DomainExceptionType.QuestionNotFound,
                     string.Format("Question with public key {0} can't be found", publicKey));
             }
         }
@@ -562,14 +562,14 @@ namespace Main.Core.Domain
             if (group == null)
             {
                 throw new DomainException(
-                    DomainExceptionType.Group_NotFound,
+                    DomainExceptionType.GroupNotFound,
                     string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
         private void ThrowDomainExceptionIfTitleisEmpty(string title)
         {
            if(string.IsNullOrEmpty(title))
-               throw new DomainException(DomainExceptionType.QuestionTitle_Required, "Question title can't be empty");
+               throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
@@ -577,21 +577,21 @@ namespace Main.Core.Domain
             if (string.IsNullOrEmpty(stataCaption))
             {
                 throw new DomainException(
-                    DomainExceptionType.VariableName_Required, "Variable name shouldn't be empty or contains white spaces");
+                    DomainExceptionType.VariableNameRequired, "Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
                 throw new DomainException(
-                    DomainExceptionType.VariableName_MaxLength, "Variable name shouldn't be longer than 32 characters");
+                    DomainExceptionType.VariableNameMaxLength, "Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
                 throw new DomainException(
-                    DomainExceptionType.VariableName_SpecialCharacters,
+                    DomainExceptionType.VariableNameSpecialCharacters,
                     "Valid variable name should contains only letters, digits and underscore character");
             }
 
@@ -599,7 +599,7 @@ namespace Main.Core.Domain
             if (startsWithDigit)
             {
                 throw new DomainException(
-                    DomainExceptionType.VariableName_StartWithDigit, "Variable name shouldn't starts with digit");
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -610,7 +610,7 @@ namespace Main.Core.Domain
             if (isNotUnique)
             {
                 throw new DomainException(
-                   DomainExceptionType.VarialbeName_NotUnique, "Variable name should be unique in questionnaire's scope");
+                   DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
         }
 
@@ -622,37 +622,37 @@ namespace Main.Core.Domain
                 if (!options.Any())
                 {
                     throw new DomainException(
-                        DomainExceptionType.Selector_Empty, "Question with options should have one option at least");
+                        DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
                 }
 
                 if (options.Any(x => string.IsNullOrEmpty(x.Value)))
                 {
                     throw new DomainException(
-                        DomainExceptionType.SelectorValue_Required, "Answer option value is required");
+                        DomainExceptionType.SelectorValueRequired, "Answer option value is required");
                 }
 
                 if (options.Any(x => !x.Value.IsInteger()))
                 {
                     throw new DomainException(
-                        DomainExceptionType.SelectorValue_SpecialCharacters,
+                        DomainExceptionType.SelectorValueSpecialCharacters,
                         "Answer option value should have only number characters");
                 }
 
                 if (options.Select(x => x.Value).Distinct().Count() != options.Count())
                 {
                     throw new DomainException(
-                        DomainExceptionType.SelectorValue_NotUnique,
+                        DomainExceptionType.SelectorValueNotUnique,
                         "Answer option value should have unique in options scope");
                 }
 
                 if (options.Any(x => string.IsNullOrEmpty(x.Title)))
                 {
-                    throw new DomainException(DomainExceptionType.SelectorText_Required, "Answer title can't be empty");
+                    throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
                 }
 
                 if (options.Select(x => x.Title).Distinct().Count() != options.Count())
                 {
-                    throw new DomainException(DomainExceptionType.SelectorText_NotUnique, "Answer title is not unique");
+                    throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
                 }
             }
         }
