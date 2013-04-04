@@ -6,26 +6,61 @@
 //   The user helper.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Designer.Models
+
+using System;
+using System.Web.Security;
+using Microsoft.Practices.ServiceLocation;
+using NinjectAdapter;
+using WB.UI.Designer.Providers.Roles;
+using WebMatrix.WebData;
+
+namespace WB.UI.Designer.Code
 {
-    using System;
-    using System.Web.Security;
+    public interface IUserHelper
+    {
+        /// <summary>
+        ///     The adminrolename.
+        /// </summary>
+        string ADMINROLENAME { get; }
 
-    using WB.UI.Designer.Providers.Roles;
+        /// <summary>
+        ///     Gets the current user.
+        /// </summary>
+        MembershipUser CurrentUser { get; }
 
-    using WebMatrix.WebData;
+        /// <summary>
+        ///     Gets the current user id.
+        /// </summary>
+        Guid CurrentUserId { get; }
+
+        /// <summary>
+        ///     Gets a value indicating whether is admin.
+        /// </summary>
+        bool IsAdmin { get; }
+
+        /// <summary>
+        ///     The userrolename.
+        /// </summary>
+        string USERROLENAME { get; }
+
+        void Logout();
+    }
 
     /// <summary>
     ///     The user helper.
     /// </summary>
-    public static class UserHelper
+    public class UserHelper : IUserHelper
     {
+        public static IUserHelper Instance {
+            get { return (ServiceLocator.Current as NinjectServiceLocator).GetInstance<IUserHelper>(); }
+        }
+
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes static members of the <see cref="UserHelper" /> class.
         /// </summary>
-        static UserHelper()
+        public UserHelper()
         {
             ADMINROLENAME = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.Administrator);
             USERROLENAME = Enum.GetName(typeof(SimpleRoleEnum), SimpleRoleEnum.User);
@@ -38,12 +73,12 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     The adminrolename.
         /// </summary>
-        public static string ADMINROLENAME { get; private set; }
+        public string ADMINROLENAME { get; private set; }
 
         /// <summary>
         ///     Gets the current user.
         /// </summary>
-        public static MembershipUser CurrentUser
+        public MembershipUser CurrentUser
         {
             get
             {
@@ -54,7 +89,7 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     Gets the current user id.
         /// </summary>
-        public static Guid CurrentUserId
+        public Guid CurrentUserId
         {
             get
             {
@@ -65,7 +100,7 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     Gets a value indicating whether is admin.
         /// </summary>
-        public static bool IsAdmin
+        public bool IsAdmin
         {
             get
             {
@@ -76,11 +111,11 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     The userrolename.
         /// </summary>
-        public static string USERROLENAME { get; private set; }
+        public string USERROLENAME { get; private set; }
 
         #endregion
 
-        public static void Logout()
+        public void Logout()
         {
             WebSecurity.Logout();
         }
