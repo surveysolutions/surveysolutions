@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
@@ -45,11 +46,30 @@ namespace WB.UI.Designer.Tests
             UserHelperMock.Setup(x => x.CurrentUserId).Returns(Guid.NewGuid);
 
             // act
-            controller.Import(file.Object);
+            var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
 
             // assert
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Once());
 
+            Assert.AreEqual(actionResult.RouteValues["action"],"Index");
+            Assert.AreEqual(actionResult.RouteValues["controller"], "Questionnaire");
+
+        }
+
+        [Test]
+        public void Import_When_RequestDoesntContainsQuestionnaire_Then_ImportCommandWasntExecutedAndRedirectToErrorController()
+        {
+            // arrange
+            SynchronizationController controller = CreateSynchronizationController();
+            Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
+
+            // act
+            var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
+
+            // assert
+            CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Never());
+            Assert.AreEqual(actionResult.RouteValues["action"], "Index");
+            Assert.AreEqual(actionResult.RouteValues["controller"], "Error");
         }
 
         private SynchronizationController CreateSynchronizationController()
