@@ -6,6 +6,9 @@
 //   The administration controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
