@@ -87,7 +87,7 @@ namespace DataEntryClient.SycProcess
         {
             ErrorCodes returnCode = ErrorCodes.Fail;
             var archive = new List<AggregateRootEvent>();
-            var events = this.EventStore.ReadEvents().ToList();
+            var events = this.EventStoreReader.ReadEvents().ToList();
             if (this.TemplateGuid != null)
                 archive.Add(
                     events.Where(

@@ -96,6 +96,7 @@ namespace DataEntryClient.SycProcess
         {
             this.collector = new EventPipeCollector();
             base.Export(syncProcessDescription);
+
             return new ImportSynchronizationMessage
                 {
                     EventStream = this.collector.GetEventList()
@@ -118,12 +119,28 @@ namespace DataEntryClient.SycProcess
         {
             this.collector = new EventPipeCollector();
             base.Export(syncProcessDescription);
+
             return new ListOfAggregateRootsForImportMessage
                 {
                    Roots = this.collector.GetChunkedList().Select(e => new ProcessedEventChunk(e)).ToList() 
                 };
         }
 
+        public SyncItemsMetaContainer GetListOfAggregateRoots(string syncProcessDescription)
+        {
+            return new SyncItemsMetaContainer { ARId = EventStoreReader.GetAllARIds().ToList() };
+
+        }
+
+        public ImportSynchronizationMessage GetAR(string syncProcessDescription, Guid aRKey, string ARType, int length)
+        {
+            return new ImportSynchronizationMessage
+            {
+                EventStream = EventStoreReader.GetARById(aRKey, ARType, null).ToArray()
+            };
+        }
+
+        
         /// <summary>
         /// The stub
         /// </summary>

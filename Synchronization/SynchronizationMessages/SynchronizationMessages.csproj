@@ -132,6 +132,7 @@
     <Compile Include="CompleteQuestionnaire\JsonNewSerializerContractBehaviorAttribute.cs" />
     <Compile Include="CompleteQuestionnaire\JsonSerrializer.cs" />
     <Compile Include="CompleteQuestionnaire\ListOfAggregateRootsForImportMessage.cs" />
+    <Compile Include="CompleteQuestionnaire\SyncItemsMetaContainer.cs" />
     <Compile Include="Discover\ISpotSync.cs" />
     <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Export\ZipManager.cs" />
@@ -153,7 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>    
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
