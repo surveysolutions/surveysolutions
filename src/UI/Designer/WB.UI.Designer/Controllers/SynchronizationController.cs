@@ -38,8 +38,8 @@ namespace WB.UI.Designer.Controllers
         ///  <param name="zipUtils">
         /// The command service.
         /// </param>
-        public SynchronizationController(IViewRepository repository, ICommandService commandService, IZipUtils zipUtils)
-            : base(repository, commandService)
+        public SynchronizationController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper, IZipUtils zipUtils)
+            : base(repository, commandService, userHelper)
         {
             this.ZipUtils = zipUtils;
         }

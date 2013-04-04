@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Microsoft.Practices.ServiceLocation;
+using NinjectAdapter;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer
@@ -26,6 +28,11 @@ namespace WB.UI.Designer
     /// </summary>
     public class QuestionnaireHelper
     {
+        #warning remove this shit
+        private static IUserHelper UserHelperInstance {
+            get { return Code.UserHelper.Instance; }
+        }
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -160,7 +167,7 @@ namespace WB.UI.Designer
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
-                           CanDelete = UserHelper.IsAdmin, 
+                           CanDelete = UserHelperInstance.IsAdmin, 
                            CanEdit = false, 
                            CreatedBy =
                                createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
@@ -233,7 +240,7 @@ namespace WB.UI.Designer
                             {
                                 CreatedBy = userId, 
                                 IsOnlyOwnerItems = isOnlyOwnerItems, 
-                                IsAdminMode = UserHelper.IsAdmin, 
+                                IsAdminMode = UserHelperInstance.IsAdmin, 
                                 Page = pageIndex ?? 1, 
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
