@@ -254,6 +254,7 @@
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
+    <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\QuestionnaireAR.cs" />
@@ -421,6 +422,7 @@
     <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\ZAStrategy.cs" />
     <Compile Include="Utility\SimpleHash.cs" />
+    <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Answer\AnswerView.cs" />
     <Compile Include="View\Answer\CompleteAnswerView.cs" />

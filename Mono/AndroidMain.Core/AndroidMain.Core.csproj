@@ -896,6 +896,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleHash.cs">
       <Link>Utility\SimpleHash.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleObjectExtensions.cs">
+      <Link>Utility\SimpleObjectExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
     </Compile>
