@@ -563,8 +563,8 @@ namespace Main.Core.Domain
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new DomainException(
-                   DomainExceptionType.QuestionnaireTitleRequired,
-                   "Questionnaire's title can not be empty or contains whitespaces only");
+                    DomainExceptionType.QuestionnaireTitleRequired,
+                    "Questionnaire's title can not be empty or contains whitespaces only");
             }
         }
 
