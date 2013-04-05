@@ -10,16 +10,10 @@
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
-    @Styles.Render("~/Content/edit")
+    @Styles.Render("~/content/edit")
 }
 @section Scripts{
-    @Scripts.Render(
-        "~/bundles/jqueryui",
-        "~/bundles/jqueryval",
-        "~/bundles/jsextlibs",
-        "~/bundles/modernizr",
-        "~/Scripts/require.js"
-         )
+    @Scripts.Render("~/designer")
     <script>
         define('input', [], function() {
             var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings ()
@@ -33,14 +27,6 @@
             };
         });
     </script>
-
-    @Scripts.Render(
-        "~/bundles/jsappdetails",
-        "~/bundles/ace",
-        "~/Scripts/lib/ace/mode-ncalc.js",
-        "~/Scripts/lib/ace/theme-designer.js",
-        "~/Scripts/details/main.js"
-         )
 }
 
 <div id="busyindicator"></div>
