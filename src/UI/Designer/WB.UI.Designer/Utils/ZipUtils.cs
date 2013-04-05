@@ -60,7 +60,9 @@ namespace WB.UI.Designer.Utils
         protected T DesserializeStream<T>(Stream stream)
         {
             var settings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects};
+            stream.Position = 0;
             StreamReader reader = new StreamReader(stream);
+            
             string text = reader.ReadToEnd();
             return JsonConvert.DeserializeObject<T>(text, settings);
         }
