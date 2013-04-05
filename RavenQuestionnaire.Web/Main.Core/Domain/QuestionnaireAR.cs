@@ -22,6 +22,16 @@ namespace Main.Core.Domain
         
         private readonly ICompleteQuestionFactory questionFactory;
 
+        private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.SingleOption,
+            QuestionType.MultyOption,
+            QuestionType.Numeric,
+            QuestionType.DateTime,
+            QuestionType.Text,
+            QuestionType.AutoPropagate,
+        };
+
         public QuestionnaireAR()
         {
             this.questionFactory = new CompleteQuestionFactory();
@@ -221,6 +231,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+
             this.ApplyEvent(new NewQuestionAdded
             {
                 PublicKey = questionId,
@@ -280,7 +292,8 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
-            
+
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
 
@@ -650,6 +663,15 @@ namespace Main.Core.Domain
                 throw new DomainException(
                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionTypeIsNotAllowed(QuestionType type)
+        {
+            bool isQuestionTypeAllowed = AllowedQuestionTypes.Contains(type);
+
+            if (!isQuestionTypeAllowed)
+                throw new DomainException(DomainExceptionType.NotAllowedQuestionType, 
+                    string.Format("Question type {0} is not allowed", type));
         }
 
         private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
