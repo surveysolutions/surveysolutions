@@ -34,11 +34,11 @@
                 createGroup: "AddGroup",
                 updateGroup: "UpdateGroup",
                 deleteGroup: "DeleteGroup",
-                moveGroup: "MoveGroup",
+                groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
-                moveQuestion: "MoveQuestion"
+                questionMove: "MoveQuestion"
             },
             hashes = {
                 details: '#/details',
