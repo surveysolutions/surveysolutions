@@ -262,7 +262,7 @@
             var fromId = arg.sourceParent.id;
             var toId = arg.targetParent.id;
             var moveItemType = arg.item.type().replace('View','').toLowerCase();
-            var isDropedInChapter = !(_.isNull(toId) || _.isUndefined(toId));
+            var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
             
             if (isDropedInChapter && moveItemType == "question") {
                 arg.cancelDrop = true;
