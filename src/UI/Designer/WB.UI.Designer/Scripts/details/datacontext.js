@@ -226,10 +226,12 @@
         };
         
         commands[config.commands.questionMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
             return command;
         };
         
         commands[config.commands.groupMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
             return command;
         };
 
