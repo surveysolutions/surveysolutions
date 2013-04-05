@@ -11,6 +11,7 @@ using NLog;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using RazorEngine;
+using WB.Core.Questionnaire.ExportServices;
 using WB.Core.Questionnaire.ImportService.Commands;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Models;
@@ -23,35 +24,28 @@ namespace WB.UI.Designer.Controllers
     {
 
         protected readonly IZipUtils ZipUtils;
-
+        protected readonly IExportService ExportService;
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AdminController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        ///  <param name="zipUtils">
-        /// The command service.
-        /// </param>
-        public SynchronizationController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper, IZipUtils zipUtils)
+        public SynchronizationController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper, IZipUtils zipUtils, IExportService exportService)
             : base(repository, commandService, userHelper)
         {
             this.ZipUtils = zipUtils;
+            this.ExportService = exportService;
         }
 
         #endregion
 
+        [AcceptVerbs(HttpVerbs.Get)]
+        public FileResult Export(Guid id)
+        {
+            var data = ExportService.GetQuestionnaireTemplate(id);
+            if (string.IsNullOrEmpty(data))
+                return null;
+            return this.File(ZipUtils.ZipDate(data), "application/zip",
+                             "template.zip");
+        }
 
-        /// <summary>
-        /// The import.
-        /// </summary>
-        /// <returns>
-        /// </returns>
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
