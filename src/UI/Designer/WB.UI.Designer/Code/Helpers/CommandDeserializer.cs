@@ -18,6 +18,7 @@ namespace WB.UI.Designer.Code.Helpers
             { "UpdateGroup", typeof(NewUpdateGroupCommand) },
             { "AddGroup", typeof(NewAddGroupCommand) },
             { "DeleteGroup", typeof(NewDeleteGroupCommand) },
+            { "MoveGroup", typeof(MoveGroupCommand) },
             { "UpdateQuestion", typeof(NewUpdateQuestionCommand) },
             { "AddQuestion", typeof(NewAddQuestionCommand) },
             { "DeleteQuestion", typeof(NewDeleteQuestionCommand) },
