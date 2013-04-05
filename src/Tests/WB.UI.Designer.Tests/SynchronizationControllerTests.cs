@@ -10,6 +10,7 @@ using Main.Core.View;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Questionnaire.ExportServices;
 using WB.Core.Questionnaire.ImportService.Commands;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
@@ -23,6 +24,7 @@ namespace WB.UI.Designer.Tests
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IViewRepository> ViewRepositoryMock;
         protected Mock<IZipUtils> ZipUtilsMock;
+        protected Mock<IExportService> ExportServiceMock;
         protected Mock<IUserHelper> UserHelperMock;
         
         [SetUp]
@@ -31,6 +33,7 @@ namespace WB.UI.Designer.Tests
             CommandServiceMock=new Mock<ICommandService>();
             ViewRepositoryMock=new Mock<IViewRepository>();
             ZipUtilsMock=new Mock<IZipUtils>();
+            ExportServiceMock = new Mock<IExportService>();
             UserHelperMock=new Mock<IUserHelper>();
         }
 
@@ -72,11 +75,45 @@ namespace WB.UI.Designer.Tests
             Assert.AreEqual(actionResult.RouteValues["controller"], "Error");
         }
 
+        [Test]
+        public void Export_When_TemplateIsNotNull_Then_FileIsReturned()
+        {
+            // arrange
+            SynchronizationController controller = CreateSynchronizationController();
+            Guid templateId = Guid.NewGuid();
+            string dataForZip = "zipped data";
+            ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
+
+            // act
+            controller.Export(templateId);
+
+            // assert
+            ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
+            ZipUtilsMock.Verify(x => x.ZipDate(dataForZip), Times.Once());
+        }
+
+        [Test]
+        [TestCase("")]
+        [TestCase(null)]
+        public void Export_When_TemplateIsAbsent_Then_NullisReturned(string data)
+        {
+            // arrange
+            SynchronizationController target = CreateSynchronizationController();
+            Guid templateId = Guid.NewGuid();
+            ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(data);
+
+            // act
+            var result = target.Export(templateId);
+
+            // assert
+            Assert.That(result, Is.EqualTo(null));
+        }
+
         private SynchronizationController CreateSynchronizationController()
         {
             return new SynchronizationController(ViewRepositoryMock.Object, CommandServiceMock.Object,
                                                  UserHelperMock.Object,
-                                                 ZipUtilsMock.Object);
+                                                 ZipUtilsMock.Object, ExportServiceMock.Object);
         }
     }
 }
