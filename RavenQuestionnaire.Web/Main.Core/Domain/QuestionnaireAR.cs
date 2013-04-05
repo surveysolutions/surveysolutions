@@ -164,7 +164,22 @@ namespace Main.Core.Domain
             this.ApplyEvent(new GroupDeleted(groupId));
         }
 
-        public void MoveGroup() { }
+        public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex)
+        {
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            if (targetGroupId.HasValue)
+            {
+                this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
+            }
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = groupId,
+                GroupKey = targetGroupId,
+                TargetIndex = targetIndex,
+            });
+        }
 
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)
