@@ -22,7 +22,7 @@ namespace Main.Core.Domain
         
         private readonly ICompleteQuestionFactory questionFactory;
 
-        public QuestionnaireAR()
+        public QuestionnaireAR():base(Guid.NewGuid())
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
