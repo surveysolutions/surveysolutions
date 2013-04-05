@@ -224,6 +224,14 @@
         commands[config.commands.updateQuestion] = function (question) {
             return converQuestionToCommand(question);
         };
+        
+        commands[config.commands.questionMove] = function (command) {
+            return command;
+        };
+        
+        commands[config.commands.groupMove] = function (command) {
+            return command;
+        };
 
         var converQuestionToCommand = function(question) {
             var command = {
