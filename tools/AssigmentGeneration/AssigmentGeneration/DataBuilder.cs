@@ -13,7 +13,7 @@ using Main.Core.Events.User;
 using Main.Core.Utility;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
-using Questionnaire.Core.Web.Export;
+using SynchronizationMessages.Export;
 
 namespace AssigmentGeneration
 {
@@ -47,7 +47,7 @@ namespace AssigmentGeneration
             zipFile.CompressionLevel = CompressionLevel.BestSpeed;
             zipFile.ParallelDeflateThreshold = -1;
             var events = BuildUserEventStream();
-            var data = new Questionnaire.Core.Web.Export.ZipFileData() { ClientGuid = Guid.NewGuid(), Events = events };
+            var data = new ZipFileData() { ClientGuid = Guid.NewGuid(), Events = events };
             JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
 
             string result =

@@ -13,7 +13,6 @@ using Main.Core.Events.User;
 using Main.Core.Utility;
 using Ncqrs.Eventing;
 using Newtonsoft.Json;
-using Questionnaire.Core.Web.Export;
 
 namespace AssigmentGeneration
 {

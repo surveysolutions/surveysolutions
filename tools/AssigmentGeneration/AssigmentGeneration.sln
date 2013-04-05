@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssigmentGeneration", "Assi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs", "..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj", "{01F84441-80D3-49B4-AB18-96894ACB2F90}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionnaire.Core.Web", "..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj", "{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Core", "..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj", "{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Supervisor", "..\..\RavenQuestionnaire.Web\Core.Supervisor\Core.Supervisor.csproj", "{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}"
@@ -54,20 +52,6 @@ Global
 		{01F84441-80D3-49B4-AB18-96894ACB2F90}.MONODROID|Any CPU.Build.0 = MONODROID|Any CPU
 		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-dev|Any CPU.ActiveCfg = Deploy-dev|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-dev|Any CPU.Build.0 = Deploy-dev|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-devKh|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-devKh|Any CPU.Build.0 = Deploy-devKh|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-Main|Any CPU.ActiveCfg = Deploy-Main|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-Main|Any CPU.Build.0 = Deploy-Main|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.MONODROID|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.MONODROID|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E2698A4-1286-4534-BD2C-04C76AE2DA5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-dev|Any CPU.ActiveCfg = Deploy-dev|Any CPU
