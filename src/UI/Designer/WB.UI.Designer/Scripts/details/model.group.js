@@ -58,7 +58,8 @@
                             return dc().groups.getLocalById(item.id);
                         return dc().questions.getLocalById(item.id);
                      });
-                    this.children(items);
+                     this.children(items);
+                     this.children.id = this.id();
                     //return self.children();
                 };
             return {

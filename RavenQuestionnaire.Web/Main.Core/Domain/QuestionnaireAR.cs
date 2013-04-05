@@ -219,7 +219,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
 
-            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -286,7 +286,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
 
-            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -483,9 +483,9 @@ namespace Main.Core.Domain
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
-        private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
+        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
         {
-            if (triggedGroupIds == null || triggedGroupIds.Length == 0) 
+            if (type != QuestionType.AutoPropagate || triggedGroupIds == null || triggedGroupIds.Length == 0) 
                 return;
 
             foreach (var groupId in triggedGroupIds)
