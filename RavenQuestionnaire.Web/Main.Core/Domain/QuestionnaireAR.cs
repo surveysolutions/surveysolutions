@@ -164,6 +164,8 @@ namespace Main.Core.Domain
             this.ApplyEvent(new GroupDeleted(groupId));
         }
 
+        public void MoveQuestion() { }
+
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)
         {
