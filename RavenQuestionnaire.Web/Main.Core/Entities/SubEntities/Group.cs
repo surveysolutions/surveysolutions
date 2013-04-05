@@ -11,6 +11,7 @@ namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 
     using Main.Core.Entities.Composite;
@@ -20,6 +21,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The group.
     /// </summary>
+    [DebuggerDisplay("Group {PublicKey}")]
     public class Group : IGroup
     {
         #region Constructors and Destructors
