@@ -225,9 +225,7 @@
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
-    <Compile Include="Controllers\SynchronizationController.cs">
-      <DependentUpon>AdminController.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -550,6 +548,10 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
