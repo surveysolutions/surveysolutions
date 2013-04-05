@@ -85,7 +85,7 @@
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
                 <!-- ko ifnot: isFilterMode -->
-                <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
+                <ul data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
                     @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
@@ -244,7 +244,7 @@
                 <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
             </div>
         </div>
-        <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
+        <ul data-bind="sortable: { data: children, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
             @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
