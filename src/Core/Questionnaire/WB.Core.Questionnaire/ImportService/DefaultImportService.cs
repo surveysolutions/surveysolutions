@@ -40,19 +40,23 @@ namespace WB.Core.Questionnaire.ImportService
             var document = command.Source as QuestionnaireDocument;
             if (document == null)
                 throw new ArgumentException("only QuestionnaireDocuments are supported for now");
-            
-            var questionnsire = context.GetById<QuestionnaireAR>(command.CommandIdentifier);
-            if (questionnsire != null)
-                throw new ArgumentException("Questionnair with the same key present in system");
 
-            #warning Nastya:redo on create snapshot after merge with next branch
+            long eventSequence = 1;
+            var questionnsire = context.GetById<QuestionnaireAR>(command.CommandIdentifier);
+
+            if (questionnsire != null)
+                eventSequence = questionnsire.Version + 1;
+
+#warning Nastya:redo on create snapshot after merge with next branch
             document.CreatedBy = command.CreatedBy;
             var eventVersion = GetType().Assembly.GetName().Version;
-            var singleEvent = new UncommittedEvent(Guid.NewGuid(), command.CommandIdentifier, 1, 1, DateTime.Now,
+            var singleEvent = new UncommittedEvent(Guid.NewGuid(), command.CommandIdentifier, eventSequence, 1,
+                                                   DateTime.Now,
                                                    new SnapshootLoaded()
                                                        {
                                                            Template =
-                                                               new Snapshot(command.CommandIdentifier, 1, command.Source)
+                                                               new Snapshot(command.CommandIdentifier, eventSequence,
+                                                                            command.Source)
                                                        },
                                                    eventVersion);
             var stream = new UncommittedEventStream(Guid.NewGuid());
