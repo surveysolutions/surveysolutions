@@ -21,6 +21,7 @@ namespace WB.UI.Designer.Code.Helpers
             { "UpdateQuestion", typeof(NewUpdateQuestionCommand) },
             { "AddQuestion", typeof(NewAddQuestionCommand) },
             { "DeleteQuestion", typeof(NewDeleteQuestionCommand) },
+            { "MoveQuestion", typeof(MoveQuestionCommand) },
         };
 
         public ICommand Deserialize(string commandType, string serializedCommand)
