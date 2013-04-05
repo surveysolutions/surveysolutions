@@ -19,10 +19,11 @@ namespace Main.Core.Tests.Domain
     [TestFixture]
     public class QuestionnaireARTests
     {
+        [Test]
         [TestCase("")]
         [TestCase("   ")]
-        [TestCase("      ")] /* contains \t symbol */
-        public void QuestionnaireARConstructor_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException(string emptyTitle)
+        [TestCase("\t")]
+        public void QuestionnaireARConstructor_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException_with_type_QuestionnaireTitleRequired(string emptyTitle)
         {
             // arrange
 
@@ -30,13 +31,14 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => new QuestionnaireAR(Guid.NewGuid(), emptyTitle);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
 
         [TestCase("")]
         [TestCase("   ")]
-        [TestCase("      ")] /* contains \t symbol */
-        public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException(string emptyTitle)
+        [TestCase("\t")]
+        public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException_of_type_QuestionnaireTitleRequired(string emptyTitle)
         {
             // arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
@@ -45,9 +47,9 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.UpdateQuestionnaire(emptyTitle);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionnaireTitleRequired));
         }
-
 
         [Test]
         public void UpdateQuestionnaire_When_questionnaire_title_is_not_empty_Then_raised_QuestionnaireUpdated_event_contains_questionnaire_title()
@@ -72,18 +74,17 @@ namespace Main.Core.Tests.Domain
             // Arrange
             Guid autoGroupId = Guid.NewGuid();
             bool isFeatured = true;
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupId);
 
             // Act
-            TestDelegate act =
-                () =>
-                questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text,
-                                             "name",
-                                             false, isFeatured, false, QuestionScope.Interviewer, "", "", "", "",
-                                             new Option[0], Order.AsIs, 0, new Guid[0]);
+            TestDelegate act = () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?", QuestionType.Text, "name", false,
+                                            isFeatured,
+                                            false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
             // Assert
-            Assert.Throws<DomainException>(act);
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
         }
 
         [Test]
@@ -94,7 +95,7 @@ namespace Main.Core.Tests.Domain
                 // Arrange
                 Guid groupId = Guid.NewGuid();
                 bool isFeatured = true;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneNonPropagatedGroup(groupId: groupId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
@@ -110,57 +111,70 @@ namespace Main.Core.Tests.Domain
         #region empty title tests
 
         [Test]
-        public void
-            NewAddQuestion_When_Title_is_not_empty_Then_rised_Then_NewQuestionAdded_event_contains_the_same_title_caption
-            ()
+        public void NewAddQuestion_When_Title_is_not_empty_Then_rised_Then_NewQuestionAdded_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
+                // Arrange
                 var questionnaireKey = Guid.NewGuid();
                 var groupKey = Guid.NewGuid();
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
 
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "not empty", QuestionType.Text, "test", false,
+                var notEmptyTitle = "any not empty title";
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, notEmptyTitle, QuestionType.Text, "test", false,
                                              false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                              string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+
+                // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
-                Assert.AreEqual("not empty", risedEvent.QuestionText);
+                Assert.That(risedEvent.QuestionText, Is.EqualTo(notEmptyTitle));
             }
         }
 
         [Test]
-        public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption
-            ()
+        public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
                 Guid questionKey;
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionKey);
 
-                questionnaire.NewUpdateQuestion(questionKey, "not empty", QuestionType.Text, "test", false, false,
+                string notEmptyTitle = "not empty :)";
+
+
+                //act
+                questionnaire.NewUpdateQuestion(questionKey, notEmptyTitle, QuestionType.Text, "test", false, false,
                                                 false, QuestionScope.Interviewer, string.Empty, string.Empty,
                                                 string.Empty,
                                                 string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
+
+                //assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
-                Assert.AreEqual("not empty", risedEvent.QuestionText);
+                Assert.AreEqual(notEmptyTitle, risedEvent.QuestionText);
             }
         }
 
         [Test]
-        public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown
-            ()
+        public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown()
         {
             var questionnaireKey = Guid.NewGuid();
             var groupKey = Guid.NewGuid();
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireKey, groupKey);
+
+
             TestDelegate act =
                 () =>
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "", QuestionType.Text, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
 
         [Test]
@@ -174,7 +188,10 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "", QuestionType.Text, "test", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionTitleRequired));
         }
         #endregion
 
@@ -197,9 +214,10 @@ namespace Main.Core.Tests.Domain
                 questionnsire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                              false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                              string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
+
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
         }
 
         [Test]
@@ -232,7 +250,8 @@ namespace Main.Core.Tests.Domain
         {
             Guid questionKey;
             // arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
+                out questionKey, questionType, new [] { new Option(Guid.NewGuid(), "123", "title") });
             Option[] options = new Option[1] {new Option(Guid.NewGuid(), "1", string.Empty)};
             // act
             TestDelegate act =
@@ -240,9 +259,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextRequired));
         }
 
         [Test]
@@ -255,19 +274,11 @@ namespace Main.Core.Tests.Domain
                 Guid questionKey;
                 Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey,
-                                                                                                      questionType,
-                                                                                                      new Answer[1]
-                                                                                                          {
-                                                                                                              new Answer
-                                                                                                          ()
-                                                                                                                  {
-                                                                                                                      AnswerText
-                                                                                                                          = "t",
-                                                                                                                      AnswerValue
-                                                                                                                          = "1"
-                                                                                                                  }
-                                                                                                          });
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
+                    out questionKey, questionType, new []
+                    {
+                        new Option(Guid.NewGuid(), "1", "option text"),
+                    });
                
 
                 // act
@@ -278,9 +289,6 @@ namespace Main.Core.Tests.Domain
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
             }
-
-            
-
         }
 
         #endregion
@@ -304,9 +312,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupKey, "test", questionType, "alias", false, false,
                                          false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                          string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-            
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextNotUnique));
         }
 
         [Test]
@@ -341,7 +349,7 @@ namespace Main.Core.Tests.Domain
         {
             Guid questionKey;
             // arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
             Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
             // act
             TestDelegate act =
@@ -349,9 +357,9 @@ namespace Main.Core.Tests.Domain
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
-            Assert.Throws<DomainException>(act);
             // assert
-
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorTextNotUnique));
         }
 
         [Test]
@@ -363,7 +371,7 @@ namespace Main.Core.Tests.Domain
             {
                 Guid questionKey;
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInType(out questionKey, questionType);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
                 Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
                 // act
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
@@ -387,7 +395,7 @@ namespace Main.Core.Tests.Domain
             // Arrange
             Guid groupId = Guid.NewGuid();
             bool isHeadOfPropagatedGroup = true;
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
             // Act
             TestDelegate act =
@@ -398,8 +406,9 @@ namespace Main.Core.Tests.Domain
                                              QuestionScope.Interviewer, "", "", "", "",
                                              new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
         }
 
         [Test]
@@ -410,7 +419,7 @@ namespace Main.Core.Tests.Domain
                 // Arrange
                 Guid autoGroupId = Guid.NewGuid();
                 bool isHeadOfPropagatedGroup = true;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), autoGroupId, "What is your last name?",
@@ -429,16 +438,13 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                Guid groupId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(groupId: groupId);
                 bool capital = true;
 
                 // Act
-                questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?",
-                                          "name", QuestionType.Text,
-                                          QuestionScope.Interviewer,
-                                          "", "", "", false, false, capital, Order.AZ, "", null, new List<Guid>(), 0,
-                                          new Answer[0]);
-
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text, "name",
+                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] {}, Order.AZ, null, new Guid[]{});
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -455,7 +461,7 @@ namespace Main.Core.Tests.Domain
             {
                 // Arrange
                 var groupId = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text,
@@ -503,8 +509,9 @@ namespace Main.Core.Tests.Domain
                                                                false, false, false, QuestionScope.Interviewer,
                                                                "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameMaxLength));
         }
 
         [Test]
@@ -521,8 +528,9 @@ namespace Main.Core.Tests.Domain
                                              false, false, false, QuestionScope.Interviewer,
                                              "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameStartWithDigit));
         }
 
         [Test]
@@ -540,8 +548,9 @@ namespace Main.Core.Tests.Domain
                                              "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameRequired));
         }
 
         [Test]
@@ -557,8 +566,9 @@ namespace Main.Core.Tests.Domain
                 nonValidVariableNameWithBannedSymbols,
                 false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameSpecialCharacters));
         }
 
         [Test]
@@ -575,8 +585,9 @@ namespace Main.Core.Tests.Domain
                 false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AZ, 0, new Guid[0]);
 
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
         [Test]
@@ -592,8 +603,9 @@ namespace Main.Core.Tests.Domain
                                                isFeatured,
                                                false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup));
         }
 
         [Test]
@@ -629,8 +641,9 @@ namespace Main.Core.Tests.Domain
                                                 isHeadOfPropagatedGroup,
                                                 QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup));
         }
 
         [Test]
@@ -659,18 +672,20 @@ namespace Main.Core.Tests.Domain
         public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Answer[0];
+            var emptyAnswersList = new Option[] {};
+            Guid groupId = Guid.NewGuid();
 
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
 
             // Act
-            TestDelegate act = () => questionnaire.AddQuestion(Guid.NewGuid(), "What is your last name?", "name",
-                                                               questionType,
-                                                               QuestionScope.Interviewer, "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0,
-                                                               emptyAnswersList);
+            TestDelegate act = () =>
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?",
+                    questionType, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "",
+                    emptyAnswersList, Order.AZ, null, new Guid[] { });
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
         }
 
         [Test]
@@ -679,19 +694,22 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Answer[0];
+            var emptyAnswersList = new Option[] {};
 
             Guid targetQuestionPublicKey;
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0, "name", "",
-                                             questionType,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false, false, Order.AZ,
-                                             emptyAnswersList);
+            TestDelegate act = () =>
+            {
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", questionType, "name",
+                    false, false, false, QuestionScope.Interviewer, "", "", "",
+                    "", emptyAnswersList, Order.AZ, 0, new List<Guid>().ToArray());
+            };
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorEmpty));
         }
 
         [Test]
@@ -700,17 +718,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                Guid targetQuestionPublicKey;
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(targetQuestionPublicKey);
 
                 bool capital = true;
 
                 // Act
-                questionnaire.ChangeQuestion(targetQuestionPublicKey, "Title", new List<Guid>(), 0,
-                                             "title", "", QuestionType.Text,
-                                             QuestionScope.Interviewer, null, "", "", "", false, false, capital,
-                                             Order.AZ, new Answer[0]);
-
+                questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text, "title",
+                    false, false, capital, QuestionScope.Interviewer, "", "", "",
+                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
 
                 // Assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
@@ -747,15 +763,16 @@ namespace Main.Core.Tests.Domain
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
             // Act
-            TestDelegate act = () => questionnaire.ChangeQuestion(Guid.NewGuid(), "Title", new List<Guid>(), 0,
-                                                            "valid", "",
-                                                            QuestionType.Text,
-                                                            QuestionScope.Interviewer, null, "", "", "", false, false, false,
-                                                            Order.AZ,
-                                                            new Answer[0]);
+            TestDelegate act = () =>
+            {
+                questionnaire.NewUpdateQuestion(Guid.NewGuid(), "Title", QuestionType.Text, "valid",
+                    false, false, false, QuestionScope.Interviewer, "", "", "",
+                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
+            };
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionNotFound));
         }
 
         [Test]
@@ -772,8 +789,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameMaxLength));
         }
 
         [Test]
@@ -791,8 +809,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameStartWithDigit));
         }
 
         [Test]
@@ -833,10 +852,11 @@ namespace Main.Core.Tests.Domain
                                                 emptyVariableName,
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
-            
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameRequired));
         }
 
         [Test]
@@ -854,8 +874,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VariableNameSpecialCharacters));
         }
 
         [Test]
@@ -872,8 +893,9 @@ namespace Main.Core.Tests.Domain
                                                 false, false, false, QuestionScope.Interviewer, "", "", "", "",
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
-            // Assert
-            Assert.Throws<DomainException>(act);
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.VarialbeNameNotUnique));
         }
 
         [Test]
@@ -882,31 +904,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
                 Guid groupPublicKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
-                questionnaire.DeleteGroup(groupPublicKey, Guid.NewGuid());
+                Guid parentPublicKey = Guid.NewGuid();
+                questionnaire.NewDeleteGroup(groupPublicKey);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
-            }
-        }
-
-        [Test]
-        public void DeleteGroup_When_parent_element_public_key_specified_Then_raised_GroupDeleted_event_with_same_parent_element_public_key()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                Guid parentElementPublicKey = Guid.NewGuid();
-
-                // act
-                questionnaire.DeleteGroup(Guid.NewGuid(), parentElementPublicKey);
-
-                // assert
-                Assert.That(GetSingleEvent<GroupDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentElementPublicKey));
             }
         }
 
@@ -952,31 +958,15 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                var questionId = Guid.NewGuid();
+                Guid questionId;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
 
                 // act
-                questionnaire.DeleteQuestion(questionId, Guid.NewGuid());
+                Guid parentPublicKey = Guid.NewGuid();
+                questionnaire.NewDeleteQuestion(questionId);
 
                 // assert
                 Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).QuestionId, Is.EqualTo(questionId));
-            }
-        }
-
-        [Test]
-        public void DeleteQuestion_When_parent_element_public_key_specified_Then_raised_QuestionDeleted_event_with_same_parent_element_public_key()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-                var parentPublicKey = Guid.NewGuid();
-
-                // act
-                questionnaire.DeleteQuestion(Guid.NewGuid(), parentPublicKey);
-
-                // assert
-                Assert.That(GetSingleEvent<QuestionDeleted>(eventContext).ParentPublicKey, Is.EqualTo(parentPublicKey));
             }
         }
 
@@ -1043,7 +1033,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, emptyTitle, Propagate.None, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
@@ -1076,7 +1067,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, "Title", unsupportedPropagationKing, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedPropagationGroup));
         }
 
         [TestCase(Propagate.None)]
@@ -1108,7 +1100,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupTitleRequired));
         }
 
         [Test]
@@ -1139,7 +1132,8 @@ namespace Main.Core.Tests.Domain
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, "Title", unsupportedPropagationKing, null, null);
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotSupportedPropagationGroup));
         }
 
         [TestCase(Propagate.None)]
@@ -1168,10 +1162,13 @@ namespace Main.Core.Tests.Domain
 
             // act
             TestDelegate act = () =>
-                questionnaire.UpdateGroup(null, Propagate.None, notExistingGroupPublicKey, null, null, null);
+            {
+                questionnaire.NewUpdateGroup(notExistingGroupPublicKey, null, Propagate.None, null, null);
+            };
 
             // assert
-            Assert.That(act, Throws.InstanceOf<DomainException>());
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupNotFound));
         }
 
         [Test]
@@ -1185,7 +1182,7 @@ namespace Main.Core.Tests.Domain
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(questionnaireId, existingGroupPublicKey);
 
                 // act
-                questionnaire.UpdateGroup("Title", Propagate.None, existingGroupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(existingGroupPublicKey, "Title", Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).QuestionnaireId, Is.EqualTo(questionnaireId.ToString()));
@@ -1199,10 +1196,10 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
-                questionnaire.UpdateGroup("group text", Propagate.None, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "group text", Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
@@ -1216,11 +1213,11 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var groupText = "new group text";
 
                 // act
-                questionnaire.UpdateGroup(groupText, Propagate.None, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, groupText, Propagate.None, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).GroupText, Is.EqualTo(groupText));
@@ -1234,11 +1231,11 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var propagatability = Propagate.AutoPropagated;
 
                 // act
-                questionnaire.UpdateGroup("new text", propagatability, groupPublicKey, null, null, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "new text", propagatability, null, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(propagatability));
@@ -1252,11 +1249,11 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var conditionExpression = "2 < 7";
 
                 // act
-                questionnaire.UpdateGroup("text of a group", Propagate.None, groupPublicKey, null, conditionExpression, null);
+                questionnaire.NewUpdateGroup(groupPublicKey, "text of a group", Propagate.None, null, conditionExpression);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).ConditionExpression, Is.EqualTo(conditionExpression));
@@ -1270,11 +1267,11 @@ namespace Main.Core.Tests.Domain
             {
                 // arrange
                 var groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupPublicKey);
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
                 var description = "hardest questionnaire in the world";
 
                 // act
-                questionnaire.UpdateGroup("Title", Propagate.None, groupPublicKey, null, null, description);
+                questionnaire.NewUpdateGroup(groupPublicKey, "Title", Propagate.None, description, null);
 
                 // assert
                 Assert.That(GetSingleEvent<GroupUpdated>(eventContext).Description, Is.EqualTo(description));
@@ -1342,24 +1339,25 @@ namespace Main.Core.Tests.Domain
             return new QuestionnaireAR();
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid targetQuestionPublicKey)
+        #warning Slava: remove out parameter. replace it with optional in parameter
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid questionId)
         {
-            return CreateQuestionnaireARWithOneQuestionnInType(out targetQuestionPublicKey, QuestionType.Text);
+            questionId = Guid.NewGuid();
+            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
         }
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInType(out Guid targetQuestionPublicKey, QuestionType questionType)
+        
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInType(out Guid questionId, QuestionType questionType)
         {
-            return CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out targetQuestionPublicKey, QuestionType.Text, new Answer[0]);
+            questionId = Guid.NewGuid();
+            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType);
         }
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out Guid targetQuestionPublicKey, QuestionType questionType, Answer[] options)
+        
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out Guid questionId, QuestionType questionType, Option[] options)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            targetQuestionPublicKey = Guid.NewGuid();
+            questionId = Guid.NewGuid();
+            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType, options: options);
+        }
 
-            questionnaire.AddQuestion(targetQuestionPublicKey, "What is your last name?", "lastName", questionType,
-                                      QuestionScope.Interviewer,
-                                      "", "", "", false, false, false, Order.AZ, "", null, new List<Guid>(), 0, options);
-            return questionnaire;
-        }
         private static QuestionnaireAR CreateQuestionnaireAR(Guid? questionnaireId = null, string text = "text of questionnaire")
         {
             return new QuestionnaireAR(questionnaireId ?? Guid.NewGuid(), text);
@@ -1367,58 +1365,49 @@ namespace Main.Core.Tests.Domain
 
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionAndOneImage(Guid questionKey, Guid imageKey)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-
-            questionnaire.AddQuestion(questionKey, "What is your middle name?", "middlename",
-                QuestionType.Text, QuestionScope.Interviewer, null, null, null,
-                false, false, false, Order.AZ, null, null,
-                new List<Guid>(), 0, new Answer[] { });
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionKey);
 
             questionnaire.UploadImage(questionKey, "image title", "image description", imageKey);
 
             return questionnaire;
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupPublicKey = null)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroup(Guid? questionnaireId = null, Guid? groupId = null, Propagate propagationKind = Propagate.None)
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR(questionnaireId ?? Guid.NewGuid(), "Title");
 
-            questionnaire.AddGroup(groupPublicKey ?? Guid.NewGuid(), "New group", Propagate.None, null, null, null);
+            questionnaire.NewAddGroup(groupId ?? Guid.NewGuid(), null, "New group", propagationKind, null, null);
 
             return questionnaire;
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroup(Guid autoGroupId)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneAutoPropagatedGroup(Guid groupId)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR(Guid.NewGuid(), "Title");
+            return CreateQuestionnaireARWithOneGroup(groupId: groupId, propagationKind: Propagate.AutoPropagated);
+        }
 
-            questionnaire.AddGroup(autoGroupId, "New auto group", Propagate.AutoPropagated, null, null, null);
-
-            return questionnaire;
+        private static QuestionnaireAR CreateQuestionnaireARWithOneNonPropagatedGroup(Guid groupId)
+        {
+            return CreateQuestionnaireARWithOneGroup(groupId: groupId, propagationKind: Propagate.None);
         }
 
         private static QuestionnaireAR CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(Guid questionId)
         {
-            var autoGroupId = Guid.NewGuid();
-
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupId);
-
-            questionnaire.NewAddQuestion(questionId, autoGroupId, "Title", QuestionType.Text, "text", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0]);
-
-            return questionnaire;
+            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(
+                questionId: questionId, groupPropagationKind: Propagate.AutoPropagated);
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneGroupAndQuestionInIt(Guid questionId, Guid? groupPublicKey = null)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneGroupAndQuestionInIt(Guid questionId, Guid? groupId = null,
+            Propagate groupPropagationKind = Propagate.None, QuestionType questionType = QuestionType.Text, Option[] options = null)
         {
-            var groupId = groupPublicKey ?? Guid.NewGuid();
+            groupId = groupId ?? Guid.NewGuid();
 
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupId);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupId.Value, groupPropagationKind);
 
-            questionnaire.NewAddQuestion(questionId, groupId, "Title", QuestionType.Text, "text", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0]);
+            questionnaire.NewAddQuestion(questionId,
+                groupId.Value, "Title", questionType, "text", false, false,
+                false, QuestionScope.Interviewer, "", "", "", "", options ?? new Option[] {}, Order.AsIs, null,
+                new Guid[] {});
 
             return questionnaire;
         }
@@ -1441,135 +1430,131 @@ namespace Main.Core.Tests.Domain
         }
 
         #region [Answer option values allows only numbers]
-        [Test]
-        public void AddQuestion_When_answer_multi_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
-        {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-
-            // Act
-            TestDelegate act =
-                () =>
-                questionnaire.AddQuestion(
-                    publicKey: Guid.NewGuid(),
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.MultyOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
-        }
 
         [Test]
-        public void AddQuestion_When_answer_single_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
-        {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-
-            // Act
-            TestDelegate act =
-                () =>
-                questionnaire.AddQuestion(
-                    publicKey: Guid.NewGuid(),
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
-        }
-
-        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
         public void
-            NewAddQuestion_When_answer_multi_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
+            NewAddQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
             // Act
-            TestDelegate act =
-                () =>
+            TestDelegate act = () =>
                 questionnaire.NewAddQuestion(
                     questionId: Guid.NewGuid(),
                     groupId: Guid.NewGuid(),
                     title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: 0,
+                    triggedGroupIds: new Guid[0],
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
                     type: QuestionType.MultyOption,
-                    alias: "name",
-                    isMandatory: false,
-                    isFeatured: false,
-                    isHeaderOfPropagatableGroup: false,
                     scope: QuestionScope.Interviewer,
                     condition: string.Empty,
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
                     instructions: string.Empty,
-                    optionsOrder: Order.AsIs,
-                    maxValue: 0,
                     triggedGroupIds: new Guid[0],
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
+                    maxValue: 0,
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: "some text") });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueSpecialCharacters));
         }
 
         [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
         public void
-            NewAddQuestion_When_answer_single_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
+            NewUpdateQuestion_When_answer_option_value_contains_only_numbers_Then_raised_QuestionChanged_event_contains_question_answer_with_only_numbers_value
+            (QuestionType questionType)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            using (var eventContext = new EventContext())
+            {
 
-            // Act
-            TestDelegate act =
-                () =>
+                Guid targetQuestionPublicKey;
+                string answerValue = "10";
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: questionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: answerValue) });
+
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewAddQuestion_When_answer_option_value_contains_only_numbers_Then_raised_NewQuestionAdded_event_contains_question_answer_with_only_numbers_value
+            (QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                string answerValue = "10";
+                Guid autoGroupId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupId);
+
                 questionnaire.NewAddQuestion(
                     questionId: Guid.NewGuid(),
-                    groupId: Guid.NewGuid(),
+                    groupId: autoGroupId,
                     title: "What is your last name?",
-                    type: QuestionType.SingleOption,
+                    type: questionType,
                     alias: "name",
                     isMandatory: false,
                     isFeatured: false,
@@ -1582,155 +1567,29 @@ namespace Main.Core.Tests.Domain
                     optionsOrder: Order.AsIs,
                     maxValue: 0,
                     triggedGroupIds: new Guid[0],
-                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: "some value", title: "text") });
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: answerValue, title: "text") });
 
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+            }
         }
 
-        [Test]
-        public void ChangeQuestion_When_answer_multi_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
-        {
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
-
-            // Act
-            TestDelegate act =
-                () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.MultyOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
-        }
-
-        [Test]
-        public void ChangeQuestion_When_answer_single_option_value_allows_only_numbers_Then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
-
-            // Act
-            TestDelegate act =
-                () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerValue = "some text",
-                                    AnswerText = "text"
-                                }
-                        });
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("only number characters"));
-        }
         #endregion
 
-
         #region [Answer option value is required]
-       
+
         [Test]
         public void AddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            Guid groupId = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId);
 
             // Act
-            TestDelegate act =
-                () =>
-                questionnaire.AddQuestion(
-                    publicKey: Guid.NewGuid(),
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
-                    validationExpression: string.Empty,
-                    validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
-                    instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
-                    maxValue: 0,
-                    answers:
-                    new Answer[1]
-                        {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerText = "text"
-                                }
-                        });
-
-            // Assert
-            var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
-        }
-
-       
-        [Test]
-        public void
-            NewAddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
-        {
-            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-
-            // Act
-            TestDelegate act =
-                () =>
+            TestDelegate act = () =>
                 questionnaire.NewAddQuestion(
                     questionId: Guid.NewGuid(),
-                    groupId: Guid.NewGuid(),
+                    groupId: groupId,
                     title: "What is your last name?",
                     type: QuestionType.SingleOption,
                     alias: "name",
@@ -1742,57 +1601,293 @@ namespace Main.Core.Tests.Domain
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
                     instructions: string.Empty,
-                    optionsOrder: Order.AsIs,
+                    optionsOrder: Order.AZ,
                     maxValue: 0,
-                    triggedGroupIds: new Guid[0],
+                    triggedGroupIds: new Guid[] { },
                     options: new Option[1] { new Option(id: Guid.NewGuid(), value: null, title: "text") });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueRequired));
         }
 
-       
         [Test]
-        public void ChangeQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
-            // Arrange
             Guid targetQuestionPublicKey;
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
 
             // Act
             TestDelegate act =
                 () =>
-                questionnaire.ChangeQuestion(
-                    publicKey: targetQuestionPublicKey,
-                    questionText: "What is your last name?",
-                    stataExportCaption: "name",
-                    questionType: QuestionType.SingleOption,
-                    questionScope: QuestionScope.Interviewer,
-                    conditionExpression: string.Empty,
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: questionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
                     validationExpression: string.Empty,
                     validationMessage: string.Empty,
-                    featured: false,
-                    mandatory: false,
-                    capital: false,
-                    answerOrder: Order.AZ,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
                     instructions: string.Empty,
-                    groupPublicKey: null,
-                    triggers: new List<Guid>(),
+                    triggedGroupIds: new Guid[0],
                     maxValue: 0,
-                    answers:
-                    new Answer[1]
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: null) });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueRequired));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewUpdateQuestion_When_answer_option_value_is_not_null_or_empty_Then_raised_QuestionChanged_event_contains_not_null_and_not_empty_question_answer
+            (QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+
+                Guid targetQuestionPublicKey;
+                string answerValue = "10";
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: questionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), title: "text", value: answerValue) });
+
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewAddQuestion_When_answer_option_value_is_not_null_or_empty_Then_raised_NewQuestionAdded_event_contains_not_null_and_not_empty_question_answer
+            (QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                string answerValue = "10";
+                Guid autoGroupId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupId);
+
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: autoGroupId,
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: 0,
+                    triggedGroupIds: new Guid[0],
+                    options: new Option[1] { new Option(id: Guid.NewGuid(), value: answerValue, title: "text") });
+
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+            }
+        }
+        #endregion
+
+        #region [Answer option values is unique in options scope]
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewAddQuestion_When_answer_option_values_not_unique_in_options_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            var questionnaire = CreateQuestionnaireAR();
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: Guid.NewGuid(),
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: 0,
+                    triggedGroupIds: new Guid[0],
+                    options:
+                    new Option[2]
                         {
-                            new Answer()
-                                {
-                                    PublicKey = Guid.NewGuid(),
-                                    AnswerText = "text"
-                                }
+                            new Option(id: Guid.NewGuid(), value: "1", title: "text 1"),
+                            new Option(id: Guid.NewGuid(), value: "1", title: "text 2")
                         });
 
             // Assert
             var domainException = Assert.Throws<DomainException>(act);
-            Assert.That(domainException.Message, Is.StringContaining("Answer value is required"));
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueNotUnique));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void NewUpdateQuestion_When_answer_option_values_not_unique_in_options_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
+        {
+            Guid targetQuestionPublicKey;
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+            // Act
+            TestDelegate act =
+                () =>
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: questionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options:
+                    new Option[2]
+                        {
+                            new Option(id: Guid.NewGuid(), value: "1", title: "text 1"),
+                            new Option(id: Guid.NewGuid(), value: "1", title: "text 2")
+                        });
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.SelectorValueNotUnique));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewUpdateQuestion_When_answer_option_values_unique_in_options_scope_Then_raised_QuestionChanged_event_contains_only_unique_values_in_answer_values_scope
+            (QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+
+                Guid targetQuestionPublicKey;
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+
+                questionnaire.NewUpdateQuestion(
+                    questionId: targetQuestionPublicKey,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: questionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options:
+                        new Option[2]
+                            {
+                                new Option(id: Guid.NewGuid(), title: "text 1", value: "1"),
+                                new Option(id: Guid.NewGuid(), title: "text 2", value: "2")
+                            });
+
+
+                // assert
+                Assert.That(
+                    GetSingleEvent<QuestionChanged>(eventContext).Answers.Select(x => x.AnswerValue).Distinct().Count(),
+                    Is.EqualTo(2));
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void
+            NewAddQuestion_When_answer_option_values_unique_in_options_scope_Then_raised_NewQuestionAdded_event_contains_only_unique_values_in_answer_values_scope
+            (QuestionType questionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                Guid autoGroupId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupId);
+
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: autoGroupId,
+                    title: "What is your last name?",
+                    type: questionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: 0,
+                    triggedGroupIds: new Guid[0],
+                    options:
+                        new Option[2]
+                            {
+                                new Option(id: Guid.NewGuid(), title: "text 1", value: "1"),
+                                new Option(id: Guid.NewGuid(), title: "text 2", value: "2")
+                            });
+
+
+                // assert
+                Assert.That(
+                    GetSingleEvent<NewQuestionAdded>(eventContext).Answers.Select(x => x.AnswerValue).Distinct().Count(),
+                    Is.EqualTo(2));
+            }
         }
         #endregion
     }

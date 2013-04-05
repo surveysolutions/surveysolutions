@@ -9,15 +9,12 @@
     [Serializable]
     public class DomainException : Exception
     {
-        public DomainException() {}
+        public readonly DomainExceptionType ErrorType;
 
-        public DomainException(string message)
-            : base(message) {}
-
-        public DomainException(string message, Exception innerException)
-            : base(message, innerException) {}
-
-        protected DomainException(SerializationInfo info, StreamingContext context)
-            : base(info, context) {}
+        public DomainException(DomainExceptionType errorType, string message)
+            : base(message)
+        {
+            ErrorType = errorType;
+        }
     }
 }

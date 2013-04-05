@@ -54,41 +54,41 @@ namespace Main.Core.Domain
                 x => x.Children,
                 (parent, x) =>
                     {
-                        var parentId = parent == null ? (Guid?)null : parent.PublicKey;
+                        Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
                         var q = x as IQuestion;
                         if (q != null)
                         {
                             var autoQuestion = q as IAutoPropagate;
-                            this.AddQuestion(
-                                publicKey: q.PublicKey,
-                                questionText: q.QuestionText,
-                                stataExportCaption: q.StataExportCaption,
-                                questionType: q.QuestionType,
-                                questionScope: q.QuestionScope,
-                                conditionExpression: q.ConditionExpression,
+                            this.NewAddQuestion(
+                                questionId: q.PublicKey,
+                                groupId: parentId.Value,
+                                title: q.QuestionText,
+                                type: q.QuestionType,
+                                alias: q.StataExportCaption,
+                                isMandatory: q.Mandatory,
+                                isFeatured: q.Featured,
+                                isHeaderOfPropagatableGroup: q.Capital,
+                                scope: q.QuestionScope,
+                                condition: q.ConditionExpression,
                                 validationExpression: q.ValidationExpression,
                                 validationMessage: q.ValidationMessage,
-                                featured: q.Featured,
-                                mandatory: q.Mandatory,
-                                capital: q.Capital,
-                                answerOrder: q.AnswerOrder,
                                 instructions: q.Instructions,
-                                groupPublicKey: parentId,
-                                triggers: autoQuestion == null ? null : autoQuestion.Triggers,
+                                options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
+                                optionsOrder: q.AnswerOrder,
                                 maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                                answers: q.Answers.Select(Answer.CreateFromOther).ToArray());
+                                triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
                         }
                         var g = x as IGroup;
                         if (g != null)
                         {
-                            this.AddGroup(
-                                publicKey: g.PublicKey,
-                                text: g.Title,
-                                propagateble: g.Propagated,
-                                parentGroupKey: parentId,
-                                conditionExpression: g.ConditionExpression,
-                                description: g.Description);
+                            this.NewAddGroup(
+                                groupId: g.PublicKey,
+                                parentGroupId: parentId,
+                                title: g.Title,
+                                propagationKind: g.Propagated,
+                                description: g.Description,
+                                condition: g.ConditionExpression);
                         }
                     });
         }
@@ -116,131 +116,6 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionnaireDeleted());
         }
 
-        [Obsolete]
-        public void AddGroup(
-            Guid publicKey, string text, Propagate propagateble, Guid? parentGroupKey, string conditionExpression, string description)
-        {
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(text);
-            
-            this.ApplyEvent(
-                new NewGroupAdded
-                    {
-                        PublicKey = publicKey,
-                        GroupText = text,
-                        ParentGroupPublicKey = parentGroupKey,
-                        Paropagateble = propagateble,
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
-        }
-
-        [Obsolete]
-        public void AddQuestion(
-            Guid publicKey,
-            string questionText,
-            string stataExportCaption,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            bool featured,
-            bool mandatory,
-            bool capital,
-            Order answerOrder,
-            string instructions,
-            Guid? groupPublicKey,
-            List<Guid> triggers,
-            int maxValue,
-            Answer[] answers)
-        {
-            stataExportCaption = stataExportCaption.Trim();
-
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
-
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
-
-            this.ApplyEvent(
-                new NewQuestionAdded
-                    {
-                        PublicKey = publicKey,
-                        QuestionText = questionText,
-                        StataExportCaption = stataExportCaption,
-                        QuestionType = questionType,
-                        QuestionScope = questionScope,
-                        ConditionExpression = conditionExpression,
-                        ValidationExpression = validationExpression,
-                        ValidationMessage = validationMessage,
-                        Featured = featured,
-                        Mandatory = mandatory,
-                        Capital = capital,
-                        AnswerOrder = answerOrder,
-                        GroupPublicKey = groupPublicKey,
-                        Triggers = triggers,
-                        MaxValue = maxValue,
-                        Answers = answers,
-                        Instructions = instructions
-                    });
-        }
-
-        [Obsolete]
-        public void ChangeQuestion(
-            Guid publicKey,
-            string questionText,
-            List<Guid> triggers,
-            int maxValue,
-            string stataExportCaption,
-            string instructions,
-            QuestionType questionType,
-            QuestionScope questionScope,
-            Guid? groupPublicKey,
-            string conditionExpression,
-            string validationExpression,
-            string validationMessage,
-            bool featured,
-            bool mandatory,
-            bool capital,
-            Order answerOrder,
-            Answer[] answers)
-        {
-            this.ThrowDomainExceptionIfQuestionDoesNotExist(publicKey);
-
-            stataExportCaption = stataExportCaption.Trim();
-
-            this.ThrowDomainExceptionIfStataCaptionIsInvalid(publicKey, stataExportCaption);
-
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(questionType, answers);
-
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(questionType, answers);
-
-            this.ApplyEvent(
-                new QuestionChanged
-                    {
-                        PublicKey = publicKey,
-                        QuestionText = questionText,
-                        Triggers = triggers,
-                        MaxValue = maxValue,
-                        StataExportCaption = stataExportCaption,
-                        QuestionType = questionType,
-                        QuestionScope = questionScope,
-                        ConditionExpression = conditionExpression,
-                        ValidationExpression = validationExpression,
-                        ValidationMessage = validationMessage,
-                        Featured = featured,
-                        Mandatory = mandatory,
-                        Capital = capital,
-                        AnswerOrder = answerOrder,
-                        Answers = answers,
-                        Instructions = instructions
-                    });
-        }
-
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
         #warning probably a factory should be used here
         {
@@ -249,25 +124,12 @@ namespace Main.Core.Domain
             new CompleteQuestionnaireAR(completeQuestionnaireId, this.innerDocument, creator);
         }
 
-        [Obsolete]
-        public void DeleteGroup(Guid groupPublicKey, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new GroupDeleted(groupPublicKey, parentPublicKey));
-        }
-
         public void DeleteImage(Guid questionKey, Guid imageKey)
         {
             this.ApplyEvent(new ImageDeleted { ImageKey = imageKey, QuestionKey = questionKey });
         }
 
         [Obsolete]
-        public void DeleteQuestion(Guid questionId, Guid parentPublicKey)
-        #warning we should not supply parent here. that is because question is unique, and parent has no business sense
-        {
-            this.ApplyEvent(new QuestionDeleted(questionId, parentPublicKey));
-        }
-
         public void MoveQuestionnaireItem(Guid publicKey, Guid? groupKey, Guid? afterItemKey)
         {
             this.ApplyEvent(
@@ -332,12 +194,11 @@ namespace Main.Core.Domain
         {
             alias = alias.Trim();
 
-            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
-            this.ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(type, options);
-            this.ThrowDomainExceptionIfOptionsContainsInvalidCharacters(type, options);
-
+            
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
 
@@ -378,6 +239,19 @@ namespace Main.Core.Domain
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
 
+        public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex)
+        {
+            this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId);
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = questionId,
+                GroupKey = targetGroupId,
+                TargetIndex = targetIndex,
+            });
+        }
+
         public void NewUpdateQuestion(Guid questionId,
             string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
@@ -390,7 +264,7 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
-            this.ThrowDomainExceptionIfOptionsNeededButAbsent(type, options);
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
             
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
@@ -422,35 +296,6 @@ namespace Main.Core.Domain
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
             });
-        }
-
-        
-
-        [Obsolete]
-        public void UpdateGroup(
-            string groupText,
-            Propagate propagateble,
-            Guid groupPublicKey,
-            UserLight executor,
-            string conditionExpression,
-            string description)
-        #warning get rid of executor here and create a common mechanism for handling it if needed
-        {
-            this.ThrowDomainExceptionIfGroupDoesNotExist(groupPublicKey);
-
-            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(groupText);
-
-            this.ApplyEvent(
-                new GroupUpdated
-                    {
-                        QuestionnaireId = this.innerDocument.PublicKey.ToString(),
-                        GroupPublicKey = groupPublicKey,
-                        GroupText = groupText,
-                        Propagateble = propagateble,
-                        /*Executor = executor,*/
-                        ConditionExpression = conditionExpression,
-                        Description = description
-                    });
         }
 
         public void UpdateImage(Guid questionKey, Guid imageKey, string title, string description)
@@ -587,7 +432,16 @@ namespace Main.Core.Domain
 
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
-            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            bool isLegacyEvent = e.AfterItemKey != null || e.GroupKey == null;
+
+            if (isLegacyEvent)
+            {
+                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+            }
+            else
+            {
+                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey.Value, e.TargetIndex);
+            }
         }
 
         private static Answer[] ConvertOptionsToAnswers(Option[] options)
@@ -609,6 +463,11 @@ namespace Main.Core.Domain
             };
         }
 
+        private static Option ConvertAnswerToOption(IAnswer answer)
+        {
+            return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
+        }
+
         private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
         {
             if (triggedGroupIds == null || triggedGroupIds.Length == 0) 
@@ -619,12 +478,14 @@ namespace Main.Core.Domain
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
                 {
-                    throw new DomainException("Question can trigger only existing");
+                    throw new DomainException(
+                        DomainExceptionType.TriggerLinksToNotExistingGroup, "Question can trigger only existing");
                 }
 
                 if (@group.Propagated == Propagate.None)
                 {
-                    throw new DomainException("Question can trigger only propagated groups");
+                    throw new DomainException(
+                        DomainExceptionType.TriggerLinksToNotPropagatedGroup, "Question can trigger only propagated groups");
                 }
             }
         }
@@ -648,7 +509,9 @@ namespace Main.Core.Domain
 
             if (group.Propagated == Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException(
+                     DomainExceptionType.QuestionIsHeadOfGroupButNotInsidePropagateGroup,
+                     "Question inside propagated group can not be head of group");
             }
         }
 
@@ -671,21 +534,27 @@ namespace Main.Core.Domain
 
             if (group.Propagated != Propagate.None)
             {
-                throw new DomainException("Question inside propagated group can not be featured");
+                throw new DomainException(
+                    DomainExceptionType.QuestionIsFeaturedButNotInsideNonPropagateGroup,
+                    "Question inside propagated group can not be featured");
             }
         }
 
         private void ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(Propagate propagationKind)
         {
             if (!(propagationKind == Propagate.None || propagationKind == Propagate.AutoPropagated))
-                throw new DomainException(string.Format("Group's propagation kind {0} is unsupported", propagationKind));
+                throw new DomainException(
+                    DomainExceptionType.NotSupportedPropagationGroup,
+                    string.Format("Group's propagation kind {0} is unsupported", propagationKind));
         }
 
         private void ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("The titles of groups and chapters can not be empty or contains whitespaces only");
+                throw new DomainException(
+                    DomainExceptionType.GroupTitleRequired,
+                    "The titles of groups and chapters can not be empty or contains whitespaces only");
             }
         }
 
@@ -693,7 +562,9 @@ namespace Main.Core.Domain
         {
             if (string.IsNullOrWhiteSpace(title))
             {
-                throw new DomainException("Questionnaire's title can not be empty or contains whitespaces only");
+                throw new DomainException(
+                    DomainExceptionType.QuestionnaireTitleRequired,
+                    "Questionnaire's title can not be empty or contains whitespaces only");
             }
         }
 
@@ -702,7 +573,9 @@ namespace Main.Core.Domain
             var question = this.innerDocument.Find<AbstractQuestion>(publicKey);
             if (question == null)
             {
-                throw new DomainException(string.Format("Question with public key {0} can't be found", publicKey));
+                throw new DomainException(
+                    DomainExceptionType.QuestionNotFound,
+                    string.Format("Question with public key {0} can't be found", publicKey));
             }
         }
 
@@ -711,63 +584,45 @@ namespace Main.Core.Domain
             var group = this.innerDocument.Find<Group>(groupPublicKey);
             if (group == null)
             {
-                throw new DomainException(string.Format("group with  publick key {0} can't be found", groupPublicKey));
+                throw new DomainException(
+                    DomainExceptionType.GroupNotFound,
+                    string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
         private void ThrowDomainExceptionIfTitleisEmpty(string title)
         {
            if(string.IsNullOrEmpty(title))
-               throw new DomainException("Question title can't be empty");
-        }
-        private void ThrowDomainExceptionIfOptionsNeededButAbsent(QuestionType type, Option[] options)
-        {
-            this.ThrowDomainExceptionIfAnswersNeededButAbsent(type, ConvertOptionsToAnswers(options));
-        }
-
-        private void ThrowDomainExceptionIfAnswersNeededButAbsent(QuestionType questionType,
-                                                                  IEnumerable<IAnswer> answerOptions)
-        {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption ||
-                                        questionType == QuestionType.SingleOption;
-            if (!isQuestionWithOptions)
-                return;
-            if (!answerOptions.Any())
-                throw new DomainException("Questions with options should have one answer option at least");
-            Dictionary<string, int> uniquniesTitleCounter = new Dictionary<string, int>();
-            foreach (var answerOption in answerOptions)
-            {
-                if(string.IsNullOrEmpty(answerOption.AnswerText))
-                    throw new DomainException("Answer title can't be empty");
-                if (uniquniesTitleCounter.ContainsKey(answerOption.AnswerText))
-                    throw new DomainException("Answer title is not unique");
-                uniquniesTitleCounter[answerOption.AnswerText] = 1;
-            }
-
+               throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
         {
             if (string.IsNullOrEmpty(stataCaption))
             {
-                throw new DomainException("Variable name shouldn't be empty or contains white spaces");
+                throw new DomainException(
+                    DomainExceptionType.VariableNameRequired, "Variable name shouldn't be empty or contains white spaces");
             }
 
             bool isTooLong = stataCaption.Length > 32;
             if (isTooLong)
             {
-                throw new DomainException("Variable name shouldn't be longer than 32 characters");
+                throw new DomainException(
+                    DomainExceptionType.VariableNameMaxLength, "Variable name shouldn't be longer than 32 characters");
             }
 
             bool containsInvalidCharacters = stataCaption.Any(c => !(c == '_' || Char.IsLetterOrDigit(c)));
             if (containsInvalidCharacters)
             {
-                throw new DomainException("Valid variable name should contains only letters, digits and underscore character");
+                throw new DomainException(
+                    DomainExceptionType.VariableNameSpecialCharacters,
+                    "Valid variable name should contains only letters, digits and underscore character");
             }
 
             bool startsWithDigit = Char.IsDigit(stataCaption[0]);
             if (startsWithDigit)
             {
-                throw new DomainException("Variable name shouldn't starts with digit");
+                throw new DomainException(
+                    DomainExceptionType.VariableNameStartWithDigit, "Variable name shouldn't starts with digit");
             }
 
             var captions = this.innerDocument.GetAllQuestions<AbstractQuestion>()
@@ -777,41 +632,51 @@ namespace Main.Core.Domain
             bool isNotUnique = captions.Contains(stataCaption);
             if (isNotUnique)
             {
-                throw new DomainException("Variable name should be unique in questionnaire's scope");
+                throw new DomainException(
+                   DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
         }
 
-        private void ThrowDomainExceptionIfOptionsContainsInvalidCharacters(QuestionType type, Option[] options)
+        private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
+            QuestionType questionType, Option[] options)
         {
-            this.ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(type, ConvertOptionsToAnswers(options));
-        }
-
-        private void ThrowDomainExceptionIfAnswerValuesContainsInvalidCharacters(
-            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
-        {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption
-                                        || questionType == QuestionType.SingleOption;
-            int iAnswerValue = 0;
-            if (isQuestionWithOptions && answerOptions.Any(x=>!int.TryParse(x.AnswerValue, out iAnswerValue)))
+            if (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)
             {
-                throw new DomainException("Answer values should have only number characters");
-            }
-        }
+                if (!options.Any())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
+                }
 
-        private void ThrowDomainExceptionIfOptionsValueIsNullOrEmpty(QuestionType type, Option[] options)
-        {
-            this.ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(type, ConvertOptionsToAnswers(options));
-        }
+                if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueRequired, "Answer option value is required");
+                }
 
-        private void ThrowDomainExceptionIfAnswerValueIsNullOrEmpty(
-            QuestionType questionType, IEnumerable<IAnswer> answerOptions)
-        {
-            var isQuestionWithOptions = questionType == QuestionType.MultyOption
-                                        || questionType == QuestionType.SingleOption;
+                if (options.Any(x => !x.Value.IsInteger()))
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueSpecialCharacters,
+                        "Answer option value should have only number characters");
+                }
 
-            if (isQuestionWithOptions && answerOptions.Any(x => string.IsNullOrEmpty(x.AnswerValue)))
-            {
-                throw new DomainException("Answer value is required");
+                if (options.Select(x => x.Value).Distinct().Count() != options.Count())
+                {
+                    throw new DomainException(
+                        DomainExceptionType.SelectorValueNotUnique,
+                        "Answer option value should have unique in options scope");
+                }
+
+                if (options.Any(x => string.IsNullOrEmpty(x.Title)))
+                {
+                    throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+                }
+
+                if (options.Select(x => x.Title).Distinct().Count() != options.Count())
+                {
+                    throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
+                }
             }
         }
     }

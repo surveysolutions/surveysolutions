@@ -18,6 +18,7 @@ namespace Main.Core.Commands.Questionnaire
     /// <summary>
     /// The move questionnaire item command.
     /// </summary>
+    [Obsolete]
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "MoveQuestionnaireItem")]
     public class MoveQuestionnaireItemCommand : CommandBase

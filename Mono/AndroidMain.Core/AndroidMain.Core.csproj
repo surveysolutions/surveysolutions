@@ -180,6 +180,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\FullQuestionDataCommand.cs">
       <Link>Commands\Questionnaire\Question\FullQuestionDataCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\MoveQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\MoveQuestionCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewAddQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\NewAddQuestionCommand.cs</Link>
     </Compile>
@@ -338,6 +341,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainException.cs">
       <Link>Domain\Exceptions\DomainException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainExceptionType.cs">
+      <Link>Domain\Exceptions\DomainExceptionType.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
@@ -848,9 +854,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Services\IFileStorageService.cs">
       <Link>Services\IFileStorageService.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\CollectionExtensions.cs">
-      <Link>Utility\CollectionExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EnumerableExtensions.cs">
       <Link>Utility\EnumerableExtensions.cs</Link>
     </Compile>
@@ -892,6 +895,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleHash.cs">
       <Link>Utility\SimpleHash.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleObjectExtensions.cs">
+      <Link>Utility\SimpleObjectExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
