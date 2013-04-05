@@ -111,7 +111,7 @@ namespace Main.Core.Tests.Domain
         #region empty title tests
 
         [Test]
-        public void NewAddQuestion_When_Title_is_not_empty_Then_rised_Then_NewQuestionAdded_event_contains_the_same_title_caption()
+        public void NewAddQuestion_When_Title_is_not_empty_Then_NewQuestionAdded_event_contains_the_same_title_caption()
         {
             using (var eventContext = new EventContext())
             {
@@ -159,119 +159,7 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_null_then_rised_NewQuestionAdded_event_should_contains_null_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var groupId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
-                Guid[] emptyTriggedGroupIds = null;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
-
-                // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds);
-
-
-                // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Null);
-            }
-        }
-
-        [Test]
-        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_empty_then_rised_NewQuestionAdded_event_should_contains_empty_list_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var groupId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
-                var emptyTriggedGroupIds = new Guid[0];
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
-
-                // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds);
-
-
-                // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Empty);
-            }
-        }
-
-        [Test]
-        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_absent_group_id_then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
-
-            var groupId = Guid.NewGuid();
-            var absentGroupId = Guid.NewGuid();
-            var triggedGroupIdsWithAbsentGroupId = new[] { absentGroupId };
-
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                         string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithAbsentGroupId);
-
-
-            // Assert
-            Assert.Throws<DomainException>(act);
-        }
-
-        [Test]
-        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_non_propagate_group_id_then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
-            var nonPropagateGroupId = Guid.NewGuid();
-            var groupId = Guid.NewGuid();
-            var triggedGroupIdsWithNonPropagateGroupId = new[] { nonPropagateGroupId };
-
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroups(nonPropagateGroupId, groupId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
-                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
-                                         string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithNonPropagateGroupId);
-
-
-            // Assert
-            Assert.Throws<DomainException>(act);
-        }
-
-        [Test]
-        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_propagate_group_id_then_rised_NewQuestionAdded_event_should_contains_that_group_id_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var autoPropagate = QuestionType.AutoPropagate;
-                var autoPropagateGroupId = Guid.NewGuid();
-                var groupId = Guid.NewGuid();
-                var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
-
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithAutoGroupAndRegularGroup(autoPropagateGroupId, groupId);
-
-                // Act
-                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
-                                             false,
-                                             false, QuestionScope.Interviewer, string.Empty, string.Empty,
-                                             string.Empty,
-                                             string.Empty, new Option[0], Order.AZ, null,
-                                             triggedGroupIdsWithAutoPropagateGroupId);
-
-                // Assert
-                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
-            }
-        }
-
-        [Test]
+        public void NewAddQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown()
         {
             var questionnaireKey = Guid.NewGuid();
             var groupKey = Guid.NewGuid();
@@ -363,7 +251,7 @@ namespace Main.Core.Tests.Domain
             Guid questionKey;
             // arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
-                out questionKey, questionType, new [] { new Option(Guid.NewGuid(), "123", "title") });
+                out questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") });
             Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
             // act
             TestDelegate act =
@@ -387,7 +275,7 @@ namespace Main.Core.Tests.Domain
                 Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
                 // arrange
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
-                    out questionKey, questionType, new []
+                    out questionKey, questionType, new[]
                     {
                         new Option(Guid.NewGuid(), "1", "option text"),
                     });
@@ -500,6 +388,7 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+
         [Test]
         public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
         {
@@ -555,7 +444,7 @@ namespace Main.Core.Tests.Domain
 
                 // Act
                 questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "What is your last name?", QuestionType.Text, "name",
-                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] {}, Order.AZ, null, new Guid[]{});
+                    false, false, capital, QuestionScope.Interviewer, "", "", "", "", new Option[] { }, Order.AZ, null, new Guid[] { });
 
                 // Assert
                 var risedEvent = GetSingleEvent<NewQuestionAdded>(eventContext);
@@ -702,120 +591,6 @@ namespace Main.Core.Tests.Domain
         }
 
         [Test]
-        public void NewUpdateQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_null_then_rised_QuestionChanged_event_should_contains_null_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var groupId = Guid.NewGuid();
-                var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
-                Guid[] emptyTriggedGroupIds = null;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
-
-                // Act
-                questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                               emptyTriggedGroupIds);
-                
-
-                // Assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Null);
-            }
-        }
-
-        [Test]
-        public void NewUpdateQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_empty_then_rised_QuestionChanged_event_should_contains_empty_list_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var groupId = Guid.NewGuid();
-                var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagate = QuestionType.AutoPropagate;
-                var emptyTriggedGroupIds = new Guid[0];
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: groupId);
-
-                // Act
-                questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                               emptyTriggedGroupIds);
-
-                
-                // Assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Empty);
-            }
-        }
-
-        [Test]
-        public void NewUpdateQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_absent_group_id_then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
-            var autoPropagateQuestionId = Guid.NewGuid();
-            var groupId = Guid.NewGuid();
-            var absentGroupId = Guid.NewGuid();
-            var triggedGroupIdsWithAbsentGroupId = new[] { absentGroupId };
-
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(groupId, autoPropagateQuestionId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                               triggedGroupIdsWithAbsentGroupId);
-
-            // Assert
-            Assert.Throws<DomainException>(act);
-        }
-
-        [Test]
-        public void NewUpdateQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_non_propagate_group_id_then_DomainException_should_be_thrown()
-        {
-            // Arrange
-            var autoPropagate = QuestionType.AutoPropagate;
-            var autoPropagateQuestionId = Guid.NewGuid();
-            var nonPropagateGroupId = Guid.NewGuid();
-            var groupId = Guid.NewGuid();
-            var triggedGroupIdsWithNonPropagateGroupId = new[] { nonPropagateGroupId };
-
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroups(nonPropagateGroupId, groupId);
-
-            // Act
-            TestDelegate act = () => questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, 
-                                               triggedGroupIdsWithNonPropagateGroupId);
-
-
-            // Assert
-            Assert.Throws<DomainException>(act);
-        }
-
-        [Test]
-        public void NewUpdateQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_propagate_group_id_then_rised_QuestionChanged_event_should_contains_that_group_id_in_triggers_field()
-        {
-            using (var eventContext = new EventContext())
-            {
-                // Arrange
-                var autoPropagate = QuestionType.AutoPropagate;
-                var autoPropagateQuestionId = Guid.NewGuid();
-                var autoPropagateGroupId = Guid.NewGuid();
-                var groupId = Guid.NewGuid();
-                var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
-
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithAutoGroupAndRegularGroupAndQuestionInIt(autoPropagateGroupId, groupId, autoPropagateQuestionId);
-
-                // Act
-                questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
-                                               false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, 
-                                               triggedGroupIdsWithAutoPropagateGroupId);
-
-                // Assert
-                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
-            }
-        }
-
-
-        [Test]
         public void NewUpdateQuestion_when_qustion_in_propagated_group_is_featured_then_DomainException_should_be_thrown()
         {
             // Arrange
@@ -897,7 +672,7 @@ namespace Main.Core.Tests.Domain
         public void AddQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Option[] {};
+            var emptyAnswersList = new Option[] { };
             Guid groupId = Guid.NewGuid();
 
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
@@ -919,7 +694,7 @@ namespace Main.Core.Tests.Domain
         public void ChangeQuestion_When_QuestionType_is_option_type_and_answer_options_list_is_empty_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // Arrange
-            var emptyAnswersList = new Option[] {};
+            var emptyAnswersList = new Option[] { };
 
             Guid targetQuestionPublicKey;
             var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
@@ -951,7 +726,7 @@ namespace Main.Core.Tests.Domain
                 // Act
                 questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text, "title",
                     false, false, capital, QuestionScope.Interviewer, "", "", "",
-                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
+                    "", new Option[] { }, Order.AZ, 0, new List<Guid>().ToArray());
 
                 // Assert
                 var risedEvent = GetSingleEvent<QuestionChanged>(eventContext);
@@ -992,7 +767,7 @@ namespace Main.Core.Tests.Domain
             {
                 questionnaire.NewUpdateQuestion(Guid.NewGuid(), "Title", QuestionType.Text, "valid",
                     false, false, false, QuestionScope.Interviewer, "", "", "",
-                    "", new Option[]{}, Order.AZ, 0, new List<Guid>().ToArray());
+                    "", new Option[] { }, Order.AZ, 0, new List<Guid>().ToArray());
             };
 
             // assert
@@ -1564,20 +1339,19 @@ namespace Main.Core.Tests.Domain
             return new QuestionnaireAR();
         }
 
-        #warning Slava: remove out parameter. replace it with optional in parameter
+#warning Slava: remove out parameter. replace it with optional in parameter
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid questionId)
         {
             questionId = Guid.NewGuid();
             return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
         }
-        
+
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInType(out Guid questionId, QuestionType questionType)
         {
             questionId = Guid.NewGuid();
             return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType);
         }
-        
-        
+
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out Guid questionId, QuestionType questionType, Option[] options)
         {
             questionId = Guid.NewGuid();
@@ -1632,8 +1406,8 @@ namespace Main.Core.Tests.Domain
 
             questionnaire.NewAddQuestion(questionId,
                 groupId.Value, "Title", questionType, "text", false, false,
-                false, QuestionScope.Interviewer, "", "", "", "", options ?? new Option[] {}, Order.AsIs, null,
-                new Guid[] {});
+                false, QuestionScope.Interviewer, "", "", "", "", options ?? new Option[] { }, Order.AsIs, null,
+                new Guid[] { });
 
             return questionnaire;
         }
@@ -1657,32 +1431,22 @@ namespace Main.Core.Tests.Domain
 
         private static QuestionnaireAR CreateQuestionnaireARWithTwoGroups(Guid firstGroup, Guid secondGroup)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupPublicKey: firstGroup);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneNonPropagatedGroup(firstGroup);
 
-            questionnaire.AddGroup(secondGroup, "Second group", Propagate.None, null, null, null);
+            questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null);
 
             return questionnaire;
         }
 
         private static QuestionnaireAR CreateQuestionnaireARWithAutoGroupAndRegularGroup(Guid autoGroupPublicKey, Guid secondGroup)
         {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoGroup(autoGroupPublicKey);
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneAutoPropagatedGroup(autoGroupPublicKey);
 
-            questionnaire.AddGroup(secondGroup, "Second group", Propagate.None, null, null, null);
+            questionnaire.NewAddGroup(secondGroup, null, "Second group", Propagate.None, null, null);
 
             return questionnaire;
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithAutoGroupAndRegularGroupAndQuestionInIt(Guid autoGroupPublicKey, Guid secondGroup, Guid autoQuestoinId)
-        {
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithAutoGroupAndRegularGroup(autoGroupPublicKey, secondGroup);
-
-            questionnaire.NewAddQuestion(autoQuestoinId, secondGroup, "Title", QuestionType.AutoPropagate, "auto", false, false,
-                                         false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0,
-                                         new Guid[0]);
-            return questionnaire;
-        }
-        
         #region [Answer option values allows only numbers]
 
         [Test]
@@ -2144,5 +1908,120 @@ namespace Main.Core.Tests.Domain
             }
         }
         #endregion
+
+        [Test]
+        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_null_then_rised_NewQuestionAdded_event_should_contains_null_in_triggers_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                var groupId = Guid.NewGuid();
+                var autoPropagate = QuestionType.AutoPropagate;
+                Guid[] emptyTriggedGroupIds = null;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds);
+
+
+                // Assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Null);
+            }
+        }
+        
+        [Test]
+        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_is_empty_then_rised_NewQuestionAdded_event_should_contains_empty_list_in_triggers_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                var groupId = Guid.NewGuid();
+                var autoPropagate = QuestionType.AutoPropagate;
+                var emptyTriggedGroupIds = new Guid[0];
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null, emptyTriggedGroupIds);
+
+
+                // Assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Is.Empty);
+            }
+        }
+        
+        [Test]
+        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_absent_group_id_then_DomainException_of_type_TriggerLinksToNotExistingGroup_should_be_thrown()
+        {
+            // Arrange
+            var autoPropagate = QuestionType.AutoPropagate;
+
+            var groupId = Guid.NewGuid();
+            var absentGroupId = Guid.NewGuid();
+            var triggedGroupIdsWithAbsentGroupId = new[] { absentGroupId };
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
+
+            // Act
+            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                         string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithAbsentGroupId);
+
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TriggerLinksToNotExistingGroup));
+        }
+        
+        [Test]
+        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_non_propagate_group_id_then_DomainException_of_type_TriggerLinksToNotPropagatedGroup_should_be_thrown()
+        {
+            // Arrange
+            var autoPropagate = QuestionType.AutoPropagate;
+            var nonPropagateGroupId = Guid.NewGuid();
+            var groupId = Guid.NewGuid();
+            var triggedGroupIdsWithNonPropagateGroupId = new[] { nonPropagateGroupId };
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroups(nonPropagateGroupId, groupId);
+
+            // Act
+            TestDelegate act = () => questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false, false,
+                                         false, QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
+                                         string.Empty, new Option[0], Order.AZ, null, triggedGroupIdsWithNonPropagateGroupId);
+
+
+            // Assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.TriggerLinksToNotPropagatedGroup));
+        }
+
+        [Test]
+        public void NewAddQuestion_when_question_is_AutoPropagate_and_list_of_triggers_contains_propagate_group_id_then_rised_NewQuestionAdded_event_should_contains_that_group_id_in_triggers_field()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // Arrange
+                var autoPropagate = QuestionType.AutoPropagate;
+                var autoPropagateGroupId = Guid.NewGuid();
+                var groupId = Guid.NewGuid();
+                var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
+
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithAutoGroupAndRegularGroup(autoPropagateGroupId, groupId);
+
+                // Act
+                questionnaire.NewAddQuestion(Guid.NewGuid(), groupId, "Question", autoPropagate, "test", false,
+                                             false,
+                                             false, QuestionScope.Interviewer, string.Empty, string.Empty,
+                                             string.Empty,
+                                             string.Empty, new Option[0], Order.AZ, null,
+                                             triggedGroupIdsWithAutoPropagateGroupId);
+
+                // Assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
+            }
+        }
     }
 }
