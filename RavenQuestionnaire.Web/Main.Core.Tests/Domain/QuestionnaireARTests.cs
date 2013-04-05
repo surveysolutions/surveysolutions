@@ -1612,6 +1612,172 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.Text)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void AddQuestion_When_question_type_is_allowed_Then_raised_NewQuestionAdded_event_with_same_question_type(
+            QuestionType allowedQuestionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId);
+
+                // act
+                questionnaire.NewAddQuestion(
+                    questionId: Guid.NewGuid(),
+                    groupId: groupId,
+                    title: "What is your last name?",
+                    type: allowedQuestionType,
+                    alias: "name",
+                    isMandatory: false,
+                    isFeatured: false,
+                    isHeaderOfPropagatableGroup: false,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    instructions: string.Empty,
+                    optionsOrder: Order.AsIs,
+                    maxValue: null,
+                    triggedGroupIds: new Guid[]{},
+                    options: AreOptionsRequiredByQuestionType(allowedQuestionType) ? CreateTwoOptions() : null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewQuestionAdded>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.DropDownList)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.YesNo)]
+        public void AddQuestion_When_question_type_is_not_allowed_Then_DomainException_with_type_NotAllowedQuestionType_should_be_thrown(
+            QuestionType notAllowedQuestionType)
+        {
+            // arrange
+            Guid groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId);
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddQuestion(
+                questionId: Guid.NewGuid(),
+                groupId: groupId,
+                title: "What is your last name?",
+                type: notAllowedQuestionType,
+                alias: "name",
+                isMandatory: false,
+                isFeatured: false,
+                isHeaderOfPropagatableGroup: false,
+                scope: QuestionScope.Interviewer,
+                condition: string.Empty,
+                validationExpression: string.Empty,
+                validationMessage: string.Empty,
+                instructions: string.Empty,
+                optionsOrder: Order.AsIs,
+                maxValue: null,
+                triggedGroupIds: null,
+                options: null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotAllowedQuestionType));
+        }
+
+        [Test]
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        [TestCase(QuestionType.Numeric)]
+        [TestCase(QuestionType.Text)]
+        [TestCase(QuestionType.DateTime)]
+        [TestCase(QuestionType.AutoPropagate)]
+        public void UpdateQuestion_When_question_type_is_allowed_Then_raised_QuestionChanged_event_with_same_question_type(
+            QuestionType allowedQuestionType)
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                Guid questionId;
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
+
+                // act
+                questionnaire.NewUpdateQuestion(
+                    questionId: questionId,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: allowedQuestionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options: AreOptionsRequiredByQuestionType(allowedQuestionType) ? CreateTwoOptions() : null);
+
+                // assert
+                Assert.That(GetSingleEvent<QuestionChanged>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+            }
+        }
+
+        [Test]
+        [TestCase(QuestionType.DropDownList)]
+        [TestCase(QuestionType.GpsCoordinates)]
+        [TestCase(QuestionType.YesNo)]
+        public void UpdateQuestion_When_question_type_is_not_allowed_Then_DomainException_with_type_NotAllowedQuestionType_should_be_thrown(
+            QuestionType notAllowedQuestionType)
+        {
+            // arrange
+            Guid questionId;
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateQuestion(
+                    questionId: questionId,
+                    title: "What is your last name?",
+                    alias: "name",
+                    type: notAllowedQuestionType,
+                    scope: QuestionScope.Interviewer,
+                    condition: string.Empty,
+                    validationExpression: string.Empty,
+                    validationMessage: string.Empty,
+                    isFeatured: false,
+                    isMandatory: false,
+                    isHeaderOfPropagatableGroup: false,
+                    optionsOrder: Order.AZ,
+                    instructions: string.Empty,
+                    triggedGroupIds: new Guid[0],
+                    maxValue: 0,
+                    options: null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.NotAllowedQuestionType));
+        }
+
+        private static bool AreOptionsRequiredByQuestionType(QuestionType type)
+        {
+            return type == QuestionType.MultyOption || type == QuestionType.SingleOption;
+        }
+
+        private static Option[] CreateTwoOptions()
+        {
+            return new[]
+            {
+                new Option(Guid.Parse("00000000-1111-0000-1111-000000000000"), "-1", "No"),
+                new Option(Guid.Parse("00000000-2222-0000-2222-000000000000"), "42", "Yes"),
+            };
+        }
+
         #region [Answer option value is required]
 
         [Test]
