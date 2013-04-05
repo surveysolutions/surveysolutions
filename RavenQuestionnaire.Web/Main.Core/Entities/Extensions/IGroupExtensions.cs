@@ -57,12 +57,12 @@ namespace Main.Core.Entities.Extensions
 
         public static void MoveItem(this QuestionnaireDocument questionnaire, Guid itemId, Guid targetGroupId, int targetIndex)
         {
-            Guid? idOfItemToPutAfter = GetIdOfItemToPutAfter(questionnaire, targetGroupId, targetIndex);
+            Guid? idOfItemToPutAfter = GetIdOfItemToPutAfter(questionnaire, itemId, targetGroupId, targetIndex);
 
             questionnaire.MoveItem(itemId, targetGroupId, idOfItemToPutAfter);
         }
 
-        private static Guid? GetIdOfItemToPutAfter(QuestionnaireDocument questionnaire, Guid targetGroupId, int targetIndex)
+        private static Guid? GetIdOfItemToPutAfter(QuestionnaireDocument questionnaire, Guid idOfItemToMove, Guid targetGroupId, int targetIndex)
         {
             if (targetIndex == 0)
                 return null;
@@ -84,7 +84,16 @@ namespace Main.Core.Entities.Extensions
                 return null;
             }
 
-            return targetGroup.Children[targetIndex - 1].PublicKey;
+            int currentIndexOfMovedItemInTargetGroup = targetGroup.Children.FindIndex(item => item.PublicKey == idOfItemToMove);
+
+            bool willItemMoveAffectIndexOfItemToMoveAfter =
+                currentIndexOfMovedItemInTargetGroup > -1 &&
+                currentIndexOfMovedItemInTargetGroup < targetIndex;
+
+            if (willItemMoveAffectIndexOfItemToMoveAfter)
+                return targetGroup.Children[targetIndex].PublicKey;
+            else
+                return targetGroup.Children[targetIndex - 1].PublicKey;
         }
 
         /// <summary>

@@ -10,6 +10,7 @@ namespace Main.Core.Entities.SubEntities
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
 
     using Main.Core.Entities.Composite;
@@ -19,6 +20,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The abstract question.
     /// </summary>
+    [DebuggerDisplay("Question {PublicKey}")]
     public abstract class AbstractQuestion : IQuestion
     {
         #region Constructors and Destructors
