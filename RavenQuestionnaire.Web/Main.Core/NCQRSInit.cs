@@ -48,6 +48,12 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
     /// </summary>
     public static class NcqrsInit
     {
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
@@ -111,6 +117,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// </exception>
         public static void RebuildReadLayer()
         {
+            Logger.Info("Read layer rebuilding started.");
+
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
             {
@@ -129,6 +137,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
 
             isReadLayerBuilt = true;
+
+            Logger.Info("Read layer rebuilding finished.");
         }
 
 
