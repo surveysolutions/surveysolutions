@@ -10,16 +10,10 @@
     var serializer = new JavaScriptSerializer(new TypeResolver());
 }
 @section Styles{
-    @Styles.Render("~/Content/edit")
+    @Styles.Render("~/content/edit")
 }
 @section Scripts{
-    @Scripts.Render(
-        "~/bundles/jqueryui",
-        "~/bundles/jqueryval",
-        "~/bundles/jsextlibs",
-        "~/bundles/modernizr",
-        "~/Scripts/require.js"
-         )
+    @Scripts.Render("~/designer")
     <script>
         define('input', [], function() {
             var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings ()
@@ -33,14 +27,6 @@
             };
         });
     </script>
-
-    @Scripts.Render(
-        "~/bundles/jsappdetails",
-        "~/bundles/ace",
-        "~/Scripts/lib/ace/mode-ncalc.js",
-        "~/Scripts/lib/ace/theme-designer.js",
-        "~/Scripts/details/main.js"
-         )
 }
 
 <div id="busyindicator"></div>
@@ -85,7 +71,7 @@
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
                 <!-- ko ifnot: isFilterMode -->
-                <ul data-bind="sortable: {data: chapters, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list">
+                <ul data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
                     @*<ul data-bind="foreach: chapters" class="list">*@
                     <li data-bind="template: { name: 'GroupView' }, allowDrop : true"></li>
                 </ul>
@@ -244,7 +230,7 @@
                 <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
             </div>
         </div>
-        <ul data-bind="sortable: { data: children, afterMove: $root.afterMove, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
+        <ul data-bind="sortable: { data: children, beforeMove: $root.isMovementPossible}" class="list ui-expander-content">
             @*<ul data-bind="foreach: children" class="list ui-expander-content">*@
             <li data-bind="template: { name: $data.template}"></li>
         </ul>
