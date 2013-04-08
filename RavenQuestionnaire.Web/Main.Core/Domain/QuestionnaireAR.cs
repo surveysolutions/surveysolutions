@@ -498,22 +498,24 @@ public QuestionnaireAR():base(Guid.NewGuid())
 
         private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
         {
-            if (type != QuestionType.AutoPropagate || triggedGroupIds == null || triggedGroupIds.Length == 0) 
+            bool questionIsNotAutoPropagated = type != QuestionType.AutoPropagate;
+            bool noGroupsShouldBeTrigged = triggedGroupIds == null || triggedGroupIds.Length == 0;
+            if (questionIsNotAutoPropagated || noGroupsShouldBeTrigged)
                 return;
 
-            foreach (var groupId in triggedGroupIds)
+            foreach (Guid groupId in triggedGroupIds)
             {
                 var group = this.innerDocument.Find<Group>(groupId);
                 if (@group == null)
                 {
                     throw new DomainException(
-                        DomainExceptionType.TriggerLinksToNotExistingGroup, "Question can trigger only existing");
+                        DomainExceptionType.TriggerLinksToNotExistingGroup, "Question can trigger only existing group");
                 }
 
-                if (@group.Propagated == Propagate.None)
+                if (@group.Propagated != Propagate.AutoPropagated)
                 {
-                    throw new DomainException(
-                        DomainExceptionType.TriggerLinksToNotPropagatedGroup, "Question can trigger only propagated groups");
+                    throw new DomainException(DomainExceptionType.TriggerLinksToNotPropagatedGroup, 
+                        string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
                 }
             }
         }
