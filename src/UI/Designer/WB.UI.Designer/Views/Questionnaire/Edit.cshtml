@@ -16,7 +16,7 @@
     @Scripts.Render("~/designer")
     <script>
         define('input', [], function() {
-            var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings ()
+            var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings()
                         {
                             TypeNameHandling = TypeNameHandling.Objects,
                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
@@ -101,7 +101,15 @@
                 </div>
                 <!-- ko if : level() != 0 -->
                 <div class="row-fluid">
-                    <label class="required">Kind of propagation</label>
+                    <label class="required">
+                        <a href="#" class="btn btn-warning btn-small btn-help"
+                            data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
+                            data-original-title="Kind of propagation"
+                           data-html="true"
+                            data-trigger="hover"
+                            data-placement="right"
+                            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
+                        Kind of propagation</label>
                     <div class="btn-group">
                         <button
                             data-value="None" data-bind="checkedButtons: gtype" class="btn btn-small">
@@ -109,12 +117,7 @@
                         <button data-value="AutoPropagated" data-bind="checkedButtons: gtype" class="btn btn-small">Auto propagated</button>
                     </div>
 
-                    <a href="#" class="btn btn-warning btn-small"
-                       data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
-                       data-original-title="Kind of propagation"
-                       data-html="true"
-                       data-placement="bottom"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
+
                 </div>
                 <!-- /ko -->
                 <div class="row-fluid">
@@ -124,7 +127,14 @@
                     </div>
                 </div>
 
-                <label>Condition expression</label>
+                <label>
+                    <a href="#" class="btn btn-warning btn btn-help"
+                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                        data-original-title="Condition expression"
+                       data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
@@ -178,12 +188,26 @@
                     <label>Who should answer this question?</label>
                     <select data-bind="options: scopeOptions, value: scope" class="span12"></select>
                 </div>*@
-                <label>Condition expression</label>
+                <label>
+                    <a href="#" class="btn btn-warning btn-small btn-help"
+                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                        data-original-title="Condition expression"
+                       data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
 
-                <label>Validation expression</label>
+                <label>
+                    <a href="#" class="btn btn-warning btn-small btn-help"
+                        data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
+                       data-original-title="Validation expression"
+                        data-trigger="hover"
+                        data-html="true"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Validation expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
