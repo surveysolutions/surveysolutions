@@ -69,10 +69,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Cirrious.MvvmCross.Localization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Localization.dll</HintPath>
-    </Reference>
     <Reference Include="Cirrious.MvvmCross.Plugins.DownloadCache">
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.DownloadCache.dll</HintPath>
     </Reference>
