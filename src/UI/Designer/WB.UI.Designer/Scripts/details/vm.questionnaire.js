@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
-    function (ko, _, config, datacontext, router, messenger, store, model, bootbox) {
+    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
+    function (ko, _, config, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
