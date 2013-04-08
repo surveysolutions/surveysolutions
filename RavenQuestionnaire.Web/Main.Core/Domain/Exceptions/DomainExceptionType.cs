@@ -117,6 +117,8 @@ namespace Main.Core.Domain
         /// <summary>
         /// The selector text_ not unique.
         /// </summary>
-        SelectorTextNotUnique
+        SelectorTextNotUnique,
+
+        NotAllowedQuestionType,
     }
 }

@@ -185,6 +185,7 @@
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\FullGroupDataCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />

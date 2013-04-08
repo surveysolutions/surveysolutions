@@ -22,7 +22,17 @@ namespace Main.Core.Domain
         
         private readonly ICompleteQuestionFactory questionFactory;
 
-        public QuestionnaireAR():base(Guid.NewGuid())
+        private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
+        {
+            QuestionType.SingleOption,
+            QuestionType.MultyOption,
+            QuestionType.Numeric,
+            QuestionType.DateTime,
+            QuestionType.Text,
+            QuestionType.AutoPropagate,
+        };
+
+public QuestionnaireAR():base(Guid.NewGuid())
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
@@ -164,6 +174,23 @@ namespace Main.Core.Domain
             this.ApplyEvent(new GroupDeleted(groupId));
         }
 
+        public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex)
+        {
+            this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
+            if (targetGroupId.HasValue)
+            {
+                this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
+            }
+
+            this.ApplyEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = groupId,
+                GroupKey = targetGroupId,
+                TargetIndex = targetIndex,
+            });
+        }
+
         public void NewUpdateGroup(Guid groupId,
             string title, Propagate propagationKind, string description, string condition)
         {
@@ -202,7 +229,9 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
 
-            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
             this.ApplyEvent(new NewQuestionAdded
             {
@@ -263,13 +292,14 @@ namespace Main.Core.Domain
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
             this.ThrowDomainExceptionIfTitleisEmpty(title);
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
-            
+
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
             this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
 
             this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
 
-            this.ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(triggedGroupIds);
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
             this.ApplyEvent(new QuestionChanged
             {
@@ -466,9 +496,9 @@ namespace Main.Core.Domain
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
-        private void ThrowDomainExceptionIfAnyTriggerLinksToNotPropagatedGroup(Guid[] triggedGroupIds)
+        private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
         {
-            if (triggedGroupIds == null || triggedGroupIds.Length == 0) 
+            if (type != QuestionType.AutoPropagate || triggedGroupIds == null || triggedGroupIds.Length == 0) 
                 return;
 
             foreach (var groupId in triggedGroupIds)
@@ -633,6 +663,15 @@ namespace Main.Core.Domain
                 throw new DomainException(
                    DomainExceptionType.VarialbeNameNotUnique, "Variable name should be unique in questionnaire's scope");
             }
+        }
+
+        private void ThrowDomainExceptionIfQuestionTypeIsNotAllowed(QuestionType type)
+        {
+            bool isQuestionTypeAllowed = AllowedQuestionTypes.Contains(type);
+
+            if (!isQuestionTypeAllowed)
+                throw new DomainException(DomainExceptionType.NotAllowedQuestionType, 
+                    string.Format("Question type {0} is not allowed", type));
         }
 
         private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
