@@ -91,7 +91,6 @@
             $('#stacks').removeClass('output-visible');
         },
         addQuestion = function (parent) {
-            console.log(parent);
             var question = new model.Question();
             question.parent(parent);
 
@@ -113,7 +112,6 @@
             calcStatistics();
         },
         addGroup = function (parent) {
-            console.log(parent);
             var group = new model.Group();
             group.parent(parent);
             datacontext.groups.add(group);
@@ -138,7 +136,6 @@
                                 deleteGroupSuccessCallback(item);
                             },
                             error: function (d) {
-                                console.log(d);
                                 errors.removeAll();
                                 errors.push(d);
                                 showOutput();
@@ -181,7 +178,6 @@
 
                             },
                             error: function (d) {
-                                console.log(d);
                                 errors.removeAll();
                                 errors.push(d);
                                 showOutput();
@@ -219,7 +215,6 @@
                         hideOutput();
                     },
                     error: function (d) {
-                        console.log(d);
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
@@ -238,7 +233,6 @@
                         hideOutput();
                     },
                     error: function (d) {
-                        console.log(d);
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
@@ -257,7 +251,6 @@
             }
         },
         isMovementPossible = function (arg) {
-            console.log(arg);
 
             var fromId = arg.sourceParent.id;
             var toId = arg.targetParent.id;
@@ -288,14 +281,11 @@
                moveCommand,
                {
                    success: function (d) {
-                       console.log('ok');
                    },
                    error: function (d) {
-                       console.log('fail');
                    }
                });
             
-            console.log(moveCommand);
         },
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
