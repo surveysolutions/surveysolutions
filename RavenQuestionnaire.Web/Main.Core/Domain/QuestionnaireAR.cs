@@ -233,9 +233,9 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, groupId);
-
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, groupId);
+            var group = this.innerDocument.Find<IGroup>(groupId);
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
 
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
@@ -303,9 +303,9 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
 
-            this.ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(questionId, isFeatured, null);
-
-            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(questionId, isHeaderOfPropagatableGroup, null);
+            IGroup group = this.innerDocument.GetParentOfQuestion(questionId);
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
 
             this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
 
@@ -515,12 +515,10 @@ namespace Main.Core.Domain
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButNotInsidePropagateGroup(Guid questionId, bool isHeadOfGroup, Guid? groupId)
+        private void ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(bool isHeadOfGroup, IGroup group)
         {
             if (!isHeadOfGroup)
                 return;
-
-            var @group = this.innerDocument.FindParentOfQuestion(questionId, groupId);
 
             if (group.Propagated == Propagate.None)
             {
@@ -530,12 +528,10 @@ namespace Main.Core.Domain
             }
         }
 
-        private void ThrowDomainExceptionIfQuestionIsFeaturedButNotInsideNonPropagateGroup(Guid questionId, bool isFeatured, Guid? groupId)
+        private void ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(bool isFeatured, IGroup group)
         {
             if (!isFeatured)
                 return;
-            
-            var group = this.innerDocument.FindParentOfQuestion(questionId, groupId);
 
             if (group.Propagated != Propagate.None)
             {

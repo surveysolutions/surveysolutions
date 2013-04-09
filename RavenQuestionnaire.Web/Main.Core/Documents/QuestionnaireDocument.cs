@@ -159,16 +159,6 @@ namespace Main.Core.Documents
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
         }
 
-        public IGroup FindParentOfQuestion(Guid questionId, Guid? groupId)
-        {
-            if (groupId.HasValue)
-            {
-                return this.Find<Group>(groupId.Value);
-            }
-
-            return this.GetParentOfQuestion(questionId) as IGroup;
-        }
-
         public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
         {
             Guid oldQuestionId = oldQuestion.PublicKey;
@@ -290,7 +280,7 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
-        private IComposite GetParentOfQuestion(Guid questionId)
+        public IGroup GetParentOfQuestion(Guid questionId)
         {
             return this
                 .Find<IGroup>(group => ContainsChildQuestionWithSpecifiedId(group, questionId))
