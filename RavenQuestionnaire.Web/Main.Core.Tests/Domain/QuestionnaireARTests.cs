@@ -1468,6 +1468,7 @@ namespace Main.Core.Tests.Domain
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
+        #warning Roma: when part is incorrect should be something like when answer option value contains not number
         public void NewAddQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
@@ -1502,6 +1503,7 @@ namespace Main.Core.Tests.Domain
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
+        #warning Roma: when part is incorrect should be something like when answer option value contains not number
         public void NewUpdateQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
