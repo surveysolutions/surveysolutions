@@ -141,8 +141,8 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid questionKey;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionKey);
+                Guid questionKey = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(questionKey);
 
                 string notEmptyTitle = "not empty :)";
 
@@ -181,8 +181,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_Title_is_empty_Then_DomainException_should_be_thrown()
         {
             // arrange
-            Guid questionKey;
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionKey);
+            Guid questionKey = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(questionKey);
 
             // act
             TestDelegate act = () =>
@@ -249,10 +249,10 @@ namespace Main.Core.Tests.Domain
         [TestCase(QuestionType.MultyOption)]
         public void NewUpdateQuestion_When_AnswerTitleIsAbsent_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
-            Guid questionKey;
+            Guid questionKey = Guid.NewGuid();
             // arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
-                out questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") });
+                questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") });
             Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
             // act
             TestDelegate act =
@@ -272,11 +272,11 @@ namespace Main.Core.Tests.Domain
         {
             using (var eventContext = new EventContext())
             {
-                Guid questionKey;
+                Guid questionKey = Guid.NewGuid();
                 Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
                 // arrange
                 QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
-                    out questionKey, questionType, new[]
+                    questionKey, questionType, new[]
                     {
                         new Option(Guid.NewGuid(), "1", "option text"),
                     });
@@ -348,9 +348,9 @@ namespace Main.Core.Tests.Domain
         [TestCase(QuestionType.MultyOption)]
         public void NewUpdateQuestion_When_AnswerTitleIsNotUnique_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
-            Guid questionKey;
+            Guid questionKey = Guid.NewGuid();
             // arrange
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
             Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
             // act
             TestDelegate act =
@@ -370,9 +370,9 @@ namespace Main.Core.Tests.Domain
         {
             using (var eventContext = new EventContext())
             {
-                Guid questionKey;
+                Guid questionKey = Guid.NewGuid();
                 // arrange
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
                 Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
                 // act
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
@@ -696,8 +696,8 @@ namespace Main.Core.Tests.Domain
             // Arrange
             var emptyAnswersList = new Option[] { };
 
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -740,8 +740,8 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                Guid targetQuestionPublicKey;
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // Act
                 questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text,
@@ -775,8 +775,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_variable_name_has_33_chars_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
             string longVariableName = "".PadRight(33, 'A');
 
             // Act
@@ -794,8 +794,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_variable_name_starts_with_digit_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string stataExportCaptionWithFirstDigit = "1aaaa";
 
@@ -816,8 +816,8 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // Arrange
-                Guid targetQuestionPublicKey;
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
                 string variableNameWithTrailingSpaces = " my_name38  ";
 
                 // Act
@@ -837,8 +837,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_variable_name_is_empty_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string emptyVariableName = string.Empty;
 
@@ -858,8 +858,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_variable_name_contains_any_non_underscore_letter_or_digit_character_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string nonValidVariableNameWithBannedSymbols = "aaa:_&b";
 
@@ -953,8 +953,8 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid questionId;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
+                Guid questionId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(questionId);
 
                 // act
                 Guid parentPublicKey = Guid.NewGuid();
@@ -1334,22 +1334,13 @@ namespace Main.Core.Tests.Domain
             return new QuestionnaireAR();
         }
 
-#warning Slava: remove out parameter. replace it with optional in parameter
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(out Guid questionId)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(Guid questionId)
         {
-            questionId = Guid.NewGuid();
             return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId);
         }
 
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInType(out Guid questionId, QuestionType questionType)
+        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(Guid questionId, QuestionType questionType, Option[] options)
         {
-            questionId = Guid.NewGuid();
-            return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType);
-        }
-
-        private static QuestionnaireAR CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(out Guid questionId, QuestionType questionType, Option[] options)
-        {
-            questionId = Guid.NewGuid();
             return CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId, questionType: questionType, options: options);
         }
 
@@ -1507,8 +1498,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_answer_option_value_allows_only_numbers_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -1544,9 +1535,9 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid targetQuestionPublicKey;
+                Guid targetQuestionPublicKey = Guid.NewGuid();
                 string answerValue = "10";
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -1704,8 +1695,8 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid questionId;
-                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
+                Guid questionId = Guid.NewGuid();
+                QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(questionId);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -1739,8 +1730,8 @@ namespace Main.Core.Tests.Domain
             QuestionType notAllowedQuestionType)
         {
             // arrange
-            Guid questionId;
-            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(out questionId);
+            Guid questionId = Guid.NewGuid();
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneQuestion(questionId);
 
             // act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(
@@ -1823,8 +1814,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -1860,9 +1851,9 @@ namespace Main.Core.Tests.Domain
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid targetQuestionPublicKey;
+                Guid targetQuestionPublicKey = Guid.NewGuid();
                 string answerValue = "10";
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -1976,8 +1967,8 @@ namespace Main.Core.Tests.Domain
         public void NewUpdateQuestion_When_answer_option_values_not_unique_in_options_scope_Then_DomainException_should_be_thrown(QuestionType questionType)
         {
             // arrange
-            Guid targetQuestionPublicKey;
-            var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+            Guid targetQuestionPublicKey = Guid.NewGuid();
+            var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -2012,14 +2003,13 @@ namespace Main.Core.Tests.Domain
         [Test]
         [TestCase(QuestionType.SingleOption)]
         [TestCase(QuestionType.MultyOption)]
-        public void NewUpdateQuestion_When_answer_option_values_unique_in_options_scope_Then_raised_QuestionChanged_event_contains_only_unique_values_in_answer_values_scope(
-            QuestionType questionType)
+        public void NewUpdateQuestion_When_answer_option_values_unique_in_options_scope_Then_raised_QuestionChanged_event_contains_only_unique_values_in_answer_values_scope(            QuestionType questionType)
         {
             using (var eventContext = new EventContext())
             {
                 // arrange
-                Guid targetQuestionPublicKey;
-                var questionnaire = CreateQuestionnaireARWithOneQuestion(out targetQuestionPublicKey);
+                Guid targetQuestionPublicKey = Guid.NewGuid();
+                var questionnaire = CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
