@@ -1783,7 +1783,9 @@ namespace Main.Core.Tests.Domain
         #region [Answer option value is required]
 
         [Test]
-        public void AddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown()
+        [TestCase(QuestionType.SingleOption)]
+        [TestCase(QuestionType.MultyOption)]
+        public void AddQuestion_When_answer_option_value_is_required_Then_DomainException_should_be_thrown(QuestionType questionTypeWithOptionsExpected)
         {
             // arrange
             Guid groupId = Guid.NewGuid();
@@ -1795,7 +1797,7 @@ namespace Main.Core.Tests.Domain
                     questionId: Guid.NewGuid(),
                     groupId: groupId,
                     title: "What is your last name?",
-                    type: QuestionType.SingleOption,
+                    type: questionTypeWithOptionsExpected,
                     alias: "name",
                     isMandatory: false,
                     isFeatured: false,
