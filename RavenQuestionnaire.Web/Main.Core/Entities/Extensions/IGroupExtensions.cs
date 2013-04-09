@@ -23,7 +23,7 @@ namespace Main.Core.Entities.Extensions
     public static class IGroupExtensions
     {
 #if MONODROID
-		private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
 #else
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 #endif
@@ -68,6 +68,7 @@ namespace Main.Core.Entities.Extensions
                 return null;
 
             IGroup targetGroup = questionnaire.Find<IGroup>(group => @group.PublicKey == targetGroupId).FirstOrDefault();
+
             if (targetGroup == null)
             {
                 Logger.Warn(string.Format("Failed to correctly move item to group {0} because group is missing.",

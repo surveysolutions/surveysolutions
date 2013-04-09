@@ -286,6 +286,16 @@ namespace Main.Core.Documents
                 .SingleOrDefault();
         }
 
+        private IComposite GetParentOfItem(IComposite item)
+        {
+            if (ContainsChildItem(this, item))
+                return this;
+
+            return this
+                .Find<IGroup>(group => ContainsChildItem(group, item))
+                .SingleOrDefault();
+        }
+
         private IComposite GetParentOfQuestion(Guid questionId)
         {
             return this
@@ -325,6 +335,11 @@ namespace Main.Core.Documents
             return container.Children.Any(child => IsQuestionWithSpecifiedId(child, questionId));
         }
 
+        private static bool ContainsChildItem(IComposite container, IComposite item)
+        {
+            return container.Children.Any(child => child == item);
+        }
+
         private static bool IsGroupWithSpecifiedId(IComposite child, Guid groupId)
         {
             return child is IGroup && ((IGroup)child).PublicKey == groupId;
@@ -342,6 +357,75 @@ namespace Main.Core.Documents
                 item.SetParent(this);
                 item.ConnectChildsWithParent();
             }
+        }
+
+        public void MoveItem(Guid itemId, Guid? targetGroupId, int targetIndex)
+        {
+            IComposite item = this.GetItemOrLogWarning(itemId);
+            if (item == null)
+                return;
+
+            IComposite sourceContainer = this.GetParentOfItemOrLogWarning(item);
+            if (sourceContainer == null)
+                return;
+
+            IComposite targetContainer = this.GetGroupOrRootOrLogWarning(targetGroupId);
+            if (targetContainer == null)
+                return;
+
+            sourceContainer.Children.Remove(item);
+
+            if (targetIndex < 0)
+            {
+                targetContainer.Children.Insert(0, item);
+            }
+            else if (targetIndex >= targetContainer.Children.Count)
+            {
+                targetContainer.Children.Add(item);
+            }
+            else
+            {
+                targetContainer.Children.Insert(targetIndex, item);
+            }
+        }
+
+        private IComposite GetItemOrLogWarning(Guid itemId)
+        {
+            var itemToMove = this.Find<IComposite>(item => item.PublicKey == itemId).FirstOrDefault();
+
+            if (itemToMove == null)
+            {
+                Logger.Warn(string.Format("Failed to locate item {0}.", itemId));
+            }
+
+            return itemToMove;
+        }
+
+        private IComposite GetParentOfItemOrLogWarning(IComposite item)
+        {
+            IComposite foundParent = this.GetParentOfItem(item);
+
+            if (foundParent == null)
+            {
+                Logger.Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
+            }
+
+            return foundParent;
+        }
+
+        private IComposite GetGroupOrRootOrLogWarning(Guid? groupId)
+        {
+            if (groupId == null)
+                return this;
+
+            IComposite foundGroup = this.Find<IGroup>(group => group.PublicKey == groupId).FirstOrDefault();
+
+            if (foundGroup == null)
+            {
+                Logger.Warn(string.Format("Failed to find group {0}.", groupId.Value));
+            }
+
+            return foundGroup;
         }
 
         public IComposite Clone()

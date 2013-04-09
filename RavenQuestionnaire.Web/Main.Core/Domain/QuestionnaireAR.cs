@@ -18,6 +18,12 @@ namespace Main.Core.Domain
 
     public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
         
         private readonly ICompleteQuestionFactory questionFactory;
@@ -449,16 +455,15 @@ namespace Main.Core.Domain
 
         protected void OnQuestionnaireItemMoved(QuestionnaireItemMoved e)
         {
-            bool isLegacyEvent = e.AfterItemKey != null || e.GroupKey == null;
+            bool isLegacyEvent = e.AfterItemKey != null;
 
             if (isLegacyEvent)
             {
-                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.AfterItemKey);
+                Logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                return;
             }
-            else
-            {
-                this.innerDocument.MoveItem(e.PublicKey, e.GroupKey.Value, e.TargetIndex);
-            }
+
+            this.innerDocument.MoveItem(e.PublicKey, e.GroupKey, e.TargetIndex);
         }
 
         private static Answer[] ConvertOptionsToAnswers(Option[] options)

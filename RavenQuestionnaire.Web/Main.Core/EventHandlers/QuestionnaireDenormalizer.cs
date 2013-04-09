@@ -41,6 +41,12 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<QuestionnaireUpdated>,
                                              IEventHandler<QuestionnaireDeleted>
     {
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         #region Fields
 
         /// <summary>
@@ -134,22 +140,19 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument questionnaire = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            // var questionnaire = new Questionnaire(item);
-
-            bool isLegacyEvent = evnt.Payload.AfterItemKey != null || evnt.Payload.GroupKey == null;
+            bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
 
             if (isLegacyEvent)
             {
-                item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
-            }
-            else
-            {
-                item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey.Value, evnt.Payload.TargetIndex);
+                Logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                return;
             }
 
-            this.UpdateQuestionnaire(evnt, item);
+            questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.TargetIndex);
+
+            this.UpdateQuestionnaire(evnt, questionnaire);
         }
 
         /// <summary>
