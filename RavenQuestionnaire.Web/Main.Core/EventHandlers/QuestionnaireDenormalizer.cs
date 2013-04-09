@@ -283,17 +283,14 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            var group = item.Find<Group>(evnt.Payload.GroupPublicKey);
-            if (group != null)
-            {
-                group.Propagated = evnt.Payload.Propagateble;
 
-                ////if(e.Triggers!=null)
-                // group.Triggers = e.Triggers;
-                group.Description = evnt.Payload.Description;
-                group.ConditionExpression = evnt.Payload.ConditionExpression;
-                group.Update(evnt.Payload.GroupText);
-            }
+            item.UpdateGroup(
+                evnt.Payload.GroupPublicKey,
+                evnt.Payload.GroupText,
+                evnt.Payload.Description,
+                evnt.Payload.Propagateble,
+                evnt.Payload.ConditionExpression);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 

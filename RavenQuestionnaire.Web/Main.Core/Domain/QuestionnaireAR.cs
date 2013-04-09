@@ -368,19 +368,7 @@ namespace Main.Core.Domain
 
         protected void OnGroupUpdated(GroupUpdated e)
         {
-            var group = this.innerDocument.Find<Group>(e.GroupPublicKey);
-            if (group != null)
-            {
-                if (group.Propagated != Propagate.None)
-                {
-                    this.innerDocument.UpdateAutoPropagateQuestionsTriggersIfNeeded(group);
-                }
-                group.Propagated = e.Propagateble;
-
-                group.ConditionExpression = e.ConditionExpression;
-                group.Description = e.Description;
-                group.Update(e.GroupText);
-            }
+            this.innerDocument.UpdateGroup(e.GroupPublicKey, e.GroupText, e.Description, e.Propagateble, e.ConditionExpression);
         }
 
         protected void OnImageDeleted(ImageDeleted e)

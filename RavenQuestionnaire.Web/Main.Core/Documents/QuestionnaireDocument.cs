@@ -227,6 +227,19 @@ namespace Main.Core.Documents
             }
         }
 
+        public void UpdateGroup(Guid groupId, string title, string description, Propagate kindOfPropagation, string conditionExpression)
+        {
+            var group = this.Find<Group>(groupId);
+            if (@group == null) return;
+
+            this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group);
+            
+            @group.Propagated = kindOfPropagation;
+            @group.ConditionExpression = conditionExpression;
+            @group.Description = description;
+            @group.Update(title);
+        }
+
         public void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group)
         {
             if (group.Propagated == Propagate.None)
