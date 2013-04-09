@@ -41,8 +41,9 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<QuestionnaireUpdated>,
                                              IEventHandler<QuestionnaireDeleted>
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireDenormalizer));
 #else
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 #endif

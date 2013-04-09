@@ -50,8 +50,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
     /// </summary>
     public static class NcqrsInit
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(NcqrsInit));
 #else
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 #endif
