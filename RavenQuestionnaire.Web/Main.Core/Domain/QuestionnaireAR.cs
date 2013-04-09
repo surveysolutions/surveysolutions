@@ -18,8 +18,9 @@ namespace Main.Core.Domain
 
     public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(IGroupExtensions));
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireAR));
 #else
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 #endif
