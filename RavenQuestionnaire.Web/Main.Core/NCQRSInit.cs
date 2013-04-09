@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.Extensions;
+
 #if !MONODROID
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Document;
