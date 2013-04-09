@@ -51,46 +51,46 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             aggregateRoot.InitializeFromHistory(eventStream);
             Assert.IsTrue(aggregateRoot.EventHandlingCounter == 1);
         }
-   /*     [Test]
-        public void InitializeFromHistory_OneSnatshotIsAvalible_ExceptionThrowed()
-        {
-            Guid aggreagateRootId = Guid.NewGuid();
-            CommittedEventStream eventStream = new CommittedEventStream(aggreagateRootId,
-                                                                        new CommittedEvent(Guid.NewGuid(),
-                                                                                           Guid.NewGuid(),
-                                                                                           aggreagateRootId, 1,
-                                                                                           DateTime.Now,
-                                                                                           new object(),
-                                                                                           new Version())
-                                                                        ,
-                                                                        new CommittedEvent(Guid.NewGuid(),
-                                                                                           Guid.NewGuid(),
-                                                                                           aggreagateRootId, 2,
-                                                                                           DateTime.Now,
-                                                                                           new SnapshootLoaded()
-                                                                                               {
-                                                                                                   Template =
-                                                                                                       new Snapshot(
-                                                                                                       aggreagateRootId,
-                                                                                                       2, new object())
-                                                                                               },
-                                                                                           new Version())
-                                                                        ,
-                                                                        new CommittedEvent(Guid.NewGuid(),
-                                                                                           Guid.NewGuid(),
-                                                                                           aggreagateRootId, 3,
-                                                                                           DateTime.Now,
-                                                                                           new object(),
-                                                                                           new Version()));
-            DummyAR aggregateRoot = new DummyAR();
-            Assert.Throws<InvalidCommittedEventException>(() => aggregateRoot.InitializeFromHistory(eventStream));
-        }*/
+        /*     [Test]
+             public void InitializeFromHistory_OneSnatshotIsAvalible_ExceptionThrowed()
+             {
+                 Guid aggreagateRootId = Guid.NewGuid();
+                 CommittedEventStream eventStream = new CommittedEventStream(aggreagateRootId,
+                                                                             new CommittedEvent(Guid.NewGuid(),
+                                                                                                Guid.NewGuid(),
+                                                                                                aggreagateRootId, 1,
+                                                                                                DateTime.Now,
+                                                                                                new object(),
+                                                                                                new Version())
+                                                                             ,
+                                                                             new CommittedEvent(Guid.NewGuid(),
+                                                                                                Guid.NewGuid(),
+                                                                                                aggreagateRootId, 2,
+                                                                                                DateTime.Now,
+                                                                                                new SnapshootLoaded()
+                                                                                                    {
+                                                                                                        Template =
+                                                                                                            new Snapshot(
+                                                                                                            aggreagateRootId,
+                                                                                                            2, new object())
+                                                                                                    },
+                                                                                                new Version())
+                                                                             ,
+                                                                             new CommittedEvent(Guid.NewGuid(),
+                                                                                                Guid.NewGuid(),
+                                                                                                aggreagateRootId, 3,
+                                                                                                DateTime.Now,
+                                                                                                new object(),
+                                                                                                new Version()));
+                 DummyAR aggregateRoot = new DummyAR();
+                 Assert.Throws<InvalidCommittedEventException>(() => aggregateRoot.InitializeFromHistory(eventStream));
+             }*/
 
         [Test]
         public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_SnapshotSaved()
         {
             // arrange
-            DummyAR ar =new DummyAR();
+            DummyAR ar = new DummyAR();
             var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
             ar.InitializeFromSnapshot(snapshot);
             ar.RestoreFromSnapshot(snapshot);
@@ -98,7 +98,6 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.That(this.eventContext.Events.Count(), Is.EqualTo(1));
             Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
         }
-
         [Test]
         public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_Nothing()
         {
@@ -125,24 +124,21 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.AreEqual(snapshotEvent.EventSequence, 3);
             Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
         }
-    /*    [Test]
-        public void CreateNewSnapshot_SnpshotEventSnpshotSequence_NewSnpapshotIsCreate()
-
-        [Test]
-        public void CreateNewSnapshot_LastEventIsNotSnapshot_EventsHasTheSameUtsTime()
-        {
-            // arrange
-            DummyAR ar = new DummyAR();
-            var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
-            ar.InitializeFromSnapshot(snapshot);
-            ar.RestoreFromSnapshot(snapshot);
-            ar.DummyCommand();
-            ar.CreateNewSnapshot();
-            ar.CreateNewSnapshot();
-            var snapshotEvent = this.eventContext.Events.Last();
-            Assert.AreEqual(snapshotEvent.EventSequence, 3);
-            Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
-        }*/
+        /*    [Test]
+            public void CreateNewSnapshot_SnpshotEventSnpshotSequence_NewSnpapshotIsCreate()
+            {
+                // arrange
+                DummyAR ar = new DummyAR();
+                var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
+                ar.InitializeFromSnapshot(snapshot);
+                ar.RestoreFromSnapshot(snapshot);
+                ar.DummyCommand();
+                ar.CreateNewSnapshot();
+                ar.CreateNewSnapshot();
+                var snapshotEvent = this.eventContext.Events.Last();
+                Assert.AreEqual(snapshotEvent.EventSequence, 3);
+                Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
+            }*/
         [Test]
         public void CreateNewSnapshot_LastEventIsNotSnapshot_SnapshotIsCreatedAndStored()
         {
@@ -151,7 +147,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             ar.InitializeFromHistory(new CommittedEventStream(ar.EventSourceId,
                                                               new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(),
                                                                                  ar.EventSourceId, 1, DateTime.Now,
-                                                                                 new object(), 
+                                                                                 new object(),
                                                                                  new Version(1, 1))));
             ar.CreateNewSnapshot();
             var snapshotEvent = this.eventContext.Events.Last();
@@ -177,10 +173,6 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.IsTrue(result.Count() == 1);
             var offset = TimeZoneInfo.Utc.GetUtcOffset(result.First().EventTimeStamp);
             Assert.IsTrue(offset.Ticks == 0);
-
-         /*   eventStoreMock.Verify(
-                x => x.Store(It.Is<UncommittedEventStream>(e => e.First().EventTimeStamp == result.First().EventTimeStamp)),
-                Times.Once());*/
 
         }
         class DummyAR : SnapshootableAggregateRoot<object>
