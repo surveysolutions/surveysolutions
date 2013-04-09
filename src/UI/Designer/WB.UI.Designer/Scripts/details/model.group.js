@@ -35,7 +35,7 @@
                 self.isSelected = ko.observable();
                 self.typeOptions = config.groupTypes;
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.type, self.description, self.condition]);
+                self.dirtyFlag = new ko.DirtyFlag([self.title, self.gtype, self.description, self.condition]);
                 self.dirtyFlag().reset();
                 
                 self.errors = ko.validation.group(self);
@@ -58,7 +58,8 @@
                             return dc().groups.getLocalById(item.id);
                         return dc().questions.getLocalById(item.id);
                      });
-                    this.children(items);
+                     this.children(items);
+                     this.children.id = this.id();
                     //return self.children();
                 };
             return {

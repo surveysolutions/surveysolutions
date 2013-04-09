@@ -153,10 +153,6 @@
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>
-      <Name>Questionnaire.Core.Web</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>

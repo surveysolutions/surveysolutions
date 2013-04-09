@@ -1,0 +1,106 @@
+﻿@using WB.UI.Designer.Extensions
+@using WB.UI.Designer.Models
+@using WB.UI.Designer.BootstrapSupport
+
+@model System.Collections.IEnumerable
+
+@{
+    string controller = ViewBag.Controller ?? WB.UI.Designer.GlobalHelper.CurrentController;
+
+    var propertyList = Model.VisibleProperties();
+
+    var sortOrder = (int?)ViewBag.SortOrder;
+}
+
+<table class="table table-hover">
+    <caption></caption>
+    <thead>
+        <tr>
+            @foreach (var property in propertyList)
+            {
+                <th>
+                    @Html.ActionLink(property.GetLabel().ToSeparatedWords(), WB.UI.Designer.GlobalHelper.CurrentAction, new { p = ViewBag.PageIndex, sb = property.Name, so = WB.UI.Designer.Extensions.CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == property.Name), f = ViewBag.Filter })
+                    @if (ViewBag.SortBy == property.Name)
+                    {
+                        if (!sortOrder.ToBool())
+                        {
+                        <i class="icon-chevron-up"></i>
+                        }
+                        else
+                        {
+                        <i class="icon-chevron-down"></i>
+                        }
+                    }
+                </th>
+
+            }
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int index = 0; }
+        @foreach (var model in Model)
+        {
+            ViewData[index.ToString()] = model;
+            <tr>
+                @foreach (var property in propertyList)
+                {
+                    <td>
+                        @Html.Display(index + "." + property.Name)
+                    </td>
+                }
+
+                <td style="width: 110px">
+                    @{
+                var actionModel = model as IActionItem;
+                if (actionModel != null)
+                {
+                    if (actionModel.CanCopy || actionModel.CanDelete || actionModel.CanEdit || actionModel.CanExport || actionModel.CanPreview || actionModel.CanPrint)
+                    {
+                        <div class="btn-group pull-right">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">Action
+                                        <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                @{
+                        var routevalues = model.GetIdValue();
+                        var itemId = model.GetId();
+                        var itemType = model.GetLabel();
+                        var itemName = Uri.EscapeDataString(model.GetName());
+
+                                    if (actionModel.CanEdit)
+                                    {
+                                        <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                        <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                                    }
+
+                                    if (actionModel.CanPreview)
+                        {
+                                    <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
+                        }
+                        if (actionModel.CanCopy)
+                        {
+                                    <li>@Html.ActionLink("Clone", "Clone", controller, routevalues, null)</li>
+                        }
+                        if (actionModel.CanExport)
+                        {
+                                    <li class="divider"></li>
+                                    <li>@Html.ActionLink("View/Export", "Export", controller, routevalues, null)</li>
+                        }
+                        if (actionModel.CanDelete)
+                        {
+                                    <li class="divider"></li>
+                                    <li><a  href="#mDelete" data-bind='click: deleteItem.bind($data,"@itemId", "@itemType", "@itemName")' data-toggle="modal">Delete</a></li>
+                        }
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+                    }
+                </td>
+            </tr>
+                index++;
+        }
+    </tbody>
+</table>

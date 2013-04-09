@@ -26,7 +26,6 @@
                 return groups;
             },
             getAllQuestions = function (questionnaire) {
-                console.log(questionnaire);
                 var questions = [];
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {
@@ -56,8 +55,7 @@
                     item.title(dto.group.Title);
                     item.description(dto.group.Description);
                     item.condition(dto.group.ConditionExpression);
-                    var type = config.groupTypes[dto.group.Propagated];
-                    item.gtype(type);
+                    item.gtype(dto.group.Propagated);
                     
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
@@ -77,14 +75,11 @@
                     var groups = otherData.groups;
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
 
-                    var type = config.questionTypes[dto.QuestionType];
-                    item.qtype(type);
+                    item.qtype(dto.QuestionType);
                     
-                    var scope = config.questionScopes[dto.QuestionScope];
-                    item.scope(scope);
+                    item.scope(dto.QuestionScope);
 
-                    var order = config.answerOrders[dto.AnswerOrder];
-                    item.answerOrder(order);
+                    item.answerOrder(dto.AnswerOrder);
 
                     var answers = _.map(dto.Answers, function (answer) {
                         return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);

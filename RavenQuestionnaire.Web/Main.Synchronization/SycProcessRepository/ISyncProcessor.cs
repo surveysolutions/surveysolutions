@@ -29,7 +29,7 @@ namespace Main.Synchronization.SycProcessRepository
         /// <returns>
         /// List of UserSyncProcessStatistics
         /// </returns>
-        List<UserSyncProcessStatistics> CalculateStatistics();
+        void PostProcess();
 
         /// <summary>
         /// The commit.

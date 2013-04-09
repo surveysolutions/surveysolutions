@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using SynchronizationMessages.Export;
+
 namespace DataEntryClient.SycProcess
 {
     using System;
@@ -24,7 +26,6 @@ namespace DataEntryClient.SycProcess
 
     using Ninject;
 
-    using Questionnaire.Core.Web.Export;
 
     using SynchronizationMessages.CompleteQuestionnaire;
 

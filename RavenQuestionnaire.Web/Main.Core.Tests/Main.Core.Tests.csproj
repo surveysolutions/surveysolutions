@@ -271,6 +271,7 @@
   <ItemGroup>
     <Compile Include="AbstractFactories\QuestionFactoryTest.cs" />
     <Compile Include="Documents\CompleteQuestionnaireDocumentTest.cs" />
+    <Compile Include="Documents\QuestionnaireDocumentTests.cs" />
     <Compile Include="Domain\CompleteQuestionnaireARTest.cs" />
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\QuestionnaireARTest.cs" />
@@ -283,6 +284,7 @@
     <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerStorageStub.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />

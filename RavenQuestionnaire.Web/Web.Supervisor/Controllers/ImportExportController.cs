@@ -6,6 +6,13 @@
 //   The import export controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ionic.Zip;
+using Main.Core.Documents;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Questionnaire.ImportService.Commands;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -36,6 +43,7 @@ namespace Web.Supervisor.Controllers
     using SynchronizationMessages.CompleteQuestionnaire;
 
     using Web.Supervisor.Models;
+    using Web.Supervisor.Utils.Attributes;
 
     /// <summary>
     /// The import export controller.
@@ -44,7 +52,10 @@ namespace Web.Supervisor.Controllers
     public class ImportExportController : AsyncController
     {
         #region Fields
-
+        /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalInfo;
         /// <summary>
         /// Data exporter
         /// </summary>
@@ -64,24 +75,14 @@ namespace Web.Supervisor.Controllers
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImportExportController"/> class.
-        /// </summary>
-        /// <param name="exporter">
-        /// The exporter.
-        /// </param>
-        /// <param name="viewRepository">
-        /// The view repository
-        /// </param>
-        /// <param name="syncProcessFactory">
-        /// The sync Process Factory.
-        /// </param>
+        
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, IGlobalInfoProvider globalInfo)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
+            this.globalInfo = globalInfo;
         }
 
         #endregion
@@ -397,6 +398,17 @@ namespace Web.Supervisor.Controllers
 
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
+        public FileResult GetARKeys()
+        {
+            var stream = new MemoryStream();
+            this.GetList().WriteTo(stream);
+            stream.Position = 0L;
+
+            return new FileStreamResult(stream, "application/json; charset=utf-8");
+
+        }
+
 
         /// <summary>
         /// The get item.
@@ -443,8 +455,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 result = process.Export("Supervisor export AR events", key, ln);
             }
@@ -481,6 +492,51 @@ namespace Web.Supervisor.Controllers
             stream.Position = 0L;
             return new FileStreamResult(stream, "application/json; charset=utf-8");
         }
+
+
+        /// <summary>
+        /// The get item.
+        /// </summary>
+        /// <param name="firstEventPulicKey">
+        /// The first event pulic key.
+        /// </param>
+        /// <param name="length">
+        /// The length.
+        /// </param>
+        /// <returns>
+        /// The <see cref="Stream"/>.
+        /// </returns>
+        [CompressContent]
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult GetAR(string firstEventPulicKey, string length)
+        {
+            var item = this.GetItemInt(firstEventPulicKey, length);
+            if (item == null)
+            {
+                return null;
+            }
+
+            var stream = new MemoryStream();
+            item.WriteTo(stream);
+            stream.Position = 0L;
+            
+            return new FileStreamResult(stream, "application/octet-stream");
+        }
+
+
+        /// <summary>
+        /// Determines if GZip is supported
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsGZipSupported(HttpRequestBase request)
+        {
+            string AcceptEncoding = request.Headers["Accept-Encoding"];
+            if (!string.IsNullOrEmpty(AcceptEncoding) &&
+                    (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
+                return true;
+            return false;
+        }
+
 
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)
@@ -531,5 +587,39 @@ namespace Web.Supervisor.Controllers
         }
 
         #endregion
+
+
+        #region Import from new designer
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult NewImport()
+        {
+            return this.View("NewViewTestUploadFile");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult NewImport(HttpPostedFileBase uploadFile)
+        {
+            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
+            if (zipData == null || zipData.Count == 0)
+            {
+                return null;
+            }
+            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
+            NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
+
+
+            return this.RedirectToAction("Index", "Survey");
+        }
+
+        protected T DesserializeString<T>(String data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+
+            return JsonConvert.DeserializeObject<T>(data, settings);
+        }
+        #endregion
+
     }
 }

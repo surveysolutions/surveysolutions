@@ -40,9 +40,11 @@
                         view: '',
                         route: /.*/,
                         title: '',
-                        callback: function() {
-                            logger.error(config.toasts.invalidRoute);
-                        }
+                        callback: vm.questionnaire.activate
+                        //callback: function () {
+                        //    Note from TLK: this does not work because both logger.error and config.toasts are undefined
+                        //    logger.error(config.toasts.invalidRoute);
+                        //}
                     }
                 ];
 

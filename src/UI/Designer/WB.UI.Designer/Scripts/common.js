@@ -5,7 +5,8 @@
     self.itemType = ko.observable('');
 
     self.deleteItem = function (id, type, name) {
-        self.itemName(name);
+        var encName = decodeURIComponent(name);
+        self.itemName(encName);
         self.itemType(type);
         self.itemId(id);
     };

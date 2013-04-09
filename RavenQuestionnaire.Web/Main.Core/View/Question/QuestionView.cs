@@ -17,6 +17,8 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.View.Answer;
 using Main.Core.View.Card;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Main.Core.View.Question
 {
@@ -93,6 +95,7 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the answer order.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Order AnswerOrder { get; set; }
 
         /// <summary>
@@ -148,11 +151,13 @@ namespace Main.Core.View.Question
         /// <summary>
         /// Gets or sets the question type.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QuestionType QuestionType { get; set; }
 
         /// <summary>
         /// Gets or sets question scope.
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public QuestionScope QuestionScope { get; set; }
 
         /// <summary>

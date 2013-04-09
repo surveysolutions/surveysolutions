@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Microsoft.Practices.ServiceLocation;
+using NinjectAdapter;
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer
 {
     using System.Web.Mvc;
@@ -20,12 +24,18 @@ namespace WB.UI.Designer
     /// </summary>
     public class CustomAuthorize : AuthorizeAttribute
     {
+        #warning remove this shit
+        private static IUserHelper UserHelperInstance
+        {
+            get { return UserHelper.Instance; }
+        }
+
         #region Methods
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var isInvalidUser = false;
-            var user = UserHelper.CurrentUser;
+            var user = UserHelperInstance.CurrentUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
@@ -34,7 +44,7 @@ namespace WB.UI.Designer
 
                 if (user != null)
                 {
-                    var baseController = filterContext.Controller as AlertController;
+                    var baseController = filterContext.Controller as BaseController;
                     if (baseController != null)
                     {
                         if (!user.IsApproved)
@@ -57,7 +67,7 @@ namespace WB.UI.Designer
 
             if (isInvalidUser)
             {
-                UserHelper.Logout();
+                UserHelperInstance.Logout();
                 filterContext.Result =
                     new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Account", action = "Login" }));
             }

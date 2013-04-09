@@ -1,10 +1,26 @@
-﻿using System.Web.Optimization;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="BundleConfig.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace WB.UI.Designer
 {
+    using System.Web.Optimization;
+
+    /// <summary>
+    /// The bundle config.
+    /// </summary>
     public class BundleConfig
     {
-        // For more information on Bundling, visit http://go.microsoft.com/fwlink/?LinkId=254725
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The register bundles.
+        /// </summary>
+        /// <param name="bundles">
+        /// The bundles.
+        /// </param>
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.UseCdn = false;
@@ -13,87 +29,100 @@ namespace WB.UI.Designer
             bundles.IgnoreList.Ignore("*-vsdoc.js");
             bundles.IgnoreList.Ignore("*intellisense.js");
 
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+            bundles.Add(
+                new StyleBundle("~/content/edit").Include(
+                    "~/Content/details.css", "~/Content/jquery.pnotify.css", "~/Content/jquery.pnotify.icons.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryui").Include(
-                        "~/Scripts/jquery-ui-{version}.js"));
+            bundles.Add(
+                new StyleBundle("~/content/css").Include(
+                    "~/Content/bootstrap.css", 
+                    "~/Content/body.css", 
+                    "~/Content/bootstrap-responsive.css", 
+                    "~/Content/bootstrap-mvc-validation.css"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate.js",
-                        "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js"));
+            #region [Scripts]
 
-            // Use the development version of Modernizr to develop with and learn from. Then, when you're
-            // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
-            bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
-                        "~/Scripts/modernizr-*"));
+            bundles.Add(
+                new ScriptBundle("~/editform").Include(
+                    "~/Scripts/jquery-{version}.js", 
+                    "~/Scripts/jquery.validate.js", 
+                    "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
+                    "~/Scripts/bootstrap.js"));
 
-            bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
-                        "~/Content/themes/base/jquery.ui.core.css",
-                        "~/Content/themes/base/jquery.ui.resizable.css",
-                        "~/Content/themes/base/jquery.ui.selectable.css",
-                        "~/Content/themes/base/jquery.ui.accordion.css",
-                        "~/Content/themes/base/jquery.ui.autocomplete.css",
-                        "~/Content/themes/base/jquery.ui.button.css",
-                        "~/Content/themes/base/jquery.ui.dialog.css",
-                        "~/Content/themes/base/jquery.ui.slider.css",
-                        "~/Content/themes/base/jquery.ui.tabs.css",
-                        "~/Content/themes/base/jquery.ui.datepicker.css",
-                        "~/Content/themes/base/jquery.ui.progressbar.css",
-                        "~/Content/themes/base/jquery.ui.theme.css"));
+            bundles.Add(
+                new ScriptBundle("~/list").Include(
+                    "~/Scripts/jquery-{version}.js", 
+                    "~/Scripts/bootstrap.js", 
+                    "~/Scripts/knockout-2.2.1.js", 
+                    "~/Scripts/common.js"));
 
-            // 3rd Party JavaScript files
-            bundles.Add(new ScriptBundle("~/bundles/jsextlibs")
-                            //.IncludeDirectory("~/Scripts/lib", "*.js", searchSubdirectories: false));
-                            .Include(
-                                "~/Scripts/lib/json2.js", // IE7 needs this
+            bundles.Add(
+                new ScriptBundle("~/designer").Include(
+                    "~/Scripts/jquery-{version}.js", 
+                    "~/Scripts/jquery.validate.js", 
+                    "~/Scripts/jquery.validate.unobtrusive-custom-for-bootstrap.js", 
+                    "~/Scripts/jquery-ui-{version}.js", 
+                    "~/Scripts/bootstrap.js", 
+                    "~/Scripts/modernizr-{version}.js", 
+                    "~/Scripts/lib/json2.js", // IE7 needs this
 
-                                // jQuery plugins
-                                "~/Scripts/lib/activity-indicator.js",
-                                "~/Scripts/TrafficCop.js",
-                                "~/Scripts/infuser.js", // depends on TrafficCop
+                    // jQuery plugins
+                    "~/Scripts/lib/activity-indicator.js", 
+                    "~/Scripts/TrafficCop.js", 
+                    "~/Scripts/infuser.js", // depends on TrafficCop
 
-                                // Knockout and its plugins
-                                "~/Scripts/knockout-{version}.js",
-                                "~/Scripts/lib/knockout.activity.js",
-                                "~/Scripts/lib/knockout.asyncCommand.js",
-                                "~/Scripts/lib/knockout.dirtyFlag.js",
-                                "~/Scripts/knockout.validation.debug.js",
-                                "~/Scripts/lib/koExternalTemplateEngine.js",
-                                "~/Scripts/lib/knockout-sortable.js",
+                    // Knockout and its plugins
+                    "~/Scripts/knockout-{version}.js", 
+                    "~/Scripts/lib/knockout.activity.js", 
+                    "~/Scripts/lib/knockout.asyncCommand.js", 
+                    "~/Scripts/lib/knockout.dirtyFlag.js", 
+                    "~/Scripts/knockout.validation.debug.js", 
+                    "~/Scripts/lib/koExternalTemplateEngine.js", 
+                    "~/Scripts/lib/knockout-sortable.js", 
+                    // Other 3rd party libraries
+                    "~/Scripts/lodash.js", 
+                    "~/Scripts/moment.js", 
+                    "~/Scripts/lib/sammy.js", 
+                    "~/Scripts/lib/sammy.title.js", 
+                    "~/Scripts/amplify.*", 
+                    "~/Scripts/jquery.pnotify.js", 
+                    "~/Scripts/bootbox.js", 
+                    // Plugins
+                    "~/Scripts/lib/jquery.autogrow-textarea.js", 
+                    "~/Scripts/lib/Math.uuid.js",
+ 
+                    "~/Scripts/require.js", 
+                    "~/Scripts/details/utils.js", 
+                    "~/Scripts/details/binder.js", 
+                    "~/Scripts/details/bootstrapper.js", 
+                    "~/Scripts/details/config.js", 
+                    "~/Scripts/details/datacontext.js", 
+                    "~/Scripts/details/dataprimer.js", 
+                    "~/Scripts/details/dataservice.js", 
+                    "~/Scripts/details/ko.bindingHandlers.js", 
+                    "~/Scripts/details/ko.debug.helpers.js", 
+                    "~/Scripts/details/messenger.js", 
+                    "~/Scripts/details/model.answerOption.js", 
+                    "~/Scripts/details/model.group.js", 
+                    "~/Scripts/details/model.js", 
+                    "~/Scripts/details/model.mapper.js", 
+                    "~/Scripts/details/model.question.js", 
+                    "~/Scripts/details/model.questionnaire.js", 
+                    "~/Scripts/details/presenter.js", 
+                    "~/Scripts/details/route-mediator.js", 
+                    "~/Scripts/details/router.js", 
+                    "~/Scripts/details/route-config.js", 
+                    "~/Scripts/details/store.js", 
+                    "~/Scripts/details/vm.js", 
+                    "~/Scripts/details/vm.questionnaire.js", 
 
-                                // Other 3rd party libraries
-                                "~/Scripts/lodash.js",
-                                "~/Scripts/moment.js",
-                                "~/Scripts/lib/sammy.js",
-                                "~/Scripts/lib/sammy.title.js",
-                                "~/Scripts/amplify.*",
-                                "~/Scripts/jquery.pnotify.js",
-                                "~/Scripts/bootbox.js",
+                    "~/Scripts/lib/ace/*.js", 
 
-                                //Plugins
-                                "~/Scripts/lib/jquery.autogrow-textarea.js",
-                                "~/Scripts/lib/Math.uuid.js"
-                            ));
+                    "~/Scripts/details/main.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/jsappdetails")
-                   .IncludeDirectory("~/Scripts/details/", "*.js", searchSubdirectories: false));
-
-            bundles.Add(new StyleBundle("~/Content/edit").Include(
-               "~/Content/details.css",
-               "~/Content/jquery.pnotify.css",
-               "~/Content/jquery.pnotify.icons.css"));
-
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                "~/Scripts/bootstrap.js"
-                ));
-
-            bundles.Add(new StyleBundle("~/content/css").Include(
-                "~/Content/bootstrap.css",
-                "~/Content/body.css",
-                "~/Content/bootstrap-responsive.css",
-                "~/Content/bootstrap-mvc-validation.css"
-                ));
+            #endregion
         }
+
+        #endregion
     }
 }

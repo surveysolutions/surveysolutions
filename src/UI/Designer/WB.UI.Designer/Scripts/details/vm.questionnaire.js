@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox'],
-    function (ko, _, config, datacontext, router, messenger, store, model, bootbox) {
+    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
+    function (ko, _, config, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -22,6 +22,8 @@
                 questionnaire(datacontext.questionnaire);
                 calcStatistics();
                 $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
+
+
             }
             if (!_.isUndefined(selectedGroup())) {
                 selectedGroup().isSelected(false);
@@ -37,6 +39,12 @@
                 editGroup(routeData.group);
             }
             isInitialized = true;
+
+            $("a[data-toggle=popover]")
+                    .popover()
+                    .click(function (e) {
+                        e.preventDefault();
+                    });
         },
         canLeave = function () {
             return true;
@@ -83,7 +91,6 @@
             $('#stacks').removeClass('output-visible');
         },
         addQuestion = function (parent) {
-            console.log(parent);
             var question = new model.Question();
             question.parent(parent);
 
@@ -105,7 +112,6 @@
             calcStatistics();
         },
         addGroup = function (parent) {
-            console.log(parent);
             var group = new model.Group();
             group.parent(parent);
             datacontext.groups.add(group);
@@ -115,7 +121,7 @@
             calcStatistics();
         },
         deleteGroup = function (item) {
-            bootbox.confirm("Are you sure you want to delete this question?", function(result) {
+            bootbox.confirm("Are you sure you want to delete this question?", function (result) {
                 if (result == false)
                     return;
 
@@ -126,11 +132,10 @@
                         config.commands.deleteGroup,
                         item,
                         {
-                            success: function() {
+                            success: function () {
                                 deleteGroupSuccessCallback(item);
                             },
-                            error: function(d) {
-                                console.log(d);
+                            error: function (d) {
                                 errors.removeAll();
                                 errors.push(d);
                                 showOutput();
@@ -170,10 +175,9 @@
                         {
                             success: function () {
                                 deleteQuestionSuccessCallback(item);
-                                
+
                             },
                             error: function (d) {
-                                console.log(d);
                                 errors.removeAll();
                                 errors.push(d);
                                 showOutput();
@@ -190,17 +194,16 @@
             parent.childrenID.remove(child);
             parent.fillChildren();
             calcStatistics();
-            
+
             if (isFilterMode() == true) {
                 filter.valueHasMutated();
             } else {
                 router.navigateTo(parent.getHref());
             }
-            
+
             hideOutput();
         },
         saveGroup = function (group) {
-            console.log(group);
             datacontext.sendCommand(
                 group.isNew() ? config.commands.createGroup : config.commands.updateGroup,
                 group,
@@ -212,7 +215,6 @@
                         hideOutput();
                     },
                     error: function (d) {
-                        console.log(d);
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
@@ -231,7 +233,6 @@
                         hideOutput();
                     },
                     error: function (d) {
-                        console.log(d);
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
@@ -249,21 +250,42 @@
                 searchResult(datacontext.questions.search(query));
             }
         },
-        afterMove = function (arg) {
-            console.log(arg);
-        },
         isMovementPossible = function (arg) {
-            var target = arg.targetParent()[0].parent();
-            if ((_.isNull(target) || _.isUndefined(target)) && arg.item.type() == "QuestionView") {
+
+            var fromId = arg.sourceParent.id;
+            var toId = arg.targetParent.id;
+            var moveItemType = arg.item.type().replace('View','').toLowerCase();
+            var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
+            
+            if (isDropedInChapter && moveItemType == "question") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveQuestionOutsideGroup);
                 return;
             }
-            if (target.gtype() !== "None" && arg.item.type() == "GroupView") {
+            var target = datacontext.groups.getLocalById(toId);
+            
+            if (isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                 return;
             }
+            
+            var moveCommand = {
+                targetGroupId: toId,
+                targetIndex: arg.targetIndex
+            };
+            moveCommand[moveItemType + 'Id'] = arg.item.id();
+            
+            datacontext.sendCommand(
+               config.commands[moveItemType + "Move"],
+               moveCommand,
+               {
+                   success: function (d) {
+                   },
+                   error: function (d) {
+                   }
+               });
+            
         },
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
@@ -288,7 +310,6 @@
             clearFilter: clearFilter,
             filter: filter,
             isFilterMode: isFilterMode,
-            afterMove: afterMove,
             isMovementPossible: isMovementPossible,
             saveGroup: saveGroup,
             deleteGroup: deleteGroup,

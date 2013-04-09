@@ -6,6 +6,10 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Commands.Synchronization;
+using Ncqrs.Commanding.ServiceModel;
+
 namespace Main.Synchronization.SycProcessRepository
 {
     using System;
@@ -126,6 +130,18 @@ namespace Main.Synchronization.SycProcessRepository
             return this.statistics.Statistics;
         }
 
+        public void PostProcess()
+        {
+            if (this.statistics != null)
+            {
+                var statisticValues = CalculateStatistics();
+
+                NcqrsEnvironment.Get<ICommandService>()
+                                .Execute(new PushStatisticsCommand(this.statistics.PublicKey, statisticValues));
+            }
+
+        }
+
         /// <summary>
         /// The commit.
         /// </summary>
@@ -188,6 +204,8 @@ namespace Main.Synchronization.SycProcessRepository
             // yield return g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue));
             // }
         }
+
+       
 
         /// <summary>
         /// Get difference between already stored item and new-come CQ document and generates statistics

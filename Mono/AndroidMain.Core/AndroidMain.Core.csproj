@@ -13,7 +13,7 @@
     <AssemblyName>Main.Core</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.2</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -150,6 +150,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\GroupCommand.cs">
       <Link>Commands\Questionnaire\Group\GroupCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\MoveGroupCommand.cs">
+      <Link>Commands\Questionnaire\Group\MoveGroupCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\NewAddGroupCommand.cs</Link>
     </Compile>
@@ -179,6 +182,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\FullQuestionDataCommand.cs">
       <Link>Commands\Questionnaire\Question\FullQuestionDataCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\MoveQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\MoveQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewAddQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\NewAddQuestionCommand.cs</Link>
@@ -339,6 +345,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainException.cs">
       <Link>Domain\Exceptions\DomainException.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\Exceptions\DomainExceptionType.cs">
+      <Link>Domain\Exceptions\DomainExceptionType.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Domain\FileAR.cs">
       <Link>Domain\FileAR.cs</Link>
     </Compile>
@@ -378,10 +387,6 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\ICompleteQuestionExtensions.cs">
       <Link>Entities\Extensions\ICompleteQuestionExtensions.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Extensions\IGroupExtensions.cs">
-      <Link>Entities\Extensions\IGroupExtensions.cs</Link>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\Observers\ITriggerable.cs">
@@ -848,9 +853,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Services\IFileStorageService.cs">
       <Link>Services\IFileStorageService.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\CollectionExtensions.cs">
-      <Link>Utility\CollectionExtensions.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\EnumerableExtensions.cs">
       <Link>Utility\EnumerableExtensions.cs</Link>
     </Compile>
@@ -892,6 +894,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleHash.cs">
       <Link>Utility\SimpleHash.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\SimpleObjectExtensions.cs">
+      <Link>Utility\SimpleObjectExtensions.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Utility\StringUtil.cs">
       <Link>Utility\StringUtil.cs</Link>
@@ -1115,7 +1120,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 @using WB.UI.Designer
+@using WB.UI.Designer.Code
 @using WB.UI.Designer.Models
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="@Styles.Url("~/content/css")" rel="stylesheet"/>
     @this.RenderSection("Styles", required: false)
-    @Scripts.Render("~/bundles/jquery", "~/bundles/bootstrap")
     @this.RenderSection("Scripts", required: false)
     @this.Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
@@ -36,11 +36,12 @@
                             </ul>
                         </li>
                         <li class="divider-vertical"></li>
-                        @if (UserHelper.IsAdmin)
+                        @if (UserHelper.Instance.IsAdmin)
                         {
                             <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li>@this.Html.ActionLink("Manage users", "Index", "Admin")</li>
+                                     <li>@this.Html.ActionLink("Import", "Import", "Synchronization")</li>
                                 </ul>
                             </li>
                             <li class="divider-vertical"></li>

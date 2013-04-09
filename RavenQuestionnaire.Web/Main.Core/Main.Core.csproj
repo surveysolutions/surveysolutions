@@ -185,9 +185,13 @@
     <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\FullGroupDataCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\FullQuestionDataCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\GroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Commands\Questionnaire\Question\NewAddQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs" />
@@ -251,6 +255,7 @@
     <Compile Include="Domain\CompleteQuestionnaireAR.cs" />
     <Compile Include="Domain\DeviceAR.cs" />
     <Compile Include="Domain\Exceptions\DomainException.cs" />
+    <Compile Include="Domain\Exceptions\DomainExceptionType.cs" />
     <Compile Include="Domain\FileAR.cs" />
     <Compile Include="Domain\LocationAR.cs" />
     <Compile Include="Domain\QuestionnaireAR.cs" />
@@ -263,7 +268,6 @@
     <Compile Include="Entities\Extensions\GroupHash.cs" />
     <Compile Include="Entities\Extensions\ICompleteGroupExtensions.cs" />
     <Compile Include="Entities\Extensions\ICompleteQuestionExtensions.cs" />
-    <Compile Include="Entities\Extensions\IGroupExtensions.cs" />
     <Compile Include="Entities\Observers\ITriggerable.cs" />
     <Compile Include="Entities\OrderDirection.cs" />
     <Compile Include="Entities\OrderRequestItem.cs" />
@@ -418,6 +422,7 @@
     <Compile Include="Utility\OrderStrategy\RandomStrategy.cs" />
     <Compile Include="Utility\OrderStrategy\ZAStrategy.cs" />
     <Compile Include="Utility\SimpleHash.cs" />
+    <Compile Include="Utility\SimpleObjectExtensions.cs" />
     <Compile Include="Utility\StringUtil.cs" />
     <Compile Include="View\Answer\AnswerView.cs" />
     <Compile Include="View\Answer\CompleteAnswerView.cs" />
