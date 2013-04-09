@@ -526,17 +526,7 @@ namespace Main.Core.Domain
             if (!isHeadOfGroup)
                 return;
 
-            IGroup group;
-            if (groupId.HasValue)
-            {
-                group = this.innerDocument.Find<Group>(groupId.Value);
-            }
-            else
-            {
-                this.innerDocument.ConnectChildsWithParent();
-                var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-                group = question.GetParent() as IGroup;
-            }
+            var @group = this.innerDocument.FindParentOfQuestion(questionId, groupId);
 
             if (group.Propagated == Propagate.None)
             {
@@ -551,17 +541,7 @@ namespace Main.Core.Domain
             if (!isFeatured)
                 return;
             
-            IGroup group;
-            if (groupId.HasValue)
-            {
-                group = this.innerDocument.Find<Group>(groupId.Value);
-            }
-            else
-            {
-                this.innerDocument.ConnectChildsWithParent();
-                var question = this.innerDocument.Find<AbstractQuestion>(questionId);
-                group = question.GetParent() as IGroup;
-            }
+            var group = this.innerDocument.FindParentOfQuestion(questionId, groupId);
 
             if (group.Propagated != Propagate.None)
             {
@@ -620,6 +600,7 @@ namespace Main.Core.Domain
                     string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
+        
         private void ThrowDomainExceptionIfTitleIsEmpty(string title)
         {
            if(string.IsNullOrEmpty(title))

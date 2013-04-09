@@ -29,9 +29,6 @@ namespace Main.Core.Documents
 
     using Newtonsoft.Json;
 
-    /// <summary>
-    /// The questionnaire document.
-    /// </summary>
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
@@ -41,20 +38,8 @@ namespace Main.Core.Documents
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 #endif
 
-        #region Fields
-
-        /// <summary>
-        /// The triggers.
-        /// </summary>
         private readonly List<Guid> triggers = new List<Guid>();
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireDocument"/> class.
-        /// </summary>
         public QuestionnaireDocument()
         {
             this.CreationDate = DateTime.Now;
@@ -64,60 +49,27 @@ namespace Main.Core.Documents
             this.ConditionExpression = string.Empty;
         }
 
-        #endregion
 
         #region Public Properties
 
-        /// <summary>
-        /// Gets or sets the children.
-        /// </summary>
         public List<IComposite> Children { get; set; }
 
-        /// <summary>
-        /// Gets or sets the close date.
-        /// </summary>
         public DateTime? CloseDate { get; set; }
 
-        // public string Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets the condition expression.
-        /// </summary>
         public string ConditionExpression { get; set; }
 
-        /// <summary>
-        /// Gets or sets the creation date.
-        /// </summary>
         public DateTime CreationDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the last entry date.
-        /// </summary>
         public DateTime LastEntryDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets the open date.
-        /// </summary>
         public DateTime? OpenDate { get; set; }
 
-        /// <summary>
-        /// Gets or sets deleted document flag
-        /// </summary>
         public bool IsDeleted { get; set; }
 
-        /// <summary>
-        /// Gets or sets the created by.
-        /// </summary>
         public Guid? CreatedBy { get; set; }
 
-        /// <summary>
-        /// Gets or sets the parent.
-        /// </summary>
         private IComposite parent;
 
-        /// <summary>
-        /// Gets or sets the propagated.
-        /// </summary>
         public Propagate Propagated
         {
             get
@@ -140,24 +92,12 @@ namespace Main.Core.Documents
             this.parent = parent;
         }
 
-        /// <summary>
-        /// Gets or sets the public key.
-        /// </summary>
         public Guid PublicKey { get; set; }
 
-        /// <summary>
-        /// Gets or sets the title.
-        /// </summary>
         public string Title { get; set; }
 
-        /// <summary>
-        /// Gets or sets Description.
-        /// </summary>
         public string Description { get; set; }
 
-        /// <summary>
-        /// Gets or sets the triggers.
-        /// </summary>
         public List<Guid> Triggers
         {
             get
@@ -172,20 +112,6 @@ namespace Main.Core.Documents
 
         #endregion
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The add.
-        /// </summary>
-        /// <param name="c">
-        /// The c.
-        /// </param>
-        /// <param name="parent">
-        /// The parent.
-        /// </param>
-        /// <param name="parentPropagationKey"></param>
-        /// <exception cref="CompositeException">
-        /// </exception>
         public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             if (!parent.HasValue || this.PublicKey == parent)
@@ -207,17 +133,6 @@ namespace Main.Core.Documents
             throw new CompositeException();
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="publicKey">
-        /// The public key.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {
             foreach (IComposite child in this.Children)
@@ -237,17 +152,6 @@ namespace Main.Core.Documents
             return null;
         }
 
-        /// <summary>
-        /// The find.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
-        /// </returns>
         public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : class
         {
             return
@@ -255,21 +159,20 @@ namespace Main.Core.Documents
                     this.Children.SelectMany(q => q.Find(condition)));
         }
 
-        /// <summary>
-        /// The first or default.
-        /// </summary>
-        /// <param name="condition">
-        /// The condition.
-        /// </param>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The T.
-        /// </returns>
         public T FirstOrDefault<T>(Func<T, bool> condition) where T : class
         {
             return this.Children.Where(a => a is T && condition(a as T)).Select(a => a as T).FirstOrDefault()
                    ?? this.Children.SelectMany(q => q.Find(condition)).FirstOrDefault();
+        }
+
+        public IGroup FindParentOfQuestion(Guid questionId, Guid? groupId)
+        {
+            if (groupId.HasValue)
+            {
+                return this.Find<Group>(groupId.Value);
+            }
+
+            return this.GetParentOfQuestion(questionId) as IGroup;
         }
 
         public void ReplaceQuestionWithNew(IQuestion oldQuestion, IQuestion newQuestion)
@@ -291,21 +194,6 @@ namespace Main.Core.Documents
             }
         }
 
-        /// <summary>
-        /// The remove.
-        /// </summary>
-        /// <param name="itemKey">
-        /// The item key.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <param name="parentPublicKey">
-        /// The parent public key.
-        /// </param>
-        /// <param name="parentPropagationKey">
-        /// The parent propagation key.
-        /// </param>
         public void Remove(Guid itemKey, Guid? propagationKey, Guid? parentPublicKey, Guid? parentPropagationKey)
         {
             // we could delete group from the root of Questionnaire
@@ -434,9 +322,6 @@ namespace Main.Core.Documents
             return child is IQuestion && ((IQuestion)child).PublicKey == questionId;
         }
 
-        /// <summary>
-        /// The connect childs with parent.
-        /// </summary>
         public void ConnectChildsWithParent()
         {
             foreach (var item in this.Children)
@@ -446,12 +331,6 @@ namespace Main.Core.Documents
             }
         }
 
-        /// <summary>
-        /// The clone.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IComposite"/>.
-        /// </returns>
         public IComposite Clone()
         {
             var doc = this.MemberwiseClone() as QuestionnaireDocument;
@@ -467,7 +346,5 @@ namespace Main.Core.Documents
 
             return doc;
         }
-
-        #endregion
     }
 }

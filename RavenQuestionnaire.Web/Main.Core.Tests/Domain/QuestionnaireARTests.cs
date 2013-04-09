@@ -1016,13 +1016,14 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        [Test]
-        public void NewUpdateGroup_When_groups_new_title_is_empty_Then_throws_DomainException()
+        [TestCase("")]
+        [TestCase("   ")]
+        [TestCase("\t")]
+        public void NewUpdateGroup_When_groups_new_title_is_empty_or_whitespaces_Then_throws_DomainException(string emptyTitle)
         {
             // arrange
             var groupPublicKey = Guid.NewGuid();
             QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(Guid.NewGuid(), groupPublicKey);
-            string emptyTitle = string.Empty;
 
             // act
             TestDelegate act = () => questionnaire.NewUpdateGroup(groupPublicKey, emptyTitle, Propagate.None, null, null);
@@ -1084,12 +1085,13 @@ namespace Main.Core.Tests.Domain
             }
         }
 
-        [Test]
-        public void NewAddGroup_When_groups_title_is_empty_Then_throws_DomainException()
+        [TestCase("")]
+        [TestCase("   ")]
+        [TestCase("\t")]
+        public void NewAddGroup_When_groups_title_is_empty_or_whitespaces_Then_throws_DomainException(string emptyTitle)
         {
             // arrange
             QuestionnaireAR questionnaire = CreateQuestionnaireAR();
-            string emptyTitle = string.Empty;
 
             // act
             TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), null, emptyTitle, Propagate.None, null, null);
