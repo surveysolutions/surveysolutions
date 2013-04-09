@@ -32,7 +32,8 @@ namespace Main.Core.Domain
             QuestionType.AutoPropagate,
         };
 
-public QuestionnaireAR():base(Guid.NewGuid())
+        public QuestionnaireAR()
+            : base(Guid.NewGuid())
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
@@ -219,7 +220,7 @@ public QuestionnaireAR():base(Guid.NewGuid())
         {
             alias = alias.Trim();
 
-            this.ThrowDomainExceptionIfTitleisEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
             
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
@@ -290,7 +291,7 @@ public QuestionnaireAR():base(Guid.NewGuid())
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
-            this.ThrowDomainExceptionIfTitleisEmpty(title);
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
 
             this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
@@ -619,7 +620,7 @@ public QuestionnaireAR():base(Guid.NewGuid())
                     string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
-        private void ThrowDomainExceptionIfTitleisEmpty(string title)
+        private void ThrowDomainExceptionIfTitleIsEmpty(string title)
         {
            if(string.IsNullOrEmpty(title))
                throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
@@ -679,44 +680,50 @@ public QuestionnaireAR():base(Guid.NewGuid())
         private void ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(
             QuestionType questionType, Option[] options)
         {
-            if (questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption)
+            bool isQuestionWithOptions = questionType == QuestionType.MultyOption || questionType == QuestionType.SingleOption;
+            if (!isQuestionWithOptions)
+                return;
+
+            if (!options.Any())
             {
-                if (!options.Any())
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
-                }
-
-                if (options.Any(x => string.IsNullOrEmpty(x.Value)))
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueRequired, "Answer option value is required");
-                }
-
-                if (options.Any(x => !x.Value.IsInteger()))
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueSpecialCharacters,
-                        "Answer option value should have only number characters");
-                }
-
-                if (options.Select(x => x.Value).Distinct().Count() != options.Count())
-                {
-                    throw new DomainException(
-                        DomainExceptionType.SelectorValueNotUnique,
-                        "Answer option value should have unique in options scope");
-                }
-
-                if (options.Any(x => string.IsNullOrEmpty(x.Title)))
-                {
-                    throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
-                }
-
-                if (options.Select(x => x.Title).Distinct().Count() != options.Count())
-                {
-                    throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
-                }
+                throw new DomainException(
+                    DomainExceptionType.SelectorEmpty, "Question with options should have one option at least");
             }
+
+            if (options.Any(x => string.IsNullOrEmpty(x.Value)))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueRequired, "Answer option value is required");
+            }
+
+            if (options.Any(x => !x.Value.IsInteger()))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueSpecialCharacters,
+                    "Answer option value should have only number characters");
+            }
+
+            if (!AreElementsUnique(options.Select(x => x.Value)))
+            {
+                throw new DomainException(
+                    DomainExceptionType.SelectorValueNotUnique,
+                    "Answer option value should have unique in options scope");
+            }
+
+            if (options.Any(x => string.IsNullOrEmpty(x.Title)))
+            {
+                throw new DomainException(DomainExceptionType.SelectorTextRequired, "Answer title can't be empty");
+            }
+
+            if (!AreElementsUnique(options.Select(x => x.Title)))
+            {
+                throw new DomainException(DomainExceptionType.SelectorTextNotUnique, "Answer title is not unique");
+            }
+        }
+
+        private static bool AreElementsUnique(IEnumerable<string> elements)
+        {
+            return elements.Distinct().Count() == elements.Count();
         }
     }
 }
