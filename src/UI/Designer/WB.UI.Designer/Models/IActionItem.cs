@@ -46,6 +46,11 @@ namespace WB.UI.Designer.Models
         /// </summary>
         bool CanPrint { get; }
 
+        /// <summary>
+        /// Gets a value indicating whether can synchonize.
+        /// </summary>
+        bool CanSynchronize { get; }
+
         #endregion
     }
 }
