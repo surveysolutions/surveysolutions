@@ -9,8 +9,6 @@
 
 using Main.Core.Entities.Extensions;
 
-using Ncqrs.Restoring.EventStapshoot.EventStores;
-
 #if !MONODROID
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Document;
@@ -89,18 +87,15 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
-                                                          new InMemoryEventStore());
             // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
 
-            var bus = new  InProcessEventBus();
+            var bus = new InProcessEventBus(true);
 
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
-                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
+
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
@@ -173,7 +168,6 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
-                                     
             return service;
         }
 
