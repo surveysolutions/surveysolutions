@@ -221,10 +221,13 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
+    <Compile Include="Code\ObjectExtensions.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
+    <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
