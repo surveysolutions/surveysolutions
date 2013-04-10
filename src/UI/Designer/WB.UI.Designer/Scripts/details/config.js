@@ -71,6 +71,10 @@
             loggerTmeout = 2000,
 
             warnings = {
+                propagatedGroupCantBecomeChapter : {
+                    title: 'Cant move',
+                    text:  "Auto propagate group can't become a chapter"
+                },
                 cantMoveQuestionOutsideGroup: {
                     title: 'Cant move',
                     text:  "You can't move question outside any group"
