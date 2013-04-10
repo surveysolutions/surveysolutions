@@ -227,6 +227,8 @@ namespace Main.Core.Domain
         {
             alias = alias.Trim();
 
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
@@ -265,6 +267,20 @@ namespace Main.Core.Domain
                 MaxValue = maxValue ?? 10,
                 Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
             });
+        }
+
+        private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
+        {
+            IEnumerable<IQuestion> questionsWithSameId = this.innerDocument.Find<IQuestion>(question => question.PublicKey == questionId).ToList();
+
+            if (questionsWithSameId.Any())
+            {
+                string lineSeparatedQuestionTitles = string.Join(Environment.NewLine,
+                    questionsWithSameId.Select(question => question.QuestionText ?? "<untitled>"));
+
+                throw new DomainException(DomainExceptionType.QuestionWithSuchIdAlreadyExists,
+                    string.Format("Following questions contain the same ID:{0}{1}", Environment.NewLine, lineSeparatedQuestionTitles));
+            }
         }
 
         public void NewDeleteQuestion(Guid questionId)
