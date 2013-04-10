@@ -6,6 +6,9 @@
 //   The administration controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -32,18 +35,9 @@ namespace WB.UI.Designer.Controllers
     public class AdminController : BaseController
     {
         #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AdminController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        public AdminController(IViewRepository repository, ICommandService commandService)
-            : base(repository, commandService)
+        
+        public AdminController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
+            : base(repository, commandService,userHelper)
         {
         }
 

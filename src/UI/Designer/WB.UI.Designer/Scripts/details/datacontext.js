@@ -59,7 +59,6 @@
                         items[newObj.id()] = newObj;
                     },
                     removeById = function (id) {
-                        console.log(items[id].title());
                         delete items[id];
                     },
                     getLocalById = function (id) {
@@ -112,7 +111,6 @@
             questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
-        console.log(questionnaire);
 
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
@@ -224,6 +222,16 @@
         commands[config.commands.updateQuestion] = function (question) {
             return converQuestionToCommand(question);
         };
+        
+        commands[config.commands.questionMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
+            return command;
+        };
+        
+        commands[config.commands.groupMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
+            return command;
+        };
 
         var converQuestionToCommand = function(question) {
             var command = {
@@ -286,7 +294,6 @@
                         def.resolve(response);
                     },
                     error: function (response, xhr) {
-                        console.log(xhr);
                         if (callbacks && callbacks.error) {
                             callbacks.error(response);
                         }

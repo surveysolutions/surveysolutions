@@ -6,6 +6,10 @@
 //   The questionnaire controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Domain;
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -35,17 +39,8 @@ namespace WB.UI.Designer.Controllers
         // GET: /Questionnaires/
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        public QuestionnaireController(IViewRepository repository, ICommandService commandService)
-            : base(repository, commandService)
+        public QuestionnaireController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
+            : base(repository, commandService,userHelper)
         {
         }
 
@@ -90,11 +85,24 @@ namespace WB.UI.Designer.Controllers
                 {
                     throw new ArgumentNullException("model");
                 }
-
-                this.CommandService.Execute(
-                    new CloneQuestionnaireCommand(
-                        Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
-                return this.RedirectToAction("Index");
+                try
+                {
+                    this.CommandService.Execute(
+                        new CloneQuestionnaireCommand(
+                            Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
+                    return this.RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    if (e.InnerException is DomainException)
+                    {
+                        this.Error(e.InnerException.Message);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
             }
 
             return this.View(model);

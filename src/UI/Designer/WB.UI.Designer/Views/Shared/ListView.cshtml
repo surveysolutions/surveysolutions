@@ -68,12 +68,13 @@
                         var itemType = model.GetLabel();
                         var itemName = Uri.EscapeDataString(model.GetName());
 
-                        if (actionModel.CanEdit)
-                        {
-                                    <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
-                        }
+                                    if (actionModel.CanEdit)
+                                    {
+                                        <li>@Html.ActionLink("Edit", "Edit", controller, routevalues, null)</li>
+                                        <li>@Html.ActionLink("Export to HQ", "Export", "Synchronization", routevalues, null)</li>
+                                    }
 
-                        if (actionModel.CanPreview)
+                                    if (actionModel.CanPreview)
                         {
                                     <li>@Html.ActionLink("Details", "Details", controller, routevalues, null)</li>
                         }

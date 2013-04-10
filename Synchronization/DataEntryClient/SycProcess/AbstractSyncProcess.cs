@@ -118,9 +118,8 @@ namespace DataEntryClient.SycProcess
 
                 syncProcess.Merge(events);
 
-                var statistics = syncProcess.CalculateStatistics();
-
-                this.Invoker.Execute(new PushStatisticsCommand(this.ProcessGuid, statistics));
+                syncProcess.PostProcess();
+               
 
                 syncProcess.Commit();
 
