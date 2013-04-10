@@ -25,13 +25,13 @@ namespace Web.Supervisor.Controllers
         }
 
         #region Import from new designer
-
+        [Authorize]
         [AcceptVerbs(HttpVerbs.Get)]
         public ActionResult Import()
         {
             return this.View("NewViewTestUploadFile");
         }
-
+        [Authorize]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Import(HttpPostedFileBase uploadFile)
         {
