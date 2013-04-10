@@ -709,7 +709,7 @@ namespace Main.Core.Domain
                     questionsWithSameId.Select(question => question.QuestionText ?? "<untitled>"));
 
                 throw new DomainException(DomainExceptionType.QuestionWithSuchIdAlreadyExists,
-                    string.Format("Following questions contain the same ID:{0}{1}", Environment.NewLine, lineSeparatedQuestionTitles));
+                    string.Format("Following questions contain the same ID {0}:{1}{2}", questionId, Environment.NewLine, lineSeparatedQuestionTitles));
             }
         }
     }
