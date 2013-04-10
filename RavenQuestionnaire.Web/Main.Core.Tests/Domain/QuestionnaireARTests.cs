@@ -409,6 +409,22 @@ namespace Main.Core.Tests.Domain
             Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithSuchIdAlreadyExists));
         }
 
+        [Test]
+        public void AddGroup_When_questionnaire_contains_group_with_same_id_Then_DomainException_with_error_type_GroupWithSuchIdAlreadyExists_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewAddGroup(groupId, null, "Group 2", Propagate.None, null, null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupWithSuchIdAlreadyExists));
+        }
+
         #endregion // Uniqueness
 
         [Test]

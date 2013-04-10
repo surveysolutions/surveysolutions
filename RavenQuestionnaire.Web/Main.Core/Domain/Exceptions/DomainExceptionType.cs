@@ -122,5 +122,7 @@ namespace Main.Core.Domain
         NotAllowedQuestionType,
 
         QuestionWithSuchIdAlreadyExists,
+
+        GroupWithSuchIdAlreadyExists,
     }
 }
