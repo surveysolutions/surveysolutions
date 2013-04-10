@@ -416,7 +416,7 @@ namespace Main.Core.Domain
             question.AddCard(newImage);
         }
 
-        protected void OnNewGroupAdded(NewGroupAdded e)
+        protected internal void OnNewGroupAdded(NewGroupAdded e)
         {
             var group = new Group();
             group.Title = e.GroupText;
@@ -427,7 +427,7 @@ namespace Main.Core.Domain
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
-        protected void OnNewQuestionAdded(NewQuestionAdded e)
+        protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question = new CompleteQuestionFactory().Create(e);
             if (question == null)
@@ -708,11 +708,10 @@ namespace Main.Core.Domain
                 elementId: questionId,
                 exceptionType: DomainExceptionType.QuestionWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("Cannot add new question because following question(s) contain the same ID {0}:{1}{2}",
+                    elementsWithSameId => string.Format("One or more question(s) with same ID {0} already exist:{1}{2}",
                         questionId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
-
         }
 
         private void ThrowDomainExceptionIfGroupAlreadyExists(Guid groupId)
@@ -721,7 +720,7 @@ namespace Main.Core.Domain
                 elementId: groupId,
                 exceptionType: DomainExceptionType.GroupWithSuchIdAlreadyExists,
                 getExceptionDescription:
-                    elementsWithSameId => string.Format("Cannot add new group because following group(s) contain the same ID {0}:{1}{2}",
+                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
                         groupId,
                         Environment.NewLine,
                         string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));

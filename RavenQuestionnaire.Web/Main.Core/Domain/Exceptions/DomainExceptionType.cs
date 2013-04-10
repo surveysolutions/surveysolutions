@@ -124,5 +124,9 @@ namespace Main.Core.Domain
         QuestionWithSuchIdAlreadyExists,
 
         GroupWithSuchIdAlreadyExists,
+
+        MoreThanOneQuestionsWithSuchIdExists,
+
+        MoreThanOneGroupsWithSuchIdExists,
     }
 }
