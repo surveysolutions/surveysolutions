@@ -269,20 +269,6 @@ namespace Main.Core.Domain
             });
         }
 
-        private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
-        {
-            IEnumerable<IQuestion> questionsWithSameId = this.innerDocument.Find<IQuestion>(question => question.PublicKey == questionId).ToList();
-
-            if (questionsWithSameId.Any())
-            {
-                string lineSeparatedQuestionTitles = string.Join(Environment.NewLine,
-                    questionsWithSameId.Select(question => question.QuestionText ?? "<untitled>"));
-
-                throw new DomainException(DomainExceptionType.QuestionWithSuchIdAlreadyExists,
-                    string.Format("Following questions contain the same ID:{0}{1}", Environment.NewLine, lineSeparatedQuestionTitles));
-            }
-        }
-
         public void NewDeleteQuestion(Guid questionId)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
@@ -711,6 +697,20 @@ namespace Main.Core.Domain
         private static bool AreElementsUnique(IEnumerable<string> elements)
         {
             return elements.Distinct().Count() == elements.Count();
+        }
+
+        private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
+        {
+            IEnumerable<IQuestion> questionsWithSameId = this.innerDocument.Find<IQuestion>(question => question.PublicKey == questionId).ToList();
+
+            if (questionsWithSameId.Any())
+            {
+                string lineSeparatedQuestionTitles = string.Join(Environment.NewLine,
+                    questionsWithSameId.Select(question => question.QuestionText ?? "<untitled>"));
+
+                throw new DomainException(DomainExceptionType.QuestionWithSuchIdAlreadyExists,
+                    string.Format("Following questions contain the same ID:{0}{1}", Environment.NewLine, lineSeparatedQuestionTitles));
+            }
         }
     }
 }
