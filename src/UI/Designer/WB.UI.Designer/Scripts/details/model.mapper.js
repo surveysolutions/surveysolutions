@@ -26,7 +26,6 @@
                 return groups;
             },
             getAllQuestions = function (questionnaire) {
-                console.log(questionnaire);
                 var questions = [];
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {

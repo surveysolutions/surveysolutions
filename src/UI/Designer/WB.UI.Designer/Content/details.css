@@ -699,3 +699,10 @@ h1 {
     border: 1px solid #CCCCCC;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
 }
+a.btn.btn-help {
+    border-radius: 16px 16px 16px 16px;
+    padding: 0 3px;
+}
+.row-fluid .btn-group {
+    margin-bottom: 10px;
+}
