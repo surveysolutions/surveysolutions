@@ -45,6 +45,9 @@
                  getDtoId: function (dto) { return dto.PublicKey; },
                  fromDto: function (dto, item) {
                      item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title);
+                     item.childrenID(_.map(dto.Children, function (c) {
+                         return { type: c.__type, id: c.PublicKey };
+                     }));
                      return item;
                  }
              },
