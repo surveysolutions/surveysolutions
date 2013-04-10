@@ -168,7 +168,9 @@ namespace WB.UI.Designer
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            CanDelete = UserHelperInstance.IsAdmin, 
-                           CanEdit = false, 
+                           CanExport = true,
+                           CanEdit = false,
+                           CanSynchronize = UserHelperInstance.IsAdmin,
                            CreatedBy =
                                createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
                        };
@@ -193,7 +195,9 @@ namespace WB.UI.Designer
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            CanDelete = true, 
-                           CanEdit = true
+                           CanEdit = true,
+                           CanExport = true,
+                           CanSynchronize = UserHelperInstance.IsAdmin
                        };
         }
 
