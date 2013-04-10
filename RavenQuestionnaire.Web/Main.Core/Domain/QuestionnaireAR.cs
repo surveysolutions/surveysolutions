@@ -7,6 +7,7 @@ namespace Main.Core.Domain
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
@@ -160,6 +161,8 @@ namespace Main.Core.Domain
         public void NewAddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
         {
+            this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
+
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
@@ -701,16 +704,37 @@ namespace Main.Core.Domain
 
         private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
         {
-            IEnumerable<IQuestion> questionsWithSameId = this.innerDocument.Find<IQuestion>(question => question.PublicKey == questionId).ToList();
+            this.ThrowDomainExceptionIfElementAlreadyExists<IQuestion>(
+                elementId: questionId,
+                exceptionType: DomainExceptionType.QuestionWithSuchIdAlreadyExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("Cannot add new question because following question(s) contain the same ID {0}:{1}{2}",
+                        questionId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
 
-            if (questionsWithSameId.Any())
-            {
-                string lineSeparatedQuestionTitles = string.Join(Environment.NewLine,
-                    questionsWithSameId.Select(question => question.QuestionText ?? "<untitled>"));
+        }
 
-                throw new DomainException(DomainExceptionType.QuestionWithSuchIdAlreadyExists,
-                    string.Format("Following questions contain the same ID {0}:{1}{2}", questionId, Environment.NewLine, lineSeparatedQuestionTitles));
-            }
+        private void ThrowDomainExceptionIfGroupAlreadyExists(Guid groupId)
+        {
+            this.ThrowDomainExceptionIfElementAlreadyExists<IGroup>(
+                elementId: groupId,
+                exceptionType: DomainExceptionType.GroupWithSuchIdAlreadyExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("Cannot add new group because following group(s) contain the same ID {0}:{1}{2}",
+                        groupId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
+        }
+
+        private void ThrowDomainExceptionIfElementAlreadyExists<T>(
+            Guid elementId, DomainExceptionType exceptionType, Func<IEnumerable<T>, string> getExceptionDescription)
+            where T : class, IComposite
+        {
+            IEnumerable<T> elementsWithSameId = this.innerDocument.Find<T>(element => element.PublicKey == elementId).ToList();
+
+            if (elementsWithSameId.Any())
+                throw new DomainException(exceptionType, getExceptionDescription(elementsWithSameId));
         }
     }
 }
