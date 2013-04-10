@@ -22,8 +22,6 @@
                 questionnaire(datacontext.questionnaire);
                 calcStatistics();
                 $('#groups .body').css('top', ($('#groups .title').outerHeight() + 'px'));
-
-
             }
             if (!_.isUndefined(selectedGroup())) {
                 selectedGroup().isSelected(false);
@@ -263,6 +261,12 @@
                 return;
             }
             var target = datacontext.groups.getLocalById(toId);
+            
+            if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.propagatedGroupCantBecomeChapter);
+                return;
+            }
             
             if (isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
                 arg.cancelDrop = true;
