@@ -279,7 +279,7 @@ namespace WB.UI.Designer.Controllers
         [RecaptchaControlMvc.CaptchaValidatorAttribute]
         public ActionResult Register(RegisterModel model, bool captchaValid)
         {
-            if (!captchaValid)
+            if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
             {
                 this.Error("You did not type the verification word correctly. Please try again.");
             }
