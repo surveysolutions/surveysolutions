@@ -389,6 +389,27 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+        #region Uniqueness
+
+        [Test]
+        public void AddQuestion_When_questionnaire_contains_question_with_same_id_Then_DomainException_with_error_type_QuestionWithSuchIdAlreadyExists_should_be_thrown()
+        {
+            // arrange
+            Guid existingQuestionId = Guid.Parse("11111111111111111111111111111111");
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId: existingQuestionId, groupId: groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewAddQuestion(existingQuestionId, groupId,
+                "What is your last name?", QuestionType.Text, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[]{}, Order.AsIs, null, new Guid[]{});
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithSuchIdAlreadyExists));
+        }
+
+        #endregion // Uniqueness
 
         [Test]
         public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
