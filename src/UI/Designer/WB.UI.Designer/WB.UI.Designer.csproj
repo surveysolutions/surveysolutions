@@ -374,6 +374,7 @@
     </Content>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Slava.Designer.Web.config">
       <SubType>Designer</SubType>
@@ -385,6 +386,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Stacy.Designer.Web.config" />
+    <Content Include="Configuration\Roma.Designer.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
