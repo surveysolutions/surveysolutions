@@ -425,7 +425,7 @@ namespace WB.UI.Designer.Providers.CQRS
                         comment: account.Comment);
                     break;
                 case MembershipEventType.UpdateOnlineState:
-                    command = new ChangeOnlineAccountCommand(accountPublicKey);
+                    //command = new ChangeOnlineAccountCommand(accountPublicKey);
                     break;
                 case MembershipEventType.UserValidated:
                     command = new ValidateAccountCommand(accountPublicKey);

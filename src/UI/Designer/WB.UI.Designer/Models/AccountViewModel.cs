@@ -61,14 +61,14 @@ namespace WB.UI.Designer.Models
         /// <summary>
         /// Gets or sets a value indicating whether is online.
         /// </summary>
-        [Display(Name = "Is Online", Order = 7)]
-        public bool IsOnline { get; set; }
+        //[Display(Name = "Is Online", Order = 7)]
+        //public bool IsOnline { get; set; }
 
         /// <summary>
         /// Gets or sets the last activity date.
         /// </summary>
-        [Display(Name = "Last Activity Date", Order = 8)]
-        public string LastActivityDate { get; set; }
+        //[Display(Name = "Last Activity Date", Order = 8)]
+        //public string LastActivityDate { get; set; }
 
         /// <summary>
         /// Gets or sets the last lockout date.
