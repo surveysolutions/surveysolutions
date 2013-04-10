@@ -152,7 +152,6 @@
     <Compile Include="Binding\GenericBinderResolver.cs" />
     <Compile Include="Export\csv\CSVExporter.cs" />
     <Compile Include="Export\DataExport.cs" />
-    <Compile Include="Export\ZipFileData.cs" />
     <Compile Include="Helpers\ClientIdHelper.cs" />
     <Compile Include="Helpers\EntityNames.cs" />
     <Compile Include="Helpers\GlobalInfo.cs" />

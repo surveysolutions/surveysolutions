@@ -36,15 +36,9 @@ namespace DataEntryClientTests.Stubs
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The calculate statistics.
-        /// </summary>
-        /// <returns>
-        /// List of stat items
-        /// </returns>
-        public List<UserSyncProcessStatistics> CalculateStatistics()
+        public void PostProcess()
         {
-            return new List<UserSyncProcessStatistics>();
+            
         }
 
         /// <summary>

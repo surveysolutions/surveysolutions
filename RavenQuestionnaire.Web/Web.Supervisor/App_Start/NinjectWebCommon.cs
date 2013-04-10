@@ -4,12 +4,14 @@ using System.Web.Configuration;
 using System.Web.Mvc;
 using Main.Core;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
-
-
+using WB.Core.Questionnaire.ImportService;
+using WB.Core.Questionnaire.ImportService.Commands;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
@@ -74,7 +76,10 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
-            
+
+            #warning Nastya: invent a new way of domain service registration
+            var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
+            commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand), new DefaultImportService());
             // SuccessMarker.Start(kernel);
             return kernel;
         }

@@ -11,11 +11,6 @@ namespace Main.Core.Commands
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
     using Ncqrs.Eventing.Storage;
-#if MONODROID
-	using AndroidLogger;
-#else
-    using NLog;
-#endif
 
     /// <summary>
     /// Repeates command execution until success.
@@ -32,10 +27,11 @@ namespace Main.Core.Commands
         /// <summary>
         /// The logger.
         /// </summary>
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
-		private readonly ILog logger = LogManager.GetLogger(typeof(ConcurrencyResolveCommandService));
+		private readonly AndroidLogger.ILog logger = AndroidLogger.LogManager.GetLogger(typeof(ConcurrencyResolveCommandService));
 #else
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 #endif
         
         #endregion

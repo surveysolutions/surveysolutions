@@ -32,7 +32,7 @@
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidLinkSkip />
-    <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+    <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <BundleAssemblies>False</BundleAssemblies>
   </PropertyGroup>

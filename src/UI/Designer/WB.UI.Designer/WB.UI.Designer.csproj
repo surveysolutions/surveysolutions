@@ -80,6 +80,10 @@
     <Reference Include="ICSharpCode.SharpZipLib">
       <HintPath>..\..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
@@ -221,6 +225,7 @@
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
+    <Compile Include="Controllers\SynchronizationController.cs" />
     <Compile Include="Filters\FilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -278,6 +283,7 @@
     <Compile Include="Utils\IExpressionReplacer.cs" />
     <Compile Include="Utils\JsonWithTypeResult.cs" />
     <Compile Include="Utils\TypeResolver.cs" />
+    <Compile Include="Utils\ZipUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Readme\Elmah.txt" />
@@ -378,6 +384,7 @@
     <Content Include="Configuration\Dev-Stable.Designer.Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Configuration\Stacy.Designer.Web.config" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="Scripts\amplify.js" />
     <Content Include="Scripts\amplify.min.js" />
@@ -418,7 +425,6 @@
     <Content Include="Scripts\infuser.min.gz.js" />
     <Content Include="Scripts\infuser.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
-    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
@@ -430,6 +436,7 @@
     <Content Include="Scripts\jquery.pnotify.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
@@ -525,6 +532,7 @@
     <Content Include="Views\Shared\DisplayTemplates\Admin_QiestionnaireListView.cshtml" />
     <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
+    <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -540,6 +548,14 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
+      <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
+      <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>

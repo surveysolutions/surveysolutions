@@ -7,8 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Domain.Storage;
-using Ncqrs.Restoring.EventStapshoot;
+using Main.Core.Entities.Extensions;
+
 using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 #if !MONODROID
@@ -52,6 +52,13 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
     /// </summary>
     public static class NcqrsInit
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(NcqrsInit));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
@@ -118,6 +125,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// </exception>
         public static void RebuildReadLayer()
         {
+            Logger.Info("Read layer rebuilding started.");
+
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
             {
@@ -136,6 +145,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
 
             isReadLayerBuilt = true;
+
+            Logger.Info("Read layer rebuilding finished.");
         }
 
 
@@ -162,8 +173,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
-            service.RegisterExecutor(typeof (CreateSnapshotForAR),
-                                     new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
+                                     
             return service;
         }
 

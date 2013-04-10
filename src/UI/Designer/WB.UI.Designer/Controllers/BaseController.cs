@@ -6,6 +6,9 @@
 //   The base controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer.Controllers
 {
     using System.Web.Mvc;
@@ -33,30 +36,18 @@ namespace WB.UI.Designer.Controllers
         /// </summary>
         protected readonly IViewRepository Repository;
 
+
+        protected readonly IUserHelper UserHelper;
+
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseController"/> class.
-        /// </summary>
-        public BaseController()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BaseController"/> class.
-        /// </summary>
-        /// <param name="repository">
-        /// The repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command service.
-        /// </param>
-        public BaseController(IViewRepository repository, ICommandService commandService)
+        public BaseController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
         {
             this.Repository = repository;
             this.CommandService = commandService;
+            this.UserHelper = userHelper;
         }
 
         #endregion

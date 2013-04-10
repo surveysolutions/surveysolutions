@@ -284,6 +284,7 @@
     <Compile Include="Entities\SubEntities\DateTimeCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerStorageStub.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizer_HandleQuestionChanged_Test.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />

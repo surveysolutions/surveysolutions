@@ -6,6 +6,11 @@
 //   The account controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.View;
+using Ncqrs.Commanding.ServiceModel;
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer.Controllers
 {
     using System;
@@ -28,6 +33,10 @@ namespace WB.UI.Designer.Controllers
     public class AccountController : BaseController
     {
         #region Public Methods and Operators
+
+        public AccountController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper) : base(repository, commandService, userHelper)
+        {
+        }
 
         /// <summary>
         ///     The confirmation failure.

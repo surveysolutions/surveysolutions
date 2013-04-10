@@ -73,9 +73,9 @@
       <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Questionnaire.Core.Web\Questionnaire.Core.Web.csproj">
-      <Project>{8e2698a4-1286-4534-bd2c-04c76ae2da5b}</Project>
-      <Name>Questionnaire.Core.Web</Name>
+    <ProjectReference Include="..\..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
+      <Project>{ad672732-3d12-48bc-8612-09547f0065d3}</Project>
+      <Name>SynchronizationMessages</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

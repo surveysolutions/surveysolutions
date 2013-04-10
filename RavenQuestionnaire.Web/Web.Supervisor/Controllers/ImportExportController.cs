@@ -6,6 +6,13 @@
 //   The import export controller.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ionic.Zip;
+using Main.Core.Documents;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
+using WB.Core.Questionnaire.ImportService.Commands;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -45,7 +52,10 @@ namespace Web.Supervisor.Controllers
     public class ImportExportController : AsyncController
     {
         #region Fields
-
+        /// <summary>
+        /// Global info object
+        /// </summary>
+        private readonly IGlobalInfoProvider globalInfo;
         /// <summary>
         /// Data exporter
         /// </summary>
@@ -65,24 +75,14 @@ namespace Web.Supervisor.Controllers
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ImportExportController"/> class.
-        /// </summary>
-        /// <param name="exporter">
-        /// The exporter.
-        /// </param>
-        /// <param name="viewRepository">
-        /// The view repository
-        /// </param>
-        /// <param name="syncProcessFactory">
-        /// The sync Process Factory.
-        /// </param>
+        
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, IGlobalInfoProvider globalInfo)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
+            this.globalInfo = globalInfo;
         }
 
         #endregion
@@ -609,5 +609,39 @@ namespace Web.Supervisor.Controllers
         }
 
         #endregion
+
+
+        #region Import from new designer
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult NewImport()
+        {
+            return this.View("NewViewTestUploadFile");
+        }
+
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult NewImport(HttpPostedFileBase uploadFile)
+        {
+            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
+            if (zipData == null || zipData.Count == 0)
+            {
+                return null;
+            }
+            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
+            NcqrsEnvironment.Get<ICommandService>()
+                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
+
+
+            return this.RedirectToAction("Index", "Survey");
+        }
+
+        protected T DesserializeString<T>(String data)
+        {
+            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+
+            return JsonConvert.DeserializeObject<T>(data, settings);
+        }
+        #endregion
+
     }
 }

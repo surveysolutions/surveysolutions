@@ -235,7 +235,7 @@ namespace DataEntryClientTests.SycProcess
 
             syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(1));
 
-            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Exactly(1));
+            syncProcessor.Verify(x => x.PostProcess(), Times.Exactly(1));
 
             syncProcessor.Verify(x => x.Commit(), Times.Exactly(1));
         }
@@ -288,7 +288,7 @@ namespace DataEntryClientTests.SycProcess
 
             syncProcessor.Verify(x => x.Merge(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Never());
 
-            syncProcessor.Verify(x => x.CalculateStatistics(), Times.Never());
+            syncProcessor.Verify(x => x.PostProcess(), Times.Never());
 
             syncProcessor.Verify(x => x.Commit(), Times.Never());
         }

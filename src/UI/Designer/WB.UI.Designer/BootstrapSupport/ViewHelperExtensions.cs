@@ -10,6 +10,9 @@ using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Practices.ServiceLocation;
+using NinjectAdapter;
+using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.BootstrapSupport
 {
@@ -17,6 +20,13 @@ namespace WB.UI.Designer.BootstrapSupport
 
     public static class DefaultScaffoldingExtensions
     {
+        #warning remove this shit
+        private static IUserHelper UserHelperInstance
+        {
+            get { return Code.UserHelper.Instance; }
+        }
+
+
         public static string GetControllerName(this Type controllerType)
         {
             return controllerType.Name.Replace("Controller", String.Empty);
@@ -29,6 +39,7 @@ namespace WB.UI.Designer.BootstrapSupport
 
         public static PropertyInfo[] VisibleProperties(this IEnumerable Model)
         {
+            
             var elementType = Model.GetType().GetElementType() ?? Model.GetType().GetGenericArguments()[0];
             var actionProperties = typeof(IActionItem).GetProperties();
             return
@@ -37,7 +48,7 @@ namespace WB.UI.Designer.BootstrapSupport
                                info =>
                                (info.Name != elementType.IdentifierPropertyName())
                                && actionProperties.All(x => x.Name != info.Name)
-                               && (UserHelper.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
+                               && (UserHelperInstance.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
                            .OrderedByDisplayAttr()
                            .ToArray();
         }
