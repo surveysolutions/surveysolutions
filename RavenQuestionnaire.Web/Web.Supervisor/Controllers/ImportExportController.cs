@@ -52,10 +52,7 @@ namespace Web.Supervisor.Controllers
     public class ImportExportController : AsyncController
     {
         #region Fields
-        /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
+       
         /// <summary>
         /// Data exporter
         /// </summary>
@@ -77,12 +74,11 @@ namespace Web.Supervisor.Controllers
 
         
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, IGlobalInfoProvider globalInfo)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
-            this.globalInfo = globalInfo;
         }
 
         #endregion
@@ -611,37 +607,7 @@ namespace Web.Supervisor.Controllers
         #endregion
 
 
-        #region Import from new designer
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult NewImport()
-        {
-            return this.View("NewViewTestUploadFile");
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult NewImport(HttpPostedFileBase uploadFile)
-        {
-            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
-            if (zipData == null || zipData.Count == 0)
-            {
-                return null;
-            }
-            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
-
-
-            return this.RedirectToAction("Index", "Survey");
-        }
-
-        protected T DesserializeString<T>(String data)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-
-            return JsonConvert.DeserializeObject<T>(data, settings);
-        }
-        #endregion
+       
 
     }
 }
