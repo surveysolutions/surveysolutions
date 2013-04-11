@@ -37,10 +37,9 @@ namespace WB.UI.Designer.Utils
             var map = new Dictionary<string, string>();
             foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
             {
-                if (string.IsNullOrWhiteSpace(pair.Value) || !map.ContainsKey(pair.Value))
-                {
-                    map.Add(pair.Value, pair.Key.ToString());
-                }
+                if (string.IsNullOrWhiteSpace(pair.Value) || map.ContainsKey(pair.Value))
+                    continue;
+                map.Add(pair.Value, pair.Key.ToString());
             }
             return MakeSubstitutions(expression, map);
         }
@@ -63,10 +62,9 @@ namespace WB.UI.Designer.Utils
             foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
             {
                 var key = pair.Key.ToString();
-                if (string.IsNullOrWhiteSpace(key) || !map.ContainsKey(key))
-                {
-                    map.Add(key, pair.Value);
-                }
+                if (string.IsNullOrWhiteSpace(key) || map.ContainsKey(key))
+                    continue;
+                map.Add(key, pair.Value);
             }
             return MakeSubstitutions(expression, map);
         }
