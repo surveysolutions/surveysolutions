@@ -282,6 +282,8 @@
     <Compile Include="Domain\Configuration.cs" />
     <Compile Include="Domain\QuestionnaireARTest.cs" />
     <Compile Include="Domain\QuestionnaireARTests.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
     <Compile Include="Domain\UserARTests.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
