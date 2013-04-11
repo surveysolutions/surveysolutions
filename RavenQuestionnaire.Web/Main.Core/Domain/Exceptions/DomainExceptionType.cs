@@ -14,6 +14,8 @@ namespace Main.Core.Domain
     /// </summary>
     public enum DomainExceptionType
     {
+        AutoPropagateGroupCantHaveChildGroups,
+
         /// <summary>
         /// The trigger links to not existing group.
         /// </summary>
