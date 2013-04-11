@@ -42,6 +42,9 @@ namespace WB.UI.Designer
 
             #region [Scripts]
 
+            bundles.Add(new ScriptBundle("~/simplepage").Include("~/Scripts/jquery-{version}.js",
+                                                                 "~/Scripts/bootstrap.js"));
+
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
                     "~/Scripts/jquery-{version}.js", 
