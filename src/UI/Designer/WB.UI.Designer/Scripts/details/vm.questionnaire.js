@@ -304,11 +304,12 @@
                            datacontext.questionnaire.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
                            chapters(datacontext.groups.getChapters());
                        } else {
-                           item.level(target.level() + 1);
+                           if (moveItemType == "group") {
+                               item.level(target.level() + 1);
+                           }
                            target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
                            target.fillChildren();
                        }
-
                    },
                    error: function (d) {
                        arg.cancelDrop = true;
