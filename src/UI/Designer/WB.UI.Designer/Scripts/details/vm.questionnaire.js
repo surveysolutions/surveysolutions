@@ -254,6 +254,7 @@
             var toId = arg.targetParent.id;
             var moveItemType = arg.item.type().replace('View','').toLowerCase();
             var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
+            var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
             
             if (isDropedInChapter && moveItemType == "question") {
                 arg.cancelDrop = true;
@@ -261,6 +262,7 @@
                 return;
             }
             var target = datacontext.groups.getLocalById(toId);
+            var source = datacontext.groups.getLocalById(fromId);
             
             if (isDropedInChapter && moveItemType == "group" && arg.item.gtype() !== "None") {
                 arg.cancelDrop = true;
@@ -273,23 +275,46 @@
                 config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                 return;
             }
-            
+
+            var item = arg.item;
+
             var moveCommand = {
                 targetGroupId: toId,
                 targetIndex: arg.targetIndex
             };
-            moveCommand[moveItemType + 'Id'] = arg.item.id();
+            moveCommand[moveItemType + 'Id'] = item.id();
             
             datacontext.sendCommand(
                config.commands[moveItemType + "Move"],
                moveCommand,
                {
                    success: function (d) {
+                       if (isDraggedFromChapter) {
+                           var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
+                           datacontext.questionnaire.childrenID.remove(child);
+                           chapters(datacontext.groups.getChapters());
+                       } else {
+                           var child = _.find(source.childrenID(), { 'id': item.id() });
+                           source.childrenID.remove(child);
+                           source.fillChildren();
+                       }
+                       
+                       if (isDropedInChapter) {
+                           item.level(0);
+                           datacontext.questionnaire.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
+                           chapters(datacontext.groups.getChapters());
+                       } else {
+                           if (moveItemType == "group") {
+                               item.level(target.level() + 1);
+                           }
+                           target.childrenID.splice(arg.targetIndex, 0, { type: item.type(), id: item.id() });
+                           target.fillChildren();
+                       }
                    },
                    error: function (d) {
+                       arg.cancelDrop = true;
                    }
                });
-            
         },
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);

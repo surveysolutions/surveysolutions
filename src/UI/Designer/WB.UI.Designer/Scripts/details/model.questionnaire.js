@@ -6,7 +6,8 @@
                 var self = this;
                 self.id = ko.observable();
                 self.title = ko.observable();
-
+                self.childrenID = ko.observableArray();
+                
                 self.isNullo = false;
                 self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
 
