@@ -5,6 +5,7 @@ using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events.Questionnaire;
+using Main.Core.Tests.Utils;
 using NUnit.Framework;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
@@ -1115,6 +1116,40 @@ namespace Main.Core.Tests.Domain
 
                 // assert
                 Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).GroupText, Is.EqualTo(notEmptyNewTitle));
+            }
+        }
+
+        [Test]
+        public void NewAddGroup_When_parent_group_has_AutoPropagate_propagation_kind_Then_throws_DomainException()
+        {
+            // arrange
+            var parentAutoPropagateGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+            questionnaire.AddChapter().AddGroup(parentAutoPropagateGroupId, propagationKind: Propagate.AutoPropagated);
+
+            // act
+            TestDelegate act = () => questionnaire.NewAddGroup(Guid.NewGuid(), parentAutoPropagateGroupId, "Title", Propagate.None, null, null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups));
+        }
+
+        [Test]
+        public void NewAddGroup_When_parent_group_is_non_propagated_Then_raised_NewAddGroup_event_contains_regular_group_id_as_parent()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var parentRegularGroupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+                questionnaire.AddChapter().AddGroup(parentRegularGroupId, propagationKind: Propagate.None);
+
+                // act
+                questionnaire.NewAddGroup(Guid.NewGuid(), parentRegularGroupId, "Title", Propagate.None, null, null);
+
+                // assert
+                Assert.That(GetSingleEvent<NewGroupAdded>(eventContext).ParentGroupPublicKey, Is.EqualTo(parentRegularGroupId));
             }
         }
 
