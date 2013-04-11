@@ -120,5 +120,13 @@ namespace Main.Core.Domain
         SelectorTextNotUnique,
 
         NotAllowedQuestionType,
+
+        QuestionWithSuchIdAlreadyExists,
+
+        GroupWithSuchIdAlreadyExists,
+
+        MoreThanOneQuestionsWithSuchIdExists,
+
+        MoreThanOneGroupsWithSuchIdExists,
     }
 }

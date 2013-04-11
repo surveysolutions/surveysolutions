@@ -7,6 +7,7 @@ namespace Main.Core.Domain
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.Extensions;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Complete;
@@ -160,6 +161,8 @@ namespace Main.Core.Domain
         public void NewAddGroup(Guid groupId,
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
         {
+            this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
+
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
             this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
@@ -178,6 +181,7 @@ namespace Main.Core.Domain
         public void NewDeleteGroup(Guid groupId)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+            this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             this.ApplyEvent(new GroupDeleted(groupId));
         }
@@ -185,6 +189,7 @@ namespace Main.Core.Domain
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+            this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             if (targetGroupId.HasValue)
             {
@@ -203,6 +208,7 @@ namespace Main.Core.Domain
             string title, Propagate propagationKind, string description, string condition)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+            this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
@@ -226,6 +232,8 @@ namespace Main.Core.Domain
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             alias = alias.Trim();
+
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
             
@@ -270,6 +278,7 @@ namespace Main.Core.Domain
         public void NewDeleteQuestion(Guid questionId)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
 
             this.ApplyEvent(new QuestionDeleted(questionId));
         }
@@ -277,6 +286,8 @@ namespace Main.Core.Domain
         public void MoveQuestion(Guid questionId, Guid targetGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
+
             this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId);
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -294,6 +305,7 @@ namespace Main.Core.Domain
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
+            this.ThrowDomainExceptionIfMoreThanOneQuestionExists(questionId);
           
             alias = alias.Trim();
 
@@ -411,7 +423,7 @@ namespace Main.Core.Domain
             question.AddCard(newImage);
         }
 
-        protected void OnNewGroupAdded(NewGroupAdded e)
+        protected internal void OnNewGroupAdded(NewGroupAdded e)
         {
             var group = new Group();
             group.Title = e.GroupText;
@@ -422,7 +434,7 @@ namespace Main.Core.Domain
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
-        protected void OnNewQuestionAdded(NewQuestionAdded e)
+        protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question = new CompleteQuestionFactory().Create(e);
             if (question == null)
@@ -695,6 +707,70 @@ namespace Main.Core.Domain
         private static bool AreElementsUnique(IEnumerable<string> elements)
         {
             return elements.Distinct().Count() == elements.Count();
+        }
+
+        private void ThrowDomainExceptionIfQuestionAlreadyExists(Guid questionId)
+        {
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IQuestion>(
+                elementId: questionId,
+                expectedCount: 0,
+                exceptionType: DomainExceptionType.QuestionWithSuchIdAlreadyExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("One or more question(s) with same ID {0} already exist:{1}{2}",
+                        questionId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
+        }
+
+        private void ThrowDomainExceptionIfGroupAlreadyExists(Guid groupId)
+        {
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IGroup>(
+                elementId: groupId,
+                expectedCount: 0,
+                exceptionType: DomainExceptionType.GroupWithSuchIdAlreadyExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
+                        groupId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
+        }
+
+        private void ThrowDomainExceptionIfMoreThanOneQuestionExists(Guid questionId)
+        {
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IQuestion>(
+                elementId: questionId,
+                expectedCount: 1,
+                exceptionType: DomainExceptionType.MoreThanOneQuestionsWithSuchIdExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("One or more question(s) with same ID {0} already exist:{1}{2}",
+                        questionId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(question => question.QuestionText ?? "<untitled>"))));
+        }
+
+        private void ThrowDomainExceptionIfMoreThanOneGroupExists(Guid groupId)
+        {
+            this.ThrowDomainExceptionIfElementCountIsMoreThanExpected<IGroup>(
+                elementId: groupId,
+                expectedCount: 1,
+                exceptionType: DomainExceptionType.MoreThanOneGroupsWithSuchIdExists,
+                getExceptionDescription:
+                    elementsWithSameId => string.Format("One or more group(s) with same ID {0} already exist:{1}{2}",
+                        groupId,
+                        Environment.NewLine,
+                        string.Join(Environment.NewLine, elementsWithSameId.Select(group => group.Title ?? "<untitled>"))));
+        }
+
+        private void ThrowDomainExceptionIfElementCountIsMoreThanExpected<T>(Guid elementId, int expectedCount,
+            DomainExceptionType exceptionType, Func<IEnumerable<T>, string> getExceptionDescription)
+            where T : class, IComposite
+        {
+            List<T> elementsWithSameId = this.innerDocument.Find<T>(element => element.PublicKey == elementId).ToList();
+
+            if (elementsWithSameId.Count > expectedCount)
+            {
+                throw new DomainException(exceptionType, getExceptionDescription(elementsWithSameId));
+            }
         }
     }
 }
