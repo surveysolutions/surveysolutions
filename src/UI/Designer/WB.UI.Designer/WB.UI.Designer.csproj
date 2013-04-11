@@ -541,7 +541,9 @@
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
       <SubType>Designer</SubType>

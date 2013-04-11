@@ -8,6 +8,8 @@ namespace WB.UI.Designer.Models
             CanDelete = false;
             CanEdit = false;
             CanPreview = false;
+            CanExport = false;
+            CanSynchronize = false;
         }
 
         /// <summary>
@@ -39,13 +41,12 @@ namespace WB.UI.Designer.Models
         /// <summary>
         ///     Gets a value indicating whether can export.
         /// </summary>
-        public virtual bool CanExport
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public virtual bool CanExport { get; set; }
+
+        /// <summary>
+        ///     Gets a value indicating whether can synchronize.
+        /// </summary>
+        public virtual bool CanSynchronize { get; set; }
 
         /// <summary>
         ///     Gets a value indicating whether can print.
