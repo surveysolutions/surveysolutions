@@ -73,7 +73,7 @@ namespace WB.UI.Designer.App_Start
             MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
 
             kernel.Load(new DesignerRegistry(
-                            repositoryPath: WebConfigurationManager.AppSettings["Raven.DocumentStore"], isEmbeded: false));
+                            repositoryPath: AppSettings.Instance.RavenDocumentStore, isEmbeded: false));
 
             #warning TLK: move NCQRS initialization to Global.asax
             NcqrsInit.Init(kernel);
