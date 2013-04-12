@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace WB.UI.Designer.Models
 {
-    using System;
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
@@ -23,7 +22,7 @@ namespace WB.UI.Designer.Models
         ///     Gets or sets the title.
         /// </summary>
         [Display(Name = "Created by", Order = 2)]
-        public string CreatedBy { get; set; }
+        public string CreatorName { get; set; }
         
         #endregion
     }
