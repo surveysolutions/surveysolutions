@@ -10,6 +10,7 @@
 using Microsoft.Practices.ServiceLocation;
 using NinjectAdapter;
 using WB.UI.Designer.Code;
+using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.UI.Designer
 {
@@ -67,7 +68,7 @@ namespace WB.UI.Designer
             int? sortOrder = null, 
             string filter = null)
         {
-            QuestionnaireBrowseView model = GetQuestionnaireView(
+            QuestionnaireListView model = GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
                 isOnlyOwnerItems: false, 
@@ -112,7 +113,7 @@ namespace WB.UI.Designer
             int? sortOrder = null, 
             string filter = null)
         {
-            QuestionnaireBrowseView model = GetQuestionnaireView(
+            QuestionnaireListView model = GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
                 isOnlyOwnerItems: true, 
@@ -156,24 +157,21 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="QuestionnairePublicListViewModel"/>.
         /// </returns>
-        private static QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireBrowseItem x)
+        private static QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
-            var createdBy = Membership.GetUser(x.CreatedBy, false);
-
             return new QuestionnairePublicListViewModel
-                       {
-                           Id = x.Id, 
-                           CreationDate = x.CreationDate, 
-                           LastEntryDate = x.LastEntryDate, 
-                           Title = x.Title, 
-                           IsDeleted = x.IsDeleted, 
-                           CanDelete = UserHelperInstance.IsAdmin, 
-                           CanExport = true,
-                           CanEdit = false,
-                           CanSynchronize = UserHelperInstance.IsAdmin,
-                           CreatedBy =
-                               createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
-                       };
+                {
+                    Id = x.Id,
+                    CreationDate = x.CreationDate,
+                    LastEntryDate = x.LastEntryDate,
+                    Title = x.Title,
+                    IsDeleted = x.IsDeleted,
+                    CanDelete = UserHelperInstance.IsAdmin,
+                    CanExport = true,
+                    CanEdit = false,
+                    CanSynchronize = UserHelperInstance.IsAdmin,
+                    CreatorName = x.CreatorName ?? GlobalHelper.EmptyString
+                };
         }
 
         /// <summary>
@@ -185,7 +183,7 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="QuestionnaireListViewModel"/>.
         /// </returns>
-        private static QuestionnaireListViewModel GetQuestionnaire(QuestionnaireBrowseItem x)
+        private static QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x)
         {
             return new QuestionnaireListViewModel
                        {
@@ -226,9 +224,9 @@ namespace WB.UI.Designer
         /// The filter.
         /// </param>
         /// <returns>
-        /// The <see cref="QuestionnaireBrowseView"/>.
+        /// The <see cref="QuestionnaireListView"/>.
         /// </returns>
-        private static QuestionnaireBrowseView GetQuestionnaireView(
+        private static QuestionnaireListView GetQuestionnaireView(
             IViewRepository repository, 
             Guid userId, 
             bool isOnlyOwnerItems = true, 
@@ -238,9 +236,9 @@ namespace WB.UI.Designer
             string filter = null)
         {
             return
-                repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+                repository.Load<QuestionnaireListViewInputModel, QuestionnaireListView>(
                     input:
-                        new QuestionnaireBrowseInputModel
+                        new QuestionnaireListViewInputModel
                             {
                                 CreatedBy = userId, 
                                 IsOnlyOwnerItems = isOnlyOwnerItems, 
