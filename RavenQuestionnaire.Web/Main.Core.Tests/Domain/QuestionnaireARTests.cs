@@ -1368,7 +1368,7 @@ namespace Main.Core.Tests.Domain
 
         private static QuestionnaireAR CreateQuestionnaireAR()
         {
-            return new QuestionnaireAR();
+            return new QuestionnaireAR(Guid.NewGuid());
         }
 
         private static QuestionnaireAR CreateQuestionnaireARWithOneQuestion(Guid questionId)

@@ -40,7 +40,12 @@ namespace Main.Core.Domain
         };
 
         public QuestionnaireAR()
-            : base(Guid.NewGuid())
+            : base()
+        {
+        }
+
+        public QuestionnaireAR(Guid publicKey)
+            : base(publicKey)
         {
             this.questionFactory = new CompleteQuestionFactory();
         }
