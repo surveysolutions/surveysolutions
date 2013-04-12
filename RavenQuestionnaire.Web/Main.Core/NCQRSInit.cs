@@ -134,6 +134,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
+            #warning hello to Vitaliy Balabanov: rebuild read layer by event sources
             var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
 
             if (eventStore == null)
