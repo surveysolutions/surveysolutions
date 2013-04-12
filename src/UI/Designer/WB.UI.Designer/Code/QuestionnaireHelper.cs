@@ -158,7 +158,7 @@ namespace WB.UI.Designer
         /// </returns>
         private static QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireBrowseItem x)
         {
-            var createdBy = Membership.GetUser(x.CreatedBy, false);
+            var createdBy = x.CreatedBy != null ? Membership.GetUser(x.CreatedBy, false) : null;
 
             return new QuestionnairePublicListViewModel
                        {
