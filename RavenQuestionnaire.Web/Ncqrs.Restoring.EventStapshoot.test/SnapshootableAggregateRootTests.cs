@@ -47,7 +47,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                            DateTime.Now,
                                                                                            new object(),
                                                                                            new Version()));
-            DummyAR aggregateRoot = new DummyAR();
+            DummyAR aggregateRoot =  CreateDummyAr();
             aggregateRoot.InitializeFromHistory(eventStream);
             Assert.IsTrue(aggregateRoot.EventHandlingCounter == 1);
         }
@@ -82,7 +82,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
                                                                                                 DateTime.Now,
                                                                                                 new object(),
                                                                                                 new Version()));
-                 DummyAR aggregateRoot = new DummyAR();
+                 DummyAR aggregateRoot = CreateDummyAr();
                  Assert.Throws<InvalidCommittedEventException>(() => aggregateRoot.InitializeFromHistory(eventStream));
              }*/
 
@@ -90,19 +90,19 @@ namespace Ncqrs.Restoring.EventStapshoot.test
         public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_SnapshotSaved()
         {
             // arrange
-            DummyAR ar = new DummyAR();
+            DummyAR ar = CreateDummyAr();
             var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
             ar.InitializeFromSnapshot(snapshot);
             ar.RestoreFromSnapshot(snapshot);
             ar.CreateNewSnapshot();
             Assert.That(this.eventContext.Events.Count(), Is.EqualTo(1));
-            Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
+            Assert.AreEqual(ar.RestoreFromSnapshotCounter, 2);
         }
         [Test]
         public void CreateNewSnapshot_LastEventIsUncommitedSnapshot_Nothing()
         {
             // arrange
-            DummyAR ar = new DummyAR();
+            DummyAR ar = CreateDummyAr();
             var snapshot = new CommitedSnapshot(ar.EventSourceId, 1, new object());
             ar.InitializeFromSnapshot(snapshot);
             ar.RestoreFromSnapshot(snapshot);
@@ -114,7 +114,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
         public void CreateNewSnapshot_SnpshotEventSequence_NewSnpapshotIsCreate()
         {
             // arrange
-            DummyAR ar = new DummyAR();
+            DummyAR ar = CreateDummyAr();
             var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
             ar.InitializeFromSnapshot(snapshot);
             ar.RestoreFromSnapshot(snapshot);
@@ -124,26 +124,27 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.AreEqual(snapshotEvent.EventSequence, 3);
             Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
         }
-        /*    [Test]
-            public void CreateNewSnapshot_SnpshotEventSnpshotSequence_NewSnpapshotIsCreate()
-            {
-                // arrange
-                DummyAR ar = new DummyAR();
-                var snapshot = new Snapshot(ar.EventSourceId, 1, new object());
-                ar.InitializeFromSnapshot(snapshot);
-                ar.RestoreFromSnapshot(snapshot);
-                ar.DummyCommand();
-                ar.CreateNewSnapshot();
-                ar.CreateNewSnapshot();
-                var snapshotEvent = this.eventContext.Events.Last();
-                Assert.AreEqual(snapshotEvent.EventSequence, 3);
-                Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
-            }*/
+
+        [Test]
+        public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_ARStateIsRestoredTottalyFromMethodArgument()
+        {
+            // arrange
+            DummyAR ar = CreateDummyAr();
+            var newState = new object();
+
+            // act
+            ar.CreateNewSnapshot(newState);
+
+            // assert
+            var currentSnapshot = ar.CreateSnapshot();
+            Assert.That(currentSnapshot, Is.EqualTo(newState));
+        }
+
         [Test]
         public void CreateNewSnapshot_LastEventIsNotSnapshot_SnapshotIsCreatedAndStored()
         {
             // arrange
-            DummyAR ar = new DummyAR();
+            DummyAR ar = CreateDummyAr();
             ar.InitializeFromHistory(new CommittedEventStream(ar.EventSourceId,
                                                               new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(),
                                                                                  ar.EventSourceId, 1, DateTime.Now,
@@ -153,13 +154,18 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             var snapshotEvent = this.eventContext.Events.Last();
             Assert.AreEqual(snapshotEvent.EventSequence, 2);
             Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
-            Assert.AreEqual(ar.RestoreFromSnapshotCounter, 0);
+            Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
+        }
+
+        private static DummyAR CreateDummyAr()
+        {
+            return new DummyAR();
         }
 
         [Test]
         public void CreateNewSnapshot_LastEventIsNotSnapshot_EventsHasTheSameUtsTime()
         {
-            DummyAR ar = new DummyAR();
+            DummyAR ar = CreateDummyAr();
             var eventId = Guid.NewGuid();
             ar.InitializeFromHistory(new CommittedEventStream(ar.EventSourceId, new CommittedEvent(Guid.NewGuid(),
                                                                                                  eventId,
@@ -180,6 +186,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
 
             public int EventHandlingCounter { get; private set; }
             public int RestoreFromSnapshotCounter { get; private set; }
+            private object state=new object();
             protected void OnDummyEventHandler(object evt)
             {
                 this.EventHandlingCounter++;
@@ -194,11 +201,12 @@ namespace Ncqrs.Restoring.EventStapshoot.test
 
             public override object CreateSnapshot()
             {
-                return new object();
+                return state;
             }
 
             public override void RestoreFromSnapshot(object snapshot)
             {
+                state = snapshot;
                 this.RestoreFromSnapshotCounter++;
             }
 

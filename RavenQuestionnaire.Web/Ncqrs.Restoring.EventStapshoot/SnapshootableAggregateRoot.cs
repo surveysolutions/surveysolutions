@@ -52,6 +52,7 @@ namespace Ncqrs.Restoring.EventStapshoot
 
         protected void OnCreateNewSnapshot(SnapshootLoaded e)
         {
+            RestoreFromSnapshot(e.Template.Payload as T);
             LastPersistedSnapshot = this.Version;
         }
 
