@@ -50,25 +50,35 @@ namespace Ncqrs.Restoring.EventStapshoot
                 LastPersistedSnapshot = snapshot.Version;
         }
 
-        /*  protected override void ValidateHistoricalEvent(CommittedEvent evnt)
-          {
-              base.ValidateHistoricalEvent(evnt);
-              if (evnt.Payload is SnapshootLoaded)
-                  throw new InvalidCommittedEventException("event stream can't contain snapshots");
-          }*/
         protected void OnCreateNewSnapshot(SnapshootLoaded e)
         {
+            RestoreFromSnapshot(e.Template.Payload as T);
             LastPersistedSnapshot = this.Version;
         }
+
         public virtual void CreateNewSnapshot()
         {
-            if (LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value == Version)
+            CreateNewSnapshotInternal(CreateSnapshot());
+        }
+        public virtual void CreateNewSnapshot(T shapshot)
+        {
+            if (ExitWhenSelfSnapshotingWasMadeByPreviousEvent(shapshot))
                 return;
-
-            var snapshoot = CreateSnapshot();
-            var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(this.EventSourceId, this.Version + 1, snapshoot) };
+            CreateNewSnapshotInternal(shapshot);
+        }
+        protected virtual void CreateNewSnapshotInternal(T shapshot)
+        {
+            var eventSnapshoot = new SnapshootLoaded()
+                {
+                    Template = new Snapshot(this.EventSourceId, this.Version + 1, shapshot)
+                };
 
             ApplyEvent(eventSnapshoot);
+        }
+
+        protected bool ExitWhenSelfSnapshotingWasMadeByPreviousEvent(T shapshot)
+        {
+            return LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value == Version && shapshot == null;
         }
     }
 
