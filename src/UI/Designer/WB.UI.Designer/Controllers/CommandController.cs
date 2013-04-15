@@ -1,5 +1,5 @@
 ﻿using Main.Core.Commands.Questionnaire.Question;
-
+using WB.UI.Designer.Code.Exceptions;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
@@ -38,6 +38,7 @@ namespace WB.UI.Designer.Controllers
         }
 
         [HttpPost]
+        [CustomHandleError]
         public JsonResult Execute(string type, string command)
         {
             ICommand concreteCommand;

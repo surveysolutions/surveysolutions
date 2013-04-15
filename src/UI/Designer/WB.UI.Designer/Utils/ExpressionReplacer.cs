@@ -34,7 +34,13 @@ namespace WB.UI.Designer.Utils
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
-            Dictionary<string, string> map = LoadMap(questionnaireKey).StataMap.ToDictionary(p=>p.Value, p=>p.Key.ToString());
+            var map = new Dictionary<string, string>();
+            foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
+            {
+                if (string.IsNullOrWhiteSpace(pair.Value) || map.ContainsKey(pair.Value))
+                    continue;
+                map.Add(pair.Value, pair.Key.ToString());
+            }
             return MakeSubstitutions(expression, map);
         }
 
@@ -52,7 +58,14 @@ namespace WB.UI.Designer.Utils
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
-            var map = LoadMap(questionnaireKey).StataMap.ToDictionary(p => p.Key.ToString(), p => p.Value);
+            var map = new Dictionary<string, string>();
+            foreach (var pair in this.LoadMap(questionnaireKey).StataMap)
+            {
+                var key = pair.Key.ToString();
+                if (string.IsNullOrWhiteSpace(key) || map.ContainsKey(key))
+                    continue;
+                map.Add(key, pair.Value);
+            }
             return MakeSubstitutions(expression, map);
         }
 
