@@ -40,17 +40,22 @@ namespace AndroidMain.Synchronization
         /// <summary>
         /// The item path 1.
         /// </summary>
-        private const string itemPath1 = "importexport/GetItem1";
+        private const string GetItemAsStreamPath = "importexport/GetItemAsStream";
 
         /// <summary>
         /// The list path.
         /// </summary>
-        private const string listPath = "importexport/GetRootsList";
+        private const string GetRootsListPath = "importexport/GetRootsList";
 
         /// <summary>
-        /// The list path 1.
+        /// The list path.
         /// </summary>
-        private const string listPath1 = "importexport/GetRootsList1";
+        private const string GetARKeysPath = "importexport/GetARKeys";
+
+        /// <summary>
+        /// The list path.
+        /// </summary>
+        private const string GetARPath = "importexport/GetAR";
 
         #endregion
 
@@ -168,8 +173,8 @@ namespace AndroidMain.Synchronization
         protected IEnumerable<AggregateRootEvent> GetEventStreamWithProxy()
         {
             var restClient = new RestClient(this.baseAddress);
-            
-            var request = new RestRequest(listPath, Method.GET);
+
+            var request = new RestRequest(GetARKeysPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
@@ -178,41 +183,39 @@ namespace AndroidMain.Synchronization
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("Event list is empty");
+                throw new Exception("Event list is empty.");
             }
 
-            var listOfAggregateRootsForImportMessage =
-                JsonConvert.DeserializeObject<ListOfAggregateRootsForImportMessage>(
+            var syncItemsMetaContainer =
+                JsonConvert.DeserializeObject<SyncItemsMetaContainer>(
                     response.Content, new JsonSerializerSettings());
 
             /*var roots = JsonConvert.DeserializeObject<IList<ProcessedEventChunk>>(
                 response.Content.Substring(pos), new JsonSerializerSettings());*/
-            if (listOfAggregateRootsForImportMessage == null)
+            if (syncItemsMetaContainer == null)
             {
                 throw new Exception("aggregate roots list is empty");
             }
 
             //var events = new List<AggregateRootEvent>();
 
-            foreach (ProcessedEventChunk root in listOfAggregateRootsForImportMessage.Roots)
+            foreach (var root in syncItemsMetaContainer.ARId)
             {
-                    if (root.EventKeys.Count == 0)
-                    {
-                        continue;
-                    }
 
-                    var itemRequest = new RestRequest(itemPath1, Method.POST);
-                    itemRequest.AddParameter("firstEventPulicKey", root.EventKeys.First());
-                    itemRequest.AddParameter("length", root.EventKeys.Count);
+                var itemRequest = new RestRequest(GetARPath, Method.POST);
+                    itemRequest.AddParameter("ARKey", root.Item2);
+                    itemRequest.AddParameter("length", 0);
+                    itemRequest.AddParameter("rootType", root.Item1);
+
 
                     itemRequest.RequestFormat = DataFormat.Json;
                     itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
                     
                     IRestResponse responseStream = restClient.Execute(itemRequest);
-                    if (string.IsNullOrWhiteSpace(responseStream.Content)
-                        || responseStream.StatusCode != HttpStatusCode.OK)
+                    if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
                     {
-                        throw new Exception("Error stream for item " + root.EventKeys.First());
+                        //logging
+                        throw new Exception("Operation finished unsuccessfully.");
                     }
                     
                     var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };

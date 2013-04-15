@@ -34,7 +34,13 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     PublishZipPackage $SourceFolder 'package.zip'
 
-    Remove-Item "$TargetFolder\*" -Force -Recurse
+    PublishZipPackage $SourceFolder 'package.zip'
+
+	Set-content -path "$TargetFolder\app_offline.htm" -value "Maintenance is in progress. Wait for awhile, please."	
+	
+    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude "app_offline.htm"
 
     Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
+	
+	Remove-Item "$TargetFolder\app_offline.htm"
 }

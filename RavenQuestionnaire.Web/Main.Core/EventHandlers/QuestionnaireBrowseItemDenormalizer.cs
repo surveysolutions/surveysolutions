@@ -66,18 +66,19 @@ namespace Main.Core.EventHandlers
                 return;
             }
 
-            // getting all featured questions
-            var browseItem = this.documentStorage.GetByGuid(document.PublicKey);
+          /*  // getting all featured questions
+            QuestionnaireBrowseItem browseItem = this.documentStorage.GetByGuid(document.PublicKey);
             if (browseItem == null)
-            {
-                browseItem = new QuestionnaireBrowseItem(
+            {*/
+               var browseItem = new QuestionnaireBrowseItem(
                     document.PublicKey,
                     document.Title,
                     document.CreationDate,
                     document.LastEntryDate,
                     document.CreatedBy);
-                this.documentStorage.Store(browseItem, document.PublicKey);
-            }
+              
+            //}
+            this.documentStorage.Store(browseItem, document.PublicKey);
         }
 
         #endregion

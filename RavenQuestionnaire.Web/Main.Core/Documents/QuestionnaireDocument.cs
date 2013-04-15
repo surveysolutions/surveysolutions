@@ -216,7 +216,7 @@ namespace Main.Core.Documents
             var group = this.Find<Group>(groupId);
             if (@group == null) return;
 
-            this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group);
+            this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
             
             @group.Propagated = kindOfPropagation;
             @group.ConditionExpression = conditionExpression;
@@ -224,15 +224,15 @@ namespace Main.Core.Documents
             @group.Update(title);
         }
 
-        public void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group)
+        private void UpdateAutoPropagateQuestionsTriggersIfNeeded(IGroup group, Propagate newPropagationKind = Propagate.None)
         {
-            if (group.Propagated == Propagate.None)
-                return;
-
-            var questions = this.GetAllQuestions().Where(question => question is IAutoPropagate).Cast<IAutoPropagate>().ToList();
-            foreach (var question in questions.Where(question => question.Triggers.Contains(group.PublicKey)))
+            if (group.Propagated == Propagate.AutoPropagated && newPropagationKind == Propagate.None)
             {
-                question.Triggers.Remove(group.PublicKey);
+                var questions = this.GetAllQuestions().Where(question => question is IAutoPropagate).Cast<IAutoPropagate>().ToList();
+                foreach (var question in questions.Where(question => question.Triggers.Contains(group.PublicKey)))
+                {
+                    question.Triggers.Remove(group.PublicKey);
+                }
             }
         }
 

@@ -77,9 +77,10 @@ namespace Ncqrs.Eventing.Storage
         /// another event type is already registered using one of <paramref name="type"/>'s aliases (<see cref="EventNameAliasAttribute"/>)
         /// </exception>
         public void AddEvent(Type type)
-        {
+        {   
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(type != null, "type cannot be null");
-
+#endif
             if (_eventNames.ContainsKey(type))
                 return;
 

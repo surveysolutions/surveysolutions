@@ -20,7 +20,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
     /// </para>
     /// </remarks>
     /// <typeparam name="T">The type of the serialized data.</typeparam>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IEventFormatterContracts<>))]
+    #endif
     public interface IEventFormatter<T>
     {
         /// <summary>
@@ -37,7 +39,7 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <returns>A strongly typed event from <paramref name="obj"/>.</returns>
         object Deserialize(T obj, string eventName);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IEventFormatter<>))]
     internal abstract class IEventFormatterContracts<T> : IEventFormatter<T>
     {
@@ -56,4 +58,5 @@ namespace Ncqrs.Eventing.Storage.Serialization
             return default(object);
         }
     }
+#endif
 }

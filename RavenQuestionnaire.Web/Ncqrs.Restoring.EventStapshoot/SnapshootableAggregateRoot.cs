@@ -18,21 +18,23 @@ namespace Ncqrs.Restoring.EventStapshoot
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public abstract class SnapshootableAggregateRoot<T> : MappedAggregateRoot, ISnapshotable<T>
+    public abstract class SnapshootableAggregateRoot<T> : MappedAggregateRoot, ISnapshotable<T> where T : class
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SnapshootableAggregateRoot"/> class.
         /// </summary>
         protected SnapshootableAggregateRoot()
-            : base(new SnapshootableEventHandlerMappingStrategy(new ConventionBasedEventHandlerMappingStrategy()))
+            : base(new ConventionBasedEventHandlerMappingStrategy())
         {
         }
 
         protected SnapshootableAggregateRoot(Guid id)
-            : base(id, new SnapshootableEventHandlerMappingStrategy(new ConventionBasedEventHandlerMappingStrategy()))
+            : base(id, new ConventionBasedEventHandlerMappingStrategy())
         {
         }
 
+        public long? LastPersistedSnapshot { get; private set; }
+        //     private bool isLastEventSnapshot = false;
         #region Implementation of ISnapshotable<T>
 
         public abstract T CreateSnapshot();
@@ -40,25 +42,43 @@ namespace Ncqrs.Restoring.EventStapshoot
         public abstract void RestoreFromSnapshot(T snapshot);
 
         #endregion
-        public override void InitializeFromHistory(CommittedEventStream history)
+
+        public override void InitializeFromSnapshot(Snapshot snapshot)
         {
-            var lastSnapshoot = history.LastOrDefault(e => e.Payload is SnapshootLoaded);
-            if (lastSnapshoot == null)
-            {
-                base.InitializeFromHistory(history);
+            base.InitializeFromSnapshot(snapshot);
+            if (snapshot is CommitedSnapshot)
+                LastPersistedSnapshot = snapshot.Version;
+        }
+
+        protected void OnCreateNewSnapshot(SnapshootLoaded e)
+        {
+            RestoreFromSnapshot(e.Template.Payload as T);
+            LastPersistedSnapshot = this.Version;
+        }
+
+        public virtual void CreateNewSnapshot()
+        {
+            if (ExitWhenSelfSnapshotingWasMadeByPreviousEvent())
                 return;
-            }
-           
-            var newHistory = new CommittedEventStream(history.SourceId,
-                                                      history.SkipWhile(e => e != lastSnapshoot).Skip(1).Select(
-                                                          (e, i) =>
-                                                          new CommittedEvent(e.CommitId, e.EventIdentifier,
-                                                                             e.EventSourceId, e.EventSequence, e.EventTimeStamp,
-                                                                             e.Payload, e.EventVersion)));
-            Snapshot snapshotEvent = ((SnapshootLoaded)lastSnapshoot.Payload).Template;
-            this.InitializeFromSnapshot(new Snapshot(snapshotEvent.EventSourceId, lastSnapshoot.EventSequence, null));
-            this.RestoreFromSnapshot((T)snapshotEvent.Payload);
-            base.InitializeFromHistory(newHistory);
+            CreateNewSnapshotInternal(CreateSnapshot());
+        }
+        public virtual void CreateNewSnapshot(T shapshot)
+        {
+            CreateNewSnapshotInternal(shapshot);
+        }
+        protected virtual void CreateNewSnapshotInternal(T shapshot)
+        {
+            var eventSnapshoot = new SnapshootLoaded()
+                {
+                    Template = new Snapshot(this.EventSourceId, this.Version + 1, shapshot)
+                };
+
+            ApplyEvent(eventSnapshoot);
+        }
+
+        protected bool ExitWhenSelfSnapshotingWasMadeByPreviousEvent()
+        {
+            return LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value == Version;
         }
     }
 

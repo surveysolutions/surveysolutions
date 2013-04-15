@@ -1,14 +1,12 @@
-﻿namespace WB.UI.Designer.Controllers
+﻿
+namespace WB.UI.Designer.Controllers
 {
+    using Codaxy.WkHtmlToPdf;
+    using Main.Core.View;
     using System;
     using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
-
-    using Codaxy.WkHtmlToPdf;
-
-    using Main.Core.View;
-
     using WB.UI.Designer.Views.Questionnaire;
 
     public class PdfController : Controller
@@ -54,15 +52,13 @@
 
             PdfConvert.ConvertHtmlToPdf(
                 new PdfDocument
-                {
-                    Url = string.Format("{0}/Pdf/RenderQuestionnaire/{1}",
-                        ConfigurationManager.AppSettings["SiteRoot"],
-                        id),
-                },
+                    {
+                        Url = GlobalHelper.GenerateUrl("RenderQuestionnaire", "Pdf", new {id = id}),
+                    },
                 new PdfOutput
-                {
-                    OutputStream = memoryStream,
-                });
+                    {
+                        OutputStream = memoryStream,
+                    });
 
             memoryStream.Flush();
         }
@@ -71,7 +67,7 @@
         {
             string path = Path.GetFullPath(Path.Combine(
                 this.Server.MapPath("~"),
-                ConfigurationManager.AppSettings["WKHtmlToPdfExecutablePath"]));
+                AppSettings.Instance.WKHtmlToPdfExecutablePath));
 
             if (!System.IO.File.Exists(path))
                 throw new ConfigurationErrorsException(string.Format("Path to wkhtmltopdf.exe is incorrect ({0}). Please install wkhtmltopdf.exe and/or update server configuration.", path));

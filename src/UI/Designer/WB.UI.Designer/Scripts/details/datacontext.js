@@ -140,10 +140,15 @@
             groups.removeById(id);
         };
 
-        groups.getChapters = function () {
-            var chapters = _.filter(groups.getAllLocal(), function (item) {
-                return item.level() == 0;
+        groups.getChapters = function() {
+            var chapters = _.map(questionnaire.childrenID(), function(children) {
+                var item = groups.getLocalById(children.id);
+                item.parent(parent);
+                return item;
             });
+            //_.filter(groups.getAllLocal(), function (item) {
+            //    return item.level() == 0;
+            //});
             return chapters;
         };
 

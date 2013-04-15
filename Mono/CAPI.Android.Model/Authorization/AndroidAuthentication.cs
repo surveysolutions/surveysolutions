@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
@@ -22,6 +23,8 @@ namespace CAPI.Android.Core.Model.Authorization
         {
             get { return currentUser; }
         }
+
+        
 
         public bool IsLoggedIn { get { return currentUser != null; }
     }

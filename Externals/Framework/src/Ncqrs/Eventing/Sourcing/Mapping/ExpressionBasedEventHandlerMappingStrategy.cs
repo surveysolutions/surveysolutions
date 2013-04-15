@@ -40,9 +40,10 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         /// <returns>All the <see cref="ISourcedEventHandler"/>'s created based on the given mapping.</returns>
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-
-            if(!(target is AggregateRootMappedWithExpressions))
+#endif
+            if (!(target is AggregateRootMappedWithExpressions))
                 throw new ArgumentException("aggregateRoot need to be of type AggregateRootMappedWithExpressions to be used in a ExpressionBasedEventHandlerMappingStrategy.");
 
             var handlers = new List<ISourcedEventHandler>();

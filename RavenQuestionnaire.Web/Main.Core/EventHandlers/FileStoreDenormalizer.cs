@@ -67,10 +67,7 @@ namespace Main.Core.EventHandlers
         {
             var fileDescription = new FileDescription
                 {
-                    PublicKey = evnt.Payload.PublicKey.ToString(), 
-                    
-                    
-                    
+                    FileName = evnt.Payload.PublicKey.ToString(),
                     // Content = original,
                     Description = evnt.Payload.Description, 
                     Title = evnt.Payload.Title

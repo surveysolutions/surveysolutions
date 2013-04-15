@@ -42,6 +42,9 @@ namespace WB.UI.Designer
 
             #region [Scripts]
 
+            bundles.Add(new ScriptBundle("~/simplepage").Include("~/Scripts/jquery-{version}.js",
+                                                                 "~/Scripts/bootstrap.js"));
+
             bundles.Add(
                 new ScriptBundle("~/editform").Include(
                     "~/Scripts/jquery-{version}.js", 
@@ -66,10 +69,6 @@ namespace WB.UI.Designer
                     "~/Scripts/modernizr-{version}.js", 
                     "~/Scripts/lib/json2.js", // IE7 needs this
 
-                    // jQuery plugins
-                    "~/Scripts/lib/activity-indicator.js", 
-                    "~/Scripts/TrafficCop.js", 
-                    "~/Scripts/infuser.js", // depends on TrafficCop
 
                     // Knockout and its plugins
                     "~/Scripts/knockout-{version}.js", 
@@ -77,7 +76,6 @@ namespace WB.UI.Designer
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
                     "~/Scripts/knockout.validation.debug.js", 
-                    "~/Scripts/lib/koExternalTemplateEngine.js", 
                     "~/Scripts/lib/knockout-sortable.js", 
                     // Other 3rd party libraries
                     "~/Scripts/lodash.js", 

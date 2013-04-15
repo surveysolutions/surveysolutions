@@ -7,7 +7,9 @@ namespace Ncqrs.Commanding.CommandExecution
     /// Executes a command. This means that the handles 
     /// executes the correct action based on the command.
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(ICommandExecutorContracts<>))]
+#endif
     public interface ICommandExecutor<in TCommand> where TCommand : ICommand
     {
         /// <summary>
@@ -17,7 +19,7 @@ namespace Ncqrs.Commanding.CommandExecution
         /// <exception cref="ArgumentNullException">Occurs when <i>command</i> is null.</exception>
         void Execute(TCommand command);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(ICommandExecutor<>))]
     internal abstract class ICommandExecutorContracts<TCommand> : ICommandExecutor<TCommand> where TCommand : ICommand
     {
@@ -26,4 +28,5 @@ namespace Ncqrs.Commanding.CommandExecution
             Contract.Requires<ArgumentNullException>(command != null, "The command cannot be null.");
         }
     }
+    #endif
 }

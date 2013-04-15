@@ -499,9 +499,10 @@ namespace Ncqrs.Eventing.Storage.SQL
         /// <param name="transaction">The transaction.</param>
         private void SaveEvents(IEnumerable<UncommittedEvent> uncommittedEvents, SqlTransaction transaction)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(uncommittedEvents != null, "The argument uncommittedEvents could not be null.");
             Contract.Requires<ArgumentNullException>(transaction != null, "The argument transaction could not be null.");
-
+#endif
             foreach (var sourcedEvent in uncommittedEvents)
             {
                 SaveEvent(sourcedEvent, transaction);
@@ -515,9 +516,10 @@ namespace Ncqrs.Eventing.Storage.SQL
         /// <param name="transaction">The transaction.</param>
         private void SaveEvent(UncommittedEvent uncommittedEvent, SqlTransaction transaction)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(uncommittedEvent != null, "The argument uncommittedEvent could not be null.");
             Contract.Requires<ArgumentNullException>(transaction != null, "The argument transaction could not be null.");
-
+#endif
             string eventName;
             var document = _formatter.Serialize(uncommittedEvent.Payload, out eventName);
             var storedEvent = new StoredEvent<JObject>(uncommittedEvent.EventIdentifier, uncommittedEvent.EventTimeStamp,

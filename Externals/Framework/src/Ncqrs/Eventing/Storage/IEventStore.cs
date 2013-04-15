@@ -8,7 +8,9 @@ namespace Ncqrs.Eventing.Storage
     /// <summary>
     /// An event store. Can store and load events from an <see cref="IEventSource"/>.
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IEventStoreContracts))]
+#endif
     public interface IEventStore
     {
         /// <summary>
@@ -30,7 +32,7 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
         void Store(UncommittedEventStream eventStream);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IEventStore))]
     internal abstract class IEventStoreContracts : IEventStore
     {
@@ -48,4 +50,5 @@ namespace Ncqrs.Eventing.Storage
 
 
     }
+#endif
 }

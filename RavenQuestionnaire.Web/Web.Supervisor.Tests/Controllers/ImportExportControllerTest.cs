@@ -48,10 +48,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         /// </summary>
         public Mock<IDataExport> DataExportMock { get; set; }
 
-        /// <summary>
-        /// Gets or sets DataExportMock.
-        /// </summary>
-        public Mock<IGlobalInfoProvider> GlobalInfoProviderMock { get; set; }
 
         /// <summary>
         /// Gets or sets SyncProcessFactoryMock.
@@ -77,7 +73,6 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         {
             this.DataExportMock = new Mock<IDataExport>();
             this.SyncProcessFactoryMock = new Mock<ISyncProcessFactory>();
-            this.GlobalInfoProviderMock=new Mock<IGlobalInfoProvider>();
             var syncProcessMock = new Mock<IUsbSyncProcess>();
 
             this.SyncProcessFactoryMock.Setup(
@@ -86,7 +81,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             return new ImportExportController(
                 this.DataExportMock.Object,
                 (new Mock<IViewRepository>()).Object,
-                this.SyncProcessFactoryMock.Object, this.GlobalInfoProviderMock.Object);
+                this.SyncProcessFactoryMock.Object);
         }
 
         /// <summary>

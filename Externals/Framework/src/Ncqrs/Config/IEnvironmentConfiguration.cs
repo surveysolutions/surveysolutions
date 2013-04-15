@@ -6,7 +6,9 @@ namespace Ncqrs.Config
     /// <summary>
     /// A configuration that can resolve requested instances.
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IEnvironmentConfigurationContracts))]
+    #endif
     public interface IEnvironmentConfiguration
     {
         /// <summary>
@@ -17,7 +19,7 @@ namespace Ncqrs.Config
         /// <returns>A indication whether the instance could be get or not.</returns>
         Boolean TryGet<T>(out T result) where T : class;
     }
-
+#if USE_CONTRACTS
     [ContractClassFor(typeof(IEnvironmentConfiguration))]
     internal abstract class IEnvironmentConfigurationContracts : IEnvironmentConfiguration
     {
@@ -36,4 +38,5 @@ namespace Ncqrs.Config
             return true;
         }
     }
+#endif
 }

@@ -23,8 +23,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentNullException"><paramref name="typeResolver"/> is <value>null</value>.</exception>
         public JsonEventFormatter(IEventTypeResolver typeResolver)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
-
+#endif
             _typeResolver = typeResolver;
             _serializer = new JsonSerializer();
         }

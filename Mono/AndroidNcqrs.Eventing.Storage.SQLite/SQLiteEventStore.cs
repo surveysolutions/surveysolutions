@@ -10,6 +10,8 @@
 using System.Data;
 using System.Linq;
 using Mono.Data.Sqlite;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
@@ -27,7 +29,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
     /// <summary>
     /// The sq lite event store.
     /// </summary>
-    public class SQLiteEventStore : IStreamableEventStore
+    public class SQLiteEventStore : IStreamableEventStore, ISnapshootEventStore
     {
         #region Fields
 
@@ -173,6 +175,14 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         {
             var events = GetEventsFromReader(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion));
             return new CommittedEventStream(id, events);
+        }
+
+        public CommittedEvent GetLatestSnapshoot(Guid id)
+        {
+            var events = GetEventsFromReader(Query.GetLatestSnapshoot(id, typeof(SnapshootLoaded).FullName));
+            if (!events.Any())
+                return null;
+            return events.First();
         }
 
         /// <summary>

@@ -52,10 +52,7 @@ namespace Web.Supervisor.Controllers
     public class ImportExportController : AsyncController
     {
         #region Fields
-        /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
+       
         /// <summary>
         /// Data exporter
         /// </summary>
@@ -77,12 +74,11 @@ namespace Web.Supervisor.Controllers
 
         
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, IGlobalInfoProvider globalInfo)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
-            this.globalInfo = globalInfo;
         }
 
         #endregion
@@ -366,8 +362,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process =
-                    (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
                 result = process.Export("Supervisor export AR events");
             }
@@ -378,14 +373,34 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
+
+
+        private SyncItemsMetaContainer GetListOfAR()
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            var result = new SyncItemsMetaContainer();
+
+            try
+            {
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.GetListOfAggregateRoots("Supervisor export AR events");
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
+        }
+
+
+
         [AcceptVerbs(HttpVerbs.Get)]
         public JsonResult GetRootsList()
         {
             return Json(this.GetList(), JsonRequestBehavior.AllowGet);
         }
-
-
-
 
         [AcceptVerbs(HttpVerbs.Get)]
         public FileResult GetRootsList1()
@@ -395,18 +410,12 @@ namespace Web.Supervisor.Controllers
             stream.Position = 0L;
 
             return new FileStreamResult(stream, "application/json; charset=utf-8");
-
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public FileResult GetARKeys()
+        public JsonResult GetARKeys()
         {
-            var stream = new MemoryStream();
-            this.GetList().WriteTo(stream);
-            stream.Position = 0L;
-
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-
+            return Json(this.GetListOfAR());
         }
 
 
@@ -466,6 +475,39 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
+
+        private ImportSynchronizationMessage GetARInt(string aRKey, string length, string rootType)
+        {
+            Guid syncProcess = Guid.NewGuid();
+
+            Guid key;
+            if (!Guid.TryParse(aRKey, out key))
+            {
+                return null;
+            }
+
+            int ln;
+            if (!int.TryParse(length, out ln))
+            {
+                return null;
+            }
+
+            var result = new ImportSynchronizationMessage();
+
+            try
+            {
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+
+                result = process.GetAR("Supervisor export AR events", key,rootType, ln);
+            }
+            catch (Exception ex)
+            {
+            }
+
+            return result;
+        }
+
+
         /// <summary>
         /// The get item.
         /// </summary>
@@ -479,7 +521,7 @@ namespace Web.Supervisor.Controllers
         /// The <see cref="Stream"/>.
         /// </returns>
         [AcceptVerbs(HttpVerbs.Post)]
-        public FileResult GetItem1(string firstEventPulicKey, string length)
+        public FileResult GetItemAsStream(string firstEventPulicKey, string length)
         {
             var item = this.GetItemInt(firstEventPulicKey, length);
             if (item == null)
@@ -495,22 +537,18 @@ namespace Web.Supervisor.Controllers
 
 
         /// <summary>
-        /// The get item.
+        /// Retrive Item
         /// </summary>
-        /// <param name="firstEventPulicKey">
-        /// The first event pulic key.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
+        /// <param name="aRKey"></param>
+        /// <param name="length"></param>
+        /// <param name="rootType"></param>
+        /// <returns></returns>
         [CompressContent]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult GetAR(string firstEventPulicKey, string length)
+        public ActionResult GetAR(string aRKey, string length, string rootType)
         {
-            var item = this.GetItemInt(firstEventPulicKey, length);
+            var item = this.GetARInt(aRKey, length, rootType);
+            
             if (item == null)
             {
                 return null;
@@ -523,31 +561,11 @@ namespace Web.Supervisor.Controllers
             return new FileStreamResult(stream, "application/octet-stream");
         }
 
-
-        /// <summary>
-        /// Determines if GZip is supported
-        /// </summary>
-        /// <returns></returns>
-        public static bool IsGZipSupported(HttpRequestBase request)
-        {
-            string AcceptEncoding = request.Headers["Accept-Encoding"];
-            if (!string.IsNullOrEmpty(AcceptEncoding) &&
-                    (AcceptEncoding.Contains("gzip") || AcceptEncoding.Contains("deflate")))
-                return true;
-            return false;
-        }
-
-
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)
         {
             Guid syncProcess = Guid.NewGuid();
 
-            /*if (string.IsNullOrWhiteSpace(request))
-            {
-                return false;
-            }
-*/
             try
             {
                 Request.InputStream.Position = 0;
@@ -575,7 +593,7 @@ namespace Web.Supervisor.Controllers
                     (IEventSyncProcess)
                     this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
 
-                process.Import("Direct controller syncronization", message.Command);
+                process.Import("Direct controller syncronization.", message.Command);
 
                 return true;
             }
@@ -589,37 +607,7 @@ namespace Web.Supervisor.Controllers
         #endregion
 
 
-        #region Import from new designer
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public ActionResult NewImport()
-        {
-            return this.View("NewViewTestUploadFile");
-        }
-
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult NewImport(HttpPostedFileBase uploadFile)
-        {
-            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
-            if (zipData == null || zipData.Count == 0)
-            {
-                return null;
-            }
-            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
-
-
-            return this.RedirectToAction("Index", "Survey");
-        }
-
-        protected T DesserializeString<T>(String data)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-
-            return JsonConvert.DeserializeObject<T>(data, settings);
-        }
-        #endregion
+       
 
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics.Contracts;
+#if !MONODROID
 using System.Transactions;
-
+#endif
 namespace Ncqrs.Commanding.CommandExecution
 {
     /// <summary>
@@ -23,7 +24,9 @@ namespace Ncqrs.Commanding.CommandExecution
         /// <param name="executor">The executor to use to execute the command.</param>
         public TransactionalCommandExecutorWrapper(ICommandExecutor<TCommand> executor)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(executor != null, "The executor cannot be null.");
+#endif
             _executor = executor;
         }
         
