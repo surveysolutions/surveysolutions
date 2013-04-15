@@ -110,6 +110,7 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.That(this.eventContext.Events.Count(), Is.EqualTo(0));
             Assert.AreEqual(ar.RestoreFromSnapshotCounter, 1);
         }
+
         [Test]
         public void CreateNewSnapshot_SnpshotEventSequence_NewSnpapshotIsCreate()
         {

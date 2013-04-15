@@ -58,12 +58,12 @@ namespace Ncqrs.Restoring.EventStapshoot
 
         public virtual void CreateNewSnapshot()
         {
+            if (ExitWhenSelfSnapshotingWasMadeByPreviousEvent())
+                return;
             CreateNewSnapshotInternal(CreateSnapshot());
         }
         public virtual void CreateNewSnapshot(T shapshot)
         {
-            if (ExitWhenSelfSnapshotingWasMadeByPreviousEvent(shapshot))
-                return;
             CreateNewSnapshotInternal(shapshot);
         }
         protected virtual void CreateNewSnapshotInternal(T shapshot)
@@ -76,9 +76,9 @@ namespace Ncqrs.Restoring.EventStapshoot
             ApplyEvent(eventSnapshoot);
         }
 
-        protected bool ExitWhenSelfSnapshotingWasMadeByPreviousEvent(T shapshot)
+        protected bool ExitWhenSelfSnapshotingWasMadeByPreviousEvent()
         {
-            return LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value == Version && shapshot == null;
+            return LastPersistedSnapshot.HasValue && LastPersistedSnapshot.Value == Version;
         }
     }
 
