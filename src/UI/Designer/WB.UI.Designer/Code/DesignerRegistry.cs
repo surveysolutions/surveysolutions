@@ -4,6 +4,8 @@ using System.Reflection;
 using Main.Core;
 using Main.Core.Documents;
 using Main.DenormalizerStorage;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ninject;
 using WB.Core.Questionnaire.ExportServices;
 using WB.UI.Designer.Providers.CQRS.Accounts;
@@ -35,8 +37,6 @@ namespace WB.UI.Designer.Code
         public override void Load()
         {
             base.Load();
-            Kernel.Bind<IExportService>()
-                  .ToConstant(new JsonExportService(Kernel.Get<IDenormalizerStorage<QuestionnaireDocument>>()));
         }
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {

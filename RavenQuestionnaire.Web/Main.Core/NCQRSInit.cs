@@ -175,6 +175,10 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
+
+            service.RegisterExecutor(typeof(CreateSnapshotForAR),
+                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
+        
             return service;
         }
 

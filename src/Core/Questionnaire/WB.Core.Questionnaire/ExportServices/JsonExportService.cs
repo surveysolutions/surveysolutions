@@ -1,6 +1,9 @@
 using System;
 using Main.Core.Documents;
+using Main.Core.Domain;
 using Main.DenormalizerStorage;
+using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Restoring.EventStapshoot;
 using Newtonsoft.Json;
 using Formatting = System.Xml.Formatting;
 
