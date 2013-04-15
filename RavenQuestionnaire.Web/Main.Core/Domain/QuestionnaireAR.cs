@@ -26,7 +26,7 @@ namespace Main.Core.Domain
 #endif
 
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
-        
+
         private readonly ICompleteQuestionFactory questionFactory;
 
         private static readonly HashSet<QuestionType> AllowedQuestionTypes = new HashSet<QuestionType>
@@ -69,44 +69,44 @@ namespace Main.Core.Domain
             source.Children.ApplyAction(
                 x => x.Children,
                 (parent, x) =>
-                    {
-                        Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
+                {
+                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
-                        var q = x as IQuestion;
-                        if (q != null)
-                        {
-                            var autoQuestion = q as IAutoPropagate;
-                            this.NewAddQuestion(
-                                questionId: q.PublicKey,
-                                groupId: parentId.Value,
-                                title: q.QuestionText,
-                                type: q.QuestionType,
-                                alias: q.StataExportCaption,
-                                isMandatory: q.Mandatory,
-                                isFeatured: q.Featured,
-                                isHeaderOfPropagatableGroup: q.Capital,
-                                scope: q.QuestionScope,
-                                condition: q.ConditionExpression,
-                                validationExpression: q.ValidationExpression,
-                                validationMessage: q.ValidationMessage,
-                                instructions: q.Instructions,
-                                options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
-                                optionsOrder: q.AnswerOrder,
-                                maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
-                                triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
-                        }
-                        var g = x as IGroup;
-                        if (g != null)
-                        {
-                            this.NewAddGroup(
-                                groupId: g.PublicKey,
-                                parentGroupId: parentId,
-                                title: g.Title,
-                                propagationKind: g.Propagated,
-                                description: g.Description,
-                                condition: g.ConditionExpression);
-                        }
-                    });
+                    var q = x as IQuestion;
+                    if (q != null)
+                    {
+                        var autoQuestion = q as IAutoPropagate;
+                        this.NewAddQuestion(
+                            questionId: q.PublicKey,
+                            groupId: parentId.Value,
+                            title: q.QuestionText,
+                            type: q.QuestionType,
+                            alias: q.StataExportCaption,
+                            isMandatory: q.Mandatory,
+                            isFeatured: q.Featured,
+                            isHeaderOfPropagatableGroup: q.Capital,
+                            scope: q.QuestionScope,
+                            condition: q.ConditionExpression,
+                            validationExpression: q.ValidationExpression,
+                            validationMessage: q.ValidationMessage,
+                            instructions: q.Instructions,
+                            options: q.Answers.Select(ConvertAnswerToOption).ToArray(),
+                            optionsOrder: q.AnswerOrder,
+                            maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
+                            triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
+                    }
+                    var g = x as IGroup;
+                    if (g != null)
+                    {
+                        this.NewAddGroup(
+                            groupId: g.PublicKey,
+                            parentGroupId: parentId,
+                            title: g.Title,
+                            propagationKind: g.Propagated,
+                            description: g.Description,
+                            condition: g.ConditionExpression);
+                    }
+                });
         }
 
         public override QuestionnaireDocument CreateSnapshot()
@@ -120,7 +120,7 @@ namespace Main.Core.Domain
         }
 
         public void UpdateQuestionnaire(string title)
-        #warning CRUD
+#warning CRUD
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
@@ -133,7 +133,7 @@ namespace Main.Core.Domain
         }
 
         public void CreateCompletedQ(Guid completeQuestionnaireId, UserLight creator)
-        #warning probably a factory should be used here
+#warning probably a factory should be used here
         {
             // TODO: check is it good to create new AR form another?
             // Do we need Saga here?
@@ -210,6 +210,8 @@ namespace Main.Core.Domain
 
             this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
 
+            this.ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(groupId, propagationKind);
+
             this.ApplyEvent(new GroupUpdated
             {
                 QuestionnaireId = this.innerDocument.PublicKey.ToString(),
@@ -222,15 +224,15 @@ namespace Main.Core.Domain
         }
 
         public void NewAddQuestion(Guid questionId,
-            Guid groupId, string title, QuestionType type, string alias, 
-            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup, 
+            Guid groupId, string title, QuestionType type, string alias,
+            bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfTitleIsEmpty(title);
-            
+
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
 
             this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
@@ -296,7 +298,7 @@ namespace Main.Core.Domain
             string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             this.ThrowDomainExceptionIfQuestionDoesNotExist(questionId);
-          
+
             alias = alias.Trim();
 
             this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
@@ -493,6 +495,20 @@ namespace Main.Core.Domain
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
 
+        private void ThrowDomainExceptionIfGroupsPropagationKindCannotBeChanged(Guid groupId, Propagate newPropagationKind)
+        {
+            if (newPropagationKind == Propagate.None)
+                return;
+
+            var group = this.innerDocument.Find<Group>(groupId);
+
+            bool hasAnyChildGroup = group.Children.Any(g => g is Group);
+            if (hasAnyChildGroup)
+            {
+                throw new DomainException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
+            }
+        }
+
         private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
         {
             bool isParentGroupAChapter = !parentGroupId.HasValue;
@@ -524,7 +540,7 @@ namespace Main.Core.Domain
 
                 if (@group.Propagated != Propagate.AutoPropagated)
                 {
-                    throw new DomainException(DomainExceptionType.TriggerLinksToNotPropagatedGroup, 
+                    throw new DomainException(DomainExceptionType.TriggerLinksToNotPropagatedGroup,
                         string.Format("Group {0} cannot be triggered because it is not auto propagated", group.Title));
                 }
             }
@@ -605,11 +621,11 @@ namespace Main.Core.Domain
                     string.Format("group with public key {0} can't be found", groupPublicKey));
             }
         }
-        
+
         private void ThrowDomainExceptionIfTitleIsEmpty(string title)
         {
-           if(string.IsNullOrEmpty(title))
-               throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
+            if (string.IsNullOrEmpty(title))
+                throw new DomainException(DomainExceptionType.QuestionTitleRequired, "Question title can't be empty");
         }
 
         private void ThrowDomainExceptionIfStataCaptionIsInvalid(Guid questionPublicKey, string stataCaption)
@@ -659,7 +675,7 @@ namespace Main.Core.Domain
             bool isQuestionTypeAllowed = AllowedQuestionTypes.Contains(type);
 
             if (!isQuestionTypeAllowed)
-                throw new DomainException(DomainExceptionType.NotAllowedQuestionType, 
+                throw new DomainException(DomainExceptionType.NotAllowedQuestionType,
                     string.Format("Question type {0} is not allowed", type));
         }
 
