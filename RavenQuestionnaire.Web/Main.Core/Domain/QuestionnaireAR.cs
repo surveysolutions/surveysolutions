@@ -168,6 +168,7 @@ namespace Main.Core.Domain
             Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
         {
             this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
+            this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
 
@@ -508,6 +509,20 @@ namespace Main.Core.Domain
         {
             return new Option(answer.PublicKey, answer.AnswerValue, answer.AnswerText);
         }
+
+        private void ThrowDomainExceptionIfParentGroupCantHaveChildGroups(Guid? parentGroupId)
+        {
+            bool isParentGroupAChapter = !parentGroupId.HasValue;
+            if (isParentGroupAChapter)
+                return;
+
+            var parentGroup = this.innerDocument.Find<Group>(parentGroupId.Value);
+            if (parentGroup.Propagated == Propagate.AutoPropagated)
+            {
+                throw new DomainException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
+            }
+        }
+
 
         private void ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(QuestionType type, Guid[] triggedGroupIds)
         {
