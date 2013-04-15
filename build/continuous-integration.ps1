@@ -6,6 +6,6 @@ $ErrorActionPreference = "Stop"
 
 CleanBinAndObjFolders
 
-BuildSolutions 'Debug' | %{ if (-not $_) { Exit } }
+BuildSolutions 'Release' | %{ if (-not $_) { Exit } }
 
-RunTests 'Debug'
+RunTests 'Release'
