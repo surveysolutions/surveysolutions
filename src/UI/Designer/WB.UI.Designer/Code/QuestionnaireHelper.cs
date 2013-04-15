@@ -159,6 +159,8 @@ namespace WB.UI.Designer
         /// </returns>
         private static QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
+            var createdBy = x.CreatedBy != null ? Membership.GetUser(x.CreatedBy, false) : null;
+
             return new QuestionnairePublicListViewModel
                 {
                     Id = x.Id,
@@ -170,8 +172,9 @@ namespace WB.UI.Designer
                     CanExport = true,
                     CanEdit = false,
                     CanSynchronize = UserHelperInstance.IsAdmin,
-                    CreatorName = x.CreatorName ?? GlobalHelper.EmptyString
-                };
+                           CreatedBy =
+                               createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
+                       };
         }
 
         /// <summary>
