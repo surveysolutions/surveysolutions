@@ -172,9 +172,8 @@ namespace WB.UI.Designer
                     CanExport = true,
                     CanEdit = false,
                     CanSynchronize = UserHelperInstance.IsAdmin,
-                           CreatedBy =
-                               createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
-                       };
+                    CreatorName = createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
+                };
         }
 
         /// <summary>
