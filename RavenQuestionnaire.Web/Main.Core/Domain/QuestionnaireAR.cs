@@ -42,6 +42,7 @@ namespace Main.Core.Domain
         public QuestionnaireAR()
             : base()
         {
+            this.questionFactory = new CompleteQuestionFactory();
         }
 
         public QuestionnaireAR(Guid publicKey)
