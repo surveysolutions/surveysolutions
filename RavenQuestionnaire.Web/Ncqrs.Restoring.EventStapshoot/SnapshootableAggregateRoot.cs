@@ -56,15 +56,21 @@ namespace Ncqrs.Restoring.EventStapshoot
             LastPersistedSnapshot = this.Version;
         }
 
-        public virtual void CreateNewSnapshot(T shapshot = null)
+        public virtual void CreateNewSnapshot()
+        {
+            CreateNewSnapshotInternal(CreateSnapshot());
+        }
+        public virtual void CreateNewSnapshot(T shapshot)
         {
             if (ExitWhenSelfSnapshotingWasMadeByPreviousEvent(shapshot))
                 return;
-
-            //    var snapshoot = CreateSnapshot();
+            CreateNewSnapshotInternal(shapshot);
+        }
+        protected virtual void CreateNewSnapshotInternal(T shapshot)
+        {
             var eventSnapshoot = new SnapshootLoaded()
                 {
-                    Template = new Snapshot(this.EventSourceId, this.Version + 1, shapshot ?? CreateSnapshot())
+                    Template = new Snapshot(this.EventSourceId, this.Version + 1, shapshot)
                 };
 
             ApplyEvent(eventSnapshoot);
