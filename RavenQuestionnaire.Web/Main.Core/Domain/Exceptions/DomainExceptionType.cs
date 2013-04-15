@@ -122,5 +122,7 @@ namespace Main.Core.Domain
         SelectorTextNotUnique,
 
         NotAllowedQuestionType,
+
+        GroupCantBecomeAutoPropagateIfHasAnyChildGroup
     }
 }
