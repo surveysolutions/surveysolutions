@@ -390,6 +390,143 @@ namespace Main.Core.Tests.Domain
 
         #endregion
 
+        #region Uniqueness
+
+        [Test]
+        public void AddQuestion_When_questionnaire_contains_question_with_same_id_Then_DomainException_with_error_type_QuestionWithSuchIdAlreadyExists_should_be_thrown()
+        {
+            // arrange
+            Guid existingQuestionId = Guid.Parse("11111111111111111111111111111111");
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroupAndQuestionInIt(questionId: existingQuestionId, groupId: groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewAddQuestion(existingQuestionId, groupId,
+                "What is your last name?", QuestionType.Text, "name", false, false, false, QuestionScope.Interviewer, "", "", "", "", new Option[]{}, Order.AsIs, null, new Guid[]{});
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.QuestionWithSuchIdAlreadyExists));
+        }
+
+        [Test]
+        public void AddGroup_When_questionnaire_contains_group_with_same_id_Then_DomainException_with_error_type_GroupWithSuchIdAlreadyExists_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithOneGroup(groupId: groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewAddGroup(groupId, null, "Group 2", Propagate.None, null, null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupWithSuchIdAlreadyExists));
+        }
+
+        [Test]
+        public void UpdateQuestion_When_questionnaire_contains_two_questions_with_same_id_Then_DomainException_with_error_type_MoreThanOneQuestionWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid questionId = Guid.Parse("11111111111111111111111111111111");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoQuestionsWithSameId(questionId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewUpdateQuestion(questionId, 
+                    "What is your very last name?", QuestionType.Text, "name33", false, false, false,
+                    QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty, string.Empty, 
+                    new Option[]{}, Order.AsIs, null, new Guid[]{});
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneQuestionsWithSuchIdExists));
+        }
+
+        [Test]
+        public void UpdateGroup_When_questionnaire_contains_two_groups_with_same_id_Then_DomainException_with_error_type_MoreThanOneGroupWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroupsWithSameId(groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewUpdateGroup(groupId, "New Title", Propagate.None, string.Empty, string.Empty);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneGroupsWithSuchIdExists));
+        }
+
+        [Test]
+        public void DeleteQuestion_When_questionnaire_contains_two_questions_with_same_id_Then_DomainException_with_error_type_MoreThanOneQuestionWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid questionId = Guid.Parse("11111111111111111111111111111111");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoQuestionsWithSameId(questionId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewDeleteQuestion(questionId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneQuestionsWithSuchIdExists));
+        }
+
+        [Test]
+        public void DeleteGroup_When_questionnaire_contains_two_groups_with_same_id_Then_DomainException_with_error_type_MoreThanOneGroupWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroupsWithSameId(groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.NewDeleteGroup(groupId);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneGroupsWithSuchIdExists));
+        }
+
+        [Test]
+        public void MoveQuestion_When_questionnaire_contains_two_questions_with_same_id_Then_DomainException_with_error_type_MoreThanOneQuestionWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid questionId = Guid.Parse("11111111111111111111111111111111");
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoQuestionsWithSameId(questionId, groupId: groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.MoveQuestion(questionId, groupId, 0);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneQuestionsWithSuchIdExists));
+        }
+
+        [Test]
+        public void MoveGroup_When_questionnaire_contains_two_groups_with_same_id_Then_DomainException_with_error_type_MoreThanOneGroupWithSuchIdExists_should_be_thrown()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            QuestionnaireAR questionnaire = CreateQuestionnaireARWithTwoGroupsWithSameId(groupId);
+
+            // act
+            TestDelegate act = () =>
+                questionnaire.MoveGroup(groupId, null, 0);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.MoreThanOneGroupsWithSuchIdExists));
+        }
+
+        #endregion // Uniqueness
 
         [Test]
         public void NewAddQuestion_when_question_is_head_of_propagated_group_but_inside_non_propagated_group_then_DomainException_should_be_thrown()
@@ -2356,6 +2493,52 @@ namespace Main.Core.Tests.Domain
             }
         }
 
+        private QuestionnaireAR CreateQuestionnaireARWithTwoGroupsWithSameId(Guid groupId)
+        {
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
+            questionnaire.OnNewGroupAdded(new NewGroupAdded
+            {
+                PublicKey = groupId,
+                GroupText = "Group A",
+            });
+
+            questionnaire.OnNewGroupAdded(new NewGroupAdded
+            {
+                PublicKey = groupId,
+                GroupText = "Group B",
+            });
+
+            return questionnaire;
+        }
+
+        private QuestionnaireAR CreateQuestionnaireARWithTwoQuestionsWithSameId(Guid questionId, Guid? groupId = null)
+        {
+            groupId = groupId ?? Guid.Parse("abcd0000abcd0000abcd0000abcd0000");
+
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
+
+            questionnaire.OnNewGroupAdded(new NewGroupAdded
+            {
+                PublicKey = groupId.Value,
+                GroupText = "Main Group",
+            });
+
+            questionnaire.OnNewQuestionAdded(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = "Question 1"
+            });
+
+            questionnaire.OnNewQuestionAdded(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = "Question 2"
+            });
+
+            return questionnaire;
+        }
     }
 }
