@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Web.Tests.WCF
         /// The process_ avent arrived_ eventprocessed.
         /// </summary>
         [Test]
-        public void Process_AventArrived_Eventprocessed()
+        public void Process_EventArrived_Eventprocessed()
         {
             IKernel kernel = new StandardKernel();
             var eventSync = new Mock<IEventStreamReader>();
@@ -48,8 +48,11 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             var factory = new Mock<ISyncProcessFactory>();
             var syncProcessMock = new Mock<IEventSyncProcess>();
 
-            factory.Setup(f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
-                  syncProcessMock.Object);
+            factory.Setup(f => f.GetProcess(
+                It.IsAny<SyncProcessType>(), 
+                It.IsAny<Guid>(), 
+                It.IsAny<Guid?>()))
+                .Returns(syncProcessMock.Object);
 
             var target = new EventPipeService(kernel, factory.Object);
 

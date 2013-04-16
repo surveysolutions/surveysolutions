@@ -23,8 +23,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentNullException"><paramref name="typeResolver"/> is <value>null</value>.</exception>
         public EventConverter(IEventTypeResolver typeResolver)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(typeResolver != null, "typeResolver");
-
+            #endif
             _converters = new Dictionary<string, IEventConverter>();
             _typeResolver = typeResolver;
         }
@@ -63,9 +64,10 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentException">If a converter for <paramref name="eventType"/> has already been added.</exception>
         public void AddConverter(Type eventType, IEventConverter converter)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(eventType != null, "eventType");
             Contract.Requires<ArgumentNullException>(converter != null, "converter");
-
+            #endif
             string name = _typeResolver.EventNameFor(eventType);
             AddConverter(name, converter);
         }
@@ -83,9 +85,10 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <exception cref="ArgumentException">If a converter for <paramref name="eventName"/> has already been added.</exception>
         public void AddConverter(string eventName, IEventConverter converter)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(eventName != null, "eventName");
             Contract.Requires<ArgumentNullException>(converter != null, "converter");
-
+#endif
             ThrowIfNameExists(eventName);
             _converters.Add(eventName, converter);
         }

@@ -8,6 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Entities.Extensions;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 #if !MONODROID
 using Ncqrs.Eventing.Storage.RavenDB;
@@ -87,15 +90,18 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
+            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
+                                                          new InMemoryEventStore());
             // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
-            var bus = new InProcessEventBus(true);
+            var bus = new  InProcessEventBus(true);
 
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-
+            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
+                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
@@ -128,6 +134,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
+            #warning hello to Vitaliy Balabanov: rebuild read layer by event sources
             var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
 
             if (eventStore == null)
@@ -168,6 +175,10 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
+
+            service.RegisterExecutor(typeof(CreateSnapshotForAR),
+                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
+        
             return service;
         }
 

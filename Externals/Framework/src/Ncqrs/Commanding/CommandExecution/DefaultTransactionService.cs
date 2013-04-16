@@ -1,10 +1,12 @@
 ﻿using System;
+#if !MONODROID
 using System.Transactions;
-
+#endif
 namespace Ncqrs.Commanding.CommandExecution
 {
     public class DefaultTransactionService : ITransactionService
     {
+        #if !MONODROID
         private readonly TransactionOptions _options;        
 
         public DefaultTransactionService()
@@ -30,14 +32,18 @@ namespace Ncqrs.Commanding.CommandExecution
         }
 
         public TransactionScopeOption ScopeOption { get; set; }
-
+#endif
         public void ExecuteInTransaction(Action action)
-        {
+        { 
+#if !MONODROID
             using (var scope = new TransactionScope(ScopeOption, Options))
             {
+#endif
                 action();
+            #if !MONODROID
                 scope.Complete();
             }
+#endif
         }
     }
 }

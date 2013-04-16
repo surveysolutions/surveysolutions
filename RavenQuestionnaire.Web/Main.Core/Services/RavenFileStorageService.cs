@@ -82,8 +82,11 @@ namespace Main.Core.Services
 
             /*   var memoryStream = new MemoryStream();
             a.Data().CopyTo(memoryStream);*/
+
             file.Content = a.Data();
-            file.PublicKey = filename;
+
+            file.FileName = filename;
+
             file.Description = a.Metadata["Description"].Value<string>();
             file.Title = a.Metadata["Description"].Value<string>();
             return file;
@@ -113,7 +116,7 @@ namespace Main.Core.Services
         /// </param>
         public void StoreFile(FileDescription file)
         {
-            Attachment a = this.documentStore.DatabaseCommands.GetAttachment(file.PublicKey);
+            Attachment a = this.documentStore.DatabaseCommands.GetAttachment(file.FileName);
             if (a == null)
             {
                 /*  using (MemoryStream theMemStream = new MemoryStream())
@@ -121,12 +124,12 @@ namespace Main.Core.Services
 
                     theMemStream.Write(file.Content, 0, file.Content.Length);*/
                 this.documentStore.DatabaseCommands.PutAttachment(
-                    file.PublicKey, 
+                    file.FileName, 
                     null, 
                     file.Content, 
                     new RavenJObject
                         {
-                            { "PublicKey", file.PublicKey }, 
+                            { "PublicKey", file.FileName}, 
                             { "Description", file.Description }, 
                             { "Title", file.Title }
                         });
@@ -135,10 +138,10 @@ namespace Main.Core.Services
                 int thumbWidth, thumbHeight;
                 MemoryStream thumbData = this.ResizeImage(image, 160, 120, out thumbWidth, out thumbHeight);
                 this.documentStore.DatabaseCommands.PutAttachment(
-                    this.GetThumbName(file.PublicKey), 
+                    this.GetThumbName(file.FileName), 
                     null, 
                     thumbData, 
-                    new RavenJObject { { "PublicKey", this.GetThumbName(file.PublicKey) } });
+                    new RavenJObject { { "PublicKey", this.GetThumbName(file.FileName) } });
 
                 // }
             }

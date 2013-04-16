@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Events
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
@@ -24,6 +25,11 @@ namespace Main.Core.Events
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; RavenQuestionnaire.Core.Events.AggregateRootEvent].
         /// </returns>
         IEnumerable<AggregateRootEvent> ReadEvents();
+
+
+        IEnumerable<Tuple<string, Guid>> GetAllARIds();
+
+        IEnumerable<AggregateRootEvent> GetARById(Guid aRId, string rootType ,Guid? startFrom);
 
         #endregion
     }

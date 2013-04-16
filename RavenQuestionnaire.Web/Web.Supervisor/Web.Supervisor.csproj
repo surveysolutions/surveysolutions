@@ -194,6 +194,7 @@
     <Compile Include="Controllers\DeviceController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Global.asax.cs">
@@ -576,7 +577,7 @@
     <Content Include="Views\Backup\Index.cshtml" />
     <Content Include="Views\Survey\Timeline1.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
-    <Content Include="Views\ImportExport\NewViewTestUploadFile.cshtml" />
+    <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

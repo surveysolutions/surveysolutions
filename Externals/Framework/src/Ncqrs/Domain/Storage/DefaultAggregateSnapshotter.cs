@@ -4,7 +4,9 @@ using System.Reflection.Emit;
 using System.Linq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Domain.Storage
 {
     public class DefaultAggregateSnapshotter : IAggregateSnapshotter

@@ -424,7 +424,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Head",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -434,7 +434,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Spouse",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -444,7 +444,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Child",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -454,7 +454,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Parent",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -464,7 +464,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other Relative",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -474,7 +474,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employee",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -484,7 +484,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Non-relative",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -494,7 +494,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -528,7 +528,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Male",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -538,7 +538,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Female",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -572,7 +572,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -582,7 +582,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -711,7 +711,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "None",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -721,7 +721,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Pre-primary (Infant) or Primary",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -731,7 +731,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Lower / Junior Secondary (Forms 1-3) / Senior Primary",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -741,7 +741,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Upper Secondary (Forms 4 & 5)",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -751,7 +751,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Post Secondary, non-tertiary (diploma or associate degree)",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -761,7 +761,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Tertiary (University)",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -771,7 +771,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -805,7 +805,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "None",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -815,7 +815,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Common Ent.",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -825,7 +825,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "GCE/CXC 1-2",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -835,7 +835,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "GCE/CXC 3-4",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -845,7 +845,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "GCE/CXC 5+",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -855,7 +855,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "GCE A: 1-2",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -865,7 +865,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "GCE A: 3+",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -875,7 +875,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Dip/Degree",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -885,7 +885,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Std. 6",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -895,7 +895,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "10",
@@ -929,7 +929,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "YES",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -939,7 +939,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "NO",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -973,7 +973,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Apprenticeship",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -983,7 +983,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "On the job",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -993,7 +993,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Correspondence Course",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1003,7 +1003,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Virtual/Internet Learning",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1013,7 +1013,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Private Study",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1023,7 +1023,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Institution Full Time",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -1033,7 +1033,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Institution Part Time",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -1043,7 +1043,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -1184,7 +1184,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Student",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1194,7 +1194,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Housewife/homemaker",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1204,7 +1204,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Reciever of income from abroad",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1214,7 +1214,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Retired, old age",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1224,7 +1224,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Disabled",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1234,7 +1234,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -1291,7 +1291,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "YES",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1301,7 +1301,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "NO",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1335,7 +1335,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "YES",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1345,7 +1345,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "NO",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1379,7 +1379,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Vacation",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1389,7 +1389,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Maternity Leave",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1399,7 +1399,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Sick leave",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1409,7 +1409,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Temporary Lay-off",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1419,7 +1419,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1476,7 +1476,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "YES",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1486,7 +1486,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "NO",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1496,7 +1496,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Have Job",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1530,7 +1530,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Nothing",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1540,7 +1540,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Register at a public employment exchange",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1550,7 +1550,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Register at a private employment exchange",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1560,7 +1560,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Direct application",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1570,7 +1570,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Checking at work sites, farms factory gates, markets etc.",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1580,7 +1580,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Answering newspaper advertisement",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -1590,7 +1590,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Seeking assistance of friends, relatives colleagues, unions etc",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -1600,7 +1600,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Looking for land, building, etc to establish own business",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -1610,7 +1610,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Arranging for financial resources, applying for permits, licenses",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -1620,7 +1620,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "10",
@@ -1654,7 +1654,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Own illness, injury, pregnancy",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1664,7 +1664,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Personal, family responsibilities",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1674,7 +1674,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "In school, training",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1684,7 +1684,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Already found work to start later",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1694,7 +1694,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Already made arrangments for self employment activities",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1704,7 +1704,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Awaiting recall to former job",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -1714,7 +1714,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Awaiting replies from employers",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -1724,7 +1724,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Awaiting busy season",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -1734,7 +1734,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Believe no suitable work available",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -1744,7 +1744,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Believe no financial resources, land, equipment permits etc. available to start own business",
                             "AnswerType": 0,
                             "AnswerValue": "10",
@@ -1754,7 +1754,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Lack employer's requirements",
                             "AnswerType": 0,
                             "AnswerValue": "11",
@@ -1764,7 +1764,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Could not find suitable work",
                             "AnswerType": 0,
                             "AnswerValue": "12",
@@ -1774,7 +1774,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Do not know how or where to seek work",
                             "AnswerType": 0,
                             "AnswerValue": "13",
@@ -1784,7 +1784,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Not yet started to seek work",
                             "AnswerType": 0,
                             "AnswerValue": "14",
@@ -1818,7 +1818,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "In school, training",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1828,7 +1828,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Retirement/old age",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -1838,7 +1838,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Illness/disability",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -1848,7 +1848,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Household/family duties",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -1858,7 +1858,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other.",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -1868,7 +1868,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Nothing",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -1949,7 +1949,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -1959,7 +1959,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2041,7 +2041,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "actual = usual",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2051,7 +2051,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Own illness (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2061,7 +2061,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Holiday/vacation (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2071,7 +2071,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Personal/family Responsibilities (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2081,7 +2081,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "In school training (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -2091,7 +2091,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Strike, lock-out (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -2101,7 +2101,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Job started/ended in reference week (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -2111,7 +2111,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Reduction in economic activity (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -2121,7 +2121,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Temporary disorganisation (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -2131,7 +2131,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other reason (actual less than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "10",
@@ -2141,7 +2141,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Overtime work (actual greater than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "11",
@@ -2151,7 +2151,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other reason (actual greater than usual)",
                             "AnswerType": 0,
                             "AnswerValue": "12",
@@ -2231,7 +2231,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Own illness, injury",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2241,7 +2241,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Holiday, vacation",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2251,7 +2251,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Personal, family responsibilities",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2261,7 +2261,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "In school, training",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2271,7 +2271,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Did not want more work",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -2281,7 +2281,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Full time work is less than 35 hours a week",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -2291,7 +2291,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Strike, lock-out",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -2301,7 +2301,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Job started/ended within reference period",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -2311,7 +2311,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Reduction in economic activity",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -2321,7 +2321,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Temporary disorganisation/suspension from work",
                             "AnswerType": 0,
                             "AnswerValue": "10",
@@ -2331,7 +2331,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Could not find more work",
                             "AnswerType": 0,
                             "AnswerValue": "11",
@@ -2341,7 +2341,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "12",
@@ -2398,7 +2398,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "YES",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2408,7 +2408,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "NO",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2442,7 +2442,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Central Government Employee",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2452,7 +2452,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employee of statutory board",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2462,7 +2462,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Private employee",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2472,7 +2472,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Apprentice",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2482,7 +2482,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed with employee",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -2492,7 +2492,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed without employee",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -2502,7 +2502,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Unpaid family worker",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -2512,7 +2512,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Member of Production Cooperative",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -2522,7 +2522,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -2579,7 +2579,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Complete set of written accounts",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2589,7 +2589,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Simplified written accounts",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2599,7 +2599,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Only through informal records of orders, sales, purchases",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2609,7 +2609,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No records are kept.",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2643,7 +2643,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes, Written contract",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2653,7 +2653,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No, Verbal agreement",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2687,7 +2687,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2697,7 +2697,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2731,7 +2731,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2741,7 +2741,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2751,7 +2751,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "I don't know",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2785,7 +2785,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes, from the NIC",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2795,7 +2795,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes from an Insurance other than NIC",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2805,7 +2805,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2815,7 +2815,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "I don't know",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2849,7 +2849,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employer",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2859,7 +2859,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-Employed",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2869,7 +2869,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Not Registered",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2903,7 +2903,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "only one",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -2913,7 +2913,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "2-5",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -2923,7 +2923,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "6-9",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -2933,7 +2933,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "10- 49",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -2943,7 +2943,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "50 or more",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -3069,7 +3069,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Less than 6 months",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3079,7 +3079,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "6 months but less than 1 year",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3089,7 +3089,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "1 year but less than 5 years",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3099,7 +3099,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "5 years but less than 10 years",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3109,7 +3109,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Ten years or more",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -3317,7 +3317,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Central Government Employee",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3327,7 +3327,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employee of statutory board",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3337,7 +3337,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Private employee",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3347,7 +3347,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Apprentice",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3357,7 +3357,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed with employee",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -3367,7 +3367,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed without employee",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -3377,7 +3377,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Unpaid family worker",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -3387,7 +3387,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Member of Production Cooperative",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -3397,7 +3397,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -3548,7 +3548,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Less than 6 months",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3558,7 +3558,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Six months but less than one year",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3568,7 +3568,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "One year but less than five years",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3578,7 +3578,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Five years but less than ten years",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3588,7 +3588,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Ten years or more",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -3646,7 +3646,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Additional income needed",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3656,7 +3656,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Starting own business",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3666,7 +3666,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Hobby",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3676,7 +3676,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other specify.",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3757,7 +3757,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Less than 1 month",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3767,7 +3767,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "One to three months",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3777,7 +3777,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Four to six months",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3787,7 +3787,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "More than six months",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3821,7 +3821,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3831,7 +3831,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3865,7 +3865,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Lost job",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3875,7 +3875,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Job completed",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3885,7 +3885,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Resigned to study",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3895,7 +3895,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Resigned to take care of children",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -3905,7 +3905,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Retrenched",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -3915,7 +3915,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Business failed",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -3925,7 +3925,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Moved to new area",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -3935,7 +3935,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -3969,7 +3969,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Central Government Employee",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -3979,7 +3979,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employee of statutory board",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -3989,7 +3989,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Private employee",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -3999,7 +3999,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed with employee",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4009,7 +4009,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed without employee",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4019,7 +4019,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Unpaid family worker",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -4029,7 +4029,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Apprentice",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -4039,7 +4039,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Member of Production Coop",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -4049,7 +4049,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -4152,7 +4152,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Never looked",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4162,7 +4162,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Less than one month",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4172,7 +4172,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "One month but less than three months",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -4182,7 +4182,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Three months but less than six months",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4192,7 +4192,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Six months and more",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4226,7 +4226,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Parent/Guardian",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4236,7 +4236,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Spouse/Partner",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4246,7 +4246,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Money from abroad",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -4256,7 +4256,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Savings/investment/pension",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4266,7 +4266,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Friend/relative in St. Lucia",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4276,7 +4276,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Social Security",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -4286,7 +4286,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -4367,7 +4367,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4377,7 +4377,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4411,7 +4411,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Less than one month",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4421,7 +4421,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "One month but less than two months",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4431,7 +4431,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Two but less than 3 months",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -4441,7 +4441,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Three but less than six months",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4451,7 +4451,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Six months to one year",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4461,7 +4461,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "More than one year",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -4495,7 +4495,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Central Government Employee",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4505,7 +4505,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Employee of statutory board",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4515,7 +4515,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Private employee",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -4525,7 +4525,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed with employee",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4535,7 +4535,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Self-employed without employee",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4545,7 +4545,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Unpaid family worker",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -4555,7 +4555,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Apprentice",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -4565,7 +4565,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Member of Production Cooperative",
                             "AnswerType": 0,
                             "AnswerValue": "8",
@@ -4575,7 +4575,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "9",
@@ -4678,7 +4678,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Parent/Guardian",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4688,7 +4688,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Spouse/Partner",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4698,7 +4698,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Money from abroad",
                             "AnswerType": 0,
                             "AnswerValue": "3",
@@ -4708,7 +4708,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Savings/investment/pension",
                             "AnswerType": 0,
                             "AnswerValue": "4",
@@ -4718,7 +4718,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Friend/relative in St. Lucia",
                             "AnswerType": 0,
                             "AnswerValue": "5",
@@ -4728,7 +4728,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Social Security",
                             "AnswerType": 0,
                             "AnswerValue": "6",
@@ -4738,7 +4738,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Other",
                             "AnswerType": 0,
                             "AnswerValue": "7",
@@ -4795,7 +4795,7 @@
                         "Answers": [
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "Yes",
                             "AnswerType": 0,
                             "AnswerValue": "1",
@@ -4805,7 +4805,7 @@
                           },
                           {
                             "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                            "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                            "AnswerImage": null,
                             "AnswerText": "No",
                             "AnswerType": 0,
                             "AnswerValue": "2",
@@ -4860,7 +4860,7 @@
                     "Answers": [
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Undivided private house",
                         "AnswerType": 0,
                         "AnswerValue": "1",
@@ -4870,7 +4870,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Part of a private house",
                         "AnswerType": 0,
                         "AnswerValue": "2",
@@ -4880,7 +4880,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Flat, apartment, condominium",
                         "AnswerType": 0,
                         "AnswerValue": "3",
@@ -4890,7 +4890,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Townhouse",
                         "AnswerType": 0,
                         "AnswerValue": "4",
@@ -4900,7 +4900,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Double house/Duplex",
                         "AnswerType": 0,
                         "AnswerValue": "5",
@@ -4910,7 +4910,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Combined business & dwelling",
                         "AnswerType": 0,
                         "AnswerValue": "6",
@@ -4920,7 +4920,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Barracks",
                         "AnswerType": 0,
                         "AnswerValue": "7",
@@ -4930,7 +4930,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Other",
                         "AnswerType": 0,
                         "AnswerValue": "8",
@@ -4964,7 +4964,7 @@
                     "Answers": [
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Wood/Timber",
                         "AnswerType": 0,
                         "AnswerValue": "1",
@@ -4974,7 +4974,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Concrete/Concrete Blocks",
                         "AnswerType": 0,
                         "AnswerValue": "2",
@@ -4984,7 +4984,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Wood & Concrete",
                         "AnswerType": 0,
                         "AnswerValue": "3",
@@ -4994,7 +4994,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Stone",
                         "AnswerType": 0,
                         "AnswerValue": "4",
@@ -5004,7 +5004,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Brick/Blocks",
                         "AnswerType": 0,
                         "AnswerValue": "5",
@@ -5014,7 +5014,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Plywood",
                         "AnswerType": 0,
                         "AnswerValue": "6",
@@ -5024,7 +5024,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Makeshift",
                         "AnswerType": 0,
                         "AnswerValue": "7",
@@ -5034,7 +5034,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Other/Don't Know",
                         "AnswerType": 0,
                         "AnswerValue": "8",
@@ -5091,7 +5091,7 @@
                     "Answers": [
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Owned (with mortgage)",
                         "AnswerType": 0,
                         "AnswerValue": "1",
@@ -5101,7 +5101,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Owned (Without mortgage)",
                         "AnswerType": 0,
                         "AnswerValue": "2",
@@ -5111,7 +5111,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Rented-Furnished",
                         "AnswerType": 0,
                         "AnswerValue": "3",
@@ -5121,7 +5121,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Rented-Unfurnished",
                         "AnswerType": 0,
                         "AnswerValue": "4",
@@ -5131,7 +5131,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Leased to own",
                         "AnswerType": 0,
                         "AnswerValue": "5",
@@ -5141,7 +5141,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Provided Rent-free",
                         "AnswerType": 0,
                         "AnswerValue": "6",
@@ -5151,7 +5151,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Other",
                         "AnswerType": 0,
                         "AnswerValue": "7",
@@ -5161,7 +5161,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Squatted",
                         "AnswerType": 0,
                         "AnswerValue": "8",
@@ -5314,7 +5314,7 @@
                     "Answers": [
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Television Set",
                         "AnswerType": 0,
                         "AnswerValue": "1",
@@ -5324,7 +5324,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Refrigerator",
                         "AnswerType": 0,
                         "AnswerValue": "2",
@@ -5334,7 +5334,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Washing Machine",
                         "AnswerType": 0,
                         "AnswerValue": "3",
@@ -5344,7 +5344,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Telephone - LandLine",
                         "AnswerType": 0,
                         "AnswerValue": "4",
@@ -5354,7 +5354,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Telephone - Cellular",
                         "AnswerType": 0,
                         "AnswerValue": "5",
@@ -5364,7 +5364,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Internet Access",
                         "AnswerType": 0,
                         "AnswerValue": "6",
@@ -5374,7 +5374,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Electric/Gas Stove",
                         "AnswerType": 0,
                         "AnswerValue": "7",
@@ -5384,7 +5384,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Computer",
                         "AnswerType": 0,
                         "AnswerValue": "8",
@@ -5394,7 +5394,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Motor Vehicle",
                         "AnswerType": 0,
                         "AnswerValue": "9",
@@ -5404,7 +5404,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Video/VCR",
                         "AnswerType": 0,
                         "AnswerValue": "10",
@@ -5414,7 +5414,7 @@
                       },
                       {
                         "$type": "Main.Core.Entities.SubEntities.Answer, Main.Core",
-                        "AnswerImage": "45ccb0e6-fc33-4575-b961-7a309c1b28e7",
+                        "AnswerImage": null,
                         "AnswerText": "Electric Iron",
                         "AnswerType": 0,
                         "AnswerValue": "11",

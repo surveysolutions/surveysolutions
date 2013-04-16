@@ -58,7 +58,7 @@ namespace CAPI.Android.Injections
         }
         protected IProjectionStorage CreateStorage(IContext c)
         {
-            return new InternalProjectionStorage(CapiApplication.Context);
+            return new InternalProjectionStorage();
         }
     }
 }

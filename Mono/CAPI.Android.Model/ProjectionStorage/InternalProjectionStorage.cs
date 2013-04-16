@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Android.Content;
 using Newtonsoft.Json;
 
@@ -6,30 +7,37 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
 {
     public class InternalProjectionStorage : IProjectionStorage
     {
-        private Context context;
-        public InternalProjectionStorage(Context context)
+      //  private Context context;
+        public InternalProjectionStorage(/*Context context*/)
         {
-            this.context = context;
+         //   this.context = context;
 
         }
 
         #region Implementation of IProjectionStorage
 
-        public void SaveOrUpdateProjection(object projection, Guid publicKey)
+        protected string GetFileName(Guid publicKey)
         {
-            using (var fs = context.OpenFileOutput(publicKey.ToString(), FileCreationMode.WorldReadable))
+            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
+                                           publicKey.ToString());
+        }
+
+        public void SaveOrUpdateProjection<T>(T projection, Guid publicKey) where T : class 
+        {
+            using (var fs = File.Open(GetFileName(publicKey),FileMode.OpenOrCreate))
             {
                 var bytes = GetBytes(GetJsonData(projection));
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
 
-        public object RestoreProjection(Guid publicKey)
+        public T RestoreProjection<T>(Guid publicKey) where T : class 
         {
-            byte[] cachedBytes = System.IO.File.ReadAllBytes(
-                System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),
-                                       publicKey.ToString()));
-            return GetObject(GetString(cachedBytes));
+            var filePath = GetFileName(publicKey);
+            if (!File.Exists(filePath))
+                return null;
+            byte[] cachedBytes = System.IO.File.ReadAllBytes(filePath);
+            return GetObject<T>(GetString(cachedBytes));
             /*    using (var fs = context.OpenFileInput(publicKey.ToString()))
                 {
 
@@ -54,7 +62,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
 
         public void ClearProjection(Guid prjectionKey)
         {
-            context.DeleteFile(prjectionKey.ToString());
+            File.Delete(GetFileName(prjectionKey));
         }
 
         #endregion
@@ -83,10 +91,10 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             Console.WriteLine(data);
             return data;
         }
-
-        private object GetObject(string json)
+        
+        private T GetObject<T>(string json)where  T:class 
         {
-            return JsonConvert.DeserializeObject(json,
+            return JsonConvert.DeserializeObject<T>(json,
                 new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Objects,

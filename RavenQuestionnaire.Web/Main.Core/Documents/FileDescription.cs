@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Documents
 {
+    using System;
     using System.IO;
 
     /// <summary>
@@ -30,7 +31,7 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets or sets the public key.
         /// </summary>
-        public string PublicKey { get; set; }
+        public string FileName { get; set; }
 
         // public Guid ThumbPublicKey { get; set; }
         // public DateTime CreationDate { get; set; }

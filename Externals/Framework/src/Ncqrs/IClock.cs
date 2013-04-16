@@ -21,7 +21,9 @@ namespace Ncqrs
     {
         public DateTime UtcNow()
         {
+            #if USE_CONTRACTS
             Contract.Ensures(Contract.Result<DateTime>().Kind == DateTimeKind.Utc, "The result should be a UTC date and time.");
+            #endif
             return default(DateTime);
         }
     }

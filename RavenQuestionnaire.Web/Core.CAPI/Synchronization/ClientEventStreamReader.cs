@@ -98,6 +98,16 @@ namespace Core.CAPI.Synchronization
             return retval.OrderBy(x => x.EventSequence);
         }
 
+        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Methods

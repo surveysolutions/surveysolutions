@@ -76,9 +76,6 @@ namespace Main.Core.Events
         /// <summary>
         /// Responsible for load and added users from database
         /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
         protected List<AggregateRootEvent> ExtractUsers()
         {
             var usersList = new List<AggregateRootEvent>();
@@ -86,7 +83,7 @@ namespace Main.Core.Events
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
             foreach (UserDocument item in model)
             {
-                usersList.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                usersList.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
             }
 
             return usersList;
@@ -97,6 +94,16 @@ namespace Main.Core.Events
         #region Overrides of AbstractEventSync
 
         public override IEnumerable<AggregateRootEvent> ReadEvents()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
         {
             throw new NotImplementedException();
         }

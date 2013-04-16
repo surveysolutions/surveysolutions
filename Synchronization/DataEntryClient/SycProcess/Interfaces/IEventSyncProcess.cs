@@ -50,5 +50,12 @@ namespace DataEntryClient.SycProcess.Interfaces
         /// List Of Aggregate Roots For Import Message 
         /// </returns>
         ListOfAggregateRootsForImportMessage Export(string syncProcessDescription);
+
+
+        SyncItemsMetaContainer GetListOfAggregateRoots(string syncProcessDescription);
+
+
+        ImportSynchronizationMessage GetAR(string syncProcessDescription, Guid firstEventPublicKey, string ARType ,int length);
+
     }
 }

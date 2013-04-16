@@ -29,9 +29,9 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             return data;
         }
 
-        private object GetObject(string json)
+        private T GetObject<T>(string json)where  T:class 
         {
-            return JsonConvert.DeserializeObject(json,
+            return JsonConvert.DeserializeObject<T>(json,
                 new JsonSerializerSettings
                 {
                     TypeNameHandling = TypeNameHandling.Objects,
@@ -42,7 +42,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
         }
         #region Implementation of IProjectionStorage
 
-        public void SaveOrUpdateProjection(object projection, Guid publicKey)
+        public void SaveOrUpdateProjection<T>(T projection, Guid publicKey)where  T:class 
         {
             var cursor = _databaseHelper
                .ReadableDatabase
@@ -67,7 +67,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
                                                         new string[0]);
         }
 
-        public object RestoreProjection(Guid publicKey)
+        public T RestoreProjection<T>(Guid publicKey)where  T:class 
         {
             var cursor = _databaseHelper
                 .ReadableDatabase
@@ -75,7 +75,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             var dataIndex = cursor.GetColumnIndex("Data");
             while (cursor.MoveToNext())
             {
-                return GetObject(cursor.GetString(dataIndex));
+                return GetObject<T>(cursor.GetString(dataIndex));
             }
             return null;
         }

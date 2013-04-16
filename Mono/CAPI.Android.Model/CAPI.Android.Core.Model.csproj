@@ -62,6 +62,7 @@
     <Compile Include="EventHandlers\CompleteQuestionnaireViewDenormalizer.cs" />
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
+    <Compile Include="FileStorage\FileStorageService.cs" />
     <Compile Include="ProjectionStorage\CriteriaContractResolver.cs" />
     <Compile Include="ProjectionStorage\DefaultProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\InternalProjectionStorage.cs" />

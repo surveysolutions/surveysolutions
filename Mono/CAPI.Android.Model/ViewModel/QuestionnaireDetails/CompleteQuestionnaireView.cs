@@ -188,6 +188,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             if (!this.Questions.ContainsKey(key))
                 return;
+
             var question =
                 this.Questions[key];
             question.SetEnabled(enebled);
@@ -419,7 +420,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                             newType,
                             Enumerable.ToList<AnswerViewModel>(question.Answers.OfType<ICompleteAnswer>().Select(
                                     a =>
-                                    new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected))),
+                                    new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected,a.AnswerImage))),
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
                             question.ValidationExpression, question.ValidationMessage);

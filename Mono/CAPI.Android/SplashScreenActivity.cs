@@ -13,11 +13,11 @@ namespace CAPI.Android
             : base(Resource.Layout.SplashScreen)
         {
         }
-        protected override void TriggerFirstNavigate()
+      /*  protected override void TriggerFirstNavigate()
         {
             CapiApplication.GenerateEvents();
             base.TriggerFirstNavigate();
-        }
+        }*/
 
     }
 }

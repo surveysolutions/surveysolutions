@@ -4,7 +4,9 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Commanding.CommandExecution.Mapping
 {
     public class PropertiesToMethodMapper
@@ -53,8 +55,14 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
         {
             var propertiesToMap = new List<PropertyToParameterMappingInfo>(sources);
             var mappedProps = new PropertyInfo[propertiesToMap.Count];
+#if MONODROID
+ var targets = new List<MethodBase>();
+			targets.AddRange(potentialTargets
+				.Select(t => (MethodBase)t)
+				.ToList());
+#else
             var targets = new List<MethodBase>(potentialTargets);
-
+#endif
             MakeSureAllPropertiesToMapOnNameHaveUniqueNames(propertiesToMap);
             MakeSureAllPropertieOrdinalsAreUnique(propertiesToMap);
 
@@ -97,8 +105,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
         private static void MakeSureAllPropertieOrdinalsAreUnique(List<PropertyToParameterMappingInfo> propertiesToMap)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(propertiesToMap != null);
-
+#endif
             var query = from p in propertiesToMap
                         where p.Ordinal.HasValue
                         group p by p.Ordinal
@@ -116,8 +125,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
 
         private static void MakeSureAllPropertiesToMapOnNameHaveUniqueNames(List<PropertyToParameterMappingInfo> propertiesToMap)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(propertiesToMap != null);
-
+#endif
             var query = from p in propertiesToMap
                         where !p.TargetName.IsNullOrEmpty()
                         group p by p.TargetName

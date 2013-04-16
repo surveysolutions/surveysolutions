@@ -45,8 +45,9 @@ namespace Ncqrs.Commanding.CommandExecution
         /// <exception cref="ArgumentNullException">Occurs when <i>commandType</i> is a <c>null</c> dereference.</exception>
         public ExecutorForCommandNotFoundException(Type commandType, string message, Exception inner) : base((String.IsNullOrEmpty(message) ? String.Format("No handler was found for command {0}.", commandType.FullName) : message), inner)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(commandType != null);
-
+#endif
             CommandType = commandType;
         }
 

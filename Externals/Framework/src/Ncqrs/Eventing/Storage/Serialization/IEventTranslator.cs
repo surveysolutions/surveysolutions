@@ -9,7 +9,9 @@ namespace Ncqrs.Eventing.Storage.Serialization
     /// and a raw format for storage.
     /// </summary>
     /// <typeparam name="T">The type of the raw data.</typeparam>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IEventTranslatorContracts<>))]
+    #endif
     public interface IEventTranslator<T>
     {
         /// <summary>
@@ -28,7 +30,7 @@ namespace Ncqrs.Eventing.Storage.Serialization
         /// <seealso cref="StoredEvent{T}.Clone{TOther}"/>
         StoredEvent<T> TranslateToRaw(StoredEvent<JObject> obj);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IEventTranslator<>))]
     internal abstract class IEventTranslatorContracts<T> : IEventTranslator<T>
     {
@@ -46,4 +48,5 @@ namespace Ncqrs.Eventing.Storage.Serialization
             return default(StoredEvent<T>);
         }
     }
+#endif
 }

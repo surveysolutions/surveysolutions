@@ -6,6 +6,11 @@
 //   The raven db event store.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
     using System;
@@ -22,7 +27,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     /// <summary>
     /// The raven DB event store.
     /// </summary>
-    public class RavenDBEventStore : IStreamableEventStore
+    public class RavenDBEventStore : IStreamableEventStore, ISnapshootEventStore
     {
         #region Fields
 
@@ -110,7 +115,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 while (true)
                 {
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).OrderBy(y=>y.EventTimeStamp).Skip(page * PageSize).Take(PageSize);
+                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).OrderBy(y => y.EventSequence).Skip(page * PageSize).Take(PageSize);
 
                     if (!chunk.Any())
                     {
@@ -140,14 +145,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            /*  using (var session = _documentStore.OpenSession())
-            {
-                var storedEvents = session.Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResults())
-                    .Where(x => x.EventSourceId == id)
-                    .Where(x => x.EventSequence >= minVersion)
-                    .Where(x => x.EventSequence <= maxVersion)
-                    .ToList().OrderBy(x => x.EventSequence);*/
             IOrderedEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(x => x.EventSequence);
@@ -207,6 +204,20 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
                 throw new ConcurrencyException(sourceId, version);
             }
+        }
+
+        public CommittedEvent GetLatestSnapshoot(Guid aggreagateRootId)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                IDocumentQuery<StoredEvent> snapshoots = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
+                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId));
+                if (snapshoots.Any())
+                {
+                    return ToCommittedEvent(snapshoots.Last());
+                }
+            }
+            return null;
         }
 
         #endregion

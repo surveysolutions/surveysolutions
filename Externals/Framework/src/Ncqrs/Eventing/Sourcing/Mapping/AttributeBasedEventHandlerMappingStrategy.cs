@@ -37,8 +37,9 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
         /// <returns>All the <see cref="IDomainEventHandler"/>'s created based on attribute mapping.</returns>
         public IEnumerable<ISourcedEventHandler> GetEventHandlers(object target)
         {
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-
+#endif
             var targetType = target.GetType();
             var handlers = new List<ISourcedEventHandler>();
 
@@ -78,8 +79,9 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         private static Boolean IsMarkedAsEventHandler(MethodInfo target, out EventHandlerAttribute attribute)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-
+            #endif
             var attributeType = typeof(EventHandlerAttribute);
             var attributes = target.GetCustomAttributes(attributeType, false);
             if (attributes.Length > 0)
@@ -94,14 +96,17 @@ namespace Ncqrs.Eventing.Sourcing.Mapping
 
         private static int NumberOfParameters(MethodInfo target)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
-
+            #endif
             return target.GetParameters().Count();
         }
 
         private static Type FirstParameterType(MethodInfo target)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(target != null, "The target cannot be null.");
+            #endif
             if (NumberOfParameters(target) < 1) throw new ArgumentException("target does not contain parameters.");
 
             return target.GetParameters().First().ParameterType;
