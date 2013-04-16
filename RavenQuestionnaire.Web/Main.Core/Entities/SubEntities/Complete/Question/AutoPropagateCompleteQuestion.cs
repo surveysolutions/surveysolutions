@@ -24,7 +24,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoPropagateCompleteQuestion"/> class.
         /// </summary>
-        public AutoPropagateCompleteQuestion()
+        public AutoPropagateCompleteQuestion():base()
         {
             this.Triggers = new List<Guid>();
         }
