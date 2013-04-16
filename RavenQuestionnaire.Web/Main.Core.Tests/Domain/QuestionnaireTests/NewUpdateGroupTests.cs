@@ -10,6 +10,40 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
     [TestFixture]
     public class NewUpdateGroupTests {
 
+        [Test]
+        public void NewUpdateGroup_When_new_propagation_kind_of_group_without_subgroups_is_AutoPropagate_Then_throws_DomainException_with_type_GroupCantBecomeAutoPropagateIfHasAnyChildGroup()
+        {
+            using (var eventContext = new EventContext())
+            {
+                // arrange
+                var groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+                var newPropagationKind = Propagate.AutoPropagated;
+                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneGroupAndQuestionInIt(Guid.NewGuid(), groupId, Propagate.None);
+
+                // act
+                questionnaire.NewUpdateGroup(groupId, "New title", newPropagationKind, null, null);
+
+                // assert
+                Assert.That(QuestionnaireARUtils.GetSingleEvent<GroupUpdated>(eventContext).Propagateble, Is.EqualTo(newPropagationKind));
+            }
+        }
+
+        [Test]
+        public void NewUpdateGroup_When_new_propagation_kind_of_group_with_subgroups_is_AutoPropagate_Then_throws_DomainException_with_type_GroupCantBecomeAutoPropagateIfHasAnyChildGroup()
+        {
+            // arrange
+            Guid groupId = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            var newPropagationKind = Propagate.AutoPropagated;
+            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithRegularGroupAndRegularGroupInIt(groupId);
+
+            // act
+            TestDelegate act = () => questionnaire.NewUpdateGroup(groupId, "New title", newPropagationKind, null, null);
+
+            // assert
+            var domainException = Assert.Throws<DomainException>(act);
+            Assert.That(domainException.ErrorType, Is.EqualTo(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup));
+        }
+
         [TestCase("")]
         [TestCase("   ")]
         [TestCase("\t")]
