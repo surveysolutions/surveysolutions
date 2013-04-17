@@ -55,8 +55,9 @@ namespace WB.UI.Designer
 
         public static string GenerateUrl(string action, string controller, object routes)
         {
-            UrlHelper url = new UrlHelper(HttpContext.Current.Request.RequestContext);
-            return url.Action(action, controller, new RouteValueDictionary(routes));
+            var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+            return url.Action(action, controller, routes, "http");
         }
 
         #endregion
