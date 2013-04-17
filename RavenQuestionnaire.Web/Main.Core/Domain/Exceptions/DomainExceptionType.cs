@@ -124,6 +124,8 @@ namespace Main.Core.Domain
         NotAllowedQuestionType,
 
         QuestionWithSuchIdAlreadyExists,
+        
+        GroupCantBecomeAutoPropagateIfHasAnyChildGroup
 
         GroupWithSuchIdAlreadyExists,
 
