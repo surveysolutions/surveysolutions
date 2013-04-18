@@ -9,6 +9,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
 
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
+    using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.Core.Entities.SubEntities.Question;
     using Main.Core.EventHandlers;
@@ -38,18 +39,34 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
                 questionFactory ?? Mock.Of<ICompleteQuestionFactory>());
         }
 
-        protected static QuestionnaireDocument CreateQuestionnaireDocument()
+        protected static QuestionnaireDocument CreateQuestionnaireDocument(
+            IEnumerable<IComposite> children = null)
         {
-            return new QuestionnaireDocument();
+            var questionnaire = new QuestionnaireDocument();
+
+            if (children != null)
+            {
+                questionnaire.Children.AddRange(children);
+            }
+
+            return questionnaire;
         }
 
-        protected static Group CreateGroup(Guid? groupId = null, string title = "Group X")
+        protected static Group CreateGroup(Guid? groupId = null, string title = "Group X",
+            IEnumerable<IComposite> children = null)
         {
-            return new Group
+            var group = new Group
             {
-                PublicKey = groupId ?? Guid.NewGuid(), 
+                PublicKey = groupId ?? Guid.NewGuid(),
                 Title = title,
             };
+
+            if (children != null)
+            {
+                group.Children.AddRange(children);
+            }
+
+            return group;
         }
 
         protected static AbstractQuestion CreateQuestion(Guid? questionId = null, string title = null)
@@ -58,6 +75,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
             {
                 PublicKey = questionId ?? Guid.NewGuid(),
                 QuestionText = title,
+                QuestionType = QuestionType.Text,
             };
         }
 
@@ -74,6 +92,53 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
             return ToPublishedEvent(new QuestionDeleted
             {
                 QuestionId = questionId,
+            });
+        }
+
+        protected static IPublishedEvent<NewGroupAdded> CreateNewGroupAddedEvent(Guid groupId, string title = "New Group X")
+        {
+            return ToPublishedEvent(new NewGroupAdded
+            {
+                PublicKey = groupId,
+                GroupText = title,
+            });
+        }
+
+        protected static IPublishedEvent<NewQuestionAdded> CreateNewQuestionAddedEvent(Guid questionId, Guid? groupId = null, string title = "New Question X")
+        {
+            return ToPublishedEvent(new NewQuestionAdded
+            {
+                PublicKey = questionId,
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                QuestionType = QuestionType.Numeric,
+            });
+        }
+
+        protected static IPublishedEvent<GroupUpdated> CreateGroupUpdatedEvent(Guid groupId, string title)
+        {
+            return ToPublishedEvent(new GroupUpdated
+            {
+                GroupPublicKey = groupId,
+                GroupText = title,
+            });
+        }
+
+        protected static IPublishedEvent<QuestionChanged> CreateQuestionChangedEvent(Guid questionId, string title)
+        {
+            return ToPublishedEvent(new QuestionChanged
+            {
+                PublicKey = questionId,
+                QuestionText = title,
+            });
+        }
+
+        protected static IPublishedEvent<QuestionnaireItemMoved> CreateQuestionnaireItemMovedEvent(Guid itemId, Guid? targetGroupId)
+        {
+            return ToPublishedEvent(new QuestionnaireItemMoved
+            {
+                PublicKey = itemId,
+                GroupKey = targetGroupId,
             });
         }
     }
