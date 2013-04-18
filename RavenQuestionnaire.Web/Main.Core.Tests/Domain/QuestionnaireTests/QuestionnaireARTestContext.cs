@@ -6,7 +6,7 @@ using Main.Core.Domain;
 
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
-    public static class QuestionnaireARUtils {
+    public class QuestionnaireARTestContext {
 
         public static T GetSingleEvent<T>(EventContext eventContext)
         {

@@ -214,10 +214,7 @@ namespace Main.Core.Domain
             });
         }
 
-
-
-        public void NewUpdateGroup(Guid groupId,
-            string title, Propagate propagationKind, string description, string condition)
+        public void NewUpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
 

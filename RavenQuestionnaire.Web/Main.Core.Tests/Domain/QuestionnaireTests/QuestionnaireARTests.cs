@@ -11,7 +11,7 @@ using Ncqrs;
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     [TestFixture]
-    public class QuestionnaireARTests
+    public class QuestionnaireARTests : QuestionnaireARTestContext
     {
         [Test]
         [TestCase("")]
@@ -41,7 +41,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 new QuestionnaireAR(publicKey, "title");
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).PublicKey, Is.EqualTo(publicKey));
             }
         }
 
@@ -57,7 +57,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 new QuestionnaireAR(Guid.NewGuid(), title);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).Title, Is.EqualTo(title));
             }
         }
 
@@ -76,7 +76,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 new QuestionnaireAR(Guid.NewGuid(), "some title");
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<NewQuestionnaireCreated>(eventContext).CreationDate, Is.EqualTo(currentDate));
             }
         }
     }
