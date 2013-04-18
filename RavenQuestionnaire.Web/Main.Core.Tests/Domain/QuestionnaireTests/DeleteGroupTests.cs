@@ -7,7 +7,7 @@ using Ncqrs.Spec;
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     [TestFixture]
-    public class DeleteGroupTests {
+    public class DeleteGroupTests : QuestionnaireARTestContext {
 
         [Test]
         public void DeleteGroup_When_group_public_key_specified_Then_raised_GroupDeleted_event_with_same_group_public_key()
@@ -16,14 +16,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid groupPublicKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneGroup(groupId: groupPublicKey);
 
                 // act
                 Guid parentPublicKey = Guid.NewGuid();
                 questionnaire.NewDeleteGroup(groupPublicKey);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<GroupDeleted>(eventContext).GroupPublicKey, Is.EqualTo(groupPublicKey));
             }
         }
     }

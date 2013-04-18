@@ -196,11 +196,14 @@ namespace Main.Core.Domain
         public void MoveGroup(Guid groupId, Guid? targetGroupId, int targetIndex)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             if (targetGroupId.HasValue)
             {
                 this.ThrowDomainExceptionIfGroupDoesNotExist(targetGroupId.Value);
+
+                this.ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(targetGroupId.Value);
             }
 
             this.ApplyEvent(new QuestionnaireItemMoved
@@ -211,10 +214,10 @@ namespace Main.Core.Domain
             });
         }
 
-        public void NewUpdateGroup(Guid groupId,
-            string title, Propagate propagationKind, string description, string condition)
+        public void NewUpdateGroup(Guid groupId, string title, Propagate propagationKind, string description, string condition)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
+
             this.ThrowDomainExceptionIfMoreThanOneGroupExists(groupId);
 
             this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
@@ -523,6 +526,15 @@ namespace Main.Core.Domain
             if (hasAnyChildGroup)
             {
                 throw new DomainException(DomainExceptionType.GroupCantBecomeAutoPropagateIfHasAnyChildGroup, "Auto propagated groups can't have child groups");
+            }
+        }
+
+        private void ThrowDomainExceptionIfTargetGroupCannotHaveChildGroups(Guid groupId)
+        {
+            var group = this.innerDocument.Find<Group>(groupId);
+            if (group.Propagated == Propagate.AutoPropagated)
+            {
+                throw new DomainException(DomainExceptionType.AutoPropagateGroupCantHaveChildGroups, "Auto propagated groups can't have child groups");
             }
         }
 

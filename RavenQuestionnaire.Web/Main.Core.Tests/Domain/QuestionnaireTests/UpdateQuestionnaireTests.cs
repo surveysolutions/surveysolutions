@@ -6,7 +6,7 @@ using Ncqrs.Spec;
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     [TestFixture]
-    public class UpdateQuestionnaireTests
+    public class UpdateQuestionnaireTests : QuestionnaireARTestContext
     {
         [TestCase("")]
         [TestCase("   ")]
@@ -14,7 +14,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         public void UpdateQuestionnaire_When_questionnaire_title_is_empty_or_contains_whitespaces_only_Then_throws_DomainException_with_type_QuestionnaireTitleRequired(string emptyTitle)
         {
             // arrange
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireAR();
+            QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
             // act
             TestDelegate act = () => questionnaire.UpdateQuestionnaire(emptyTitle);
@@ -31,13 +31,13 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 var nonEmptyTitle = "Title";
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireAR();
+                QuestionnaireAR questionnaire = CreateQuestionnaireAR();
 
                 // act
                 questionnaire.UpdateQuestionnaire(nonEmptyTitle);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionnaireUpdated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
+                Assert.That(GetSingleEvent<QuestionnaireUpdated>(eventContext).Title, Is.EqualTo(nonEmptyTitle));
             }
         }
     }

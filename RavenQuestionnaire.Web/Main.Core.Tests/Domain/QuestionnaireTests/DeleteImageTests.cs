@@ -6,7 +6,8 @@ using Ncqrs.Spec;
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     [TestFixture]
-    public class DeleteImageTests {
+    public class DeleteImageTests : QuestionnaireARTestContext
+    {
 
         [Test]
         public void DeleteImage_When_specified_keys_of_existing_question_and_image_Then_raised_ImageDeleted_event_with_specified_question_key()
@@ -16,13 +17,13 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // arrange
                 var imageKey = Guid.NewGuid();
                 var questionKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
 
                 // act
                 questionnaire.DeleteImage(questionKey, imageKey);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<ImageDeleted>(eventContext).QuestionKey, Is.EqualTo(questionKey));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<ImageDeleted>(eventContext).QuestionKey, Is.EqualTo(questionKey));
             }
         }
 
@@ -34,13 +35,13 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // arrange
                 var imageKey = Guid.NewGuid();
                 var questionKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionAndOneImage(questionKey, imageKey);
 
                 // act
                 questionnaire.DeleteImage(questionKey, imageKey);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<ImageDeleted>(eventContext).ImageKey, Is.EqualTo(imageKey));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<ImageDeleted>(eventContext).ImageKey, Is.EqualTo(imageKey));
             }
         }
 

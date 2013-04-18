@@ -125,7 +125,7 @@ namespace Main.Core.Domain
 
         QuestionWithSuchIdAlreadyExists,
         
-        GroupCantBecomeAutoPropagateIfHasAnyChildGroup
+        GroupCantBecomeAutoPropagateIfHasAnyChildGroup,
 
         GroupWithSuchIdAlreadyExists,
 

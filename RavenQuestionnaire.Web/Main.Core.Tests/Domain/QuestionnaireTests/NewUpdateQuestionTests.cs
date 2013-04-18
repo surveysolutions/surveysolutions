@@ -10,7 +10,8 @@ using Ncqrs.Spec;
 namespace Main.Core.Tests.Domain.QuestionnaireTests
 {
     [TestFixture]
-    public class NewUpdateQuestionTests {
+    public class NewUpdateQuestionTests : QuestionnaireARTestContext
+    {
 
         [Test]
         public void NewUpdateQuestion_When_Title_is_empty_Then_QuestionChanged_event_contains_the_same_title_caption()
@@ -19,7 +20,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid questionKey = Guid.NewGuid();
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(questionKey);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(questionKey);
 
                 string notEmptyTitle = "not empty :)";
 
@@ -30,7 +31,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 string.Empty, new Option[0], Order.AZ, null, new Guid[0]);
 
                 // assert
-                var risedEvent = QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext);
+                var risedEvent = QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual(notEmptyTitle, risedEvent.QuestionText);
             }
         }
@@ -40,7 +41,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             Guid questionKey = Guid.NewGuid();
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(questionKey);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(questionKey);
 
             // act
             TestDelegate act = () =>
@@ -60,7 +61,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             Guid questionKey = Guid.NewGuid();
             // arrange
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
                 questionKey, questionType, new[] { new Option(Guid.NewGuid(), "123", "title") });
             Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", string.Empty) };
             // act
@@ -84,7 +85,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 Guid questionKey = Guid.NewGuid();
                 Option[] options = new Option[1] { new Option(Guid.NewGuid(), "1", "title") };
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(
                     questionKey, questionType, new[]
                         {
                             new Option(Guid.NewGuid(), "1", "option text"),
@@ -96,7 +97,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
                 // assert
-                var risedEvent = QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext);
+                var risedEvent = QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual("title", risedEvent.Answers[0].AnswerText);
             }
         }
@@ -108,7 +109,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             Guid questionKey = Guid.NewGuid();
             // arrange
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
             Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title"), new Option(Guid.NewGuid(), "2", "title") };
             // act
             TestDelegate act =
@@ -130,14 +131,14 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 Guid questionKey = Guid.NewGuid();
                 // arrange
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestionnInTypeAndOptions(questionKey, questionType, options: new[] { new Option(Guid.NewGuid(), "12", "title") });
                 Option[] options = new Option[] { new Option(Guid.NewGuid(), "1", "title1"), new Option(Guid.NewGuid(), "2", "title2") };
                 // act
                 questionnaire.NewUpdateQuestion(questionKey, "test", questionType, "test", false, false, false,
                                                 QuestionScope.Interviewer, string.Empty, string.Empty, string.Empty,
                                                 string.Empty, options, Order.AsIs, null, new Guid[0]);
                 // assert
-                var risedEvent = QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext);
+                var risedEvent = QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext);
                 for (int i = 0; i < options.Length; i++)
                 {
                     Assert.IsTrue(options[i].Title == risedEvent.Answers[i].AnswerText);
@@ -151,7 +152,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             // Arrange
             Guid updatedQuestion = Guid.NewGuid();
             bool isFeatured = true;
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
@@ -171,7 +172,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // Arrange
                 Guid updatedQuestion = Guid.NewGuid();
                 bool isFeatured = true;
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
 
                 // Act
                 questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false,
@@ -179,7 +180,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 false, QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Featured, Is.EqualTo(isFeatured));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Featured, Is.EqualTo(isFeatured));
             }
         }
 
@@ -189,7 +190,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             // Arrange
             Guid updatedQuestion = Guid.NewGuid();
             bool isHeadOfPropagatedGroup = true;
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneGroupAndQuestionInIt(updatedQuestion);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
@@ -209,7 +210,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // Arrange
                 Guid updatedQuestion = Guid.NewGuid();
                 bool isHeadOfPropagatedGroup = true;
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(updatedQuestion);
 
                 // Act
                 questionnaire.NewUpdateQuestion(updatedQuestion, "What is your last name?", QuestionType.Text, "name", false, false,
@@ -217,7 +218,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 QuestionScope.Interviewer, "", "", "", "", new Option[0], Order.AsIs, 0, new Guid[0]);
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Capital, Is.EqualTo(isHeadOfPropagatedGroup));
             }
         }
 
@@ -230,7 +231,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             var emptyAnswersList = new Option[] { };
 
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -250,7 +251,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // Arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(targetQuestionPublicKey);
 
                 bool capital = true;
 
@@ -260,7 +261,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 "", new Option[] { }, Order.AZ, 0, new List<Guid>().ToArray());
 
                 // Assert
-                var risedEvent = QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext);
+                var risedEvent = QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual(capital, risedEvent.Capital);
             }
         }
@@ -274,7 +275,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // Arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // Act
                 questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text,
@@ -283,7 +284,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 new Option[0], Order.AZ, 0, new Guid[0]);
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).StataExportCaption, Is.EqualTo(validVariableName));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).StataExportCaption, Is.EqualTo(validVariableName));
             }
         }
 
@@ -291,7 +292,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         public void NewUpdateQuestion_When_we_updating_absent_question_Then_DomainException_should_be_thrown()
         {
             // Arrange
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireAR();
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireAR();
 
             // Act
             TestDelegate act = () =>
@@ -309,7 +310,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // Arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
             string longVariableName = "".PadRight(33, 'A');
 
             // Act
@@ -328,7 +329,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // Arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string stataExportCaptionWithFirstDigit = "1aaaa";
 
@@ -350,7 +351,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // Arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
                 string variableNameWithTrailingSpaces = " my_name38  ";
 
                 // Act
@@ -361,7 +362,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // Assert
-                var risedEvent = QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext);
+                var risedEvent = QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext);
                 Assert.AreEqual(variableNameWithTrailingSpaces.Trim(), risedEvent.StataExportCaption);
             }
         }
@@ -371,7 +372,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // Arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string emptyVariableName = string.Empty;
 
@@ -392,7 +393,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // Arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             string nonValidVariableNameWithBannedSymbols = "aaa:_&b";
 
@@ -413,7 +414,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             // Arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
             string duplicateVariableName = "text";
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithTwoQuestions(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithTwoQuestions(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(targetQuestionPublicKey, "Title", QuestionType.Text,
@@ -434,7 +435,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -472,7 +473,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
                 string answerValue = "10";
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -495,7 +496,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
             }
         }
 
@@ -513,7 +514,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid questionId = Guid.NewGuid();
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(questionId);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(questionId);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -532,10 +533,10 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                     instructions: string.Empty,
                     triggedGroupIds: new Guid[0],
                     maxValue: 0,
-                    options: QuestionnaireARUtils.AreOptionsRequiredByQuestionType(allowedQuestionType) ? QuestionnaireARUtils.CreateTwoOptions() : null);
+                    options: QuestionnaireARTestContext.AreOptionsRequiredByQuestionType(allowedQuestionType) ? QuestionnaireARTestContext.CreateTwoOptions() : null);
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).QuestionType, Is.EqualTo(allowedQuestionType));
             }
         }
 
@@ -548,7 +549,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             Guid questionId = Guid.NewGuid();
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(questionId);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(questionId);
 
             // act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(
@@ -581,7 +582,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -619,7 +620,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
                 string answerValue = "10";
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -642,7 +643,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Answers[0].AnswerValue, Is.EqualTo("10"));
             }
         }
 
@@ -653,7 +654,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
         {
             // arrange
             Guid targetQuestionPublicKey = Guid.NewGuid();
-            var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+            var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
             // Act
             TestDelegate act = () =>
@@ -694,7 +695,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             {
                 // arrange
                 Guid targetQuestionPublicKey = Guid.NewGuid();
-                var questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
+                var questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneQuestion(targetQuestionPublicKey);
 
                 // act
                 questionnaire.NewUpdateQuestion(
@@ -722,7 +723,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Answers.Select(x => x.AnswerValue).Distinct().Count(),
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Answers.Select(x => x.AnswerValue).Distinct().Count(),
                             Is.EqualTo(2));
             }
         }
@@ -737,7 +738,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 var autoPropagateQuestionId = Guid.NewGuid();
                 var autoPropagate = QuestionType.AutoPropagate;
                 Guid[] emptyTriggedGroupIds = null;
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(autoPropagateQuestionId);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(autoPropagateQuestionId);
 
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
@@ -746,7 +747,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Null);
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Null);
             }
         }
 
@@ -760,7 +761,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 var autoPropagateQuestionId = Guid.NewGuid();
                 var autoPropagate = QuestionType.AutoPropagate;
                 var emptyTriggedGroupIds = new Guid[0];
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(autoPropagateQuestionId);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneAutoGroupAndQuestionInIt(autoPropagateQuestionId);
 
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
@@ -769,7 +770,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
 
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Empty);
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Is.Empty);
             }
         }
 
@@ -783,7 +784,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             var absentGroupId = Guid.NewGuid();
             var triggedGroupIdsWithAbsentGroupId = new[] { absentGroupId };
 
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithOneGroupAndQuestionInIt(autoPropagateQuestionId, groupId, questionType: QuestionType.AutoPropagate);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithOneGroupAndQuestionInIt(autoPropagateQuestionId, groupId, questionType: QuestionType.AutoPropagate);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
@@ -805,7 +806,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
             var groupId = Guid.NewGuid();
             var triggedGroupIdsWithNonPropagateGroupId = new[] { nonPropagateGroupId };
 
-            QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithTwoRegularGroupsAndQuestionInLast(nonPropagateGroupId, autoPropagateQuestionId);
+            QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithTwoRegularGroupsAndQuestionInLast(nonPropagateGroupId, autoPropagateQuestionId);
 
             // Act
             TestDelegate act = () => questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
@@ -830,7 +831,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                 var groupId = Guid.NewGuid();
                 var triggedGroupIdsWithAutoPropagateGroupId = new[] { autoPropagateGroupId };
 
-                QuestionnaireAR questionnaire = QuestionnaireARUtils.CreateQuestionnaireARWithAutoGroupAndRegularGroupAndQuestionInIt(autoPropagateGroupId, groupId, autoPropagateQuestionId);
+                QuestionnaireAR questionnaire = QuestionnaireARTestContext.CreateQuestionnaireARWithAutoGroupAndRegularGroupAndQuestionInIt(autoPropagateGroupId, groupId, autoPropagateQuestionId);
 
                 // Act
                 questionnaire.NewUpdateQuestion(autoPropagateQuestionId, "What is your last name?", autoPropagate, "name", false, false,
@@ -838,7 +839,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireTests
                                                 triggedGroupIdsWithAutoPropagateGroupId);
 
                 // Assert
-                Assert.That(QuestionnaireARUtils.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
+                Assert.That(QuestionnaireARTestContext.GetSingleEvent<QuestionChanged>(eventContext).Triggers, Contains.Item(autoPropagateGroupId));
             }
         }
     }

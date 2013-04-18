@@ -277,6 +277,7 @@
     <Compile Include="Domain\QuestionnaireTests\DeleteGroupTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\DeleteImageTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\DeleteQuestionTests.cs" />
+    <Compile Include="Domain\QuestionnaireTests\MoveGroupTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\MoveQuestionnaireItemTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\NewAddGroupTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\NewUpdateGroupTests.cs" />
@@ -284,7 +285,7 @@
     <Compile Include="Domain\QuestionnaireTests\NewAddQuestionTests.cs" />
     <Compile Include="Domain\QuestionnaireARTest.cs" />
     <Compile Include="Domain\QuestionnaireTests\QuestionnaireARTests.cs" />
-    <Compile Include="Domain\QuestionnaireTests\QuestionnaireARUtils.cs" />
+    <Compile Include="Domain\QuestionnaireTests\QuestionnaireARTestContext.cs" />
     <Compile Include="Domain\QuestionnaireTests\UpdateQuestionnaireTests.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
     <Compile Include="Domain\UserARTests.cs" />
