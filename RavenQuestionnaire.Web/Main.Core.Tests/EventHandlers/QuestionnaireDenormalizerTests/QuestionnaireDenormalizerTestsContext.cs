@@ -10,6 +10,7 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
     using Main.Core.AbstractFactories;
     using Main.Core.Documents;
     using Main.Core.Entities.SubEntities;
+    using Main.Core.Entities.SubEntities.Question;
     using Main.Core.EventHandlers;
     using Main.Core.Events.Questionnaire;
     using Main.DenormalizerStorage;
@@ -51,11 +52,28 @@ namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
             };
         }
 
+        protected static AbstractQuestion CreateQuestion(Guid? questionId = null, string title = null)
+        {
+            return new TextQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = title,
+            };
+        }
+
         protected static IPublishedEvent<GroupDeleted> CreateGroupDeletedEvent(Guid groupId)
         {
             return ToPublishedEvent(new GroupDeleted
             {
                 GroupPublicKey = groupId,
+            });
+        }
+
+        protected static IPublishedEvent<QuestionDeleted> CreateQuestionDeletedEvent(Guid questionId)
+        {
+            return ToPublishedEvent(new QuestionDeleted
+            {
+                QuestionId = questionId,
             });
         }
     }

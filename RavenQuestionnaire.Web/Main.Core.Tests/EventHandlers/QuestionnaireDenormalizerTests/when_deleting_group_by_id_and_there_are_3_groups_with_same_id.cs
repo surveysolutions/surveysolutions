@@ -21,20 +21,17 @@
     {
         Establish context = () =>
         {
-            groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-            firstGroupTitle = "Group 1";
-            secondGroupTitle = "Group 2";
-            thirdGroupTitle = "Group 3";
+            var groupId = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 
             groupDeletedEvent = CreateGroupDeletedEvent(groupId);
 
             questionnaire = CreateQuestionnaireDocument();
-            questionnaire.Children.AddRange(new []
+
+            questionnaire.Children.AddRange(new [] 
             {
-                CreateGroup(groupId: groupId, title: firstGroupTitle),
-                CreateGroup(groupId: groupId, title: secondGroupTitle),
-                CreateGroup(groupId: groupId, title: thirdGroupTitle),
+                firstGroup = CreateGroup(groupId: groupId, title: "Group 1"),
+                secondGroup = CreateGroup(groupId: groupId, title: "Group 2"),
+                thirdGroup = CreateGroup(groupId: groupId, title: "Group 3"),
             });
 
             var documentStorage = Mock.Of<IDenormalizerStorage<QuestionnaireDocument>>(storage
@@ -46,24 +43,23 @@
         Because of = () =>
             denormalizer.Handle(groupDeletedEvent);
 
-        It should_be_only_2_groups = () =>
+        It should_be_only_2_groups_left = () =>
             questionnaire.Children.Count.ShouldEqual(2);
 
         It should_remove_first_group = () =>
-            questionnaire.Children.ShouldNotContain(group => ((IGroup)group).Title == firstGroupTitle);
+            questionnaire.Children.ShouldNotContain(firstGroup);
 
         It should_not_remove_second_group = () =>
-            questionnaire.Children.ShouldContain(group => ((IGroup)group).Title == secondGroupTitle);
+            questionnaire.Children.ShouldContain(secondGroup);
 
         It should_not_remove_third_group = () =>
-            questionnaire.Children.ShouldContain(group => ((IGroup)group).Title == thirdGroupTitle);
+            questionnaire.Children.ShouldContain(thirdGroup);
 
         private static QuestionnaireDocument questionnaire;
-        private static string firstGroupTitle;
-        private static string secondGroupTitle;
-        private static string thirdGroupTitle;
         private static QuestionnaireDenormalizer denormalizer;
-        private static Guid groupId;
         private static IPublishedEvent<GroupDeleted> groupDeletedEvent;
+        private static Group firstGroup;
+        private static Group secondGroup;
+        private static Group thirdGroup;
     }
 }
