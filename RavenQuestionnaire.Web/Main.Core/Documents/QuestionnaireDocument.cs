@@ -252,12 +252,22 @@ namespace Main.Core.Documents
 
         private static void RemoveChildGroupBySpecifiedId(IComposite container, Guid groupId)
         {
-            container.Children.RemoveAll(child => IsGroupWithSpecifiedId(child, groupId));
+            RemoveFirstChild(container, child => IsGroupWithSpecifiedId(child, groupId));
         }
 
         private static void RemoveChildQuestionBySpecifiedId(IComposite container, Guid questionId)
         {
-            container.Children.RemoveAll(child => IsQuestionWithSpecifiedId(child, questionId));
+            RemoveFirstChild(container, child => IsQuestionWithSpecifiedId(child, questionId));
+        }
+
+        private static void RemoveFirstChild(IComposite container, Predicate<IComposite> condition)
+        {
+            IComposite child = container.Children.Find(condition);
+
+            if (child != null)
+            {
+                container.Children.Remove(child);
+            }
         }
 
         private IComposite GetParentOfGroup(Guid groupId)

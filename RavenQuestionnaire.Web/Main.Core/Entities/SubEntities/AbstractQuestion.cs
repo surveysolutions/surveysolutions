@@ -337,5 +337,10 @@ namespace Main.Core.Entities.SubEntities
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Question {{{0}}} '{1}'", this.PublicKey, this.QuestionText ?? "<untitled>");
+        }
     }
 }

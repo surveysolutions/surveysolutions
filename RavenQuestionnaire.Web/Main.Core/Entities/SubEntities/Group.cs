@@ -262,5 +262,10 @@ namespace Main.Core.Entities.SubEntities
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Group {{{0}}} '{1}'", this.PublicKey, this.Title ?? "<untitled>");
+        }
     }
 }
