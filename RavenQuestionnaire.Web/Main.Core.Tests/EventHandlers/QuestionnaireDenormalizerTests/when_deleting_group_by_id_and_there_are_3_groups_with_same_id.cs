@@ -46,14 +46,8 @@
         It should_be_only_2_groups_left = () =>
             questionnaire.Children.Count.ShouldEqual(2);
 
-        It should_remove_first_group = () =>
-            questionnaire.Children.ShouldNotContain(firstGroup);
-
-        It should_not_remove_second_group = () =>
-            questionnaire.Children.ShouldContain(secondGroup);
-
-        It should_not_remove_third_group = () =>
-            questionnaire.Children.ShouldContain(thirdGroup);
+        It should_be_only_second_and_third_groups_left = () =>
+            questionnaire.Children.ShouldContainOnly(secondGroup, thirdGroup);
 
         private static QuestionnaireDocument questionnaire;
         private static QuestionnaireDenormalizer denormalizer;

@@ -35,7 +35,7 @@
 
             group.Children.AddRange(new[]
             {
-                firstQuestion = CreateQuestion(questionId: questionId, title: "Question 1"),
+                CreateQuestion(questionId: questionId, title: "Question 1"),
                 secondQuestion = CreateQuestion(questionId: questionId, title: "Question 2"),
                 thirdQuestion = CreateQuestion(questionId: questionId, title: "Question 3"),
                 forthQuestion = CreateQuestion(questionId: questionId, title: "Question 4"),
@@ -53,20 +53,10 @@
         It should_be_only_3_questions_left = () =>
             group.Children.Count.ShouldEqual(3);
 
-        It should_remove_first_question = () =>
-            group.Children.ShouldNotContain(firstQuestion);
-
-        It should_not_remove_second_question = () =>
-            group.Children.ShouldContain(secondQuestion);
-
-        It should_not_remove_thrid_question = () =>
-            group.Children.ShouldContain(thirdQuestion);
-
-        It should_not_remove_forth_question = () =>
-            group.Children.ShouldContain(forthQuestion);
+        It should_be_only_second_third_and_forth_questions_left = () =>
+            group.Children.ShouldContainOnly(secondQuestion, thirdQuestion, forthQuestion);
 
         private static Group group;
-        private static AbstractQuestion firstQuestion;
         private static AbstractQuestion secondQuestion;
         private static AbstractQuestion thirdQuestion;
         private static AbstractQuestion forthQuestion;
