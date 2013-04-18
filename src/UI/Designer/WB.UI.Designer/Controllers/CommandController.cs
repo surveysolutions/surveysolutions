@@ -65,6 +65,10 @@ namespace WB.UI.Designer.Controllers
                 {
                     return this.Json(new { error = e.InnerException.Message });
                 }
+                else if (e.InnerException!=null && e.InnerException.InnerException is DomainException)
+                {
+                    return this.Json(new { error = e.InnerException.InnerException.Message });
+                }
                 else
                 {
                     throw;

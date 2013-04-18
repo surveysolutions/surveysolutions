@@ -248,7 +248,7 @@
                 searchResult(datacontext.questions.search(query));
             }
         },
-        isMovementPossible = function (arg) {
+        isMovementPossible = function (arg, event, ui) {
 
             var fromId = arg.sourceParent.id;
             var toId = arg.targetParent.id;
@@ -270,7 +270,7 @@
                 return;
             }
             
-            if (isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
+            if (target.gtype() !== "None" && moveItemType == "group") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                 return;
@@ -312,7 +312,15 @@
                        }
                    },
                    error: function (d) {
-                       arg.cancelDrop = true;
+                       _.each(datacontext.groups.getAllLocal(), function (group) {
+                           group.fillChildren();
+                       });
+                       
+                       chapters(datacontext.groups.getChapters());
+                       
+                       errors.removeAll();
+                       errors.push(d);
+                       showOutput();
                    }
                });
         },
