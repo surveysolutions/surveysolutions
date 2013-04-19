@@ -27,6 +27,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// Initializes a new instance of the <see cref="SingleCompleteQuestion"/> class.
         /// </summary>
         public SingleCompleteQuestion()
+            : base()
         {
             
         }

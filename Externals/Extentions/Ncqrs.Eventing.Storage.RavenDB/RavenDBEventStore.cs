@@ -111,20 +111,27 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             const int PageSize = 1024;
             var page = 0;
 
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            while (true)
             {
-                while (true)
+                List<StoredEvent> chunk;
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).OrderBy(y => y.EventSequence).Skip(page * PageSize).Take(PageSize);
-
-                    if (!chunk.Any())
-                    {
-                        yield break;
-                    }
-
-                    page++;
-                    yield return chunk.ToList();
+                    chunk = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResults())
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(page * PageSize)
+                        .Take(PageSize)
+                        .ToList();
                 }
+
+                if (chunk.Count == 0)
+                {
+                    yield break;
+                }
+
+                page++;
+                yield return chunk;
             }
         }
 
@@ -242,10 +249,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    IQueryable<StoredEvent> chunk =
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * maxPageSize)
-                            .Take(maxPageSize).Where(query);
-                    if (!chunk.Any())
+                    List<StoredEvent> chunk = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResults())
+                        .Skip(page * maxPageSize)
+                        .Take(maxPageSize)
+                        .Where(query)
+                        .ToList();
+
+                    if (chunk.Count == 0)
                     {
                         break;
                     }
