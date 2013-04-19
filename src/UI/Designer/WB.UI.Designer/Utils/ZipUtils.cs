@@ -46,8 +46,6 @@ namespace WB.UI.Designer.Utils
                     {
                         foreach (ZipEntry e in zip)
                         {
-                            e.AlternateEncodingUsage = ZipOption.AsNecessary;
-                            
                             e.Extract(stream);
                         }
                         return DesserializeStream<T>(stream);
