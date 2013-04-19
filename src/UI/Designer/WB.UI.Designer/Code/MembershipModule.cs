@@ -26,7 +26,7 @@ namespace WB.UI.Designer
         public override void Load()
         {
             Bind<IPasswordStrategy>().To<HashPasswordStrategy>().InSingletonScope();
-            Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy());
+            Bind<IPasswordPolicy>().ToConstant(PasswordPolicyFactory.CreatePasswordPolicy(AppSettings.Instance.IsLockingAccountPolicyForced));
             Bind<IAccountRepository>()
                 .ToConstructor(x => new CQRSAccountRepository(x.Inject<IViewRepository>(),
                                                               NcqrsEnvironment.Get<ICommandService>()))
