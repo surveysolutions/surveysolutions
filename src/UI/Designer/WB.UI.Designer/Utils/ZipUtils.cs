@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -45,6 +46,8 @@ namespace WB.UI.Designer.Utils
                     {
                         foreach (ZipEntry e in zip)
                         {
+                            e.AlternateEncodingUsage = ZipOption.AsNecessary;
+                            
                             e.Extract(stream);
                         }
                         return DesserializeStream<T>(stream);
@@ -61,11 +64,11 @@ namespace WB.UI.Designer.Utils
 
         public byte[] ZipDate(string data)
         {
-            var zip = new ZipFile();
+            var zip = new ZipFile(Encoding.UTF8);
 
             zip.CompressionLevel = CompressionLevel.BestCompression;
             zip.AddEntry(
-                "data.txt", data);
+                "data.txt", data,Encoding.UTF8);
             var outputStream = new MemoryStream();
             zip.Save(outputStream);
             outputStream.Seek(0, SeekOrigin.Begin);
