@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Text;
 using SynchronizationMessages.Export;
 
 namespace DataEntryClient.SycProcess
@@ -129,15 +130,15 @@ namespace DataEntryClient.SycProcess
             var collector = new EventPipeCollector();
             this.ProcessEvents(collector);
 
-            this.zip = new ZipFile();
+            this.zip = new ZipFile(Encoding.UTF8);
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
             this.zip.CompressionLevel = CompressionLevel.BestCompression;
             this.zip.AddEntry(
                 "backup.txt", 
                 JsonConvert.SerializeObject(
                     new ZipFileData { ClientGuid = this.ProcessGuid, Events = collector.GetEventList() }, 
-                    Formatting.Indented, 
-                    settings));
+                    Formatting.Indented,
+                    settings), Encoding.UTF8);
         }
 
         /// <summary>
