@@ -231,6 +231,12 @@
     <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Machine.Specifications">
+      <HintPath>..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.dll</HintPath>
+    </Reference>
+    <Reference Include="Machine.Specifications.Clr4">
+      <HintPath>..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.Clr4.dll</HintPath>
+    </Reference>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
@@ -287,6 +293,10 @@
     <Compile Include="Domain\QuestionnaireTests\QuestionnaireARTests.cs" />
     <Compile Include="Domain\QuestionnaireTests\QuestionnaireARTestContext.cs" />
     <Compile Include="Domain\QuestionnaireTests\UpdateQuestionnaireTests.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\QuestionnaireDenormalizerTestsContext.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_adding_a_group_and_there_already_is_one_group_with_same_id.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_adding_a_question_and_there_already_is_one_question_with_same_id.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_deleting_group_by_id_and_there_are_3_groups_with_same_id.cs" />
     <Compile Include="Domain\TestDataConfigurator.cs" />
     <Compile Include="Domain\UserARTests.cs" />
     <Compile Include="Entities\CompleteGroupTest.cs" />
@@ -296,6 +306,11 @@
     <Compile Include="Entities\SubEntities\NumericCompleteQuestionTest.cs" />
     <Compile Include="Entities\SubEntities\SingleCompleteQuestionTest.cs" />
     <Compile Include="EventHandlers\QuestionnaireDenormalizerTests.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_deleting_question_by_id_and_there_are_4_questions_with_same_id.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_moving_group_to_another_group_by_id_and_there_are_3_groups_with_same_id_in_initial_group.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_moving_question_to_another_group_by_id_and_there_are_4_questions_with_same_id_in_initial_group.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_group_by_id_and_there_are_2_groups_with_same_id.cs" />
+    <Compile Include="EventHandlers\QuestionnaireDenormalizerTests\when_updating_question_by_id_and_there_are_3_questions_with_same_id.cs" />
     <Compile Include="Events\EventMergeUtilsTest.cs" />
     <Compile Include="Events\EventSyncExtensionsTests.cs" />
     <Compile Include="Export\HeaderCollectionTests.cs" />
