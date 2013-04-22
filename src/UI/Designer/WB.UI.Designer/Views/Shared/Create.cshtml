@@ -2,7 +2,8 @@
 @model Object
 @using (Html.BeginForm())
 {
-    @Html.AntiForgeryToken()
+    this.Html.Partial("_AntiForgerySubPage");
+
     <fieldset class="form-horizontal">
         <legend>@Model.GetLabel() <small>Details</small></legend>
         @{
