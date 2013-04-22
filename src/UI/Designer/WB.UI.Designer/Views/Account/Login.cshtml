@@ -8,7 +8,8 @@
 
 @using (Html.BeginForm("login", "account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-signin" }))
 {
-    @Html.AntiForgeryToken()
+    this.Html.RenderPartial("_AntiForgerySubPage");
+    
     <legend>@Model.GetLabel()</legend>
     <fieldset class="form-horizontal">
 

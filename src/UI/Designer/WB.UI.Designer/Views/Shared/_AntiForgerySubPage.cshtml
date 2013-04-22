@@ -1,0 +1,6 @@
+﻿@using WB.UI.Designer
+
+@if (AppSettings.Instance.IsAntiForgeryEnabled)
+{
+    @Html.AntiForgeryToken()
+}
