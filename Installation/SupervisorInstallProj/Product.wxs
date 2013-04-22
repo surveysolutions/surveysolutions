@@ -38,8 +38,14 @@
             </DirectorySearch>
         </Property>
 
-        <Condition Message='ASP.NET MVC 3 is required to proceed with the installation (http://www.microsoft.com/en-us/download/details.aspx?id=1491).'>
-            <![CDATA[Installed OR ASP_NET_MVC_3_0_DLL]]>
+		<Property Id='ASP_NET_MVC_4_0_DLL'>
+            <DirectorySearch Id='MVC4_DLL_DIR' Path='[ProgramFilesFolder]\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies'>
+                <FileSearch Id='MVC4_DLL_FILE' Name='System.Web.Mvc.dll' MinVersion='4.0.20700'/>
+            </DirectorySearch>
+        </Property>
+		
+        <Condition Message='ASP.NET MVC 3 or 4 is required to proceed with the installation (http://www.microsoft.com/en-us/download/details.aspx?id=1491).'>
+            <![CDATA[Installed OR ASP_NET_MVC_3_0_DLL OR ASP_NET_MVC_4_0_DLL]]>
         </Condition>
         
 <!--
