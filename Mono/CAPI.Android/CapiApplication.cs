@@ -99,12 +99,20 @@ namespace CAPI.Android
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
+            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
+
+            // initialize app if necessary
+            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
+            {
+                _setup.Initialize();
+            }
+
             kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
             kernel.Bind<Context>().ToConstant(this);
             kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             NcqrsInit.Init(kernel);
      
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore);
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
 
             #region register handlers
 
