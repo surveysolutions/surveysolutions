@@ -114,7 +114,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             while (true)
             {
                 List<StoredEvent> chunk;
-                //this.DocumentStore.JsonRequestFactory += (sender, e) => { e.Request.Timeout = 50000; /*ms*/ };
+                this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) => { e.Request.Timeout =  120*1000; /*ms*/ };
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     chunk = session
