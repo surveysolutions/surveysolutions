@@ -193,9 +193,9 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
 
             item.IsLockedOut = false;
             item.FailedPasswordAnswerWindowAttemptCount = 0;
-            item.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue;
+            item.FailedPasswordAnswerWindowStartedAt = DateTime.MinValue.ToUniversalTime();
             item.FailedPasswordWindowAttemptCount = 0;
-            item.FailedPasswordWindowStartedAt = DateTime.MinValue;
+            item.FailedPasswordWindowStartedAt = DateTime.MinValue.ToUniversalTime();
         }
 
         /// <summary>
@@ -225,7 +225,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
             AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
 
             item.LastLoginAt = @event.Payload.LastLoginAt;
-            item.FailedPasswordWindowStartedAt = DateTime.MinValue;
+            item.FailedPasswordWindowStartedAt = DateTime.MinValue.ToUniversalTime();
             item.FailedPasswordWindowAttemptCount = 0;
         }
 
