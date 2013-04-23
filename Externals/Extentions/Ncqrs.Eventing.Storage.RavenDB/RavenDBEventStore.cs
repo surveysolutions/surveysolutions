@@ -127,7 +127,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     chunk = session
                         .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults())
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
                         .OrderBy(y => y.EventSequence)
                         .Skip(page * PageSize)
                         .Take(PageSize)
