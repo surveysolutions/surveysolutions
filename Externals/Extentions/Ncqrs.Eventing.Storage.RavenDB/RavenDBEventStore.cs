@@ -54,6 +54,10 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public RavenDBEventStore(string ravenUrl)
         {
             this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
+            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
+                {
+                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                };
         }
 
         /// <summary>
@@ -66,6 +70,10 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             externalDocumentStore.Conventions = CreateConventions();
             this.DocumentStore = externalDocumentStore;
+            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
+                {
+                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                };
         }
 
         #endregion
@@ -114,6 +122,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             while (true)
             {
                 List<StoredEvent> chunk;
+                
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     chunk = session
