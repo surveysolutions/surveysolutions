@@ -100,6 +100,10 @@
     <Compile Include="SnapshotCommandMapper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
