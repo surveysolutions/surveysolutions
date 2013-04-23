@@ -66,6 +66,8 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private readonly string baseAddress;
 
+        public string ProcessLogging;
+
        /* /// <summary>
         /// The chanel factory wrapper.
         /// </summary>
@@ -174,12 +176,17 @@ namespace AndroidMain.Synchronization
         {
             var restClient = new RestClient(this.baseAddress);
 
+            ProcessLogging = string.Empty;
+
             var request = new RestRequest(GetARKeysPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
+            ProcessLogging += String.Format("Start getting list {0}\r\n", DateTime.UtcNow);
+
             IRestResponse response = restClient.Execute(request);
 
+            ProcessLogging += String.Format("List got {0}\r\n", DateTime.UtcNow);
 
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
@@ -203,30 +210,36 @@ namespace AndroidMain.Synchronization
             {
 
                 var itemRequest = new RestRequest(GetARPath, Method.POST);
-                    itemRequest.AddParameter("ARKey", root.Item2);
-                    itemRequest.AddParameter("length", 0);
-                    itemRequest.AddParameter("rootType", root.Item1);
+                itemRequest.AddParameter("ARKey", root.Item2);
+                itemRequest.AddParameter("length", 0);
+                itemRequest.AddParameter("rootType", root.Item1);
 
 
-                    itemRequest.RequestFormat = DataFormat.Json;
-                    itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
+                itemRequest.RequestFormat = DataFormat.Json;
+                itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
+
+                ProcessLogging += String.Format("Start getting item {0} of type {1} at {2}\r\n", root.Item2, root.Item1, DateTime.UtcNow);
+                IRestResponse responseStream = restClient.Execute(itemRequest);
+
+                ProcessLogging += String.Format("Item got {0} of type {1} at {2}\r\n", root.Item2, root.Item1, DateTime.UtcNow);
+
                     
-                    IRestResponse responseStream = restClient.Execute(itemRequest);
-                    if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
-                    {
-                        //logging
+                if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
+                {
+                    //logging
                         throw new Exception("Operation finished unsuccessfully.");
-                    }
+                }
                     
-                    var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                    var str = responseStream.Content.Substring( responseStream.Content.IndexOf("[") );
-                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
+                var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
+                var str = responseStream.Content.Substring( responseStream.Content.IndexOf("[") );                    
+                var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
-
-                    foreach (var aggregateRootEvent in evnts)
-                    {
-                        yield return aggregateRootEvent;
-                    }
+                ProcessLogging += String.Format("Item deserialyzed {0} of type {1} at {2}\r\n", root.Item2, root.Item1, DateTime.UtcNow);
+                
+                foreach (var aggregateRootEvent in evnts)
+                {
+                    yield return aggregateRootEvent;
+                }
             }
 
             //return events;
