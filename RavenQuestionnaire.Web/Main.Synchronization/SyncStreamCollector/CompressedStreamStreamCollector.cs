@@ -6,6 +6,9 @@
 //   The compressed stream stream collector.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Text;
+
 namespace Main.Synchronization.SyncStreamCollector
 {
     using System;
@@ -131,7 +134,7 @@ namespace Main.Synchronization.SyncStreamCollector
         {
             if (zipStream == null)
             {
-               var zipFile = new ZipFile();
+                var zipFile = new ZipFile(Encoding.UTF8);
 
                 zipFile.CompressionLevel = CompressionLevel.BestSpeed;
                 zipFile.ParallelDeflateThreshold = -1;
@@ -142,7 +145,7 @@ namespace Main.Synchronization.SyncStreamCollector
                         Formatting.None,
                         new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 
-                zipFile.AddEntry("backup.txt", result);
+                zipFile.AddEntry("backup.txt", result, Encoding.UTF8);
 
                 zipStream = new MemoryStream();
                 zipFile.Save(zipStream);
