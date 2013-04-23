@@ -328,12 +328,10 @@ namespace CAPI.Android
                             () =>
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
-                                    string infoMess = result.Result
+                                    syncResult.Text = result.Result
                                                           ? "Process is finished"
                                                           : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
-
-                                    syncResult.Text = infoMess + result.ProgressLog;
                                     progressDialog.Hide();
                                 });
                     });
@@ -384,8 +382,6 @@ namespace CAPI.Android
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
-
-            status.ProgressLog = provider.ProcessLogging;
             status.Progress = 100;
             return result;
         }

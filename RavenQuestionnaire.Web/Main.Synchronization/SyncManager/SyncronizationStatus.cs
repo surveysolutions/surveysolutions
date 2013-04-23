@@ -37,11 +37,6 @@ namespace Main.Synchronization.SyncManager
         public int Progress { get; set; }
 
         /// <summary>
-        /// Contains log of the progress.
-        /// </summary>
-        public string ProgressLog { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether result.
         /// </summary>
         public bool Result { get; set; }
