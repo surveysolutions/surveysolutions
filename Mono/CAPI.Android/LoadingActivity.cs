@@ -9,7 +9,10 @@ using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 
 namespace CAPI.Android
 {
-    [Activity(Label = "Loading", NoHistory = true)]
+    using global::Android.Content.PM;
+
+    [Activity(Label = "Loading", NoHistory = true, 
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoadingActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         private Action<Guid> restore; 

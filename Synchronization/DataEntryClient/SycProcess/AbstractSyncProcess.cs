@@ -54,7 +54,7 @@ namespace DataEntryClient.SycProcess
         /// <summary>
         /// The event store.
         /// </summary>
-        protected readonly IEventStreamReader EventStore;
+        protected readonly IEventStreamReader EventStoreReader;
 
         /// <summary>
         /// sync process repository
@@ -79,7 +79,7 @@ namespace DataEntryClient.SycProcess
         /// </param>
         protected AbstractSyncProcess(IKernel kernel, Guid syncProcess, Guid? parentSyncProcess = null)
         {
-            this.EventStore = kernel.Get<IEventStreamReader>();
+            this.EventStoreReader = kernel.Get<IEventStreamReader>();
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
             this.ParentProcessGuid = parentSyncProcess;
@@ -118,9 +118,8 @@ namespace DataEntryClient.SycProcess
 
                 syncProcess.Merge(events);
 
-                var statistics = syncProcess.CalculateStatistics();
-
-                this.Invoker.Execute(new PushStatisticsCommand(this.ProcessGuid, statistics));
+                syncProcess.PostProcess();
+               
 
                 syncProcess.Commit();
 
@@ -196,7 +195,7 @@ namespace DataEntryClient.SycProcess
         {
             ErrorCodes returnCode = ErrorCodes.None;
 
-            List<IEnumerable<AggregateRootEvent>> events = this.EventStore.ReadEventsByChunks().ToList();
+            List<IEnumerable<AggregateRootEvent>> events = this.EventStoreReader.ReadEventsByChunks().ToList();
 
             this.Invoker.Execute(new PushEventsCommand(this.ProcessGuid, events));
             foreach (IEnumerable<AggregateRootEvent> t in events)

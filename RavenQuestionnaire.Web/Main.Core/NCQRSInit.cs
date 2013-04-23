@@ -7,6 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.Extensions;
+using Ncqrs.Domain.Storage;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 #if !MONODROID
 using Ncqrs.Eventing.Storage.RavenDB;
 using Raven.Client.Document;
@@ -34,9 +39,9 @@ namespace Main.Core
 #if MONODROID
 using AndroidNcqrs.Eventing.Storage.SQLite;
 #else
-//using Ncqrs.Eventing.Storage.RavenDB;
+    //using Ncqrs.Eventing.Storage.RavenDB;
 #endif
-    
+
     //using Ncqrs.Eventing.Storage.RavenDB;
 
     using Ninject;
@@ -48,6 +53,13 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
     /// </summary>
     public static class NcqrsInit
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(NcqrsInit));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
@@ -62,7 +74,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         public static void Init(IKernel kernel)
         {
 #if MONODROID
-			NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
+            NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             var store = InitializeEventStore(kernel.Get<DocumentStore>());
@@ -70,23 +82,26 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
             NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
-            
+
             NcqrsEnvironment.SetDefault(kernel.Get<IFileStorageService>());
 #endif
 
-           NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
+            NcqrsEnvironment.SetDefault(InitializeCommandService(kernel.Get<ICommandListSupplier>()));
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
+            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
+                                                          new InMemoryEventStore());
             // key param for storing im memory
-            NcqrsEnvironment.SetDefault<ISnapshotStore>(new InMemoryEventStore());
-         
-            var bus = new InProcessEventBus(true);
+            NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
+
+            var bus = new  InProcessEventBus(true);
 
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-
+            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
+                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
@@ -111,13 +126,16 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// </exception>
         public static void RebuildReadLayer()
         {
+            Logger.Info("Read layer rebuilding started.");
+
             var eventBus = NcqrsEnvironment.Get<IEventBus>();
             if (eventBus == null)
             {
                 throw new Exception("IEventBus is not properly initialized.");
             }
 
-            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>(); 
+            #warning hello to Vitaliy Balabanov: rebuild read layer by event sources
+            var eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
 
             if (eventStore == null)
             {
@@ -129,6 +147,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             eventBus.Publish(eventStore.GetEventStream().Select(evnt => evnt as IPublishableEvent));
 
             isReadLayerBuilt = true;
+
+            Logger.Info("Read layer rebuilding finished.");
         }
 
 
@@ -150,11 +170,15 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         {
             var mapper = new AttributeBasedCommandMapper();
             var service = new ConcurrencyResolveCommandService();
-            foreach (Type type in commandSupplier.GetCommandList()){
-                   
+            foreach (Type type in commandSupplier.GetCommandList())
+            {
+
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
+            service.RegisterExecutor(typeof(CreateSnapshotForAR),
+                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
+        
             return service;
         }
 

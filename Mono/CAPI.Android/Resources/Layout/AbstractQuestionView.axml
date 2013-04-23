@@ -45,5 +45,5 @@
   <EditText
    android:layout_width="fill_parent"
    android:layout_height="wrap_content" android:textStyle="italic"
-   android:id="@+id/etComments" android:visibility="gone"  local:MvxBind="{'Text':{'Path':'Comments'}}"/>
+   android:id="@+id/etComments" android:visibility="gone"  local:MvxBind="{'Text':{'Path':'Comments', 'Mode':'OneWay'}}"/>
 </LinearLayout>

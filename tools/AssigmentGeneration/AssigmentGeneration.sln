@@ -1,0 +1,115 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssigmentGeneration", "AssigmentGeneration\AssigmentGeneration.csproj", "{84000E8A-5910-40EB-BDB1-F146D3F82DC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs", "..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj", "{01F84441-80D3-49B4-AB18-96894ACB2F90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main.Core", "..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj", "{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Supervisor", "..\..\RavenQuestionnaire.Web\Core.Supervisor\Core.Supervisor.csproj", "{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SynchronizationMessages", "..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj", "{AD672732-3D12-48BC-8612-09547F0065D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs.Restoring.EventStapshoot", "..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj", "{7598C70B-5772-4ED5-81DE-C0D7718BC164}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Deploy-dev|Any CPU = Deploy-dev|Any CPU
+		Deploy-devKh|Any CPU = Deploy-devKh|Any CPU
+		Deploy-Main|Any CPU = Deploy-Main|Any CPU
+		Deploy-Main-Debug|Any CPU = Deploy-Main-Debug|Any CPU
+		MONODROID|Any CPU = MONODROID|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-devKh|Any CPU.ActiveCfg = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-devKh|Any CPU.Build.0 = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-Main|Any CPU.ActiveCfg = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-Main|Any CPU.Build.0 = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-Main-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Deploy-Main-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.MONODROID|Any CPU.ActiveCfg = Release|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.MONODROID|Any CPU.Build.0 = Release|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84000E8A-5910-40EB-BDB1-F146D3F82DC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-devKh|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-devKh|Any CPU.Build.0 = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-Main|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-Main|Any CPU.Build.0 = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-Main-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Deploy-Main-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.MONODROID|Any CPU.ActiveCfg = MONODROID|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.MONODROID|Any CPU.Build.0 = MONODROID|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01F84441-80D3-49B4-AB18-96894ACB2F90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-dev|Any CPU.ActiveCfg = Deploy-dev|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-dev|Any CPU.Build.0 = Deploy-dev|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-devKh|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-devKh|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.MONODROID|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.MONODROID|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-dev|Any CPU.ActiveCfg = Deploy-dev|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-dev|Any CPU.Build.0 = Deploy-dev|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-devKh|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-devKh|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-Main|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-Main|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.MONODROID|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.MONODROID|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-dev|Any CPU.ActiveCfg = Deploy-dev|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-dev|Any CPU.Build.0 = Deploy-dev|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-devKh|Any CPU.ActiveCfg = Deploy-devKh|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-devKh|Any CPU.Build.0 = Deploy-devKh|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-Main|Any CPU.ActiveCfg = Deploy-Main|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-Main|Any CPU.Build.0 = Deploy-Main|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.MONODROID|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.MONODROID|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD672732-3D12-48BC-8612-09547F0065D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-dev|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-dev|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-devKh|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-devKh|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-Main|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-Main|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-Main-Debug|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Deploy-Main-Debug|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.MONODROID|Any CPU.ActiveCfg = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.MONODROID|Any CPU.Build.0 = Deploy-Main-Debug|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7598C70B-5772-4ED5-81DE-C0D7718BC164}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

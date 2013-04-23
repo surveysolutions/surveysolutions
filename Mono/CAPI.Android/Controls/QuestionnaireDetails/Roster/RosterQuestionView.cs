@@ -26,15 +26,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.Roster
             this.Model = source;
             Content = bindingActivity.BindingInflate(source, Resource.Layout.RosterQuestion, this);
            
-            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+          
             llWrapper.Click += rowViewItem_Click;
          //   this.SetBackgroundResource(Resource.Drawable.grid_headerItem);
         }
-
+        protected override void OnAttachedToWindow()
+        {
+            llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            base.OnAttachedToWindow();
+        }
         void rowViewItem_Click(object sender, EventArgs e)
         {
-            if (!this.Model.Status.HasFlag(QuestionStatus.Enabled))
-                return;
             var handler = RosterItemsClick;
             if (handler != null)
             {

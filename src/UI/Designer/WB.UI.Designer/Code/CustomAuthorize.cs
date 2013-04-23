@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Microsoft.Practices.ServiceLocation;
+using NinjectAdapter;
+using WB.UI.Designer.Code;
+
 namespace WB.UI.Designer
 {
     using System.Web.Mvc;
@@ -20,30 +24,42 @@ namespace WB.UI.Designer
     /// </summary>
     public class CustomAuthorize : AuthorizeAttribute
     {
+        #warning remove this shit
+        private static IUserHelper UserHelperInstance
+        {
+            get { return UserHelper.Instance; }
+        }
+
         #region Methods
 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             var isInvalidUser = false;
+            var user = UserHelperInstance.CurrentUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                isInvalidUser = UserHelper.CurrentUser == null || UserHelper.CurrentUser.IsLockedOut
-                                      || !UserHelper.CurrentUser.IsApproved;
+                isInvalidUser = user == null || user.IsLockedOut
+                                      || !user.IsApproved;
 
-                if (UserHelper.CurrentUser != null)
+                if (user != null)
                 {
-                    var baseController = filterContext.Controller as AlertController;
+                    var baseController = filterContext.Controller as BaseController;
                     if (baseController != null)
                     {
-                        if (!UserHelper.CurrentUser.IsApproved)
+                        if (!user.IsApproved)
                         {
-                            baseController.Error("Please, confirm your account first. Check your emails.");
+                            baseController.Attention(
+                                string.Format(
+                                    "Please, confirm your account first. We've sent a confirmation link to {0}. Didn't get it? <a href='{1}'>Request another one.</a>",
+                                    user.Email,
+                                    GlobalHelper.GenerateUrl(
+                                        "ResendConfirmation", "Account", new { id = user.UserName })));
                         }
-                        else if (UserHelper.CurrentUser.IsLockedOut)
+                        else if (user.IsLockedOut)
                         {
-                            baseController.Error(
-                                "Your account is blocked. Contact the administrator for unblocking account");
+                            baseController.Attention(
+                                "Your account is blocked. Contact the administrator to unblock your account");
                         }
                     }
                 }
@@ -51,7 +67,7 @@ namespace WB.UI.Designer
 
             if (isInvalidUser)
             {
-                UserHelper.Logout();
+                UserHelperInstance.Logout();
                 filterContext.Result =
                     new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Account", action = "Login" }));
             }

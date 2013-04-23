@@ -5,12 +5,15 @@ using Main.Core.View;
 using Moq;
 using NUnit.Framework;
 using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot;
 using Main.DenormalizerStorage;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 namespace Core.Supervisor.Tests
 {
     [TestFixture]
@@ -20,32 +23,85 @@ namespace Core.Supervisor.Tests
         public void Prepare()
         {
             denormalizerMock = new Mock<IDenormalizer>();
-            eventStoreMock = new Mock<IEventStore>();
-            eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
+           // eventStoreMock = new Mock<IEventStore>();
+         /*   eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
                                                  int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(Guid.NewGuid()));
-            unitOfWorckFactory=new Mock<IUnitOfWorkFactory>();
-
-            NcqrsEnvironment.SetDefault(eventStoreMock.Object);
-            NcqrsEnvironment.SetDefault(unitOfWorckFactory.Object);
+                                                     new CommittedEventStream(Guid.NewGuid()));*/
+            commandServiceMock=new Mock<ICommandService>();
+        //    NcqrsEnvironment.SetDefault(eventStoreMock.Object);
+            NcqrsEnvironment.SetDefault(commandServiceMock.Object);
         }
 
+        protected Mock<IEventStore> PerpairSimpleEventStore()
+        {
+            var eventStoreMock = new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault(eventStoreMock.Object);
+            eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
+                                                  int.MinValue, int.MaxValue)).Returns(
+                                                      new CommittedEventStream(Guid.NewGuid()));
+            return eventStoreMock;
+        }
+
+        protected Mock<ISnapshootEventStore> PrepareSnapshotableEventStore()
+        {
+            var eventStoreMock = new Mock<ISnapshootEventStore>();
+            NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
+       /*     eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
+                                                int.MinValue, int.MaxValue)).Returns(
+                                                    new CommittedEventStream(Guid.NewGuid()));*/
+            eventStoreMock.Setup(x => x.GetLatestSnapshoot(It.IsAny<Guid>()))
+                          .Returns(new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now,
+                                                      new object(), new Version(1,1,1,1)));
+            return eventStoreMock;
+        }
+
+
         private Mock<IDenormalizer> denormalizerMock;
-        private Mock<IEventStore> eventStoreMock;
-        private Mock<IUnitOfWorkFactory> unitOfWorckFactory;
+       // private Mock<IEventStore> eventStoreMock;
+        private Mock<ICommandService> commandServiceMock;
         [Test]
         public void GetEventStreamById_EventStoreIsEmpty_EmptyListIsReturned()
         {
+            var eventStoreMock = PerpairSimpleEventStore();
             SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
             Guid eventSourceId = Guid.NewGuid();
-            var result = target.GetEventStreamById(eventSourceId, typeof(object));
+            var result = target.GetEventStreamById<DummySnapshotableAR>(eventSourceId);
             Assert.IsTrue(result.Count == 0);
             eventStoreMock.Verify(x => x.ReadFrom(eventSourceId,
                                                   int.MinValue, int.MaxValue), Times.Once());
         }
+      
+        [Test]
+        public void GetEventStreamById_AggreagateRootIsSnapsootableEventStoreIsNotSnapshotable_AllEventStreamIsReturned()
+        {
+            var eventStoreMock = PerpairSimpleEventStore();
+            var aggregateRootId = Guid.NewGuid();
+            var eventId = Guid.NewGuid();
+            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
+                                                 int.MinValue, int.MaxValue)).Returns(
+                                                     new CommittedEventStream(aggregateRootId,
+                                                                              new CommittedEvent(Guid.NewGuid(),
+                                                                                                 eventId,
+                                                                                                 aggregateRootId, 1,
+                                                                                                 DateTime.Now,
+                                                                                                 new object(),
+                                                                                                 new Version()),
+                                                                                                 new CommittedEvent(Guid.NewGuid(),
+                                                                                                 Guid.NewGuid(),
+                                                                                                 aggregateRootId, 2,
+                                                                                                 DateTime.Now,
+                                                                                                 new object(),
+                                                                                                 new Version())));
+
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
+            Assert.IsTrue(result.Count == 2);
+
+        }
         [Test]
         public void GetEventStreamById_AggreagateRootIsNotSnapsootable_AllEventStreamIsReturned()
         {
+            var eventStoreMock = PrepareSnapshotableEventStore();
             var aggregateRootId = Guid.NewGuid();
             var eventId = Guid.NewGuid();
             eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
@@ -59,257 +115,42 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
             SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, typeof(object));
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result[0].EventIdentifier == eventId);
-            
-        }
-        [Test]
-        public void GetEventStreamById_AggreagateRootIsNotSnapshootableAggregateRoot_AllEventStreamIsReturned()
-        {
-            Mock<ISnapshotable<object>> aggreagateRootMock=new Mock<ISnapshotable<object>>();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRootMock.Object.GetType());
-            Assert.IsTrue(result.Count == 1);
-            Assert.IsTrue(result[0].EventIdentifier == eventId);
-
-        }
-
-        [Test]
-        public void GetEventStreamById_LastEventIsSnapshootLoaded_OnlyLastEventReturned()
-        {
-            DummyAR aggreagateRoot=new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(), 
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new SnapshootLoaded(),
-                                                                                                 new Version())));
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
+            var result = target.GetEventStreamById<DummyAR>(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
 
         }
         [Test]
-        public void GetEventStreamById_SnapshootBuilding_UnitOfWorkFactoryIsCalled()
+        public void GetEventStreamById_LastEventIsSnapshootLoaded_ReadFromWasntCalled()
         {
-            DummyAR aggreagateRoot = new DummyAR();
+            var eventStoreMock = PrepareSnapshotableEventStore();
             var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-            
             SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
-            unitOfWorckFactory.Verify(x => x.CreateUnitOfWork(It.IsAny<Guid>()), Times.Once());
-
-        }
-        [Test]
-        public void GetEventStreamById_SnapshootBuilding_UnitOfWorkGetByIdIsCalled()
-        {
-            DummyAR aggreagateRoot = new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
-            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
-            unitOfworkMock.Verify(x => x.GetById(typeof (DummyAR), aggregateRootId, null), Times.Once());
-
-        }
-        [Test]
-        public void GetEventStreamById_SnapshootBuilding_CreateSnapshotIsCalled()
-        {
-            DummyAR aggreagateRoot = new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
-            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
-
-            unitOfworkMock.Setup(x => x.GetById(typeof (DummyAR), aggregateRootId, null)).Returns(aggreagateRoot);
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
-            Assert.IsTrue(aggreagateRoot.IsSnapshootCreatedCalled);
-
-        }
-
-        [Test]
-        public void GetEventStreamById_SnapshootBuilding_SnapshootLoadedEventIsStored()
-        {
-            DummyAR aggreagateRoot = new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
-            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
-
-            unitOfworkMock.Setup(x => x.GetById(typeof(DummyAR), aggregateRootId, null)).Returns(aggreagateRoot);
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
-            eventStoreMock.Verify(x => x.Store(
-                It.Is<UncommittedEventStream>((stream) => stream.Count() == 1 && stream.First().Payload is SnapshootLoaded
-                )), Times.Once());
-
-        }
-        [Test]
-        public void GetEventStreamById_SnapshootBuilding_SnapshootLoadedEventIsReturned()
-        {
-            DummyAR aggreagateRoot = new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            var eventId = Guid.NewGuid();
-            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
-            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
-
-            unitOfworkMock.Setup(x => x.GetById(typeof(DummyAR), aggregateRootId, null)).Returns(aggreagateRoot);
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 Guid.NewGuid(),
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version()),
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 2,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, aggreagateRoot.GetType());
-            Assert.IsTrue(result.Count==1);
-            Assert.IsTrue(result[0].Payload is SnapshootLoaded);
-
-        }
-
-
-        [Test]
-        public void GetEventStreamById_StoredEventAndReturnedEvent_EventsHasTheSameUtsTime()
-        {
-            DummyAR aggreagateRoot = new DummyAR();
-            var aggregateRootId = Guid.NewGuid();
-            Mock<IUnitOfWorkContext> unitOfworkMock = new Mock<IUnitOfWorkContext>();
-            unitOfWorckFactory.Setup(x => x.CreateUnitOfWork(It.IsAny<Guid>())).Returns(unitOfworkMock.Object);
-
-            unitOfworkMock.Setup(x => x.GetById(typeof(DummyAR), aggregateRootId, null)).Returns(aggreagateRoot);
-
-            var eventId = Guid.NewGuid();
-            eventStoreMock.Setup(x => x.ReadFrom(aggregateRootId,
-                                                 int.MinValue, int.MaxValue)).Returns(
-                                                     new CommittedEventStream(aggregateRootId,
-                                                                              new CommittedEvent(Guid.NewGuid(),
-                                                                                                 eventId,
-                                                                                                 aggregateRootId, 1,
-                                                                                                 DateTime.Now,
-                                                                                                 new object(),
-                                                                                                 new Version())));
-
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
-            var result = target.GetEventStreamById(aggregateRootId, typeof(DummyAR));
+            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
-            var offset = TimeZoneInfo.Utc.GetUtcOffset(result[0].EventTimeStamp);
-            Assert.IsTrue(offset.Ticks==0);
+            eventStoreMock.Verify(x => x.ReadFrom(aggregateRootId, It.IsAny<long>(), It.IsAny<long>()), Times.Never());
+        }
 
-            eventStoreMock.Verify(
-                x => x.Store(It.Is<UncommittedEventStream>(e => e.First().EventTimeStamp == result[0].EventTimeStamp)),
-                Times.Once());
+        [Test]
+        public void GetEventStreamById_SnapshootBuilding_CommandForSnapshotCreatinSended()
+        {
+            var eventStoreMock = PrepareSnapshotableEventStore();
+            DummySnapshotableAR aggreagateRoot = new DummySnapshotableAR();
+            var aggregateRootId = Guid.NewGuid();
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
+            commandServiceMock.Verify(x => x.Execute(It.IsAny<CreateSnapshotForAR>()), Times.Once());
 
         }
+
+      
     }
 
-    public class DummyAR : SnapshootableAggregateRoot<object>
+    public class DummyAR : AggregateRoot
+    {
+    }
+
+    public class DummySnapshotableAR : SnapshootableAggregateRoot<object>
     {
         public bool IsSnapshootCreatedCalled { get;private set; }
         public bool IsRestoreFromSnapshot { get; private set; }

@@ -7,12 +7,14 @@ namespace Ncqrs.Commanding
     /// <summary>
     /// 
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(IKnownCommandsEnumeratorContracts))]
+    #endif
     public interface IKnownCommandsEnumerator
     {
         IEnumerable<Type> GetAllCommandTypes();
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(IKnownCommandsEnumerator))]
     internal abstract class IKnownCommandsEnumeratorContracts : IKnownCommandsEnumerator
     {
@@ -22,4 +24,5 @@ namespace Ncqrs.Commanding
             return default(IEnumerable<Type>);
         }
     }
+#endif
 }

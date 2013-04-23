@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public class AttributeBasedCommandMapper : ICommandMapper
@@ -48,15 +50,19 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
         public void Map(ICommand command, IMappedCommandExecutor executor)
         {
             var commandType = command.GetType();
-            IEnumerable<dynamic> attributes = commandType.GetCustomAttributes(false);
+            IEnumerable<object> attributes = commandType.GetCustomAttributes(false);
 
-            dynamic attributeHandler;
+            object attributeHandler;
 
-            foreach (dynamic attribute in attributes)
+            foreach (object attribute in attributes)
             {
                 if (_handlers.TryGetValue(attribute.GetType(), out attributeHandler))
                 {
-                    attributeHandler.Map(attribute, command, executor);
+                    var mapMethod = attributeHandler.GetType().GetMethod("Map");
+                    if (mapMethod == null)
+                        continue;
+                    mapMethod.Invoke(attributeHandler, new object[] { attribute, command, executor });
+                    //  attributeHandler.Map(attribute, command, executor);
                     return;
                 }
             }

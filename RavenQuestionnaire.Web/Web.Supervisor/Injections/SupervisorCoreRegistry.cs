@@ -61,9 +61,9 @@ namespace Web.Supervisor.Injections
             return
                 base.GetAssweblysForRegister().Concat(
                     new[]
-                        {
+                    {
                             typeof(SupervisorEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly
-                        });
+                    });
         }
 
         /// <summary>

@@ -6,16 +6,8 @@
       android:layout_height="wrap_content"
       android:orientation="vertical"
       android:background="@drawable/dashboardquestionnaire"
-                 local:MvxBind="{'Visible':{'Path':'Visible'}}" 
-               >
-  <!--<RelativeLayout
-                 android:padding="10dip"
-                  android:minHeight="?android:attr/listPreferredItemHeight"
-                  android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
-                    android:background="@android:drawable/list_selector_background"
-                  android:clickable="true"
-                 local:MvxBind="{'Click':{'Path':'ViewDetailCommand'}}">-->
+               
+               >  <!--local:MvxBind="{'Visible':{'Path':'Visible'}}"--> 
     <LinearLayout
           android:orientation=    "horizontal"
           android:layout_width=    "fill_parent"
@@ -30,7 +22,7 @@
                android:layout_height="wrap_content"
                android:gravity=    "center"
                android:textSize="20dp"
-               local:MvxBind="{'Text':{'Path':'Status'}}"/>
+               local:MvxBind="{'Text':{'Path':'Status.Name'}}"/>
       <Mvx.MvxBindableLinearLayout
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"

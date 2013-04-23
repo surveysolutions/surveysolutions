@@ -34,6 +34,10 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,14 +47,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventHandler\QuestionnaireDenormalizer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questionnaire\GroupView.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListInputModel.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListViewItem.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListView.cs" />
+    <Compile Include="Questionnaire\QuestionnaireListViewFactory.cs" />
     <Compile Include="Questionnaire\QuestionnaireStataMapView.cs" />
     <Compile Include="Questionnaire\QuestionnaireView.cs" />
     <Compile Include="Questionnaire\QuestionnaireViewFactory.cs" />
     <Compile Include="Questionnaire\QuestionnaireViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
@@ -58,6 +71,18 @@
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
+      <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
+      <Name>WB.UI.Designer.Providers.CQRS</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
+      <Project>{E936364C-A916-45E7-8F59-80DE2518AF2C}</Project>
+      <Name>WB.UI.Designer.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

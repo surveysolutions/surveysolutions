@@ -188,6 +188,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         {
             if (!this.Questions.ContainsKey(key))
                 return;
+
             var question =
                 this.Questions[key];
             question.SetEnabled(enebled);
@@ -300,17 +301,24 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             var siblings = BuildSiblingsForNonPropagatedGroups(rout, rosterKey);
             var screenItems = BuildItems(group, false);
             var breadcrumbs = BuildBreadCrumbs(rout, rosterKey);
-            
+
             var roster = new QuestionnaireGridViewModel(PublicKey, group.Title, Title,
                                                         rosterKey, group.Enabled,
                                                         siblings,
                                                         breadcrumbs,
-                                                       // this.Chapters,
-                                                        Enumerable.ToList<HeaderItem>(@group.Children.OfType<ICompleteQuestion>().Select(
-                                                                BuildHeader)),
+                                                        // this.Chapters,
+                                                        Enumerable.ToList<HeaderItem>(@group.Children
+                                                                                            .OfType<ICompleteQuestion>()
+                                                                                            .Where(
+                                                                                                q =>
+                                                                                                q.QuestionScope ==
+                                                                                                QuestionScope
+                                                                                                    .Interviewer)
+                                                                                            .Select(
+                                                                                                BuildHeader)),
                                                         () => CollectPropagatedScreen(rosterKey.PublicKey));
 
-            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] { roster.ScreenId }).ToList();
+            breadcrumbs = breadcrumbs.Union(new ItemPublicKey[1] {roster.ScreenId}).ToList();
             var template = new QuestionnairePropagatedScreenViewModel(PublicKey, group.Title, group.Enabled,
                                                                       rosterKey, screenItems,
                                                                       GetSiblings,
@@ -412,7 +420,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                             newType,
                             Enumerable.ToList<AnswerViewModel>(question.Answers.OfType<ICompleteAnswer>().Select(
                                     a =>
-                                    new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected))),
+                                    new AnswerViewModel(a.PublicKey, a.AnswerText, a.AnswerValue, a.Selected,a.AnswerImage))),
                             question.Enabled, question.Instructions, BuildComments(question.Comments),
                             question.Valid, question.Mandatory, question.Capital, question.GetAnswerString(),
                             question.ValidationExpression, question.ValidationMessage);

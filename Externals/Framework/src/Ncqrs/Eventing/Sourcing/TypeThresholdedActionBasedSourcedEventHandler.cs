@@ -43,10 +43,11 @@ namespace Ncqrs.Eventing.Sourcing
         public TypeThresholdedActionBasedDomainEventHandler(Action<object> handler, Type eventTypeThreshold, string handlerName,
                                                               Boolean exact = false)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(handler != null, "The handler cannot be null.");
             Contract.Requires<ArgumentNullException>(eventTypeThreshold != null,
                                                      "The eventTypeThreshold cannot be null.");
-
+            #endif
             _handler = handler;
             _eventTypeThreshold = eventTypeThreshold;
             _handlerName = handlerName;
@@ -70,8 +71,9 @@ namespace Ncqrs.Eventing.Sourcing
         /// </returns>
         public bool HandleEvent(object evnt)
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(evnt != null, "The Event cannot be null.");
-
+#endif
             var handled = false;
 
             if (ShouldHandleThisEventData(evnt))
@@ -82,7 +84,7 @@ namespace Ncqrs.Eventing.Sourcing
 
             return handled;
         }
-
+            #if USE_CONTRACTS
         /// <summary>
         ///   This method holds all the objects invariants.
         /// </summary>
@@ -92,7 +94,7 @@ namespace Ncqrs.Eventing.Sourcing
             Contract.Invariant(_handler != null);
             Contract.Invariant(_eventTypeThreshold != null);
         }
-
+#endif
         /// <summary>
         ///   Determine whether the event should be handled or not.
         /// </summary>
@@ -100,8 +102,9 @@ namespace Ncqrs.Eventing.Sourcing
         /// <returns><c>true</c> when this event should be handled; otherwise, <c>false</c>.</returns>
         private bool ShouldHandleThisEventData(object evnt)
         {
+            #if USE_CONTRACTS
             Contract.Assume(evnt != null, "The Event should not be null.");
-
+            #endif
             var shouldHandle = false;
 
             var dataType = evnt.GetType();

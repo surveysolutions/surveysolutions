@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.ServiceModel;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public static class RegisterExecutorForAllMappedCommandsInAssemblyExtension

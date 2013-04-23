@@ -6,6 +6,11 @@
 //   The raven db event store.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
     using System;
@@ -22,7 +27,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     /// <summary>
     /// The raven DB event store.
     /// </summary>
-    public class RavenDBEventStore : IStreamableEventStore
+    public class RavenDBEventStore : IStreamableEventStore, ISnapshootEventStore
     {
         #region Fields
 
@@ -106,20 +111,27 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             const int PageSize = 1024;
             var page = 0;
 
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            while (true)
             {
-                while (true)
+                List<StoredEvent> chunk;
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    var chunk = session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * PageSize).Take(PageSize);
-
-                    if (!chunk.Any())
-                    {
-                        yield break;
-                    }
-
-                    page++;
-                    yield return chunk.ToList();
+                    chunk = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResults())
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(page * PageSize)
+                        .Take(PageSize)
+                        .ToList();
                 }
+
+                if (chunk.Count == 0)
+                {
+                    yield break;
+                }
+
+                page++;
+                yield return chunk;
             }
         }
 
@@ -140,14 +152,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            /*  using (var session = _documentStore.OpenSession())
-            {
-                var storedEvents = session.Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResults())
-                    .Where(x => x.EventSourceId == id)
-                    .Where(x => x.EventSequence >= minVersion)
-                    .Where(x => x.EventSequence <= maxVersion)
-                    .ToList().OrderBy(x => x.EventSequence);*/
             IOrderedEnumerable<StoredEvent> storedEvents =
                 this.AccumulateEvents(
                     x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(x => x.EventSequence);
@@ -209,6 +213,20 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
         }
 
+        public CommittedEvent GetLatestSnapshoot(Guid aggreagateRootId)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                IDocumentQuery<StoredEvent> snapshoots = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
+                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId));
+                if (snapshoots.Any())
+                {
+                    return ToCommittedEvent(snapshoots.Last());
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region Methods
@@ -231,10 +249,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    IQueryable<StoredEvent> chunk =
-                        session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults()).Skip(page * maxPageSize)
-                            .Take(maxPageSize).Where(query);
-                    if (!chunk.Any())
+                    List<StoredEvent> chunk = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResults())
+                        .Skip(page * maxPageSize)
+                        .Take(maxPageSize)
+                        .Where(query)
+                        .ToList();
+
+                    if (chunk.Count == 0)
                     {
                         break;
                     }

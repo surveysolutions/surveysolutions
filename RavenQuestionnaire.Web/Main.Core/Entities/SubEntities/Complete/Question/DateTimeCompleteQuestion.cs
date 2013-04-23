@@ -42,6 +42,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// Initializes a new instance of the <see cref="DateTimeCompleteQuestion"/> class.
         /// </summary>
         public DateTimeCompleteQuestion()
+            : base()
         {
         }
 

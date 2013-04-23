@@ -9,11 +9,14 @@
 
 namespace WB.UI.Designer.Models
 {
+    using System;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
     /// The account list view item model.
     /// </summary>
+    [DisplayName("account")]
     public class AccountListViewItemModel : ActionItem
     {
         #region Public Properties
@@ -33,7 +36,7 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the id.
         /// </summary>
         [Key]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether is approved.
@@ -57,6 +60,7 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the user name.
         /// </summary>
         [Display(Name = "Name", Order = 1)]
+        [Default]
         public string UserName { get; set; }
 
         /// <summary>

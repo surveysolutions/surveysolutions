@@ -1,5 +1,6 @@
 using System;
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Android.Support.V4.View;
 using Android.Widget;
@@ -8,6 +9,9 @@ using CAPI.Android.Core;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
+using CAPI.Android.Extensions;
+using Main.Core.Domain;
+using Ncqrs.Restoring.EventStapshoot;
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -15,7 +19,7 @@ using Orientation = Android.Content.Res.Orientation;*/
 
 namespace CAPI.Android
 {
-    [Activity(Icon = "@drawable/capi")]
+    [Activity(NoHistory = true, Icon = "@drawable/capi", ConfigurationChanges = ConfigChanges.Orientation |ConfigChanges.KeyboardHidden |ConfigChanges.ScreenSize)]
     public class DetailsActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
     {
         protected ItemPublicKey? ScreenId;
@@ -35,54 +39,71 @@ namespace CAPI.Android
         {
             get { return this.FindViewById<LinearLayout>(Resource.Id.llContainer); }
         }
-        protected QuestionnaireNavigationFragment NavList
+     /*   protected LinearLayout llNavigationContainer
         {
             get
             {
                 return
                     this.SupportFragmentManager.FindFragmentById(Resource.Id.NavList) as QuestionnaireNavigationFragment;
             }
-        }
+        }*/
         
         protected ContentFrameAdapter Adapter { get; set; }
-        protected override void OnResume()
-        {
-            base.OnResume();
-        }
+        protected QuestionnaireNavigationFragment NavList { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
-
-            if (!CapiApplication.Membership.IsLoggedIn)
-            {
-                StartActivity(typeof (LoginActivity));
-            }
-
-
+          
             ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                 new QuestionnaireScreenInput(QuestionnaireId));
 
             base.OnCreate(bundle);
+
+            if (this.FinishIfNotLoggedIn())
+                return;
+
             SetContentView(Resource.Layout.Details);
             if (bundle != null)
             {
                 var savedScreen = bundle.GetString("ScreenId");
-                if (string.IsNullOrEmpty(savedScreen))
-                    return;
-                ScreenId = ItemPublicKey.Parse(savedScreen);
+                if (!string.IsNullOrEmpty(savedScreen))
+                {
+                    ScreenId = ItemPublicKey.Parse(savedScreen);
+                }
+            }
+            else
+            {
+                ScreenId = ViewModel.Chapters.FirstOrDefault().ScreenId;
             }
 
             this.Title = ViewModel.Title;
 
             if (bundle == null)
             {
-                NavList.Model = ViewModel;
+                NavList = QuestionnaireNavigationFragment.NewInstance(ViewModel.PublicKey);
+                this.SupportFragmentManager.BeginTransaction()
+                    .Add(Resource.Id.llNavigationContainer, NavList, "navigation")
+                    .Commit();
+                //  NavList.NewInstance(ViewModel.PublicKey);
+                //NavList.Model = ViewModel;
             }
-            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, VpContent,
-                                              ViewModel.Chapters.FirstOrDefault().ScreenId);
+            else
+            {
+                NavList = this.SupportFragmentManager.FindFragmentByTag("navigation") as QuestionnaireNavigationFragment;
+            }
+            Adapter = new ContentFrameAdapter(this.SupportFragmentManager, ViewModel, ScreenId);
+            VpContent.Adapter = Adapter;
+            VpContent.PageSelected += VpContent_PageSelected;
 
-            VpContent.PageSelected += new EventHandler<ViewPager.PageSelectedEventArgs>(VpContent_PageSelected);
+        }
 
+        protected override void OnSaveInstanceState(Bundle outState)
+        {
+            base.OnSaveInstanceState(outState);
+        
+            if (!Adapter.ScreenId.HasValue)
+                return;
+            outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
         }
 
         public override void OnAttachFragment(global::Android.Support.V4.App.Fragment p0)
@@ -93,6 +114,11 @@ namespace CAPI.Android
                 screen.ScreenChanged += ContentFrameAdapter_ScreenChanged;
             }
             base.OnAttachFragment(p0);
+        }
+        public override void Finish()
+        {
+            CapiApplication.CommandService.Execute(new CreateSnapshotForAR(QuestionnaireId, typeof(CompleteQuestionnaireAR)));
+            base.Finish();
         }
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
@@ -106,7 +132,7 @@ namespace CAPI.Android
             }
 
             Adapter.UpdateScreenData(e.ScreenId);
-
+            VpContent.CurrentItem = Adapter.GetScreenIndex(e.ScreenId);
             if (e.ScreenId.HasValue)
             {
                 var screen = ViewModel.Screens[e.ScreenId.Value];
@@ -119,15 +145,10 @@ namespace CAPI.Android
                     }
                 }
             }
+            GC.Collect(0);
         }
 
-        protected override void OnSaveInstanceState(Bundle outState)
-        {
-            base.OnSaveInstanceState(outState);
-            if (!Adapter.ScreenId.HasValue)
-                return;
-            outState.PutString("ScreenId", Adapter.ScreenId.Value.ToString());
-        }
+       
         private void VpContent_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
         {
 
@@ -141,12 +162,14 @@ namespace CAPI.Android
         protected override void OnDestroy()
         {
             base.OnDestroy();
+            VpContent.PageSelected -= VpContent_PageSelected;
             GC.Collect();
         }
+
+
         public override void OnLowMemory()
         {
             base.OnLowMemory();
-            Console.WriteLine("Low memory Details activities");
             GC.Collect();
         }
     }

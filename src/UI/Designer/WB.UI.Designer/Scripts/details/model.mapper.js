@@ -26,7 +26,6 @@
                 return groups;
             },
             getAllQuestions = function (questionnaire) {
-                console.log(questionnaire);
                 var questions = [];
                 var stack = getGroups(questionnaire, 0);
                 while (stack.length > 0) {
@@ -46,6 +45,9 @@
                  getDtoId: function (dto) { return dto.PublicKey; },
                  fromDto: function (dto, item) {
                      item = item || new model.Questionnaire().id(dto.PublicKey).title(dto.Title);
+                     item.childrenID(_.map(dto.Children, function (c) {
+                         return { type: c.__type, id: c.PublicKey };
+                     }));
                      return item;
                  }
              },
@@ -54,10 +56,10 @@
                 fromDto: function(dto, item) {
                     item = item || new model.Group().id(dto.group.PublicKey).level(dto.level);
                     item.title(dto.group.Title);
+                    item.parent(null);
                     item.description(dto.group.Description);
                     item.condition(dto.group.ConditionExpression);
-                    var type = config.groupTypes[dto.group.Propagated];
-                    item.gtype(type);
+                    item.gtype(dto.group.Propagated);
                     
                     item.childrenID(_.map(dto.group.Children, function (c) {
                         return { type: c.__type, id: c.PublicKey };
@@ -76,22 +78,30 @@
                 fromDto: function(dto, item, otherData) {
                     var groups = otherData.groups;
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
-
-                    var type = config.questionTypes[dto.QuestionType];
-                    item.qtype(type);
+                    item.parent(null);
+                    item.qtype(dto.QuestionType);
                     
-                    var scope = config.questionScopes[dto.QuestionScope];
-                    item.scope(scope);
+                    item.scope(dto.QuestionScope);
 
-                    var order = config.answerOrders[dto.AnswerOrder];
-                    item.answerOrder(order);
+                    item.answerOrder(dto.AnswerOrder);
 
                     var answers = _.map(dto.Answers, function (answer) {
                         return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);
                     });
 
-                    var triggers = _.map(dto.Triggers, function (groupId) {
+                    var triggers = _.filter(dto.Triggers, function (groupId) {
+                        var item = groups.getLocalById(groupId);
+                        return !_.isNull(item);
+                    }).map(function (groupId) {
                         return { key: groupId, value: groups.getLocalById(groupId).title() };
+                    });
+
+                        _.map(dto.Triggers, function (groupId) {
+                        var item = groups.getLocalById(groupId);
+                        if (!_.isNull(item)) {
+                            return { key: groupId, value: groups.getLocalById(groupId).title() };
+                        }
+                        return;
                     });
                     item.triggers(triggers);
 

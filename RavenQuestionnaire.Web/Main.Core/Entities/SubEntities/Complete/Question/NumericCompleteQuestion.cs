@@ -24,6 +24,7 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// Initializes a new instance of the <see cref="NumericCompleteQuestion"/> class.
         /// </summary>
         public NumericCompleteQuestion()
+            : base()
         {
         }
 

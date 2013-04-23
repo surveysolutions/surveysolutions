@@ -85,7 +85,7 @@ namespace Main.DenormalizerStorage
                 {
                     session.SaveChanges();
                 }
-                catch (ConcurrencyException ex)
+                catch (ConcurrencyException)
                 {
                     if (i < 3)
                         Store<T>(denormalizer, key, i + 1);

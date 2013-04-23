@@ -10,6 +10,8 @@
 using System.Data;
 using System.Linq;
 using Mono.Data.Sqlite;
+using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
@@ -27,7 +29,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
     /// <summary>
     /// The sq lite event store.
     /// </summary>
-    public class SQLiteEventStore : IStreamableEventStore
+    public class SQLiteEventStore : IStreamableEventStore, ISnapshootEventStore
     {
         #region Fields
 
@@ -82,6 +84,9 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         }
         protected  IEnumerable<CommittedEvent> GetEvents(string query)
         {
+
+            return GetEventsFromReader(query);
+
             var cursor = this._databaseHelper.QueryData(query);
 
             var events = new List<CommittedEvent>();
@@ -95,7 +100,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                     //TimeStamp, Data, Sequence
                     long timestamp = Convert.ToInt64(objectse[3]);
                     DateTime eventTimeStamp = DateTime.FromBinary(timestamp);
-                    object data = this.GetObject(objectse[4].ToString());
+                    object data = GetObject(objectse[4].ToString());
                     long sequenceId = Convert.ToInt64(objectse[5]);
                     var @event = new CommittedEvent(
                         commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1,1,1,1));
@@ -111,6 +116,24 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             return @events;
         }
 
+
+        protected IEnumerable<CommittedEvent> GetEventsFromReader(string query)
+        {
+            foreach (object[] objectse in this._databaseHelper.QueryData(query))
+                {
+                    Guid commitId = Guid.Parse(objectse[0].ToString());
+                    Guid eventSourceId = Guid.Parse(objectse[1].ToString());
+                    Guid eventId = Guid.Parse(objectse[2].ToString());
+                    //TimeStamp, Data, Sequence
+                    long timestamp = Convert.ToInt64(objectse[3]);
+                    DateTime eventTimeStamp = DateTime.FromBinary(timestamp);
+                    object data = GetObject(objectse[4].ToString());
+                    long sequenceId = Convert.ToInt64(objectse[5]);
+                    yield return new CommittedEvent(
+                        commitId, eventId, eventSourceId, sequenceId, eventTimeStamp, data, new Version(1, 1, 1, 1));
+                }
+        }
+        
         /// <summary>
         /// The get all events.
         /// </summary>
@@ -119,7 +142,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </returns>
         public IEnumerable<CommittedEvent> GetAllEvents()
         {
-            return GetEvents(Query.SelectAllEventsQuery());
+            return GetEventsFromReader(Query.SelectAllEventsQuery());
         }
 
         /// <summary>
@@ -150,8 +173,16 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// </returns>
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            var events = GetEvents(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion));
+            var events = GetEventsFromReader(Query.SelectAllEventsByGuidQuery(id, minVersion, maxVersion));
             return new CommittedEventStream(id, events);
+        }
+
+        public CommittedEvent GetLatestSnapshoot(Guid id)
+        {
+            var events = GetEventsFromReader(Query.GetLatestSnapshoot(id, typeof(SnapshootLoaded).FullName));
+            if (!events.Any())
+                return null;
+            return events.First();
         }
 
         /// <summary>
@@ -194,7 +225,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
         /// <returns>
         /// The <see cref="object"/>.
         /// </returns>
-        private object GetObject(string json)
+        private static object GetObject(string json)
         {
             return JsonConvert.DeserializeObject(
                 json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });

@@ -7,7 +7,7 @@
 @{
     Html.RequiresCss("details.css", "Content", 50);
 
-    JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver());
+    JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
 }
 <script type="text/javascript">
     var dataHelper = null;

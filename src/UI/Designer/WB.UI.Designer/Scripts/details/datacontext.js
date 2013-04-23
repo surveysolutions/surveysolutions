@@ -1,6 +1,18 @@
 ﻿define('datacontext',
     ['jquery', 'underscore', 'ko', 'model', 'config', 'dataservice', 'model.mapper', 'utils', 'input'],
     function ($, _, ko, model, config, dataservice, modelmapper, utils, input) {
+
+        var stack = [input.questionnaire];
+        while (stack.length > 0) {
+            var item = stack.pop();
+            var type = item['$type'].split(",")[0];
+            item["__type"] = type.substring(type.lastIndexOf('.') + 1);
+            _.each(item.Children, function (q) {
+                stack.push(q);
+            });
+        }
+
+
         var logger = config.logger,
             itemsToArray = function (items, observableArray, filter, sortFunction) {
                 // Maps the memo to an observableArray, 
@@ -47,12 +59,11 @@
                         items[newObj.id()] = newObj;
                     },
                     removeById = function (id) {
-                        console.log(items[id].title());
                         delete items[id];
                     },
                     getLocalById = function (id) {
                         // This is the only place we set to NULLO
-                        return !!id && !!items[id] ? items[id] : nullo;
+                        return !!id && !!items[id] ? items[id] : null;
                     },
                     getAllLocal = function () {
                         return utils.mapMemoToArray(items);
@@ -100,7 +111,6 @@
             questions = new LocalEntitySet(modelmapper.question, model.Question.Nullo, { groups: groups }),
             questionnaire = modelmapper.questionnaire.fromDto(input.questionnaire);
 
-        console.log(questionnaire);
 
         groups.parse(input.questionnaire);
         questions.parse(input.questionnaire);
@@ -130,10 +140,15 @@
             groups.removeById(id);
         };
 
-        groups.getChapters = function () {
-            var chapters = _.filter(groups.getAllLocal(), function (item) {
-                return item.level() == 0;
+        groups.getChapters = function() {
+            var chapters = _.map(questionnaire.childrenID(), function(children) {
+                var item = groups.getLocalById(children.id);
+                //item.parent(parent);
+                return item;
             });
+            //_.filter(groups.getAllLocal(), function (item) {
+            //    return item.level() == 0;
+            //});
             return chapters;
         };
 
@@ -155,7 +170,11 @@
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });
                 if (!_.isUndefined(child)) {
+                    var isDirty = question.dirtyFlag().isDirty();
                     question.triggers.remove(child);
+                    if (!isDirty) {
+                        question.dirtyFlag().reset();
+                    }
                 }
             });
         };
@@ -211,6 +230,16 @@
 
         commands[config.commands.updateQuestion] = function (question) {
             return converQuestionToCommand(question);
+        };
+        
+        commands[config.commands.questionMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
+            return command;
+        };
+        
+        commands[config.commands.groupMove] = function (command) {
+            command.questionnaireId = questionnaire.id();
+            return command;
         };
 
         var converQuestionToCommand = function(question) {
@@ -274,7 +303,6 @@
                         def.resolve(response);
                     },
                     error: function (response, xhr) {
-                        console.log(xhr);
                         if (callbacks && callbacks.error) {
                             callbacks.error(response);
                         }

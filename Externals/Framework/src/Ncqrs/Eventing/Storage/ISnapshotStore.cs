@@ -9,7 +9,9 @@ namespace Ncqrs.Eventing.Storage
     /// <summary>
     /// A <see cref="Snapshot"/> store. Can store and retrieve a <see cref="Snapshot"/>.
     /// </summary>
+    #if USE_CONTRACTS
     [ContractClass(typeof(ISnapshotStoreContracts))]
+#endif
     public interface ISnapshotStore
     {
         /// <summary>
@@ -29,7 +31,7 @@ namespace Ncqrs.Eventing.Storage
         /// </returns>
         Snapshot GetSnapshot(Guid eventSourceId, long maxVersion);
     }
-
+    #if USE_CONTRACTS
     [ContractClassFor(typeof(ISnapshotStore))]
     internal abstract class ISnapshotStoreContracts : ISnapshotStore
     {
@@ -45,4 +47,5 @@ namespace Ncqrs.Eventing.Storage
             return default(Snapshot);
         }
     }
+    #endif
 }

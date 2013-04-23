@@ -3,7 +3,9 @@ using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Domain.Storage
 {
     public class DomainRepository : IDomainRepository

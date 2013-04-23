@@ -1,4 +1,5 @@
 ﻿@using Recaptcha
+@using WB.UI.Designer
 @using WB.UI.Designer.BootstrapSupport
 @model WB.UI.Designer.Models.RegisterModel
 
@@ -15,9 +16,14 @@
         @{
     this.Html.RenderPartial("EditForm");
         }
-        <p>
-            @Html.Raw(Html.GenerateCaptcha())
-        </p>
+
+        @if (AppSettings.Instance.IsReCaptchaEnabled)
+        {
+            <p>
+                @Html.Raw(Html.GenerateCaptcha())
+            </p>
+        }
+
         <div class="form-actions">
             <button class="btn btn-large btn-primary pull-right" type="submit">Register</button>
         </div>
@@ -25,7 +31,7 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/editform")
 }
 
 @section Styles

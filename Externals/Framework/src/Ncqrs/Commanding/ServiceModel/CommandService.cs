@@ -3,7 +3,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Ncqrs.Commanding.CommandExecution;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Commanding.ServiceModel
 {
     public class CommandService : ICommandService
@@ -69,7 +71,9 @@ namespace Ncqrs.Commanding.ServiceModel
 
         public virtual void RegisterExecutor<TCommand>(Type commandType, ICommandExecutor<TCommand> executor) where TCommand : ICommand
         {
+            #if USE_CONTRACTS
             Contract.Requires<ArgumentOutOfRangeException>(typeof(TCommand).IsAssignableFrom(commandType));
+#endif
             if (_executors.ContainsKey(commandType)) return;
             Action<ICommand> action = (cmd) => executor.Execute((TCommand) cmd);
             _executors.Add(commandType, action);

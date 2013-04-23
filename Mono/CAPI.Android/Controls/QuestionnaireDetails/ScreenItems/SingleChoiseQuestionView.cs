@@ -4,6 +4,7 @@ using System.Linq;
 using Android.Content;
 using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Interfaces.Views;
 using Main.Core.Commands.Questionnaire.Completed;
 
@@ -34,10 +35,13 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             {
                 radioButtons[i] = new RadioButton(this.Context);
                 radioButtons[i].Text = answer.Title;
+                
                 if (answer.Selected)
                     checkedButton = radioButtons[i];
                 radioButtons[i].SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
+                radioButtons[i].AttachImage(answer);
                 radioGroup.AddView(radioButtons[i]);
+               
                 i++;
             }
             if (checkedButton != null)
@@ -54,8 +58,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                         new List<Guid>(1) {answerGuid}, "",
                                                         Model.PublicKey.PropagationKey));
-            SaveAnswer();
         }
+
+
+
         #endregion
     }
 }

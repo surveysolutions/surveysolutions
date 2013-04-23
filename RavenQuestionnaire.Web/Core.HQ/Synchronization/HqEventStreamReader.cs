@@ -90,6 +90,16 @@ namespace Core.HQ.Synchronization
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
 
+        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Private Methods
@@ -106,7 +116,7 @@ namespace Core.HQ.Synchronization
 
             foreach (var item in model)
             {
-                retval.AddRange(this.GetEventStreamById(item.Id, typeof(QuestionnaireAR)));
+                retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
             }
         }
 
@@ -121,7 +131,7 @@ namespace Core.HQ.Synchronization
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>().Where(q => q.Roles != null && !q.Roles.Contains(UserRoles.Administrator));
             foreach (UserDocument item in model)
             {
-                retval.AddRange(base.GetEventStreamById(item.PublicKey, typeof(UserAR)));
+                retval.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
             }
         }
 
@@ -143,7 +153,7 @@ namespace Core.HQ.Synchronization
                     continue;
                 }
 
-                retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId, typeof(CompleteQuestionnaireAR)));
+                retval.AddRange(base.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
             }
         }
 
@@ -156,9 +166,10 @@ namespace Core.HQ.Synchronization
         protected void AddFiles(List<AggregateRootEvent> retval)
         {
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
+            
             foreach (FileDescription item in model)
             {
-                retval.AddRange(base.GetEventStreamById(Guid.Parse(item.PublicKey), typeof(FileAR)));
+                retval.AddRange(base.GetEventStreamById<FileAR>(Guid.Parse(item.FileName)));
             }
         }
 

@@ -13,7 +13,7 @@ namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
+    //using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Web;
@@ -25,7 +25,6 @@ namespace RavenQuestionnaire.Web.Controllers
     using Main.Core.Commands.File;
     using Main.Core.Commands.Questionnaire;
     using Main.Core.Commands.Questionnaire.Question;
-    using Main.Core.Domain;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.Answer;
@@ -276,13 +275,13 @@ namespace RavenQuestionnaire.Web.Controllers
             return this.View(
                 "_EditCard",
                 new ImageNewViewModel
-                    {
-                        Desc = source.Description,
-                        Title = source.Title,
-                        QuestionnaireId = questionnaireId,
-                        PublicKey = publicKey,
-                        ImageKey = imageKey
-                    });
+                {
+                    Desc = source.Description,
+                    Title = source.Title,
+                    QuestionnaireId = questionnaireId,
+                    PublicKey = publicKey,
+                    ImageKey = imageKey
+                });
         }
 
         /// <summary>
@@ -359,11 +358,18 @@ namespace RavenQuestionnaire.Web.Controllers
         [QuestionnaireAuthorize(UserRoles.Administrator)]
         public ActionResult Save(QuestionView[] question, AnswerView[] answers, IEnumerable<Guid> triggers)
         {
+#warning  Put this staf into domain object into command handler
+
             QuestionView model = question[0];
             if (this.ModelState.IsValid)
             {
                 try
                 {
+#warning add StataExportCaption validation here
+
+                    if (model.StataExportCaption != null)
+                        model.StataExportCaption = model.StataExportCaption.Trim();
+
                     var ansverItems = new Answer[0];
                     if (answers != null)
                     {
@@ -479,15 +485,15 @@ namespace RavenQuestionnaire.Web.Controllers
                         }
                     }
                 }
-                catch (DomainException e)
+                catch (ArgumentException e)
                 {
-                    this.AddModelErrorUsingDomainException(model, e);
+                    this.AddModelErrorUsingArgumentException(model, e);
                 }
                 catch (Exception e)
                 {
-                    if (e.InnerException is DomainException)
+                    if (e.InnerException is ArgumentException)
                     {
-                        this.AddModelErrorUsingDomainException(model, (DomainException) e.InnerException);
+                        this.AddModelErrorUsingArgumentException(model, (ArgumentException)e.InnerException);
                     }
                     else
                     {
@@ -509,9 +515,9 @@ namespace RavenQuestionnaire.Web.Controllers
             this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
         }
 
-        private void AddModelErrorUsingDomainException(QuestionView model, DomainException e)
+        private void AddModelErrorUsingArgumentException(QuestionView model, ArgumentException e)
         {
-            this.ModelState.AddModelError(string.Format("question[{0}].ConditionExpression", model.PublicKey), e.Message);
+            this.ModelState.AddModelError(string.Format("question[{0}].{1}", model.PublicKey, e.ParamName), e.Message);
         }
 
         /// <summary>

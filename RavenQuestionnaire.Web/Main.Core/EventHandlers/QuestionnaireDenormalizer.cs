@@ -41,6 +41,13 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<QuestionnaireUpdated>,
                                              IEventHandler<QuestionnaireDeleted>
     {
+#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
+#if MONODROID
+        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireDenormalizer));
+#else
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+#endif
+
         #region Fields
 
         /// <summary>
@@ -134,11 +141,19 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument questionnaire = this.documentStorage.GetByGuid(evnt.EventSourceId);
 
-            // var questionnaire = new Questionnaire(item);
-            item.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.AfterItemKey);
-            this.UpdateQuestionnaire(evnt, item);
+            bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
+
+            if (isLegacyEvent)
+            {
+                Logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                return;
+            }
+
+            questionnaire.MoveItem(evnt.Payload.PublicKey, evnt.Payload.GroupKey, evnt.Payload.TargetIndex);
+
+            this.UpdateQuestionnaire(evnt, questionnaire);
         }
 
         /// <summary>
@@ -272,17 +287,14 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
         {
             QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
-            var group = item.Find<Group>(evnt.Payload.GroupPublicKey);
-            if (group != null)
-            {
-                group.Propagated = evnt.Payload.Propagateble;
 
-                ////if(e.Triggers!=null)
-                // group.Triggers = e.Triggers;
-                group.Description = evnt.Payload.Description;
-                group.ConditionExpression = evnt.Payload.ConditionExpression;
-                group.Update(evnt.Payload.GroupText);
-            }
+            item.UpdateGroup(
+                evnt.Payload.GroupPublicKey,
+                evnt.Payload.GroupText,
+                evnt.Payload.Description,
+                evnt.Payload.Propagateble,
+                evnt.Payload.ConditionExpression);
+
             this.UpdateQuestionnaire(evnt, item);
         }
 

@@ -4,17 +4,14 @@
 
         var// properties
             //-----------------
-            questionTypes = [
-                "SingleOption",
-                "YesNo",
-                "DropDownList",
-                "MultyOption",
-                "Numeric",
-                "DateTime",
-                "GpsCoordinates",
-                "Text",
-                "AutoPropagate"
-            ],
+            questionTypes = {
+                "SingleOption": "SingleOption",
+                "MultyOption" : "MultyOption",
+                "Numeric" : "Numeric",
+                "DateTime" : "DateTime",
+                "Text" : "Text",
+                "AutoPropagate": "AutoPropagate"
+            },
             questionScopes = [
                 "Interviewer",
                 "Supervisor",
@@ -30,18 +27,18 @@
             ],
             groupTypes = [
                 "None",
-                "Propagated",
+                "",
                 "AutoPropagated"
             ],
             commands = {
                 createGroup: "AddGroup",
                 updateGroup: "UpdateGroup",
                 deleteGroup: "DeleteGroup",
-                moveGroup: "MoveGroup",
+                groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
-                moveQuestion: "MoveQuestion"
+                questionMove: "MoveQuestion"
             },
             hashes = {
                 details: '#/details',
@@ -74,6 +71,10 @@
             loggerTmeout = 2000,
 
             warnings = {
+                propagatedGroupCantBecomeChapter : {
+                    title: 'Cant move',
+                    text:  "Auto propagate group can't become a chapter"
+                },
                 cantMoveQuestionOutsideGroup: {
                     title: 'Cant move',
                     text:  "You can't move question outside any group"

@@ -36,7 +36,7 @@ namespace RavenQuestionnaire.Web.Utils
         {
             if (string.IsNullOrWhiteSpace(expression))
                 return expression;
-            Dictionary<string, string> map = LoadMap(questionnaireKey).StataMap.ToDictionary(p=>p.Value, p=>p.Key.ToString());
+            Dictionary<string, string> map = LoadMap(questionnaireKey).StataMap.ToDictionary(p => p.Value, p => p.Key.ToString());
             return MakeSubstitutions(expression, map);
         }
 
@@ -65,9 +65,11 @@ namespace RavenQuestionnaire.Web.Utils
 
         private static string MakeSubstitutions(string expression, IEnumerable<KeyValuePair<string, string>> map)
         {
+            #warning change logic using NCalc - the same approach as execution instead of replace
+
             foreach (var pair in map)
             {
-                expression = expression.Replace(string.Format("[{0}]", pair.Key), string.Format("[{0}]", pair.Value));
+                expression = expression.Replace(string.Format("[{0}]", pair.Key.Trim()), string.Format("[{0}]", pair.Value));
             }
             return expression;
         }

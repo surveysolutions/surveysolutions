@@ -36,10 +36,14 @@
     <Reference Include="Ninject">
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\RavenQuestionnaire.Web\Main.Core\bin\Debug\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -72,6 +76,10 @@
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\Main.Synchronization.csproj">
       <Project>{caff029b-9fe0-4ae9-a475-c384d9022471}</Project>
       <Name>Main.Synchronization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
+      <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
+      <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

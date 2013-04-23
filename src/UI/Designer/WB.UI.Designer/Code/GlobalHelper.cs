@@ -10,6 +10,8 @@
 namespace WB.UI.Designer
 {
     using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
 
     /// <summary>
     /// The global helper.
@@ -17,6 +19,8 @@ namespace WB.UI.Designer
     public static class GlobalHelper
     {
         #region Constants
+
+        public const string EmptyString = "--//--";
 
         /// <summary>
         /// The grid page items count.
@@ -47,6 +51,13 @@ namespace WB.UI.Designer
             {
                 return (string)HttpContext.Current.Request.RequestContext.RouteData.Values["controller"];
             }
+        }
+
+        public static string GenerateUrl(string action, string controller, object routes)
+        {
+            var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
+
+            return url.Action(action, controller, routes, "http");
         }
 
         #endregion

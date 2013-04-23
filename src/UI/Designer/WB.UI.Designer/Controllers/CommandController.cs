@@ -1,5 +1,5 @@
 ﻿using Main.Core.Commands.Questionnaire.Question;
-using Main.Core.View;
+using WB.UI.Designer.Code.Exceptions;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
@@ -21,22 +21,24 @@ namespace WB.UI.Designer.Controllers
 
     using WB.UI.Designer.Code.Helpers;
 
+    [CustomAuthorize]
     public class CommandController : Controller
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
-        private readonly IViewRepository _repository;
+        private readonly IExpressionReplacer expressionReplacer;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IViewRepository repository)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
-            this._repository = repository;
+            this.expressionReplacer = expressionReplacer;
         }
 
         [HttpPost]
+        [CustomHandleError]
         public JsonResult Execute(string type, string command)
         {
             ICommand concreteCommand;
@@ -63,6 +65,10 @@ namespace WB.UI.Designer.Controllers
                 {
                     return this.Json(new { error = e.InnerException.Message });
                 }
+                else if (e.InnerException!=null && e.InnerException.InnerException is DomainException)
+                {
+                    return this.Json(new { error = e.InnerException.InnerException.Message });
+                }
                 else
                 {
                     throw;
@@ -74,13 +80,21 @@ namespace WB.UI.Designer.Controllers
 
         private void PrepareCommandForExecution(ICommand command)
         {
-            if ((!(command is FullQuestionDataCommand))) return;
+            this.ReplaceStataCaptionsWithGuidsIfNeeded(command);
+        }
 
-            var questionDataCommand = (FullQuestionDataCommand) command;
-            var transformator = new ExpressionReplacer(this._repository);
+        private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
+        {
+            if (!(command is FullQuestionDataCommand))
+                return;
 
-            questionDataCommand.Condition = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.Condition, questionDataCommand.QuestionnaireId);
-            questionDataCommand.ValidationExpression = transformator.ReplaceStataCaptionsWithGuids(questionDataCommand.ValidationExpression, questionDataCommand.QuestionnaireId);
+            var questionCommand = (FullQuestionDataCommand) command;
+
+            questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
+                questionCommand.Condition, questionCommand.QuestionnaireId);
+
+            questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
+                questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
         }
     }
 }

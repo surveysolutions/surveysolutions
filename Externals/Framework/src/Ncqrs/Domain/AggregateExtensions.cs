@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
-
+#if MONODROID
+using AndroidLogger;
+#endif
 namespace Ncqrs.Domain
 {
     internal static class AggregateRootExtensions

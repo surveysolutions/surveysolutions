@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Questionnaire.Core.Web.Helpers;
+
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
@@ -46,6 +48,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         /// </summary>
         public Mock<IDataExport> DataExportMock { get; set; }
 
+
         /// <summary>
         /// Gets or sets SyncProcessFactoryMock.
         /// </summary>
@@ -61,6 +64,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
         [SetUp]
         public void CreateObjects()
         {
+           
+
+            this.Controller = NewImportExportController();
+        }
+
+        private ImportExportController NewImportExportController()
+        {
             this.DataExportMock = new Mock<IDataExport>();
             this.SyncProcessFactoryMock = new Mock<ISyncProcessFactory>();
             var syncProcessMock = new Mock<IUsbSyncProcess>();
@@ -68,8 +78,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             this.SyncProcessFactoryMock.Setup(
                 f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
                     syncProcessMock.Object);
-
-            this.Controller = new ImportExportController(
+            return new ImportExportController(
                 this.DataExportMock.Object,
                 (new Mock<IViewRepository>()).Object,
                 this.SyncProcessFactoryMock.Object);

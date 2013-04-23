@@ -141,7 +141,7 @@ body.loading .loading-backdrop {
         overflow-y: scroll;
     }
 
-    .stack .bottom {
+    .stack .pane-bottom {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -161,7 +161,7 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        .stack .bottom .inner {
+        .stack .pane-bottom .inner {
             padding: 6px 8px 0 8px;
         }
 
@@ -253,7 +253,7 @@ body.loading .loading-backdrop {
         padding-right: 8px;
     }
 
-    #questionnaire .bottom {
+    #questionnaire .pane-bottom {
         position: absolute;
         bottom: 0;
         right: 0;
@@ -273,7 +273,7 @@ body.loading .loading-backdrop {
         height: 42px;
     }
 
-        #questionnaire .bottom .inner {
+        #questionnaire .pane-bottom .inner {
             padding: 6px 8px 0 8px;
         }
 
@@ -488,6 +488,7 @@ h1 {
     background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     background: linear-gradient(top, rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
     border-radius: 4px;
+    min-height: 34px;
 }
 
     .q-item .icon-warning-sign {
@@ -685,4 +686,23 @@ h1 {
 .details.stack .answer-options{
     margin-bottom: 10px;
     border-bottom: 1px solid #ddd;
+}
+.editor-container{
+    height: 100px;
+    margin-bottom: 10px;
+    position: relative
+}
+.editor {
+    height: 100px;
+    width: 100%;
+    border-radius: 4px 4px 4px 4px;
+    border: 1px solid #CCCCCC;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+}
+a.btn.btn-help {
+    border-radius: 16px 16px 16px 16px;
+    padding: 0 3px;
+}
+.row-fluid .btn-group {
+    margin-bottom: 10px;
 }

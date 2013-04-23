@@ -384,6 +384,8 @@ namespace Main.Core.Entities.SubEntities.Complete
         public void SetComments(string comments, DateTime date, UserLight user)
         {
             this.LastComment = comments;
+            if (this.Comments == null)
+                this.Comments = new List<CommentDocument>();
             if (this.Comments.Count > 0 && this.Comments.Last().Comment == comments)
             {
                 return;

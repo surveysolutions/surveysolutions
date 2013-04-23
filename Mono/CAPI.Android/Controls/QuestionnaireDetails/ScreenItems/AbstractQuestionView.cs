@@ -115,11 +115,15 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 ShowKeyboard(etComments);
             }
         }
+        
         protected void SaveComment()
         {
-            CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey,
-                                                         etComments.Text, this.Model.PublicKey.PropagationKey,
-                                                         CapiApplication.Membership.CurrentUser));
+            string newComments = etComments.Text.Trim();
+            if (newComments != this.Model.Comments)
+            {
+                CommandService.Execute(new SetCommentCommand(this.QuestionnairePublicKey, this.Model.PublicKey.PublicKey, newComments, this.Model.PublicKey.PropagationKey,
+                                                             CapiApplication.Membership.CurrentUser));
+            }
             SetEditCommentsVisibility(false);
             etComments.Text = tvComments.Text;
             
@@ -153,10 +157,14 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             etComments.Visibility = tvCommentsTitle.Visibility = visible ? ViewStates.Visible : ViewStates.Gone;
             tvComments.Visibility = visible ? ViewStates.Gone : ViewStates.Visible;
         }
-
-        protected virtual void PostInit()
+        protected override void OnAttachedToWindow()
         {
             llWrapper.EnableDisableView(this.Model.Status.HasFlag(QuestionStatus.Enabled));
+            base.OnAttachedToWindow();
+        }
+        protected virtual void PostInit()
+        {
+           
             if (string.IsNullOrEmpty(Model.Instructions))
                 btnInstructions.Visibility = ViewStates.Gone;
             else

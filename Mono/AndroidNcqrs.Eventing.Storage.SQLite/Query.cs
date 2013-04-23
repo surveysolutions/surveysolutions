@@ -24,7 +24,19 @@ ORDER BY Sequence";
 
 			return string.Format(template, id, minVersion, maxVersion);
 		}
+        internal static string GetLatestSnapshoot(Guid id, string name)
+        {
+            var template =
+@"SELECT CommitId, EventSourceId, EventId, TimeStamp, Data, Sequence
+FROM Events
+WHERE [EventSourceId] = '{0}'
+AND Name='{1}'
+ORDER BY Sequence DESC
+LIMIT 1 
+";
 
+            return string.Format(template, id, name);
+        }
 		internal static string SelectAllEventsQuery()
 		{
 			return

@@ -2,11 +2,15 @@
 
 @{
     this.ViewBag.Title = "PDF Preview";
-    this.Layout = "~/Views/Shared/Layout.cshtml";
 }
-
-<link href="~/Content/pdf.css" rel="stylesheet" />
-
+@section Styles
+{
+    @Styles.Render("~/Content/pdf.css")
+}
+@section Scripts
+{
+    @Scripts.Render("~/simplepage")
+}
 <div class="pdf-preview">
 
     <div class="buttons">
