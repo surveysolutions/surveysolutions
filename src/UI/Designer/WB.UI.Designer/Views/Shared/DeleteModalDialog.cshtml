@@ -11,7 +11,7 @@
         <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
         @using (Html.BeginForm("delete", GlobalHelper.CurrentController, FormMethod.Post, new { style = "display: inline-block; height: 20px" }))
         {
-            this.Html.RenderPartial("_AntiForgerySubPage");
+            @Html.AntiForgeryToken()
             <input name="id" data-bind="value: itemId" type="hidden"/>
             <button type="submit" class="btn btn-primary" value="Delete">Delete</button>
         }
