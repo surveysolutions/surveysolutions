@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Controllers
             QuestionnaireView model = this.GetQuestionnaire(id);
             return
                 this.View(
-                    new QuestionnaireCloneModel { Title = string.Format("{0}_Copy", model.Title), Id = model.PublicKey });
+                    new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
         }
 
         /// <summary>
