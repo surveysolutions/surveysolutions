@@ -20,50 +20,70 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
     public class MvvmCrossSqliteEventStore : IStreamableEventStore, ISnapshootEventStore, IMvxServiceConsumer
     {
-        private readonly ISQLiteConnection _connection;
+       // private readonly ISQLiteConnection _connection;
         public MvvmCrossSqliteEventStore()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            _connectionFactory = this.GetService<ISQLiteConnectionFactory>();
 
-            _connection = connectionFactory.Create("EventStore");
-            Connection.CreateTable<StoredEvent>();
+            //  _connection = connectionFactory.Create("EventStore");
+            WrapConnection((c) => c.CreateTable<StoredEvent>());
+
         }
 
-   //     private readonly  ISQLiteConnectionFactory _connectionFactory;
+        private readonly  ISQLiteConnectionFactory _connectionFactory;
 
-
-        protected ISQLiteConnection Connection
-        {
-            get { return _connection; }
-        }
 
         public Ncqrs.Eventing.CommittedEvent GetLatestSnapshoot(Guid id)
         {
             return
-                Connection.Table<StoredEvent>().Where(x => x.IsSnapshot)
-                           .OrderByDescending(x => x.Sequence)
-                           .Last()
-                           .ToCommitedEvent();
+                WrapConnection<CommittedEvent>(
+                    (c) => c.Table<StoredEvent>().Where(x => x.IsSnapshot && x.EventSourceId == id.ToString())
+                            .OrderByDescending(x => x.Sequence)
+                            .Last()
+                            .ToCommitedEvent());
+
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
-            Connection.InsertAll(eventStream.Select(x => x.ToStoredEvent()), true);
+            WrapConnection((c) => c.InsertAll(eventStream.Select(x => x.ToStoredEvent()), true));
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             return
-                Connection.Table<StoredEvent>().Select(x => x.ToCommitedEvent());
+                WrapConnection<IEnumerable<CommittedEvent>>(
+                    (c) => c.Table<StoredEvent>().Select(x => x.ToCommitedEvent()));
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return new CommittedEventStream(id,
-                                            Connection.Table<StoredEvent>()
-                                                       .Where(x => x.EventSourceId == id.ToString())
-                                                       .Select(x => x.ToCommitedEvent()));
+            return
+                WrapConnection<CommittedEventStream>(
+                    (c) => new CommittedEventStream(id,
+                                                    c.Table<StoredEvent>()
+                                                     .Where(
+                                                         x =>
+                                                         x.EventSourceId == id.ToString() && x.Sequence >= minVersion &&
+                                                         x.Sequence <= maxVersion)
+                                                     .Select(x => x.ToCommitedEvent())));
+        }
+
+       /* private void WrapConnection(Action<ISQLiteConnection> action)
+        {
+            using (var connection = _connectionFactory.Create("EventStore"))
+            {
+                action(connection);
+            }
+        }*/
+
+        private T WrapConnection<T>(Func<ISQLiteConnection, T> action)
+        {
+            using (var connection = _connectionFactory.Create("EventStore"))
+            {
+                return action(connection);
+            }
         }
     }
 }

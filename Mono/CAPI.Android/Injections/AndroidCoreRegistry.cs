@@ -44,7 +44,7 @@ namespace CAPI.Android.Injections
         {
             base.Load();
 
-            this.Bind<IEventStore>().To<MvvmCrossSqliteEventStore>();
+            this.Bind<IEventStore>().ToConstant(new MvvmCrossSqliteEventStore());
             this.Unbind<IAuthentication>();
 
             var membership = new AndroidAuthentication(Kernel.Get<IDenormalizerStorage<UserView>>());

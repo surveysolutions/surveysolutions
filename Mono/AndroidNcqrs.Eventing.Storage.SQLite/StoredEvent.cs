@@ -39,10 +39,12 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             return JsonConvert.SerializeObject(
                 payload, Formatting.None, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
         }
-        [PrimaryKey]
+       
         public string EventSourceId { get; set; }
 
         public string CommitId { get; set; }
+        
+        [PrimaryKey]
         public string EventId { get; set; }
         public long Sequence { get; set; }
         public long TimeStamp { get; set; }
