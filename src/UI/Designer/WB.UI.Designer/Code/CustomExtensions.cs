@@ -148,7 +148,9 @@ namespace WB.UI.Designer.Extensions
         /// </returns>
         public static string ToUIString(this DateTime source)
         {
-            return source == DateTime.MinValue ? GlobalHelper.EmptyString : source.ToString(CultureInfo.InvariantCulture);
+            return DateTime.Compare(source.ToUniversalTime(), DateTime.MinValue) == 0
+                       ? GlobalHelper.EmptyString
+                       : source.ToString(CultureInfo.InvariantCulture);
         }
 
         #endregion
