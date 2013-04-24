@@ -10,7 +10,6 @@ namespace AndroidMain.Synchronization
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Net;
 
     using Main.Core.Documents;
@@ -66,11 +65,8 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private readonly string baseAddress;
 
-       /* /// <summary>
-        /// The chanel factory wrapper.
-        /// </summary>
-        private readonly IChanelFactoryWrapper chanelFactoryWrapper;*/
-
+        private bool UseGZip = true;
+       
         #endregion
 
         #region Constructors and Destructors
@@ -176,11 +172,13 @@ namespace AndroidMain.Synchronization
 
             var request = new RestRequest(GetARKeysPath, Method.POST);
             request.RequestFormat = DataFormat.Json;
-            request.AddHeader("Accept-Encoding", "gzip,deflate");
+
+            if (UseGZip)
+                request.AddHeader("Accept-Encoding", "gzip,deflate");
+
 
             IRestResponse response = restClient.Execute(request);
-
-
+            
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
                 throw new Exception("Event list is empty.");
@@ -194,7 +192,7 @@ namespace AndroidMain.Synchronization
                 response.Content.Substring(pos), new JsonSerializerSettings());*/
             if (syncItemsMetaContainer == null)
             {
-                throw new Exception("aggregate roots list is empty");
+                throw new Exception("Elements to be synchronized are not found.");
             }
 
             //var events = new List<AggregateRootEvent>();
@@ -203,30 +201,31 @@ namespace AndroidMain.Synchronization
             {
 
                 var itemRequest = new RestRequest(GetARPath, Method.POST);
-                    itemRequest.AddParameter("ARKey", root.Item2);
-                    itemRequest.AddParameter("length", 0);
-                    itemRequest.AddParameter("rootType", root.Item1);
+                itemRequest.AddParameter("ARKey", root.Item2);
+                itemRequest.AddParameter("length", 0);
+                itemRequest.AddParameter("rootType", root.Item1);
 
+                itemRequest.RequestFormat = DataFormat.Json;
 
-                    itemRequest.RequestFormat = DataFormat.Json;
+                if (UseGZip)
                     itemRequest.AddHeader("Accept-Encoding", "gzip,deflate");
-                    
-                    IRestResponse responseStream = restClient.Execute(itemRequest);
-                    if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
-                    {
-                        //logging
-                        throw new Exception("Operation finished unsuccessfully.");
-                    }
-                    
-                    var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-                    var str = responseStream.Content.Substring( responseStream.Content.IndexOf("[") );
-                    var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
+
+                IRestResponse responseStream = restClient.Execute(itemRequest);
+                if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
+                {
+                    //logging
+                    throw new Exception("Operation finished unsuccessfully. Item was not received.");
+                }
+
+                var settings = new JsonSerializerSettings(){ TypeNameHandling = TypeNameHandling.Objects };
+                var str = responseStream.Content.Substring(responseStream.Content.IndexOf("["));
+                var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
 
-                    foreach (var aggregateRootEvent in evnts)
-                    {
-                        yield return aggregateRootEvent;
-                    }
+                foreach (var aggregateRootEvent in evnts)
+                {
+                    yield return aggregateRootEvent;
+                }
             }
 
             //return events;
