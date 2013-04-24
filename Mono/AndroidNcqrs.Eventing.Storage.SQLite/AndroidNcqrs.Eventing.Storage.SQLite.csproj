@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="DataBaseHelper.cs" />
     <Compile Include="DenormalizerStorage\SqliteDenormalizerStorage.cs" />
+    <Compile Include="Extensions\SQLiteConnectionFactoryExtensions.cs" />
     <Compile Include="MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Query.cs" />
     <Compile Include="SQLiteContext.cs" />

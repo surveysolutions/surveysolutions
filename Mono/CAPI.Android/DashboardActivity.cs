@@ -23,7 +23,6 @@ namespace CAPI.Android
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
             SetContentView(Resource.Layout.Main);
         }
-
         public override bool OnCreateOptionsMenu(global::Android.Views.IMenu menu)
         {
             this.CreateActionBar();

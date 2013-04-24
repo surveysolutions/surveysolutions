@@ -30,7 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>

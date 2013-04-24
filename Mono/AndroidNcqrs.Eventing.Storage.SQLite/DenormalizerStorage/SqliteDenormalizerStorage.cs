@@ -19,46 +19,64 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
     public class SqliteDenormalizerStorage<T> : IDenormalizerStorage<T>, IMvxServiceConsumer
         where T : DenormalizerRow, new()
     {
-        private readonly ISQLiteConnection _connection;
-
+        private readonly ISQLiteConnectionFactory _connectionFactory;
+        private const string _dbName="Projections";
         public SqliteDenormalizerStorage()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            var factory = this.GetService<ISQLiteConnectionFactory>();
-            _connection = factory.Create("DenormalizerStorage");
-
-            _connection.CreateTable<T>();
+            _connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            WrapConnection((c) => c.CreateTable<T>());
         }
 
         public int Count()
         {
-            return _connection.Table<T>().Count();
+            return WrapConnection((c) => c.Table<T>().Count());
         }
 
         public T GetByGuid(Guid key)
         {
-            return _connection.Table<T>().FirstOrDefault(x => x.Id == key);
+            return WrapConnection((c) => c.Table<T>().FirstOrDefault(x => x.Id == key.ToString()));
         }
 
         public IQueryable<T> Query()
         {
-            return _connection.Table<T>().AsQueryable();
+            return WrapConnection((c) => c.Table<T>().ToList().AsQueryable());
         }
 
         public void Remove(Guid key)
         {
-            _connection.Delete<T>(key);
+            WrapConnection((c) => c.Delete<T>(key));
         }
 
         public void Store(T denormalizer, Guid key)
         {
-            _connection.Insert(denormalizer);
+            WrapConnection((c) =>
+                {
+                    try
+                    {
+                        c.Insert(denormalizer);
+                    }
+                    catch
+                    {
+                        c.Update(denormalizer);
+                    }
+                    return 0;
+                })
+                ;
+        }
+
+        private TOut WrapConnection<TOut>(Func<ISQLiteConnection, TOut> action)
+        {
+            using (var connection = _connectionFactory.Create(_dbName))
+            {
+                return action(connection);
+            }
         }
     }
 
     public abstract class DenormalizerRow
     {
         [PrimaryKey]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
     }
 }

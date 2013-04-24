@@ -350,7 +350,6 @@ namespace CAPI.Android
             {
                 var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
                 manager.StartPump();
-                CapiApplication.SaveProjections();
                 return true;
             }
             catch (Exception ex)

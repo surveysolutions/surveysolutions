@@ -21,13 +21,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            allItems = items.ToDictionary(k => k.PublicKey, v => v);
+            cacheddItems = items.Where(i => IsVisible(i.Status)).ToList();
         }
         public DashboardSurveyItem(Guid publicKey, string surveyTitle)
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            allItems = new Dictionary<Guid, DashboardQuestionnaireItem>();
         }
         public Guid PublicKey { get; private set; }
         public string SurveyTitle { get; private set; }
@@ -38,7 +37,13 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         private IList<DashboardQuestionnaireItem> cacheddItems = new List<DashboardQuestionnaireItem>();
 
-        private void RecacheItems()
+        protected bool IsVisible(SurveyStatus status)
+        {
+            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
+                   status == SurveyStatus.Error;
+        }
+
+    /*    private void RecacheItems()
         {
             cacheddItems = allItems.Where(i => IsVisible(i.Value.Status)).Select(i => i.Value).ToList();
             this.RaisePropertyChanged("ActiveItems");
@@ -69,17 +74,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             RecacheItems();
         }
 
-        /* public bool TryToChangeQuestionnaireState(Guid key, SurveyStatus status)
-        {
-            var questionnaire = allItems.FirstOrDefault(i => i.PublicKey == key);
-            if (questionnaire != null)
-            {
-                questionnaire.SetStatus(status);
-                return true;
-            }
-            return false;
-        }*/
-
         public bool Remove(Guid key)
         {
             if (!allItems.ContainsKey(key))
@@ -89,12 +83,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             return true;
         }
 
-        protected bool IsVisible(SurveyStatus status)
-        {
-            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Error;
-        }
-
-        private IDictionary<Guid,DashboardQuestionnaireItem> allItems;
+     
+        private IDictionary<Guid,DashboardQuestionnaireItem> allItems;*/
     }
 }
