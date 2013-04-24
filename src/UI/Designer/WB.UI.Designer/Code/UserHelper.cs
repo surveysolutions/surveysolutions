@@ -9,12 +9,10 @@
 
 using System;
 using System.Web.Security;
-using Microsoft.Practices.ServiceLocation;
-using NinjectAdapter;
 using WB.UI.Designer.Providers.Roles;
 using WebMatrix.WebData;
 
-namespace WB.UI.Designer.Code
+namespace WB.UI.Designer
 {
     public interface IUserHelper
     {
@@ -51,10 +49,6 @@ namespace WB.UI.Designer.Code
     /// </summary>
     public class UserHelper : IUserHelper
     {
-        public static IUserHelper Instance {
-            get { return (ServiceLocator.Current as NinjectServiceLocator).GetInstance<IUserHelper>(); }
-        }
-
         #region Constructors and Destructors
 
         /// <summary>
