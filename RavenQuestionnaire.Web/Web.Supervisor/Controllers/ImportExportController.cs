@@ -402,6 +402,7 @@ namespace Web.Supervisor.Controllers
             return Json(this.GetList(), JsonRequestBehavior.AllowGet);
         }
 
+        [Obsolete]
         [AcceptVerbs(HttpVerbs.Get)]
         public FileResult GetRootsList1()
         {

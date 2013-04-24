@@ -126,8 +126,8 @@ namespace CAPI.Android
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
-            this.DoSync(PumpimgType.Push);
-            this.DoSync(PumpimgType.Pull);
+            this.DoSync(PumpimgType.Sync);
+            //this.DoSync(PumpimgType.Pull);
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace CAPI.Android
 */
             }
 
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -257,15 +257,10 @@ namespace CAPI.Android
                 return;
             }
 
-
-            // async task protection
-            //ScreenOrientation oldOrientation = this.RequestedOrientation;
-            //this.RequestedOrientation = ScreenOrientation.Nosensor;
-
             var progressDialog = new ProgressDialog(this);
 
-            progressDialog.SetTitle("Synchronization process");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
+            progressDialog.SetTitle("Synchronizing");
+            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
             progressDialog.SetMessage("Initialyzing");
             progressDialog.SetCancelable(false);
 
@@ -301,6 +296,11 @@ namespace CAPI.Android
                                         else if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
+                                        }
+                                        else if (pumpingType == PumpimgType.Sync)
+                                        {
+                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
+                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
                                     }
                                     catch (Exception exc)
@@ -390,7 +390,7 @@ namespace CAPI.Android
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -415,7 +415,7 @@ namespace CAPI.Android
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -434,10 +434,9 @@ namespace CAPI.Android
 
     public enum PumpimgType
     {
-        Push,
-
-        Pull,
-
-        Backup
+        Push = 0,
+        Pull = 1,
+        Backup = 2,
+        Sync = 4
     }
 }
