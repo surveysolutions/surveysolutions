@@ -176,13 +176,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
                         CreatedAt = @event.Payload.CreatedDate, 
                         FailedPasswordAnswerWindowAttemptCount = 0, 
                         FailedPasswordWindowAttemptCount = 0, 
-                        SimpleRoles = new List<SimpleRoleEnum>(),
-                        FailedPasswordAnswerWindowStartedAt = DateTime.MinValue,
-                        FailedPasswordWindowStartedAt = DateTime.MinValue,
-                        LastActivityAt = DateTime.MinValue,
-                        LastLockedOutAt = DateTime.MinValue,
-                        LastPasswordChangeAt = DateTime.MinValue,
-                        LastLoginAt = DateTime.MinValue
+                        SimpleRoles = new List<SimpleRoleEnum>()
                     }, 
                 @event.EventSourceId);
         }
