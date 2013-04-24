@@ -427,9 +427,9 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void OnAccountUnlocked(AccountUnlocked @event)
         {
-            this._failedPasswordAnswerWindowStartedAt = DateTime.MinValue.ToUniversalTime();
+            this._failedPasswordAnswerWindowStartedAt = DateTime.MinValue;
             this._failedPasswordWindowAttemptCount = 0;
-            this._failedPasswordWindowStartedAt = DateTime.MinValue.ToUniversalTime();
+            this._failedPasswordWindowStartedAt = DateTime.MinValue;
         }
 
         /// <summary>
@@ -467,7 +467,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         public void OnUserLoggedIn(UserLoggedIn @event)
         {
             this._lastLoginAt = @event.LastLoginAt;
-            this._failedPasswordWindowStartedAt = DateTime.MinValue.ToUniversalTime();
+            this._failedPasswordWindowStartedAt = DateTime.MinValue;
             this._failedPasswordWindowAttemptCount = 0;
         }
 
