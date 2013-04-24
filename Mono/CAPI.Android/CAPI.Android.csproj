@@ -182,6 +182,7 @@
     <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
     <Compile Include="Syncronization\Provider.cs" />
     <Compile Include="Syncronization\RemoteCollector.cs" />
+    <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />

@@ -25,6 +25,7 @@ namespace CAPI.Android
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
     using CAPI.Android.Syncronization;
+    using CAPI.Android.Utils;
 
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
@@ -95,9 +96,10 @@ namespace CAPI.Android
             if (buttonSync != null)
             {
                 buttonSync.Click += this.ButtonSyncClick;
+                buttonSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
             }
 
-            var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
+            /*var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
             if (buttonPull != null)
             {
                 buttonPull.Click += this.buttonPull_Click;
@@ -107,7 +109,7 @@ namespace CAPI.Android
             if (buttonPush != null)
             {
                 buttonPush.Click += this.buttonPush_Click;
-            }
+            }*/
 
             var buttonBackup = this.FindViewById<Button>(Resource.Id.btnBackup);
             if (buttonBackup != null)
@@ -144,7 +146,7 @@ namespace CAPI.Android
 
         /// <summary>
         ///     The pull.
-        /// </summary>
+        /// </summary>e
         /// <param name="remoteSyncNode">
         ///     The remote Sync Node.
         /// </param>
@@ -249,6 +251,12 @@ namespace CAPI.Android
             {
                 return;
             }
+
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                return;
+            }
+
 
             // async task protection
             //ScreenOrientation oldOrientation = this.RequestedOrientation;
@@ -415,37 +423,7 @@ namespace CAPI.Android
         {
             this.DoSync(PumpimgType.Backup);
         }
-
-        /// <summary>
-        ///     The button pull_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPull_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Pull);
-        }
-
-        /// <summary>
-        ///     The button push_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPush_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Push);
-        }
-
+        
         private void buttonRestore_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
