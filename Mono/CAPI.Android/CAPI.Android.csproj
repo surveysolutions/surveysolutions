@@ -235,6 +235,10 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>

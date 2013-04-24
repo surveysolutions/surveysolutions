@@ -118,6 +118,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
       <Name>AndroidFluentAssertions</Name>
