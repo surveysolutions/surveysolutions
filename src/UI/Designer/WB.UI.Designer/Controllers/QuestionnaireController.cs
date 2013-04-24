@@ -39,9 +39,16 @@ namespace WB.UI.Designer.Controllers
         // GET: /Questionnaires/
         #region Constructors and Destructors
 
-        public QuestionnaireController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
-            : base(repository, commandService,userHelper)
+        private readonly IQuestionnaireHelper _questionnaireHelper;
+
+        public QuestionnaireController(
+            IViewRepository repository,
+            ICommandService commandService,
+            IUserHelper userHelper,
+            IQuestionnaireHelper questionnaireHelper)
+            : base(repository, commandService, userHelper)
         {
+            this._questionnaireHelper = questionnaireHelper;
         }
 
         #endregion
@@ -285,7 +292,7 @@ namespace WB.UI.Designer.Controllers
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return QuestionnaireHelper.GetPublicQuestionnaires(
+            return this._questionnaireHelper.GetPublicQuestionnaires(
                 repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
@@ -341,7 +348,7 @@ namespace WB.UI.Designer.Controllers
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return QuestionnaireHelper.GetQuestionnaires(
+            return this._questionnaireHelper.GetQuestionnaires(
                 repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
