@@ -751,9 +751,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewQuestionAdded.cs">
       <Link>Events\Questionnaire\NewQuestionAdded.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewQuestionnaireCreated.cs">
-      <Link>Events\Questionnaire\NewQuestionnaireCreated.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionChanged.cs">
       <Link>Events\Questionnaire\QuestionChanged.cs</Link>
     </Compile>
@@ -1085,6 +1082,10 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
       <Name>AndroidLogger</Name>
@@ -1121,7 +1122,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" />
+      <UserProperties ProjectLinkReference="8332bcd2-dc58-466e-8d80-5bcb1faccd6c" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
