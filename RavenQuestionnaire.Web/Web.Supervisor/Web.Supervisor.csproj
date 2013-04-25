@@ -220,6 +220,7 @@
     <Compile Include="Models\MenuItem.cs" />
     <Compile Include="Models\PagingExtensions.cs" />
     <Compile Include="Models\PagingHelper.cs" />
+    <Compile Include="Models\SupervisorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
@@ -591,6 +592,7 @@
     <Content Include="Views\Survey\Timeline1.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
+    <Content Include="Views\User\CreateSupervisor.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -7,8 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Web.Http;
+using System.Web.Security;
 using Core.Supervisor.Views.Interviewer;
 using Main.Core.View;
+using Questionnaire.Core.Web.Security;
 
 namespace Web.Supervisor.Controllers
 {
@@ -31,24 +34,15 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
-    [Authorize]
+   
     public class UserController : Controller
     {
-        #region Fields
 
-        /// <summary>
-        /// Global info object
-        /// </summary>
         private readonly IGlobalInfoProvider globalInfo;
 
-        /// <summary>
-        /// View repository
-        /// </summary>
         private readonly IViewRepository viewRepository;
 
-        #endregion
-
-        #region Constructor
+        private readonly IFormsAuthentication authentication;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
@@ -59,20 +53,39 @@ namespace Web.Supervisor.Controllers
         /// <param name="globalInfo">
         /// The global info.
         /// </param>
-        public UserController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
+        public UserController(IFormsAuthentication auth, IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
         {
+            this.authentication = auth;
             this.viewRepository = viewRepository;
             this.globalInfo = globalInfo;
         }
-
-        #endregion
 
         private static ICommandService CommandService
         {
             get { return NcqrsEnvironment.Get<ICommandService>(); }
         }
 
-        #region PublicActions
+        [AllowAnonymous]
+        public ActionResult CreateSupervisor()
+        {
+            var supervisor = new SupervisorModel(Guid.NewGuid(), "supervisor");
+            return this.View(supervisor);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CreateSupervisor(SupervisorModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                CommandService.Execute(new CreateUserCommand(user.Id, user.Name, user.Name, user.Name + "@worldbank.org", new [] {UserRoles.Supervisor}, false, null));
+
+                this.authentication.SignIn(user.Name, false);
+                return this.Redirect("~/");
+            }
+
+            return this.View(user);
+        }
 
         /// <summary>
         /// Unlock user
@@ -83,6 +96,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
+        [Authorize]
         public ActionResult UnlockUser(string id)
         {
             Guid key = ParseKeyOrThrow404(id);
@@ -101,6 +115,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
+         [Authorize]
         public ActionResult LockUser(string id)
         {
             Guid key = ParseKeyOrThrow404(id);
@@ -116,6 +131,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Interviewer summary view
         /// </returns>
+         [Authorize]
         public ActionResult Summary()
         {
             ViewBag.ActivePage = MenuItem.Interviewers;
@@ -134,6 +150,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Partial view with table's body
         /// </returns>
+         [Authorize]
         public ActionResult _SummaryData(GridDataRequestModel data)
         {
             var user = this.globalInfo.GetCurrentUser();
@@ -161,6 +178,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Show statistics view if everything is ok
         /// </returns>
+         [Authorize]
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
         {
             var inputModel = input == null
@@ -187,6 +205,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Index view
         /// </returns>
+         [Authorize]
         public ActionResult Index(InterviewersInputModel input)
         {
             ViewBag.ActivePage = MenuItem.Administration;
@@ -205,6 +224,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Partial view with table's body
         /// </returns>
+         [Authorize]
         public ActionResult _TableData(GridDataRequestModel data)
         {
             var input = new InterviewersInputModel
@@ -228,6 +248,7 @@ namespace Web.Supervisor.Controllers
         /// Partial view with table's body
         /// </returns>
         [HttpPost]
+        [Authorize]
         public ActionResult TableGroupByUser(GridDataRequestModel data)
         {
             var input = new InterviewerInputModel()
@@ -252,6 +273,7 @@ namespace Web.Supervisor.Controllers
         /// Partial view with table's body
         /// </returns>
         [HttpPost]
+        [Authorize]
         public ActionResult UserStatistics(GridDataRequestModel data)
         {
             var input = new InterviewerStatisticsInputModel()
@@ -271,6 +293,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// List of all  supervisor's users
         /// </returns>
+         [Authorize]
         public ActionResult UsersJson()
         {
             var user = this.globalInfo.GetCurrentUser();
@@ -278,10 +301,6 @@ namespace Web.Supervisor.Controllers
             var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
         }
-
-        #endregion
-
-        #region Private
 
         private static Guid ParseKeyOrThrow404(string id)
         {
@@ -295,6 +314,5 @@ namespace Web.Supervisor.Controllers
             return key;
         }
 
-        #endregion
     }
 }
