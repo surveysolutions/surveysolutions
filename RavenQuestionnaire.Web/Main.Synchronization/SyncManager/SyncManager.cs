@@ -319,7 +319,7 @@ namespace Main.Synchronization.SyncManager
                 this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
                 this.status.Progress = 98;
                 this.status.IsWorking = false;
-                //throw;
+                throw;
 
                 // return ErrorCodes.Fail;
             }

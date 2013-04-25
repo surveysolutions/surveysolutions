@@ -5,6 +5,7 @@ using System.Text;
 
 using Android.App;
 using Android.Content;
+using Android.Database.Sqlite;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -15,75 +16,58 @@ using Cirrious.MvvmCross.Plugins.Sqlite;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
+using SQLite;
+using SQLiteException = Android.Database.Sqlite.SQLiteException;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite
 {
     public class MvvmCrossSqliteEventStore : IStreamableEventStore, ISnapshootEventStore, IMvxServiceConsumer
     {
-       // private readonly ISQLiteConnection _connection;
+        private readonly ISQLiteConnection _connection;
+
         public MvvmCrossSqliteEventStore()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            _connectionFactory = this.GetService<ISQLiteConnectionFactory>();
-
+            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            _connection = connectionFactory.Create("EventStore");
             //  _connection = connectionFactory.Create("EventStore");
-            WrapConnection((c) => c.CreateTable<StoredEvent>());
+            _connection.CreateTable<StoredEvent>();
 
         }
 
-        private readonly  ISQLiteConnectionFactory _connectionFactory;
+        // private readonly  ISQLiteConnectionFactory _connectionFactory;
 
 
         public Ncqrs.Eventing.CommittedEvent GetLatestSnapshoot(Guid id)
         {
-            return
-                WrapConnection<CommittedEvent>(
-                    (c) => c.Table<StoredEvent>().Where(x => x.IsSnapshot && x.EventSourceId == id.ToString())
+            var idString = id.ToString();
+            return ((TableQuery<StoredEvent>)_connection.Table<StoredEvent>()).Where(x => x.IsSnapshot && x.EventSourceId == idString)
                             .OrderByDescending(x => x.Sequence)
                             .Last()
-                            .ToCommitedEvent());
+                            .ToCommitedEvent();
 
         }
 
         public void Store(UncommittedEventStream eventStream)
         {
-            WrapConnection((c) => c.InsertAll(eventStream.Select(x => x.ToStoredEvent()), true));
+            _connection.InsertAll(eventStream.Select(x => x.ToStoredEvent()), true);
         }
 
         public IEnumerable<CommittedEvent> GetEventStream()
         {
-            return
-                WrapConnection<IEnumerable<CommittedEvent>>(
-                    (c) => c.Table<StoredEvent>().Select(x => x.ToCommitedEvent()));
+            return _connection.Table<StoredEvent>().Select(x => x.ToCommitedEvent());
         }
 
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            return
-                WrapConnection<CommittedEventStream>(
-                    (c) => new CommittedEventStream(id,
-                                                    c.Table<StoredEvent>()
-                                                     .Where(
-                                                         x =>
-                                                         x.EventSourceId == id.ToString() && x.Sequence >= minVersion &&
-                                                         x.Sequence <= maxVersion)
-                                                     .Select(x => x.ToCommitedEvent())));
-        }
-
-       /* private void WrapConnection(Action<ISQLiteConnection> action)
-        {
-            using (var connection = _connectionFactory.Create("EventStore"))
-            {
-                action(connection);
-            }
-        }*/
-
-        private T WrapConnection<T>(Func<ISQLiteConnection, T> action)
-        {
-            using (var connection = _connectionFactory.Create("EventStore"))
-            {
-                return action(connection);
-            }
+            var idString = id.ToString();
+            return new CommittedEventStream(id,
+                                            ((TableQuery<StoredEvent>) _connection.Table<StoredEvent>())
+                                                .Where(
+                                                    x =>
+                                                    x.EventSourceId == idString && x.Sequence >= minVersion &&
+                                                    x.Sequence <= maxVersion).ToList()
+                                                .Select(x => x.ToCommitedEvent()));
         }
     }
 }

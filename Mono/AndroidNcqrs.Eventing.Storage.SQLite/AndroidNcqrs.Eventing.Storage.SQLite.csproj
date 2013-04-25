@@ -44,6 +44,9 @@
     <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite">
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="ManagedSQLite">
       <HintPath>..\LibrariesPortedToAndroid\ManagedSQLite.dll</HintPath>
     </Reference>

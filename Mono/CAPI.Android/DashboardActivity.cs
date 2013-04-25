@@ -10,18 +10,27 @@ namespace CAPI.Android
 
     [Activity(Label = "CAPI", Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
+    public class 
+        DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
         protected override void OnCreate(Bundle bundle)
         {
-          
+
             base.OnCreate(bundle);
             if (this.FinishIfNotLoggedIn())
                 return;
+
             ViewModel =
                 CapiApplication.LoadView<DashboardInput, DashboardModel>(
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
             SetContentView(Resource.Layout.Main);
+        }
+       protected override void OnRestart()
+        {
+            base.OnRestart();
+            ViewModel.ReplaceSurveyList(
+               CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                   new DashboardInput(CapiApplication.Membership.CurrentUser.Id)).Surveys);
         }
         public override bool OnCreateOptionsMenu(global::Android.Views.IMenu menu)
         {

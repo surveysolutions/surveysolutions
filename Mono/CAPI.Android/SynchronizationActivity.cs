@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.View.User;
 
@@ -24,8 +25,6 @@ namespace CAPI.Android
     using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
-    using CAPI.Android.Syncronization;
-
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
@@ -402,7 +401,7 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                    CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);

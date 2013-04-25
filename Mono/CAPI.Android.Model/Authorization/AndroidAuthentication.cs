@@ -36,10 +36,13 @@ namespace CAPI.Android.Core.Model.Authorization
                 throw new InvalidOperationException("please logoff first");
             try
             {
+                var hash = SimpleHash.ComputeHash(password);
+
                 LoginDTO user =
-                    _documentStorage.Query().FirstOrDefault(
+                    _documentStorage.Query(
                         u =>
-                        u.Login.ToLower() == userName.ToLower() && u.Password == SimpleHash.ComputeHash(password));
+                        u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
+                                    .FirstOrDefault();
                 
                 
               /*  UserView user =
@@ -48,7 +51,7 @@ namespace CAPI.Android.Core.Model.Authorization
                             userName.ToLower(),
                             // bad hack due to key insensitivity of login
                             SimpleHash.ComputeHash(password)));*/
-                if (user == null || user.IsLocked)
+                if (user == null || user.Password!=hash || user.IsLocked)
                     return false;
 
                 currentUser = new UserLight(Guid.Parse(user.Id), user.Login);

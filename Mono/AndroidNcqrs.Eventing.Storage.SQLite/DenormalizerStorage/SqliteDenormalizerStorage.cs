@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 
 using Android.App;
@@ -13,65 +14,52 @@ using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Cirrious.MvvmCross.Plugins.Sqlite;
 using Main.DenormalizerStorage;
+using SQLite;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
     public class SqliteDenormalizerStorage<T> : IDenormalizerStorage<T>, IMvxServiceConsumer
         where T : DenormalizerRow, new()
     {
-        private readonly ISQLiteConnectionFactory _connectionFactory;
+//        private readonly ISQLiteConnectionFactory _connectionFactory;
+        private readonly ISQLiteConnection _connection;
         private const string _dbName="Projections";
         public SqliteDenormalizerStorage()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
-            _connectionFactory = this.GetService<ISQLiteConnectionFactory>();
-            WrapConnection((c) => c.CreateTable<T>());
+            var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
+            _connection = connectionFactory.Create(_dbName);
+
+            _connection.CreateTable<T>();
         }
 
         public int Count()
         {
-            return WrapConnection((c) => c.Table<T>().Count());
+            return _connection.Table<T>().Count();
         }
 
         public T GetByGuid(Guid key)
         {
-            return WrapConnection((c) => c.Table<T>().FirstOrDefault(x => x.Id == key.ToString()));
+            var idString = key.ToString();
+            //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
+            return  ((TableQuery<T>)_connection.Table<T>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
         public IQueryable<T> Query()
         {
-            return WrapConnection((c) => c.Table<T>().ToList().AsQueryable());
+            return _connection.Table<T>().AsQueryable();
+        }
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        {
+            return ((TableQuery<T>)_connection.Table<T>()).Where(predExpr);
         }
 
         public void Remove(Guid key)
         {
-            WrapConnection((c) => c.Delete<T>(key));
+            _connection.Delete<T>(key);
         }
 
-        public void Store(T denormalizer, Guid key)
-        {
-            WrapConnection((c) =>
-                {
-                    try
-                    {
-                        c.Insert(denormalizer);
-                    }
-                    catch
-                    {
-                        c.Update(denormalizer);
-                    }
-                    return 0;
-                })
-                ;
-        }
-
-        private TOut WrapConnection<TOut>(Func<ISQLiteConnection, TOut> action)
-        {
-            using (var connection = _connectionFactory.Create(_dbName))
-            {
-                return action(connection);
-            }
-        }
     }
 
     public abstract class DenormalizerRow

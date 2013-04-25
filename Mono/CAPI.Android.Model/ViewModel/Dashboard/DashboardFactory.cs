@@ -24,13 +24,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public DashboardModel Load(DashboardInput input)
         {
-            var allQuestionnairies =
-                _questionnaireDTOdocumentStorage.Query();
+            var userId = input.UserId.ToString();
             var questionnairies =
-                _questionnaireDTOdocumentStorage.Query().Where(q => q.Responsible == input.UserId.ToString()).ToList();
+                _questionnaireDTOdocumentStorage.Query(q => q.Responsible == userId).ToList();
             var result = new DashboardModel(input.UserId);
             var surveysIds = questionnairies.Select(q => q.Survey).Distinct().ToList();
-            var surveys = _surveyDTOdocumentStorage.Query().Where(s => surveysIds.Contains(s.Id));
+            var surveys = _surveyDTOdocumentStorage.Query(s => surveysIds.Contains(s.Id));
 
             foreach (SurveyDto surveyDto in surveys)
             {
