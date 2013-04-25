@@ -561,10 +561,13 @@
   <ItemGroup>
     <Content Include="Configuration\Slava.Supervisor.Web.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Configuration\Supervisor.Web.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="HostMap.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -60,6 +60,9 @@ namespace Web.Supervisor.App_Start
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
+            #warning TLK: delete this when NCQRS initialization moved to Global.asax
+            MvcApplication.Initialize(); // pinging global.asax to perform it's part of static initialization
+            
             bool isEmbeded;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["Raven.IsEmbeded"], out isEmbeded))
             {

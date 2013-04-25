@@ -184,5 +184,7 @@ namespace Web.Supervisor
             NConfigurator.UsingFiles(@"~\Configuration\Supervisor.Web.config").SetAsSystemDefault();
         }
 
+        #warning TLK: delete this when NCQRS initialization moved to Global.asax
+        public static void Initialize() { }
     }
 }
