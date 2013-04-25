@@ -727,42 +727,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireDeleted.cs">
-      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupDeleted.cs">
-      <Link>Events\Questionnaire\GroupDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupUpdated.cs">
-      <Link>Events\Questionnaire\GroupUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageDeleted.cs">
-      <Link>Events\Questionnaire\ImageDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageUpdated.cs">
-      <Link>Events\Questionnaire\ImageUpdated.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\ImageUploaded.cs">
-      <Link>Events\Questionnaire\ImageUploaded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewGroupAdded.cs">
-      <Link>Events\Questionnaire\NewGroupAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\NewQuestionAdded.cs">
-      <Link>Events\Questionnaire\NewQuestionAdded.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionChanged.cs">
-      <Link>Events\Questionnaire\QuestionChanged.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionDeleted.cs">
-      <Link>Events\Questionnaire\QuestionDeleted.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireItemMoved.cs">
-      <Link>Events\Questionnaire\QuestionnaireItemMoved.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireUpdated.cs">
-      <Link>Events\Questionnaire\QuestionnaireUpdated.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Synchronization\AggregateRootEventStreamPushed.cs">
       <Link>Events\Synchronization\AggregateRootEventStreamPushed.cs</Link>
     </Compile>

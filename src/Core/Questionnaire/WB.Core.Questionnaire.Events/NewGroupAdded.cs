@@ -6,7 +6,6 @@
 
     using Ncqrs.Eventing.Storage;
 
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:NewGroupAdded")]
     public class NewGroupAdded
     {

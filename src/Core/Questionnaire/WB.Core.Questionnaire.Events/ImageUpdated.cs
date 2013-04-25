@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ImageUploaded.cs" company="">
+// <copyright file="ImageUpdated.cs" company="">
 //   
 // </copyright>
 // <summary>
-//   The image uploaded.
+//   The image updated.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 namespace Main.Core.Events.Questionnaire
@@ -13,11 +13,10 @@ namespace Main.Core.Events.Questionnaire
     using Ncqrs.Eventing.Storage;
 
     /// <summary>
-    /// The image uploaded.
+    /// The image updated.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:ImageUploaded")]
-    public class ImageUploaded
+    public class ImageUpdated
     {
         #region Public Properties
 
@@ -27,14 +26,14 @@ namespace Main.Core.Events.Questionnaire
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets the image public key.
+        /// Gets or sets the image key.
         /// </summary>
-        public Guid ImagePublicKey { get; set; }
+        public Guid ImageKey { get; set; }
 
         /// <summary>
-        /// Gets or sets the public key.
+        /// Gets or sets the question key.
         /// </summary>
-        public Guid PublicKey { get; set; }
+        public Guid QuestionKey { get; set; }
 
         /// <summary>
         /// Gets or sets the title.
@@ -42,9 +41,5 @@ namespace Main.Core.Events.Questionnaire
         public string Title { get; set; }
 
         #endregion
-
-        // public string FileName { get; set; }
-
-        // public string ThumbName { get; set; }
     }
 }

@@ -15,7 +15,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// TODO: Delete summary.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionnaireDeleted")]
     public class QuestionnaireDeleted
     {
