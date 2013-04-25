@@ -74,7 +74,7 @@
                     }
                 }
 
-                if (!isInvalidUser && filterContext.Controller is AccountController)
+                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.ToLower() != "logoff")
                 {
                     filterContext.Result =
                         new RedirectToRouteResult(
