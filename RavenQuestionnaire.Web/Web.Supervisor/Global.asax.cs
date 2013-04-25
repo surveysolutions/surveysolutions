@@ -6,6 +6,9 @@
 //   The mvc application.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using NConfig;
+
 namespace Web.Supervisor
 {
     using System;
@@ -25,7 +28,13 @@ namespace Web.Supervisor
     /// </summary>
     public class MvcApplication : HttpApplication
     {
-        #region Fields
+        /// <summary>
+        /// Initialization per AppDomain.
+        /// </summary>
+        static MvcApplication()
+        {
+            SetupNConfig();
+        }
 
         /// <summary>
         /// The logger.
@@ -36,10 +45,6 @@ namespace Web.Supervisor
         /// The correctly initialized.
         /// </summary>
         private static bool correctlyInitialized;
-
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// The register global filters.
@@ -73,10 +78,6 @@ namespace Web.Supervisor
                 new { controller = "Survey", action = "Index", id = UrlParameter.Optional } // Parameter defaults
                 );
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// The application_ error.
@@ -178,6 +179,10 @@ namespace Web.Supervisor
             
         }
 
-        #endregion
+        private static void SetupNConfig()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Supervisor.Web.config").SetAsSystemDefault();
+        }
+
     }
 }
