@@ -15,7 +15,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The new questionnaire created.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:NewQuestionnaireCreated")]
     public class NewQuestionnaireCreated
     {

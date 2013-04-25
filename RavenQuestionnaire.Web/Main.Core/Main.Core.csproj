@@ -372,7 +372,6 @@
     <Compile Include="Events\Questionnaire\ImageUploaded.cs" />
     <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
     <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
     <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
     <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
     <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
@@ -520,6 +519,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>
