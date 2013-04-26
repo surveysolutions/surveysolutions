@@ -31,10 +31,11 @@ namespace CAPI.Android.Extensions
                 {
                     using (var resized = Resize(bm, display))
                     {
-                        view.SetCompoundDrawablesWithIntrinsicBounds(null, null, null, new BitmapDrawable(resized));
+                        view.SetCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(resized), null, null, null);
                     }
                     view.Text = string.Empty;
                     view.SetBackgroundResource(Resource.Drawable.questionShape);
+                    view.SetPadding(10, 10, 0, 10);
                 }
             }
 
