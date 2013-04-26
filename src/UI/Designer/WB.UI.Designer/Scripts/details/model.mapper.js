@@ -56,6 +56,7 @@
                 fromDto: function(dto, item) {
                     item = item || new model.Group().id(dto.group.PublicKey).level(dto.level);
                     item.title(dto.group.Title);
+                    item.parent(null);
                     item.description(dto.group.Description);
                     item.condition(dto.group.ConditionExpression);
                     item.gtype(dto.group.Propagated);
@@ -77,7 +78,7 @@
                 fromDto: function(dto, item, otherData) {
                     var groups = otherData.groups;
                     item = item || new model.Question().id(dto.PublicKey).title(dto.Title);
-
+                    item.parent(null);
                     item.qtype(dto.QuestionType);
                     
                     item.scope(dto.QuestionScope);
@@ -88,8 +89,19 @@
                         return new model.AnswerOption().id(answer.PublicKey).title(answer.Title).value(answer.AnswerValue);
                     });
 
-                    var triggers = _.map(dto.Triggers, function (groupId) {
+                    var triggers = _.filter(dto.Triggers, function (groupId) {
+                        var item = groups.getLocalById(groupId);
+                        return !_.isNull(item);
+                    }).map(function (groupId) {
                         return { key: groupId, value: groups.getLocalById(groupId).title() };
+                    });
+
+                        _.map(dto.Triggers, function (groupId) {
+                        var item = groups.getLocalById(groupId);
+                        if (!_.isNull(item)) {
+                            return { key: groupId, value: groups.getLocalById(groupId).title() };
+                        }
+                        return;
                     });
                     item.triggers(triggers);
 

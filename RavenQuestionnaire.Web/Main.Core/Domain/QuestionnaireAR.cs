@@ -79,6 +79,24 @@ namespace Main.Core.Domain
                 {
                     Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
+                    var g = x as IGroup;
+                    if (g != null)
+                    {
+                        this.NewAddGroup(
+                            groupId: g.PublicKey,
+                            parentGroupId: parentId,
+                            title: g.Title,
+                            propagationKind: g.Propagated,
+                            description: g.Description,
+                            condition: g.ConditionExpression);
+                    }
+                });
+            source.Children.ApplyAction(
+                x => x.Children,
+                (parent, x) =>
+                {
+                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
+
                     var q = x as IQuestion;
                     if (q != null)
                     {
@@ -101,17 +119,6 @@ namespace Main.Core.Domain
                             optionsOrder: q.AnswerOrder,
                             maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
                             triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
-                    }
-                    var g = x as IGroup;
-                    if (g != null)
-                    {
-                        this.NewAddGroup(
-                            groupId: g.PublicKey,
-                            parentGroupId: parentId,
-                            title: g.Title,
-                            propagationKind: g.Propagated,
-                            description: g.Description,
-                            condition: g.ConditionExpression);
                     }
                 });
         }

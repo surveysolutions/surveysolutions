@@ -25,6 +25,7 @@ namespace CAPI.Android
     using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
+    using CAPI.Android.Utils;
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
@@ -94,9 +95,10 @@ namespace CAPI.Android
             if (buttonSync != null)
             {
                 buttonSync.Click += this.ButtonSyncClick;
+                buttonSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
             }
 
-            var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
+            /*var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
             if (buttonPull != null)
             {
                 buttonPull.Click += this.buttonPull_Click;
@@ -106,7 +108,7 @@ namespace CAPI.Android
             if (buttonPush != null)
             {
                 buttonPush.Click += this.buttonPush_Click;
-            }
+            }*/
 
             var buttonBackup = this.FindViewById<Button>(Resource.Id.btnBackup);
             if (buttonBackup != null)
@@ -123,8 +125,8 @@ namespace CAPI.Android
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
-            this.DoSync(PumpimgType.Push);
-            this.DoSync(PumpimgType.Pull);
+            this.DoSync(PumpimgType.Sync);
+            //this.DoSync(PumpimgType.Pull);
         }
 
         /// <summary>
@@ -143,7 +145,7 @@ namespace CAPI.Android
 
         /// <summary>
         ///     The pull.
-        /// </summary>
+        /// </summary>e
         /// <param name="remoteSyncNode">
         ///     The remote Sync Node.
         /// </param>
@@ -198,7 +200,7 @@ namespace CAPI.Android
 */
             }
 
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -249,14 +251,15 @@ namespace CAPI.Android
                 return;
             }
 
-            // async task protection
-            //ScreenOrientation oldOrientation = this.RequestedOrientation;
-            //this.RequestedOrientation = ScreenOrientation.Nosensor;
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                return;
+            }
 
             var progressDialog = new ProgressDialog(this);
 
-            progressDialog.SetTitle("Synchronization process");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
+            progressDialog.SetTitle("Synchronizing");
+            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
             progressDialog.SetMessage("Initialyzing");
             progressDialog.SetCancelable(false);
 
@@ -292,6 +295,11 @@ namespace CAPI.Android
                                         else if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
+                                        }
+                                        else if (pumpingType == PumpimgType.Sync)
+                                        {
+                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
+                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
                                     }
                                     catch (Exception exc)
@@ -380,7 +388,7 @@ namespace CAPI.Android
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -405,7 +413,7 @@ namespace CAPI.Android
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -413,37 +421,7 @@ namespace CAPI.Android
         {
             this.DoSync(PumpimgType.Backup);
         }
-
-        /// <summary>
-        ///     The button pull_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPull_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Pull);
-        }
-
-        /// <summary>
-        ///     The button push_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPush_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Push);
-        }
-
+        
         private void buttonRestore_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
@@ -454,10 +432,9 @@ namespace CAPI.Android
 
     public enum PumpimgType
     {
-        Push,
-
-        Pull,
-
-        Backup
+        Push = 0,
+        Pull = 1,
+        Backup = 2,
+        Sync = 4
     }
 }

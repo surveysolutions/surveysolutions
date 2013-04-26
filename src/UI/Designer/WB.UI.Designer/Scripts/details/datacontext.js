@@ -63,7 +63,7 @@
                     },
                     getLocalById = function (id) {
                         // This is the only place we set to NULLO
-                        return !!id && !!items[id] ? items[id] : nullo;
+                        return !!id && !!items[id] ? items[id] : null;
                     },
                     getAllLocal = function () {
                         return utils.mapMemoToArray(items);
@@ -143,7 +143,7 @@
         groups.getChapters = function() {
             var chapters = _.map(questionnaire.childrenID(), function(children) {
                 var item = groups.getLocalById(children.id);
-                item.parent(parent);
+                //item.parent(parent);
                 return item;
             });
             //_.filter(groups.getAllLocal(), function (item) {
@@ -170,7 +170,11 @@
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });
                 if (!_.isUndefined(child)) {
+                    var isDirty = question.dirtyFlag().isDirty();
                     question.triggers.remove(child);
+                    if (!isDirty) {
+                        question.dirtyFlag().reset();
+                    }
                 }
             });
         };

@@ -218,12 +218,12 @@ namespace Main.Synchronization.SyncManager
                 if (this.streamCollector == null)
                 {
                     this.status.Result = false;
-                    this.status.ErrorMessage = "Incorrect receiver";
+                    this.status.ErrorMessage = "Incorrect receiver.";
                     this.status.Progress = 98;
                 }
 
                 this.status.Progress++;
-                this.status.CurrentStageDescription = "Process is starting";
+                this.status.CurrentStageDescription = "Process is starting.";
 
                 this.Invoker.Execute(
                     new CreateNewSynchronizationProcessCommand(
@@ -240,7 +240,7 @@ namespace Main.Synchronization.SyncManager
                 var chunk = new List<AggregateRootEvent>();
 
                 this.status.Progress = 15;
-                this.status.CurrentStageDescription = "In progress";
+                this.status.CurrentStageDescription = "Process is in progress.";
 
                 // read from stream and handle by chunk
                 foreach (AggregateRootEvent evnt in this.eventStreamProvider.GetEventStream())
@@ -259,7 +259,7 @@ namespace Main.Synchronization.SyncManager
                         if (!this.streamCollector.Collect(chunk))
                         {
                             this.status.Result = false;
-                            this.status.ErrorMessage = "Target refused stream";
+                            this.status.ErrorMessage = "Target refused stream.";
                             this.status.Progress = 98;
                             this.status.IsWorking = false;
                             return;
@@ -283,7 +283,7 @@ namespace Main.Synchronization.SyncManager
                     if (!this.streamCollector.Collect(chunk))
                     {
                         this.status.Result = false;
-                        this.status.ErrorMessage = "Target refused stream";
+                        this.status.ErrorMessage = "Target refused stream.";
                         this.status.Progress = 98;
                         this.status.IsWorking = false;
                         return;
@@ -299,14 +299,14 @@ namespace Main.Synchronization.SyncManager
                 }
 
                 this.status.Progress = 95;
-                this.status.CurrentStageDescription = "Finishing process";
+                this.status.CurrentStageDescription = "Finishing process.";
 
                 // notify collector about finishing
                 this.streamCollector.Finish();
 
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
 
-                this.status.CurrentStageDescription = "Finished";
+                this.status.CurrentStageDescription = "Finished.";
                 this.status.Result = true;
                 this.status.Progress = 98;
             }

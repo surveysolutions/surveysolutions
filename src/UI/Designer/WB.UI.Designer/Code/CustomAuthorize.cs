@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Microsoft.Practices.ServiceLocation;
-using NinjectAdapter;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer
@@ -16,31 +14,37 @@ namespace WB.UI.Designer
     using System.Web.Mvc;
     using System.Web.Routing;
 
+
     using WB.UI.Designer.Controllers;
-    using WB.UI.Designer.Models;
+
+
+    ///marker attribute
+    public class CustomAuthorizeAttribute : AuthorizeAttribute
+    {
+    }
 
     /// <summary>
     /// The custom authorize.
     /// </summary>
-    public class CustomAuthorize : AuthorizeAttribute
+    public class CustomAuthorizeFilter : IAuthorizationFilter
     {
-        #warning remove this shit
-        private static IUserHelper UserHelperInstance
+        private readonly IUserHelper _userService;
+
+        public CustomAuthorizeFilter(IUserHelper userService)
         {
-            get { return UserHelper.Instance; }
+            _userService = userService;
         }
 
         #region Methods
 
-        public override void OnAuthorization(AuthorizationContext filterContext)
+        public void OnAuthorization(AuthorizationContext filterContext)
         {
             var isInvalidUser = false;
-            var user = UserHelperInstance.CurrentUser;
+            var user = this._userService.CurrentUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
-                isInvalidUser = user == null || user.IsLockedOut
-                                      || !user.IsApproved;
+                isInvalidUser = user == null || user.IsLockedOut || !user.IsApproved;
 
                 if (user != null)
                 {
@@ -67,13 +71,10 @@ namespace WB.UI.Designer
 
             if (isInvalidUser)
             {
-                UserHelperInstance.Logout();
+                this._userService.Logout();
                 filterContext.Result =
-                    new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Account", action = "Login" }));
-            }
-            else
-            {
-                base.OnAuthorization(filterContext);
+                    new RedirectToRouteResult(
+                        new RouteValueDictionary(new { controller = "Account", action = "Login" }));
             }
         }
 
