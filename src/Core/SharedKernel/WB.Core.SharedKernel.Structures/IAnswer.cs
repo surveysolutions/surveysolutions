@@ -14,6 +14,7 @@ namespace Main.Core.Entities.SubEntities
     /// <summary>
     /// The Answer interface.
     /// </summary>
+    #warning: remove this interface, as there are no need to have an interface for a value object
     public interface IAnswer // : ICloneable
     {
         #region Public Properties

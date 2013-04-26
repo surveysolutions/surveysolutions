@@ -273,14 +273,10 @@
     <Compile Include="Entities\OrderRequestItem.cs" />
     <Compile Include="Entities\RegisterData.cs" />
     <Compile Include="Entities\SubEntities\AbstractQuestion.cs" />
-    <Compile Include="Entities\SubEntities\Answer.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompelteValueQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\ICompleteItem.cs" />
     <Compile Include="Entities\SubEntities\Option.cs" />
-    <Compile Include="Entities\SubEntities\QuestionScope.cs" />
     <Compile Include="Entities\SubEntities\IConditional.cs" />
-    <Compile Include="Entities\SubEntities\Order.cs" />
-    <Compile Include="Entities\SubEntities\AnswerType.cs" />
     <Compile Include="Entities\SubEntities\CollectionItem.cs" />
     <Compile Include="Entities\SubEntities\Complete\AbstractCompleteQuestion.cs" />
     <Compile Include="Entities\SubEntities\Complete\CompleteAnswer.cs" />
@@ -307,15 +303,12 @@
     <Compile Include="Entities\SubEntities\FlowConnection.cs" />
     <Compile Include="Entities\SubEntities\FlowRule.cs" />
     <Compile Include="Entities\SubEntities\Group.cs" />
-    <Compile Include="Entities\SubEntities\IAnswer.cs" />
     <Compile Include="Entities\SubEntities\ICollectionItem.cs" />
     <Compile Include="Entities\SubEntities\IFlowBlock.cs" />
     <Compile Include="Entities\SubEntities\IGroup.cs" />
     <Compile Include="Entities\SubEntities\Image.cs" />
     <Compile Include="Entities\SubEntities\IQuestion.cs" />
     <Compile Include="Entities\SubEntities\LocationWithUserStatistic.cs" />
-    <Compile Include="Entities\SubEntities\Propagate.cs" />
-    <Compile Include="Entities\SubEntities\QuestionType.cs" />
     <Compile Include="Entities\SubEntities\Question\AutoPropagateQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\DateTimeQuestion.cs" />
     <Compile Include="Entities\SubEntities\Question\GpsCoordinateQuestion.cs" />
@@ -364,19 +357,6 @@
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireAssignmentChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\QuestionnaireStatusChanged.cs" />
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireDeleted.cs" />
-    <Compile Include="Events\Questionnaire\GroupDeleted.cs" />
-    <Compile Include="Events\Questionnaire\GroupUpdated.cs" />
-    <Compile Include="Events\Questionnaire\ImageDeleted.cs" />
-    <Compile Include="Events\Questionnaire\ImageUpdated.cs" />
-    <Compile Include="Events\Questionnaire\ImageUploaded.cs" />
-    <Compile Include="Events\Questionnaire\NewGroupAdded.cs" />
-    <Compile Include="Events\Questionnaire\NewQuestionAdded.cs" />
-    <Compile Include="Events\Questionnaire\NewQuestionnaireCreated.cs" />
-    <Compile Include="Events\Questionnaire\QuestionChanged.cs" />
-    <Compile Include="Events\Questionnaire\QuestionDeleted.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireItemMoved.cs" />
-    <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs" />
@@ -513,9 +493,21 @@
       <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>

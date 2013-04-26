@@ -4,7 +4,6 @@
 
     using Ncqrs.Eventing.Storage;
 
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionnaireItemMoved")]
     public class QuestionnaireItemMoved
     {
