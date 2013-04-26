@@ -35,10 +35,17 @@ namespace WB.UI.Designer.Controllers
     public class AdminController : BaseController
     {
         #region Constructors and Destructors
-        
-        public AdminController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
-            : base(repository, commandService,userHelper)
+
+        private readonly IQuestionnaireHelper _questionnaireHelper;
+
+        public AdminController(
+            IViewRepository repository,
+            ICommandService commandService,
+            IUserHelper userHelper,
+            IQuestionnaireHelper questionnaireHelper)
+            : base(repository, commandService, userHelper)
         {
+            this._questionnaireHelper = questionnaireHelper;
         }
 
         #endregion
@@ -130,7 +137,7 @@ namespace WB.UI.Designer.Controllers
         {
             MembershipUser account = this.GetUser(id);
 
-            var questionnaires = QuestionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
+            var questionnaires = _questionnaireHelper.GetQuestionnairesByUserId(repository: this.Repository, userId: id);
             questionnaires.ToList().ForEach(
                 x =>
                     {
