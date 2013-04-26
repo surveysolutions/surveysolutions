@@ -38,13 +38,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            this.Orientation = Orientation.Horizontal;
+            this.Orientation = Orientation.Vertical;
 
             typedMode = Model as SelectebleQuestionViewModel;
        /*   */
            
-            int i = 0;
-            var checkboxes = new CheckBox[typedMode.Answers.Count()];
+         //   int i = 0;
+            var optionsWrapper = new LinearLayout(this.Context);
+            optionsWrapper.Orientation = Orientation.Vertical;
+            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+      //      var checkboxes = new CheckBox[typedMode.Answers.Count()];
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
@@ -54,14 +58,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
 
                 cb.AttachImage(answer);
-                checkboxes[i] = cb;
-                i++;
+                optionsWrapper.AddView(cb);
+            /*    checkboxes[i] = cb;
+                i++;*/
             }
-            var optionsWrapper = new LinearLayout(this.Context);
-            optionsWrapper.Orientation=Orientation.Vertical;
-            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
-            PopulateComboboxes(optionsWrapper, checkboxes, this.Context);
+          /* 
+            PopulateComboboxes(optionsWrapper, checkboxes, this.Context);*/
             llWrapper.AddView(optionsWrapper);
         }
 
@@ -88,9 +90,10 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private void PopulateComboboxes(LinearLayout ll, CheckBox[] views, Context mContext)
         {
-            Display display = ((Activity)mContext).WindowManager.DefaultDisplay;
+          //  Display display = ((Activity)mContext).WindowManager.DefaultDisplay;
             ll.RemoveAllViews();
-            int maxWidth = display.Width - 20;
+            this.Measure(0,0);
+            int maxWidth = this.MeasuredWidth - 20;
 
             LinearLayout.LayoutParams lparams;
             LinearLayout newLL = new LinearLayout(mContext);
