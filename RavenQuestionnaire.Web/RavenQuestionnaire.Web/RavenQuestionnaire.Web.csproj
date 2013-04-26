@@ -514,17 +514,7 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Dev.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Main.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
@@ -717,14 +707,7 @@
     <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.Deploy-Main.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Group\Mobile\_CommentsBlock.cshtml" />
-    <Content Include="Web.Deploy-devKh.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Views\Question\_AutoPropagateRow.cshtml" />
     <Content Include="Views\Question\_EditAutoPropagates.cshtml" />
     <Content Include="Views\Error\Http403.cshtml" />
@@ -739,10 +722,6 @@
     <Content Include="Views\Pdf\_RenderChild.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionDetails.cshtml" />
     <Content Include="Views\Pdf\_RenderQuestionnaire.cshtml" />
-    <None Include="Web.Deploy-Main-Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

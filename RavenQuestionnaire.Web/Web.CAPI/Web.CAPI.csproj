@@ -331,18 +331,9 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Web.Deploy-Main.config">
-      <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
@@ -399,9 +390,6 @@
     <Content Include="Views\Account\LogOn.cshtml" />
     <Content Include="Views\Synchronizations\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Survey\_SurveyContent.cshtml" />
-    <Content Include="Web.Deploy-devKh.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Views\Survey\Complete\_Main.cshtml" />
     <Content Include="Views\Survey\Complete\_Answered.cshtml" />
     <Content Include="Views\Survey\Complete\_Invalid.cshtml" />
@@ -419,9 +407,6 @@
     <Content Include="Views\Survey\Answer\GridAnswerList\_SingleOption.cshtml" />
     <Content Include="Views\Survey\Answer\GridAnswerList\_Text.cshtml" />
     <Content Include="Views\Survey\Answer\GridAnswerList\_YesNo.cshtml" />
-    <None Include="Web.Deploy-Main-Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
