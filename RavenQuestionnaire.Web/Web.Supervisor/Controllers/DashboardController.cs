@@ -26,22 +26,8 @@ namespace Web.Supervisor.Controllers
     /// Show Statistics
     /// </summary>
     [Authorize]
-    public class DashboardController : Controller
-    {
-        #region Fields
-
-        /// <summary>
-        /// ViewRepository object
-        /// </summary>
-        private IViewRepository viewRepository;
-
-        /// <summary>
-        /// The _global provider.
-        /// </summary>
-        private readonly IGlobalInfoProvider _globalProvider;
-
-        #endregion
-        
+    public class DashboardController : BaseController
+    {        
         #region Constructor
 
         /// <summary>
@@ -50,10 +36,16 @@ namespace Web.Supervisor.Controllers
         /// <param name="viewRepository">
         /// The view repository.
         /// </param>
-        public DashboardController(IViewRepository viewRepository, IGlobalInfoProvider globalProvider)
+        /// <param name="commandService">
+        /// The command Service.
+        /// </param>
+        /// <param name="globalProvider">
+        /// The global Provider.
+        /// </param>
+        public DashboardController(
+            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider)
+            : base(viewRepository, commandService, globalProvider)
         {
-            this.viewRepository = viewRepository;
-            this._globalProvider = globalProvider;
         }
 
         #endregion
@@ -71,7 +63,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
-             var model = this.viewRepository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
+             var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
              return this.View(model);
         }
   
@@ -93,8 +85,7 @@ namespace Web.Supervisor.Controllers
             if (!Guid.TryParse(id, out key))
                 throw new HttpException("404");
             var newQuestionnairePublicKey = Guid.NewGuid();
-            var commandService = NcqrsEnvironment.Get<ICommandService>();
-            commandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this._globalProvider.GetCurrentUser()));
+            this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.GlobalInfo.GetCurrentUser()));
             return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
         }
         #endregion

@@ -258,9 +258,9 @@ namespace Main.Core.Utility
         /// <typeparam name="T">
         /// </typeparam>
         public static void ApplyAction<T>(
-            this IEnumerable<T> source, 
-            Func<T, IEnumerable<T>> descendBy, 
-            Action<T, T> action, 
+            this IEnumerable<T> source,
+            Func<T, IEnumerable<T>> descendBy,
+            Action<T, T> action,
             T rootElement = default(T))
         {
             if (action == null)
@@ -274,6 +274,44 @@ namespace Main.Core.Utility
 
                 descendBy(value).ApplyAction(descendBy, action, value);
             }
+        }
+
+        /// <summary>
+        /// The and also.
+        /// </summary>
+        /// <param name="predicate1">
+        /// The predicate 1.
+        /// </param>
+        /// <param name="predicate2">
+        /// The predicate 2.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Func{T,TResult}"/>.
+        /// </returns>
+        public static Func<T, bool> AndAlso<T>(this Func<T, bool> predicate1, Func<T, bool> predicate2)
+        {
+            return arg => predicate1(arg) && predicate2(arg);
+        }
+
+        /// <summary>
+        /// The or else.
+        /// </summary>
+        /// <param name="predicate1">
+        /// The predicate 1.
+        /// </param>
+        /// <param name="predicate2">
+        /// The predicate 2.
+        /// </param>
+        /// <typeparam name="T">
+        /// </typeparam>
+        /// <returns>
+        /// The <see cref="Func{T,TResult}"/>.
+        /// </returns>
+        public static Func<T, bool> OrElse<T>(this Func<T, bool> predicate1, Func<T, bool> predicate2)
+        {
+            return arg => predicate1(arg) || predicate2(arg);
         }
 
         #endregion

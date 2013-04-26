@@ -1,0 +1,47 @@
+﻿@using Web.Supervisor.Models
+@model Core.Supervisor.Views.Interviewer.InterviewersView
+@{
+    ViewBag.Title = "Interviewers";
+}
+
+<script>
+    $(document).ready(function() {
+        $("#questionnaireTable").tablesorter({
+                order: "@Model.Order",
+                send: function(data) {
+                    $.ajax({
+                            type: "POST",
+                            url: "@Url.Action("_TableData", "User")",
+                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }, SupervisorId:'@Model.SupervisorId' }),
+                            contentType: 'application/json, charset=utf-8',
+                            statusCode: {
+                                200: function(response) {
+                                    $("#questionnaireTable tbody").html(response);
+                                }
+                            }
+                        });
+                }
+            });
+    });
+</script>
+<h2>Interviewers</h2>
+<table id="questionnaireTable" class="table table-striped table-bordered table-condensed">
+    <thead>
+        <tr>
+            <th class="sorting" sorter='{"key":"Login"}'>Login</th>
+            <th class="sorting" sorter='{"key":"CreationDate"}'>Creation date </th>
+            <th class="sorting" sorter='{"key":"Email"}'>Email </th>
+            <td>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @Html.Partial("_Table", Model)
+    </tbody>
+</table>
+<div class="pagination">
+    @if (((double)Model.TotalCount / Model.PageSize) > 1d)
+    {
+        <text> @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })</text>
+    }
+</div>

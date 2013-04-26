@@ -58,13 +58,22 @@
                             <li class="@(page == MenuItem.Docs ? "active" : "")">
                                 @Html.ActionLink("Documents", "Documents", "Survey")
                             </li>
+                            <li class="@(page == MenuItem.Teams ? "active" : "")">
+                                @Html.ActionLink("Teams", "Index", "Team")
+                            </li>
                         </ul>
                     }
                     @if (Request.IsAuthenticated)
                     {
                         <div class="pull-right">
                             <ul class="nav pull-right" role="menu">
-                                <li class="navbar-text">@User.Identity.Name</li>
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret">
+                                    </b></a>
+                                    <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
+                                    </ul>
+                                </li>
                                 <li class="divider-vertical"></li>
                                 <li class="@(page == MenuItem.Administration ? "active" : "")" class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
