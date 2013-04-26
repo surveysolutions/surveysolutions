@@ -21,9 +21,10 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
     public class SqliteDenormalizerStorage<T> : IDenormalizerStorage<T>, IMvxServiceConsumer
         where T : DenormalizerRow, new()
     {
-//        private readonly ISQLiteConnectionFactory _connectionFactory;
+        //        private readonly ISQLiteConnectionFactory _connectionFactory;
         private readonly ISQLiteConnection _connection;
-        private const string _dbName="Projections";
+        private const string _dbName = "Projections";
+
         public SqliteDenormalizerStorage()
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
@@ -42,7 +43,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
         {
             var idString = key.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return  ((TableQuery<T>)_connection.Table<T>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return ((TableQuery<T>) _connection.Table<T>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
         public IQueryable<T> Query()
@@ -52,7 +53,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 
         public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
         {
-            return ((TableQuery<T>)_connection.Table<T>()).Where(predExpr);
+            return ((TableQuery<T>) _connection.Table<T>()).Where(predExpr);
         }
 
         public void Remove(Guid key)
@@ -60,6 +61,17 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             _connection.Delete<T>(key);
         }
 
+        public void Store(T denormalizer, Guid key)
+        {
+            try
+            {
+                _connection.Insert(denormalizer);
+            }
+            catch
+            {
+                _connection.Update(denormalizer);
+            }
+        }
     }
 
     public abstract class DenormalizerRow

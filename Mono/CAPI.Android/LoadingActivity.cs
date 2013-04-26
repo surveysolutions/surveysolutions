@@ -39,7 +39,6 @@ namespace CAPI.Android
         {
             try
             {
-                CapiApplication.GenerateEvents(publicKey);
                 ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                     new QuestionnaireScreenInput(publicKey));
                 

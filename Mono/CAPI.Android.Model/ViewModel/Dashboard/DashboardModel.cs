@@ -22,11 +22,5 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public IList<DashboardSurveyItem> Surveys { get; private set; }
         
-      
-        public void ReplaceSurveyList(IList<DashboardSurveyItem> surveys)
-        {
-            this.Surveys = surveys;
-            this.RaisePropertyChanged("Surveys");
-        }
     }
 }

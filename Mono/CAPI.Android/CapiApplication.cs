@@ -82,18 +82,6 @@ namespace CAPI.Android
             }
         }
 
-        static IList<Guid> DashboardsRestored
-        {
-            get
-            {
-                if (Context == null)
-                    return null;
-                var capiApp = Context.ApplicationContext as CapiApplication;
-                if (capiApp == null)
-                    return null;
-                return capiApp.dashboardsRestored;
-            }
-        }
 
         #endregion
 
@@ -198,7 +186,6 @@ namespace CAPI.Android
         }
         
         private IKernel kernel;
-        private readonly IList<Guid> dashboardsRestored = new List<Guid>();
         public  static void Restart()
         {
             Intent i = Context.PackageManager.GetLaunchIntentForPackage(Context.PackageName);
@@ -206,47 +193,6 @@ namespace CAPI.Android
             Context.StartActivity(i);
             
         }
-
-        public static void GenerateEvents(Guid questionnaireId)
-        {
-            if (DashboardsRestored.Contains(questionnaireId))
-                return;
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore;
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as InMemorySnapshootStore;
-         
-            long minVersion = 0;
-            var snapshot = eventStore.GetLatestSnapshoot(questionnaireId);
-            if (snapshot != null)
-            {
-                bus.Publish(snapshot);
-                snapshotStore.SaveEventToSnapshotStore(snapshot);
-                minVersion = snapshot.EventSequence + 1;
-            }
-            foreach (CommittedEvent committedEvent in
-                eventStore.ReadFrom(questionnaireId, minVersion, long.MaxValue))
-            {
-                bus.Publish(committedEvent);
-            }
-
-            DashboardsRestored.Add(questionnaireId);
-        }
-
-        /*     protected static T DesserializeEmbededResource<T>(string fileName)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-            //var data = Encoding.Default.GetString("");
-            string s = string.Empty;
-            using (Stream streamEmbededRes = Assembly.GetExecutingAssembly()
-                               .GetManifestResourceStream("AndroidApp." + fileName))
-            using (StreamReader reader = new StreamReader(streamEmbededRes))
-            {
-                s = reader.ReadToEnd();
-            }
-            return JsonConvert.DeserializeObject<T>(s, settings);
-        }*/
-
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
         }
