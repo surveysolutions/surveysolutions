@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
@@ -40,35 +41,28 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             this.Orientation = Orientation.Horizontal;
 
             typedMode = Model as SelectebleQuestionViewModel;
-            var rl = new RelativeLayout(this.Context);
-            rl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
+       /*   */
            
-            int i = 1;
+            int i = 0;
+            var checkboxes = new CheckBox[typedMode.Answers.Count()];
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
-                cb.Id = i;
-                var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                   ViewGroup.LayoutParams.WrapContent);
-                if (i>1)
-                {
-                    layoutParams.AddRule(LayoutRules.AlignTop, i-1);
-                    layoutParams.AddRule(LayoutRules.RightOf, i-1);
-                }
-                else
-                    layoutParams.AddRule(LayoutRules.AlignLeft);
-                cb.LayoutParameters = layoutParams;
                 cb.Text = answer.Title;
                 cb.Checked = answer.Selected;
                 cb.CheckedChange += cb_CheckedChange;
                 cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
 
                 cb.AttachImage(answer);
-                rl.AddView(cb);
+                checkboxes[i] = cb;
                 i++;
             }
-            llWrapper.AddView(rl);
+            var optionsWrapper = new LinearLayout(this.Context);
+            optionsWrapper.Orientation=Orientation.Vertical;
+            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+            PopulateComboboxes(optionsWrapper, checkboxes, this.Context);
+            llWrapper.AddView(optionsWrapper);
         }
 
         private SelectebleQuestionViewModel typedMode;
@@ -92,5 +86,54 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         }
 
+        private void PopulateComboboxes(LinearLayout ll, CheckBox[] views, Context mContext)
+        {
+            Display display = ((Activity)mContext).WindowManager.DefaultDisplay;
+            ll.RemoveAllViews();
+            int maxWidth = display.Width - 20;
+
+            LinearLayout.LayoutParams lparams;
+            LinearLayout newLL = new LinearLayout(mContext);
+            newLL.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
+                                                      LayoutParams.WrapContent);
+            newLL.SetGravity(GravityFlags.Left);
+            newLL.Orientation = Orientation.Horizontal;
+
+            int widthSoFar = 0;
+
+            for (int i = 0; i < views.Length; i++)
+            {
+                LinearLayout LL = new LinearLayout(mContext);
+                LL.Orientation = Orientation.Horizontal;
+                LL.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom);
+                LL.LayoutParameters = new ListView.LayoutParams(
+                    LayoutParams.WrapContent, LayoutParams.WrapContent);
+                views[i].Measure(0, 0);
+                lparams = new LinearLayout.LayoutParams(views[i].MeasuredWidth,
+                                                        LayoutParams.WrapContent);
+                LL.AddView(views[i], lparams);
+                LL.Measure(0, 0);
+                widthSoFar += views[i].MeasuredWidth; // YOU MAY NEED TO ADD THE MARGINS
+                if (widthSoFar >= maxWidth)
+                {
+                    ll.AddView(newLL);
+
+                    newLL = new LinearLayout(mContext);
+                    newLL.LayoutParameters = new LayoutParams(
+                        LayoutParams.FillParent,
+                        LayoutParams.WrapContent);
+                    newLL.Orientation = Orientation.Horizontal;
+                    newLL.SetGravity(GravityFlags.Left);
+                    lparams = new LinearLayout.LayoutParams(LL.MeasuredWidth, LL.MeasuredHeight);
+                    newLL.AddView(LL, lparams);
+                    widthSoFar = LL.MeasuredWidth;
+                }
+                else
+                {
+                    newLL.AddView(LL);
+                }
+            }
+            ll.AddView(newLL);
+        }
     }
 }
