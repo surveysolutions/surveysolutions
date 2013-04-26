@@ -36,14 +36,6 @@ namespace WB.UI.Designer
         protected void Application_Error(object sender, EventArgs e)
         {
             var httpContext = ((MvcApplication)sender).Context;
-            var currentController = string.Empty;
-            var currentAction = string.Empty;
-            var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
-            if (currRouteData != null)
-            {
-                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
-                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
-            }
 
             var ex = Server.GetLastError();
 
@@ -52,6 +44,12 @@ namespace WB.UI.Designer
             var controller = new ErrorController();
             var routeData = new RouteData();
             var action = "Index";
+
+            if (ex is HttpAntiForgeryException)
+            {
+                httpContext.Response.Redirect(httpContext.Request.Url.ToString(), true);
+                return;
+            }
 
             if (ex is HttpException)
             {
@@ -69,6 +67,15 @@ namespace WB.UI.Designer
                         action = "AccessDenied";
                         break;
                 }
+            }
+
+            var currentController = string.Empty;
+            var currentAction = string.Empty;
+            var currRouteData = RouteTable.Routes.GetRouteData(new HttpContextWrapper(httpContext));
+            if (currRouteData != null)
+            {
+                currentController = (string)currRouteData.Values["controller"] ?? string.Empty;
+                currentAction = (string)currRouteData.Values["action"] ?? string.Empty;
             }
 
             httpContext.ClearError();

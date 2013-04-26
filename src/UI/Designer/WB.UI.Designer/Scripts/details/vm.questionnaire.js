@@ -105,6 +105,7 @@
             group.title('New Chapter');
             group.parent(null);
             datacontext.groups.add(group);
+            datacontext.questionnaire.childrenID.push({ type: group.type(), id: group.id() });
             chapters.push(group);
             router.navigateTo(group.getHref());
             calcStatistics();
@@ -149,10 +150,17 @@
             if (!(_.isUndefined(parent) || (_.isNull(parent)))) {
                 var child = _.find(parent.childrenID(), { 'id': item.id() });
                 parent.childrenID.remove(child);
-                parent.fillChildren();
+                
+                _.each(datacontext.groups.getAllLocal(), function (group) {
+                    group.fillChildren();
+                });
+                //parent.fillChildren();
                 datacontext.questions.cleanTriggers(child);
                 router.navigateTo(parent.getHref());
             } else {
+                var child = _.find(datacontext.questionnaire.childrenID(), { 'id': item.id() });
+                datacontext.questionnaire.childrenID.remove(child);
+                
                 chapters(datacontext.groups.getChapters());
                 router.navigateTo(config.hashes.details);
             }
@@ -270,7 +278,7 @@
                 return;
             }
             
-            if (target.gtype() !== "None" && moveItemType == "group") {
+            if (!isDropedInChapter && target.gtype() !== "None" && moveItemType == "group") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveGroupIntoPropagatedGroup);
                 return;
