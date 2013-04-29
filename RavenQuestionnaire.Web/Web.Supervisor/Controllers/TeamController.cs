@@ -11,6 +11,7 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Interviewer;
     using Core.Supervisor.Views.User;
 
+    using Main.Core.Commands.User;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
 
@@ -74,16 +75,64 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Interviewers(string id)
+        public ActionResult Interviewers(Guid id)
         {
-            Guid supervisorId = this.ParseKeyOrThrow404(id);
-
-            InterviewersView model =
+            var user = this.Repository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
+            var interviewers =
                 this.Repository.Load<InterviewersInputModel, InterviewersView>(
-                    new InterviewersInputModel() { SupervisorId = supervisorId });
+                    new InterviewersInputModel() { SupervisorId = id });
+            return this.View(new InterviewerListViewModel() { View = interviewers, SupervisorName = user.UserName });
+        }
+
+
+        public ActionResult AddSupervisor()
+        {
+            return this.View(new SupervisorViewModel());
+        }
+
+        public ActionResult AddInterviewer(Guid id)
+        {
+            return this.View(new InterviewerViewModel() { SupervisorId = id });
+        }
+
+        /// <summary>
+        /// The add interviewer.
+        /// </summary>
+        /// <param name="model">
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult AddInterviewer(InterviewerViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return this.RedirectToAction("Interviewers");
+            }
+
             return this.View(model);
         }
 
+        /// <summary>
+        /// The add supervisor.
+        /// </summary>
+        /// <param name="model">
+        /// The model.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult AddSupervisor(SupervisorViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                return this.RedirectToAction("Index");
+            }
+
+            return this.View(model);
+        }
 
         /// <summary>
         /// Gets table data for some view
