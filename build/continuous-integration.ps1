@@ -1,3 +1,5 @@
+param([switch] $Deep)
+
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ErrorActionPreference = "Stop"
 
@@ -6,6 +8,10 @@ $ErrorActionPreference = "Stop"
 
 CleanBinAndObjFolders
 
-BuildSolutions 'Release' | %{ if (-not $_) { Exit } }
+if ($Deep) {
+    BuildSolutions 'Release' -ClearBinAndObjFoldersBeforeEachSolution | %{ if (-not $_) { Exit } }
+} else {
+    BuildSolutions 'Release' | %{ if (-not $_) { Exit } }
+}
 
 RunTests 'Release'

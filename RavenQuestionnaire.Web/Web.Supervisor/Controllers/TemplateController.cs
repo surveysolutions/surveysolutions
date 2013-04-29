@@ -12,6 +12,7 @@ using WB.Core.Questionnaire.ImportService.Commands;
 
 namespace Web.Supervisor.Controllers
 {
+    [Authorize]
     public class TemplateController : Controller
     {
         /// <summary>
