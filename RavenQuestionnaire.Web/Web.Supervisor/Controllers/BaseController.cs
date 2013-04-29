@@ -59,29 +59,6 @@ namespace Web.Supervisor.Controllers
             this.GlobalInfo = globalInfo;
         }
 
-        /// <summary>
-        /// The parse key or throw 404.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Guid"/>.
-        /// </returns>
-        /// <exception cref="HttpException">
-        /// </exception>
-        protected Guid ParseKeyOrThrow404(string id)
-        {
-            Guid key;
-
-            if (!Guid.TryParse(id, out key))
-            {
-                throw new HttpException("404");
-            }
-
-            return key;
-        }
-
         #endregion
     }
 }

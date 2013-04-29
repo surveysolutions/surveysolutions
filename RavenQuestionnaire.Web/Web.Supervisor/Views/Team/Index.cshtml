@@ -46,3 +46,8 @@
         <text> @Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new { order = Model.Order })</text>
     }
 </div>
+
+<div>
+    <a class="btn btn-primary" href="@Url.Action("AddSupervisor", "Team")">
+                     <i class="icon icon-user icon-white"></i>Add</a>
+</div>

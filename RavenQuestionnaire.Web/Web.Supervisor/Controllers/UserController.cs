@@ -93,13 +93,11 @@ namespace Web.Supervisor.Controllers
         /// Redirects to index view if everything is ok
         /// </returns>
         [Authorize]
-        public ActionResult UnlockUser(string id)
+        public ActionResult UnlockUser(Guid id)
         {
-            Guid key = ParseKeyOrThrow404(id);
+            CommandService.Execute(new UnlockUserCommand(id));
 
-            CommandService.Execute(new UnlockUserCommand(key));
-
-            return this.RedirectToAction("Index");
+            return this.Redirect(GlobalHelper.PreviousPage);
         }
 
         /// <summary>
@@ -112,13 +110,11 @@ namespace Web.Supervisor.Controllers
         /// Redirects to index view if everything is ok
         /// </returns>
          [Authorize]
-        public ActionResult LockUser(string id)
+        public ActionResult LockUser(Guid id)
         {
-            Guid key = ParseKeyOrThrow404(id);
+            CommandService.Execute(new LockUserCommand(id));
 
-            CommandService.Execute(new LockUserCommand(key));
-
-            return this.RedirectToAction("Index");
+            return this.Redirect(GlobalHelper.PreviousPage);
         }
 
         /// <summary>
