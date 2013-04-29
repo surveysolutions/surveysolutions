@@ -24,12 +24,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             _documentStore = externalDocumentStore;            
         }
 
-        private static DocumentConvention CreateConventions()
+        public static DocumentConvention CreateConventions()
         {
             return new DocumentConvention
             {
                 JsonContractResolver = new PropertiesOnlyContractResolver(),
-                FindTypeTagName = x => "Snapshots"
+                FindTypeTagName = x => "Snapshots",
+                CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}")
             };
         }
         
