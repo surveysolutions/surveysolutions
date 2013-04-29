@@ -168,7 +168,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
-            this.Activity.ClearAllBackStack<DashboardActivity>();
+        //    this.Activity.ClearAllBackStack<DashboardActivity>();
+            this.Activity.Finish();
         }
 
         protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)

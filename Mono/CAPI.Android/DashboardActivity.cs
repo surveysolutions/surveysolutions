@@ -25,7 +25,12 @@ namespace CAPI.Android
                     new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
             SetContentView(Resource.Layout.Main);
         }
-
+        protected override void OnRestart()
+        {
+            base.OnRestart();
+            ViewModel.ReinitSurveys(CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                new DashboardInput(CapiApplication.Membership.CurrentUser.Id)).Surveys);
+        }
         public override bool OnCreateOptionsMenu(global::Android.Views.IMenu menu)
         {
             this.CreateActionBar();
