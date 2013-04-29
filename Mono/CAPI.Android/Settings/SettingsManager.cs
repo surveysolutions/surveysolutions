@@ -67,11 +67,7 @@ namespace CAPI.Android.Settings
         /// </returns>
         public static bool SetSyncAddressPoint(string syncPoint)
         {
-            Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
-                         && (test.Scheme == "http" || test.Scheme == "https");
-
-            if (!valid)
+            if (!ValidateAddress(syncPoint))
             {
                 return false;
             }
@@ -83,6 +79,14 @@ namespace CAPI.Android.Settings
             prefEditor.Commit();
 
             return true;
+        }
+
+        public static bool ValidateAddress(string syncPoint)
+        {
+            Uri test = null;
+            return  Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
+                         && (test.Scheme == "http" || test.Scheme == "https");
+
         }
 
         #endregion
