@@ -222,16 +222,12 @@ namespace CAPI.Android
         private bool CheckSyncPoint()
         {
             string syncPoint = SettingsManager.GetSyncAddressPoint();
-
-            Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
-                         && (test.Scheme == "http" || test.Scheme == "https");
-
-            if (!valid)
+            
+            if (!SettingsManager.ValidateAddress(syncPoint))
             {
                 var builder = new AlertDialog.Builder(this);
-                builder.SetTitle("Incorrect Address Point");
-                builder.SetMessage("Please set in settings");
+                builder.SetTitle("Incorrect Address Point.");
+                builder.SetMessage("Please set in settings.");
                 AlertDialog dialog = builder.Create();
                 dialog.Show();
                 return false;
@@ -247,38 +243,37 @@ namespace CAPI.Android
         /// </param>
         private void DoSync(PumpimgType pumpingType)
         {
+            this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
+
             if (!this.CheckSyncPoint())
             {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Sync point is set incorrect.";
                 return;
             }
 
             if (!NetworkHelper.IsNetworkEnabled(this))
             {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Network is not avalable.";
                 return;
             }
 
-            var progressDialog = new ProgressDialog(this);
-
-            progressDialog.SetTitle("Synchronizing");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            progressDialog.SetMessage("Initialyzing");
-            progressDialog.SetCancelable(false);
-
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
 
-            int currentProgress = 0;
+            var progressDialog = CreateDialog();
+            progressDialog.Show();
+
             ThreadPool.QueueUserWorkItem(
                 state =>
                     {
-                        this.RunOnUiThread(
+                        /*this.RunOnUiThread(
                             () =>
                                 {
                                     progressDialog.Show();
                                     progressDialog.IncrementProgressBy(1);
                                 });
-
+*/
                         var result = new SyncronizationStatus();
-                        currentProgress = result.Progress;
+                        int currentProgress = result.Progress;
 
                         ThreadPool.QueueUserWorkItem(
                             proc =>
@@ -337,7 +332,7 @@ namespace CAPI.Android
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
-                                                          ? "Process is finished"
+                                                          ? "Process is finished."
                                                           : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
@@ -369,7 +364,19 @@ namespace CAPI.Android
             }
         }
 
-       
+
+        private ProgressDialog CreateDialog()
+        {
+            var progressDialog = new ProgressDialog(this);
+
+            progressDialog.SetTitle("Synchronizing");
+            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            progressDialog.SetMessage("Initialyzing");
+            progressDialog.SetCancelable(false);
+
+            return progressDialog;
+        }
+
 
         /// <summary>
         ///     The pull.
