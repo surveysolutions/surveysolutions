@@ -35,6 +35,12 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             get { return cacheddItems; }
         }
 
+        public void ReplaceItems(IList<DashboardQuestionnaireItem> newActiveItems)
+        {
+            this.cacheddItems = newActiveItems;
+            this.RaisePropertyChanged("ActiveItems");
+        }
+
         private IList<DashboardQuestionnaireItem> cacheddItems = new List<DashboardQuestionnaireItem>();
 
         protected bool IsVisible(SurveyStatus status)

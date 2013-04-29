@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using Java.IO;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -22,34 +23,30 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public IList<DashboardSurveyItem> Surveys { get; private set; }
 
-        public void ReinitSurveys(IEnumerable<DashboardSurveyItem> surveys)
+        public void ReinitSurveys(IEnumerable<DashboardSurveyItem> updatedSurveyList)
         {
-            foreach (var questionnaire in surveys.SelectMany(s=>s.ActiveItems).ToList())
+            foreach (DashboardSurveyItem dashboardSurveyItem in updatedSurveyList)
             {
-                var current = GetQuestionanire(questionnaire.PublicKey);
-                if (current == null)
+                var  existingSurvey = GetSurvey(dashboardSurveyItem.PublicKey);
+
+                foreach (DashboardQuestionnaireItem questionnaireItem in dashboardSurveyItem.ActiveItems)
                 {
-                    var survey = GetSurvey(questionnaire.SurveyKey);
-                    if (survey == null)
-                        continue;
-                    survey.ActiveItems.Add(questionnaire);
-                    continue;
+                    var existingQuestionnaire =
+                        existingSurvey.ActiveItems.FirstOrDefault(q => q.PublicKey == questionnaireItem.PublicKey);
+                    if (existingQuestionnaire != null)
+                        existingQuestionnaire.SetStatus(questionnaireItem.Status);
                 }
-                if (current.Status.PublicId != questionnaire.Status.PublicId)
-                    current.SetStatus(questionnaire.Status);
-                
             }
-           /* foreach (DashboardSurveyItem dashboardSurveyItem in Surveys)
-            {
-                if(dashboardSurveyItem.ActiveItems.Count==0)
-                    da
-            }*/
+        }
+        /*
+        private DashboardSurveyItem HandleNotExistingSurvey(DashboardSurveyItem dashboardSurveyItem)
+        {
+            var survey = new DashboardSurveyItem(dashboardSurveyItem.PublicKey, dashboardSurveyItem.SurveyTitle);
+            Surveys.Add(survey);
+            return survey;
         }
 
-        protected DashboardQuestionnaireItem GetQuestionanire(Guid id)
-        {
-            return Surveys.SelectMany(s => s.ActiveItems).FirstOrDefault(q => q.PublicKey == id);
-        }
+        */
         protected DashboardSurveyItem GetSurvey(Guid id)
         {
             return Surveys.FirstOrDefault(q => q.PublicKey == id);

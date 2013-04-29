@@ -36,11 +36,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         public string Survey { get; set; }
         public string Properties { get; set; }
 
-        public DashboardQuestionnaireItem GetDashboardItem()
+        public DashboardQuestionnaireItem GetDashboardItem(string surveyKey, string title)
         {
             return new DashboardQuestionnaireItem(
-                Guid.Parse(Id), GetTypedStatus(),
-                GetProperties());
+                Guid.Parse(Id),Guid.Parse(surveyKey), GetTypedStatus(),
+                GetProperties(), title);
         }
 
         private SurveyStatus GetTypedStatus()
