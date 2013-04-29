@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
-using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using Questionnaire.Core.Web.Helpers;
@@ -13,16 +11,20 @@ using WB.Core.Questionnaire.ImportService.Commands;
 namespace Web.Supervisor.Controllers
 {
     [Authorize]
-    public class TemplateController : Controller
+    public class TemplateController : BaseController
     {
         /// <summary>
-        /// Global info object
+        /// Initializes a new instance of the <see cref="TemplateController"/> class.
         /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
-
-        public TemplateController(IGlobalInfoProvider globalInfo)
+        /// <param name="commandService">
+        /// The command service.
+        /// </param>
+        /// <param name="globalInfo">
+        /// The global info.
+        /// </param>
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo)
+            : base(null, commandService, globalInfo)
         {
-            this.globalInfo = globalInfo;
         }
 
         #region Import from new designer
@@ -42,9 +44,8 @@ namespace Web.Supervisor.Controllers
                 return null;
             }
             var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
 
+            this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
 
             return this.RedirectToAction("Index", "Survey");
         }

@@ -73,7 +73,7 @@ namespace Core.Supervisor.Views.Interviewer
         public InterviewersView Load(InterviewersInputModel input)
         {
             int count =
-                this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.Supervisor.Id);
+                this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.SupervisorId);
             if (count == 0)
             {
                 return new InterviewersView(
@@ -81,12 +81,11 @@ namespace Core.Supervisor.Views.Interviewer
                     input.PageSize, 
                     count, 
                     new InterviewersItem[0], 
-                    input.Supervisor.Id, 
-                    input.Supervisor.Name);
+                    input.SupervisorId);
             }
 
             IQueryable<UserDocument> query =
-                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
+                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.SupervisorId);
             IQueryable<InterviewersItem> items =
                 query.Select(
                     x =>
@@ -105,7 +104,7 @@ namespace Core.Supervisor.Views.Interviewer
 
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new InterviewersView(
-                input.Page, input.PageSize, count, items, input.Supervisor.Id, input.Supervisor.Name);
+                input.Page, input.PageSize, count, items, input.SupervisorId);
         }
 
         #endregion
