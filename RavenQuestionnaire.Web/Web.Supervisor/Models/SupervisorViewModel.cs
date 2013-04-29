@@ -6,23 +6,13 @@
 
 namespace Web.Supervisor.Models
 {
+    using System.ComponentModel;
+
     /// <summary>
     /// The supervisor view model.
     /// </summary>
-    public class SupervisorViewModel
+    [DisplayName("Supervisor")]
+    public class SupervisorViewModel : UserViewModel
     {
-        #region Public Properties
-
-        /// <summary>
-        /// Gets or sets the email.
-        /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
-
-        #endregion
     }
 }

@@ -3,32 +3,25 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.Models
 {
     using System;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     /// <summary>
-    /// The interviewer view model.
+    ///     The interviewer view model.
     /// </summary>
-    public class InterviewerViewModel
+    [DisplayName("Interviewer")]
+    public class InterviewerViewModel : UserViewModel
     {
         #region Public Properties
 
         /// <summary>
-        /// Gets or sets the email.
+        /// Gets or sets the id.
         /// </summary>
-        public string Email { get; set; }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the supervisor id.
-        /// </summary>
-        public Guid SupervisorId { get; set; }
+        [Key]
+        public Guid Id { get; set; }
 
         #endregion
     }

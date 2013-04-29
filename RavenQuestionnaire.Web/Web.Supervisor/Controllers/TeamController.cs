@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TeamsController.cs" company="">
+// <copyright file="TeamController.cs" company="">
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -54,51 +54,24 @@ namespace Web.Supervisor.Controllers
         #region Public Methods and Operators
 
         /// <summary>
-        ///     The index.
-        /// </summary>
-        /// <returns>
-        ///     The <see cref="ActionResult" />.
-        /// </returns>
-        public ActionResult Index()
-        {
-            UserListView model =
-                this.Repository.Load<UserListViewInputModel, UserListView>(
-                    new UserListViewInputModel { Role = UserRoles.Supervisor });
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// The interviewers.
+        /// The add interviewer.
         /// </summary>
         /// <param name="id">
+        /// The id.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Interviewers(Guid id)
-        {
-            var user = this.Repository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
-            var interviewers =
-                this.Repository.Load<InterviewersInputModel, InterviewersView>(
-                    new InterviewersInputModel() { SupervisorId = id });
-            return this.View(new InterviewerListViewModel() { View = interviewers, SupervisorName = user.UserName });
-        }
-
-
-        public ActionResult AddSupervisor()
-        {
-            return this.View(new SupervisorViewModel());
-        }
-
         public ActionResult AddInterviewer(Guid id)
         {
-            return this.View(new InterviewerViewModel() { SupervisorId = id });
+            return this.View(new InterviewerViewModel { Id = id });
         }
 
         /// <summary>
         /// The add interviewer.
         /// </summary>
         /// <param name="model">
+        /// The model.
         /// </param>
         /// <returns>
         /// The <see cref="ActionResult"/>.
@@ -106,12 +79,32 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult AddInterviewer(InterviewerViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                return this.RedirectToAction("Interviewers");
+                this.CommandService.Execute(
+                    new CreateUserCommand(
+                        publicKey: Guid.NewGuid(), 
+                        userName: model.Name, 
+                        password: model.Password, 
+                        email: model.Email, 
+                        isLocked: false, 
+                        roles: new[] { UserRoles.Operator }, 
+                        supervsor: this.GetUser(model.Id).GetUseLight()));
+                return this.RedirectToAction("Interviewers", new { id = model.Id });
             }
 
             return this.View(model);
+        }
+
+        /// <summary>
+        ///     The add supervisor.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="ActionResult" />.
+        /// </returns>
+        public ActionResult AddSupervisor()
+        {
+            return this.View(new SupervisorViewModel());
         }
 
         /// <summary>
@@ -126,8 +119,18 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult AddSupervisor(SupervisorViewModel model)
         {
-            if (ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
+                this.CommandService.Execute(
+                    new CreateUserCommand(
+                        publicKey: Guid.NewGuid(),
+                        userName: model.Name,
+                        password: model.Password,
+                        email: model.Email,
+                        isLocked: false,
+                        roles: new[] { UserRoles.Supervisor },
+                        supervsor: null));
+
                 return this.RedirectToAction("Index");
             }
 
@@ -149,12 +152,62 @@ namespace Web.Supervisor.Controllers
                 this.Repository.Load<UserListViewInputModel, UserListView>(
                     new UserListViewInputModel
                         {
-                            Role = UserRoles.Supervisor,
-                            Orders = data.SortOrder,
-                            Page = data.Pager.Page,
+                            Role = UserRoles.Supervisor, 
+                            Orders = data.SortOrder, 
+                            Page = data.Pager.Page, 
                             PageSize = data.Pager.PageSize
                         });
             return this.PartialView("_PartialGrid_Supervisors", model);
+        }
+
+        /// <summary>
+        ///     The index.
+        /// </summary>
+        /// <returns>
+        ///     The <see cref="ActionResult" />.
+        /// </returns>
+        public ActionResult Index()
+        {
+            UserListView model =
+                this.Repository.Load<UserListViewInputModel, UserListView>(
+                    new UserListViewInputModel { Role = UserRoles.Supervisor });
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// The interviewers.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The<see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Interviewers(Guid id)
+        {
+            UserView user = this.GetUser(id);
+            InterviewersView interviewers =
+                this.Repository.Load<InterviewersInputModel, InterviewersView>(
+                    new InterviewersInputModel { SupervisorId = id });
+            return this.View(new InterviewerListViewModel { View = interviewers, SupervisorName = user.UserName });
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// The get user.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="UserView"/>.
+        /// </returns>
+        private UserView GetUser(Guid id)
+        {
+            return this.Repository.Load<UserViewInputModel, UserView>(new UserViewInputModel(id));
         }
 
         #endregion
