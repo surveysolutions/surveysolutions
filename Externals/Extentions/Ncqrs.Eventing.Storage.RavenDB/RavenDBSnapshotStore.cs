@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Raven.Abstractions.Json;
 using Raven.Client;
 using Raven.Client.Document;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -29,8 +31,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             return new DocumentConvention
             {
                 JsonContractResolver = new PropertiesOnlyContractResolver(),
-                FindTypeTagName = x => "Snapshots",
-                CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}")
+                FindTypeTagName = x => "Snapshots"
+                /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
             };
         }
         

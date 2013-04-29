@@ -290,8 +290,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
            var docStore = new DocumentConvention
                {
                    JsonContractResolver = new PropertiesOnlyContractResolver(),
-                   FindTypeTagName = x => "Events",
-                   CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}")
+                   FindTypeTagName = x => "Events"
+                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
                };
             return docStore;
         }

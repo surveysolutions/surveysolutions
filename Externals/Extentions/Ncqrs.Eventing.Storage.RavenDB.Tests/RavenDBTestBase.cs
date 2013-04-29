@@ -33,7 +33,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
         {
             var documentStore = new DocumentStore
                                     {
-                                        Url = "http://localhost:8080"
+                                        Url = "http://localhost:8080",
+                                        Conventions = new DocumentConvention
+                                        {
+                                            JsonContractResolver = new PropertiesOnlyContractResolver(),
+                                            FindTypeTagName = x => "Snapshots"
+                                                /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+                                        }
                                     };
             documentStore.Initialize();
             return documentStore;
@@ -50,7 +56,13 @@ namespace Ncqrs.Eventing.Storage.RavenDB.Tests
             }
             var documentStore = new EmbeddableDocumentStore
                                     {
-                                        DataDirectory = path
+                                        DataDirectory = path,
+                                        Conventions = new DocumentConvention
+                                            {
+                                                JsonContractResolver = new PropertiesOnlyContractResolver(),
+                                                FindTypeTagName = x => "Snapshots"
+                                                /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+                                            }
                                     };
             documentStore.Initialize();
             return documentStore;
