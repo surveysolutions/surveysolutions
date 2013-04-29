@@ -22,7 +22,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             return new CommittedEvent(Guid.Parse(storedEvent.CommitId), Guid.Parse(storedEvent.EventId),
                                       Guid.Parse(storedEvent.EventSourceId), storedEvent.Sequence,
                                       DateTime.FromBinary(storedEvent.TimeStamp), GetObject(storedEvent.Data),
-                                      Version.Parse(storedEvent.Version));
+                                      new Version(1, 1, 1, 1));
         }
 
         public static StoredEvent ToStoredEvent(this UncommittedEvent evt)
