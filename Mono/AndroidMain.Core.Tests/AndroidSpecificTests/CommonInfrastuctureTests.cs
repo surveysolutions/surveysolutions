@@ -41,6 +41,8 @@ namespace AndroidMain.Core.Tests.CommonTests
     [TestFixture]
     public class CommonInfrastuctureTests
     {
+        private const string _testEventStore = "test_event_store";
+
         #region Fields
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace AndroidMain.Core.Tests.CommonTests
         [SetUp]
         public void SetUp()
         {
-            Application.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
+           // Application.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
 
             var registry = new TestsRegistry();
 
@@ -66,7 +68,7 @@ namespace AndroidMain.Core.Tests.CommonTests
 
             Context appContext = TestsContext.CurrentContext;
 
-            var store = new SQLiteEventStore(TestsContext.CurrentContext);
+            var store = new MvvmCrossSqliteEventStore(_testEventStore);
             this._kernel.Bind<IEventStore>().ToConstant(store).InSingletonScope();
 
             this._kernel.Bind<IFileStorageService>().To<FakeFileStorage>();
@@ -97,7 +99,7 @@ namespace AndroidMain.Core.Tests.CommonTests
 
             Guid sourceId = storedEvent.EventSourceId;
 
-            var store = NcqrsEnvironment.Get<IEventStore>() as SQLiteEventStore;
+            var store = NcqrsEnvironment.Get<IEventStore>() as MvvmCrossSqliteEventStore;
 
             Assert.NotNull(store);
 
@@ -115,7 +117,7 @@ namespace AndroidMain.Core.Tests.CommonTests
             var commandService = NcqrsEnvironment.Get<ICommandService>();
             commandService.Execute(command);
 
-            IEnumerable<CommittedEvent> allEvents = store.GetAllEvents();
+            IEnumerable<CommittedEvent> allEvents = store.GetEventStream();
 
             Assert.That(allEvents.Count(), Is.EqualTo(2));
 

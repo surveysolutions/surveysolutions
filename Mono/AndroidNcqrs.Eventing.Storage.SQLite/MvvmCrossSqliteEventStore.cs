@@ -25,11 +25,11 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
     {
         private readonly ISQLiteConnection _connection;
 
-        public MvvmCrossSqliteEventStore()
+        public MvvmCrossSqliteEventStore(string databaseName)
         {
             Cirrious.MvvmCross.Plugins.Sqlite.PluginLoader.Instance.EnsureLoaded();
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
-            _connection = connectionFactory.Create("EventStore");
+            _connection = connectionFactory.Create(databaseName);
             //  _connection = connectionFactory.Create("EventStore");
             _connection.CreateTable<StoredEvent>();
 

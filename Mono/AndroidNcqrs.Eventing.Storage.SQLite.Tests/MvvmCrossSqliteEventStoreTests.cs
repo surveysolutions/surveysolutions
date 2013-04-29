@@ -1,5 +1,13 @@
 ﻿using AndroidNcqrs.Eventing.Storage.SQLite;
+using Cirrious.MvvmCross.Droid.Platform;
+using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Interfaces.Plugins;
+using Cirrious.MvvmCross.IoC;
+using Cirrious.MvvmCross.Platform;
+using Cirrious.MvvmCross.Plugins.Sqlite;
+using Moq;
 using Ncqrs.Eventing.Sourcing;
+using SQLite;
 
 namespace Ncqrs.Eventing.Storage.SQLite.Tests
 {
@@ -10,23 +18,54 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 	using FluentAssertions;
 	using NUnit.Framework;
 
-	[TestFixture]
-	public class SQLiteEventStoreTests
+   
+
+    [TestFixture]
+    public class MvvmCrossSqliteEventStoreTests
 	{
-		[SetUp]
-		public void Setup()
-		{
-			SqliteTestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
-			_store = new SQLiteEventStore(SqliteTestsContext.CurrentContext);
-		}
 
-		[TearDown]
-		public void Teardown()
-		{
-			SqliteTestsContext.Context.DeleteDatabase(DataBaseHelper.DATABASE_NAME);
-		}
 
-		private SQLiteEventStore _store;
+        [SetUp]
+        public void Setup()
+        {
+            Teardown();
+           
+            if (MvxServiceProvider.Instance == null)
+            {
+                Mock<IMvxPluginManager> pluginManagerCache = new Mock<IMvxPluginManager>();
+                var provider= new MvxServiceProvider(new MvxSimpleIoCServiceProvider());
+                provider.RegisterServiceInstance<IMvxPluginManager>(pluginManagerCache.Object);
+                
+            }
+            Mock<ISQLiteConnectionFactory> sqlFactoryMock = new Mock<ISQLiteConnectionFactory>();
+            MvxServiceProvider.Instance.RegisterServiceInstance<ISQLiteConnectionFactory>(sqlFactoryMock.Object);
+            ISQLiteConnection sqlConnection = new SQLiteConnection(DBPath);
+            sqlFactoryMock.Setup(x => x.Create(It.IsAny<string>())).Returns(sqlConnection);
+            _store = new MvvmCrossSqliteEventStore(TestDataBaseName);
+
+        }
+
+        public string DBPath
+        {
+            get
+            {
+                var path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+                return Path.Combine(path, TestDataBaseName);
+            }
+        }
+
+        private const string TestDataBaseName = "test_db";
+
+        [TearDown]
+        public void Teardown()
+        {
+            if (File.Exists(DBPath))
+                
+                File.Delete(DBPath);
+       //     SqliteTestsContext.Context.DeleteDatabase(TestDataBaseName);
+        }
+
+        private MvvmCrossSqliteEventStore _store;
 
 		[Test]
 		public void Save_SmokeTest()
@@ -141,7 +180,7 @@ namespace Ncqrs.Eventing.Storage.SQLite.Tests
 			var thirdStream = GetUncommiteEventStream(thirdId);
 			_store.Store(thirdStream);
 
-			var allEvents = _store.GetAllEvents();
+		    var allEvents = _store.GetEventStream();
 			allEvents.Count().Should().Be(9);
 
 			allEvents.GroupBy(e => e.EventSourceId)

@@ -45,15 +45,32 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot.test\InMemorySnapshootStoreTests.cs">
+      <Link>InMemorySnapshootStoreTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot.test\SnapshootableAggregateRootTests.cs">
+      <Link>SnapshootableAggregateRootTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot.test\SnapshootableEventHandlerMappingStrategyTests.cs">
+      <Link>SnapshootableEventHandlerMappingStrategyTests.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot.test\SnapshootDomainEventHandlerTest.cs">
+      <Link>SnapshootDomainEventHandlerTest.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SnapshootableAggregateRootTests.cs" />
-    <Compile Include="SnapshootableEventHandlerMappingStrategyTests.cs" />
-    <Compile Include="SnapshootDomainEventHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
       <Project>{30BE60C9-980F-40E1-A8FD-C2A5959827D3}</Project>
       <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Spec\AndroidNcqrs.Spec.csproj">
+      <Project>{c500a144-e8b6-41c1-8776-dc468e1d4889}</Project>
+      <Name>AndroidNcqrs.Spec</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>

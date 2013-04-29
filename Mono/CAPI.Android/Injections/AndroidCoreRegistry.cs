@@ -27,6 +27,8 @@ namespace CAPI.Android.Injections
     /// </summary>
     public class AndroidCoreRegistry : CoreRegistry
     {
+        private const string EventStoreDatabaseName = "EventStore";
+
         public AndroidCoreRegistry(string repositoryPath, bool isEmbeded) : base(repositoryPath, isEmbeded)
         {
         }
@@ -44,7 +46,7 @@ namespace CAPI.Android.Injections
         {
             base.Load();
 
-            this.Bind<IEventStore>().ToConstant(new MvvmCrossSqliteEventStore());
+            this.Bind<IEventStore>().ToConstant(new MvvmCrossSqliteEventStore(EventStoreDatabaseName));
             this.Unbind<IAuthentication>();
 
            

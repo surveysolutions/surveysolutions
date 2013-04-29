@@ -63,13 +63,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseHelper.cs" />
     <Compile Include="DenormalizerStorage\SqliteDenormalizerStorage.cs" />
-    <Compile Include="Extensions\SQLiteConnectionFactoryExtensions.cs" />
     <Compile Include="MvvmCrossSqliteEventStore.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="SQLiteContext.cs" />
-    <Compile Include="SQLiteEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredEventExtensions.cs" />
