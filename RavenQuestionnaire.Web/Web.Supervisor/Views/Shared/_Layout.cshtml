@@ -58,20 +58,20 @@
                             <li class="@(page == MenuItem.Docs ? "active" : "")">
                                 @Html.ActionLink("Documents", "Documents", "Survey")
                             </li>
-                            <li class="@(page == MenuItem.Teams ? "active" : "")">
-                                @Html.ActionLink("Teams", "Index", "Team")
-                            </li>
+                            @if (User.IsInRole("Headquarter"))
+                            {
+                                <li>@Html.ActionLink("HQ dashboard", "Index", "Dashboard")</li>
+                                <li class="@(page == MenuItem.Teams ? "active" : "")">
+                                    @Html.ActionLink("Teams", "Index", "Team")
+                                </li>
+                            }
                         </ul>
-                    }
-                    @if (Request.IsAuthenticated)
-                    {
                         <div class="pull-right">
                             <ul class="nav pull-right" role="menu">
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret">
                                     </b></a>
                                     <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("HQ dashboard", "Index", "Dashboard")</li>
                                         <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
                                     </ul>
                                 </li>

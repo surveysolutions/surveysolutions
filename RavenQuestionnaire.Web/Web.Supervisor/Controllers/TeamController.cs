@@ -24,7 +24,7 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     ///     The teams controller.
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Headquarter")]
     public class TeamController : BaseController
     {
         #region Constructors and Destructors
