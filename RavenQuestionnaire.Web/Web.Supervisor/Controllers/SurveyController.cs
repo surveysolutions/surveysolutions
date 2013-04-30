@@ -237,7 +237,7 @@ namespace Web.Supervisor.Controllers
                                        isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Id = user.Id });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             return this.View(model);
         }
@@ -350,7 +350,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignPerson(Guid id, Guid tmptId)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Id = user.Id });
             var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
@@ -647,7 +647,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { Id = user.Id });
             ViewBag.Users = new SelectList(users.Items, "Id", "Login");
             var input = new AssignmentInputModel(
                 data.Id,

@@ -13,7 +13,7 @@
             send: function(data) {
                 $.ajax({
                     type: "POST",
-                    url: "@Url.Action("Data", "Team")",
+                    url: "@Url.Action("GetSupervisors", "Team")",
                             data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize } }),
                         contentType: 'application/json, charset=utf-8',
                         statusCode: {

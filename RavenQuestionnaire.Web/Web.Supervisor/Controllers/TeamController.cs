@@ -146,9 +146,9 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Partial view with table's body
         /// </returns>
-        public ActionResult Data(GridDataRequestModel data)
+        public ActionResult GetSupervisors(GridDataRequestModel data)
         {
-            UserListView model =
+            var model =
                 this.Repository.Load<UserListViewInputModel, UserListView>(
                     new UserListViewInputModel
                         {
@@ -160,36 +160,116 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_PartialGrid_Supervisors", model);
         }
 
+
         /// <summary>
-        ///     The index.
+        /// Gets table data for some view
         /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
         /// <returns>
-        ///     The <see cref="ActionResult" />.
+        /// Partial view with table's body
         /// </returns>
-        public ActionResult Index()
+        public ActionResult GetInterviewers(GridDataRequestModel data)
         {
-            UserListView model =
+            var model =
+                this.Repository.Load<InterviewersInputModel, InterviewersView>(
+                    new InterviewersInputModel
+                        {
+                            Id = data.Id,
+                            Page = data.Pager.Page,
+                            PageSize = data.Pager.PageSize,
+                            Orders = data.SortOrder
+                        });
+            return this.PartialView("_PartialGrid_Interviewers", model);
+        }
+
+        /// <summary>
+        /// The index.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        public ActionResult Index(UserListViewInputModel data)
+        {
+            var model =
                 this.Repository.Load<UserListViewInputModel, UserListView>(
-                    new UserListViewInputModel { Role = UserRoles.Supervisor });
+                    new UserListViewInputModel
+                        {
+                            Role = UserRoles.Supervisor,
+                            Page = data.Page,
+                            PageSize = data.PageSize,
+                            Orders = data.Orders
+                        });
             return this.View(model);
         }
 
         /// <summary>
         /// The interviewers.
         /// </summary>
-        /// <param name="id">
-        /// The id.
+        /// <param name="data">
+        /// The data.
         /// </param>
         /// <returns>
         /// The<see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Interviewers(Guid id)
+        public ActionResult Interviewers(InterviewersInputModel data)
         {
-            UserView user = this.GetUser(id);
-            InterviewersView interviewers =
+            UserView user = this.GetUser(data.Id);
+            var interviewers =
                 this.Repository.Load<InterviewersInputModel, InterviewersView>(
-                    new InterviewersInputModel { SupervisorId = id });
-            return this.View(new InterviewerListViewModel { View = interviewers, SupervisorName = user.UserName });
+                    new InterviewersInputModel
+                        {
+                            Id = data.Id,
+                            Page = data.Page,
+                            PageSize = data.PageSize,
+                            Order = data.Order
+                        });
+            return
+                this.View(
+                    new InterviewerListViewModel
+                        {
+                            View = interviewers,
+                            Id = user.PublicKey,
+                            SupervisorName = user.UserName
+                        });
+        }
+
+        /// <summary>
+        /// Unlock user
+        /// </summary>
+        /// <param name="id">
+        /// Use public key
+        /// </param>
+        /// <returns>
+        /// Redirects to index view if everything is ok
+        /// </returns>
+        [Authorize]
+        public ActionResult UnlockUser(Guid id)
+        {
+            CommandService.Execute(new UnlockUserCommand(id));
+
+            return this.Redirect(GlobalHelper.PreviousPage);
+        }
+
+        /// <summary>
+        /// Lock user
+        /// </summary>
+        /// <param name="id">
+        /// Use public key
+        /// </param>
+        /// <returns>
+        /// Redirects to index view if everything is ok
+        /// </returns>
+        [Authorize]
+        public ActionResult LockUser(Guid id)
+        {
+            CommandService.Execute(new LockUserCommand(id));
+
+            return this.Redirect(GlobalHelper.PreviousPage);
         }
 
         #endregion

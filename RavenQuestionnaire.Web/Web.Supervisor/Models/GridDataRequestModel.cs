@@ -39,17 +39,7 @@ namespace Web.Supervisor.Models
         /// Gets or sets Pager.
         /// </summary>
         public PagerData Pager { get; set; }
-
-        /// <summary>
-        /// Gets or sets SupervisorId.
-        /// </summary>
-        public Guid SupervisorId { get; set; }
-
-        /// <summary>
-        /// Gets or sets SupervisorName.
-        /// </summary>
-        public string SupervisorName { get; set; }
-
+        
         /// <summary>
         /// Gets or sets TemplateId.
         /// </summary>
