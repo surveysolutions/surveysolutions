@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Core.Supervisor.Synchronization;
+using Main.Core.Documents;
 using Main.Core.View;
 using Moq;
 using NUnit.Framework;
@@ -56,6 +57,56 @@ namespace Core.Supervisor.Tests
 
         private Mock<ICommandService> commandServiceMock;
 
+        [Test]
+        public void GetAllARIds_When_StreamableEventStore_Then_LastEventByRootisReturned()
+        {
+            // arrange
+            var eventStoreMock = new Mock<IEventStore>();
+            var streamableEventStore = eventStoreMock.As<IStreamableEventStore>();
+            NcqrsEnvironment.SetDefault(eventStoreMock.Object);
+            var userId = Guid.NewGuid();
+            var lastEventId = Guid.NewGuid();
+
+            streamableEventStore.Setup(x => x.GetLastEvent(userId))
+                                .Returns(new CommittedEvent(Guid.NewGuid(), lastEventId, userId, 1, DateTime.Now,
+                                                            new object(), new Version(1, 1)));
+            var avalibleUsers = new UserDocument[] {new UserDocument() {PublicKey = userId}};
+
+            denormalizerMock.Setup(x => x.Query<UserDocument>())
+                            .Returns(avalibleUsers.AsQueryable());
+
+            SupervisorEventStreamReader unitUnderTest =new SupervisorEventStreamReader(denormalizerMock.Object);
+
+            // act
+            var result =unitUnderTest.GetAllARIds().ToList();
+
+            // assert
+            Assert.That(result[0].AggregateRootPeak, Is.EqualTo(lastEventId));
+            Assert.That(result[0].AggregateRootId, Is.EqualTo(userId));
+        }
+
+        [Test]
+        public void GetAllARIds_When_NotStreamableEventStore_Then_LastEventByRootisNull()
+        {
+            // arrange
+            var eventStoreMock = new Mock<IEventStore>();
+            NcqrsEnvironment.SetDefault(eventStoreMock.Object);
+            var userId = Guid.NewGuid();
+
+            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId } };
+
+            denormalizerMock.Setup(x => x.Query<UserDocument>())
+                            .Returns(avalibleUsers.AsQueryable());
+
+            SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object);
+
+            // act
+            var result = unitUnderTest.GetAllARIds().ToList();
+
+            // assert
+            Assert.That(result[0].AggregateRootPeak, Is.EqualTo(null));
+            Assert.That(result[0].AggregateRootId, Is.EqualTo(userId));
+        }
        
         [Test]
         public void GetEventStreamById_EventStoreIsEmpty_EmptyListIsReturned()
