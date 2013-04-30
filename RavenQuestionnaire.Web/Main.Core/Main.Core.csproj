@@ -384,6 +384,9 @@
     <Compile Include="Events\Synchronization\NewDeviceRegistered.cs" />
     <Compile Include="Events\Synchronization\NewSynchronizationProcessCreated.cs" />
     <Compile Include="Events\Synchronization\ProcessEnded.cs" />
+    <Compile Include="Events\SyncItemsMeta.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Events\UserEventStreamReader.cs" />
     <Compile Include="Events\User\NewUserCreated.cs" />
     <Compile Include="Events\User\UserBaseEvent.cs" />

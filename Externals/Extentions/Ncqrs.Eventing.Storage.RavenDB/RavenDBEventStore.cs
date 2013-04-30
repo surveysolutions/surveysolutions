@@ -108,6 +108,31 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
         }
 
+        public CommittedEvent GetLastEvent(Guid aggregateRootId)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var eventLast = session
+                    .Query<StoredEvent>()
+                    .Where(e => e.EventSourceId == aggregateRootId)
+                    .OrderByDescending(y => y.EventSequence).FirstOrDefault();
+
+                if (eventLast != null)
+                    return ToCommittedEvent(eventLast);
+                return null;
+            }
+        }
+
+        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return session
+                    .Query<StoredEvent>()
+                    .Where(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier).Any();
+            }
+        }
+
         /// <summary>
         /// The get stream by chunk.
         /// </summary>

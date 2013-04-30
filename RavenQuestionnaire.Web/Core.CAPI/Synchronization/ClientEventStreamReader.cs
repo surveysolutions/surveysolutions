@@ -98,7 +98,7 @@ namespace Core.CAPI.Synchronization
             return retval.OrderBy(x => x.EventSequence);
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
             throw new NotImplementedException();
         }
