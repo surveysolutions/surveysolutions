@@ -37,10 +37,6 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IDenormalizer denormalizer;
 
-        /// <summary>
-        /// myEventStore object
-        /// </summary>
-        private readonly IStreamableEventStore myEventStore;
 
         //private List<Guid> ARKeys; 
 
@@ -61,13 +57,6 @@ namespace Core.Supervisor.Synchronization
         public SupervisorEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
-            this.myEventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
-            //this.ARKeys = new List<Guid>();
-
-            if (this.myEventStore == null)
-            {
-                throw new Exception("IEventStore is not correct.");
-            }
         }
 
         #endregion
@@ -94,7 +83,7 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            List<Guid> fileNames = GetFiles(questionnaires);
+            List<Guid> fileNames = GetFiles();
 
             this.AddFiles(retval, fileNames);
             
@@ -108,13 +97,13 @@ namespace Core.Supervisor.Synchronization
             var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", myEventStore.GetLastEvent(i).EventIdentifier)));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", GetLastEventFromStream(i))));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", myEventStore.GetLastEvent(i).EventIdentifier)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", GetLastEventFromStream(i))));
 
-            List<Guid> files = GetFiles(questionnaires);
-            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", myEventStore.GetLastEvent(i).EventIdentifier)));
+            List<Guid> files = GetFiles();
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", GetLastEventFromStream(i))));
 
             return result;
         }
@@ -138,10 +127,10 @@ namespace Core.Supervisor.Synchronization
             //return null;
         }
 
-        private List<Guid> GetFiles(List<Guid> questionnaires)
+       
+
+        private List<Guid> GetFiles()
         {
-            #warning select only files used in questionnaires
-            
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
             
             return model.Select(m => Guid.Parse(m.FileName)).ToList();

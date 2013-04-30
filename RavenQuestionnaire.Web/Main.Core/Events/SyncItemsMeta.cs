@@ -7,7 +7,7 @@ namespace Main.Core.Events
         public SyncItemsMeta()
         {
         }
-        public SyncItemsMeta(Guid aggregateRootId, string aggregateRootType, Guid aggregateRootPeak)
+        public SyncItemsMeta(Guid aggregateRootId, string aggregateRootType, Guid? aggregateRootPeak)
         {
             AggregateRootId = aggregateRootId;
             AggregateRootType = aggregateRootType;
@@ -16,6 +16,6 @@ namespace Main.Core.Events
 
         public Guid AggregateRootId { get; set; }
         public string AggregateRootType { get; set; }
-        public Guid AggregateRootPeak { get; set; }
+        public Guid? AggregateRootPeak { get; set; }
     }
 }

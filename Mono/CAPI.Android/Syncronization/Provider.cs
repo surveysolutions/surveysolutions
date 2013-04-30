@@ -204,8 +204,7 @@ namespace AndroidMain.Synchronization
 
             foreach (var root in syncItemsMetaContainer.ARId)
             {
-                if ((NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore).IsEventPresent(root.AggregateRootId,
-                                                                                                  root.AggregateRootPeak))
+                if (SkipAgregateRootIfNoChanges(root))
                     continue;
                 var itemRequest = new RestRequest(GetARPath, Method.POST);
                 itemRequest.AddParameter("ARKey", root.AggregateRootId);
@@ -236,6 +235,19 @@ namespace AndroidMain.Synchronization
             }
 
             //return events;
+        }
+
+        private static bool SkipAgregateRootIfNoChanges(SyncItemsMeta root)
+        {
+            if (!root.AggregateRootPeak.HasValue)
+                return false;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            if (eventStore == null)
+                return false;
+            var streamableEventStore = eventStore as IStreamableEventStore;
+            if (streamableEventStore == null)
+                return false;
+            return streamableEventStore.IsEventPresent(root.AggregateRootId, root.AggregateRootPeak.Value);
         }
 
         #endregion

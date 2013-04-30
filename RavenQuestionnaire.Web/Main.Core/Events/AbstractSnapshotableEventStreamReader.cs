@@ -61,6 +61,16 @@ namespace Main.Core.Events
 
         #endregion
 
+        protected Guid? GetLastEventFromStream(Guid aggregateRootId)
+        {
+            var stremableEventStore = myEventStore as IStreamableEventStore;
+            if (stremableEventStore != null)
+            {
+                return stremableEventStore.GetLastEvent(aggregateRootId).EventIdentifier;
+            }
+            return null;
+        }
+
         protected List<AggregateRootEvent> ReturnAllEventStream(Guid aggregateRootId)
         {
             var events = this.myEventStore.ReadFrom(aggregateRootId, int.MinValue, int.MaxValue);

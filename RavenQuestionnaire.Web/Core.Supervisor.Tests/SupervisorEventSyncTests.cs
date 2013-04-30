@@ -46,19 +46,17 @@ namespace Core.Supervisor.Tests
         {
             var eventStoreMock = new Mock<ISnapshootEventStore>();
             NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
-       /*     eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
-                                                int.MinValue, int.MaxValue)).Returns(
-                                                    new CommittedEventStream(Guid.NewGuid()));*/
             eventStoreMock.Setup(x => x.GetLatestSnapshoot(It.IsAny<Guid>()))
                           .Returns(new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now,
                                                       new object(), new Version(1,1,1,1)));
             return eventStoreMock;
         }
 
-
         private Mock<IDenormalizer> denormalizerMock;
-       // private Mock<IEventStore> eventStoreMock;
+
         private Mock<ICommandService> commandServiceMock;
+
+       
         [Test]
         public void GetEventStreamById_EventStoreIsEmpty_EmptyListIsReturned()
         {
