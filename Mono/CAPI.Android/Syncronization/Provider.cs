@@ -6,6 +6,11 @@
 //   The remote service event stream provider.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Ncqrs;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
+
 namespace AndroidMain.Synchronization
 {
     using System;
@@ -199,11 +204,13 @@ namespace AndroidMain.Synchronization
 
             foreach (var root in syncItemsMetaContainer.ARId)
             {
-
+                if ((NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore).IsEventPresent(root.AggregateRootId,
+                                                                                                  root.AggregateRootPeak))
+                    continue;
                 var itemRequest = new RestRequest(GetARPath, Method.POST);
-                itemRequest.AddParameter("ARKey", root.Item2);
+                itemRequest.AddParameter("ARKey", root.AggregateRootId);
                 itemRequest.AddParameter("length", 0);
-                itemRequest.AddParameter("rootType", root.Item1);
+                itemRequest.AddParameter("rootType", root.AggregateRootType);
 
                 itemRequest.RequestFormat = DataFormat.Json;
 
@@ -217,7 +224,7 @@ namespace AndroidMain.Synchronization
                     throw new Exception("Operation finished unsuccessfully. Item was not received.");
                 }
 
-                var settings = new JsonSerializerSettings(){ TypeNameHandling = TypeNameHandling.Objects };
+                var settings = new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.Objects};
                 var str = responseStream.Content.Substring(responseStream.Content.IndexOf("["));
                 var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 

@@ -40,12 +40,7 @@ namespace Core.Supervisor.Synchronization
         /// <summary>
         /// myEventStore object
         /// </summary>
-        private readonly IEventStore myEventStore;
-
-        /// <summary>
-        /// The unit of work factory.
-        /// </summary>
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly IStreamableEventStore myEventStore;
 
         //private List<Guid> ARKeys; 
 
@@ -66,8 +61,7 @@ namespace Core.Supervisor.Synchronization
         public SupervisorEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
-            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
+            this.myEventStore = NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore;
             //this.ARKeys = new List<Guid>();
 
             if (this.myEventStore == null)
@@ -109,18 +103,18 @@ namespace Core.Supervisor.Synchronization
             return retval.OrderBy(x => x.EventSequence).ToList(); // not good but allows to push correctly
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
-            var result = new List<Tuple<string, Guid>>();
+            var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new Tuple<string, Guid>("u", i)));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", myEventStore.GetLastEvent(i).EventIdentifier)));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new Tuple<string, Guid>("q", i)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", myEventStore.GetLastEvent(i).EventIdentifier)));
 
             List<Guid> files = GetFiles(questionnaires);
-            result.AddRange(files.Select(i => new Tuple<string, Guid>("f", i)));
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", myEventStore.GetLastEvent(i).EventIdentifier)));
 
             return result;
         }
