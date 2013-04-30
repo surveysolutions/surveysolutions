@@ -5,6 +5,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 namespace Web.Supervisor.Models
 {
+    using System;
+
     using Core.Supervisor.Views.Interviewer;
 
     /// <summary>
@@ -23,6 +25,11 @@ namespace Web.Supervisor.Models
         ///     Gets or sets the supervisor name.
         /// </summary>
         public string SupervisorName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the id.
+        /// </summary>
+        public Guid Id { get; set; }
 
         #endregion
     }
