@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using Main.Core.Entities.SubEntities;
 
 namespace Web.Supervisor.Models
 {
@@ -24,5 +25,7 @@ namespace Web.Supervisor.Models
         [Required]
         [Display(Name = "Supervisor login and password")]
         public string Name { get; set; }
+
+        public UserRoles Role { get; set; }
     }
 }

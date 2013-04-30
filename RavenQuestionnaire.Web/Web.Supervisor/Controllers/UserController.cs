@@ -8,7 +8,9 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Web.Http;
+using System.Web.Security;
 using Core.Supervisor.Views.Interviewer;
+using Main.Core.Utility;
 using Main.Core.View;
 using Questionnaire.Core.Web.Security;
 
@@ -64,7 +66,8 @@ namespace Web.Supervisor.Controllers
         [AllowAnonymous]
         public ActionResult CreateSupervisor()
         {
-            var supervisor = new SupervisorModel(Guid.NewGuid(), "supervisor");
+            var supervisor = new SupervisorModel(Guid.NewGuid(), "supervisor") {Role = UserRoles.Headquarter};
+            
             return this.View(supervisor);
         }
 
@@ -74,10 +77,21 @@ namespace Web.Supervisor.Controllers
         {
             if (ModelState.IsValid)
             {
-                CommandService.Execute(new CreateUserCommand(user.Id, user.Name, user.Name, user.Name + "@worldbank.org", new [] {UserRoles.Supervisor}, false, null));
+                CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
+                                                             user.Name + "@worldbank.org", new[] {user.Role},
+                                                             false, null));
 
-                this.authentication.SignIn(user.Name, false);
-                return this.Redirect("~/");
+                
+                var isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
+                var isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());
+                if (isSupervisor || isHeadquarter)
+                {
+                    this.authentication.SignIn(user.Name, false);
+                    if (isSupervisor)
+                        return this.Redirect("~/");
+                    else
+                        return this.RedirectToRoute("HeadquarterDashboard");
+                }
             }
 
             return this.View(user);

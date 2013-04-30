@@ -67,16 +67,13 @@ namespace Web.Supervisor
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
-            // routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
-            /*routes.IgnoreRoute("{WCF}/{*pathInfo}");*/
+            routes.MapRoute("HeadquarterDashboard", "hqboard", new {controller = "Dashboard", action = "Index"});
 
             routes.MapRoute(
                 "Default", 
-                // Route name
                 "{controller}/{action}/{id}", 
-                // URL with parameters
-                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-                );
+                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } 
+            );
         }
 
         /// <summary>

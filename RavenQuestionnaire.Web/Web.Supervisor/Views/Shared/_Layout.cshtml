@@ -71,6 +71,7 @@
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hi, <b>@User.Identity.Name</b> <b class="caret">
                                     </b></a>
                                     <ul class="dropdown-menu">
+                                        <li>@Html.ActionLink("HQ dashboard", "Index", "Dashboard")</li>
                                         <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
                                     </ul>
                                 </li>

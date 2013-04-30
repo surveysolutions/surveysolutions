@@ -41,6 +41,8 @@ namespace Main.Core.Entities.SubEntities
         /// <summary>
         /// The user.
         /// </summary>
-        User
+        User,
+
+        Headquarter
     }
 }

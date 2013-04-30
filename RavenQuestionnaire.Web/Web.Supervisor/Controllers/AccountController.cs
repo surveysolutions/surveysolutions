@@ -102,11 +102,15 @@ namespace Web.Supervisor.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString())
-                        || Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
+                    var isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
+                    var isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
+                    if (isSupervisor || isHeadquarter)
                     {
                         this.authentication.SignIn(model.UserName, false);
-                        return this.Redirect("~/");
+                        if (isSupervisor)
+                            return this.Redirect("~/");
+                        else
+                            return this.RedirectToRoute("HeadquarterDashboard");
                     }
 
                     ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
