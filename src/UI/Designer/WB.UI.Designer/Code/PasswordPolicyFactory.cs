@@ -16,7 +16,7 @@ namespace WB.UI.Designer
                 MaxInvalidPasswordAttempts = isLockingAccountPolicyForced ? 5 : int.MaxValue,
                 MinRequiredNonAlphanumericCharacters = 0,
                 PasswordAttemptWindow = 10,
-                PasswordMinimumLength = 6,
+                PasswordMinimumLength = 10,
                 PasswordStrengthRegularExpression = null
             };
         }
