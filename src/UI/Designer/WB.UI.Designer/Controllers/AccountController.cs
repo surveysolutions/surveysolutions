@@ -16,6 +16,7 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
     using System.Web.Security;
+    using System.Web.UI;
 
     using Postal;
 
@@ -30,6 +31,7 @@ namespace WB.UI.Designer.Controllers
     ///     The account controller.
     /// </summary>
     [CustomAuthorize]
+    [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
     public class AccountController : BaseController
     {
         #region Public Methods and Operators
@@ -84,6 +86,7 @@ namespace WB.UI.Designer.Controllers
         /// The <see cref="ActionResult"/>.
         /// </returns>
         [AllowAnonymous]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(string returnUrl)
         {
             this.ViewBag.ReturnUrl = returnUrl;
@@ -105,6 +108,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Login(LoginModel model, string returnUrl)
         {
             if (this.ModelState.IsValid
@@ -127,6 +131,7 @@ namespace WB.UI.Designer.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Manage(AccountManageMessageId? message)
         {
             if (message.HasValue)
@@ -149,6 +154,7 @@ namespace WB.UI.Designer.Controllers
         /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Manage(LocalPasswordModel model)
         {
             this.ViewBag.ReturnUrl = this.Url.Action("manage");
@@ -191,6 +197,7 @@ namespace WB.UI.Designer.Controllers
         /// <exception cref="NotImplementedException">
         /// </exception>
         [AllowAnonymous]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult PasswordReset()
         {
             if (!Membership.EnablePasswordReset)
@@ -215,6 +222,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult PasswordReset(ResetPasswordModel model)
         {
             if (!Membership.EnablePasswordReset)
@@ -277,6 +285,7 @@ namespace WB.UI.Designer.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [RecaptchaControlMvc.CaptchaValidatorAttribute]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Register(RegisterModel model, bool captchaValid)
         {
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
@@ -408,6 +417,7 @@ namespace WB.UI.Designer.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult ResetPasswordConfirmation(ResetPasswordConfirmationModel model)
         {
             if (this.ModelState.IsValid)
