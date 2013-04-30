@@ -40,7 +40,7 @@
   <ItemGroup>
     <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\MonoCapi\Mono\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
     </Reference>
     <Reference Include="Cirrious.MvvmCross.Droid">
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Droid.dll</HintPath>
