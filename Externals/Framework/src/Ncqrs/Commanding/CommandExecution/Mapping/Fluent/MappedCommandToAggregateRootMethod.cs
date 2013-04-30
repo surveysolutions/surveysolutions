@@ -50,7 +50,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>The <see cref="ICommandExecutor&lt;TCommand&gt;"/> which is able to execute this command.</returns>
         public ICommandExecutor<TCommand> ToCallOn(Action<TCommand, TAggRoot> commandmappedfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(commandmappedfunc != null, "commandmappedfunc can not be null.");
+#endif
             _mappedmethodforcommandfunc = commandmappedfunc;
 
             return this;
@@ -76,8 +78,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         [ContractInvariantMethod]
         private void ContractInvariants()
         {
+            #if !MONODROID
             Contract.Invariant(_getidfromcommandfunc != null, "getidfromcommandfunc can not be null.");
             Contract.Invariant(_aggregaterootfetchfunc != null, "aggregaterootfetchfunc can not be null.");
-        }
+#endif
+            }
     }
 }

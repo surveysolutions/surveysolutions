@@ -612,6 +612,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="HostMap.config" />
+    <Content Include="Configuration\Stacy.Supervisor.Web.config" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -32,10 +32,9 @@ namespace AssigmentGeneration
         {
             this.supKey = supKey;
             this.supName = supName;
-            template =
-                ((SnapshootLoaded) (JsonConvert.DeserializeObject<ZipFileData>(File.OpenText(filePath).ReadToEnd(),
-                                                                               settings).Events.First().Payload))
-                    .Template.Payload as QuestionnaireDocument;
+            template = JsonConvert.DeserializeObject<QuestionnaireDocument>(File.OpenText(filePath).ReadToEnd(),
+                                                                            settings);
+            
             this.assigmentValues = new List<string[]>();
             using (var reader = new CsvReader(File.OpenText(valueFilePath)))
             {

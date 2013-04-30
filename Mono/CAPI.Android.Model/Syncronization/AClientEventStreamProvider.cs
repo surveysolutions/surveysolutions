@@ -7,9 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events;
@@ -18,7 +19,7 @@ using Main.Synchronization.SyncSreamProvider;
 using Ncqrs;
 using Ncqrs.Eventing.Storage;
 
-namespace CAPI.Android.Syncronization
+namespace CAPI.Android.Core.Model.Syncronization
 {
     /// <summary>
     /// The a client event stream provider.
@@ -30,7 +31,7 @@ namespace CAPI.Android.Syncronization
         /// <summary>
         /// The document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireView> documentStorage;
+        private readonly IDenormalizerStorage<QuestionnaireDTO> documentStorage;
 
         /// <summary>
         /// myEventStore object
@@ -47,7 +48,7 @@ namespace CAPI.Android.Syncronization
         /// <param name="documentStorage">
         /// The document storage.
         /// </param>
-        public AClientEventStreamProvider(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
+        public AClientEventStreamProvider(IDenormalizerStorage<QuestionnaireDTO> documentStorage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
             this.documentStorage = documentStorage;
@@ -91,11 +92,18 @@ namespace CAPI.Android.Syncronization
         /// </returns>
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
-            return
+        /*    return
                 this.documentStorage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
                     item =>
                     this.eventStore.ReadFrom(item.PublicKey, int.MinValue, int.MaxValue).Select(
-                        e => new AggregateRootEvent(e)));
+                        e => new AggregateRootEvent(e)));*/
+            var allovedStatuses = SurveyStatus.GetListOfAllowerdStatusesForSync().Select(s => s.ToString()).ToArray();
+            var docs = documentStorage.Query(item =>allovedStatuses.Contains(item.Status)).ToList();
+            return docs
+                  .SelectMany(
+                      item =>
+                      this.eventStore.ReadFrom(Guid.Parse(item.Id), int.MinValue, int.MaxValue).Select(
+                          e => new AggregateRootEvent(e)));
         }
 
         /// <summary>

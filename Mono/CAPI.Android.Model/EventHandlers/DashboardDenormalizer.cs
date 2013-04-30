@@ -13,11 +13,15 @@ using Ncqrs.Restoring.EventStapshoot;
 namespace CAPI.Android.Core.Model.EventHandlers
 {
     public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>{
-        private readonly IDenormalizerStorage<DashboardModel> _documentStorage;
+        private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
+        private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
 
-        public DashboardDenormalizer(IDenormalizerStorage<DashboardModel> documentStorage)
+        public DashboardDenormalizer(IDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+            IDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
+            )
         {
-            _documentStorage = documentStorage;
+            _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
+            _surveyDTOdocumentStorage = surveyDTOdocumentStorage;
         }
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
@@ -35,14 +39,21 @@ namespace CAPI.Android.Core.Model.EventHandlers
         protected void PropeedCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
         {
             var featuredItems = doc.Find<ICompleteQuestion>(q => q.Featured);
-            var item = new DashboardQuestionnaireItem(doc.PublicKey, doc.Status, featuredItems.Select(
-              q =>
-              new FeaturedItem(q.PublicKey, q.QuestionText,
-                               q.GetAnswerString())).ToList());
-            AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
+            var items = featuredItems.Select(
+                q =>
+                new FeaturedItem(q.PublicKey, q.QuestionText,
+                                 q.GetAnswerString())).ToList();
+            var survey = _surveyDTOdocumentStorage.GetByGuid(doc.TemplateId);
+            if (survey == null)
+                _surveyDTOdocumentStorage.Store(new SurveyDto(doc.TemplateId, doc.Title), doc.TemplateId);
+          
+            _questionnaireDTOdocumentStorage.Store(
+                new QuestionnaireDTO(doc.PublicKey, doc.Responsible.Id, doc.TemplateId, doc.Status, items),
+                doc.PublicKey);
+            //   AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
         }
 
-        protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
+    /*    protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
         {
             foreach (var dashboard in _documentStorage.Query().Where(d=>d.OwnerKey!=owner))
             {
@@ -73,14 +84,19 @@ namespace CAPI.Android.Core.Model.EventHandlers
             }
            
             survey.AddItem(item);
-
-        }
+        
+        }*/
 
         #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var dashboard = _documentStorage.GetByGuid(evnt.Payload.Responsible.Id);
+            var questionnaire = _questionnaireDTOdocumentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            if(questionnaire==null)
+                return;
+            questionnaire.Status = evnt.Payload.Status.PublicId.ToString();
+            _questionnaireDTOdocumentStorage.Store(questionnaire, evnt.Payload.CompletedQuestionnaireId);
+            /* var dashboard = _documentStorage.GetByGuid(evnt.Payload.Responsible.Id);
             if (dashboard == null)
                 return;
             foreach (var dashboardSurveyItem in dashboard.Surveys)
@@ -91,9 +107,8 @@ namespace CAPI.Android.Core.Model.EventHandlers
                     questionnarie.SetStatus(evnt.Payload.Status);
                     return;
                 }
-                /* if (dashboardSurveyItem.TryToChangeQuestionnaireState(evnt.EventSourceId, evnt.Payload.Status))
-                    break;*/
-            }
+              
+            }*/
         }
 
         #endregion
