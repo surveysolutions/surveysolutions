@@ -248,9 +248,12 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static bool IsStatusAllowCapiSync(SurveyStatus status)
         {
-            return status.PublicId == Complete.PublicId || status.PublicId == Error.PublicId;
+            return GetListOfAllowerdStatusesForSync().Contains(status.PublicId);
         }
-
+        public static IEnumerable<Guid> GetListOfAllowerdStatusesForSync()
+        {
+            return new Guid[] {Complete.PublicId, Error.PublicId};
+        } 
         /// <summary>
         /// The is status allow down supervisor sync.
         /// </summary>

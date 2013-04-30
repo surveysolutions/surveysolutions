@@ -9,7 +9,9 @@
 
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Main.DenormalizerStorage
 {
@@ -50,6 +52,7 @@ namespace Main.DenormalizerStorage
         /// </returns>
         IQueryable<T> Query();
 
+        IEnumerable<T> Query(Expression<Func<T, bool>> predExpr);
         /// <summary>
         /// The remove.
         /// </summary>
@@ -142,6 +145,11 @@ namespace Main.DenormalizerStorage
         public IQueryable<T> Query()
         {
             return this._hash.Values.AsQueryable();
+        }
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        {
+            return this._hash.Values.Where(predExpr.Compile());
         }
 
         /// <summary>

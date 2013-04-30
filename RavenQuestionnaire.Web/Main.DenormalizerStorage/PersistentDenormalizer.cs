@@ -8,6 +8,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Caching;
 using System.Threading;
 
@@ -123,6 +124,11 @@ namespace Main.DenormalizerStorage
         {
             throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
             //    return this._hash.Values.AsQueryable();
+        }
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        {
+            throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
         }
 
         /// <summary>

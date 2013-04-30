@@ -38,6 +38,21 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.MvvmCross, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\MonoCapi\Mono\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Droid">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Droid.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -50,13 +65,17 @@
     <Compile Include="Fakes\CustomerCreatedEvent.cs" />
     <Compile Include="Fakes\CustomerNameChanged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteEventStoreTests.cs" />
+    <Compile Include="MvvmCrossSqliteEventStoreTests.cs" />
     <Compile Include="SqliteTestsContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
       <Name>AndroidFluentAssertions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
+      <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>
+      <Name>AndroidMoq</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{F9A0B560-A8BF-4914-88FB-7D98DF4242EF}</Project>

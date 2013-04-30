@@ -118,7 +118,8 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                restore = () =>
+                this.StartActivity(typeof(DashboardActivity));
+                /*restore = () =>
                     {
                         CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
                         this.StartActivity(typeof (DashboardActivity));
@@ -128,21 +129,21 @@ namespace CAPI.Android
                                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                ViewGroup.LayoutParams.FillParent));
                 restore.BeginInvoke(Callback, restore);
-
+                */
                 return;
             }
 
             this.teLogin.SetBackgroundColor(Color.Red);
             this.tePassword.SetBackgroundColor(Color.Red);
         }
-
+/*
         private void Callback(IAsyncResult asyncResult)
         {
             Action asyncAction = (Action)asyncResult.AsyncState;
             asyncAction.EndInvoke(asyncResult);
         }
 
-        private Action restore;
+        private Action restore;*/
 
         #endregion
     }
