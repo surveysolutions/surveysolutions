@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Main.Core.Events;
 
 namespace SynchronizationMessages.CompleteQuestionnaire
 {
@@ -9,9 +10,10 @@ namespace SynchronizationMessages.CompleteQuestionnaire
     {
         public SyncItemsMetaContainer()
         {
-            ARId  = new List<Tuple<string, Guid>>();
+            ARId = new List<SyncItemsMeta>();
         }
 
-        public List<Tuple<string,Guid>> ARId { set; get; }
+        public List<SyncItemsMeta> ARId { set; get; }
     }
+
 }
