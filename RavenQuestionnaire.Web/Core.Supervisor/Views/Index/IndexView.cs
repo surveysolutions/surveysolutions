@@ -51,7 +51,8 @@ namespace Core.Supervisor.Views.Index
             int page, int pageSize,  IEnumerable<IndexViewItem> items, UserDocument user)
             : this()
         {
-            this.User = user == null ? new UserLight(Guid.Empty, "All") : new UserLight(user.PublicKey, user.UserName);
+            if (user != null)
+                this.User = new UserLight(user.PublicKey, user.UserName);
             this.Page = page;
             this.PageSize = pageSize;
             this.Headers =

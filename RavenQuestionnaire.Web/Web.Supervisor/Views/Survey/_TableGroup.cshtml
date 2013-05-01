@@ -36,7 +36,7 @@
                     <div class="popover-container">
                         <a id="source-@fitem.Id" 
                     class="editable" 
-                    href="@Url.Action("Index", "Survey", new { UserId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
+                    href="@Url.Action("Index", "Survey", new { interviewerId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
                     data-original-title="Choose user"
                     data-source="@Html.Raw(users)"
                     data-type="select" 

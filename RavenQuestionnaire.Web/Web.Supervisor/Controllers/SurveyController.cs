@@ -569,7 +569,8 @@ namespace Web.Supervisor.Controllers
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
                                 Orders = data.SortOrder,
-                                InterviewerId = data.InterviwerId
+                                InterviewerId = data.InterviwerId,
+                                ViewerId = GlobalInfo.GetCurrentUser().Id
                             };
             var model = this.Repository.Load<IndexInputModel, IndexView>(input);
             ViewBag.GraphData = new InterviewerChartModel(model);

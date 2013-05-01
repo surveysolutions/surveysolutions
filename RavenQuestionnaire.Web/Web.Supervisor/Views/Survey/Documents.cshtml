@@ -55,7 +55,7 @@
                 if (data.statusId!=statusFilter && statusFilter!="00000000-0000-0000-0000-000000000000") {
                     isTransparent = true;
                 }
-                if (data.userId!=userFilter && userFilter!="00000000-0000-0000-0000-000000000000") {
+                if (data.interviewerId!=userFilter && userFilter!="00000000-0000-0000-0000-000000000000") {
                     isTransparent = true;
                 }
                 if(isTransparent){
@@ -110,7 +110,7 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("AssignmentViewTable", "Survey")",
-                data: JSON.stringify({ Id: templateFilter, UserId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+            data: JSON.stringify({ templateId: templateFilter, interviewerId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {

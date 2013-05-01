@@ -28,7 +28,7 @@
             @foreach (var collect in Model.Items)
             {
                 <tr>
-                    <td>@Html.ActionLink(collect.User.Name, "Documents", new { status = statusKey, userId = collect.User.Id })
+                    <td>@Html.ActionLink(collect.User.Name, "Documents", new { status = statusKey, interviewerId = collect.User.Id })
                     </td>
                     @foreach (var it in Model.Headers)
                     {
@@ -36,7 +36,7 @@
                         <td>
                             @if (value != 0)
                             {
-                                @Html.ActionLink(value.ToString(), "Documents", new { status = statusKey, userId = collect.User.Id, templateId = it.TemplateId })
+                                @Html.ActionLink(value.ToString(), "Documents", new { status = statusKey, interviewerId = collect.User.Id, templateId = it.TemplateId })
                             }
                             else
                             {

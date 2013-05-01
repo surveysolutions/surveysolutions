@@ -11,7 +11,7 @@
     var sortData = undefined;
     var pageSize = @Model.PageSize;
     var chart;
-    var filterUser = '@Model.User.Id';
+    var filterUser = @(Model.User==null? "null":Model.User.Id.ToString());
     $(document).ready(function() {
         $('#filterUser').editable().on('save', function(e, params) {
             filterUser = params.newValue;
@@ -46,11 +46,10 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("TableData", "Survey")",
-                data: JSON.stringify({ UserId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+            data: JSON.stringify({ InterviwerId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
-                        debugger;
                         $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
                         $('#paging').html($(response).find('#paging').html());
                         var parsedHTML = response.replace(/script/gi, 'rickscript'); 
@@ -83,7 +82,7 @@
                   data-type="select" 
                   data-source="@Url.Action("UsersJson", "User")"
                   data-prepend='All'             
-                  data-original-title="Select user">@this.Model.User.Name</a> </h2>
+                  data-original-title="Select user">@(this.Model.User==null?"All":Model.User.Name)</a> </h2>
 <div id="questionnaireTable">
     @this.Html.Partial("_Table", this.Model)
 </div>

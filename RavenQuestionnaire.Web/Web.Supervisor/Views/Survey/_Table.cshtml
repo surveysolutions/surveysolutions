@@ -4,7 +4,7 @@
 @model IndexView
 @{
     Guid? userKey = null;
-    if (Model.User.Id != Guid.Empty)
+    if (Model.User!=null)
     {
         userKey = Model.User.Id;
     }
@@ -26,7 +26,7 @@
             @foreach (var collect in Model.Items.Skip((Model.Page - 1) * Model.PageSize).Take(Model.PageSize))
             {
                 <tr>
-                    <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, userId = userKey })
+                    <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, interviewerId = userKey })
                     </td>
                     @foreach (var it in Model.Headers)
                     {
@@ -40,7 +40,7 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, status = status.PublicId, userId = userKey })
+                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, status = status.PublicId, interviewerId = userKey })
                             }
                             else
                             {
@@ -53,7 +53,7 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true", userId = userKey })
+                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true", interviewerId = userKey })
                             }
                             else
                             {
