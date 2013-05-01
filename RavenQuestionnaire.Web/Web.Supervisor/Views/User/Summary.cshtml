@@ -6,7 +6,7 @@
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    var filterTemplate = '@Model.Template.TemplateId';
+    var filterTemplate = @(Model.Template==null? "null":Model.Template.TemplateId.ToString());
     $(document).ready(function() {
         
         $('#filter').editable().on('save', function(e, params) {

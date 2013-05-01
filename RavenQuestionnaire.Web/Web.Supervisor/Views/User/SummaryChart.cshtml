@@ -79,7 +79,7 @@ barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
         $('#switcher button').each(function(i, el) {
             var self = this;
             $(self).click(function() {
-                var id = $(self).attr('QuestionnaireId');
+                var id = $(self).attr('Id');
                 if (!$(self).hasClass(active)) {
                     $("#switcher .btn").removeClass(active);
                     $(self).addClass(active);
