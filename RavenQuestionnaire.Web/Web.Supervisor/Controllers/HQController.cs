@@ -163,11 +163,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult GotoBrowser()
-        {
-            return this.RedirectToAction("Index");
-        }
-
         public ActionResult Status(Guid? statusId)
         {
             ViewBag.ActivePage = MenuItem.Statuses;

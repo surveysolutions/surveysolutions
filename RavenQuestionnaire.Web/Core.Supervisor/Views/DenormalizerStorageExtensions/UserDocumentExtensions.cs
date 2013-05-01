@@ -48,7 +48,7 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
                 return Enumerable.Empty<UserDocument>();
 
             if (viewer.IsHq())
-                return users.Query(u => u.Roles.Contains(UserRoles.Operator));
+                return users.Query(u => u.IsInterviewer());
             else if (viewer.IsSupervisor())
                 return
                     users.Query(u => u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey);
