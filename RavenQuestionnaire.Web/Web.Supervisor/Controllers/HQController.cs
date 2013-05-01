@@ -1,12 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyController.cs" company="World bank">
-//   2012
+// <copyright file="HQController.cs" company="">
+//   
 // </copyright>
-// <summary>
-//   Defines the SurveyController type.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -26,29 +22,30 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
-    using Main.Core.View.User;
-
-    using NLog;
 
     using Ncqrs.Commanding.ServiceModel;
+
+    using NLog;
 
     using Questionnaire.Core.Web.Helpers;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
-    using CompleteQuestionnaireViewInputModel = Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireViewInputModel;
+    using UserView = Main.Core.View.User.UserView;
+    using UserViewInputModel = Main.Core.View.User.UserViewInputModel;
 
     /// <summary>
-    /// Responsible for display surveys and statistic info about surveys
+    ///     The hq controller.
     /// </summary>
-    [Authorize(Roles = "Supervisor")]
-    public class SurveyController : BaseController
+    [Authorize(Roles = "Headquarter")]
+    public class HQController: BaseController
     {
-        #region Constructor
+         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyController"/> class.
@@ -62,7 +59,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="provider">
         /// The provider.
         /// </param>
-        public SurveyController(
+        public HQController(
             IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider)
             : base(viewRepository, commandService, provider)
         {

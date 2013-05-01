@@ -1,23 +1,27 @@
-﻿@using Web.Supervisor.Models
+﻿@using Core.Supervisor.Views.Index
 @using ClientDependency.Core.Mvc
-@model Core.Supervisor.Views.Summary.SummaryView
-
-@{Html.RequiresJs("plotSettings.js", "Scripts", 70);}
+@model IndexView
+@{
+    this.ViewBag.Title = "Surveys";
+}
+@{
+    Html.RequiresJs("plotSettings.js", "Scripts", 70);
+}
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    var filterTemplate = @(Model.Template==null? "null":Model.Template.TemplateId.ToString());
+    var chart;
+    var filterUser = @(Model.User==null? "null":Model.User.Id.ToString());
     $(document).ready(function() {
-        
-        $('#filter').editable().on('save', function(e, params) {
-            filterTemplate = params.newValue;
+        $('#filterUser').editable().on('save', function(e, params) {
+            filterUser = params.newValue;
             sortData = [{ Field: "Title", Direction: "Asc" }];
             getTablePage(sortData, 1);
         });
 
         makeSortable();
         onPagingClick();
-        
+
         init();
     });
 
@@ -32,7 +36,7 @@
 
     function onPagingClick() {
         $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
-             var page = getParameterByName($(this).attr('href'), "page");
+            var page = getParameterByName($(this).attr('href'), "page");
             getTablePage(sortData, page === "" ? 1 : page * 1);
             return false;
         });
@@ -41,8 +45,8 @@
     function getTablePage(data, page) {
         $.ajax({
                 type: "POST",
-                url: "@Url.Action("_SummaryData", "User")",
-                data: JSON.stringify({TemplateId: filterTemplate, SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
+                url: "@Url.Action("TableData", "HQ")",
+            data: JSON.stringify({ InterviwerId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
@@ -51,11 +55,10 @@
                         var parsedHTML = response.replace(/script/gi, 'rickscript'); 
                         $(parsedHTML).find('rickscript').each(function (index, domEle) {
                             if (!$(this).attr('src')) {
-                                eval($(this).text()); 
+                                eval($(this).text()); //feeling lucky execute it
                             }
                         });
                         init();
-                        
                         onPagingClick();
                     }
                 }
@@ -72,14 +75,19 @@
         else
             return decodeURIComponent(results[1].replace( /\+/g , " "));
     }
+    
 </script>
-<h2 class="sinle-line-header">Interviewers and Questionnaire Statuses. Filtered by Survey: <a href="#" id="filter" 
+<h2>Surveys and Questionnaire Statuses. Filtered by Interviewer: <a href="#" id="filterUser" 
                   data-placement="bottom" 
                   data-type="select" 
-                  data-source="@Url.Action("Templates", "Survey")"
+                  data-source="@Url.Action("UsersJson", "HQ")"
                   data-prepend='All'             
-                  data-original-title="Select template">@(this.Model.Template==null?"All":this.Model.Template.Title)</a> </h2>
-
+                  data-original-title="Select user">@(this.Model.User==null?"All":Model.User.Name)</a> </h2>
 <div id="questionnaireTable">
-    @this.Html.Partial("_SummaryTable", this.Model)
+    @this.Html.Partial("_Table", this.Model)
 </div>
+
+
+
+
+

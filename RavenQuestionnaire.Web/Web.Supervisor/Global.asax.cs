@@ -67,8 +67,6 @@ namespace Web.Supervisor
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
-            routes.MapRoute("HeadquarterDashboard", "hqboard", new {controller = "Dashboard", action = "Index"});
-
             routes.MapRoute(
                 "Default", 
                 "{controller}/{action}/{id}", 

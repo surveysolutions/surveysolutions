@@ -16,7 +16,7 @@
             @Html.Hidden("PublicKey", item.PublicKey)
             <label class="checkbox" for="@ViewData.TemplateInfo.GetFullHtmlFieldId("Selected")">
                 @Html.CheckBox("Selected", item.Selected, settings)
-                @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/_{0}.cshtml", item.AnswerType), item); }
+                @{ Html.RenderPartial(string.Format("Answer/_{0}", item.AnswerType), item); }
             </label>
         }
     }

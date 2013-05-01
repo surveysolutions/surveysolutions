@@ -16,7 +16,7 @@
 <div class="@bodyClass question row-fluid" id="@questionId">
     <div class="span7">
         @Html.Hidden("QuestionType", Model.QuestionType)
-        @{ Html.RenderPartial(string.Format("~/Views/Survey/AnswerList/_{0}.cshtml", Enum.GetName(typeof(QuestionType), Model.QuestionType)), Model); }
+        @{ Html.RenderPartial(string.Format("~/Views/Shared/AnswerList/_{0}.cshtml", Enum.GetName(typeof(QuestionType), Model.QuestionType)), Model); }
         @Html.ValidationMessage("AnswerValue")
         @Html.Hidden("PublicKey", Model.PublicKey)
     </div>
