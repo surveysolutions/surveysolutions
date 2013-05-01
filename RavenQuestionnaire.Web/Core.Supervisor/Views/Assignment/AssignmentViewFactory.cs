@@ -91,9 +91,9 @@ namespace Core.Supervisor.Views.Assignment
 
             view.Status =  SurveyStatus.Unknown;
 
-            if (input.Statuses != null && input.Statuses.Count > 0)
+            if (input.StatusId.HasValue)
             {
-                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
+                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
             }
 
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId

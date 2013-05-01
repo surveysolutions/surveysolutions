@@ -49,12 +49,19 @@ namespace Core.Supervisor.Views.Assignment
         {
         }
 
-        public AssignmentInputModel(Guid? templateId, Guid? interviewerId,ICollection<Guid> statuses, bool isNotAssigned)
+        public AssignmentInputModel(Guid? templateId, Guid? interviewerId, int? page,
+                                    int? pageSize,
+                                    List<OrderRequestItem> sortOrder, Guid? status, bool isNotAssigned)
         {
             this.TemplateId = templateId;
-            this.Statuses = statuses;
+            this.StatusId = status;
             this.IsNotAssigned = isNotAssigned;
             this.InterviewerId = interviewerId;
+            if (page.HasValue)
+                this.Page = page.Value;
+            if (pageSize.HasValue)
+                this.PageSize = pageSize.Value;
+            this.Orders = sortOrder;
         }
 
 
@@ -80,7 +87,7 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// Gets or sets Statuses.
         /// </summary>
-        public ICollection<Guid> Statuses { get; set; }
+        public Guid? StatusId { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether IsNotAssigned.

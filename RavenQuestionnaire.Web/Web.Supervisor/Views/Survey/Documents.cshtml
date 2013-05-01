@@ -14,9 +14,9 @@
 }
 <script type="text/javascript">
     var sortData = undefined;
-    var userFilter = @(Model.User==null? "null":Model.User.Id.ToString()),
-        statusFilter = @(Model.Status.PublicId==SurveyStatus.Unknown.PublicId? "null":Model.Status.PublicId.ToString()), 
-        templateFilter =  @(Model.Template==null? "null":Model.Template.TemplateId.ToString());
+    var userFilter = @Html.Raw(Model.User==null? "null":"'"+Model.User.Id.ToString()+"'"),
+        statusFilter = @Html.Raw(Model.Status.PublicId==SurveyStatus.Unknown.PublicId? "null":"'"+Model.Status.PublicId.ToString()+"'"), 
+        templateFilter =  @Html.Raw(Model.Template==null? "null":"'"+Model.Template.TemplateId.ToString()+"'");
     var withHeaders = false;
     var pageSize = @Model.PageSize;
     $(document).ready(function() {
@@ -110,7 +110,7 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("AssignmentViewTable", "Survey")",
-            data: JSON.stringify({ templateId: templateFilter, interviewerId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+            data: JSON.stringify({ templateId: templateFilter, InterviwerId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {

@@ -192,18 +192,21 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
-
-        public ActionResult Documents(Guid? templateId, Guid? interviewerId , ICollection<Guid> status, bool? isNotAssigned)
+        public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
             var inputModel = new AssignmentInputModel(
-                                       templateId,
-                                       interviewerId,
-                                       status,
-                                       isNotAssigned ?? false);
+                templateId,
+                interviewerId, null, null, null,
+                status,
+                isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
+            var users =
+                this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                    {
+                        SupervisorId = user.Id
+                    });
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             return this.View(model);
         }
@@ -618,11 +621,11 @@ namespace Web.Supervisor.Controllers
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(
                 data.TemplateId,
-                data.InterviwerId,/*
+                data.InterviwerId,
                 data.Pager.Page,
                 data.Pager.PageSize,
-                data.SortOrder,*/
-                data.StatusId.HasValue ? new List<Guid> {data.StatusId.Value} : new List<Guid>(),
+                data.SortOrder,
+                data.StatusId,
                 false);
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);
