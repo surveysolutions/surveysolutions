@@ -215,7 +215,7 @@ namespace Web.Supervisor.Controllers
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
-                SupervisorId = data.ViewerId
+                SupervisorId = this.GlobalInfo.GetCurrentUser().Id
             };
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.PartialView("_Table", model);
@@ -282,7 +282,7 @@ namespace Web.Supervisor.Controllers
             var user = this.GlobalInfo.GetCurrentUser();
             var input = new InterviewersInputModel { PageSize = int.MaxValue, SupervisorId = user.Id };
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
-            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
         }
     }
 }

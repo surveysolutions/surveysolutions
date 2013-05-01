@@ -192,43 +192,13 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Display Assigments statistic
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="userId">
-        /// The user QuestionnaireId.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="isNotAssigned">
-        /// The isNotAssigned.
-        /// </param>
-        /// <returns>
-        /// Return Assigments page
-        /// </returns>
-        public ActionResult Documents(Guid? templateId, Guid? userId, AssignmentInputModel input, ICollection<Guid> status, bool? isNotAssigned)
+        
+        public ActionResult Documents(Guid? templateId, Guid? userId,ICollection<Guid> status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
-            var inputModel = input == null
-                                 ? new AssignmentInputModel()
-                                     {
-                                         TemplateId = templateId.HasValue ? templateId.Value : Guid.Empty,
-                                         Statuses = status,
-                                         InterviewerId = userId.HasValue ? userId.Value : Guid.Empty
-                                     }
-                                 : new AssignmentInputModel(
-                                       templateId.HasValue ? templateId.Value : Guid.Empty,
-                                       userId.HasValue ? userId.Value : Guid.Empty,
-                                       input.Page,
-                                       input.PageSize,
-                                       input.Orders,
+            var inputModel = new AssignmentInputModel(
+                                       templateId,
+                                       userId,
                                        status,
                                        isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
@@ -351,9 +321,9 @@ namespace Web.Supervisor.Controllers
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
             {
-                Value = item.Id.ToString(),
+                Value = item.QuestionnaireId.ToString(),
                 Text = item.Login,
-                Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
+                Selected = (model.Responsible != null && model.Responsible.Id == item.QuestionnaireId) || (model.Responsible == null && item.QuestionnaireId == Guid.Empty)
             }).ToList();
             ViewBag.value = options;
             return this.View(model);
@@ -647,10 +617,10 @@ namespace Web.Supervisor.Controllers
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(
                 data.TemplateId,
-                data.InterviwerId,
+                data.InterviwerId,/*
                 data.Pager.Page,
                 data.Pager.PageSize,
-                data.SortOrder,
+                data.SortOrder,*/
                 data.StatusId.HasValue ? new List<Guid> {data.StatusId.Value} : new List<Guid>(),
                 false);
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(input);

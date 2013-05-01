@@ -4,7 +4,7 @@
 {
     <tr>
         <td>
-            <a href="@Url.Action("Index", "Survey", new { UserId = item.Id })">@item.Login</a>
+            <a href="@Url.Action("Index", "Survey", new { interviewerId = item.QuestionnaireId })">@item.Login</a>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CreationDate)
@@ -15,12 +15,12 @@
         <td>
             @if (item.IsLocked)
             {
-                <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new { id = item.Id })">
+                <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new { id = item.QuestionnaireId })">
                     <i class="icon icon-lock icon-white"></i>Unlock</a>
             }
             else
             {
-                <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new { id = item.Id })">
+                <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new { id = item.QuestionnaireId })">
                     <i class="icon icon-lock icon-white"></i>Lock</a>
             }
         </td>

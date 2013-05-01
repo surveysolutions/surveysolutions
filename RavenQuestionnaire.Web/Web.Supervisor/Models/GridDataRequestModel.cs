@@ -25,8 +25,6 @@ namespace Web.Supervisor.Models
 
         public PagerData Pager { get; set; }
 
-        public Guid ViewerId { get; set; }
-
         public Guid? TemplateId { get; set; }
         
         public Guid? StatusId { get; set; }
