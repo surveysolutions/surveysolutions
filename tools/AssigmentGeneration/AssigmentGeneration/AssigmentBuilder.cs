@@ -62,7 +62,7 @@ namespace AssigmentGeneration
             string result =
                 JsonConvert.SerializeObject(data, Formatting.None, settings);
 
-            zipFile.AddEntry("backup.txt", result);
+            zipFile.AddEntry("backup.txt", result, Encoding.UTF8);
 
             zipFile.Save("assigmentdata.capi");
         }
@@ -106,7 +106,15 @@ namespace AssigmentGeneration
             {
                 var question =
                     result.FirstOrDefault<ICompleteQuestion>(q => q.StataExportCaption == assigmentValues[0][i]);
-                question.SetAnswer(null, values[i]);
+                Guid possibleOption;
+                if (Guid.TryParse(values[i], out possibleOption))
+                {
+                    question.SetAnswer(new List<Guid> { possibleOption }, values[i]);
+                }
+                else
+                {
+                    question.SetAnswer(null, values[i]);
+                }
             }
             return result;
         }
