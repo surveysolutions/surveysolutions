@@ -5,6 +5,7 @@ using Android.Views;
 using Android.Widget;
 using CAPI.Android.Controls.Statistics;
 using CAPI.Android.Core.Model.ViewModel.Statistics;
+using CAPI.Android.Extensions;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Entities.SubEntities;
 
@@ -167,8 +168,8 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
                     Responsible = CapiApplication.Membership.CurrentUser
                 };
             CapiApplication.CommandService.Execute(command);
+        //    this.Activity.ClearAllBackStack<DashboardActivity>();
             this.Activity.Finish();
-            
         }
 
         protected override void OnScreenChanged(Events.ScreenChangedEventArgs evt)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using CAPI.Android.Core.Model.ViewModel.Login;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View.User;
@@ -10,8 +11,8 @@ namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IAuthentication
     {
-        private readonly IDenormalizerStorage<UserView> _documentStorage;
-        public AndroidAuthentication(IDenormalizerStorage<UserView> documentStorage)
+        private readonly IDenormalizerStorage<LoginDTO> _documentStorage;
+        public AndroidAuthentication(IDenormalizerStorage<LoginDTO> documentStorage)
         {
             _documentStorage = documentStorage;
         }
@@ -35,10 +36,13 @@ namespace CAPI.Android.Core.Model.Authorization
                 throw new InvalidOperationException("please logoff first");
             try
             {
-                UserView user =
-                    _documentStorage.Query().FirstOrDefault(
+                var hash = SimpleHash.ComputeHash(password);
+
+                LoginDTO user =
+                    _documentStorage.Query(
                         u =>
-                        u.UserName.ToLower() == userName.ToLower() && u.Password == SimpleHash.ComputeHash(password));
+                        u.Login == userName/* && u.Password == hash && !u.IsLocked*/)
+                                    .FirstOrDefault();
                 
                 
               /*  UserView user =
@@ -47,14 +51,14 @@ namespace CAPI.Android.Core.Model.Authorization
                             userName.ToLower(),
                             // bad hack due to key insensitivity of login
                             SimpleHash.ComputeHash(password)));*/
-                if (user == null || user.IsLocked)
+                if (user == null || user.Password!=hash || user.IsLocked)
                     return false;
 
-                currentUser = new UserLight(user.PublicKey, user.UserName);
+                currentUser = new UserLight(Guid.Parse(user.Id), user.Login);
               //  currentUser = new UserLight(Guid.NewGuid(), userName);
                 return true;
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

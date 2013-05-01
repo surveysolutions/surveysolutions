@@ -6,6 +6,10 @@
 //   The solid persistent denormalizer.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Collections.Generic;
+using System.Linq.Expressions;
+
 namespace Main.DenormalizerStorage.SolidDenormalizer
 {
     using System;
@@ -172,6 +176,13 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         {
             IQueryable<T> result = null;
             this.ThreadSafe(() => { result = this.Hash.Values.AsQueryable(); });
+            return result;
+        }
+
+        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        {
+            IEnumerable<T> result = null;
+            this.ThreadSafe(() => { result = this.Hash.Values.Where(predExpr.Compile()); });
             return result;
         }
 

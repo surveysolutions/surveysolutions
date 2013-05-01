@@ -46,23 +46,18 @@ namespace Core.Supervisor.Views.Interviewer
         /// <param name="supervisorId">
         /// The supervisor id.
         /// </param>
-        /// <param name="supervisorName">
-        /// The supervisor name.
-        /// </param>
         public InterviewersView(
             int page, 
             int pageSize, 
             int totalCount, 
             IEnumerable<InterviewersItem> items, 
-            Guid supervisorId, 
-            string supervisorName)
+            Guid supervisorId)
         {
             this.Page = page;
             this.TotalCount = totalCount;
             this.PageSize = pageSize;
             this.Items = items;
             this.SupervisorId = supervisorId;
-            this.SupervisorName = supervisorName;
         }
 
         #endregion
@@ -104,11 +99,6 @@ namespace Core.Supervisor.Views.Interviewer
         /// Gets the supervisor id.
         /// </summary>
         public Guid SupervisorId { get; private set; }
-
-        /// <summary>
-        /// Gets the supervisor name.
-        /// </summary>
-        public string SupervisorName { get; private set; }
 
         /// <summary>
         /// Gets the total count.

@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.View.User;
 
@@ -24,9 +25,7 @@ namespace CAPI.Android
     using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
-    using CAPI.Android.Syncronization;
     using CAPI.Android.Utils;
-
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
@@ -222,16 +221,12 @@ namespace CAPI.Android
         private bool CheckSyncPoint()
         {
             string syncPoint = SettingsManager.GetSyncAddressPoint();
-
-            Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
-                         && (test.Scheme == "http" || test.Scheme == "https");
-
-            if (!valid)
+            
+            if (!SettingsManager.ValidateAddress(syncPoint))
             {
                 var builder = new AlertDialog.Builder(this);
-                builder.SetTitle("Incorrect Address Point");
-                builder.SetMessage("Please set in settings");
+                builder.SetTitle("Incorrect Address Point.");
+                builder.SetMessage("Please set in settings.");
                 AlertDialog dialog = builder.Create();
                 dialog.Show();
                 return false;
@@ -247,38 +242,37 @@ namespace CAPI.Android
         /// </param>
         private void DoSync(PumpimgType pumpingType)
         {
+            this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
+
             if (!this.CheckSyncPoint())
             {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Sync point is set incorrect.";
                 return;
             }
 
             if (!NetworkHelper.IsNetworkEnabled(this))
             {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Network is not avalable.";
                 return;
             }
 
-            var progressDialog = new ProgressDialog(this);
-
-            progressDialog.SetTitle("Synchronizing");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            progressDialog.SetMessage("Initialyzing");
-            progressDialog.SetCancelable(false);
-
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
 
-            int currentProgress = 0;
+            var progressDialog = CreateDialog();
+            progressDialog.Show();
+
             ThreadPool.QueueUserWorkItem(
                 state =>
                     {
-                        this.RunOnUiThread(
+                        /*this.RunOnUiThread(
                             () =>
                                 {
                                     progressDialog.Show();
                                     progressDialog.IncrementProgressBy(1);
                                 });
-
+*/
                         var result = new SyncronizationStatus();
-                        currentProgress = result.Progress;
+                        int currentProgress = result.Progress;
 
                         ThreadPool.QueueUserWorkItem(
                             proc =>
@@ -337,7 +331,7 @@ namespace CAPI.Android
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
-                                                          ? "Process is finished"
+                                                          ? "Process is finished."
                                                           : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
@@ -358,7 +352,6 @@ namespace CAPI.Android
             {
                 var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
                 manager.StartPump();
-                CapiApplication.SaveProjections();
                 return true;
             }
             catch (Exception ex)
@@ -369,7 +362,19 @@ namespace CAPI.Android
             }
         }
 
-       
+
+        private ProgressDialog CreateDialog()
+        {
+            var progressDialog = new ProgressDialog(this);
+
+            progressDialog.SetTitle("Synchronizing");
+            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            progressDialog.SetMessage("Initialyzing");
+            progressDialog.SetCancelable(false);
+
+            return progressDialog;
+        }
+
 
         /// <summary>
         ///     The pull.
@@ -411,7 +416,7 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                    CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);

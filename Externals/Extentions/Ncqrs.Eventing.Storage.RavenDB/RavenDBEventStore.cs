@@ -285,14 +285,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <returns>
         /// The <see cref="DocumentConvention"/>.
         /// </returns>
-        private static DocumentConvention CreateConventions()
+        public static DocumentConvention CreateConventions()
         {
-            return new DocumentConvention
-                {
-                    JsonContractResolver = new PropertiesOnlyContractResolver(), 
-                    FindTypeTagName = x => "Events"
-                    // NewDocumentETagGenerator = GenerateETag
-                };
+           var docStore = new DocumentConvention
+               {
+                   JsonContractResolver = new PropertiesOnlyContractResolver(),
+                   FindTypeTagName = x => "Events"
+                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+               };
+            return docStore;
         }
 
         /*/// <summary>

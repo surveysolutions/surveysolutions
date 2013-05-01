@@ -154,6 +154,13 @@
     <Compile Include="Views\Timeline\TimelineView.cs" />
     <Compile Include="Views\Timeline\TimelineViewFactory.cs" />
     <Compile Include="Views\Timeline\TimelineViewInputModel.cs" />
+    <Compile Include="Views\User\UserListItem.cs" />
+    <Compile Include="Views\User\UserListView.cs" />
+    <Compile Include="Views\User\UserListViewFactory.cs" />
+    <Compile Include="Views\User\UserListViewInputModel.cs" />
+    <Compile Include="Views\User\UserView.cs" />
+    <Compile Include="Views\User\UserViewFactory.cs" />
+    <Compile Include="Views\User\UserViewInputModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

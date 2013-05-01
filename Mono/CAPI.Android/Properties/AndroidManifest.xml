@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="preferExternal" package="CAPI.Android">
-  <uses-sdk android:targetSdkVersion="14" />
-  <application android:label="CAPI" android:icon="@drawable/capi" android:theme="@android:style/Theme.DeviceDefault.Light" android:largeHeap="true">
+  <application android:label="CAPI" android:icon="@drawable/capi" android:theme="@android:style/Theme.DeviceDefault.Light" android:largeHeap="true" android:debuggable="true">
   </application>
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.READ_CONTACTS" />

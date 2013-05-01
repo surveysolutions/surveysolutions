@@ -1,8 +1,10 @@
-﻿@using Web.Supervisor.Utils
+﻿@using Main.Core.Entities.SubEntities
+@using Web.Supervisor.Utils
 @model Web.Supervisor.Models.SupervisorModel
 
 @{
     ViewBag.Title = "CreateSupervisor";
+    var roles = UserRoles.Supervisor.ToSelectList();
 }
 
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"> </script>
@@ -21,6 +23,10 @@
         @Html.TextBoxFor(m => m.Name, new { @class = "input-block-level", placeholder = "Name" })
         <span class="help-inline">@Html.ValidationMessageFor(m => m.Name)</span>
 
+        @Html.LabelFor(m => m.Role)        
+        @Html.DropDownListFor(m => m.Role, roles, new { @class = "input-block-level", placeholder = "Name" })
+        <span class="help-inline">@Html.ValidationMessageFor(m => m.Role)</span>
+        
         <p class="pull-right">
             <button class="btn btn-large btn-primary " type="submit">Create</button>
         </p>

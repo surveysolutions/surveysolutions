@@ -39,13 +39,14 @@ namespace CAPI.Androids.Core.Model.Tests
         }
 
         [Test]
-        public void SetQuestionStatus_QuestionISAbsent_ExeptionThrown()
+        public void SetQuestionStatus_QuestionISAbsent_ExeptionISNotThrown()
         {
             var questions = new Dictionary<ItemPublicKey, QuestionViewModel>();
 
             CompleteQuestionnaireViewTestable target = new CompleteQuestionnaireViewTestable(questions);
-            Assert.Throws<KeyNotFoundException>(
-                () => target.SetQuestionStatus(new ItemPublicKey(Guid.NewGuid(), null), true));
+            target.SetQuestionStatus(new ItemPublicKey(Guid.NewGuid(), null), true);
+          /*  Assert.Throws<KeyNotFoundException>(
+                () => target.SetQuestionStatus(new ItemPublicKey(Guid.NewGuid(), null), true));*/
         }
         [Test]
         public void SetQuestionStatus_QuestionISPresent_StatusIsChanged()

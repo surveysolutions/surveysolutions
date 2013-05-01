@@ -107,6 +107,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ncqrs.Portable", "..\Extern
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.SharedKernel.Structures", "..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj", "{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Questionnaire.Events", "..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj", "{E188A976-E54A-412B-B7B3-3B28E688D4C7}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RavenQuestionnaire.Web.vsmdi
@@ -738,6 +740,36 @@ Global
 		{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C96EA28A-CDC4-468B-B111-D54B4C6C00C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-devKh|Any CPU.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-devKh|Any CPU.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-devKh|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-devKh|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-devKh|x86.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main|Any CPU.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main|Any CPU.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main|x86.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main-Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main-Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Deploy-Main-Debug|x86.ActiveCfg = Debug|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E188A976-E54A-412B-B7B3-3B28E688D4C7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

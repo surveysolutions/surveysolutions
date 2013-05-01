@@ -33,7 +33,7 @@ namespace Main.Core.Utility
         public static string GetOrderRequestString(List<OrderRequestItem> orders)
         {
             return string.Join(
-                ",", orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? string.Empty : "Desc")));
+                ",", orders.Select(o => o.Field + (o.Direction == OrderDirection.Asc ? string.Empty : " Desc")));
         }
 
         /// <summary>

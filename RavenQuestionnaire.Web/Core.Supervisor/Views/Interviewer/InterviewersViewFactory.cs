@@ -11,6 +11,7 @@ using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Interviewer
 {
+    using System;
     using System.Linq;
     using Main.Core.Documents;
     using Main.Core.Entities;
@@ -72,23 +73,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            int count =
-                this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.Supervisor.Id);
-            if (count == 0)
-            {
-                return new InterviewersView(
-                    input.Page, 
-                    input.PageSize, 
-                    count, 
-                    new InterviewersItem[0], 
-                    input.Supervisor.Id, 
-                    input.Supervisor.Name);
-            }
+            Func<UserDocument, bool> query =
+                x => x.Supervisor != null && x.Supervisor.Id == input.Id;
 
-            IQueryable<UserDocument> query =
-                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.Supervisor.Id);
-            IQueryable<InterviewersItem> items =
-                query.Select(
+            var queryResult = this.users.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+
+            var items = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).Select(
                     x =>
                     new InterviewersItem(
                         x.PublicKey, 
@@ -96,16 +86,9 @@ namespace Core.Supervisor.Views.Interviewer
                         x.Email, 
                         x.CreationDate, 
                         x.IsLocked));
-            if (input.Orders.Count > 0)
-            {
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                            ? items.OrderBy(input.Orders[0].Field)
-                            : items.OrderByDescending(input.Orders[0].Field);
-            }
-
-            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            
             return new InterviewersView(
-                input.Page, input.PageSize, count, items, input.Supervisor.Id, input.Supervisor.Name);
+                input.Page, input.PageSize, queryResult.Count(), items, input.Id);
         }
 
         #endregion
