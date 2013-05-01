@@ -407,6 +407,7 @@
     </Content>
     <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\main.css" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
