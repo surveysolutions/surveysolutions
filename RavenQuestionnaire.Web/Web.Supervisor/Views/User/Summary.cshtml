@@ -78,7 +78,7 @@
                   data-type="select" 
                   data-source="@Url.Action("Templates", "Survey")"
                   data-prepend='All'             
-                  data-original-title="Select template">@this.Model.Template.Title</a> </h2>
+                  data-original-title="Select template">@(this.Model.Template==null?"All":this.Model.Template.Title)</a> </h2>
 
 <div id="questionnaireTable">
     @this.Html.Partial("_SummaryTable", this.Model)
