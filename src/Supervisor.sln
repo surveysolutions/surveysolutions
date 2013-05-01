@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{25D3F33B-024C-45AA-B955-529A7EA4F5E9}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τests", "Τests", "{25D3F33B-024C-45AA-B955-529A7EA4F5E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{CE728F59-FCC2-480A-88AE-D9C315D0A61F}"
 EndProject
