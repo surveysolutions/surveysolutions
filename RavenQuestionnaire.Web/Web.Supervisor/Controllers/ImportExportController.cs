@@ -219,6 +219,7 @@ namespace Web.Supervisor.Controllers
         /// <exception cref="HttpException">
         /// Not found exception
         /// </exception>
+        [Authorize(Roles = "Headquarter")]
         public void GetExportedDataAsync(Guid id, string type)
         {
             if ((id == null) || (id == Guid.Empty) || string.IsNullOrEmpty(type))
@@ -606,9 +607,5 @@ namespace Web.Supervisor.Controllers
         }
 
         #endregion
-
-
-       
-
     }
 }
