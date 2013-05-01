@@ -251,11 +251,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                IDocumentQuery<StoredEvent> snapshoots = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
-                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId));
-                if (snapshoots.Any())
+                var snapshoot = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
+                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId)).OrderByDescending(y => y.EventSequence).FirstOrDefault();
+                if (snapshoot!=null)
                 {
-                    return ToCommittedEvent(snapshoots.Last());
+                    return ToCommittedEvent(snapshoot);
                 }
             }
             return null;
