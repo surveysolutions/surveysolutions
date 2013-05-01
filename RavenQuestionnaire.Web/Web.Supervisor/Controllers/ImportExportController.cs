@@ -107,7 +107,7 @@ namespace Web.Supervisor.Controllers
                         var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
 
                         this.AsyncManager.Parameters["result"] =
-                            process.Export("Export DB on Supervisor in zip file");
+                            process.Export("Export DB on ViewerId in zip file");
                     }
                     catch (Exception e)
                     {
@@ -364,7 +364,7 @@ namespace Web.Supervisor.Controllers
             {
                 var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
-                result = process.Export("Supervisor export AR events");
+                result = process.Export("ViewerId export AR events");
             }
             catch (Exception ex)
             {
@@ -385,7 +385,7 @@ namespace Web.Supervisor.Controllers
             {
                 var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
-                result = process.GetListOfAggregateRoots("Supervisor export AR events");
+                result = process.GetListOfAggregateRoots("ViewerId export AR events");
             }
             catch (Exception ex)
             {
@@ -467,7 +467,7 @@ namespace Web.Supervisor.Controllers
             {
                 var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
-                result = process.Export("Supervisor export AR events", key, ln);
+                result = process.Export("ViewerId export AR events", key, ln);
             }
             catch (Exception ex)
             {
@@ -499,7 +499,7 @@ namespace Web.Supervisor.Controllers
             {
                 var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
 
-                result = process.GetAR("Supervisor export AR events", key,rootType, ln);
+                result = process.GetAR("ViewerId export AR events", key,rootType, ln);
             }
             catch (Exception ex)
             {

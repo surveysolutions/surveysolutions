@@ -151,20 +151,16 @@ namespace Web.Supervisor.Controllers
 
             return this.Json(new { status = "ok" });
         }
-
-        /// <summary>
-        /// Display statistic surveys on page
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Return index page
-        /// </returns>
-        public ActionResult Index(IndexInputModel input)
+        
+        public ActionResult Index(Guid? interviewerId)
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model = this.Repository.Load<IndexInputModel, IndexView>(input);
+            var model =
+                this.Repository.Load<IndexInputModel, IndexView>(new IndexInputModel()
+                    {
+                        InterviewerId = interviewerId,
+                        ViewerId = GlobalInfo.GetCurrentUser().Id
+                    });
             ViewBag.GraphData = new InterviewerChartModel(model);
             return this.View(model);
         }
@@ -180,8 +176,8 @@ namespace Web.Supervisor.Controllers
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel()
                 {
-                    Supervisor = user,
-                    StatusId = statusId.HasValue ? statusId.Value : Guid.Empty
+                    ViewerId = user.Id,
+                    StatusId = statusId
                 });
             ViewBag.GraphData = new StatusChartModel(model);
             return this.View(model);
@@ -203,7 +199,7 @@ namespace Web.Supervisor.Controllers
         /// The id.
         /// </param>
         /// <param name="userId">
-        /// The user Id.
+        /// The user QuestionnaireId.
         /// </param>
         /// <param name="input">
         /// The input.
@@ -225,7 +221,7 @@ namespace Web.Supervisor.Controllers
                                      {
                                          TemplateId = templateId.HasValue ? templateId.Value : Guid.Empty,
                                          Statuses = status,
-                                         UserId = userId.HasValue ? userId.Value : Guid.Empty
+                                         InterviewerId = userId.HasValue ? userId.Value : Guid.Empty
                                      }
                                  : new AssignmentInputModel(
                                        templateId.HasValue ? templateId.Value : Guid.Empty,
@@ -238,7 +234,7 @@ namespace Web.Supervisor.Controllers
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
             var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
+            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             return this.View(model);
         }
 
@@ -342,7 +338,7 @@ namespace Web.Supervisor.Controllers
         /// The id.
         /// </param>
         /// <param name="tmptId">
-        /// The tmpt Id.
+        /// The tmpt QuestionnaireId.
         /// </param>
         /// <returns>
         /// Return Assign form
@@ -603,7 +599,7 @@ namespace Web.Supervisor.Controllers
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
                                 Orders = data.SortOrder,
-                                UserId = data.UserId
+                                InterviewerId = data.InterviwerId
                             };
             var model = this.Repository.Load<IndexInputModel, IndexView>(input);
             ViewBag.GraphData = new InterviewerChartModel(model);
@@ -628,7 +624,7 @@ namespace Web.Supervisor.Controllers
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
                 StatusId = data.StatusId,
-                Supervisor = user
+                ViewerId = user.Id
             };
             var model = this.Repository.Load<StatusViewInputModel, StatusView>(input);
             ViewBag.GraphData = new StatusChartModel(model);
@@ -648,14 +644,14 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.GlobalInfo.GetCurrentUser();
             var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
+            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             var input = new AssignmentInputModel(
-                data.Id,
-                data.UserId,
+                data.TemplateId,
+                data.InterviwerId,
                 data.Pager.Page,
                 data.Pager.PageSize,
                 data.SortOrder,
-                data.StatusId == Guid.Empty ? new List<Guid>() : new List<Guid> { data.StatusId },
+                data.StatusId.HasValue ? new List<Guid> {data.StatusId.Value} : new List<Guid>(),
                 false);
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);

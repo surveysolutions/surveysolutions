@@ -123,7 +123,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
-         [Authorize]
+        [Authorize]
         public ActionResult LockUser(Guid id)
         {
             CommandService.Execute(new LockUserCommand(id));
@@ -137,7 +137,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Interviewer summary view
         /// </returns>
-         [Authorize]
+        [Authorize]
         public ActionResult Summary()
         {
             ViewBag.ActivePage = MenuItem.Interviewers;
@@ -172,33 +172,10 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_SummaryTable", model);
         }
 
-        /// <summary>
-        /// Display user's statistics grouped by surveys and statuses
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Show statistics view if everything is ok
-        /// </returns>
-         [Authorize]
-        public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
+        [Authorize]
+        public ActionResult Statistics(InterviewerStatisticsInputModel input)
         {
-            var inputModel = input == null
-                ? new InterviewerStatisticsInputModel() { UserId = id }
-                : new InterviewerStatisticsInputModel()
-                                 {
-                                     Order = input.Order,
-                                     Orders = input.Orders,
-                                     PageSize = input.PageSize,
-                                     Page = input.Page,
-                                     UserId = id,
-                                     UserName = input.UserName
-                                 };
-            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(inputModel);
+            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
             return this.View(model);
         }
 
@@ -238,7 +215,7 @@ namespace Web.Supervisor.Controllers
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
-                SupervisorId = data.SupervisorId
+                SupervisorId = data.ViewerId
             };
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.PartialView("_Table", model);
@@ -263,7 +240,7 @@ namespace Web.Supervisor.Controllers
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
                 TemplateId = data.TemplateId,
-                UserId = data.UserId
+                InterviwerId = data.InterviwerId
             };
             var model = this.Repository.Load<InterviewerInputModel, InterviewerView>(input);
             return this.PartialView("_TableGroupByUser", model.Items[0]);
@@ -287,7 +264,7 @@ namespace Web.Supervisor.Controllers
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
-                UserId = data.UserId
+                InterviewerId = data.InterviwerId
             };
             var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
             return this.PartialView("_UserStatistics", model);

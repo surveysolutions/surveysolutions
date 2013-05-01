@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
+
 namespace Core.Supervisor.Views.Index
 {
     using System;
@@ -45,31 +47,12 @@ namespace Core.Supervisor.Views.Index
             this.Items = new List<IndexViewItem>();
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndexView"/> class.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalCount">
-        /// The total count.
-        /// </param>
-        /// <param name="items">
-        /// The items.
-        /// </param>
-        /// <param name="user">
-        /// The user.
-        /// </param>
         public IndexView(
-            int page, int pageSize, int totalCount, IEnumerable<IndexViewItem> items, UserDocument user)
+            int page, int pageSize,  IEnumerable<IndexViewItem> items, UserDocument user)
             : this()
         {
             this.User = user == null ? new UserLight(Guid.Empty, "All") : new UserLight(user.PublicKey, user.UserName);
             this.Page = page;
-            this.TotalCount = totalCount;
             this.PageSize = pageSize;
             this.Headers =
                 new SurveyGroupedByStatusHeader(
@@ -159,7 +142,9 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Gets and sets the total count.
         /// </summary>
-        public int TotalCount { get; set; }
+        public int TotalCount {
+            get { return Items.Count; }
+        }
 
         /// <summary>
         /// Gets User.
@@ -169,7 +154,28 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// Gets or sets Summary.
         /// </summary>
-        public IndexViewItem Summary { get; set; }
+        public IndexViewItem Summary
+        {
+            get
+            {
+                if (_summary == null)
+                {
+                    _summary = new IndexViewItem(
+                        Guid.Empty,
+                        "Summary",
+                        Items.Sum(x => x.Unassigned),
+                        Items.Sum(x => x.Total),
+                        Items.Sum(x => x.Initial),
+                        Items.Sum(x => x.Error),
+                        Items.Sum(x => x.Completed),
+                        Items.Sum(x => x.Approved),
+                        Items.Sum(x => x.Redo));
+                }
+                return _summary;
+            }
+        }
+
+        private IndexViewItem _summary;
 
         #endregion
     }

@@ -79,7 +79,7 @@
            var element = $(el);
            var toggler = element.attr("data-toggle-element");
            element.editable().on('save', function(e, params) {
-               element.attr('href', "@Url.Action("Index", "Survey")" + "?UserId=" + params.newValue);
+               element.attr('href', "@Url.Action("Index", "Survey")" + "?InterviewerId=" + params.newValue);
            });
            $(toggler).click(function(e) {
                e.stopPropagation();

@@ -106,15 +106,11 @@ namespace Core.Supervisor.Views.Index
         }
 
         /// <summary>
-        /// Gets or sets statistic filtres.
-        /// </summary>
-        public string Status { get; set; }
-
-        /// <summary>
         /// Gets or sets filter by user guid
         /// </summary>
-        public Guid UserId { get; set; }
-        
+        public Guid? InterviewerId { get; set; }
+
+        public Guid ViewerId { get; set; }
         #endregion
     }
 }

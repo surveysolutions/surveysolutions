@@ -77,7 +77,7 @@
         $('#switcher button').each(function(i, el) {
             var self = this;
             $(self).click(function() {
-                var id = $(self).attr('id');
+                var id = $(self).attr('QuestionnaireId');
                 if (!$(self).hasClass(active)) {
                     $("#switcher .btn").removeClass(active);
                     $(self).addClass(active);

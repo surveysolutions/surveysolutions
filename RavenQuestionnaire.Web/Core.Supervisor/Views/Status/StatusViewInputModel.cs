@@ -105,15 +105,11 @@ namespace Core.Supervisor.Views.Status
             }
         }
 
-        /// <summary>
-        /// Gets or sets filter by user guid
-        /// </summary>
-        public Guid StatusId { get; set; }
+        
+        public Guid? StatusId { get; set; }
 
-        /// <summary>
-        /// Gets or sets Supervisor.
-        /// </summary>
-        public UserLight Supervisor { get; set; }
+       
+        public Guid ViewerId { get; set; }
 
         #endregion
     }

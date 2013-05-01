@@ -12,7 +12,7 @@
                     $.ajax({
                             type: "POST",
                             url: "@Url.Action("_TableData", "User")",
-                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.View.Page , PageSize: @Model.View.PageSize }, SupervisorId:'@Model.View.SupervisorId' }),
+                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.View.Page , PageSize: @Model.View.PageSize }, SupervisorId:'@Model.View.ViewerId' }),
                             contentType: 'application/json, charset=utf-8',
                             statusCode: {
                                 200: function(response) {
@@ -47,6 +47,6 @@
 </div>
 
 <div>
-    <a class="btn btn-primary" href="@Url.Action("AddInterviewer", "Team", new { id = Model.View.SupervisorId })">
+    <a class="btn btn-primary" href="@Url.Action("AddInterviewer", "Team", new { id = Model.View.ViewerId })">
                      <i class="icon icon-user icon-white"></i>Add</a>
 </div>

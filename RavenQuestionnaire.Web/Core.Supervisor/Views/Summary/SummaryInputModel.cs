@@ -34,27 +34,21 @@ namespace Core.Supervisor.Views.Summary
         /// The _page size.
         /// </summary>
         private int _pageSize = 20;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SummaryInputModel"/> class.
-        /// </summary>
-        /// <param name="supervisor">
-        /// The supervisor.
-        /// </param>
-        public SummaryInputModel(UserLight supervisor)
+        
+        public SummaryInputModel(UserLight viewer)
         {
-            this.Supervisor = supervisor;
+            this.ViewerId = viewer.Id;
         }
 
         /// <summary>
-        /// Gets or sets Supervisor.
+        /// Gets or sets ViewerId.
         /// </summary>
-        public UserLight Supervisor { get; set; }
+        public Guid ViewerId { get; set; }
 
         /// <summary>
         /// Gets or sets TemplateId.
         /// </summary>
-        public Guid TemplateId { get; set; }
+        public Guid? TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the order.

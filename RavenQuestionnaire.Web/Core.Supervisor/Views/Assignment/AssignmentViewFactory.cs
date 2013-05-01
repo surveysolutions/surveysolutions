@@ -81,13 +81,13 @@ namespace Core.Supervisor.Views.Assignment
         public AssignmentView Load(AssignmentInputModel input)
         {
             var view = new AssignmentView(input.Page, input.PageSize, 0);
-            view.Template = input.TemplateId == Guid.Empty
+            view.Template = !input.TemplateId.HasValue
                             ? new TemplateLight(Guid.Empty, "Any")
-                            : this.templates.GetByGuid(input.TemplateId).GetTemplateLight();
+                            : this.templates.GetByGuid(input.TemplateId.Value).GetTemplateLight();
 
-            view.User = input.UserId == Guid.Empty
+            view.User = !input.InterviewerId.HasValue
                             ? new UserLight(Guid.Empty, "Anyone")
-                            : this.users.GetByGuid(input.UserId).GetUseLight();
+                            : this.users.GetByGuid(input.InterviewerId.Value).GetUseLight();
 
             view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
 
@@ -105,7 +105,7 @@ namespace Core.Supervisor.Views.Assignment
                 : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
                 .OrderByDescending(t => t.CreationDate);
 
-            if (input.TemplateId != Guid.Empty)
+            if (input.TemplateId.HasValue)
             {
                 items = items.Where(x => (x.TemplateId == input.TemplateId));
             }
@@ -114,12 +114,12 @@ namespace Core.Supervisor.Views.Assignment
             {
                 items = items.Where(t => t.Responsible == null);
             }
-            else if (input.UserId != Guid.Empty)
+            else if (input.InterviewerId.HasValue)
             {
-                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId);
+                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.InterviewerId);
             }
 
-            if (input.QuestionnaireId != Guid.Empty)
+            if (input.QuestionnaireId.HasValue)
             {
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             }
