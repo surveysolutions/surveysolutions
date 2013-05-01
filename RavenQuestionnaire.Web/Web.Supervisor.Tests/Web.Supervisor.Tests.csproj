@@ -68,9 +68,6 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-    <Prefer32Bit>false</Prefer32Bit>
-    <Prefer32Bit>false</Prefer32Bit>
-    <Prefer32Bit>false</Prefer32Bit>
   <ItemGroup>
     <Reference Include="Moq, Version=4.0.10827.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
