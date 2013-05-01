@@ -43,19 +43,6 @@ namespace Core.Supervisor.Views.Assignment
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentView"/> class.
-        /// </summary>
-        /// <param name="page">
-        ///   The page.
-        /// </param>
-        /// <param name="pageSize">
-        ///   The page size.
-        /// </param>
-        /// <param name="totalCount">
-        ///   The total count.
-        /// </param>
-        /// <param name="id"></param>
         public AssignmentView(int page, int pageSize, int totalCount)
         {
             this.Page = page;
@@ -76,7 +63,7 @@ namespace Core.Supervisor.Views.Assignment
             {
                 return;
             }
-            if (this.Template.TemplateId != Guid.Empty)
+            if (this.Template!=null)
             {
                 foreach (var question in
                     items.SelectMany(

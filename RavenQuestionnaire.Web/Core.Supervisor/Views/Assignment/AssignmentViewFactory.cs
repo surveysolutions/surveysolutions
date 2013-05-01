@@ -82,25 +82,21 @@ namespace Core.Supervisor.Views.Assignment
         {
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = !input.TemplateId.HasValue
-                            ? new TemplateLight(Guid.Empty, "Any")
+                            ? null
                             : this.templates.GetByGuid(input.TemplateId.Value).GetTemplateLight();
 
             view.User = !input.InterviewerId.HasValue
-                            ? new UserLight(Guid.Empty, "Anyone")
+                            ? null
                             : this.users.GetByGuid(input.InterviewerId.Value).GetUseLight();
 
-            view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
+            view.Status =  SurveyStatus.Unknown;
 
             if (input.Statuses != null && input.Statuses.Count > 0)
             {
-                var status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
-                if (status != SurveyStatus.Unknown)
-                {
-                    view.Status = status;
-                }
+                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
             }
-           
-            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == Guid.Empty
+
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
                 ? this.surveys.Query()
                 : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
                 .OrderByDescending(t => t.CreationDate);

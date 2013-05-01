@@ -14,9 +14,9 @@
 }
 <script type="text/javascript">
     var sortData = undefined;
-    var userFilter = "@(Model.User.Id)", 
-        statusFilter = "@(Model.Status.PublicId)", 
-        templateFilter = "@(Model.Template.TemplateId)";
+    var userFilter = @(Model.User==null? "null":Model.User.Id.ToString()),
+        statusFilter = @(Model.Status.PublicId==SurveyStatus.Unknown.PublicId? "null":Model.Status.PublicId.ToString()), 
+        templateFilter =  @(Model.Template==null? "null":Model.Template.TemplateId.ToString());
     var withHeaders = false;
     var pageSize = @Model.PageSize;
     $(document).ready(function() {
@@ -159,18 +159,19 @@
                   data-type="select" 
                   data-prepend='All'             
                   data-source="@Html.Raw(statuses)"
-                  data-original-title="Select status">@this.Model.Status.Name</a> by
+                  data-original-title="Select status">@(this.Model.Status.PublicId==SurveyStatus.Unknown.PublicId ?"All":this.Model.Status.Name)</a> by
     <a href="#" id="userFilter" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("UsersJson", "User")"
                   data-prepend='Anyone'             
-                  data-original-title="Select user">@this.Model.User.Name</a> in <a href="#" id="templateFilter" 
+       data-original-title="Select user">@(this.Model.User==null?"Anyone":Model.User.Name)</a> in 
+    <a href="#" id="templateFilter" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("Templates", "Survey")"
                   data-prepend='Any'             
-                  data-original-title="Select template">@(Model.Template.Title)</a>
+                  data-original-title="Select template">@(this.Model.Template==null?"Any":Model.Template.Title)</a>
     survey</h3>
 <div id="questionnaireTable">
     @Html.Partial("_TableGroup", Model)

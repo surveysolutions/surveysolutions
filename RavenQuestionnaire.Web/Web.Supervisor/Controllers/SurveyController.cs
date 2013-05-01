@@ -192,13 +192,13 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
-        
-        public ActionResult Documents(Guid? templateId, Guid? userId,ICollection<Guid> status, bool? isNotAssigned)
+
+        public ActionResult Documents(Guid? templateId, Guid? interviewerId , ICollection<Guid> status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
             var inputModel = new AssignmentInputModel(
                                        templateId,
-                                       userId,
+                                       interviewerId,
                                        status,
                                        isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
