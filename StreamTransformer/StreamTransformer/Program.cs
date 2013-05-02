@@ -58,7 +58,7 @@ namespace StreamTransformer
             // change to your store
             const string Url = "http://localhost:8080";
             var store = new DocumentStore { Url = Url };
-            var eventStore = new RavenDBEventStore(store);
+            var eventStore = new RavenDBEventStore(store, 1024);
             store.Initialize();
 
             NcqrsEnvironment.SetDefault(eventStore);
