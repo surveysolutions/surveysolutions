@@ -9,11 +9,13 @@ namespace WB.UI.Designer
         const string RAVENDOCUMENTSTORE = "Raven.DocumentStore";
         const string WKHTMLTOPDFEXECUTABLEPATH = "WKHtmlToPdfExecutablePath";
         const string ISLOCKINGACCOUNTPOLICYFORCED = "IsLockingAccountPolicyForced";
+        const string STORAGELOADINGCHUNKSIZE = "StorageLoadingChunkSize";
 
         public bool IsReCaptchaEnabled { get; private set; }
         public string RavenDocumentStore { get; private set; }
         public string WKHtmlToPdfExecutablePath { get; private set; }
         public bool IsLockingAccountPolicyForced { get; private set; }
+        public int StorageLoadingChunkSize { get; private set; }
 
         private AppSettings()
         {
@@ -21,6 +23,7 @@ namespace WB.UI.Designer
             RavenDocumentStore = GetString(RAVENDOCUMENTSTORE);
             WKHtmlToPdfExecutablePath = GetString(WKHTMLTOPDFEXECUTABLEPATH);
             IsLockingAccountPolicyForced = GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
+            StorageLoadingChunkSize = GetInt(STORAGELOADINGCHUNKSIZE, 1024);
         }
     }
 }
