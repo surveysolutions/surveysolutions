@@ -613,6 +613,7 @@
     <Content Include="Views\Shared\_SummaryTable.cshtml">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="Views\Shared\_Table.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
