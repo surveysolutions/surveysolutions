@@ -9,7 +9,7 @@
 <p><a href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Back to list</a></p>
 <div class="row-fluid">
     <div class="span6">
-        @using (Html.BeginForm("ChangeState", "Survey", new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("ChangeState", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
             <legend>Change survey status</legend>
             <div class="control-group">
@@ -34,7 +34,7 @@
                 <a class="btn" href="@Url.Action("Details", new { id = Model.Id, template = Model.TemplateId })">Cancel</a>
             </div>
         }
-        @Html.Partial("~/Views/Survey/_StatusHistory.cshtml", Model.Statistic.StatusHistory)
+        @Html.Partial("_StatusHistory", Model.Statistic.StatusHistory)
     </div>
     <div class="span6" id="state-right">
         <div class="tabbable tabs-left">

@@ -9,7 +9,7 @@
 <p><a href="@Url.Action("Documents", new { id = Model.TemplateId })">Back to list</a></p>
 <div class="row-fluid">
     <div class="span6">
-        @using (Html.BeginForm("Approve", "Survey", new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("Approve", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
             <legend>Approve survey</legend>
             <div class="control-group">

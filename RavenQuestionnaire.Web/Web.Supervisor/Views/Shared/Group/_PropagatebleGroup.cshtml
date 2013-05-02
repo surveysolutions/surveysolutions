@@ -6,6 +6,6 @@
     {
         ViewBag.GroupIndex = i + 1;
         var propagatedGroup = Model.Children[i] as PropagatedGroupMobileView;
-        @Html.Partial("~/Views/Survey/Group/_PropagatedGrooup.cshtml", propagatedGroup)
+        @Html.Partial("_PropagatedGroup.cshtml", propagatedGroup)
     }
 </ul>

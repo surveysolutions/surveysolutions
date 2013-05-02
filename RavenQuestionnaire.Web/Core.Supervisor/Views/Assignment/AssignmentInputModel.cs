@@ -49,132 +49,53 @@ namespace Core.Supervisor.Views.Assignment
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
-        /// </summary>
-        /// <param name="templateId">
-        /// The template Id.
-        /// </param>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
-        public AssignmentInputModel(Guid templateId, Guid questionnaireId)
+        public AssignmentInputModel(Guid viewerId ,Guid? templateId, Guid? interviewerId, int? page,
+                                    int? pageSize,
+                                    List<OrderRequestItem> sortOrder, Guid? status, bool isNotAssigned)
         {
+            this.ViewerId = viewerId;
             this.TemplateId = templateId;
-            this.QuestionnaireId = questionnaireId;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="userId">
-        /// The user Id.
-        /// </param>
-        /// <param name="questionnaireId">
-        /// The questionnaire id.
-        /// </param>
-        /// <param name="statuses">
-        /// The statistic filter.
-        /// </param>
-        public AssignmentInputModel(Guid id, Guid userId, Guid questionnaireId, ICollection<Guid> statuses)
-        {
-            this.TemplateId = id;
-            this.QuestionnaireId = questionnaireId;
-            this.Statuses = statuses;
-            this.UserId = userId;
-        }
-
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="userId">
-        /// The user Id.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="orders">
-        /// The orders.
-        /// </param>
-        /// <param name="statuses">
-        /// The statuses.
-        /// </param>
-        /// <param name="isNotAssigned">
-        /// The isNotAssigned.
-        /// </param>
-        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders, ICollection<Guid> statuses, bool isNotAssigned)
-        {
-            this.TemplateId = id;
-            this.Page = page;
-            this.PageSize = pageSize;
-            this.Orders = orders;
-            this.Statuses = statuses;
+            this.StatusId = status;
             this.IsNotAssigned = isNotAssigned;
-            this.UserId = userId;
+            this.InterviewerId = interviewerId;
+            if (page.HasValue)
+                this.Page = page.Value;
+            if (pageSize.HasValue)
+                this.PageSize = pageSize.Value;
+            this.Orders = sortOrder;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentInputModel"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="userId">
-        /// The user Id.
-        /// </param>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="orders">
-        /// The orders.
-        /// </param>
-        public AssignmentInputModel(Guid id, Guid userId, int page, int pageSize, List<OrderRequestItem> orders)
-        {
-            this.TemplateId = id;
-            this.Page = page;
-            this.PageSize = pageSize;
-            this.Orders = orders;
-            this.UserId = userId;
-        }
 
         #endregion
 
         #region Public Properties
 
         /// <summary>
-        /// Gets the expression.
-        /// </summary>
-        public Func<CompleteQuestionnaireBrowseItem, bool> Expression
-        {
-            get
-            {
-                return x => x.TemplateId == this.TemplateId;
-            }
-        }
-
-        /// <summary>
         /// Gets or sets the id.
         /// </summary>
-        public Guid TemplateId { get; set; }
+        public Guid? TemplateId { get; set; }
 
         /// <summary>
-        /// Gets or sets UserId.
+        /// Gets or sets InterviewerId.
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid? InterviewerId { get; set; }
+
+        /// <summary>
+        /// Gets or sets the questionnaire id.
+        /// </summary>
+        public Guid? QuestionnaireId { get; set; }
+
+        /// <summary>
+        /// Gets or sets Statuses.
+        /// </summary>
+        public Guid? StatusId { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether IsNotAssigned.
+        /// </summary>
+        public bool IsNotAssigned { get; set; }
+
+        public Guid ViewerId { get; set; }
 
         /// <summary>
         /// Gets or sets the order.
@@ -239,21 +160,6 @@ namespace Core.Supervisor.Views.Assignment
                 this.pageSize = value;
             }
         }
-
-        /// <summary>
-        /// Gets or sets the questionnaire id.
-        /// </summary>
-        public Guid QuestionnaireId { get; set; }
-
-        /// <summary>
-        /// Gets or sets Statuses.
-        /// </summary>
-        public ICollection<Guid> Statuses { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether IsNotAssigned.
-        /// </summary>
-        public bool IsNotAssigned { get; set; }
 
         #endregion
     }

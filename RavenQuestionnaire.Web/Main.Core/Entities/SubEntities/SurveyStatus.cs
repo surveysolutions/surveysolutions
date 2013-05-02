@@ -184,10 +184,11 @@ namespace Main.Core.Entities.SubEntities
         /// <returns>
         /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static SurveyStatus GetStatusByIdOrDefault(Guid id)
+        public static SurveyStatus GetStatusByIdOrDefault(Guid? id)
         {
-            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id);
-            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
+            if (!id.HasValue)
+                return SurveyStatus.Unknown;
+            return SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id.Value);
         }
 
         /// <summary>

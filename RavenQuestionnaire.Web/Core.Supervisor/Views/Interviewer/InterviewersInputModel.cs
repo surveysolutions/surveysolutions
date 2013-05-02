@@ -90,7 +90,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets or sets the supervisor id.
         /// </summary>
-        public Guid Id { get; set; }
+        public Guid ViewerId { get; set; }
 
         #endregion
     }

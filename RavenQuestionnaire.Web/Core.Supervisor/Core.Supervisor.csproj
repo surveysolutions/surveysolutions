@@ -90,6 +90,7 @@
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="Views\DenormalizerStorageExtensions\UserDocumentExtensions.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
     <Compile Include="Views\Survey\SurveyQuestion.cs" />

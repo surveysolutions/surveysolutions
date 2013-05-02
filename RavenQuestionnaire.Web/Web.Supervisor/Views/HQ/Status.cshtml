@@ -48,7 +48,7 @@
     function getTablePage(data, page) {
         $.ajax({
                 type: "POST",
-                url: "@Url.Action("StatusViewTable", "Survey")",
+                url: "@Url.Action("StatusViewTable", "HQ")",
                 data: JSON.stringify({ StatusId: statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {

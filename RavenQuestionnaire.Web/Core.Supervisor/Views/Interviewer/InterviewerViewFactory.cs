@@ -73,13 +73,13 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerView Load(InterviewerInputModel input)
         {
-            UserDocument user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
+            UserDocument user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.InterviwerId);
             var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
             IQueryable<CompleteQuestionnaireBrowseItem> docs =
                 this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
-            if (input.TemplateId != Guid.Empty)
+            if (input.TemplateId.HasValue)
             {
-                InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId, docs, input);
+                InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId.Value, docs, input);
                 if (interviewerGroupView.Items.Count > 0)
                 {
                     items.Items.Add(interviewerGroupView);

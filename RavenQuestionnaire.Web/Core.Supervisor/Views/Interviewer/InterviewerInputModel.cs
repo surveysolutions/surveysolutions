@@ -50,7 +50,7 @@ namespace Core.Supervisor.Views.Interviewer
         {
             get
             {
-                return q => (q.Responsible != null && q.Responsible.Id == this.UserId);
+                return q => (q.Responsible != null && q.Responsible.Id == this.InterviwerId);
             }
         }
 
@@ -121,12 +121,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets or sets the template id.
         /// </summary>
-        public Guid TemplateId { get; set; }
+        public Guid? TemplateId { get; set; }
 
         /// <summary>
         /// Gets or sets the user id.
         /// </summary>
-        public Guid UserId { get; set; }
+        public Guid? InterviwerId { get; set; }
 
         #endregion
     }

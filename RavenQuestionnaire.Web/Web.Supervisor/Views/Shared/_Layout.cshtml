@@ -42,30 +42,46 @@
     <div class="navbar  navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="brand" href="@Url.Action("GotoBrowser", "Survey")">Home</a> <a class="btn btn-navbar"
-                    data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
-                    <span class="icon-bar"></span><span class="icon-bar"></span></a>
                 <div class="nav-collapse ">
                     @if (Request.IsAuthenticated)
                     {
-                        <ul id="menu" class="nav" role="menu">
-                            <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
-                                <i class="icon-filter"></i>by Interviewers</a> </li>
-                            <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "User")">
-                                <i class="icon-filter"></i>by Surveys</a> </li>
-                            <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
-                                <i class="icon-filter"></i>by Statuses</a> </li>
-                            <li class="@(page == MenuItem.Docs ? "active" : "")">
-                                @Html.ActionLink("Documents", "Documents", "Survey")
-                            </li>
-                            @if (User.IsInRole("Headquarter"))
-                            {
-                                <li>@Html.ActionLink("HQ dashboard", "Index", "Dashboard")</li>
+                        if (User.IsInRole("Headquarter"))
+                        {
+                            <a class="brand" href="@Url.Action("Index", "HQ")">Home</a>
+                            <a class="btn btn-navbar"
+                               data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
+                                <span class="icon-bar"></span><span class="icon-bar"></span></a>
+                            <ul id="menu" class="nav" role="menu">
+                                <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "HQ")">
+                                                                                             <i class="icon-filter"></i>by Interviewers</a> </li>
+                                <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">
+                                                                                                 <i class="icon-filter"></i>by Surveys</a> </li>
+                                <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">
+                                                                                             <i class="icon-filter"></i>by Statuses</a> </li>
+                                <li class="@(page == MenuItem.Docs ? "active" : "")">
+                                    @Html.ActionLink("Documents", "Documents", "HQ")</li>
                                 <li class="@(page == MenuItem.Teams ? "active" : "")">
                                     @Html.ActionLink("Teams", "Index", "Team")
                                 </li>
-                            }
-                        </ul>
+                            </ul>
+                        }
+                        else
+                        {
+                            <a class="brand" href="@Url.Action("Index", "Survey")">Home</a>
+                            <a class="btn btn-navbar"
+                               data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
+                                <span class="icon-bar"></span><span class="icon-bar"></span></a>
+                            <ul id="menu" class="nav" role="menu">
+                                <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Index", "Survey")">
+                                                                                             <i class="icon-filter"></i>by Interviewers</a> </li>
+                                <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "Survey")">
+                                                                                                 <i class="icon-filter"></i>by Surveys</a> </li>
+                                <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "Survey")">
+                                                                                             <i class="icon-filter"></i>by Statuses</a> </li>
+                                <li class="@(page == MenuItem.Docs ? "active" : "")">
+                                    @Html.ActionLink("Documents", "Documents", "Survey")</li>
+                            </ul>
+                        }
                         <div class="pull-right">
                             <ul class="nav pull-right" role="menu">
                                 <li class="dropdown">
@@ -75,21 +91,24 @@
                                         <li>@Html.ActionLink("Logoff", "LogOff", "Account")</li>
                                     </ul>
                                 </li>
-                                <li class="divider-vertical"></li>
-                                <li class="@(page == MenuItem.Administration ? "active" : "")" class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
-                                    </b></a>
-                                    <ul class="dropdown-menu">
-                                        <li>@Html.ActionLink("Users", "Index", "User")</li>
-                                        <li>@Html.ActionLink("Devices", "Index", "Device")</li>
-                                        <li>@Html.ActionLink("Syncronization", "Index", "ImportExport")</li>
-                                        <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
+                                @if (User.IsInRole("Supervisor"))
+                                {
+                                 <li class="divider-vertical"></li>
+                                    <li class="@(page == MenuItem.Administration ? "active" : "")" class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administration <b class="caret">
+                                                                                                                  </b></a>
+                                        <ul class="dropdown-menu">
+                                            <li>@Html.ActionLink("Users", "Index", "User")</li>
+                                            <li>@Html.ActionLink("Devices", "Index", "Device")</li>
+                                            <li>@Html.ActionLink("Syncronization", "Index", "ImportExport")</li>
+                                            <li>@Html.ActionLink("Backup", "Index", "Backup")</li>
                                         
-                                        <li>@Html.ActionLink("Upload template", "Import", "Template")</li>
-                                        <li>@Html.ActionLink("Create new assigment", "Questionnaires", "Dashboard")</li>
+                                            <li>@Html.ActionLink("Upload template", "Import", "Template")</li>
+                                            <li>@Html.ActionLink("Create new assigment", "Questionnaires", "Dashboard")</li>
                                         
-                                    </ul>
-                                </li>
+                                        </ul>
+                                    </li>   
+                                }
                             </ul>
                         </div>
                     }

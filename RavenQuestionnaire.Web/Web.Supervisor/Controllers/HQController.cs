@@ -1,12 +1,8 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SurveyController.cs" company="World bank">
-//   2012
+// <copyright file="HQController.cs" company="">
+//   
 // </copyright>
-// <summary>
-//   Defines the SurveyController type.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -26,29 +22,30 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
+    using Main.Core.View.CompleteQuestionnaire;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
     using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
-    using Main.Core.View.User;
-
-    using NLog;
 
     using Ncqrs.Commanding.ServiceModel;
+
+    using NLog;
 
     using Questionnaire.Core.Web.Helpers;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
-    using CompleteQuestionnaireViewInputModel = Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireViewInputModel;
+    using UserView = Main.Core.View.User.UserView;
+    using UserViewInputModel = Main.Core.View.User.UserViewInputModel;
 
     /// <summary>
-    /// Responsible for display surveys and statistic info about surveys
+    ///     The hq controller.
     /// </summary>
-    [Authorize(Roles = "Supervisor")]
-    public class SurveyController : BaseController
+    [Authorize(Roles = "Headquarter")]
+    public class HQController: BaseController
     {
-        #region Constructor
+         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SurveyController"/> class.
@@ -62,7 +59,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="provider">
         /// The provider.
         /// </param>
-        public SurveyController(
+        public HQController(
             IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider)
             : base(viewRepository, commandService, provider)
         {
@@ -166,11 +163,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult GotoBrowser()
-        {
-            return this.RedirectToAction("Index");
-        }
-
         public ActionResult Status(Guid? statusId)
         {
             ViewBag.ActivePage = MenuItem.Statuses;
@@ -193,21 +185,18 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
+
         public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
             var inputModel = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
-                templateId,
-                interviewerId, null, null, null,
-                status,
-                isNotAssigned ?? false);
+                                       templateId,
+                                       interviewerId,null,null,null,
+                                       status,
+                                       isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
-            var users =
-                this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
-                    {
-                        ViewerId = user.Id
-                    });
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             return this.View(model);
         }

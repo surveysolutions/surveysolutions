@@ -176,7 +176,7 @@ namespace Web.Supervisor.Controllers
                 this.Repository.Load<InterviewersInputModel, InterviewersView>(
                     new InterviewersInputModel
                         {
-                            Id = data.Id,
+                            ViewerId = GlobalInfo.GetCurrentUser().Id,
                             Page = data.Pager.Page,
                             PageSize = data.Pager.PageSize,
                             Orders = data.SortOrder
@@ -218,12 +218,12 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Interviewers(InterviewersInputModel data)
         {
-            UserView user = this.GetUser(data.Id);
+            UserView user = this.GetUser(data.ViewerId);
             var interviewers =
                 this.Repository.Load<InterviewersInputModel, InterviewersView>(
                     new InterviewersInputModel
                         {
-                            Id = data.Id,
+                            ViewerId = data.ViewerId,
                             Page = data.Page,
                             PageSize = data.PageSize,
                             Order = data.Order

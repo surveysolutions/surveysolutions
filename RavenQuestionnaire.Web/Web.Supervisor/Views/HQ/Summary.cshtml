@@ -1,12 +1,11 @@
-﻿@using Web.Supervisor.Models
-@using ClientDependency.Core.Mvc
+﻿@using ClientDependency.Core.Mvc
 @model Core.Supervisor.Views.Summary.SummaryView
 
 @{Html.RequiresJs("plotSettings.js", "Scripts", 70);}
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    var filterTemplate = '@Model.Template.TemplateId';
+    var filterTemplate = @(Model.Template==null? "null":Model.Template.TemplateId.ToString());
     $(document).ready(function() {
         
         $('#filter').editable().on('save', function(e, params) {
@@ -41,7 +40,7 @@
     function getTablePage(data, page) {
         $.ajax({
                 type: "POST",
-                url: "@Url.Action("_SummaryData", "User")",
+                url: "@Url.Action("_SummaryData", "HQ")",
                 data: JSON.stringify({TemplateId: filterTemplate, SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }}),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
@@ -76,9 +75,9 @@
 <h2 class="sinle-line-header">Interviewers and Questionnaire Statuses. Filtered by Survey: <a href="#" id="filter" 
                   data-placement="bottom" 
                   data-type="select" 
-                  data-source="@Url.Action("Templates", "Survey")"
+                  data-source="@Url.Action("Templates", "HQ")"
                   data-prepend='All'             
-                  data-original-title="Select template">@this.Model.Template.Title</a> </h2>
+                  data-original-title="Select template">@(this.Model.Template==null?"All":this.Model.Template.Title)</a> </h2>
 
 <div id="questionnaireTable">
     @this.Html.Partial("_SummaryTable", this.Model)

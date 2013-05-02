@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
 using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Interviewer
 {
-    using System;
     using System.Linq;
     using Main.Core.Documents;
     using Main.Core.Entities;
@@ -73,22 +73,36 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            Func<UserDocument, bool> query =
-                x => x.Supervisor != null && x.Supervisor.Id == input.Id;
+            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId);
 
-            var queryResult = this.users.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+            if (!interviewers.Any())
+            {
+                return new InterviewersView(
+                    input.Page, 
+                    input.PageSize, 
+                    new InterviewersItem[0],
+                    input.ViewerId);
+            }
 
-            var items = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).Select(
+            IQueryable<InterviewersItem> items =
+                interviewers.Select(
                     x =>
                     new InterviewersItem(
                         x.PublicKey, 
                         x.UserName, 
                         x.Email, 
                         x.CreationDate, 
-                        x.IsLocked));
-            
+                        x.IsLocked)).AsQueryable();
+            if (input.Orders.Count > 0)
+            {
+                items = input.Orders[0].Direction == OrderDirection.Asc
+                            ? items.OrderBy(input.Orders[0].Field)
+                            : items.OrderByDescending(input.Orders[0].Field);
+            }
+
+            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new InterviewersView(
-                input.Page, input.PageSize, queryResult.Count(), items, input.Id);
+                input.Page, input.PageSize, items, input.ViewerId);
         }
 
         #endregion

@@ -1,7 +1,6 @@
-﻿@using ClientDependency.Core.Mvc
-@using Main.Core.View.Question
+﻿@using Main.Core.View.Question
 @using Questionnaire.Core.Web.Helpers
-@using Core.Supervisor.Views.Assignment
+@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.Assign.AssignSurveyView
 @{
@@ -33,7 +32,7 @@
             {
                 <li class="span4">
                     <div class="thumbnail">
-                        @using (Ajax.BeginForm("SaveAnswer", "Survey", new AjaxOptions()
+                        @using (Ajax.BeginForm("SaveAnswer", GlobalHelper.CurrentController, new AjaxOptions()
                                                                       {
                                                                           OnComplete = "JsonResults"
                                                                       }))

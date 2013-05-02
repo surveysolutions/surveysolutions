@@ -22,7 +22,7 @@
 
             <label for="@radibutonname">
                 @Html.RadioButton("PublicKey", item.PublicKey, (item).Selected, (IDictionary<string, object>)ViewBag.EnabledRadioBoxSettings)
-                @{ Html.RenderPartial(string.Format("~/Views/Survey/Answer/_{0}.cshtml", item.AnswerType), item); }
+                @{ Html.RenderPartial(string.Format("Answer/_{0}", item.AnswerType), item); }
             </label>
             @Html.Hidden("Selected", true)
         }

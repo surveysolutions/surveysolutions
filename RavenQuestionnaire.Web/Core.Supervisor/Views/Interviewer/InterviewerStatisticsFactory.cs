@@ -69,15 +69,16 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
-            var user = this.users.GetByGuid(input.UserId);
-            if (user == null)
+            if (!input.InterviewerId.HasValue)
                 return null;
+            var user = this.users.GetByGuid(input.InterviewerId.Value);
+          
             var questionnairesGroupedByTemplate =
                 BuildItems(
-                    this.documentItemSession.Query().Where(q => q.Responsible!=null && q.Responsible.Id == input.UserId).GroupBy(
+                    this.documentItemSession.Query().Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).GroupBy(
                         x => x.TemplateId)).AsQueryable();
 
-            var retval = new InterviewerStatisticsView(input.UserId, user.UserName, input.Order,
+            var retval = new InterviewerStatisticsView(input.InterviewerId.Value, user.UserName, input.Order,
                                                        new List<InterviewerStatisticsViewItem>(), input.Page,
                                                        input.PageSize, questionnairesGroupedByTemplate.Count());
             if (input.Orders.Count > 0)

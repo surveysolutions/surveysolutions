@@ -4,7 +4,7 @@
 @model SummaryView
 @{
     Guid? templateKey = null;
-    if (Model.Template.TemplateId != Guid.Empty)
+    if (Model.Template!=null)
     {
         templateKey = Model.Template.TemplateId;
     }
@@ -28,11 +28,11 @@
                     <td>
                         @if (templateKey.HasValue)
                         {
-                            @Html.ActionLink(collect.User.Name, "Documents", "Survey", new { id = templateKey, userId = collect.User.Id }, null)
+                            @Html.ActionLink(collect.User.Name, "Documents", GlobalHelper.CurrentController, new { id = templateKey, interviewerId = collect.User.Id }, null)
                         }
                         else
                         {
-                            @Html.ActionLink(collect.User.Name, "Index", "Survey", new { userId = collect.User.Id }, null)
+                            @Html.ActionLink(collect.User.Name, "Index", GlobalHelper.CurrentController, new { interviewerId = collect.User.Id }, null)
                         }
                     </td>
                     @foreach (var it in Model.Headers)
@@ -47,7 +47,7 @@
                         <td class="td-@it.Key.ToLower()">
                             @if (value != "0")
                             {
-                                @Html.ActionLink(value, "Documents", "Survey", new { templateId = templateKey, userId = collect.User.Id, status = status.PublicId }, null)
+                                @Html.ActionLink(value, "Documents", GlobalHelper.CurrentController, new { templateId = templateKey, interviewerId = collect.User.Id, status = status.PublicId }, null)
                             }
                             else
                             {
