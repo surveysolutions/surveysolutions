@@ -186,9 +186,9 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            IOrderedEnumerable<StoredEvent> storedEvents =
+            var storedEvents =
                 this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(x => x.EventSequence);
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
 
             // }
@@ -251,8 +251,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                var snapshoot = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
-                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId)).OrderByDescending(y => y.EventSequence).FirstOrDefault();
+                var snapshoot =
+                    session.Query<StoredEvent>()
+                           .Where(e => e.IsSnapshot && e.EventSourceId == aggreagateRootId)
+                           .OrderByDescending(y => y.EventSequence)
+                           .FirstOrDefault();
                 if (snapshoot!=null)
                 {
                     return ToCommittedEvent(snapshoot);
@@ -285,10 +288,10 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     List<StoredEvent> chunk = session
                         .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults())
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
+                        .Where(query).OrderBy(x => x.EventSequence)
                         .Skip(page * maxPageSize)
                         .Take(maxPageSize)
-                        .Where(query)
                         .ToList();
 
                     if (chunk.Count == 0)
@@ -320,25 +323,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 };
         }
 
-        /*/// <summary>
-        /// The generate e tag.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Guid?"/>.
-        /// </returns>
-        private static Guid? GenerateETag(object entity)
-        {
-            var sourcedEvent = entity as StoredEvent;
-            if (sourcedEvent != null)
-            {
-                return Guid.NewGuid();
-            }
-
-            return null;
-        }*/
 
         /// <summary>
         /// The to stored event.
@@ -364,6 +348,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     Data = uncommittedEvent.Payload, 
                     EventSequence = uncommittedEvent.EventSequence, 
                     EventSourceId = uncommittedEvent.EventSourceId, 
+                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded
                 };
         }
 
