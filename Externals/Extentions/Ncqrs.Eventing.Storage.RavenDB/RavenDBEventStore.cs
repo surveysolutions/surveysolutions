@@ -17,6 +17,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     using System.Linq;
     using System.Linq.Expressions;
 
+    using Ncqrs.Restoring.EventStapshoot;
+
     using Raven.Client;
     using Raven.Client.Document;
 
@@ -43,6 +45,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// PageSize for loading by chunk
         /// </summary>
         private readonly int pageSize = 1024;
+
+        /// <summary>
+        /// PageSize for loading by chunk
+        /// </summary>
+        private readonly int timeout = 120;
 
         #endregion
 
@@ -154,7 +161,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     chunk = session
                         .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                         .OrderBy(y => y.EventSequence)
                         .Skip(page * pageSize)
                         .Take(pageSize)
@@ -289,7 +296,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     List<StoredEvent> chunk = session
                         .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                         .Where(query).OrderBy(x => x.EventSequence)
                         .Skip(page * pageSize)
                         .Take(pageSize)
