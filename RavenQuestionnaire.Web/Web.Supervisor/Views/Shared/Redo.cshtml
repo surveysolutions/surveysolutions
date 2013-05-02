@@ -1,6 +1,6 @@
-﻿
-@using Web.Supervisor.Models
+﻿@using Web.Supervisor.Models
 @using Web.Supervisor.Utils
+
 @model ApproveRedoModel
 @{
     ViewBag.Title = "Redo survey";
@@ -9,7 +9,7 @@
 <p><a href="@Url.Action("Documents", new { id = Model.TemplateId })">Back to list</a></p>
 <div class="row-fluid">
     <div class="span6">
-        @using (Html.BeginForm("Redo", "Survey", new { id = Model.Id, templateId = Model.TemplateId,  }, FormMethod.Post, new { @class = "form-horizontal" }))
+        @using (Html.BeginForm("Redo", GlobalHelper.CurrentController, new { id = Model.Id, templateId = Model.TemplateId,  }, FormMethod.Post, new { @class = "form-horizontal" }))
         {
             <legend>Redo survey</legend>
             <div class="control-group">

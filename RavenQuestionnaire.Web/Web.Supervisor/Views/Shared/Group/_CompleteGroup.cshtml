@@ -1,6 +1,4 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using Main.Core.Entities.SubEntities
-@using Main.Core.View.Group
+﻿@using Main.Core.View.Group
 @using Main.Core.View.Question
 @model Main.Core.View.Group.CompleteGroupMobileView
 @*
@@ -49,38 +47,39 @@ else
                     if ((item as CompleteQuestionView) != null)
                     {
                         var question = item as CompleteQuestionView;
-        <li>
-            <div class="line-wrap">
-                <div class="div-table">
-                    <div class="div-row">
-                        <div class="div-cell">
-                            <div class="cell-content">@question.Title</div>
-                        </div>
-                        <div class="div-cell">
-                            <div class="cell-content">@question.Answer &nbsp;</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </li>
+                        <li>
+                            <div class="line-wrap">
+                                <div class="div-table">
+                                    <div class="div-row">
+                                        <div class="div-cell">
+                                            <div class="cell-content">@question.Title</div>
+                                        </div>
+                                        <div class="div-cell">
+                                            <div class="cell-content">@question.Answer &nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
                     }
                     else
                     {
                         var group = item as CompleteGroupMobileView;
-        <li>
-            <div class="line-wrap">
-                <div class="cell">
-                    <div class="cell-content">@group.Title</div>
-                </div>
-                <div class="cell">
-                    <div class="cell-content">
-                        &nbsp;</div>
-                </div>
-            </div>
-        </li>
+                        <li>
+                            <div class="line-wrap">
+                                <div class="cell">
+                                    <div class="cell-content">@group.Title</div>
+                                </div>
+                                <div class="cell">
+                                    <div class="cell-content">
+                                        &nbsp;</div>
+                                </div>
+                            </div>
+                        </li>
                     }
                 }
-            } while (!isLast);
+            }
+            while (!isLast);
         }
     }
 </ul>

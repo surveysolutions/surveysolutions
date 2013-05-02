@@ -1,5 +1,5 @@
-﻿@using Questionnaire.Core.Web.Helpers
-@using Core.Supervisor.Views.Assignment
+﻿@using Core.Supervisor.Views.Assignment
+@using Web.Supervisor.Models
 
 @model Core.Supervisor.Views.Assign.AssignSurveyView
 @{
@@ -7,7 +7,7 @@
 }
 <h2>Assignment Person</h2>
 <p><a href="@Url.Action("Documents", new {id = Model.TemplateId, input = new AssignmentInputModel()})">Back to list</a></p>
-@using (Html.BeginForm("AssignForm", "Survey"))
+@using (Html.BeginForm("AssignForm", GlobalHelper.CurrentController))
 {
     @Html.Hidden("CqId", Model.Id)
     @Html.Hidden("TmptId", Model.TemplateId)

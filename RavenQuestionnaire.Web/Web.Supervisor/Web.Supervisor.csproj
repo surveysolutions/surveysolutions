@@ -227,6 +227,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\DeviceController.cs" />
+    <Compile Include="Controllers\HQController.cs" />
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
@@ -517,79 +518,7 @@
     <Content Include="Views\ImportExport\ViewTestUploadFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Survey\Assign.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_AutoPropagate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_DateTime.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_DropDownList.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_GpsCoordinates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_MultyOption.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_Numeric.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_SingleOption.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_Text.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\AnswerList\_YesNo.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Answer\_Image.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Answer\_Select.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Answer\_Text.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Group\_CompleteGroup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Group\_PropagatebleGroup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Group\_PropagatedGrooup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Group\_PropagatedScreen.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Group\_SimpleGroup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Question\_Question.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\_SurveyContent.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Survey\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\_Table.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\_TableGroup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Table.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Survey\Approve.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.Deploy-devKh.config">
@@ -616,24 +545,12 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Survey\Comments.cshtml" />
-    <Content Include="Views\Survey\AssignPerson.cshtml" />
-    <Content Include="Views\Survey\Redo.cshtml" />
-    <Content Include="Views\Survey\ChangeState.cshtml" />
     <Content Include="Views\Shared\Chart.cshtml" />
-    <Content Include="Views\Survey\_StatusHistory.cshtml" />
-    <Content Include="Views\User\Summary.cshtml" />
-    <Content Include="Views\User\_SummaryTable.cshtml" />
+    <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Device\Index.cshtml" />
-    <Content Include="Views\Survey\IndexChart.cshtml" />
     <Content Include="Views\Survey\Status.cshtml" />
-    <Content Include="Views\Survey\_StatusTable.cshtml" />
-    <Content Include="Views\User\SummaryChart.cshtml" />
-    <Content Include="Views\Survey\StatusChart.cshtml" />
     <Content Include="Views\ImportExport\Index.cshtml" />
-    <Content Include="Views\Survey\Timeline.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
-    <Content Include="Views\Survey\Timeline1.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
@@ -643,7 +560,59 @@
     <Content Include="Views\Team\AddSupervisor.cshtml" />
     <Content Include="Views\Team\AddInterviewer.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
-    <Content Include="Views\Dashboard\Index.cshtml" />
+    <Content Include="Views\Shared\_StatusHistory.cshtml" />
+    <Content Include="Views\Shared\_StatusTable.cshtml" />
+    <Content Include="Views\Shared\_SummaryTable.cshtml" />
+    <Content Include="Views\Shared\_SurveyContent.cshtml" />
+    <Content Include="Views\Shared\_PartialUsersGridTemplate.cshtml" />
+    <Content Include="Views\Shared\_TableGroup.cshtml" />
+    <Content Include="Views\Shared\Answer\_Image.cshtml" />
+    <Content Include="Views\Shared\Answer\_Select.cshtml" />
+    <Content Include="Views\Shared\Answer\_Text.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_AutoPropagate.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_DateTime.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_DropDownList.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_GpsCoordinates.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_MultyOption.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_Numeric.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_SingleOption.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_Text.cshtml" />
+    <Content Include="Views\Shared\AnswerList\_YesNo.cshtml" />
+    <Content Include="Views\Shared\Approve.cshtml" />
+    <Content Include="Views\Shared\Assign.cshtml" />
+    <Content Include="Views\Shared\AssignPerson.cshtml" />
+    <Content Include="Views\Shared\ChangeState.cshtml" />
+    <Content Include="Views\Shared\Comments.cshtml" />
+    <Content Include="Views\HQ\Details.cshtml" />
+    <Content Include="Views\HQ\Documents.cshtml" />
+    <Content Include="Views\Shared\Group\_CompleteGroup.cshtml" />
+    <Content Include="Views\Shared\Group\_PropagatebleGroup.cshtml" />
+    <Content Include="Views\Shared\Group\_PropagatedGroup.cshtml" />
+    <Content Include="Views\Shared\Group\_PropagatedScreen.cshtml" />
+    <Content Include="Views\Shared\Group\_SimpleGroup.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\Shared\IndexChart.cshtml" />
+    <Content Include="Views\Shared\Question\_Question.cshtml" />
+    <Content Include="Views\Shared\Redo.cshtml" />
+    <Content Include="Views\HQ\Status.cshtml" />
+    <Content Include="Views\Shared\StatusChart.cshtml" />
+    <Content Include="Views\HQ\Summary.cshtml" />
+    <Content Include="Views\Shared\SummaryChart.cshtml" />
+    <Content Include="Views\Shared\Timeline.cshtml" />
+    <Content Include="Views\Shared\Timeline1.cshtml" />
+    <Content Include="Views\Shared\IndexChart.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\StatusChart.cshtml" />
+    <Content Include="Views\Shared\SummaryChart.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\_SummaryTable.cshtml">
+      <SubType>Code</SubType>
+    </Content>
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,6 +1,5 @@
 ﻿@using Main.Core.Entities.SubEntities
 @using Core.Supervisor.Views.Assignment
-@using Questionnaire.Core.Web.Helpers
 @using Web.Supervisor.Models
 @model AssignmentView
 @{
@@ -14,7 +13,14 @@
             <tr>
                 @foreach (var header in Model.Headers)
                 {
-                    <th class="sorting" sorter='{"key":"@header.Value"}'>@header.Value</th>
+                   if (header.Key != Guid.Empty)
+                    {
+                        <th class="sorting" sorter='{"key":"@header.Value"}'>@header.Value</th>
+                    }
+                    else
+                    {
+                        <td>@header.Value</td>
+                    }
                 }
                 <th class="sorting" sorter='{"key":"Responsible.Name"}'>Responsible</th>
                 <th class="sorting" sorter='{"key":"LastEntryDate"}'>Last Update</th>
@@ -36,14 +42,14 @@
                     <div class="popover-container">
                         <a id="source-@fitem.Id" 
                     class="editable" 
-                    href="@Url.Action("Index", "Survey", new { interviewerId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
+                    href="@Url.Action("Index", GlobalHelper.CurrentController, new { interviewerId = @fitem.Responsible == null ? string.Empty : fitem.Responsible.Id.ToString() })"
                     data-original-title="Choose user"
                     data-source="@Html.Raw(users)"
                     data-type="select" 
                     data-pk="1"
                     data-placement="right" 
                     data-toggle="manual"
-                    data-url="@Url.Action("AssignForm", "Survey", new { cqId = fitem.Id, tmptId = fitem.TemplateId })"
+                    data-url="@Url.Action("AssignForm", GlobalHelper.CurrentController, new { cqId = fitem.Id, tmptId = fitem.TemplateId })"
                     data-toggle-element="#ref-@fitem.Id">@(fitem.Responsible == null ? string.Empty : fitem.Responsible.Name)</a>
                     </div>
                 </td>

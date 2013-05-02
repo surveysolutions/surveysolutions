@@ -17,23 +17,18 @@ using Questionnaire.Core.Web.Security;
 namespace Web.Supervisor.Controllers
 {
     using System;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Commands.User;
     using Main.Core.Entities.SubEntities;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using Web.Supervisor.Models;
-    using Web.Supervisor.Models.Chart;
 
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
-   
+   [Authorize]
     public class UserController : BaseController
     {
         private readonly IFormsAuthentication authentication;
@@ -80,17 +75,20 @@ namespace Web.Supervisor.Controllers
                 CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
                                                              user.Name + "@worldbank.org", new[] {user.Role},
                                                              false, null));
-
-                
+  
                 var isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
                 var isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());
                 if (isSupervisor || isHeadquarter)
                 {
                     this.authentication.SignIn(user.Name, false);
                     if (isSupervisor)
-                        return this.Redirect("~/");
+                    {
+                        return this.RedirectToAction("Index", "Survey");
+                    }
                     else
-                        return this.RedirectToRoute("HeadquarterDashboard");
+                    {
+                        return this.RedirectToAction("Index", "HQ");
+                    }
                 }
             }
 
@@ -106,7 +104,6 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
-        [Authorize]
         public ActionResult UnlockUser(Guid id)
         {
             CommandService.Execute(new UnlockUserCommand(id));
@@ -123,60 +120,11 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
-        [Authorize]
         public ActionResult LockUser(Guid id)
         {
             CommandService.Execute(new LockUserCommand(id));
 
             return this.Redirect(GlobalHelper.PreviousPage);
-        }
-
-        /// <summary>
-        /// Interviewer summary view
-        /// </summary>
-        /// <returns>
-        /// Interviewer summary view
-        /// </returns>
-        [Authorize]
-        public ActionResult Summary()
-        {
-            ViewBag.ActivePage = MenuItem.Interviewers;
-            var user = this.GlobalInfo.GetCurrentUser();
-            var model = this.Repository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-         [Authorize]
-        public ActionResult _SummaryData(GridDataRequestModel data)
-        {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var input = new SummaryInputModel(user)
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                TemplateId = data.TemplateId
-            };
-            var model = this.Repository.Load<SummaryInputModel, SummaryView>(input);
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.PartialView("_SummaryTable", model);
-        }
-
-        [Authorize]
-        public ActionResult Statistics(InterviewerStatisticsInputModel input)
-        {
-            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
-            return this.View(model);
         }
 
         /// <summary>
@@ -188,7 +136,6 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Index view
         /// </returns>
-         [Authorize]
         public ActionResult Index(InterviewersInputModel input)
         {
             ViewBag.ActivePage = MenuItem.Administration;
@@ -207,7 +154,6 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Partial view with table's body
         /// </returns>
-         [Authorize]
         public ActionResult _TableData(GridDataRequestModel data)
         {
             var input = new InterviewersInputModel
@@ -218,71 +164,7 @@ namespace Web.Supervisor.Controllers
                 SupervisorId = this.GlobalInfo.GetCurrentUser().Id
             };
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
-            return this.PartialView("_Table", model);
-        }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        [HttpPost]
-        [Authorize]
-        public ActionResult TableGroupByUser(GridDataRequestModel data)
-        {
-            var input = new InterviewerInputModel()
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                TemplateId = data.TemplateId,
-                InterviwerId = data.InterviwerId
-            };
-            var model = this.Repository.Load<InterviewerInputModel, InterviewerView>(input);
-            return this.PartialView("_TableGroupByUser", model.Items[0]);
-        }
-
-        /// <summary>
-        /// Gets user's statistics
-        /// </summary>
-        /// <param name="data">
-        /// Table order data
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        [HttpPost]
-        [Authorize]
-        public ActionResult UserStatistics(GridDataRequestModel data)
-        {
-            var input = new InterviewerStatisticsInputModel()
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                InterviewerId = data.InterviwerId
-            };
-            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
-            return this.PartialView("_UserStatistics", model);
-        }
-
-        /// <summary>
-        /// Uses to filter grids by user
-        /// </summary>
-        /// <returns>
-        /// List of all  supervisor's users
-        /// </returns>
-         [Authorize]
-        public ActionResult UsersJson()
-        {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var input = new InterviewersInputModel { PageSize = int.MaxValue, SupervisorId = user.Id };
-            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
-            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
+            return this.PartialView("_PartialUsersGridTemplate", model);
         }
     }
 }
