@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
+
 namespace Core.Supervisor.Views.Assignment
 {
     using System;
@@ -80,25 +82,30 @@ namespace Core.Supervisor.Views.Assignment
         /// </returns>
         public AssignmentView Load(AssignmentInputModel input)
         {
+            var responsibleList = users.GetIntervieweresListForViewer(input.ViewerId).Select(i => i.PublicKey);
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = !input.TemplateId.HasValue
-                            ? null
-                            : this.templates.GetByGuid(input.TemplateId.Value).GetTemplateLight();
+                                ? null
+                                : this.templates.GetByGuid(input.TemplateId.Value).GetTemplateLight();
 
             view.User = !input.InterviewerId.HasValue
                             ? null
                             : this.users.GetByGuid(input.InterviewerId.Value).GetUseLight();
 
-            view.Status =  SurveyStatus.Unknown;
+            view.Status = SurveyStatus.Unknown;
 
             if (input.StatusId.HasValue)
             {
                 view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
             }
-
+            #warning need to be filtered by responsible supervisr
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
-                ? this.surveys.Query()
-                : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
+                                                                     ? this.surveys.Query()
+                                                                     : this.surveys.Query()
+                                                                           .Where(
+                                                                               v =>
+                                                                               v.Status.PublicId == view.Status.PublicId))
+                .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
                 .OrderByDescending(t => t.CreationDate);
 
             if (input.TemplateId.HasValue)
@@ -127,7 +134,7 @@ namespace Core.Supervisor.Views.Assignment
                 items = this.DefineOrderBy(items, input);
             }
 
-            view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
+            view.SetItems(items.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize));
 
             return view;
         }

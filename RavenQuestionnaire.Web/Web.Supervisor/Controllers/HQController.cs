@@ -189,7 +189,7 @@ namespace Web.Supervisor.Controllers
         public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
-            var inputModel = new AssignmentInputModel(
+            var inputModel = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                                        templateId,
                                        interviewerId,null,null,null,
                                        status,
@@ -609,7 +609,7 @@ namespace Web.Supervisor.Controllers
             var user = this.GlobalInfo.GetCurrentUser();
             var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
             ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
-            var input = new AssignmentInputModel(
+            var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                 data.TemplateId,
                 data.InterviwerId,
                 data.Pager.Page,
