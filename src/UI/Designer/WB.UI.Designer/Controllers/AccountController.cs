@@ -165,7 +165,7 @@ namespace WB.UI.Designer.Controllers
                 try
                 {
                     changePasswordSucceeded = UserHelper.CurrentUser.ChangePassword(
-                        model.OldPassword, model.NewPassword);
+                        model.OldPassword, model.Password);
                 }
                 catch (Exception)
                 {
@@ -422,7 +422,7 @@ namespace WB.UI.Designer.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                if (WebSecurity.ResetPassword(model.Token, model.NewPassword))
+                if (WebSecurity.ResetPassword(model.Token, model.Password))
                 {
                     this.Success("Your password successfully changed. Now you can login with your new password");
                     return this.RedirectToAction("Login");

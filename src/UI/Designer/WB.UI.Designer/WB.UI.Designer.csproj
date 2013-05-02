@@ -222,6 +222,7 @@
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
+    <Compile Include="Code\CustomStringLengthAttribute.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\ObjectExtensions.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />
