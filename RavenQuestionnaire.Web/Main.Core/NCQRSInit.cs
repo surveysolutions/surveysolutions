@@ -77,7 +77,8 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
-            var store = InitializeEventStore(kernel.Get<DocumentStore>());
+            
+            var store = InitializeEventStore(kernel.Get<DocumentStore>(), 50);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
@@ -192,9 +193,9 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         /// <returns>
         /// The <see cref="IStreamableEventStore"/>.
         /// </returns>
-        private static IStreamableEventStore InitializeEventStore(DocumentStore store)
+        private static IStreamableEventStore InitializeEventStore(DocumentStore store, int pageSize)
         {
-            return new RavenDBEventStore(store);
+            return new RavenDBEventStore(store, pageSize);
         }
 
 #endif
