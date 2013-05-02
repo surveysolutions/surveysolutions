@@ -10,6 +10,7 @@ using Ionic.Zlib;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Complete.Question;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
@@ -106,10 +107,11 @@ namespace AssigmentGeneration
             {
                 var question =
                     result.FirstOrDefault<ICompleteQuestion>(q => q.StataExportCaption == assigmentValues[0][i]);
-                Guid possibleOption;
-                if (Guid.TryParse(values[i], out possibleOption))
+                var singleOption = question as SingleCompleteQuestion;
+                if (singleOption!=null)
                 {
-                    question.SetAnswer(new List<Guid> { possibleOption }, values[i]);
+                    var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                    question.SetAnswer(new List<Guid> { answer.PublicKey }, null);
                 }
                 else
                 {
