@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
@@ -39,7 +37,12 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <summary>
         /// The use async save.
         /// </summary>
-        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.  
+        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
+
+        /// <summary>
+        /// PageSize for loading by chunk
+        /// </summary>
+        private readonly int pageSize = 1024;
 
         #endregion
 
@@ -51,13 +54,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="ravenUrl">
         /// The raven url.
         /// </param>
-        public RavenDBEventStore(string ravenUrl)
+        /// <param name="pageSize"></param>
+        public RavenDBEventStore(string ravenUrl, int pageSize)
         {
             this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
                 };
+            this.pageSize = pageSize;
         }
 
         /// <summary>
@@ -66,7 +71,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="externalDocumentStore">
         /// The external document store.
         /// </param>
-        public RavenDBEventStore(DocumentStore externalDocumentStore)
+        /// <param name="pageSize"></param>
+        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
             externalDocumentStore.Conventions = CreateConventions();
             this.DocumentStore = externalDocumentStore;
@@ -74,6 +80,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
                 };
+            this.pageSize = pageSize;
         }
 
         #endregion
@@ -127,9 +134,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                return session
-                    .Query<StoredEvent>()
-                    .Where(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier).Any();
+                return session.Query<StoredEvent>().Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
             }
         }
 
@@ -141,21 +146,18 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </returns>
         private IEnumerable<IEnumerable<StoredEvent>> GetStreamByChunk()
         {
-            const int PageSize = 1024;
             var page = 0;
-
             while (true)
             {
                 List<StoredEvent> chunk;
-                
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     chunk = session
                         .Query<StoredEvent>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
                         .OrderBy(y => y.EventSequence)
-                        .Skip(page * PageSize)
-                        .Take(PageSize)
+                        .Skip(page * pageSize)
+                        .Take(pageSize)
                         .ToList();
                 }
 
@@ -280,7 +282,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         protected virtual IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
             IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable();
-            int maxPageSize = 1024;
             int page = 0;
             while (true)
             {
@@ -290,8 +291,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .Query<StoredEvent>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(120)))
                         .Where(query).OrderBy(x => x.EventSequence)
-                        .Skip(page * maxPageSize)
-                        .Take(maxPageSize)
+                        .Skip(page * pageSize)
+                        .Take(pageSize)
                         .ToList();
 
                     if (chunk.Count == 0)
