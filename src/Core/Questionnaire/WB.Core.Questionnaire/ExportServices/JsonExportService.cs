@@ -20,7 +20,7 @@ namespace WB.Core.Questionnaire.ExportServices
 
         public string GetQuestionnaireTemplate(Guid templateId)
         {
-            var template = questionnaireStorage.GetByGuid(templateId);
+            var template = questionnaireStorage.GetById(templateId);
             if (template == null)
                 return null;
             var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };

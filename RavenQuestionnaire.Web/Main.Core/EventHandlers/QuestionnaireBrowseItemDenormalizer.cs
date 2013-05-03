@@ -87,7 +87,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
-            var browseItem = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
@@ -98,7 +98,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            var browseItem = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;

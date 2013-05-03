@@ -19,14 +19,14 @@ namespace Main.DenormalizerStorage
             return this._hash.Count;
         }
 
-        public T GetByGuid(Guid key)
+        public T GetById(Guid id)
         {
-            if (!this._hash.ContainsKey(key))
+            if (!this._hash.ContainsKey(id))
             {
                 return null;
             }
 
-            return this._hash[key];
+            return this._hash[id];
         }
 
         public IQueryable<T> Query()
@@ -34,21 +34,21 @@ namespace Main.DenormalizerStorage
             return this._hash.Values.AsQueryable();
         }
 
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
             T val;
-            this._hash.TryRemove(key, out val);
+            this._hash.TryRemove(id, out val);
         }
 
-        public void Store(T denormalizer, Guid key)
+        public void Store(T view, Guid id)
         {
-            if (this._hash.ContainsKey(key))
+            if (this._hash.ContainsKey(id))
             {
-                this._hash[key] = denormalizer;
+                this._hash[id] = view;
                 return;
             }
 
-            this._hash.TryAdd(key, denormalizer);
+            this._hash.TryAdd(id, view);
         }
     }
 }

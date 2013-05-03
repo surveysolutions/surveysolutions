@@ -55,7 +55,7 @@ namespace Core.CAPI.Views.Synchronization
         /// </returns>
         public SyncProgressView Load(SyncProgressInputModel input)
         {
-            var process = this.store.GetByGuid(input.ProcessKey);
+            var process = this.store.GetById(input.ProcessKey);
             if (process == null)
             {
                 return null;

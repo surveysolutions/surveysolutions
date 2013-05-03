@@ -3,17 +3,17 @@ using System.Linq;
 
 namespace Main.DenormalizerStorage
 {
-    public interface IDenormalizerStorage<T>
-        where T : class
+    public interface IDenormalizerStorage<TView>
+        where TView : class
     {
         int Count();
 
-        T GetByGuid(Guid key);
+        TView GetById(Guid id);
 
-        IQueryable<T> Query();
+        IQueryable<TView> Query();
 
-        void Remove(Guid key);
+        void Remove(Guid id);
 
-        void Store(T denormalizer, Guid key);
+        void Store(TView view, Guid id);
     }
 }

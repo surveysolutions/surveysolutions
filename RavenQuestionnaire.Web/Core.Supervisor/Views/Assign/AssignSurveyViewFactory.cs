@@ -60,7 +60,7 @@ namespace Core.Supervisor.Views.Assign
         /// </returns>
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
-            CompleteQuestionnaireStoreDocument q = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            CompleteQuestionnaireStoreDocument q = this.store.GetById(input.CompleteQuestionnaireId);
 
             return new AssignSurveyView(q);
         }

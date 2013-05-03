@@ -66,13 +66,13 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The get by guid.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
         /// <returns>
         /// The T.
         /// </returns>
-        public T GetByGuid(Guid key)
+        public T GetById(Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -84,9 +84,9 @@ namespace Main.DenormalizerStorage
                     // object from the cache of 
                     // of weak reference objects.
                     T retval;
-                    if (!this._hash.Contains(key.ToString()))
+                    if (!this._hash.Contains(id.ToString()))
                     {
-                        retval = this._storage.GetByGuid<T>(key.ToString());
+                        retval = this._storage.GetByGuid<T>(id.ToString());
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
@@ -97,12 +97,12 @@ namespace Main.DenormalizerStorage
                         var policy = new CacheItemPolicy();
                         policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
                         policy.SlidingExpiration = TimeSpan.FromMinutes(3);
-                        this._hash.Add(key.ToString(), retval, policy);
+                        this._hash.Add(id.ToString(), retval, policy);
                     }
                     else
                     {
                       //  retval = (_hash[key].Target as WeakDisposable<T>).Data as T;
-                        retval = _hash[key.ToString()] as T;
+                        retval = _hash[id.ToString()] as T;
                     }
                     return retval;
                 }
@@ -128,10 +128,10 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The remove.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -144,11 +144,11 @@ namespace Main.DenormalizerStorage
                         return;
                     }
                     this._bag.Remove(key);*/
-                    if (this._hash.Contains(key.ToString()))
+                    if (this._hash.Contains(id.ToString()))
                     {
-                        this._hash.Remove(key.ToString());
+                        this._hash.Remove(id.ToString());
                     }
-                    this._storage.Remove<T>(key.ToString());
+                    this._storage.Remove<T>(id.ToString());
                 }
             }
             finally
@@ -160,13 +160,13 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The store.
         /// </summary>
-        /// <param name="denormalizer">
+        /// <param name="view">
         /// The denormalizer.
         /// </param>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Store(T denormalizer, Guid key)
+        public void Store(T view, Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -181,15 +181,15 @@ namespace Main.DenormalizerStorage
 
                    // this._storage.Store<T>(denormalizer, key);
 
-                    if (this._hash[key.ToString()]==null)
+                    if (this._hash[id.ToString()]==null)
                     {
                         var policy = new CacheItemPolicy();
                         policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
                         policy.SlidingExpiration = TimeSpan.FromSeconds(10);
-                        this._hash.Add(key.ToString(), denormalizer, policy);
+                        this._hash.Add(id.ToString(), view, policy);
                     }else
                     {
-                        this._hash[key.ToString()] = denormalizer;
+                        this._hash[id.ToString()] = view;
                     }
                 }
             }

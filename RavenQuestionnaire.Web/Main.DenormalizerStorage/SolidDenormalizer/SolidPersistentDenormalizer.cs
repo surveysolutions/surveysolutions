@@ -142,21 +142,21 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// <summary>
         /// The get by guid.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
         /// <returns>
         /// The <see cref="T"/>.
         /// </returns>
-        public T GetByGuid(Guid key)
+        public T GetById(Guid id)
         {
             T result = null;
             this.ThreadSafe(
                 () =>
                     {
-                        if (this.Hash.ContainsKey(key))
+                        if (this.Hash.ContainsKey(id))
                         {
-                            result = this.Hash[key];
+                            result = this.Hash[id];
                         }
                     });
             return result;
@@ -178,40 +178,40 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// <summary>
         /// The remove.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
             this.ThreadSafe(
                 () =>
                     {
                         T val;
-                        this.Hash.TryRemove(key, out val);
+                        this.Hash.TryRemove(id, out val);
                     });
         }
 
         /// <summary>
         /// The store.
         /// </summary>
-        /// <param name="denormalizer">
+        /// <param name="view">
         /// The denormalizer.
         /// </param>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Store(T denormalizer, Guid key)
+        public void Store(T view, Guid id)
         {
             this.ThreadSafe(
                 () =>
                     {
-                        if (this.Hash.ContainsKey(key))
+                        if (this.Hash.ContainsKey(id))
                         {
-                            this.Hash[key] = denormalizer;
+                            this.Hash[id] = view;
                             return;
                         }
 
-                        this.Hash.TryAdd(key, denormalizer);
+                        this.Hash.TryAdd(id, view);
                     });
         }
 

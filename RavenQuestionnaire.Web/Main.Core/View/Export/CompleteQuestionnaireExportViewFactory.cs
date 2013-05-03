@@ -64,7 +64,7 @@ namespace Main.Core.View.Export
         /// </returns>
         public CompleteQuestionnaireExportView Load(CompleteQuestionnaireExportInputModel input)
         {
-            var template = this.templateSession.GetByGuid(input.TemplateId);
+            var template = this.templateSession.GetById(input.TemplateId);
             if (template == null)
             {
                 return null;
@@ -121,7 +121,7 @@ namespace Main.Core.View.Export
             
             foreach (var key in questionnairies)
             {
-                var document = this.documentSession.GetByGuid(key);
+                var document = this.documentSession.GetById(key);
                 if (document.TemplateId != questionnaieKey)
                     throw new ArgumentException("questionnaire has different template");
                 if (!propagatableGroupPublicKey.HasValue)
