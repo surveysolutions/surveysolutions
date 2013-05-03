@@ -43,44 +43,20 @@ namespace Web.Supervisor.Controllers
     ///     The hq controller.
     /// </summary>
     [Authorize(Roles = "Headquarter")]
-    public class HQController: BaseController
+    public class HQController : BaseController
     {
-         #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SurveyController"/> class.
-        /// </summary>
-        /// <param name="viewRepository">
-        /// The view repository.
-        /// </param>
-        /// <param name="commandService">
-        /// The command Service.
-        /// </param>
-        /// <param name="provider">
-        /// The provider.
-        /// </param>
         public HQController(
             IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider)
             : base(viewRepository, commandService, provider)
         {
         }
 
-        #endregion
+        public ActionResult Index()
+        {
+            var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
+            return this.View(model);
+        }
 
-        #region Actions
-
-        /// <summary>
-        /// Save questionnaire answer in database 
-        /// </summary>
-        /// <param name="settings">
-        /// The settings.
-        /// </param>
-        /// <param name="questions">
-        /// The questions.
-        /// </param>
-        /// <returns>
-        /// Return Json result
-        /// </returns>
         [HttpPost]
         public JsonResult AnswerQuestion(Guid surveyKey, Guid questionKey, Guid questionPropagationKey, Guid[] answers, string answerValue)
         {
@@ -96,7 +72,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = NLog.LogManager.GetCurrentClassLogger();
+                var logger = LogManager.GetCurrentClassLogger();
                 logger.Fatal(e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
@@ -149,8 +125,8 @@ namespace Web.Supervisor.Controllers
 
             return this.Json(new { status = "ok" });
         }
-        
-        public ActionResult Index(Guid? interviewerId)
+
+        public ActionResult Surveys(Guid? interviewerId)
         {
             ViewBag.ActivePage = MenuItem.Surveys;
             var model =
@@ -186,12 +162,12 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
+        public ActionResult Documents(Guid? templateId, Guid? interviewerId, Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
             var inputModel = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
                                        templateId,
-                                       interviewerId,null,null,null,
+                                       interviewerId, null, null, null,
                                        status,
                                        isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
@@ -201,33 +177,12 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Display assign form
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// Return Assign form
-        /// </returns>
         public ActionResult Assign(Guid id)
         {
             var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             return this.View(model);
         }
 
-        /// <summary>
-        /// Display change state
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        /// <returns>
-        /// Return Approve Page
-        /// </returns>
         public ActionResult ChangeState(Guid id, string template)
         {
 
@@ -243,15 +198,7 @@ namespace Web.Supervisor.Controllers
          new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.PartialView("_StatusHistory", stat.StatusHistory);
         }
-        /// <summary>
-        /// Save change state in database
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// Return view
-        /// </returns>
+
         [HttpPost]
         public ActionResult ChangeState(ApproveRedoModel model, int state, string cancel)
         {
@@ -294,18 +241,7 @@ namespace Web.Supervisor.Controllers
         }
 
 
-        /// <summary>
-        /// Display assign form
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="tmptId">
-        /// The tmpt QuestionnaireId.
-        /// </param>
-        /// <returns>
-        /// Return Assign form
-        /// </returns>
+
         public ActionResult AssignPerson(Guid id, Guid tmptId)
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -322,18 +258,7 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Display approve page
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        /// <returns>
-        /// Return Approve Page
-        /// </returns>
+
         public ActionResult Approve(Guid id, string template)
         {
             var stat = this.Repository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
@@ -341,15 +266,7 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
         }
 
-        /// <summary>
-        /// Save approve status in database
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <returns>
-        /// Return view
-        /// </returns>
+
         [HttpPost]
         public ActionResult Approve(ApproveRedoModel model)
         {
@@ -366,27 +283,7 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
-        /// <summary>
-        /// Display details page
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="question">
-        /// The question.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <returns>
-        /// Return details page
-        /// </returns>
+
         public ActionResult Details(Guid id, string template, Guid? group, Guid? question, Guid? propagationKey)
         {
             ViewBag.ActivePage = MenuItem.Docs;
@@ -403,21 +300,7 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Display part of questionnaire content
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="group">
-        /// The group.
-        /// </param>
-        /// <param name="propagationKey">
-        /// The propagation key.
-        /// </param>
-        /// <returns>
-        /// Return partial view with questionnaire content
-        /// </returns>
+
         public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey)
         {
             //if (string.IsNullOrEmpty(id))
@@ -429,21 +312,7 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_SurveyContent", model);
         }
 
-        /// <summary>
-        /// Save responsible for questionnaire on database
-        /// </summary>
-        /// <param name="cqId">
-        /// The cq id.
-        /// </param>
-        /// <param name="tmptId">
-        /// The tmpt id.
-        /// </param>
-        /// <param name="value">
-        /// The user id.
-        /// </param>
-        /// <returns>
-        /// Return redirect on assigments page
-        /// </returns>
+
         [HttpPost]
         public ActionResult AssignForm(Guid cqId, Guid tmptId, Guid value)
         {
@@ -485,18 +354,7 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("Documents", "Survey", new { id = tmptId });
         }
 
-        /// <summary>
-        /// Save questionnaire answer in database 
-        /// </summary>
-        /// <param name="settings">
-        /// The settings.
-        /// </param>
-        /// <param name="questions">
-        /// The questions.
-        /// </param>
-        /// <returns>
-        /// Return Json result
-        /// </returns>
+
         [HttpPost]
         public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
         {
@@ -546,15 +404,6 @@ namespace Web.Supervisor.Controllers
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Display sorting questionnaire
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Return sorted partial view
-        /// </returns>
         public ActionResult TableData(GridDataRequestModel data)
         {
             var input = new IndexInputModel
@@ -570,15 +419,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_Table", model);
         }
 
-        /// <summary>
-        /// Display sorting questionnaire
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Return sorted partial view
-        /// </returns>
         public ActionResult StatusViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -595,15 +435,7 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_StatusTable", model);
         }
 
-        /// <summary>
-        /// Display sorting questionnaire on Survey page
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Return sorted partial view
-        /// </returns>
+
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -621,18 +453,7 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_TableGroup", model);
         }
 
-        /// <summary>
-        /// Upload and display comments
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// /// <param name="template">
-        /// The template.
-        /// </param>
-        /// <returns>
-        /// Return page with comments
-        /// </returns>
+
         public ActionResult ShowComments(Guid id, string template)
         {
             var model = this.Repository.Load<CompleteQuestionnaireViewInputModel, SurveyScreenView>(
@@ -641,18 +462,7 @@ namespace Web.Supervisor.Controllers
             return this.View("Comments", model);
         }
 
-        /// <summary>
-        /// ability to sign status Redo for questionnaire
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="template">
-        /// The template.
-        /// </param>
-        /// <returns>
-        /// Return page with ability to came back questionnaire
-        /// </returns>
+
         public ActionResult Redo(Guid id, string template)
         {
             var stat = this.Repository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
@@ -660,21 +470,7 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = id, TemplateId = template, Statistic = stat, StatusId = SurveyStatus.Redo.PublicId });
         }
 
-        /// <summary>
-        /// Save redo status in database
-        /// </summary>
-        /// <param name="model">
-        /// The model.
-        /// </param>
-        /// <param name="redo">
-        /// The redo.
-        /// </param>
-        /// <param name="cancel">
-        /// The cancel.
-        /// </param>
-        /// <returns>
-        /// return view
-        /// </returns>
+
         [HttpPost]
         public ActionResult Redo(ApproveRedoModel model, string redo, string cancel)
         {
@@ -693,15 +489,7 @@ namespace Web.Supervisor.Controllers
             return this.View(new ApproveRedoModel() { Id = model.Id, Statistic = stat, TemplateId = model.TemplateId });
         }
 
-        /// <summary>
-        /// Action for preparing data for visual chart
-        /// </summary>
-        /// <param name="view">
-        /// The view.
-        /// </param>
-        /// <returns>
-        /// return Partial View with visual chart
-        /// </returns>
+
         public ActionResult Chart(AssignmentView view)
         {
             var data = new ChartDataModel("Chart");
@@ -718,12 +506,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView(data);
         }
 
-        /// <summary>
-        /// Interviewer summary view
-        /// </summary>
-        /// <returns>
-        /// Interviewer summary view
-        /// </returns>
         [Authorize]
         public ActionResult Summary()
         {
@@ -734,15 +516,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
         [Authorize]
         public ActionResult _SummaryData(GridDataRequestModel data)
         {
@@ -759,18 +532,7 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_SummaryTable", model);
         }
 
-        /// <summary>
-        /// Display user's statistics grouped by surveys and statuses
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Show statistics view if everything is ok
-        /// </returns>
+
         public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
         {
             var inputModel = input == null
@@ -787,15 +549,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
         [HttpPost]
         public ActionResult TableGroupByUser(GridDataRequestModel data)
         {
@@ -811,15 +564,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_TableGroupByUser", model.Items[0]);
         }
 
-        /// <summary>
-        /// Gets user's statistics
-        /// </summary>
-        /// <param name="data">
-        /// Table order data
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
         [HttpPost]
         public ActionResult UserStatistics(GridDataRequestModel data)
         {
@@ -834,12 +578,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_UserStatistics", model);
         }
 
-        /// <summary>
-        /// Uses to filter grids by user
-        /// </summary>
-        /// <returns>
-        /// List of all  supervisor's users
-        /// </returns>
         public ActionResult UsersJson()
         {
             var user = this.GlobalInfo.GetCurrentUser();
@@ -847,7 +585,5 @@ namespace Web.Supervisor.Controllers
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
         }
-
-        #endregion
     }
 }

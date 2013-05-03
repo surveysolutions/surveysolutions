@@ -1,180 +1,37 @@
-﻿@using Core.Supervisor.Views.Index
-@using ClientDependency.Core.Mvc
-@using Main.Core.Entities.SubEntities
-@using Web.Supervisor.Models
-@model IndexView
+﻿@using Main.Core.View.Questionnaire
+
+@model QuestionnaireBrowseView
+
 @{
-    this.ViewBag.Title = "Surveys";
-
-    Guid? userKey = null;
-    if (Model.User != null)
-    {
-        userKey = Model.User.Id;
-    }
+    ViewBag.Title = "Index";
 }
-@{
-    Html.RequiresJs("plotSettings.js", "Scripts", 70);
-}
-<script type="text/javascript">
-    var sortData = undefined;
-    var pageSize = @Model.PageSize;
-    var chart;
-    var filterUser = @(Model.User==null? "null":Model.User.Id.ToString());
-    $(document).ready(function() {
-        $('#filterUser').editable().on('save', function(e, params) {
-            filterUser = params.newValue;
-            sortData = [{ Field: "Title", Direction: "Asc" }];
-            getTablePage(sortData, 1);
-        });
 
-        makeSortable();
-        onPagingClick();
-
-        init();
-    });
-
-    function makeSortable() {
-        $("#questionnaireTable table").tablesorter({
-                send: function(data) {
-                    sortData = JSON.parse(JSON.stringify(data));
-                    getTablePage(data, 1);
-                }
-        });
-    }
-
-    function onPagingClick() {
-        $(".pagination li:not(.disabled):not(.active) a").click(function(e) {
-            var page = getParameterByName($(this).attr('href'), "page");
-            getTablePage(sortData, page === "" ? 1 : page * 1);
-            return false;
-        });
-    }
-
-    function getTablePage(data, page) {
-        $.ajax({
-                type: "POST",
-                url: "@Url.Action("TableData", "HQ")",
-            data: JSON.stringify({ InterviwerId: filterUser, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
-                contentType: 'application/json, charset=utf-8',
-                statusCode: {
-                    200: function(response) {
-                        $('#questionnaireTable tbody').html($(response).find('#table tbody').html());
-                        $('#paging').html($(response).find('#paging').html());
-                        var parsedHTML = response.replace(/script/gi, 'rickscript'); 
-                        $(parsedHTML).find('rickscript').each(function (index, domEle) {
-                            if (!$(this).attr('src')) {
-                                eval($(this).text()); //feeling lucky execute it
-                            }
-                        });
-                        init();
-                        onPagingClick();
-                    }
-                }
-            });
-    }
-
-    function getParameterByName(ref, name) {
-        name = name.replace( /[\[]/ , "\\\[").replace( /[\]]/ , "\\\]");
-        var regexS = "[\\?&]" + name + "=([^&#]*)";
-        var regex = new RegExp(regexS);
-        var results = regex.exec(ref);
-        if (results == null)
-            return "";
-        else
-            return decodeURIComponent(results[1].replace( /\+/g , " "));
-    }
-    
-</script>
-<h2>Surveys and Questionnaire Statuses. Filtered by Interviewer: <a href="#" id="filterUser" 
-                  data-placement="bottom" 
-                  data-type="select" 
-                  data-source="@Url.Action("UsersJson", "HQ")"
-                  data-prepend='All'             
-                  data-original-title="Select user">@(this.Model.User==null?"All":Model.User.Name)</a> </h2>
-<div id="questionnaireTable">
-<div>
-    <table id="table" class="table table-striped table-bordered table-condensed table-hover">
-        <thead>
-            <tr>
-                <th class="sorting" sorter='{"key":"Title"}'><span>Surveys</span></th>
-                @foreach (var item in Model.Headers)
-                {
-                    <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
-                    </th>
-                }
-                <td style="width: 90px;">Export Data</td>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var collect in Model.Items.Skip((Model.Page - 1) * Model.PageSize).Take(Model.PageSize))
-            {
+<h2>HQ Dashboard</h2>
+<div class="row-fluid">
+    <div class="span6"></div>
+    <div class="span6">
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
                 <tr>
-                    <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, interviewerId = userKey })
-                    </td>
-                    @foreach (var it in Model.Headers)
-                    {
-
-                        var status = SurveyStatus.GetStatusByNameOrDefault(it.Value);
-                        var value = Model.Headers.GetItemValue(collect, it.Key);
-
-                        if (status.PublicId != SurveyStatus.Unknown.PublicId)
-                        {
-                
-                            <td class="td-@it.Key.ToLower()">
-                                @if (value != "0")
-                                {
-                                    @Html.ActionLink(value, "Documents", new { templateId = collect.Id, status = status.PublicId, interviewerId = userKey })
-                                }
-                                else
-                                {
-                                    <text>@value</text>
-                                }
-                            </td>
-                        }
-                        else
-                        {
-                            <td class="td-@it.Key.ToLower()">
-                                @if (value != "0")
-                                {
-                                    @Html.ActionLink(value, "Documents", new { templateId = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true", interviewerId = userKey })
-                                }
-                                else
-                                {
-                                    <text>@value</text>
-                                }
-                            </td>
-                        }
-
-                    }
-                    <td>
-                        <div class="btn-group">
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "csv" })">
-                                CSV</a>
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "tab" })">
-                                TAB</a>
-                        </div>
-                    </td>
+                    <th>Title</th>
+                    <th></th>
                 </tr>
-            }
-            <tr>
-                <th>Summary</th>
-                @foreach (var it in Model.Headers)
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
                 {
-                    <th>
-                        @Model.Headers.GetItemValue(Model.Summary, it.Key)
-                    </th>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td class="buttons">
+                            <div class="btn-group">
+                                <a  href="@Url.Action("NewSurvey", "Dashboard", new { id = item.Id })" class="btn btn-primary">New survey</a>
+                            </div>
+                        </td>
+                    </tr>
                 }
-                <th></th>
-            </tr>
-        </tbody>
-    </table>
-    <div class="pagination" id="paging">
-        @if (((double)Model.TotalCount / Model.PageSize) > 1d)
-        {
-            <text>@Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())</text>
-        }
-    </div>
-    <div id="chartBox">
-        @Html.Partial("IndexChart", this.Model)
+            </tbody>
+        </table>
     </div>
 </div>

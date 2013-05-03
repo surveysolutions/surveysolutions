@@ -590,7 +590,7 @@
     <Content Include="Views\Shared\Group\_PropagatedGroup.cshtml" />
     <Content Include="Views\Shared\Group\_PropagatedScreen.cshtml" />
     <Content Include="Views\Shared\Group\_SimpleGroup.cshtml" />
-    <Content Include="Views\HQ\Index.cshtml">
+    <Content Include="Views\HQ\Surveys.cshtml">
       <SubType>
       </SubType>
     </Content>
@@ -615,6 +615,7 @@
     </Content>
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Interviewers.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

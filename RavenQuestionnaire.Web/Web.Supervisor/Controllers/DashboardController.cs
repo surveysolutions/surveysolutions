@@ -33,12 +33,6 @@ namespace Web.Supervisor.Controllers
             : base(viewRepository, commandService, globalProvider)
         {
         }
-
-        public ActionResult Index()
-        {
-            var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
-            return this.View(model);
-        }
       
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {

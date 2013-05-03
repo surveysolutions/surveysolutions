@@ -408,12 +408,6 @@ namespace Web.Supervisor.Controllers
             return this.View(model);
         }
 
-        public ActionResult Timeline(Guid id)
-        {
-            var model = this.Repository.Load<TimelineViewInputModel, TimelineView>(new TimelineViewInputModel(id));
-            return this.View(model);
-        }
-
         /// <summary>
         /// Display part of questionnaire content
         /// </summary>
