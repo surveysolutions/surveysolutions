@@ -105,7 +105,9 @@
     <Compile Include="DenormalizerFactory.cs" />
     <Compile Include="IDenormalizer.cs" />
     <Compile Include="IDenormalizerStorage.cs" />
-    <Compile Include="InMemoryDenormalizer.cs" />
+    <Compile Include="InMemoryDenormalizer.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="RavenPersistentStorage.cs" />
     <Compile Include="SmartDenormalizerAttribute.cs" />
     <Compile Include="SolidDenormalizer\SolidPersistentDenormalizer.cs" />

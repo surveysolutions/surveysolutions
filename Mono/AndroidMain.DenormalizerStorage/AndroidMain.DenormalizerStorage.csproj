@@ -47,6 +47,9 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IDenormalizerStorage.cs">
       <Link>IDenormalizerStorage.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\InMemoryDenormalizer.cs">
+      <Link>InMemoryDenormalizer.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IPersistentStorage.cs">
       <Link>IPersistentStorage.cs</Link>
     </Compile>
@@ -67,7 +70,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="51825d6c-4a28-4c33-8598-004462023a27" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="51825d6c-4a28-4c33-8598-004462023a27" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
