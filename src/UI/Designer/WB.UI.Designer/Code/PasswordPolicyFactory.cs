@@ -1,22 +1,41 @@
-﻿namespace WB.UI.Designer
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="PasswordPolicyFactory.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace WB.UI.Designer
 {
     using WB.UI.Designer.Providers.Membership;
 
+    /// <summary>
+    /// The password policy factory.
+    /// </summary>
     public static class PasswordPolicyFactory
     {
-        public static IPasswordPolicy CreatePasswordPolicy(bool isLockingAccountPolicyForced)
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The create password policy.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IPasswordPolicy"/>.
+        /// </returns>
+        public static IPasswordPolicy CreatePasswordPolicy()
         {
             return new PasswordPolicy
-            {
-                IsPasswordQuestionRequired = false,
-                IsPasswordResetEnabled = true,
-                IsPasswordRetrievalEnabled = false,
-                MaxInvalidPasswordAttempts = isLockingAccountPolicyForced ? 5 : int.MaxValue,
-                MinRequiredNonAlphanumericCharacters = 0,
-                PasswordAttemptWindow = 10,
-                PasswordMinimumLength = 10,
-                PasswordStrengthRegularExpression = null
-            };
+                       {
+                           IsPasswordQuestionRequired = MembershipProviderSettings.Instance.RequiresQuestionAndAnswer,
+                           IsPasswordResetEnabled = MembershipProviderSettings.Instance.EnablePasswordReset,
+                           IsPasswordRetrievalEnabled = MembershipProviderSettings.Instance.EnablePasswordRetrieval,
+                           MaxInvalidPasswordAttempts = MembershipProviderSettings.Instance.MaxInvalidPasswordAttempts,
+                           MinRequiredNonAlphanumericCharacters = MembershipProviderSettings.Instance.MinRequiredNonalphanumericCharacters,
+                           PasswordAttemptWindow = MembershipProviderSettings.Instance.PasswordAttemptWindow,
+                           PasswordMinimumLength = MembershipProviderSettings.Instance.MinRequiredPasswordLength,
+                           PasswordStrengthRegularExpression = MembershipProviderSettings.Instance.PasswordStrengthRegularExpression
+                       };
         }
+
+        #endregion
     }
 }
