@@ -42,7 +42,7 @@ namespace WB.UI.Designer.Code
         {
             return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
             {
-                { typeof(IFilterProvider), typeof(FilterProvider) },
+                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
             });
         }
     }
