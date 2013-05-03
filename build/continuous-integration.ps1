@@ -1,5 +1,6 @@
-$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ErrorActionPreference = "Stop"
+
+$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\functions.ps1"
 
