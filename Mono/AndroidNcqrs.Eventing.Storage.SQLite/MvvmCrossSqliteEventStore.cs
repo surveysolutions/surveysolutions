@@ -58,6 +58,38 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             return _connection.Table<StoredEvent>().Select(x => x.ToCommitedEvent());
         }
 
+        public CommittedEvent GetLastEvent(Guid aggregateRootId)
+        {
+            var idString = aggregateRootId.ToString();
+            try
+            {
+                return
+                    ((TableQuery<StoredEvent>) _connection.Table<StoredEvent>()).Where(x => x.EventSourceId == idString)
+                                                                                .OrderByDescending(x => x.Sequence)
+                                                                                .Last()
+                                                                                .ToCommitedEvent();
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
+        {
+            var eventIdentifierString = eventIdentifier.ToString();
+            try
+            {
+                var lastEvent = _connection.Get<StoredEvent>(eventIdentifierString);
+                if (lastEvent != null && lastEvent.EventSourceId == aggregateRootId.ToString())
+                    return true;
+            }
+            catch (Exception)
+            {
+            }
+            return false;
+        }
+
         public CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
             var idString = id.ToString();

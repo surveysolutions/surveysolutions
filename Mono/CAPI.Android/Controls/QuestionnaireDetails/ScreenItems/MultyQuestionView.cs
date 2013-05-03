@@ -87,56 +87,5 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             SaveAnswer();
 
         }
-
-        private void PopulateComboboxes(LinearLayout ll, CheckBox[] views, Context mContext)
-        {
-          //  Display display = ((Activity)mContext).WindowManager.DefaultDisplay;
-            ll.RemoveAllViews();
-            this.Measure(0,0);
-            int maxWidth = this.MeasuredWidth - 20;
-
-            LinearLayout.LayoutParams lparams;
-            LinearLayout newLL = new LinearLayout(mContext);
-            newLL.LayoutParameters = new LayoutParams(LayoutParams.FillParent,
-                                                      LayoutParams.WrapContent);
-            newLL.SetGravity(GravityFlags.Left);
-            newLL.Orientation = Orientation.Horizontal;
-
-            int widthSoFar = 0;
-
-            for (int i = 0; i < views.Length; i++)
-            {
-                LinearLayout LL = new LinearLayout(mContext);
-                LL.Orientation = Orientation.Horizontal;
-                LL.SetGravity(GravityFlags.CenterHorizontal | GravityFlags.Bottom);
-                LL.LayoutParameters = new ListView.LayoutParams(
-                    LayoutParams.WrapContent, LayoutParams.WrapContent);
-                views[i].Measure(0, 0);
-                lparams = new LinearLayout.LayoutParams(views[i].MeasuredWidth,
-                                                        LayoutParams.WrapContent);
-                LL.AddView(views[i], lparams);
-                LL.Measure(0, 0);
-                widthSoFar += views[i].MeasuredWidth; // YOU MAY NEED TO ADD THE MARGINS
-                if (widthSoFar >= maxWidth)
-                {
-                    ll.AddView(newLL);
-
-                    newLL = new LinearLayout(mContext);
-                    newLL.LayoutParameters = new LayoutParams(
-                        LayoutParams.FillParent,
-                        LayoutParams.WrapContent);
-                    newLL.Orientation = Orientation.Horizontal;
-                    newLL.SetGravity(GravityFlags.Left);
-                    lparams = new LinearLayout.LayoutParams(LL.MeasuredWidth, LL.MeasuredHeight);
-                    newLL.AddView(LL, lparams);
-                    widthSoFar = LL.MeasuredWidth;
-                }
-                else
-                {
-                    newLL.AddView(LL);
-                }
-            }
-            ll.AddView(newLL);
-        }
     }
 }
