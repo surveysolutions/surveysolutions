@@ -8,6 +8,7 @@ namespace WB.UI.Designer.Filters
     using Microsoft.Practices.ServiceLocation;
 
     using WB.UI.Designer.Controllers;
+    using WB.UI.Shared.Web.Filters;
 
     public class RequiresReadLayerFilterProvider : IFilterProvider
     {

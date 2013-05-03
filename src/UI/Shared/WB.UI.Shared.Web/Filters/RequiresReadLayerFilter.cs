@@ -1,7 +1,6 @@
-﻿namespace WB.UI.Designer.Filters
+﻿namespace WB.UI.Shared.Web.Filters
 {
     using System;
-    using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
 
@@ -10,6 +9,9 @@
     /// <summary>
     /// Filter which ensures that read layer is built before action is executed.
     /// </summary>
+    /// <remarks>
+    /// This filter requires existance of MaintenanceController with ReadLayer action which accepts returnUrl string parameter.
+    /// </remarks>
     public class RequiresReadLayerFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
