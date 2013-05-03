@@ -1,5 +1,6 @@
 namespace WB.UI.Designer.Filters
 {
+    using System;
     using System.Collections.Generic;
     using System.Web.Mvc;
 
@@ -18,13 +19,20 @@ namespace WB.UI.Designer.Filters
 
         public IEnumerable<Filter> GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
         {
-            bool isErrorController = actionDescriptor.ControllerDescriptor.ControllerType == typeof(ErrorController);
-            bool isReadLayerRequiredByController = !isErrorController;
+            bool isErrorController = IsControllerOfType<ErrorController>(actionDescriptor.ControllerDescriptor);
+            bool isMaintenanceController = IsControllerOfType<MaintenanceController>(actionDescriptor.ControllerDescriptor);
+
+            bool isReadLayerRequiredByController = !isErrorController && !isMaintenanceController;
 
             if (isReadLayerRequiredByController)
             {
                 yield return new Filter(this.serviceLocator.GetInstance<RequiresReadLayerFilter>(), FilterScope.Controller, order: null);
             }
+        }
+
+        private static bool IsControllerOfType<T>(ControllerDescriptor controllerDescriptor)
+        {
+            return controllerDescriptor.ControllerType == typeof(T);
         }
     }
 }
