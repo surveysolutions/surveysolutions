@@ -393,17 +393,9 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </Content>
     <Content Include="Web.Deploy-dev.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Deploy-Main.config">
-      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Content\main.css" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -563,12 +555,6 @@
     <Content Include="Views\Survey\Approve.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.Deploy-devKh.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -608,9 +594,6 @@
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
     <Content Include="Views\Maintenance\ReadLayer.cshtml" />
-    <None Include="Web.Deploy-Main-Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
