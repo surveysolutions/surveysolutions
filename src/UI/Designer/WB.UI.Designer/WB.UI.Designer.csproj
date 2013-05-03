@@ -151,6 +151,7 @@
     </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
+      <HintPath>..\..\..\..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
@@ -230,8 +231,6 @@
     <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
-    <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
-    <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="BootstrapSupport\ControlGroupExtensions.cs" />
@@ -259,6 +258,7 @@
     <Compile Include="Code\Helpers\ICommandDeserializer.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Controllers\QuestionnaireController.cs" />
+    <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -568,6 +568,10 @@
     <ProjectReference Include="..\..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
