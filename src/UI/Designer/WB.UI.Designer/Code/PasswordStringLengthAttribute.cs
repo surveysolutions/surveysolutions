@@ -15,17 +15,17 @@ namespace WB.UI.Designer
     /// <summary>
     ///     The custom string length attribute.
     /// </summary>
-    public class CustomStringLengthAttribute : StringLengthAttribute
+    public class PasswordStringLengthAttribute : StringLengthAttribute
     {
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CustomStringLengthAttribute"/> class.
+        /// Initializes a new instance of the <see cref="PasswordStringLengthAttribute"/> class.
         /// </summary>
         /// <param name="maximumLength">
         /// The maximum length.
         /// </param>
-        public CustomStringLengthAttribute(int maximumLength)
+        public PasswordStringLengthAttribute(int maximumLength)
             : base(maximumLength)
         {
             base.MinimumLength = this.MinimumLength;
