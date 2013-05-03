@@ -34,10 +34,7 @@ namespace WB.UI.Designer.Code
                         typeof(AccountAR).Assembly,
                     });
         }
-        public override void Load()
-        {
-            base.Load();
-        }
+
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
         {
             return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
