@@ -31,7 +31,7 @@ function BuildPackageForProject($Project, $BuildConfiguration) {
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build package for project $Project']"
+        Write-Host "##teamcity[message status='FAILURE' text='Failed to build package for project $Project']"
     }
 
     Write-Host "##teamcity[progressFinish 'Building package for project $Project']"
