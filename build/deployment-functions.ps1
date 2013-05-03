@@ -7,19 +7,30 @@ function PublishZippedWebPackage($SourceFolder, $TargetFile) {
     Write-Host "##teamcity[blockOpened name='Publishing zipped web package artifact']"
     Write-Host "##teamcity[progressStart 'Publishing zipped web package artifact']"
 
-	if (Test-Path $TargetFile){
-		Remove-Item $TargetFile
-	}	
+    $wasPublishSuccessfull = $true;
+
+    try {
+        if (Test-Path $TargetFile){
+            Remove-Item $TargetFile
+        }
     
-    [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
-    [System.AppDomain]::CurrentDomain.GetAssemblies()
+        [Reflection.Assembly]::LoadWithPartialName("System.IO.Compression.FileSystem")
+        [System.AppDomain]::CurrentDomain.GetAssemblies()
 
-    [System.IO.Compression.ZipFile]::CreateFromDirectory((Join-Path (Get-Location).Path $SourceFolder), (Join-Path (Get-Location).Path $TargetFile), [System.IO.Compression.CompressionLevel]::Optimal, $false)
+        [System.IO.Compression.ZipFile]::CreateFromDirectory((Join-Path (Get-Location).Path $SourceFolder), (Join-Path (Get-Location).Path $TargetFile), [System.IO.Compression.CompressionLevel]::Optimal, $false)
 
-    Write-Host "##teamcity[publishArtifacts '$TargetFile']"
+        Write-Host "##teamcity[publishArtifacts '$TargetFile']"
+    }
+    catch {
+        $wasPublishSuccessfull = $false;
+        Write-Host "##teamcity[message status='ERROR' text='Failed to publish zipped web package artifact']"
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to publish zipped web package artifact']"
+    }
 
     Write-Host "##teamcity[progressFinish 'Publishing zipped web package artifact']"
     Write-Host "##teamcity[blockClosed name='Publishing zipped web package artifact']"
+
+    return $wasPublishSuccessfull;
 }
 
 function BuildWebPackage($Project, $BuildConfiguration) {
@@ -51,7 +62,7 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-    PublishZippedWebPackage $SourceFolder 'package.zip'
+    PublishZippedWebPackage $SourceFolder 'package.zip' | %{ if (-not $_) { Exit } }
 
     Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
 	

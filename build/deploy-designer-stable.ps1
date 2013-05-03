@@ -1,5 +1,6 @@
-$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ErrorActionPreference = "Stop"
+
+$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\deployment-functions.ps1"
 
@@ -7,7 +8,6 @@ $ErrorActionPreference = "Stop"
 Copy-Item `
     src/UI/Designer/WB.UI.Designer/Configuration/Dev-Stable.Designer.Web.config `
     src/UI/Designer/WB.UI.Designer/Configuration/Dev.Designer.Web.config `
-
 
 Deploy `
     -Solution 'src\Designer.sln' `
