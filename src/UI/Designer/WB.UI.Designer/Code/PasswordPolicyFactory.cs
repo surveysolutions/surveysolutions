@@ -1,6 +1,4 @@
-﻿using WB.UI.Designer.Providers.Membership;
-
-namespace WB.UI.Designer
+﻿namespace WB.UI.Designer
 {
     using WB.UI.Designer.Providers.Membership;
 
