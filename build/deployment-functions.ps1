@@ -3,9 +3,9 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 
-function PublishZipPackage($SourceFolder, $TargetFile) {
-    Write-Host "##teamcity[blockOpened name='Publishing zip package artifact']"
-    Write-Host "##teamcity[progressStart 'Publishing zip package artifact']"
+function PublishZippedWebPackage($SourceFolder, $TargetFile) {
+    Write-Host "##teamcity[blockOpened name='Publishing zipped web package artifact']"
+    Write-Host "##teamcity[progressStart 'Publishing zipped web package artifact']"
 
 	if (Test-Path $TargetFile){
 		Remove-Item $TargetFile
@@ -18,25 +18,25 @@ function PublishZipPackage($SourceFolder, $TargetFile) {
 
     Write-Host "##teamcity[publishArtifacts '$TargetFile']"
 
-    Write-Host "##teamcity[progressFinish 'Publishing zip package artifact']"
-    Write-Host "##teamcity[blockClosed name='Publishing zip package artifact']"
+    Write-Host "##teamcity[progressFinish 'Publishing zipped web package artifact']"
+    Write-Host "##teamcity[blockClosed name='Publishing zipped web package artifact']"
 }
 
-function BuildPackageForProject($Project, $BuildConfiguration) {
-    Write-Host "##teamcity[blockOpened name='Building package for project $Project']"
-    Write-Host "##teamcity[progressStart 'Building package for project $Project']"
+function BuildWebPackage($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building web package for project $Project']"
+    Write-Host "##teamcity[progressStart 'Building web package for project $Project']"
 
     & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" | Write-Host
 
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build package for project $Project']"
-        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build package for project $Project']"
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build web package for project $Project']"
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build web package for project $Project']"
     }
 
-    Write-Host "##teamcity[progressFinish 'Building package for project $Project']"
-    Write-Host "##teamcity[blockClosed name='Building package for project $Project']"
+    Write-Host "##teamcity[progressFinish 'Building web package for project $Project']"
+    Write-Host "##teamcity[blockClosed name='Building web package for project $Project']"
 
     return $wasBuildSuccessfull
 }
@@ -49,9 +49,9 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     RunTests $BuildConfiguration
 
-    BuildPackageForProject $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+    BuildWebPackage $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-    PublishZipPackage $SourceFolder 'package.zip'
+    PublishZippedWebPackage $SourceFolder 'package.zip'
 
     Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
 	
