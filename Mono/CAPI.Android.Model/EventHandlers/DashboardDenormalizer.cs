@@ -59,7 +59,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         {
             TryToRemoveFromOtherDashboards(item.PublicKey, templateKey, dashbordOwner);
 
-            var dashboard = _documentStorage.GetByGuid(dashbordOwner);
+            var dashboard = _documentStorage.GetById(dashbordOwner);
             if (dashboard == null)
             {
                 dashboard = new DashboardModel(dashbordOwner);
@@ -80,7 +80,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var dashboard = _documentStorage.GetByGuid(evnt.Payload.Responsible.Id);
+            var dashboard = _documentStorage.GetById(evnt.Payload.Responsible.Id);
             if (dashboard == null)
                 return;
             foreach (var dashboardSurveyItem in dashboard.Surveys)

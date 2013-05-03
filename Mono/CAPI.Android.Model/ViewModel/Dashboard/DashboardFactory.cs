@@ -17,7 +17,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         public DashboardModel Load(DashboardInput input)
         {
-            return _documentStorage.GetByGuid(input.UserId);
+            return _documentStorage.GetById(input.UserId);
            // return _documentStorage.Query().First();
         
         }
