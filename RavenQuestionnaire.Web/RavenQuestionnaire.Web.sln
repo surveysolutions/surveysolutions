@@ -103,6 +103,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Questionnaire", "..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Questionnaire.Tests", "..\src\Tests\WB.Core.Questionnaire.Tests\WB.Core.Questionnaire.Tests.csproj", "{3E34927E-F47E-4351-896B-03C7BE7A353E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{7EFFCA7F-94FE-4356-9696-C6D17A35540C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Web", "..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj", "{75470164-4087-4E9B-845A-5400C038A499}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = RavenQuestionnaire.Web.vsmdi
@@ -1299,6 +1303,36 @@ Global
 		{3E34927E-F47E-4351-896B-03C7BE7A353E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3E34927E-F47E-4351-896B-03C7BE7A353E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3E34927E-F47E-4351-896B-03C7BE7A353E}.Release|x86.ActiveCfg = Release|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|x86.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-devKh|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-devKh|Any CPU.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-devKh|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-devKh|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-devKh|x86.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main|Any CPU.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main|x86.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main-Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main-Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-Main-Debug|x86.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1329,5 +1363,6 @@ Global
 		{400CDE74-7407-4388-8D57-BF429E7C508D} = {83C45CDF-6A19-4315-A897-D710BCC106BA}
 		{8ACB96F6-D1FE-4A81-99B8-7E7664C418F5} = {83C45CDF-6A19-4315-A897-D710BCC106BA}
 		{4489F996-D379-43D1-8932-3C48D59D9AB5} = {83C45CDF-6A19-4315-A897-D710BCC106BA}
+		{75470164-4087-4E9B-845A-5400C038A499} = {7EFFCA7F-94FE-4356-9696-C6D17A35540C}
 	EndGlobalSection
 EndGlobal
