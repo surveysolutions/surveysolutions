@@ -108,9 +108,13 @@ namespace Web.Supervisor.Controllers
                     {
                         this.authentication.SignIn(model.UserName, false);
                         if (isSupervisor)
-                            return this.Redirect("~/");
+                        {
+                            return this.RedirectToAction("Index", "Survey");
+                        }
                         else
-                            return this.RedirectToRoute("HeadquarterDashboard");
+                        {
+                            return this.RedirectToAction("Index", "HQ");
+                        }
                     }
 
                     ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");

@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
+
 namespace Core.Supervisor.Views.Assignment
 {
     using System;
@@ -80,32 +82,33 @@ namespace Core.Supervisor.Views.Assignment
         /// </returns>
         public AssignmentView Load(AssignmentInputModel input)
         {
+            var responsibleList = users.GetIntervieweresListForViewer(input.ViewerId).Select(i => i.PublicKey);
             var view = new AssignmentView(input.Page, input.PageSize, 0);
-            view.Template = input.TemplateId == Guid.Empty
-                            ? new TemplateLight(Guid.Empty, "Any")
-                            : this.templates.GetByGuid(input.TemplateId).GetTemplateLight();
+            view.Template = !input.TemplateId.HasValue
+                                ? null
+                                : this.templates.GetByGuid(input.TemplateId.Value).GetTemplateLight();
 
-            view.User = input.UserId == Guid.Empty
-                            ? new UserLight(Guid.Empty, "Anyone")
-                            : this.users.GetByGuid(input.UserId).GetUseLight();
+            view.User = !input.InterviewerId.HasValue
+                            ? null
+                            : this.users.GetByGuid(input.InterviewerId.Value).GetUseLight();
 
-            view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
+            view.Status = SurveyStatus.Unknown;
 
-            if (input.Statuses != null && input.Statuses.Count > 0)
+            if (input.StatusId.HasValue)
             {
-                var status = SurveyStatus.GetStatusByIdOrDefault(input.Statuses.First());
-                if (status != SurveyStatus.Unknown)
-                {
-                    view.Status = status;
-                }
+                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
             }
-           
-            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == Guid.Empty
-                ? this.surveys.Query()
-                : this.surveys.Query().Where(v => v.Status.PublicId == view.Status.PublicId))
+            #warning need to be filtered by responsible supervisr
+            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
+                                                                     ? this.surveys.Query()
+                                                                     : this.surveys.Query()
+                                                                           .Where(
+                                                                               v =>
+                                                                               v.Status.PublicId == view.Status.PublicId))
+                .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
                 .OrderByDescending(t => t.CreationDate);
 
-            if (input.TemplateId != Guid.Empty)
+            if (input.TemplateId.HasValue)
             {
                 items = items.Where(x => (x.TemplateId == input.TemplateId));
             }
@@ -114,12 +117,12 @@ namespace Core.Supervisor.Views.Assignment
             {
                 items = items.Where(t => t.Responsible == null);
             }
-            else if (input.UserId != Guid.Empty)
+            else if (input.InterviewerId.HasValue)
             {
-                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.UserId);
+                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.InterviewerId);
             }
 
-            if (input.QuestionnaireId != Guid.Empty)
+            if (input.QuestionnaireId.HasValue)
             {
                 items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
             }
@@ -131,7 +134,7 @@ namespace Core.Supervisor.Views.Assignment
                 items = this.DefineOrderBy(items, input);
             }
 
-            view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
+            view.SetItems(items.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize));
 
             return view;
         }

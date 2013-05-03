@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
 using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Interviewer
@@ -72,29 +73,26 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            int count =
-                this.users.Query().Where(u => u.Supervisor != null).Count(u => u.Supervisor.Id == input.SupervisorId);
-            if (count == 0)
+            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId);
+
+            if (!interviewers.Any())
             {
                 return new InterviewersView(
                     input.Page, 
                     input.PageSize, 
-                    count, 
-                    new InterviewersItem[0], 
-                    input.SupervisorId);
+                    new InterviewersItem[0],
+                    input.ViewerId);
             }
 
-            IQueryable<UserDocument> query =
-                this.users.Query().Where(u => u.Supervisor != null).Where(u => u.Supervisor.Id == input.SupervisorId);
             IQueryable<InterviewersItem> items =
-                query.Select(
+                interviewers.Select(
                     x =>
                     new InterviewersItem(
                         x.PublicKey, 
                         x.UserName, 
                         x.Email, 
                         x.CreationDate, 
-                        x.IsLocked));
+                        x.IsLocked)).AsQueryable();
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc
@@ -104,7 +102,7 @@ namespace Core.Supervisor.Views.Interviewer
 
             items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
             return new InterviewersView(
-                input.Page, input.PageSize, count, items, input.SupervisorId);
+                input.Page, input.PageSize, items, input.ViewerId);
         }
 
         #endregion

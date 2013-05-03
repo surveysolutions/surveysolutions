@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
+
 namespace Core.Supervisor.Views.Summary
 {
     using System;
@@ -75,15 +77,15 @@ namespace Core.Supervisor.Views.Summary
         /// </returns>
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
-            var template = new TemplateLight(Guid.Empty, "All");
-            if (input.TemplateId != Guid.Empty)
+            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            TemplateLight template = null;
+            if (input.TemplateId.HasValue)
             {
-                var tbi = this.templates.GetByGuid(input.TemplateId);
+                var tbi = this.templates.GetByGuid(input.TemplateId.Value);
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 
-            var items = this.BuildItems((input.TemplateId == Guid.Empty
+            var items = this.BuildItems((!input.TemplateId.HasValue
                                              ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
                                              : this.survey.Query().Where(
                                                  x => x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))

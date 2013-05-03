@@ -1,0 +1,69 @@
+﻿@using Web.Supervisor.Models
+@using Core.Supervisor.Views.Status
+@model StatusView
+@{
+    Guid? statusKey = null;
+    if (Model.Status.PublicId != Guid.Empty)
+    {
+        statusKey = Model.Status.PublicId;
+    }
+}
+<div>
+    <table id="table" class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="sorting" sorter='{"key":"Title"}'><span>Interviewers</span></th>
+                @foreach (var item in Model.Headers)
+                {
+                    var acronim = string.Join(string.Empty, item.Title.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s[0]));
+                    <th class="sorting" role="columnheader" sorter='{"key": "@item.TemplateId"}'><a href="#" data-placement="top" rel="tooltip" data-original-title="@item.Title" title="@item.Title">@acronim</a>
+                    </th>
+                }
+                <th class="sorting" sorter='{"key":"Total"}'>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var collect in Model.Items)
+            {
+                <tr>
+                    <td>@Html.ActionLink(collect.User.Name, "Documents", new { status = statusKey, interviewerId = collect.User.Id })
+                    </td>
+                    @foreach (var it in Model.Headers)
+                    {
+                        var value = collect.Items[it];
+                        <td>
+                            @if (value != 0)
+                            {
+                                @Html.ActionLink(value.ToString(), "Documents", new { status = statusKey, interviewerId = collect.User.Id, templateId = it.TemplateId })
+                            }
+                            else
+                            {
+                                <text>@value</text>
+                            }
+                        </td>
+                    }
+                    <td>@collect.Total</td>
+                </tr>
+            }
+            <tr>
+                <th>Summary</th>
+                @foreach (var it in Model.Headers)
+                {
+                    <th>
+                        @Model.Summary.Items[it]
+                    </th>
+                }
+                <th>@Model.Summary.Total</th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination" id="paging">
+        @if (((double)Model.TotalCount / Model.PageSize) > 1d)
+        {
+            <text>@Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())</text>
+        }
+    </div>
+     <div id="chartBox">
+        @Html.Partial("StatusChart", this.Model)
+    </div>
+</div>

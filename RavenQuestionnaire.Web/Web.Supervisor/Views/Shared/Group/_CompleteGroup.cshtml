@@ -1,0 +1,85 @@
+﻿@using Main.Core.View.Group
+@using Main.Core.View.Question
+@model Main.Core.View.Group.CompleteGroupMobileView
+@*
+@if (Model.Propagated != Propagate.None)
+{
+    @:Html.Partial("~/Views/Survey/Group/_PropagatebleGroup.cshtml", Model)
+}
+else
+{
+    @Html.Partial("~/Views/Survey/Group/_SimpleGroup.cshtml", Model)
+}
+@helper RenderAddButton(Guid currentGroupPublicKey)
+    {
+    var requestParams = new
+                            {
+                                publicKey = currentGroupPublicKey,
+                                questionnaireId = ViewBag.QuestionnaireId,
+                                parentGroupPublicKey = ViewBag.CurrentGroupPublicKey,
+                                salt = (new Random()).NextDouble()
+                            };
+    string templateId = "groupTemplate" + currentGroupPublicKey;
+
+    using (Ajax.BeginFormHtml5("PropagateGroup", "Survey", requestParams, new AjaxOptions { HttpMethod = "POST", OnComplete = "PropagatedGroup" }))
+    {
+    <input value="@Model.Title" type="submit" data-role = "button" data-icon = "plus" data-theme = "a"/>
+
+    @Html.ValidationMessage("PublicKey")
+    }
+
+    <script id="@templateId"  type="text/x-jsrender">
+        @Html.Partial("~/Views/Survey/Group/_PropagatedGrooup.cshtml", Model.PropagateTemplate)
+    </script>
+}*@
+<ul id="survey_content">
+    @using (var enumerator = Model.Children.GetEnumerator())
+    {
+        if (enumerator.MoveNext())
+        {
+            bool isLast;
+            do
+            {
+                var item = enumerator.Current;
+                isLast = !enumerator.MoveNext();
+                {
+
+                    if ((item as CompleteQuestionView) != null)
+                    {
+                        var question = item as CompleteQuestionView;
+                        <li>
+                            <div class="line-wrap">
+                                <div class="div-table">
+                                    <div class="div-row">
+                                        <div class="div-cell">
+                                            <div class="cell-content">@question.Title</div>
+                                        </div>
+                                        <div class="div-cell">
+                                            <div class="cell-content">@question.Answer &nbsp;</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        var group = item as CompleteGroupMobileView;
+                        <li>
+                            <div class="line-wrap">
+                                <div class="cell">
+                                    <div class="cell-content">@group.Title</div>
+                                </div>
+                                <div class="cell">
+                                    <div class="cell-content">
+                                        &nbsp;</div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                }
+            }
+            while (!isLast);
+        }
+    }
+</ul>

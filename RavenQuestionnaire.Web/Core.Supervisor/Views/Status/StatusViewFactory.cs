@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
+
 namespace Core.Supervisor.Views.Status
 {
     using System;
@@ -58,17 +60,14 @@ namespace Core.Supervisor.Views.Status
         /// </returns>
         public StatusView Load(StatusViewInputModel input)
         {
-            var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
+            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
-            if (status == SurveyStatus.Unknown)
-            {
-                status = new SurveyStatus { PublicId = Guid.Empty, Name = "All" };
-            }
 
             var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
 
             var items = this.BuildItems(
-                    (status.PublicId == Guid.Empty
+                    (status.PublicId == SurveyStatus.Unknown.PublicId
                          ? this.surveys.Query().Where(
                              x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
                          : this.surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)

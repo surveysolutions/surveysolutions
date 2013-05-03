@@ -5,7 +5,7 @@ $ErrorActionPreference = "Stop"
 
 
 Deploy `
-    -Solution 'RavenQuestionnaire.Web\RavenQuestionnaire.Web.sln' `
+    -Solution 'src\Supervisor.sln' `
     -Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
     -BuildConfiguration 'Deploy-dev' `
     -SourceFolder 'RavenQuestionnaire.Web\Web.Supervisor\obj\Deploy-dev\Package\PackageTmp' `

@@ -14,9 +14,9 @@
 }
 <script type="text/javascript">
     var sortData = undefined;
-    var userFilter = "@(Model.User.Id)", 
-        statusFilter = "@(Model.Status.PublicId)", 
-        templateFilter = "@(Model.Template.TemplateId)";
+    var userFilter = @Html.Raw(Model.User==null? "null":"'"+Model.User.Id.ToString()+"'"),
+        statusFilter = @Html.Raw(Model.Status.PublicId==SurveyStatus.Unknown.PublicId? "null":"'"+Model.Status.PublicId.ToString()+"'"), 
+        templateFilter =  @Html.Raw(Model.Template==null? "null":"'"+Model.Template.TemplateId.ToString()+"'");
     var withHeaders = false;
     var pageSize = @Model.PageSize;
     $(document).ready(function() {
@@ -55,7 +55,7 @@
                 if (data.statusId!=statusFilter && statusFilter!="00000000-0000-0000-0000-000000000000") {
                     isTransparent = true;
                 }
-                if (data.userId!=userFilter && userFilter!="00000000-0000-0000-0000-000000000000") {
+                if (data.interviewerId!=userFilter && userFilter!="00000000-0000-0000-0000-000000000000") {
                     isTransparent = true;
                 }
                 if(isTransparent){
@@ -79,7 +79,7 @@
            var element = $(el);
            var toggler = element.attr("data-toggle-element");
            element.editable().on('save', function(e, params) {
-               element.attr('href', "@Url.Action("Index", "Survey")" + "?UserId=" + params.newValue);
+               element.attr('href', "@Url.Action("Index", "Survey")" + "?InterviewerId=" + params.newValue);
            });
            $(toggler).click(function(e) {
                e.stopPropagation();
@@ -110,7 +110,7 @@
         $.ajax({
                 type: "POST",
                 url: "@Url.Action("AssignmentViewTable", "Survey")",
-                data: JSON.stringify({ Id: templateFilter, UserId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
+            data: JSON.stringify({ templateId: templateFilter, InterviwerId: userFilter, StatusId :statusFilter, SortOrder: data, Pager: { Page: page, PageSize: pageSize } }),
                 contentType: 'application/json, charset=utf-8',
                 statusCode: {
                     200: function(response) {
@@ -147,10 +147,10 @@
         $('#row-' + json.cqId).removeClass("showForm");
 
         if (json.userId != null && json.userName != null) {
-            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/' + json.userId + '">' + json.userName + '</a>');
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/Survey/Statistics/' + json.userId + '">' + json.userName + '</a>');
         }
         else {
-            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/User/Statistics/"></a>');
+            $('#link-' + json.cqId).replaceWith('<a id="link-' + json.cqId + '" href="/Survey/Statistics/"></a>');
         }
     }
 </script>
@@ -159,18 +159,19 @@
                   data-type="select" 
                   data-prepend='All'             
                   data-source="@Html.Raw(statuses)"
-                  data-original-title="Select status">@this.Model.Status.Name</a> by
+                  data-original-title="Select status">@(this.Model.Status.PublicId==SurveyStatus.Unknown.PublicId ?"All":this.Model.Status.Name)</a> by
     <a href="#" id="userFilter" 
                   data-placement="bottom" 
                   data-type="select" 
-                  data-source="@Url.Action("UsersJson", "User")"
+                  data-source="@Url.Action("UsersJson", "Survey")"
                   data-prepend='Anyone'             
-                  data-original-title="Select user">@this.Model.User.Name</a> in <a href="#" id="templateFilter" 
+       data-original-title="Select user">@(this.Model.User==null?"Anyone":Model.User.Name)</a> in 
+    <a href="#" id="templateFilter" 
                   data-placement="bottom" 
                   data-type="select" 
                   data-source="@Url.Action("Templates", "Survey")"
                   data-prepend='Any'             
-                  data-original-title="Select template">@(Model.Template.Title)</a>
+                  data-original-title="Select template">@(this.Model.Template==null?"Any":Model.Template.Title)</a>
     survey</h3>
 <div id="questionnaireTable">
     @Html.Partial("_TableGroup", Model)

@@ -1,0 +1,99 @@
+﻿@using System.Web.Script.Serialization
+@using Core.Supervisor.Views.Status
+@using Web.Supervisor.Models.Chart
+@model StatusView
+@{
+    var r = new JavaScriptSerializer();
+    var xTitles = r.Serialize(@Model.Items.Select(t => t.User.Name).ToArray());
+    var colors = new[] { "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" };
+    var chartData = ViewBag.GraphData as StatusChartModel;
+}
+<p>
+    <div id="switcher" class="btn-group">
+        <button id="column" class="btn btn-primary">Column</button>
+        <button id="bar" class="btn">Bar</button>
+        <button id="pie" class="btn">Pie</button>
+    </div>
+</p>
+<script type="text/javascript">
+    barData = @Html.Raw(Json.Encode(chartData.BarData)) ;
+    pieData = [
+        {
+            type: 'pie',
+            name: 'Totals',
+            data: @Html.Raw(Json.Encode(chartData.CategoryData)) ,
+            size: '60%',
+            dataLabels: {
+                formatter: function() {
+                    return this.y > 0 ? this.point.category : null;
+                },
+                color: 'white',
+                distance: -40
+            }
+        },
+        {
+            type: 'pie',
+            name: 'Statuses',
+            data: @Html.Raw(Json.Encode(chartData.SubCategoryData)) ,
+            showInLegend: false,
+            innerSize: '60%',
+            dataLabels: {
+                formatter: function() {
+                    // display only if larger than 1
+                    return this.y > 0 ? '<b>' + this.point.name + ':</b> ' + this.y : null;
+                }
+            }
+        }
+    ];
+    
+    init = function() {
+        var containerSettings = {
+            column: { 'height': '400px' },
+            bar: { 'height': 80 * @(@Model.Items.Count) + 'px' },
+            pie: { 'height': '600px' }
+        };
+
+         var containerMethods = {
+            column: function() { 
+                chart.xAxis[0].setCategories( @Html.Raw(xTitles) );
+            },
+            bar: function() {chart.xAxis[0].setCategories(@Html.Raw(xTitles))},
+            pie: function() {}
+        };
+        
+        var active = "btn-primary";
+
+        $('#switcher button').each(function(i, el) {
+            var self = this;
+            $(self).click(function() {
+                var id = $(self).attr('Id');
+                if (!$(self).hasClass(active)) {
+                    $("#switcher .btn").removeClass(active);
+                    $(self).addClass(active);
+                }
+                $('#container').css(containerSettings[id]);
+                drawPlot(id);
+                containerMethods[id]();
+            });
+        });
+       
+        $("#column").click();
+    };
+    
+    data = {
+        column: barData,
+        bar: barData,
+        pie: pieData
+    };
+   
+    chart = null;
+    drawPlot = function(type) {
+        $("#container").html('');
+        var settings = plotSettings[type];
+        settings.series = data[type];
+        chart = new Highcharts.Chart(settings);
+    };
+</script>
+<div id="container" style="width: 100%; min-width: 400px; min-height: 400px; height: 400px;
+    margin: 0 auto">
+</div>

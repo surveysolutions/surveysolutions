@@ -1,28 +1,97 @@
-﻿@using Core.Supervisor.Views.Interviewer
-@model InterviewersView
-@foreach (InterviewersItem item in Model.Items)
-{
-    <tr>
-        <td>
-            <a href="@Url.Action("Index", "Survey", new { UserId = item.Id })">@item.Login</a>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreationDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @if (item.IsLocked)
-            {
-                <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new { id = item.Id })">
-                    <i class="icon icon-lock icon-white"></i>Unlock</a>
-            }
-            else
-            {
-                <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new { id = item.Id })">
-                    <i class="icon icon-lock icon-white"></i>Lock</a>
-            }
-        </td>
-    </tr>
+﻿@using Main.Core.Entities.SubEntities
+@using Core.Supervisor.Views.Index
+@using Web.Supervisor.Models
+@model IndexView
+@{
+    Guid? userKey = null;
+    if (Model.User != null)
+    {
+        userKey = Model.User.Id;
+    }
 }
+<div>
+    <table id="table" class="table table-striped table-bordered table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="sorting" sorter='{"key":"Title"}'><span>Surveys</span></th>
+                @foreach (var item in Model.Headers)
+                {
+                    <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
+                    </th>
+                }
+                <td style="width: 90px;">Export Data</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var collect in Model.Items.Skip((Model.Page - 1) * Model.PageSize).Take(Model.PageSize))
+            {
+                <tr>
+                        <td>@Html.ActionLink(collect.Title, "Documents", new { templateId = collect.Id, interviewerId = userKey })
+                    </td>
+                    @foreach (var it in Model.Headers)
+                    {
+
+                        var status = SurveyStatus.GetStatusByNameOrDefault(it.Value);
+                        var value = Model.Headers.GetItemValue(collect, it.Key);
+
+                        if (status.PublicId != SurveyStatus.Unknown.PublicId)
+                        {
+                
+                        <td class="td-@it.Key.ToLower()">
+                            @if (value != "0")
+                            {
+                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, status = status.PublicId, interviewerId = userKey })
+                            }
+                            else
+                            {
+                                <text>@value</text>
+                            }
+                        </td>
+                        }
+                        else
+                        {
+                        <td class="td-@it.Key.ToLower()">
+                            @if (value != "0")
+                            {
+                                @Html.ActionLink(value, "Documents", new { templateId = collect.Id, isNotAssigned = it.Key == "Total" ? string.Empty : "true", interviewerId = userKey })
+                            }
+                            else
+                            {
+                                <text>@value</text>
+                            }
+                        </td>
+                        }
+                      
+                    }
+                      <td>
+                            <div class="btn-group">
+                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "csv" })">
+                                CSV</a>
+                                     <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "tab" })">
+                            TAB</a>
+                            </div>
+                        </td>
+                </tr>
+            }
+            <tr>
+                <th>Summary</th>
+                @foreach (var it in Model.Headers)
+                {
+                    <th>
+                        @Model.Headers.GetItemValue(Model.Summary, it.Key)
+                    </th>
+                }
+                <th></th>
+            </tr>
+        </tbody>
+    </table>
+    <div class="pagination" id="paging">
+        @if (((double)Model.TotalCount / Model.PageSize) > 1d)
+        {
+            <text>@Html.QPager(Model.PageSize, Model.Page, Model.TotalCount, new RouteValueDictionary())</text>
+        }
+    </div>
+    <div id="chartBox">
+        @Html.Partial("IndexChart", this.Model)
+    </div>
+</div>

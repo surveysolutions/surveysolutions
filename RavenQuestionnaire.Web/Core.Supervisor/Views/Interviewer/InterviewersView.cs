@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Core.Supervisor.Views.Interviewer
 {
@@ -28,36 +29,17 @@ namespace Core.Supervisor.Views.Interviewer
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InterviewersView"/> class.
-        /// </summary>
-        /// <param name="page">
-        /// The page.
-        /// </param>
-        /// <param name="pageSize">
-        /// The page size.
-        /// </param>
-        /// <param name="totalCount">
-        /// The total count.
-        /// </param>
-        /// <param name="items">
-        /// The items.
-        /// </param>
-        /// <param name="supervisorId">
-        /// The supervisor id.
-        /// </param>
+        
         public InterviewersView(
             int page, 
             int pageSize, 
-            int totalCount, 
             IEnumerable<InterviewersItem> items, 
             Guid supervisorId)
         {
             this.Page = page;
-            this.TotalCount = totalCount;
             this.PageSize = pageSize;
-            this.Items = items;
-            this.SupervisorId = supervisorId;
+            this.Items = items.ToList();
+            this.ViewerId = supervisorId;
         }
 
         #endregion
@@ -67,7 +49,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets the items.
         /// </summary>
-        public IEnumerable<InterviewersItem> Items { get; private set; }
+        public IList<InterviewersItem> Items { get; private set; }
 
         /// <summary>
         /// Gets or sets the order.
@@ -98,12 +80,14 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets the supervisor id.
         /// </summary>
-        public Guid SupervisorId { get; private set; }
+        public Guid ViewerId { get; private set; }
 
         /// <summary>
         /// Gets the total count.
         /// </summary>
-        public int TotalCount { get; private set; }
+        public int TotalCount {
+            get { return Items.Count; }
+        }
 
         #endregion
     }

@@ -38,6 +38,15 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cirrious.MvvmCross">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="ManagedSQLite">
       <HintPath>..\LibrariesPortedToAndroid\ManagedSQLite.dll</HintPath>
     </Reference>
@@ -54,16 +63,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseHelper.cs" />
-    <Compile Include="Query.cs" />
-    <Compile Include="SQLiteContext.cs" />
-    <Compile Include="SQLiteEventStore.cs" />
+    <Compile Include="DenormalizerStorage\SqliteDenormalizerStorage.cs" />
+    <Compile Include="MvvmCrossSqliteEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StoredEvent.cs" />
+    <Compile Include="StoredEventExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.DenormalizerStorage\AndroidMain.DenormalizerStorage.csproj">
+      <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
+      <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>

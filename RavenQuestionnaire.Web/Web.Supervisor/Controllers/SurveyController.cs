@@ -19,6 +19,7 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
     using Core.Supervisor.Views.Status;
+    using Core.Supervisor.Views.Summary;
     using Core.Supervisor.Views.Survey;
     using Core.Supervisor.Views.Timeline;
 
@@ -44,7 +45,7 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Supervisor")]
     public class SurveyController : BaseController
     {
         #region Constructor
@@ -151,20 +152,16 @@ namespace Web.Supervisor.Controllers
 
             return this.Json(new { status = "ok" });
         }
-
-        /// <summary>
-        /// Display statistic surveys on page
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Return index page
-        /// </returns>
-        public ActionResult Index(IndexInputModel input)
+        
+        public ActionResult Index(Guid? interviewerId)
         {
             ViewBag.ActivePage = MenuItem.Surveys;
-            var model = this.Repository.Load<IndexInputModel, IndexView>(input);
+            var model =
+                this.Repository.Load<IndexInputModel, IndexView>(new IndexInputModel()
+                    {
+                        InterviewerId = interviewerId,
+                        ViewerId = GlobalInfo.GetCurrentUser().Id
+                    });
             ViewBag.GraphData = new InterviewerChartModel(model);
             return this.View(model);
         }
@@ -180,8 +177,8 @@ namespace Web.Supervisor.Controllers
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<StatusViewInputModel, StatusView>(new StatusViewInputModel()
                 {
-                    Supervisor = user,
-                    StatusId = statusId.HasValue ? statusId.Value : Guid.Empty
+                    ViewerId = user.Id,
+                    StatusId = statusId
                 });
             ViewBag.GraphData = new StatusChartModel(model);
             return this.View(model);
@@ -196,49 +193,22 @@ namespace Web.Supervisor.Controllers
             return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Display Assigments statistic
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="userId">
-        /// The user Id.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <param name="status">
-        /// The status.
-        /// </param>
-        /// <param name="isNotAssigned">
-        /// The isNotAssigned.
-        /// </param>
-        /// <returns>
-        /// Return Assigments page
-        /// </returns>
-        public ActionResult Documents(Guid? templateId, Guid? userId, AssignmentInputModel input, ICollection<Guid> status, bool? isNotAssigned)
+        public ActionResult Documents(Guid? templateId, Guid? interviewerId , Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
-            var inputModel = input == null
-                                 ? new AssignmentInputModel()
-                                     {
-                                         TemplateId = templateId.HasValue ? templateId.Value : Guid.Empty,
-                                         Statuses = status,
-                                         UserId = userId.HasValue ? userId.Value : Guid.Empty
-                                     }
-                                 : new AssignmentInputModel(
-                                       templateId.HasValue ? templateId.Value : Guid.Empty,
-                                       userId.HasValue ? userId.Value : Guid.Empty,
-                                       input.Page,
-                                       input.PageSize,
-                                       input.Orders,
-                                       status,
-                                       isNotAssigned ?? false);
+            var inputModel = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
+                templateId,
+                interviewerId, null, null, null,
+                status,
+                isNotAssigned ?? false);
             var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
+            var users =
+                this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel
+                    {
+                        ViewerId = user.Id
+                    });
+            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
             return this.View(model);
         }
 
@@ -342,7 +312,7 @@ namespace Web.Supervisor.Controllers
         /// The id.
         /// </param>
         /// <param name="tmptId">
-        /// The tmpt Id.
+        /// The tmpt QuestionnaireId.
         /// </param>
         /// <returns>
         /// Return Assign form
@@ -350,14 +320,14 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignPerson(Guid id, Guid tmptId)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
             var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
             {
-                Value = item.Id.ToString(),
+                Value = item.QuestionnaireId.ToString(),
                 Text = item.Login,
-                Selected = (model.Responsible != null && model.Responsible.Id == item.Id) || (model.Responsible == null && item.Id == Guid.Empty)
+                Selected = (model.Responsible != null && model.Responsible.Id == item.QuestionnaireId) || (model.Responsible == null && item.QuestionnaireId == Guid.Empty)
             }).ToList();
             ViewBag.value = options;
             return this.View(model);
@@ -603,7 +573,8 @@ namespace Web.Supervisor.Controllers
                                 Page = data.Pager.Page,
                                 PageSize = data.Pager.PageSize,
                                 Orders = data.SortOrder,
-                                UserId = data.UserId
+                                InterviewerId = data.InterviwerId,
+                                ViewerId = GlobalInfo.GetCurrentUser().Id
                             };
             var model = this.Repository.Load<IndexInputModel, IndexView>(input);
             ViewBag.GraphData = new InterviewerChartModel(model);
@@ -628,7 +599,7 @@ namespace Web.Supervisor.Controllers
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
                 StatusId = data.StatusId,
-                Supervisor = user
+                ViewerId = user.Id
             };
             var model = this.Repository.Load<StatusViewInputModel, StatusView>(input);
             ViewBag.GraphData = new StatusChartModel(model);
@@ -647,15 +618,15 @@ namespace Web.Supervisor.Controllers
         public ActionResult AssignmentViewTable(GridDataRequestModel data)
         {
             var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { SupervisorId = user.Id });
-            ViewBag.Users = new SelectList(users.Items, "Id", "Login");
-            var input = new AssignmentInputModel(
-                data.Id,
-                data.UserId,
+            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
+            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
+            var input = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
+                data.TemplateId,
+                data.InterviwerId,
                 data.Pager.Page,
                 data.Pager.PageSize,
                 data.SortOrder,
-                data.StatusId == Guid.Empty ? new List<Guid>() : new List<Guid> { data.StatusId },
+                data.StatusId,
                 false);
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(input);
             return this.PartialView("_TableGroup", model);
@@ -756,6 +727,136 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.PartialView(data);
+        }
+
+        /// <summary>
+        /// Interviewer summary view
+        /// </summary>
+        /// <returns>
+        /// Interviewer summary view
+        /// </returns>
+        [Authorize]
+        public ActionResult Summary()
+        {
+            ViewBag.ActivePage = MenuItem.Interviewers;
+            var user = this.GlobalInfo.GetCurrentUser();
+            var model = this.Repository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
+            ViewBag.GraphData = new SurveyChartModel(model);
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// Gets table data for some view
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        [Authorize]
+        public ActionResult _SummaryData(GridDataRequestModel data)
+        {
+            var user = this.GlobalInfo.GetCurrentUser();
+            var input = new SummaryInputModel(user)
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder,
+                TemplateId = data.TemplateId
+            };
+            var model = this.Repository.Load<SummaryInputModel, SummaryView>(input);
+            ViewBag.GraphData = new SurveyChartModel(model);
+            return this.PartialView("_SummaryTable", model);
+        }
+
+        /// <summary>
+        /// Display user's statistics grouped by surveys and statuses
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="input">
+        /// The input.
+        /// </param>
+        /// <returns>
+        /// Show statistics view if everything is ok
+        /// </returns>
+        public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
+        {
+            var inputModel = input == null
+                ? new InterviewerStatisticsInputModel() { InterviewerId = id }
+                : new InterviewerStatisticsInputModel()
+                {
+                    Order = input.Order,
+                    Orders = input.Orders,
+                    PageSize = input.PageSize,
+                    Page = input.Page,
+                    InterviewerId = id
+                };
+            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(inputModel);
+            return this.View(model);
+        }
+
+        /// <summary>
+        /// Gets table data for some view
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        [HttpPost]
+        public ActionResult TableGroupByUser(GridDataRequestModel data)
+        {
+            var input = new InterviewerInputModel()
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder,
+                TemplateId = data.TemplateId,
+                InterviwerId = data.InterviwerId
+            };
+            var model = this.Repository.Load<InterviewerInputModel, InterviewerView>(input);
+            return this.PartialView("_TableGroupByUser", model.Items[0]);
+        }
+
+        /// <summary>
+        /// Gets user's statistics
+        /// </summary>
+        /// <param name="data">
+        /// Table order data
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        [HttpPost]
+        public ActionResult UserStatistics(GridDataRequestModel data)
+        {
+            var input = new InterviewerStatisticsInputModel()
+            {
+                Page = data.Pager.Page,
+                PageSize = data.Pager.PageSize,
+                Orders = data.SortOrder,
+                InterviewerId = data.InterviwerId
+            };
+            var model = this.Repository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
+            return this.PartialView("_UserStatistics", model);
+        }
+
+        /// <summary>
+        /// Uses to filter grids by user
+        /// </summary>
+        /// <returns>
+        /// List of all  supervisor's users
+        /// </returns>
+        public ActionResult UsersJson()
+        {
+            var user = this.GlobalInfo.GetCurrentUser();
+            var input = new InterviewersInputModel { PageSize = int.MaxValue, ViewerId = user.Id };
+            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
+            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
         }
 
         #endregion
