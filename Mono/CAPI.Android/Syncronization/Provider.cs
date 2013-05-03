@@ -186,7 +186,7 @@ namespace AndroidMain.Synchronization
             
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("Event list is empty.");
+                throw new Exception("Target returned unsupported result.");
             }
 
             var syncItemsMetaContainer =
