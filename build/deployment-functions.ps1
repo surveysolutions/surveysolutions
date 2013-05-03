@@ -31,7 +31,7 @@ function BuildPackageForProject($Project, $BuildConfiguration) {
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='FAILURE' text='Failed to build package for project $Project']"
+        Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build package for project $Project']"
     }
 
     Write-Host "##teamcity[progressFinish 'Building package for project $Project']"
@@ -46,9 +46,9 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-    BuildPackageForProject $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
-
     RunTests $BuildConfiguration
+
+    BuildPackageForProject $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 
     PublishZipPackage $SourceFolder 'package.zip'
 
