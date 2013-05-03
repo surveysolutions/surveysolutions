@@ -63,6 +63,11 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
         private static bool isReadLayerBuilt = false;
         private static object lockObject = new object();
 
+        public static bool IsReadLayerBuilt
+        {
+            get { return isReadLayerBuilt; }
+        }
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -108,11 +113,11 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
         public static void EnsureReadLayerIsBuilt()
         {
-            if (!isReadLayerBuilt)
+            if (!IsReadLayerBuilt)
             {
                 lock (lockObject)
                 {
-                    if (!isReadLayerBuilt)
+                    if (!IsReadLayerBuilt)
                     {
                         RebuildReadLayer();
                     }

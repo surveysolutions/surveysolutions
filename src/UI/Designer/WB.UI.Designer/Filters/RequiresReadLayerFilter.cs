@@ -1,6 +1,9 @@
 ﻿namespace WB.UI.Designer.Filters
 {
+    using System;
+    using System.Web;
     using System.Web.Mvc;
+    using System.Web.Routing;
 
     using Main.Core;
 
@@ -11,9 +14,21 @@
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            base.OnActionExecuting(filterContext);
+            if (NcqrsInit.IsReadLayerBuilt)
+            {
+                base.OnActionExecuting(filterContext);
+                return;
+            }
 
-            NcqrsInit.EnsureReadLayerIsBuilt();
+            ((Action)NcqrsInit.EnsureReadLayerIsBuilt)
+                .BeginInvoke(null, null);
+
+            filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary
+            {
+                { "controller", "Maintenance" },
+                { "action", "ReadLayer" },
+                { "returnUrl", filterContext.RequestContext.HttpContext.Request.Url }
+            });
         }
     }
 }
