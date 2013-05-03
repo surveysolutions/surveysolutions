@@ -230,7 +230,7 @@
     <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\SynchronizationController.cs" />
-    <Compile Include="Filters\FilterProvider.cs" />
+    <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
