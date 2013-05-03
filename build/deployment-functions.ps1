@@ -7,7 +7,7 @@ function PublishZipPackage($SourceFolder, $TargetFile) {
     Write-Host "##teamcity[blockOpened name='Publishing zip package artifact']"
     Write-Host "##teamcity[progressStart 'Publishing zip package artifact']"
 
-	IF (Test-Path $TargetFile){
+	if (Test-Path $TargetFile){
 		Remove-Item $TargetFile
 	}	
     
@@ -22,6 +22,24 @@ function PublishZipPackage($SourceFolder, $TargetFile) {
     Write-Host "##teamcity[blockClosed name='Publishing zip package artifact']"
 }
 
+function BuildPackageForProject($Project, $BuildConfiguration) {
+    Write-Host "##teamcity[blockOpened name='Building package for project $Project']"
+    Write-Host "##teamcity[progressStart 'Building package for project $Project']"
+
+    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" | Write-Host
+
+    $wasBuildSuccessfull = $LASTEXITCODE -eq 0
+
+    if (-not $wasBuildSuccessfull) {
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build package for project $Project']"
+    }
+
+    Write-Host "##teamcity[progressFinish 'Building package for project $Project']"
+    Write-Host "##teamcity[blockClosed name='Building package for project $Project']"
+
+    return $wasBuildSuccessfull
+}
+
 function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $TargetFolder) {
 
     CleanBinAndObjFolders
@@ -30,13 +48,13 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     RunTests $BuildConfiguration
 
-    & (GetPathToMSBuild) $Project '/t:Package' "/p:Configuration=$BuildConfiguration" | Write-Host
+    BuildPackageForProject $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
 
     PublishZipPackage $SourceFolder 'package.zip'
 
-    Set-Content -path "$TargetFolder\app_offline.htm" -value "Maintenance is in progress. Wait for a while, please."
+    Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
 	
-    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude "app_offline.htm"
+    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
 
     Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
 	
