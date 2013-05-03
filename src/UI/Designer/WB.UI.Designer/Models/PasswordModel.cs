@@ -27,7 +27,8 @@ namespace WB.UI.Designer.Models
         /// Gets or sets the new password.
         /// </summary>
         [Required]
-        [CustomStringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.")]
+        [PasswordStringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.")]
+        [PasswordRegularExpression]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
         public string Password { get; set; }
