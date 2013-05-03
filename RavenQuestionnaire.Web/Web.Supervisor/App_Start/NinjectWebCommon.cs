@@ -74,6 +74,9 @@ namespace Web.Supervisor.App_Start
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
             
             var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
+
+            kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
+
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel);
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);

@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Web.Filters
     {
         private readonly IServiceLocator serviceLocator;
 
-        public AbstractRequiresReadLayerFilterProvider(IServiceLocator serviceLocator)
+        protected AbstractRequiresReadLayerFilterProvider(IServiceLocator serviceLocator)
         {
             this.serviceLocator = serviceLocator;
         }
