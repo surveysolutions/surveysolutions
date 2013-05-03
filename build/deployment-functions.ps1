@@ -46,9 +46,9 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     BuildSolution $Solution $BuildConfiguration | %{ if (-not $_) { Exit } }
 
-    RunTests $BuildConfiguration
-
     BuildPackageForProject $Project $BuildConfiguration | %{ if (-not $_) { Exit } }
+
+    RunTests $BuildConfiguration
 
     PublishZipPackage $SourceFolder 'package.zip'
 
