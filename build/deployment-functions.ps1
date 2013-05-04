@@ -52,6 +52,23 @@ function BuildWebPackage($Project, $BuildConfiguration) {
     return $wasBuildSuccessfull
 }
 
+function DeployFiles($SourceFolder, $TargetFolder) {
+    Write-Host "##teamcity[blockOpened name='Deploying files']"
+    Write-Host "##teamcity[progressStart 'Deploying files']"
+
+    Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
+
+    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
+
+    Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
+
+    Remove-Item "$TargetFolder\app_offline.htm"
+
+    Write-Host "##teamcity[progressFinish 'Deploying files']"
+    Write-Host "##teamcity[blockClosed name='Deploying files']"
+}
+
+
 function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $TargetFolder) {
 
     CleanBinAndObjFolders
@@ -64,11 +81,5 @@ function Deploy($Solution, $Project, $BuildConfiguration, $SourceFolder, $Target
 
     PublishZippedWebPackage $SourceFolder 'package.zip' | %{ if (-not $_) { Exit } }
 
-    Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
-	
-    Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
-
-    Copy-Item "$SourceFolder\*" $TargetFolder -Recurse
-	
-	Remove-Item "$TargetFolder\app_offline.htm"
+    DeployFiles $SourceFolder $TargetFolder
 }
