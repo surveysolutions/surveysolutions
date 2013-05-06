@@ -7,8 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Web.Security;
 using Ionic.Zip;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
+using Main.Core.Utility;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ImportService.Commands;
@@ -561,6 +564,20 @@ namespace Web.Supervisor.Controllers
             stream.Position = 0L;
             
             return new FileStreamResult(stream, "application/octet-stream");
+        }
+        
+        [AcceptVerbs(HttpVerbs.Post)]
+        public bool Validate(string login, string password)
+        {
+            if (Membership.ValidateUser(login, password))
+            {
+                if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
+                {
+                    
+                    return true;
+                }
+            }
+            return false;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]

@@ -32,7 +32,6 @@ namespace CAPI.Android.Core.Model.Syncronization
         /// The document storage.
         /// </summary>
         private readonly IDenormalizerStorage<QuestionnaireDTO> documentStorage;
-
         /// <summary>
         /// myEventStore object
         /// </summary>
@@ -42,12 +41,6 @@ namespace CAPI.Android.Core.Model.Syncronization
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AClientEventStreamProvider"/> class.
-        /// </summary>
-        /// <param name="documentStorage">
-        /// The document storage.
-        /// </param>
         public AClientEventStreamProvider(IDenormalizerStorage<QuestionnaireDTO> documentStorage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();

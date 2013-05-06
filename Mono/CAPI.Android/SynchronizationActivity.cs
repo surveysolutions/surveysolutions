@@ -9,10 +9,14 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
+using Android.Text.Method;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Syncronization;
 using Main.Core.View.User;
+using Main.Synchronization.Credentials;
 
 namespace CAPI.Android
 {
@@ -221,6 +225,7 @@ namespace CAPI.Android
             return true;
         }
 
+        private ProgressDialog progressDialog = null;
         /// <summary>
         ///     The do sync.
         /// </summary>
@@ -245,7 +250,7 @@ namespace CAPI.Android
 
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
 
-            var progressDialog = CreateDialog();
+            progressDialog = CreateDialog();
             progressDialog.Show();
 
             ThreadPool.QueueUserWorkItem(
@@ -323,6 +328,7 @@ namespace CAPI.Android
                                                           : "Error occured during the process: \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
+                                    progressDialog = null;
                                 });
                     });
 
@@ -341,9 +347,7 @@ namespace CAPI.Android
             return true;
          
         }
-
-
-        private ProgressDialog CreateDialog()
+         private ProgressDialog CreateDialog()
         {
             var progressDialog = new ProgressDialog(this);
 
@@ -355,6 +359,52 @@ namespace CAPI.Android
             return progressDialog;
         }
 
+  protected ISyncAuthenticator CreateAuthenticator()
+        {
+            var authentificator = new RestAuthenticator(SettingsManager.GetSyncAddressPoint());
+            authentificator.RequestCredentials += RequestCredentialsCallBack;
+            return authentificator;
+        }
+
+
+
+
+        protected SyncCredentials? RequestCredentialsCallBack(object sender)
+        {
+            if (CapiApplication.Membership.IsLoggedIn)
+            {
+                return new SyncCredentials(CapiApplication.Membership.CurrentUser.Name, "test");
+            }
+
+            SyncCredentials? result = null;
+            this.RunOnUiThread(
+                () =>
+                    {
+                        if (progressDialog != null)
+                            progressDialog.Dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                        var view = this.LayoutInflater.Inflate(Resource.Layout.SyncLogin, null);
+                        var teLogin = view.FindViewById<EditText>(Resource.Id.teLogin);
+                        var tePassword = view.FindViewById<EditText>(Resource.Id.tePassword);
+                        var btnLogin = view.FindViewById<Button>(Resource.Id.btnLogin);
+                        alert.SetView(view);
+                        var loginDialog = alert.Show();
+                        loginDialog.SetCancelable(false);
+                        btnLogin.Click += (s, e) =>
+                            {
+                                result = new SyncCredentials(teLogin.Text, tePassword.Text);
+                                loginDialog.Hide();
+                                if (progressDialog != null)
+                                    progressDialog.Show();
+                            };
+                    });
+            while (!result.HasValue)
+            {
+                Thread.Sleep(200);
+            }
+            return result;
+        }
 
         /// <summary>
         ///     The pull.
@@ -371,7 +421,7 @@ namespace CAPI.Android
         private bool Pull(string remoteSyncNode, SyncronizationStatus status)
         {
             Guid processKey = Guid.NewGuid();
-            var provider = new RemoteServiceEventStreamRestProvider(CapiApplication.Kernel, processKey, remoteSyncNode);
+            var provider = new RemoteServiceEventStreamRestProvider(processKey, remoteSyncNode, CreateAuthenticator());
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
@@ -398,7 +448,7 @@ namespace CAPI.Android
             var provider =
                 new AClientEventStreamProvider(
                     CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
-            var collector = new RemoteCollector(remoteSyncNode, processKey);
+            var collector = new RemoteCollector(remoteSyncNode, processKey, CreateAuthenticator());
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);
             status.Progress = 99;

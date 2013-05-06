@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Security.Authentication;
+using Main.Core.Entities.SubEntities;
+using Main.Synchronization.Credentials;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -36,20 +39,7 @@ namespace AndroidMain.Synchronization
     {
         #region Constants
 
-        /// <summary>
-        /// The item path.
-        /// </summary>
-        private const string itemPath = "importexport/GetItem";
-
-        /// <summary>
-        /// The item path 1.
-        /// </summary>
-        private const string GetItemAsStreamPath = "importexport/GetItemAsStream";
-
-        /// <summary>
-        /// The list path.
-        /// </summary>
-        private const string GetRootsListPath = "importexport/GetRootsList";
+      
 
         /// <summary>
         /// The list path.
@@ -71,27 +61,19 @@ namespace AndroidMain.Synchronization
         private readonly string baseAddress;
 
         private bool UseGZip = true;
-       
+
+        private readonly ISyncAuthenticator validator;
+
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RemoteServiceEventStreamRestProvider"/> class.
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        /// <param name="processGuid">
-        /// The process guid.
-        /// </param>
-        /// <param name="address">
-        /// The address.
-        /// </param>
-        public RemoteServiceEventStreamRestProvider(IKernel kernel, Guid processGuid, string address)
+        public RemoteServiceEventStreamRestProvider(Guid processGuid, string address, ISyncAuthenticator validator)
         {
             this.ProcessGuid = processGuid;
             this.baseAddress = address;
+
+            this.validator = validator;
         }
 
         #endregion
@@ -173,6 +155,9 @@ namespace AndroidMain.Synchronization
         /// </exception>
         protected IEnumerable<AggregateRootEvent> GetEventStreamWithProxy()
         {
+            if(!validator.ValidateUser())
+                throw new AuthenticationException("User wasn't authenticated");
+
             var restClient = new RestClient(this.baseAddress);
 
             var request = new RestRequest(GetARKeysPath, Method.POST);

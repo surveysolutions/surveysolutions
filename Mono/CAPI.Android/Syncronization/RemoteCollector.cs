@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.Core.Entities.SubEntities;
+using Main.Synchronization.Credentials;
+
 namespace AndroidMain.Synchronization
 {
     using System;
@@ -37,16 +40,15 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private const string pushPath = "importexport/PostStream";
 
-        /// <summary>
-        /// The item path 1.
-        /// </summary>
-        private const string pushPath1 = "importexport/PostStream1";
+        private readonly UserLight credentials;
 
 
         /// <summary>
         /// The base address.
         /// </summary>
         private readonly string baseAddress;
+
+        private readonly ISyncAuthenticator validator;
 
         /// <summary>
         /// Gets or sets the process guid.
@@ -74,10 +76,11 @@ namespace AndroidMain.Synchronization
         }
 
 
-        public RemoteCollector(string baseAddress, Guid processGuid)
+        public RemoteCollector(string baseAddress, Guid processGuid, ISyncAuthenticator validator)
         {
             this.baseAddress = baseAddress;
             this.ProcessGuid = processGuid;
+            this.validator = validator;
         }
 
 
@@ -98,6 +101,11 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
+            if (!validator.ValidateUser())
+            {
+                return false;
+            }
+
             var restClient = new RestClient(this.baseAddress);
 
             var request = new RestRequest(pushPath, Method.POST);

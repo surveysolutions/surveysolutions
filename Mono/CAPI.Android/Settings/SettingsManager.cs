@@ -28,8 +28,8 @@ namespace CAPI.Android.Settings
         /// <summary>
         /// The remote sync node.
         /// </summary>
-        private const string RemoteSyncNode = //"http://ec2-54-228-172-78.eu-west-1.compute.amazonaws.com/";
-
+        private const string RemoteSyncNode =// "http://ec2-54-217-244-125.eu-west-1.compute.amazonaws.com/";
+                "http://192.168.173.1:8000/";
             // "http://217.12.197.135/DEV-Supervisor/";
             // "http://192.168.173.1:8084/";
             "http://192.168.173.1:9089/";
