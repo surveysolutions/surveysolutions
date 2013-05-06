@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Security.Authentication;
 using Main.Core.Entities.SubEntities;
 using Main.Synchronization.Credentials;
 
@@ -103,7 +104,7 @@ namespace AndroidMain.Synchronization
         {
             if (!validator.ValidateUser())
             {
-                return false;
+                throw new AuthenticationException("User wasn't authenticated");
             }
 
             var restClient = new RestClient(this.baseAddress);

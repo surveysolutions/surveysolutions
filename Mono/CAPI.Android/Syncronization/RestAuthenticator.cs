@@ -43,7 +43,7 @@ namespace CAPI.Android.Syncronization
 
             var request = new RestRequest(ValidateUserPath, Method.POST);
             request.AddParameter("login", credentials.Value.Login);
-            request.AddParameter("password", SimpleHash.ComputeHash(credentials.Value.Password));
+            request.AddParameter("password", credentials.Value.Password);
             request.RequestFormat = DataFormat.Json;
             IRestResponse response = restClient.Execute(request);
 

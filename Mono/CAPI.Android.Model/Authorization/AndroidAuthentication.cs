@@ -6,6 +6,7 @@ using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
 using Main.Core.View.User;
 using Main.DenormalizerStorage;
+using Main.Synchronization.Credentials;
 
 namespace CAPI.Android.Core.Model.Authorization
 {
@@ -25,7 +26,19 @@ namespace CAPI.Android.Core.Model.Authorization
             get { return currentUser; }
         }
 
-        
+
+        public SyncCredentials RequestSyncCredentials()
+        {
+            if(!IsLoggedIn)
+                throw new InvalidOperationException("please logoin first");
+
+            LoginDTO user =
+                 _documentStorage.Query(
+                     u =>
+                     u.Login == CurrentUser.Name)
+                                 .FirstOrDefault();
+            return new SyncCredentials(user.Login, user.Password);
+        }
 
         public bool IsLoggedIn { get { return currentUser != null; }
     }

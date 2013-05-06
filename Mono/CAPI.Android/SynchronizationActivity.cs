@@ -15,6 +15,7 @@ using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Syncronization;
+using Main.Core.Utility;
 using Main.Core.View.User;
 using Main.Synchronization.Credentials;
 
@@ -373,7 +374,7 @@ namespace CAPI.Android
         {
             if (CapiApplication.Membership.IsLoggedIn)
             {
-                return new SyncCredentials(CapiApplication.Membership.CurrentUser.Name, "test");
+                return CapiApplication.Membership.RequestSyncCredentials();
             }
 
             SyncCredentials? result = null;
@@ -393,10 +394,10 @@ namespace CAPI.Android
                         loginDialog.SetCancelable(false);
                         btnLogin.Click += (s, e) =>
                             {
-                                result = new SyncCredentials(teLogin.Text, tePassword.Text);
                                 loginDialog.Hide();
                                 if (progressDialog != null)
                                     progressDialog.Show();
+                                result = new SyncCredentials(teLogin.Text, SimpleHash.ComputeHash(tePassword.Text));
                             };
                     });
             while (!result.HasValue)
