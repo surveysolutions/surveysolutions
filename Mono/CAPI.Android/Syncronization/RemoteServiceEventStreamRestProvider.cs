@@ -155,9 +155,6 @@ namespace AndroidMain.Synchronization
         /// </exception>
         protected IEnumerable<AggregateRootEvent> GetEventStreamWithProxy()
         {
-            if(!validator.ValidateUser())
-                throw new AuthenticationException("User wasn't authenticated");
-
             var restClient = new RestClient(this.baseAddress);
 
             var request = new RestRequest(GetARKeysPath, Method.POST);
@@ -166,6 +163,9 @@ namespace AndroidMain.Synchronization
             if (UseGZip)
                 request.AddHeader("Accept-Encoding", "gzip,deflate");
 
+            var currentCredentials = validator.RequestCredentials();
+            request.AddParameter("login", currentCredentials.Login);
+            request.AddParameter("password", currentCredentials.Password);
 
             IRestResponse response = restClient.Execute(request);
             
@@ -195,7 +195,8 @@ namespace AndroidMain.Synchronization
                 itemRequest.AddParameter("ARKey", root.AggregateRootId);
                 itemRequest.AddParameter("length", 0);
                 itemRequest.AddParameter("rootType", root.AggregateRootType);
-
+                itemRequest.AddParameter("login", currentCredentials.Login);
+                itemRequest.AddParameter("password", currentCredentials.Password);
                 itemRequest.RequestFormat = DataFormat.Json;
 
                 if (UseGZip)

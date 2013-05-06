@@ -418,8 +418,10 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public JsonResult GetARKeys()
+        public JsonResult GetARKeys(string login, string password)
         {
+            if (!Validate(login, password))
+                return null;
             return Json(this.GetListOfAR());
         }
 
@@ -540,18 +542,12 @@ namespace Web.Supervisor.Controllers
             return new FileStreamResult(stream, "application/json; charset=utf-8");
         }
 
-
-        /// <summary>
-        /// Retrive Item
-        /// </summary>
-        /// <param name="aRKey"></param>
-        /// <param name="length"></param>
-        /// <param name="rootType"></param>
-        /// <returns></returns>
         [CompressContent]
         [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult GetAR(string aRKey, string length, string rootType)
+        public ActionResult GetAR(string aRKey, string length, string rootType, string login, string password)
         {
+            if (!Validate(login, password))
+                return null;
             var item = this.GetARInt(aRKey, length, rootType);
             
             if (item == null)
@@ -566,8 +562,8 @@ namespace Web.Supervisor.Controllers
             return new FileStreamResult(stream, "application/octet-stream");
         }
         
-        [AcceptVerbs(HttpVerbs.Post)]
-        public bool Validate(string login, string password)
+       
+        protected bool Validate(string login, string password)
         {
             if (Membership.ValidateUser(login, password))
             {
@@ -581,8 +577,10 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
-        public bool PostStream(string request)
+        public bool PostStream(string login, string password)
         {
+            if (!Validate(login, password))
+                return false;
             Guid syncProcess = Guid.NewGuid();
 
             try

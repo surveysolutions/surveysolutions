@@ -41,8 +41,6 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private const string pushPath = "importexport/PostStream";
 
-        private readonly UserLight credentials;
-
 
         /// <summary>
         /// The base address.
@@ -102,14 +100,10 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
-            if (!validator.ValidateUser())
-            {
-                throw new AuthenticationException("User wasn't authenticated");
-            }
-
+          
             var restClient = new RestClient(this.baseAddress);
-
-            var request = new RestRequest(pushPath, Method.POST);
+            var currentCredentials = validator.RequestCredentials();
+            var request = new RestRequest(string.Format("{0}?login={1}&password={2}", pushPath, currentCredentials.Login, currentCredentials.Password), Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
@@ -123,7 +117,7 @@ namespace AndroidMain.Synchronization
 
                 // text must be changed to  "application/json; charset=utf-8"
                 request.AddParameter("text; charset=utf-8", item, ParameterType.RequestBody);
-                
+             
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
                 {

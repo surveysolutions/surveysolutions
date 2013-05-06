@@ -362,8 +362,8 @@ namespace CAPI.Android
 
   protected ISyncAuthenticator CreateAuthenticator()
         {
-            var authentificator = new RestAuthenticator(SettingsManager.GetSyncAddressPoint());
-            authentificator.RequestCredentials += RequestCredentialsCallBack;
+            var authentificator = new RestAuthenticator();
+            authentificator.RequestCredentialsCallback += RequestCredentialsCallBack;
             return authentificator;
         }
 

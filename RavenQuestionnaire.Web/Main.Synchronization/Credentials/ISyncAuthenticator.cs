@@ -2,9 +2,9 @@ namespace Main.Synchronization.Credentials
 {
     public interface ISyncAuthenticator
     {
-        bool ValidateUser();
+        SyncCredentials RequestCredentials();
 
-        event  RequestCredentialsCallBack RequestCredentials;
+        event RequestCredentialsCallBack RequestCredentialsCallback;
     }
 
     public delegate SyncCredentials? RequestCredentialsCallBack(object sender);
