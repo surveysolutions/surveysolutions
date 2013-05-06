@@ -44,7 +44,11 @@ using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
 
 namespace CAPI.Android
 {
-    [Application]
+    #if RELEASE 
+    [Application(Debuggable=false)] 
+    #else
+    [Application(Debuggable = true)]
+    #endif
     [Crasher(UseCustomData = false)]
     public class CapiApplication : Application
     {
