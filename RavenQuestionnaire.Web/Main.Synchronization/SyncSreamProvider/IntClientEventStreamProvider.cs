@@ -24,7 +24,7 @@ namespace Main.Synchronization.SyncSreamProvider
     /// <summary>
     /// The int client event stream provider.
     /// </summary>
-    public class IntClientEventStreamProvider : IIntSyncEventStreamProvider
+    public class IntClientEventStreamProvider : ISyncEventStreamProvider
     {
         #region Fields
 
