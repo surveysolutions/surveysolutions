@@ -479,30 +479,31 @@ namespace Web.Supervisor.Controllers
 
         private ImportSynchronizationMessage GetARInt(string aRKey, string length, string rootType)
         {
+            var result = new ImportSynchronizationMessage();
+
             Guid syncProcess = Guid.NewGuid();
 
             Guid key;
             if (!Guid.TryParse(aRKey, out key))
             {
-                return null;
+                return result;
             }
 
             int ln;
             if (!int.TryParse(length, out ln))
             {
-                return null;
+                return result;
             }
-
-            var result = new ImportSynchronizationMessage();
-
+            
             try
             {
                 var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
-
-                result = process.GetAR("Supervisor export AR events", key,rootType, ln);
+                result = process.GetAR("Supervisor export AR events.", key,rootType, ln);
             }
             catch (Exception ex)
             {
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.Fatal("Error on retrieving AR on sync. ", ex);
             }
 
             return result;
@@ -561,6 +562,13 @@ namespace Web.Supervisor.Controllers
             
             return new FileStreamResult(stream, "application/octet-stream");
         }
+
+        [AcceptVerbs(HttpVerbs.Get)]
+        public int GetCurrentVersion()
+        {
+            return Main.Synchronization.Version.CurrentVersion;
+        }
+
 
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)
