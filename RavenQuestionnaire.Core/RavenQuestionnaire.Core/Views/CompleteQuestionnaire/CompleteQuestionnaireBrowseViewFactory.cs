@@ -29,7 +29,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// The document session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession;
 
         #endregion
 
@@ -42,7 +42,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// The document session.
         /// </param>
         public CompleteQuestionnaireBrowseViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
         {
             this.documentSession = documentSession;
         }
