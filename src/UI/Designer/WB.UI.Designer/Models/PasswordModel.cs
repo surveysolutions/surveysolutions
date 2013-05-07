@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Models
         /// </summary>
         [Required]
         [PasswordStringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.")]
-        [PasswordRegularExpression]
+        [PasswordRegularExpression(ErrorMessage = "Password must contain at least one number, one upper case character and one lower case character")]
         [DataType(DataType.Password)]
         [Display(Name = "Password", Order = 2)]
         public string Password { get; set; }
