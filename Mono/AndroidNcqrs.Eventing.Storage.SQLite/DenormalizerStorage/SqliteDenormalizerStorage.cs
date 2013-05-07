@@ -18,7 +18,7 @@ using SQLite;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteDenormalizerStorage<T> : IDenormalizerStorage<T>, IMvxServiceConsumer
+    public class SqliteDenormalizerStorage<T> : IFilterableDenormalizerStorage<T>, IMvxServiceConsumer
         where T : DenormalizerRow, new()
     {
         //        private readonly ISQLiteConnectionFactory _connectionFactory;
@@ -44,11 +44,6 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             var idString = key.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
             return ((TableQuery<T>) _connection.Table<T>()).Where((i) => i.Id == idString).FirstOrDefault();
-        }
-
-        public IQueryable<T> Query()
-        {
-            return _connection.Table<T>().AsQueryable();
         }
 
         public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)

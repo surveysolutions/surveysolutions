@@ -24,7 +24,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Main.Core.View.User
         /// <param name="users">
         /// The users.
         /// </param>
-        public UserViewFactory(IDenormalizerStorage<UserDocument> users)
+        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.users = users;
         }

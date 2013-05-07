@@ -34,17 +34,17 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         /// <summary>
         /// The stat
         /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> stat;
+        private readonly IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat;
 
         #endregion
 
@@ -63,9 +63,9 @@ namespace Core.Supervisor.Views.Index
         /// The stat.
         /// </param>
         public IndexViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<SupervisorStatisticsItem> stat)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat)
         {
             this.surveys = surveys;
             this.users = users;

@@ -25,15 +25,6 @@ namespace Main.Core
     {
         #region Methods
 
-        /// <summary>
-        /// The create instance.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IDenormalizerStorage"/>.
-        /// </returns>
         protected override IDenormalizerStorage<T> CreateInstance(IContext context)
         {
             IDenormalizerStorage<T> result;

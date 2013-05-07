@@ -390,7 +390,7 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
+                    CapiApplication.Kernel.Get<IFilterableDenormalizerStorage<QuestionnaireDTO>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);

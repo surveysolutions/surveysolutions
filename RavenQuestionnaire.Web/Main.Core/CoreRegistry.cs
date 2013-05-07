@@ -154,12 +154,28 @@ namespace Main.Core
                     t.GetInterfaces().FirstOrDefault(
                         i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) != null)
                     .BindToSelf().Configure(binding => binding.InSingletonScope()));
+
+            this.Kernel.Bind(
+                x =>
+                x.From(GetAssweblysForRegister()).Select(
+                    t =>
+                    t.GetInterfaces().FirstOrDefault(
+                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueryableDenormalizerStorage<>)) != null)
+                    .BindToSelf().Configure(binding => binding.InSingletonScope()));
             this.Kernel.Bind(
                 x =>
                 x.From(GetAssweblysForRegister()).Select(
                     t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof (DenormalizerStorageProvider<>)).
                     BindToSelf().Configure(binding => binding.InSingletonScope()));
-            Bind(typeof (IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider);
+
+            this.Kernel.Bind(
+              x =>
+              x.From(GetAssweblysForRegister()).Select(
+                  t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof(DenormalizerQueryableStorageProvider<>)).
+                  BindToSelf().Configure(binding => binding.InSingletonScope()));
+
+            Bind(typeof(IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider);
+            Bind(typeof(IQueryableDenormalizerStorage<>)).ToMethod(ActivteFilterDenormalizerFromProvider);
 
         }
 
@@ -184,35 +200,15 @@ namespace Main.Core
                                 implementation).InScope(scope);
                     }
                 }
-             /*   else{
-                    this.Kernel.Bind(interfaceType).To(implementation);
-                }*/
             }
         }
-
-        /// <summary>
-        /// The implements at least one i event handler interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
+       
         private bool ImplementsAtLeastOneInterface(Type type, Type interfaceType)
         {
             return type.IsClass && !type.IsAbstract &&
                    type.GetInterfaces().Any(i => IsInterfaceInterface(i, interfaceType));
         }
-        /// <summary>
-        /// The is i event handler interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
+
         private  bool IsInterfaceInterface(Type type, Type interfaceType)
         {
             return type.IsInterface &&
@@ -229,6 +225,10 @@ namespace Main.Core
         protected object ActivteDenormalizerFromProvider(IContext ctx)
         {
             return (ctx.Kernel.Get(typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
+        }
+        protected object ActivteFilterDenormalizerFromProvider(IContext ctx)
+        {
+            return (ctx.Kernel.Get(typeof(DenormalizerQueryableStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
         }
     }
 }

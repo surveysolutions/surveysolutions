@@ -222,6 +222,7 @@
     <Compile Include="Commands\User\UnlockUserCommand.cs" />
     <Compile Include="Conventions\RegisterFirstInstanceOfInterface.cs" />
     <Compile Include="CoreRegistry.cs" />
+    <Compile Include="DenormalizerQueryableStorageProvider.cs" />
     <Compile Include="DenormalizerStorageProvider.cs" />
     <Compile Include="DocumentStoreProvider.cs" />
     <Compile Include="Documents\AbstractDocument.cs" />

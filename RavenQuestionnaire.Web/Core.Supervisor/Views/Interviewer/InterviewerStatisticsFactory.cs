@@ -32,7 +32,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
         /// <summary>
         /// The users.
         /// </summary>
@@ -48,7 +48,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <param name="users">
         /// The users.
         /// </param>
-        public InterviewerStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
+        public InterviewerStatisticsFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
         {
             this.documentItemSession = documentItemSession;
             this.users = users;
