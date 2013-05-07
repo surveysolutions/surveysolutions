@@ -37,10 +37,6 @@
     <WarningsNotAsErrors>612,618,1030</WarningsNotAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ExternalLibs\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="Machine.Specifications, Version=0.5.12.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Machine.Specifications.0.5.12\lib\net40\Machine.Specifications.dll</HintPath>
@@ -149,6 +145,10 @@
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj">
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Designer\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj">
+      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
+      <Name>WB.UI.Desiner.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

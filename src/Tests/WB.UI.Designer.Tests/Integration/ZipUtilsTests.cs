@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ionic.Zip;
+﻿using System.IO;
 using NUnit.Framework;
-using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests.Integration
 {
+    using System.IO.Compression;
+
+    using WB.UI.Desiner.Utilities.Compression;
+
     [TestFixture]
     public class ZipUtilsTests
     {
@@ -22,16 +19,17 @@ namespace WB.UI.Designer.Tests.Integration
             // act
             string helloworld = "helloworld";
 
-            var file = target.ZipDate(helloworld);
+            var file = target.Zip(helloworld);
 
             // assert
 
-            using (ZipFile zip = ZipFile.Read(new MemoryStream(file)))
+            using (GZipStream zip = new GZipStream(file, CompressionMode.Decompress))
             {
-                foreach (ZipEntry e in zip)
+                using (var reader = new StreamReader(zip, System.Text.Encoding.UTF8))
                 {
-                    Assert.That(e.AlternateEncoding, Is.EqualTo(Encoding.UTF8));
+                    Assert.That(reader.ReadToEnd(), Is.EqualTo(helloworld));
                 }
+               
             }
 
         }
