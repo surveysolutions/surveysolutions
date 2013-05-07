@@ -47,11 +47,18 @@ namespace AssigmentGeneration
                 return;
             }
 
-            Console.WriteLine("Enter questionnaire template path and assigment values path:");
-            var files = Console.ReadLine().Split(' ');
-            AssigmentBuilder assigments = new AssigmentBuilder(files[0].Trim(), files[1].Trim(), supervisorKey,
-                                                               supervisorName);
-            assigments.CreateFile();
+            /*------------------------------------------Assigments----------------------------------------------------*/
+            Console.WriteLine("Create assigment users? (Y/N)");
+            var answerAssigments = Console.ReadLine();
+            if (string.Compare(answerAssigments, "Y", true) == 0)
+            {
+
+                Console.WriteLine("Enter questionnaire template path and assigment values path:");
+                var files = Console.ReadLine().Split(' ');
+                AssigmentBuilder assigments = new AssigmentBuilder(files[0].Trim(), files[1].Trim(), supervisorKey,
+                                                                   supervisorName);
+                assigments.CreateFile();
+            }
             Console.ReadLine();
         }
 

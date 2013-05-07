@@ -1,4 +1,6 @@
-﻿namespace Ncqrs.Eventing.Storage
+﻿using System;
+
+namespace Ncqrs.Eventing.Storage
 {
     using System.Collections.Generic;
 
@@ -16,6 +18,11 @@
         /// The <see cref="IEnumerable"/>.
         /// </returns>
         IEnumerable<CommittedEvent> GetEventStream();
+
+        #warning move to readlayer
+        CommittedEvent GetLastEvent(Guid aggregateRootId);
+        #warning move to readlayer
+        bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier);
 
         #endregion
     }

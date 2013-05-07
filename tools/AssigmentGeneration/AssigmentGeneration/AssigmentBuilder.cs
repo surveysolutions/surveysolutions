@@ -8,12 +8,16 @@ using CsvHelper;
 using Ionic.Zip;
 using Ionic.Zlib;
 using Main.Core.Documents;
+using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
+using Main.Core.Entities.SubEntities.Complete.Question;
+using Main.Core.Entities.SubEntities.Question;
 using Main.Core.Events;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Spec;
 using Newtonsoft.Json;
 using SynchronizationMessages.Export;
 
@@ -32,10 +36,9 @@ namespace AssigmentGeneration
         {
             this.supKey = supKey;
             this.supName = supName;
-            template =
-                ((SnapshootLoaded) (JsonConvert.DeserializeObject<ZipFileData>(File.OpenText(filePath).ReadToEnd(),
-                                                                               settings).Events.First().Payload))
-                    .Template.Payload as QuestionnaireDocument;
+            template = JsonConvert.DeserializeObject<QuestionnaireDocument>(File.OpenText(filePath).ReadToEnd(),
+                                                                            settings);
+            
             this.assigmentValues = new List<string[]>();
             using (var reader = new CsvReader(File.OpenText(valueFilePath)))
             {
@@ -63,7 +66,7 @@ namespace AssigmentGeneration
             string result =
                 JsonConvert.SerializeObject(data, Formatting.None, settings);
 
-            zipFile.AddEntry("backup.txt", result);
+            zipFile.AddEntry("backup.txt", result, Encoding.UTF8);
 
             zipFile.Save("assigmentdata.capi");
         }
@@ -81,6 +84,8 @@ namespace AssigmentGeneration
             foreach (var assigmentValue in assigmentValues.Skip(1))
             {
                 result.Add(BuildNewAssigmentEvent(Guid.NewGuid(), assigmentValue));
+
+               
             }
             return result;
         }
@@ -98,18 +103,29 @@ namespace AssigmentGeneration
 
         private CompleteQuestionnaireDocument BuiltSnapshoot(Guid publicKey, string[] values)
         {
-            var result = (CompleteQuestionnaireDocument)template;
-
-            result.PublicKey = publicKey;
-            result.Status = SurveyStatus.Unassign;
-            result.Creator = new UserLight(this.supKey, this.supName);
-            for (int i = 0; i < assigmentValues[0].Length; i++)
+            using (EventContext ex=new EventContext())
             {
-                var question =
-                    result.FirstOrDefault<ICompleteQuestion>(q => q.StataExportCaption == assigmentValues[0][i]);
-                question.SetAnswer(null, values[i]);
-            }
-            return result;
+                var ar = new CompleteQuestionnaireAR(publicKey, template, new UserLight(this.supKey, this.supName));
+
+                for (int i = 0; i < assigmentValues[0].Length; i++)
+                {
+                    var question =
+                      template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == assigmentValues[0][i]);
+
+
+                    var singleOption = question as SingleQuestion;
+                    if (singleOption != null)
+                    {
+                        var answer = singleOption.Answers.FirstOrDefault(a => a.AnswerValue == values[i]);
+                        ar.SetAnswer(question.PublicKey, null, null, new List<Guid> { answer.PublicKey }, DateTime.Now);
+                    }
+                    else
+                    {
+                        ar.SetAnswer(question.PublicKey, null, values[i], null, DateTime.Now);
+                    }
+                }
+                return ar.CreateSnapshot();
+            }    
         }
     }
 }

@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.View.User;
 
@@ -24,9 +25,7 @@ namespace CAPI.Android
     using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
-    using CAPI.Android.Syncronization;
     using CAPI.Android.Utils;
-
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
@@ -98,19 +97,7 @@ namespace CAPI.Android
                 buttonSync.Click += this.ButtonSyncClick;
                 buttonSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
             }
-
-            /*var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
-            if (buttonPull != null)
-            {
-                buttonPull.Click += this.buttonPull_Click;
-            }
-
-            var buttonPush = this.FindViewById<Button>(Resource.Id.btnPush);
-            if (buttonPush != null)
-            {
-                buttonPush.Click += this.buttonPush_Click;
-            }*/
-
+            
             var buttonBackup = this.FindViewById<Button>(Resource.Id.btnBackup);
             if (buttonBackup != null)
             {
@@ -127,7 +114,6 @@ namespace CAPI.Android
         private void ButtonSyncClick(object sender, EventArgs e)
         {
             this.DoSync(PumpimgType.Sync);
-            //this.DoSync(PumpimgType.Pull);
         }
 
         /// <summary>
@@ -305,6 +291,7 @@ namespace CAPI.Android
                                     }
                                     catch (Exception exc)
                                     {
+                                        result.Result = false;
                                         //throw;
                                     }
                                     finally
@@ -338,7 +325,7 @@ namespace CAPI.Android
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
                                                           ? "Process is finished"
-                                                          : "Error occured during the process. \r\n"
+                                                          : "Error occured during the process: \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
                                 });
@@ -354,19 +341,10 @@ namespace CAPI.Android
             SyncronizationStatus status,
             Guid processKey)
         {
-            try
-            {
-                var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
-                manager.StartPump();
-                CapiApplication.SaveProjections();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // log
-                status.IsWorking = false;
-                return false;
-            }
+            var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
+            manager.StartPump();
+            return true;
+         
         }
 
        
@@ -390,6 +368,7 @@ namespace CAPI.Android
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
+            
             status.Progress = 99;
             return result;
         }
@@ -411,7 +390,7 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
+                    CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);

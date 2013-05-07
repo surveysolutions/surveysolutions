@@ -90,7 +90,7 @@ namespace Core.HQ.Synchronization
             return retval.OrderBy(x => x.EventTimeStamp).ToList();
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
             throw new NotImplementedException();
         }

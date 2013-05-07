@@ -15,6 +15,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public Guid CommitId { get; set; }
         public Guid EventIdentifier { get; set; }
         public DateTime EventTimeStamp { get; set; }
+        public bool IsSnapshot { get; set; }
 
         [JsonConverter(typeof(VersionConverter))]
         public Version Version { get; set; }

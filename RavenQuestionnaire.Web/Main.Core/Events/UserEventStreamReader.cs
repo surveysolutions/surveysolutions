@@ -98,7 +98,7 @@ namespace Main.Core.Events
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
             throw new NotImplementedException();
         }
