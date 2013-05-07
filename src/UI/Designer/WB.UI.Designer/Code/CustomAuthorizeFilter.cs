@@ -4,6 +4,8 @@
     using System.Web.Routing;
     using System.Web.Security;
 
+    using Main.Core.Utility;
+
     using WB.UI.Designer.Controllers;
 
     /// <summary>
@@ -74,7 +76,7 @@
                     }
                 }
 
-                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.ToLower() != "logoff")
+                if (!isInvalidUser && filterContext.Controller is AccountController && filterContext.ActionDescriptor.ActionName.NotIn(new [] { "logoff", "manage" }))
                 {
                     filterContext.Result =
                         new RedirectToRouteResult(
