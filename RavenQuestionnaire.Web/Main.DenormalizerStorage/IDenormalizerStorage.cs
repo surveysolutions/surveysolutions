@@ -11,14 +11,10 @@ namespace Main.DenormalizerStorage
         int Count();
 
         TView GetById(Guid id);
-        IEnumerable<T> Query(Expression<Func<T, bool>> predExpr);
-        }
-
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
-        {
-            return this._hash.Values.Where(predExpr.Compile());
 
         IQueryable<TView> Query();
+
+        IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr);
 
         void Remove(Guid id);
 
