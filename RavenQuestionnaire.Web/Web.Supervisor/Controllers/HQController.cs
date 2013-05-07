@@ -33,6 +33,7 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
+    using Web.Supervisor.DesignerPublicService;
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
@@ -482,7 +483,7 @@ namespace Web.Supervisor.Controllers
                         JsonRequestBehavior.AllowGet);
             }
 
-            return this.RedirectToAction("Documents", "Survey", new { id = tmptId });
+            return this.RedirectToAction("Documents", "HQ", new { id = tmptId });
         }
 
         /// <summary>
@@ -847,7 +848,6 @@ namespace Web.Supervisor.Controllers
             var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
         }
-
         #endregion
     }
 }

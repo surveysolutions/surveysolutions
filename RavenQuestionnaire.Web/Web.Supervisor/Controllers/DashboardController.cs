@@ -25,18 +25,13 @@ namespace Web.Supervisor.Controllers
     /// <summary>
     /// Show Statistics
     /// </summary>
-    [Authorize]
+    [Authorize(Roles = "Headquarter")]
     public class DashboardController : BaseController
     { 
         public DashboardController(
             IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider)
             : base(viewRepository, commandService, globalProvider)
         {
-        }
-
-        public ActionResult Index()
-        {
-            return this.View();
         }
       
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
@@ -52,7 +47,7 @@ namespace Web.Supervisor.Controllers
                 throw new HttpException("404");
             var newQuestionnairePublicKey = Guid.NewGuid();
             this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.GlobalInfo.GetCurrentUser()));
-            return this.RedirectToAction("Assign", "Survey", new { Id = newQuestionnairePublicKey, Template = id });
+            return this.RedirectToAction("Assign", "HQ", new { Id = newQuestionnairePublicKey, Template = id });
         }
     }
 }

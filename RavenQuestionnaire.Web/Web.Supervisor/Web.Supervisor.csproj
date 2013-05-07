@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}</ProjectGuid>
-     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Web.Supervisor</RootNamespace>
@@ -198,6 +198,7 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivator, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -230,6 +231,7 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\Chart\ChartModelBase.cs" />
+    <Compile Include="Models\ImportTemplateModel.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
@@ -246,6 +248,11 @@
     <Compile Include="Models\SupervisorViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\DesignerPublicService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
@@ -400,6 +407,13 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
+    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
+    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
     <Content Include="WCF\API.svc" />
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
@@ -416,6 +430,10 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -524,7 +542,6 @@
     <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
-    <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
     <Content Include="Views\Maintenance\ReadLayer.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
@@ -588,6 +605,22 @@
     </Content>
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Interviewers.cshtml" />
+    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
