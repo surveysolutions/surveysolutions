@@ -40,32 +40,32 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
                 throw new ArgumentException("informations for current user can't be displayed for this superviser");
         }
 
-        public static IEnumerable<UserDocument> GetTeamMembersForViewer(this IDenormalizerStorage<UserDocument> users, Guid viewerId)
+        public static IEnumerable<UserDocument> GetTeamMembersForViewer(this IQueryableDenormalizerStorage<UserDocument> users, Guid viewerId)
         {
-            var viewer = users.GetByGuid(viewerId);
+            var viewer = users.GetById(viewerId);
 
             if (viewer == null)
                 return Enumerable.Empty<UserDocument>();
 
             if (viewer.IsHq())
-                return users.Query(u => u.IsInterviewer() || u.IsSupervisor());
+                return users.Query().Where(u => u.IsInterviewer() || u.IsSupervisor());
             else if (viewer.IsSupervisor())
                 return
-                    users.Query(u => (u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey);
+                    users.Query().Where(u => (u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey);
 
             throw new ArgumentException(
                 string.Format("Operation is allowed only for ViewerId and Hq users. Current viewer rolse is {0}",
                               string.Concat(viewer.Roles)));
         }
 
-        public static IEnumerable<UserDocument> GetSupervisorsListForViewer(this IDenormalizerStorage<UserDocument> users, Guid viewerId)
+        public static IEnumerable<UserDocument> GetSupervisorsListForViewer(this IQueryableDenormalizerStorage<UserDocument> users, Guid viewerId)
         {
-            var viewer = users.GetByGuid(viewerId);
+            var viewer = users.GetById(viewerId);
 
             if (viewer == null || !viewer.IsHq())
                 return Enumerable.Empty<UserDocument>();
 
-            return users.Query(u => u.IsSupervisor());
+            return users.Query().Where(u => u.IsSupervisor());
         }
     }
 }

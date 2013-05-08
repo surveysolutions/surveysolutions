@@ -71,7 +71,7 @@ namespace Core.Supervisor.Views.Interviewer
         {
             if (!input.InterviewerId.HasValue)
                 return null;
-            var user = this.users.GetByGuid(input.InterviewerId.Value);
+            var user = this.users.GetById(input.InterviewerId.Value);
           
             var questionnairesGroupedByTemplate =
                 BuildItems(

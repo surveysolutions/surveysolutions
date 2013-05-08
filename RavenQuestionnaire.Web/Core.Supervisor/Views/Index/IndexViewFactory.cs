@@ -87,7 +87,7 @@ namespace Core.Supervisor.Views.Index
 
             if (input.InterviewerId.HasValue)
             {
-                user = this.users.GetByGuid(input.InterviewerId.Value);
+                user = this.users.GetById(input.InterviewerId.Value);
                 responsibleList = new Guid[] { input.InterviewerId.Value };
             }
             else
