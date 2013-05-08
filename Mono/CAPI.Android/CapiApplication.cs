@@ -162,11 +162,11 @@ namespace CAPI.Android
             var surveyStore = new SqliteDenormalizerStorage<SurveyDto>();
             var questionnaireStore = new SqliteDenormalizerStorage<QuestionnaireDTO>();
             
-            Kernel.Unbind<IDenormalizerStorage<SurveyDto>>();
-            Kernel.Bind<IDenormalizerStorage<SurveyDto>>().ToConstant(surveyStore);
+            Kernel.Unbind<IFilterableDenormalizerStorage<SurveyDto>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<SurveyDto>>().ToConstant(surveyStore);
 
-            Kernel.Unbind<IDenormalizerStorage<QuestionnaireDTO>>();
-            Kernel.Bind<IDenormalizerStorage<QuestionnaireDTO>>().ToConstant(questionnaireStore);
+            Kernel.Unbind<IFilterableDenormalizerStorage<QuestionnaireDTO>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<QuestionnaireDTO>>().ToConstant(questionnaireStore);
             
             var dashboardeventHandler =
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
