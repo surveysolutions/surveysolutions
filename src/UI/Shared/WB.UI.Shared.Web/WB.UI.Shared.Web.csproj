@@ -75,7 +75,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Filters\AbstractRequiresReadLayerFilterProvider.cs" />
+    <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
