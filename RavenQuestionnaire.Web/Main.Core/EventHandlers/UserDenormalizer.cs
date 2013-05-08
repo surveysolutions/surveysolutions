@@ -83,7 +83,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<UserChanged> evnt)
         {
-            UserDocument item = this.users.GetByGuid(evnt.EventSourceId);
+            UserDocument item = this.users.GetById(evnt.EventSourceId);
 
             item.Email = evnt.Payload.Email;
             item.Roles = evnt.Payload.Roles.ToList();
@@ -91,14 +91,14 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<UserLocked> @event)
         {
-            UserDocument item = this.users.GetByGuid(@event.EventSourceId);
+            UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = true;
         }
 
         public void Handle(IPublishedEvent<UserUnlocked> @event)
         {
-            UserDocument item = this.users.GetByGuid(@event.EventSourceId);
+            UserDocument item = this.users.GetById(@event.EventSourceId);
 
             item.IsLocked = false;
         }

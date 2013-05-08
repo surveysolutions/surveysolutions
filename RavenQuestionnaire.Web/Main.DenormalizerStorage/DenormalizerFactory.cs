@@ -71,7 +71,7 @@ namespace Main.DenormalizerStorage
         /// </returns>
         public T GetByGuid<T>(Guid key) where T : class
         {
-            return this.GetDenormalizer<T>().GetByGuid(key);
+            return this.GetDenormalizer<T>().GetById(key);
         }
 
         /// <summary>

@@ -74,7 +74,7 @@ namespace Main.Core.View.CompleteQuestionnaire.ScreenGroup
                 return null;
             }
             
-            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            CompleteQuestionnaireStoreDocument doc = this.store.GetById(input.CompleteQuestionnaireId);
             
             if (doc == null)
             {

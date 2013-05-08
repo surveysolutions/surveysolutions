@@ -35,7 +35,7 @@ namespace Main.DenormalizerStorage
 
         public Snapshot GetSnapshot(Guid eventSourceId, long maxVersion)
         {
-            return storage.GetByGuid(eventSourceId);
+            return storage.GetById(eventSourceId);
 
 
         }

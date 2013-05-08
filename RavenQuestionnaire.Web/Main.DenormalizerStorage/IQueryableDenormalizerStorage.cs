@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Main.DenormalizerStorage
 {
-    public interface IQueryableDenormalizerStorage<T> : IDenormalizerStorage<T> where T : class
+    public interface IQueryableDenormalizerStorage<TView> : IDenormalizerStorage<TView> where TView : class
     {
-        IQueryable<T> Query();
+        IQueryable<TView> Query();
     }
 }

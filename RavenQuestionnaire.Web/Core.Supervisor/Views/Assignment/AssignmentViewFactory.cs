@@ -83,11 +83,11 @@ namespace Core.Supervisor.Views.Assignment
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = input.TemplateId == Guid.Empty
                             ? new TemplateLight(Guid.Empty, "Any")
-                            : this.templates.GetByGuid(input.TemplateId).GetTemplateLight();
+                            : this.templates.GetById(input.TemplateId).GetTemplateLight();
 
             view.User = input.UserId == Guid.Empty
                             ? new UserLight(Guid.Empty, "Anyone")
-                            : this.users.GetByGuid(input.UserId).GetUseLight();
+                            : this.users.GetById(input.UserId).GetUseLight();
 
             view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
 

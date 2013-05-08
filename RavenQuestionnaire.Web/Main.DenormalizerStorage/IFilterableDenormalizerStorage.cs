@@ -6,8 +6,8 @@ using System.Text;
 
 namespace Main.DenormalizerStorage
 {
-    public interface IFilterableDenormalizerStorage<T> : IDenormalizerStorage<T> where T : class
+    public interface IFilterableDenormalizerStorage<TView> : IDenormalizerStorage<TView> where TView : class
     {
-        IEnumerable<T> Query(Expression<Func<T, bool>> predExpr);
+        IEnumerable<TView> Query(Expression<Func<TView, bool>> predicate);
     }
 }

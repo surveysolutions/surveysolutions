@@ -7,14 +7,14 @@ using System.Text;
 
 namespace Main.DenormalizerStorage
 {
-    public class InMemoryDenormalizer<T> : IQueryableDenormalizerStorage<T>
-        where T : class
+    public class InMemoryDenormalizer<TView> : IQueryableDenormalizerStorage<TView>
+        where TView : class
     {
-        private readonly ConcurrentDictionary<Guid, T> _hash;
+        private readonly ConcurrentDictionary<Guid, TView> _hash;
 
         public InMemoryDenormalizer()
         {
-            this._hash = new ConcurrentDictionary<Guid, T>();
+            this._hash = new ConcurrentDictionary<Guid, TView>();
         }
 
         public int Count()
@@ -22,41 +22,41 @@ namespace Main.DenormalizerStorage
             return this._hash.Count;
         }
 
-        public T GetByGuid(Guid key)
+        public TView GetById(Guid id)
         {
-            if (!this._hash.ContainsKey(key))
+            if (!this._hash.ContainsKey(id))
             {
                 return null;
             }
 
-            return this._hash[key];
+            return this._hash[id];
         }
 
-        public IQueryable<T> Query()
+        public IQueryable<TView> Query()
         {
             return this._hash.Values.AsQueryable();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
             return this._hash.Values.Where(predExpr.Compile());
         }
 
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
-            T val;
-            this._hash.TryRemove(key, out val);
+            TView val;
+            this._hash.TryRemove(id, out val);
         }
 
-        public void Store(T denormalizer, Guid key)
+        public void Store(TView view, Guid id)
         {
-            if (this._hash.ContainsKey(key))
+            if (this._hash.ContainsKey(id))
             {
-                this._hash[key] = denormalizer;
+                this._hash[id] = view;
                 return;
             }
 
-            this._hash.TryAdd(key, denormalizer);
+            this._hash.TryAdd(id, view);
         }
     }
 }

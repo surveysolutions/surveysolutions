@@ -69,7 +69,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
-            var user = this.users.GetByGuid(input.UserId);
+            var user = this.users.GetById(input.UserId);
             if (user == null)
                 return null;
             var questionnairesGroupedByTemplate =

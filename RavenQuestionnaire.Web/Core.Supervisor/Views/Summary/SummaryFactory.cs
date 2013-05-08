@@ -79,7 +79,7 @@ namespace Core.Supervisor.Views.Summary
             var template = new TemplateLight(Guid.Empty, "All");
             if (input.TemplateId != Guid.Empty)
             {
-                var tbi = this.templates.GetByGuid(input.TemplateId);
+                var tbi = this.templates.GetById(input.TemplateId);
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 

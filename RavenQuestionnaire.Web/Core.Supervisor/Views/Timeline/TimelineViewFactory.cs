@@ -56,7 +56,7 @@ namespace Core.Supervisor.Views.Timeline
         /// </returns>
         public TimelineView Load(TimelineViewInputModel input)
         {
-            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.Id);
+            CompleteQuestionnaireStoreDocument doc = this.store.GetById(input.Id);
             return new TimelineView(doc);
         }
 

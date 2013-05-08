@@ -72,7 +72,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountConfirmed> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.IsConfirmed = true;
         }
@@ -96,7 +96,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountLocked> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.IsLockedOut = true;
             item.LastLockedOutAt = @event.Payload.LastLockedOutAt;
@@ -110,7 +110,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountOnlineUpdated> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.LastActivityAt = @event.Payload.LastActivityAt;
         }
@@ -123,7 +123,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountPasswordChanged> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.Password = @event.Payload.Password;
             item.LastPasswordChangeAt = @event.Payload.LastPasswordChangeAt;
@@ -137,7 +137,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountPasswordQuestionAndAnswerChanged> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.PasswordAnswer = @event.Payload.PasswordAnswer;
             item.PasswordQuestion = @event.Payload.PasswordQuestion;
@@ -151,7 +151,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountPasswordReset> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.PasswordSalt = @event.Payload.PasswordSalt;
             item.Password = @event.Payload.Password;
@@ -189,7 +189,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountUnlocked> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.IsLockedOut = false;
             item.FailedPasswordAnswerWindowAttemptCount = 0;
@@ -206,7 +206,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountUpdated> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.Comment = @event.Payload.Comment;
             item.Email = @event.Payload.Email;
@@ -222,7 +222,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<UserLoggedIn> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.LastLoginAt = @event.Payload.LastLoginAt;
             item.FailedPasswordWindowStartedAt = DateTime.MinValue;
@@ -237,7 +237,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountRoleAdded> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.SimpleRoles.Add(@event.Payload.Role);
         }
@@ -250,7 +250,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountRoleRemoved> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.SimpleRoles.Remove(@event.Payload.Role);
         }
@@ -263,7 +263,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountLoginFailed> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.FailedPasswordWindowStartedAt = @event.Payload.FailedPasswordWindowStartedAt;
             item.FailedPasswordWindowAttemptCount += 1;
@@ -277,7 +277,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// </param>
         public void Handle(IPublishedEvent<AccountPasswordResetTokenChanged> @event)
         {
-            AccountDocument item = this._accounts.GetByGuid(@event.EventSourceId);
+            AccountDocument item = this._accounts.GetById(@event.EventSourceId);
 
             item.PasswordResetToken = @event.Payload.PasswordResetToken;
             item.PasswordResetExpirationDate = @event.Payload.PasswordResetExpirationDate;

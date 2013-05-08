@@ -57,7 +57,7 @@ namespace Main.Core.View.Question
         /// </returns>
         public QuestionView Load(QuestionViewInputModel input)
         {
-            QuestionnaireDocument doc = this._documentSession.GetByGuid(input.QuestionnaireId);
+            QuestionnaireDocument doc = this._documentSession.GetById(input.QuestionnaireId);
 
             var question = doc.Find<IQuestion>(input.PublicKey);
             if (question == null)

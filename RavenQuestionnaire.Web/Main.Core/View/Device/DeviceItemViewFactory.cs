@@ -55,7 +55,7 @@ using Main.Core.Documents;
         /// </returns>
         public DeviceItemView Load(DeviceItemViewInputModel input)
         {
-            var device = this.devices.GetByGuid(input.DeviceId);
+            var device = this.devices.GetById(input.DeviceId);
 
             if (device == null)
             {
