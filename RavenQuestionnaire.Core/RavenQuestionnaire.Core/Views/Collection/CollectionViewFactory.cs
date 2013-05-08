@@ -26,7 +26,7 @@ namespace RavenQuestionnaire.Core.Views.Collection
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CollectionDocument> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CollectionDocument> documentItemSession;
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace RavenQuestionnaire.Core.Views.Collection
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public CollectionViewFactory(IDenormalizerStorage<CollectionDocument> documentItemSession)
+        public CollectionViewFactory(IQueryableDenormalizerStorage<CollectionDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
