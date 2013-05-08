@@ -82,7 +82,7 @@ namespace Core.Supervisor.Views.Assignment
         /// </returns>
         public AssignmentView Load(AssignmentInputModel input)
         {
-            var responsibleList = users.GetIntervieweresListForViewer(input.ViewerId).Select(i => i.PublicKey);
+            var responsibleList = users.GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = !input.TemplateId.HasValue
                                 ? null
