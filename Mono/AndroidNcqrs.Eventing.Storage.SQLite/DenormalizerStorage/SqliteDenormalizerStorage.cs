@@ -18,8 +18,8 @@ using SQLite;
 
 namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 {
-    public class SqliteDenormalizerStorage<T> : IFilterableDenormalizerStorage<T>, IMvxServiceConsumer
-        where T : DenormalizerRow, new()
+    public class SqliteDenormalizerStorage<TView> : IFilterableDenormalizerStorage<TView>, IMvxServiceConsumer
+        where TView : DenormalizerRow, new()
     {
         //        private readonly ISQLiteConnectionFactory _connectionFactory;
         private readonly ISQLiteConnection _connection;
@@ -31,40 +31,40 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
             var connectionFactory = this.GetService<ISQLiteConnectionFactory>();
             _connection = connectionFactory.Create(_dbName);
 
-            _connection.CreateTable<T>();
+            _connection.CreateTable<TView>();
         }
 
         public int Count()
         {
-            return _connection.Table<T>().Count();
+            return _connection.Table<TView>().Count();
         }
 
-        public T GetByGuid(Guid key)
+        public TView GetById(Guid id)
         {
-            var idString = key.ToString();
+            var idString = id.ToString();
             //  Expression<Func<T, bool>> exp = (i) => i.Id == key.ToString();
-            return ((TableQuery<T>) _connection.Table<T>()).Where((i) => i.Id == idString).FirstOrDefault();
+            return ((TableQuery<TView>) _connection.Table<TView>()).Where((i) => i.Id == idString).FirstOrDefault();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
-            return ((TableQuery<T>) _connection.Table<T>()).Where(predExpr);
+            return ((TableQuery<TView>) _connection.Table<TView>()).Where(predExpr);
         }
 
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
-            _connection.Delete<T>(key);
+            _connection.Delete<TView>(id);
         }
 
-        public void Store(T denormalizer, Guid key)
+        public void Store(TView view, Guid id)
         {
             try
             {
-                _connection.Insert(denormalizer);
+                _connection.Insert(view);
             }
             catch
             {
-                _connection.Update(denormalizer);
+                _connection.Update(view);
             }
         }
     }
