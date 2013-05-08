@@ -22,6 +22,8 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
+    using Web.Supervisor.Models;
+
     /// <summary>
     /// Show Statistics
     /// </summary>
@@ -36,6 +38,7 @@ namespace Web.Supervisor.Controllers
       
         public ActionResult Questionnaires(QuestionnaireBrowseInputModel input)
         {
+            ViewBag.ActivePage = MenuItem.Administration;
              var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(input);
              return this.View(model);
         }
