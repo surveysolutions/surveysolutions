@@ -21,7 +21,6 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Status;
     using Core.Supervisor.Views.Summary;
     using Core.Supervisor.Views.Survey;
-    using Core.Supervisor.Views.Timeline;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
@@ -223,7 +222,8 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Assign(Guid id)
         {
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            var user = GlobalInfo.GetCurrentUser();
+            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
             return this.View(model);
         }
 
@@ -321,7 +321,7 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.GlobalInfo.GetCurrentUser();
             var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
             {
@@ -640,8 +640,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult ShowComments(Guid id, string template)
         {
-            var model = this.Repository.Load<CompleteQuestionnaireViewInputModel, SurveyScreenView>(
-                new CompleteQuestionnaireViewInputModel(id));
+            var model = this.Repository.Load<CompleteQuestionnaireViewInputModel, SurveyScreenView>(new CompleteQuestionnaireViewInputModel(id));
             ViewBag.TemplateId = template;
             return this.View("Comments", model);
         }

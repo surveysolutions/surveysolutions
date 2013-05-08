@@ -360,3 +360,86 @@ h1.inline
 
 }
 
+#output {
+    -webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	-o-box-sizing: border-box;
+	box-sizing: border-box;
+    left: 0;
+    z-index: 40;
+    padding-top: 0;
+    height: 200px;
+    top: auto;
+    bottom: -200px;
+    position: fixed;
+    background: #fff;
+    left: 20px;
+    right: 20px;
+}
+.output-visible #output {
+    bottom: 0;
+}
+    #output .inner {
+        -webkit-border-radius: 5px 5px 0 0;
+        -moz-border-radius: 5px 5px 0 0;
+        -ms-border-radius: 5px 5px 0 0;
+        -o-border-radius: 5px 5px 0 0;
+        border-radius: 5px 5px 0 0;
+        border: 1px solid #DDDDDD;
+        height: 100%;
+        position: relative;
+    }
+
+    #output .title
+{
+	background: rgba(255, 255, 255, 0.1);
+	background: -webkit-gradient(linear,left top,left bottom,from(rgba(255, 255, 255, 0.1)),to(rgba(0, 0, 0, 0.05)));
+	background: -moz-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: -ms-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	background: linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
+	border-bottom: 1px solid rgba(0, 0, 0, 0.24);
+	border-radius: 5px 5px 0 0;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-ms-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	-o-box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 24px;
+	min-height: 24px;
+	padding: 8px;
+	text-shadow: 0 1px 0 white;
+	word-wrap: break-word;
+}
+
+    #output .body {
+        top: 41px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        position: absolute;
+    }
+
+        #output .body .error-list {
+            margin: 0;
+            list-style: none;
+        }
+
+            #output .body .error-list .error {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                margin: 0 3px;
+                height: 40px;
+                line-height: 40px;
+                position: relative;
+                -webkit-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+                -moz-box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+                box-shadow: 0 -1px 0 rgba(0,0,0,.1) inset,0 1px 0 rgba(255,255,255,.85) inset;
+            }
+
+#assignmentButton {
+    text-align: center;
+}

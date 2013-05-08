@@ -57,5 +57,15 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
                 string.Format("Operation is allowed only for ViewerId and Hq users. Current viewer rolse is {0}",
                               string.Concat(viewer.Roles)));
         }
+
+        public static IEnumerable<UserDocument> GetSupervisorsListForViewer(this IDenormalizerStorage<UserDocument> users, Guid viewerId)
+        {
+            var viewer = users.GetByGuid(viewerId);
+
+            if (viewer == null || !viewer.IsHq())
+                return Enumerable.Empty<UserDocument>();
+
+            return users.Query(u => u.IsSupervisor());
+        }
     }
 }

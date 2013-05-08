@@ -1,6 +1,6 @@
 ﻿@using Main.Core.View.Questionnaire
 
-@model QuestionnaireBrowseView
+@model Web.Supervisor.Models.HQDashboardModel
 
 @{
     ViewBag.Title = "Index";
@@ -8,8 +8,36 @@
 
 <h2>HQ Dashboard</h2>
 <div class="row-fluid">
-    <div class="span6"></div>
     <div class="span6">
+        <h3>Supervisors</h3>
+        <table class="table table-striped table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th>Team Lead</th>
+                    <th>Email</th>
+                    <th>Members</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Teams.Items)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            0
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="span6">
+        <h3>Questionnaires</h3>
         <table class="table table-striped table-bordered table-condensed">
             <thead>
                 <tr>
@@ -18,7 +46,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Items)
+                @foreach (var item in Model.Questionnaires.Items)
                 {
                     <tr>
                         <td>
@@ -26,7 +54,7 @@
                         </td>
                         <td class="buttons">
                             <div class="btn-group">
-                                <a  href="@Url.Action("NewSurvey", "Dashboard", new { id = item.Id })" class="btn btn-primary">New survey</a>
+                                <a href="@Url.Action("TakeNew", "HQ", new { id = item.Id })" class="btn btn-primary">New survey</a>
                             </div>
                         </td>
                     </tr>

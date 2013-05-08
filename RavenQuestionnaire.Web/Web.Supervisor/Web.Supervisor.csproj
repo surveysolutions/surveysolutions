@@ -241,12 +241,14 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApproveRedoModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
+    <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\Chart\ChartModelBase.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
+    <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
@@ -381,6 +383,7 @@
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
     <Content Include="Scripts\details.js" />
@@ -407,6 +410,18 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\assign\app\datacontext.js" />
+    <Content Include="Scripts\assign\app\dataservice.js" />
+    <Content Include="Scripts\assign\app\mapper.js" />
+    <Content Include="Scripts\assign\app\model.js" />
+    <Content Include="Scripts\assign\app\viewmodel.js" />
+    <Content Include="Scripts\lib\amplify.js" />
+    <Content Include="Scripts\lib\jquery.js" />
+    <Content Include="Scripts\lib\knockout.js" />
+    <Content Include="Scripts\lib\knockout.validation.js" />
+    <Content Include="Scripts\lib\lodash.js" />
+    <Content Include="Scripts\lib\require.js" />
+    <Content Include="Scripts\assign\main.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
@@ -601,8 +616,6 @@
     <Content Include="Views\Shared\StatusChart.cshtml" />
     <Content Include="Views\HQ\Summary.cshtml" />
     <Content Include="Views\Shared\SummaryChart.cshtml" />
-    <Content Include="Views\Shared\Timeline.cshtml" />
-    <Content Include="Views\Shared\Timeline1.cshtml" />
     <Content Include="Views\Shared\IndexChart.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -616,6 +629,7 @@
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Interviewers.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
+    <Content Include="Views\HQ\Assign.cshtml" />
     <None Include="Web.Deploy-Main-Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

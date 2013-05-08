@@ -3,6 +3,10 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Web;
+using Core.Supervisor.Views.User;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -17,7 +21,6 @@ namespace Web.Supervisor.Controllers
     using Core.Supervisor.Views.Status;
     using Core.Supervisor.Views.Summary;
     using Core.Supervisor.Views.Survey;
-    using Core.Supervisor.Views.Timeline;
 
     using Main.Core.Commands.Questionnaire.Completed;
     using Main.Core.Entities.SubEntities;
@@ -53,8 +56,25 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Index()
         {
-            var model = this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(new QuestionnaireBrowseInputModel());
+            var model = new HQDashboardModel
+                {
+                    Questionnaires =
+                        this.Repository.Load<QuestionnaireBrowseInputModel, QuestionnaireBrowseView>(
+                            new QuestionnaireBrowseInputModel()),
+                    Teams = this.Repository.Load<UserListViewInputModel, UserListView>(new UserListViewInputModel{Role = UserRoles.Supervisor})
+                };
             return this.View(model);
+        
+        }
+
+        public ActionResult TakeNew(string id)
+        {
+            Guid key;
+            if (!Guid.TryParse(id, out key))
+                throw new HttpException("404");
+            var newQuestionnairePublicKey = Guid.NewGuid();
+            this.CommandService.Execute(new CreateCompleteQuestionnaireCommand(newQuestionnairePublicKey, key, this.GlobalInfo.GetCurrentUser()));
+            return this.RedirectToAction("Assign", "HQ", new { Id = newQuestionnairePublicKey});
         }
 
         [HttpPost]
@@ -179,13 +199,35 @@ namespace Web.Supervisor.Controllers
 
         public ActionResult Assign(Guid id)
         {
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            var user = this.GlobalInfo.GetCurrentUser();
+            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
             return this.View(model);
+        }
+
+        [HttpPost]
+        public JsonResult Assign(AssignSuveyData data)
+        {
+            try
+            {
+                foreach (var answer in data.Answers)
+                {
+                    var answers = answer.Answers ?? new Guid[0];
+                    this.CommandService.Execute(new SetAnswerCommand(data.QuestionnaireId, answer.Id, answers.ToList(), answer.Answer, null));
+                }
+
+                this.CommandService.Execute(new ChangeAssignmentCommand(data.QuestionnaireId, data.Responsible));
+            }
+            catch (Exception e)
+            {
+                var logger = LogManager.GetCurrentClassLogger();
+                logger.Fatal(e);
+                return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ChangeState(Guid id, string template)
         {
-
             var stat = this.Repository.Load<CompleteQuestionnaireStatisticViewInputModel, CompleteQuestionnaireStatisticView>(
          new CompleteQuestionnaireStatisticViewInputModel(id) { Scope = QuestionScope.Supervisor });
             return this.View(new ApproveRedoModel() { Id = id, Statistic = stat, TemplateId = template });
@@ -246,7 +288,7 @@ namespace Web.Supervisor.Controllers
         {
             var user = this.GlobalInfo.GetCurrentUser();
             var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id));
+            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
             var r = users.Items.ToList();
             var options = r.Select(item => new SelectListItem
             {
@@ -293,13 +335,6 @@ namespace Web.Supervisor.Controllers
             ViewBag.TemplateId = template;
             return this.View(model);
         }
-
-        public ActionResult Timeline(Guid id)
-        {
-            var model = this.Repository.Load<TimelineViewInputModel, TimelineView>(new TimelineViewInputModel(id));
-            return this.View(model);
-        }
-
 
         public PartialViewResult Screen(Guid id, Guid group, Guid? propagationKey)
         {
