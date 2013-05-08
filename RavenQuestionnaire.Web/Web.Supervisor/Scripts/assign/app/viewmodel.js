@@ -4,10 +4,20 @@
             responsible = ko.observable(),
             questions = ko.observableArray(),
             supervisors = ko.observableArray(),
-            errors = ko.observableArray();
+            errors = ko.observableArray(),
+            isSaving = ko.observable(false),
+            isSaveEnable = ko.computed(function () {
+                var answersAreInvalid = _.any(questions(), function (question) {
+                    return question.errors().length > 0;
+                });
+                return (isSaving() === false) && !answersAreInvalid;
+            }),
             save = function () {
+                isSaving(true);
                 datacontext.save(ko.toJS(responsible), {
                     success: function (response) {
+                        
+                        
                         if (response.status == "error") {
                             errors.removeAll();
                             errors.push({
@@ -18,6 +28,7 @@
                         if (response.status == "ok") {
                             window.back();
                         }
+                        isSaving(false);
                     }
                 });
             },
@@ -38,6 +49,7 @@
             questionnaire: questionnaire,
             save: save,
             hideOutput: hideOutput,
-            errors: errors
+            errors: errors,
+            isSaveEnable: isSaveEnable
         };
     });

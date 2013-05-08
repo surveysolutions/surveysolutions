@@ -571,36 +571,17 @@
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Shared\_PartialUsersGridTemplate.cshtml" />
     <Content Include="Views\Shared\_TableGroup.cshtml" />
-    <Content Include="Views\Shared\Answer\_Image.cshtml" />
-    <Content Include="Views\Shared\Answer\_Select.cshtml" />
-    <Content Include="Views\Shared\Answer\_Text.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_AutoPropagate.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_DateTime.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_DropDownList.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_GpsCoordinates.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_MultyOption.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_Numeric.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_SingleOption.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_Text.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_YesNo.cshtml" />
     <Content Include="Views\Shared\Approve.cshtml" />
-    <Content Include="Views\Shared\Assign.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />
     <Content Include="Views\Shared\ChangeState.cshtml" />
     <Content Include="Views\Shared\Comments.cshtml" />
     <Content Include="Views\HQ\Details.cshtml" />
     <Content Include="Views\HQ\Documents.cshtml" />
-    <Content Include="Views\Shared\Group\_CompleteGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatedGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatedScreen.cshtml" />
-    <Content Include="Views\Shared\Group\_SimpleGroup.cshtml" />
     <Content Include="Views\HQ\Surveys.cshtml">
       <SubType>
       </SubType>
     </Content>
     <Content Include="Views\Shared\IndexChart.cshtml" />
-    <Content Include="Views\Shared\Question\_Question.cshtml" />
     <Content Include="Views\Shared\Redo.cshtml" />
     <Content Include="Views\HQ\Status.cshtml" />
     <Content Include="Views\Shared\StatusChart.cshtml" />

@@ -212,22 +212,6 @@ namespace Web.Supervisor.Controllers
         }
 
         /// <summary>
-        /// Display assign form
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <returns>
-        /// Return Assign form
-        /// </returns>
-        public ActionResult Assign(Guid id)
-        {
-            var user = GlobalInfo.GetCurrentUser();
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
-            return this.View(model);
-        }
-
-        /// <summary>
         /// Display change state
         /// </summary>
         /// <param name="id">
@@ -304,34 +288,6 @@ namespace Web.Supervisor.Controllers
             }
         }
 
-
-        /// <summary>
-        /// Display assign form
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="tmptId">
-        /// The tmpt QuestionnaireId.
-        /// </param>
-        /// <returns>
-        /// Return Assign form
-        /// </returns>
-        public ActionResult AssignPerson(Guid id, Guid tmptId)
-        {
-            var user = this.GlobalInfo.GetCurrentUser();
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
-            var model = this.Repository.Load<AssignSurveyInputModel, AssignSurveyView>(new AssignSurveyInputModel(id, user.Id));
-            var r = users.Items.ToList();
-            var options = r.Select(item => new SelectListItem
-            {
-                Value = item.QuestionnaireId.ToString(),
-                Text = item.Login,
-                Selected = (model.Responsible != null && model.Responsible.Id == item.QuestionnaireId) || (model.Responsible == null && item.QuestionnaireId == Guid.Empty)
-            }).ToList();
-            ViewBag.value = options;
-            return this.View(model);
-        }
 
         /// <summary>
         /// Display approve page
@@ -488,67 +444,6 @@ namespace Web.Supervisor.Controllers
             }
 
             return this.RedirectToAction("Documents", "Survey", new { id = tmptId });
-        }
-
-        /// <summary>
-        /// Save questionnaire answer in database 
-        /// </summary>
-        /// <param name="settings">
-        /// The settings.
-        /// </param>
-        /// <param name="questions">
-        /// The questions.
-        /// </param>
-        /// <returns>
-        /// Return Json result
-        /// </returns>
-        [HttpPost]
-        public JsonResult SaveAnswer(CompleteQuestionSettings[] settings, CompleteQuestionView[] questions)
-        {
-            var question = questions[0];
-
-            List<Guid> answers = new List<Guid>();
-            string completeAnswerValue = null;
-
-            try
-            {
-                if (question.QuestionType == QuestionType.DropDownList ||
-                question.QuestionType == QuestionType.SingleOption ||
-                question.QuestionType == QuestionType.YesNo ||
-                question.QuestionType == QuestionType.MultyOption)
-                {
-                    if (question.Answers != null && question.Answers.Length > 0)
-                    {
-                        for (int i = 0; i < question.Answers.Length; i++)
-                        {
-                            if (question.Answers[i].Selected)
-                            {
-                                answers.Add(question.Answers[i].PublicKey);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    completeAnswerValue = question.Answers[0].AnswerValue;
-                }
-
-                this.CommandService.Execute(
-                    new SetAnswerCommand(
-                        settings[0].QuestionnaireId,
-                        question.PublicKey,
-                        answers,
-                        completeAnswerValue,
-                        settings[0].PropogationPublicKey));
-            }
-            catch (Exception e)
-            {
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
-                return Json(new { status = "error", questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message },
-                            JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
