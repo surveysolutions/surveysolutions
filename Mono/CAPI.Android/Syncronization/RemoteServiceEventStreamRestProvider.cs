@@ -171,7 +171,7 @@ namespace AndroidMain.Synchronization
             
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                if (response.StatusCode == HttpStatusCode.Unauthorized)
+                if (response.StatusCode == HttpStatusCode.Forbidden)
                     throw new AuthenticationException("user wasn't authorized");
                 throw new Exception("Target returned unsupported result.");
             }
@@ -207,7 +207,7 @@ namespace AndroidMain.Synchronization
                 IRestResponse responseStream = restClient.Execute(itemRequest);
                 if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
                 {
-                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    if (response.StatusCode == HttpStatusCode.Forbidden)
                         throw new AuthenticationException("user wasn't authorized");
                     //logging
                     throw new Exception("Operation finished unsuccessfully. Item was not received.");

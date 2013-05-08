@@ -121,7 +121,7 @@ namespace AndroidMain.Synchronization
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
                 {
-                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    if (response.StatusCode == HttpStatusCode.Forbidden)
                         throw new AuthenticationException("user wasn't authorized");
                     return false;
                 }

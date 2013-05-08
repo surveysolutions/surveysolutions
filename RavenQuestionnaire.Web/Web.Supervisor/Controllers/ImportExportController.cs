@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Net;
 using System.Web.Security;
 using Ionic.Zip;
 using Main.Core.Documents;
@@ -16,6 +17,8 @@ using Main.Core.View.User;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ImportService.Commands;
+using WB.UI.Shared.Web.Exceptions;
+using WB.UI.Shared.Web.Filters;
 
 namespace Web.Supervisor.Controllers
 {
@@ -379,11 +382,12 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
         public JsonResult GetARKeys(string login, string password)
         {
             var user = GetUser(login, password);
-            if (user==null)
-                throw new HttpException(401,"Authorization is failed");
+            if (user == null)
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
             return Json(this.GetListOfAR(user.Supervisor.Id));
         }
 
@@ -420,11 +424,12 @@ namespace Web.Supervisor.Controllers
 
         [CompressContent]
         [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
         public ActionResult GetAR(string aRKey, string length, string rootType, string login, string password)
         {
             var user = GetUser(login, password);
             if (user==null)
-                throw new HttpException(401,"Authorization is failed");
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
             var item = this.GetARInt(user.Supervisor.Id, aRKey, length, rootType);
             
             if (item == null)
@@ -456,11 +461,12 @@ namespace Web.Supervisor.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
+        [HandleUIException]
         public bool PostStream(string login, string password)
         {
             var user = GetUser(login, password);
             if (user == null)
-                throw new HttpException(401, "authorization is failed");
+                throw new HttpStatusException(HttpStatusCode.Forbidden);
             Guid syncProcess = Guid.NewGuid();
 
             try
