@@ -12,6 +12,7 @@ using Ionic.Zip;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Utility;
+using Main.Core.View.User;
 using Ncqrs;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ImportService.Commands;
@@ -107,7 +108,7 @@ namespace Web.Supervisor.Controllers
                 {
                     try
                     {
-                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        var process = this.syncProcessFactory.GetUsbProcess(syncProcess);
 
                         this.AsyncManager.Parameters["result"] =
                             process.Export("Export DB on ViewerId in zip file");
@@ -296,7 +297,7 @@ namespace Web.Supervisor.Controllers
             {
                 try
                 {
-                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                    var process = this.syncProcessFactory.GetUsbProcess( syncProcess);
 
                     process.Import(zipData, "Usb syncronization");
                 }
@@ -358,28 +359,7 @@ namespace Web.Supervisor.Controllers
             return 100;
         }
 
-        private ListOfAggregateRootsForImportMessage GetList()
-        {
-            Guid syncProcess = Guid.NewGuid();
-
-            var result = new ListOfAggregateRootsForImportMessage();
-
-            try
-            {
-                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
-
-                result = process.Export("ViewerId export AR events");
-            }
-            catch (Exception ex)
-            {
-            }
-
-            return result;
-        }
-
-
-
-        private SyncItemsMetaContainer GetListOfAR()
+        private SyncItemsMetaContainer GetListOfAR(Guid supervisorId)
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -387,7 +367,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = this.syncProcessFactory.GetRestProcess(syncProcess, supervisorId);
 
                 result = process.GetListOfAggregateRoots("ViewerId export AR events");
             }
@@ -398,92 +378,16 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
-
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public JsonResult GetRootsList()
-        {
-            return Json(this.GetList(), JsonRequestBehavior.AllowGet);
-        }
-
-        [Obsolete]
-        [AcceptVerbs(HttpVerbs.Get)]
-        public FileResult GetRootsList1()
-        {
-            var stream = new MemoryStream();
-            this.GetList().WriteTo(stream);
-            stream.Position = 0L;
-
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-        }
-
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult GetARKeys(string login, string password)
         {
-            if (!Validate(login, password))
-                return null;
-            return Json(this.GetListOfAR());
+            var user = GetUser(login, password);
+            if (user==null)
+                throw new HttpException(401,"Authorization is failed");
+            return Json(this.GetListOfAR(user.Supervisor.Id));
         }
 
-
-        /// <summary>
-        /// The get item.
-        /// </summary>
-        /// <param name="firstEventPulicKey">
-        /// The first event pulic key.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public JsonResult GetItem(string firstEventPulicKey, string length)
-        {
-            var item = this.GetItemInt(firstEventPulicKey, length);
-            if (item == null)
-            {
-                return null;
-            }
-
-            var outResult = Json(item, JsonRequestBehavior.AllowGet);
-            return outResult;
-        }
-
-        private ImportSynchronizationMessage GetItemInt(string firstEventPulicKey, string length)
-        {
-            Guid syncProcess = Guid.NewGuid();
-
-            Guid key;
-            if (!Guid.TryParse(firstEventPulicKey, out key))
-            {
-                return null;
-            }
-
-            int ln;
-            if (!int.TryParse(length, out ln))
-            {
-                return null;
-            }
-
-            var result = new ImportSynchronizationMessage();
-
-            try
-            {
-                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
-
-                result = process.Export("ViewerId export AR events", key, ln);
-            }
-            catch (Exception ex)
-            {
-            }
-
-            return result;
-        }
-
-
-        private ImportSynchronizationMessage GetARInt(string aRKey, string length, string rootType)
+        private ImportSynchronizationMessage GetARInt(Guid supervisorId, string aRKey, string length, string rootType)
         {
             Guid syncProcess = Guid.NewGuid();
 
@@ -503,7 +407,7 @@ namespace Web.Supervisor.Controllers
 
             try
             {
-                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                var process = this.syncProcessFactory.GetRestProcess(syncProcess, supervisorId);
 
                 result = process.GetAR("ViewerId export AR events", key,rootType, ln);
             }
@@ -514,41 +418,14 @@ namespace Web.Supervisor.Controllers
             return result;
         }
 
-
-        /// <summary>
-        /// The get item.
-        /// </summary>
-        /// <param name="firstEventPulicKey">
-        /// The first event pulic key.
-        /// </param>
-        /// <param name="length">
-        /// The length.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Stream"/>.
-        /// </returns>
-        [AcceptVerbs(HttpVerbs.Post)]
-        public FileResult GetItemAsStream(string firstEventPulicKey, string length)
-        {
-            var item = this.GetItemInt(firstEventPulicKey, length);
-            if (item == null)
-            {
-                return null;
-            }
-
-            var stream = new MemoryStream();
-            item.WriteTo(stream);
-            stream.Position = 0L;
-            return new FileStreamResult(stream, "application/json; charset=utf-8");
-        }
-
         [CompressContent]
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult GetAR(string aRKey, string length, string rootType, string login, string password)
         {
-            if (!Validate(login, password))
-                return null;
-            var item = this.GetARInt(aRKey, length, rootType);
+            var user = GetUser(login, password);
+            if (user==null)
+                throw new HttpException(401,"Authorization is failed");
+            var item = this.GetARInt(user.Supervisor.Id, aRKey, length, rootType);
             
             if (item == null)
             {
@@ -561,26 +438,29 @@ namespace Web.Supervisor.Controllers
             
             return new FileStreamResult(stream, "application/octet-stream");
         }
-        
-       
-        protected bool Validate(string login, string password)
+
+
+        protected UserView GetUser(string login, string password)
         {
+
             if (Membership.ValidateUser(login, password))
             {
                 if (Roles.IsUserInRole(login, UserRoles.Operator.ToString()))
                 {
+                    return
+                        this.viewRepository.Load<UserViewInputModel, UserView>(new UserViewInputModel(login, null));
                     
-                    return true;
                 }
             }
-            return false;
+            return null;
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string login, string password)
         {
-            if (!Validate(login, password))
-                return false;
+            var user = GetUser(login, password);
+            if (user == null)
+                throw new HttpException(401, "authorization is failed");
             Guid syncProcess = Guid.NewGuid();
 
             try
@@ -607,8 +487,7 @@ namespace Web.Supervisor.Controllers
                 }
 
                 var process =
-                    (IEventSyncProcess)
-                    this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
+                    this.syncProcessFactory.GetRestProcess(message.SynchronizationKey, user.Supervisor.Id);
 
                 process.Import("Direct controller syncronization.", message.Command);
 

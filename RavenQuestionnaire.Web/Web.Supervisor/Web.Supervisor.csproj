@@ -8,7 +8,7 @@
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{41E11B34-5BEB-48E6-B9B0-2DEA05CFA7FB}</ProjectGuid>
-     <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Web.Supervisor</RootNamespace>
@@ -250,9 +250,6 @@
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="WCF\API.svc.cs">
-      <DependentUpon>API.svc</DependentUpon>
-    </Compile>
     <Compile Include="WCF\EventPipeService.svc.cs">
       <DependentUpon>EventPipeService.svc</DependentUpon>
     </Compile>
@@ -400,7 +397,6 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
-    <Content Include="WCF\API.svc" />
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />

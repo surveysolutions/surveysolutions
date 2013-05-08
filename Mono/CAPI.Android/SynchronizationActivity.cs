@@ -350,14 +350,14 @@ namespace CAPI.Android
         }
          private ProgressDialog CreateDialog()
         {
-            var progressDialog = new ProgressDialog(this);
+            var progressDialogResult = new ProgressDialog(this);
 
-            progressDialog.SetTitle("Synchronizing");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
-            progressDialog.SetMessage("Initialyzing");
-            progressDialog.SetCancelable(false);
+            progressDialogResult.SetTitle("Synchronizing");
+            progressDialogResult.SetProgressStyle(ProgressDialogStyle.Spinner);
+            progressDialogResult.SetMessage("Initialyzing");
+            progressDialogResult.SetCancelable(false);
 
-            return progressDialog;
+            return progressDialogResult;
         }
 
   protected ISyncAuthenticator CreateAuthenticator()

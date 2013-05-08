@@ -76,7 +76,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var syncProcessMock = new Mock<IUsbSyncProcess>();
 
             this.SyncProcessFactoryMock.Setup(
-                f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
+                f => f.GetUsbProcess(It.IsAny<Guid>())).Returns(
                     syncProcessMock.Object);
             return new ImportExportController(
                 this.DataExportMock.Object,
