@@ -40,7 +40,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                                        ));
             }
             return result;
-            // return _documentStorage.GetByGuid(input.UserId);
+            // return _documentStorage.GetById(input.UserId);
             // return _documentStorage.Query().First();
 
         }
