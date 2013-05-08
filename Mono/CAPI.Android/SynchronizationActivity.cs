@@ -292,6 +292,8 @@ namespace CAPI.Android
                                     catch (Exception exc)
                                     {
                                         result.Result = false;
+                                        if (string.IsNullOrWhiteSpace(result.ErrorMessage))
+                                            result.ErrorMessage = "Unknown Error";
                                         //throw;
                                     }
                                     finally
@@ -324,8 +326,8 @@ namespace CAPI.Android
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
-                                                          ? "Process is finished"
-                                                          : "Error occured during the process: \r\n"
+                                                          ? "Process is finished ."
+                                                          : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
                                 });
