@@ -111,7 +111,8 @@ namespace AssigmentGeneration
                 {
                     var question =
                       template.FirstOrDefault<IQuestion>(q => q.StataExportCaption == assigmentValues[0][i]);
-
+                    if (question==null)
+                        continue;
 
                     var singleOption = question as SingleQuestion;
                     if (singleOption != null)
