@@ -562,14 +562,7 @@ namespace Web.Supervisor.Controllers
             
             return new FileStreamResult(stream, "application/octet-stream");
         }
-
-        [AcceptVerbs(HttpVerbs.Get)]
-        public int GetCurrentVersion()
-        {
-            return Main.Synchronization.Version.CurrentVersion;
-        }
-
-
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public bool PostStream(string request)
         {
