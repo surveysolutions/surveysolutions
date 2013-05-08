@@ -43,7 +43,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
                 q =>
                 new FeaturedItem(q.PublicKey, q.QuestionText,
                                  q.GetAnswerString())).ToList();
-            var survey = _surveyDTOdocumentStorage.GetByGuid(doc.TemplateId);
+            var survey = _surveyDTOdocumentStorage.GetById(doc.TemplateId);
             if (survey == null)
                 _surveyDTOdocumentStorage.Store(new SurveyDto(doc.TemplateId, doc.Title), doc.TemplateId);
           
@@ -53,50 +53,50 @@ namespace CAPI.Android.Core.Model.EventHandlers
             //   AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
         }
 
-    /*    protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
-        {
-            foreach (var dashboard in _documentStorage.Query().Where(d=>d.OwnerKey!=owner))
+        /*    protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
             {
-                var survey = dashboard.GetSurvey(template);
-                if (survey != null)
+                foreach (var dashboard in _documentStorage.Query().Where(d=>d.OwnerKey!=owner))
                 {
-                    if(survey.Remove(questionnarieKey))
-                        return;
+                    var survey = dashboard.GetSurvey(template);
+                    if (survey != null)
+                    {
+                        if(survey.Remove(questionnarieKey))
+                            return;
+                    }
                 }
             }
-        }
 
-        protected void AddToDashboard(DashboardQuestionnaireItem item, Guid dashbordOwner, Guid templateKey, string templateTitle)
-        {
-            TryToRemoveFromOtherDashboards(item.PublicKey, templateKey, dashbordOwner);
+            protected void AddToDashboard(DashboardQuestionnaireItem item, Guid dashbordOwner, Guid templateKey, string templateTitle)
+            {
+                TryToRemoveFromOtherDashboards(item.PublicKey, templateKey, dashbordOwner);
 
-            var dashboard = _documentStorage.GetByGuid(dashbordOwner);
-            if (dashboard == null)
-            {
-                dashboard = new DashboardModel(dashbordOwner);
-                _documentStorage.Store(dashboard, dashbordOwner);
-            }
-            var survey = dashboard.Surveys.FirstOrDefault(s => s.PublicKey == templateKey);
-            if (survey == null)
-            {
-                survey = new DashboardSurveyItem(templateKey, templateTitle);
-                dashboard.Surveys.Add(survey);
-            }
+                var dashboard = _documentStorage.GetById(dashbordOwner);
+                if (dashboard == null)
+                {
+                    dashboard = new DashboardModel(dashbordOwner);
+                    _documentStorage.Store(dashboard, dashbordOwner);
+                }
+                var survey = dashboard.Surveys.FirstOrDefault(s => s.PublicKey == templateKey);
+                if (survey == null)
+                {
+                    survey = new DashboardSurveyItem(templateKey, templateTitle);
+                    dashboard.Surveys.Add(survey);
+                }
            
-            survey.AddItem(item);
+                survey.AddItem(item);
         
-        }*/
+            }*/
 
         #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
-            var questionnaire = _questionnaireDTOdocumentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            var questionnaire = _questionnaireDTOdocumentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
             if(questionnaire==null)
                 return;
             questionnaire.Status = evnt.Payload.Status.PublicId.ToString();
             _questionnaireDTOdocumentStorage.Store(questionnaire, evnt.Payload.CompletedQuestionnaireId);
-            /* var dashboard = _documentStorage.GetByGuid(evnt.Payload.Responsible.Id);
+            /* var dashboard = _documentStorage.GetById(evnt.Payload.Responsible.Id);
             if (dashboard == null)
                 return;
             foreach (var dashboardSurveyItem in dashboard.Surveys)
@@ -115,7 +115,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         /*
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            var dashboard = _documentStorage.GetByGuid(evnt.Payload.PreviousResponsible.Id);
+            var dashboard = _documentStorage.GetById(evnt.Payload.PreviousResponsible.Id);
             if (dashboard == null)
                 return;
             foreach (var dashboardSurveyItem in dashboard.Surveys)

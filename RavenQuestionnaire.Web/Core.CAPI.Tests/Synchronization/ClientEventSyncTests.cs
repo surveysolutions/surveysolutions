@@ -40,9 +40,9 @@ namespace Core.CAPI.Tests.Synchronization
         [Test]
         public void ReadEvents_EventStoreContainsCompleteQuestionnaires_NotEmptyListReturned()
         {
-            var repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var repositoryMock = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
             var storeMock = new Mock<IEventStore>();
-            var users = new Mock<IDenormalizerStorage<UserDocument>>();
+            var users = new Mock<IQueryableDenormalizerStorage<UserDocument>>();
             NcqrsEnvironment.SetDefault(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
             storeMock.Setup(x => x.ReadFrom(eventSourceId, int.MinValue, int.MaxValue)).Returns(
@@ -71,8 +71,8 @@ namespace Core.CAPI.Tests.Synchronization
         [Test]
         public void ReadEvents_EventStoreContainsErrorQuestionnaires_NotEmptyListReturned()
         {
-            var repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
-            var users = new Mock<IDenormalizerStorage<UserDocument>>();
+            var repositoryMock = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var users = new Mock<IQueryableDenormalizerStorage<UserDocument>>();
             var storeMock = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
@@ -99,8 +99,8 @@ namespace Core.CAPI.Tests.Synchronization
         [Test]
         public void ReadEvents_EventStoreContainsinitialQuestionnaires_EmptyListReturned()
         {
-            var repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
-            var users = new Mock<IDenormalizerStorage<UserDocument>>();
+            var repositoryMock = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var users = new Mock<IQueryableDenormalizerStorage<UserDocument>>();
             var storeMock = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault(storeMock.Object);
             Guid eventSourceId = Guid.NewGuid();
@@ -130,8 +130,8 @@ namespace Core.CAPI.Tests.Synchronization
         [Test]
         public void ReadEvents_EventStoreIsEmpty_EmptyListReturned()
         {
-            var repositoryMock = new Mock<IDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
-            var users = new Mock<IDenormalizerStorage<UserDocument>>();
+            var repositoryMock = new Mock<IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem>>();
+            var users = new Mock<IQueryableDenormalizerStorage<UserDocument>>();
             var target = new ClientEventStreamReader(repositoryMock.Object, users.Object);
 
             Assert.AreEqual(target.ReadEvents().Count(), 0);

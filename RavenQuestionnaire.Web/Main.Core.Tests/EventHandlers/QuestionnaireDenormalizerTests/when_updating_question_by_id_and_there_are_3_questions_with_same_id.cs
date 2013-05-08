@@ -40,7 +40,7 @@
             });
 
             var documentStorage = Mock.Of<IDenormalizerStorage<QuestionnaireDocument>>(storage
-                => storage.GetByGuid(it.IsAny<Guid>()) == questionnaire);
+                => storage.GetById(it.IsAny<Guid>()) == questionnaire);
 
             var questionFactory = Mock.Of<ICompleteQuestionFactory>();
             Mock.Get(questionFactory)

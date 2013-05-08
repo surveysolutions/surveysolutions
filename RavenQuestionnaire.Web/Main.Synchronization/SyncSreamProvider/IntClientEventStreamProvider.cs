@@ -24,7 +24,7 @@ namespace Main.Synchronization.SyncSreamProvider
     /// <summary>
     /// The int client event stream provider.
     /// </summary>
-    public class IntClientEventStreamProvider : IIntSyncEventStreamProvider
+    public class IntClientEventStreamProvider : ISyncEventStreamProvider
     {
         #region Fields
 
@@ -36,7 +36,7 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <summary>
         /// The storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <param name="storage">
         /// The storage.
         /// </param>
-        public IntClientEventStreamProvider(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
+        public IntClientEventStreamProvider(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
             this.storage = storage;

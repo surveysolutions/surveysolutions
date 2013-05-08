@@ -27,12 +27,12 @@ namespace Core.Supervisor.Views.Status
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StatusViewFactory"/> class.
@@ -44,8 +44,8 @@ namespace Core.Supervisor.Views.Status
         /// The users.
         /// </param>
         public StatusViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.surveys = surveys;
             this.users = users;

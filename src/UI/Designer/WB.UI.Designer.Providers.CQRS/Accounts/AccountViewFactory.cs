@@ -28,7 +28,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         ///     The accounts.
         /// </summary>
-        private readonly IDenormalizerStorage<AccountDocument> accounts;
+        private readonly IQueryableDenormalizerStorage<AccountDocument> accounts;
 
         #endregion
 
@@ -40,7 +40,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The accounts.
         /// </param>
-        public AccountViewFactory(IDenormalizerStorage<AccountDocument> accounts)
+        public AccountViewFactory(IQueryableDenormalizerStorage<AccountDocument> accounts)
         {
             this.accounts = accounts;
         }

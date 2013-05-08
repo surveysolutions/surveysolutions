@@ -57,7 +57,7 @@ namespace Main.Core.View.CompleteQuestionnaire.Statistics
         /// </returns>
         public CompleteQuestionnaireStatisticView Load(CompleteQuestionnaireStatisticViewInputModel input)
         {
-            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.Id);
+            CompleteQuestionnaireStoreDocument doc = this.store.GetById(input.Id);
             return new CompleteQuestionnaireStatisticView(doc, input.Scope);
         }
 

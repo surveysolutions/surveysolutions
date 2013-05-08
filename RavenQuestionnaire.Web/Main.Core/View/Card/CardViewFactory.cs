@@ -57,7 +57,7 @@ namespace Main.Core.View.Card
         /// </returns>
         public CardView Load(CardViewInputModel input)
         {
-            QuestionnaireDocument doc = this._documentSession.GetByGuid(Guid.Parse(input.QuestionnaireId));
+            QuestionnaireDocument doc = this._documentSession.GetById(Guid.Parse(input.QuestionnaireId));
 
             var question = doc.Find<IQuestion>(input.QuestionKey);
             if (question == null)

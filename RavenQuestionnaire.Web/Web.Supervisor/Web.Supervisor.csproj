@@ -548,6 +548,10 @@
     <Content Include="HostMap.config" />
     <Content Include="Configuration\Stacy.Supervisor.Web.config" />
     <Content Include="Configuration\Dev.Supervisor.Web.config">
+          <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\Supervisor.Server.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

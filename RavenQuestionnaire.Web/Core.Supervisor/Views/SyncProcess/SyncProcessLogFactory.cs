@@ -25,7 +25,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <summary>
         /// The docs.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <param name="docs">
         /// The docs.
         /// </param>
-        public SyncProcessLogFactory(IDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+        public SyncProcessLogFactory(IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }

@@ -85,7 +85,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<CommentSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey);
@@ -109,7 +109,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<FlagSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublickey, evnt.Payload.PropagationPublicKey);
@@ -144,7 +144,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<AnswerSet> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             CompleteQuestionWrapper questionWrapper = item.GetQuestionWrapper(
                 evnt.Payload.QuestionPublicKey, evnt.Payload.PropogationPublicKey);
@@ -170,7 +170,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagateGroupCreated> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
             item.Add(evnt.Payload.Group, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
             this._documentStorage.Store(item, item.PublicKey);
         }
@@ -183,7 +183,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupAdded> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             CompleteGroup template =
                 item.Find<CompleteGroup>(g => g.PublicKey == evnt.Payload.PublicKey && g.PropagationPublicKey == null).FirstOrDefault();
@@ -203,7 +203,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<PropagatableGroupDeleted> evnt)
         {
-            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument item = this._documentStorage.GetById(evnt.EventSourceId);
 
             item.Remove(evnt.Payload.PublicKey, evnt.Payload.PropagationKey, evnt.Payload.ParentKey, evnt.Payload.ParentPropagationKey);
         }
@@ -217,7 +217,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+                this._documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -233,7 +233,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireStoreDocument item =
-                this._documentStorage.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+                this._documentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
             item.Status = evnt.Payload.Status;
             item.StatusChangeComments.Add(
                 new ChangeStatusDocument
@@ -271,7 +271,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ConditionalStatusChanged> evnt)
         {
-            CompleteQuestionnaireStoreDocument doc = this._documentStorage.GetByGuid(evnt.EventSourceId);
+            CompleteQuestionnaireStoreDocument doc = this._documentStorage.GetById(evnt.EventSourceId);
 
             // to do the serching and set status. 
             foreach (var item in evnt.Payload.ResultGroupsStatus)

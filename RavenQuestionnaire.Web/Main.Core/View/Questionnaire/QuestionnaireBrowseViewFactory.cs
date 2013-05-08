@@ -25,7 +25,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.View.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireBrowseViewFactory(IDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession)
+        public QuestionnaireBrowseViewFactory(IQueryableDenormalizerStorage<QuestionnaireBrowseItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }
