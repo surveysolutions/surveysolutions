@@ -55,9 +55,9 @@ namespace Main.Core.View.Export
 
         public void Add(Guid key, ICompleteQuestion question)
         {
-            if (question == null)
+            if (question == null || !question.Enabled)
             {
-                this.container.Add(key, new string[] { string.Empty });
+                this.container.Add(key, new string[] {string.Empty});
                 return;
             }
 

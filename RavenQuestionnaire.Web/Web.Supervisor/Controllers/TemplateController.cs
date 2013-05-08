@@ -1,18 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web;
-using System.Web.Mvc;
-using Main.Core.Documents;
-using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
-using Questionnaire.Core.Web.Helpers;
-using WB.Core.Questionnaire.ImportService.Commands;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TemplateController.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace Web.Supervisor.Controllers
 {
-    [Authorize]
+    using System;
+    using System.Net;
+    using System.ServiceModel;
+    using System.Web.Mvc;
+
+    using Main.Core.Documents;
+    using Main.Core.Utility;
+
+    using NLog;
+
+    using Ncqrs.Commanding.ServiceModel;
+
+    using Questionnaire.Core.Web.Helpers;
+
+    using WB.Core.Questionnaire.ImportService.Commands;
+
+    using Web.Supervisor.DesignerPublicService;
+    using Web.Supervisor.Models;
+
+    /// <summary>
+    /// The template controller.
+    /// </summary>
+    [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
+        #region Constructors and Destructors
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateController"/> class.
         /// </summary>
@@ -27,35 +47,73 @@ namespace Web.Supervisor.Controllers
         {
         }
 
-        #region Import from new designer
-        [Authorize]
-        [AcceptVerbs(HttpVerbs.Get)]
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Import()
         {
-            return this.View("NewViewTestUploadFile");
+            return this.View(new ImportTemplateModel());
         }
-        [Authorize]
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Import(HttpPostedFileBase uploadFile)
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
+        public ActionResult Import(ImportTemplateModel data)
         {
-            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
-            if (zipData == null || zipData.Count == 0)
+            if (this.ModelState.IsValid)
             {
-                return null;
+                #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
+                ServicePointManager.ServerCertificateValidationCallback =
+                        (self, certificate, chain, sslPolicyErrors) => true;
+
+                try
+                {
+                    using (var service = new PublicServiceClient())
+                    {
+                        service.ClientCredentials.UserName.UserName = data.UserName;
+                        service.ClientCredentials.UserName.Password = data.Password;
+
+                        string document = service.DownloadQuestionnaireSource(data.QuestionnaireId);
+
+                        this.CommandService.Execute(
+                            new ImportQuestionnaireCommand(
+                                this.GlobalInfo.GetCurrentUser().Id, document.DeserializeJson<QuestionnaireDocument>()));
+
+                        return this.RedirectToAction("Questionnaires", "Dashboard");
+                    }
+                }
+                catch (CommunicationObjectFaultedException)
+                {
+                    this.ViewBag.ErrorMessage = "You do not have permission to call this service";
+                }
+                catch (FaultException)
+                {
+                    this.ViewBag.ErrorMessage = "Check questionnaire id";
+                }
+                catch (Exception e)
+                {
+                    this.ViewBag.ErrorMessage = "Could not download template from designer. Please, try again later";
+                    LogManager.GetCurrentClassLogger().Fatal("Error on import from designer ", e);
+                }
             }
-            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
 
-            this.CommandService.Execute(new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
-
-            return this.RedirectToAction("Index", "Survey");
+            return this.View(data);
         }
 
-        protected T DesserializeString<T>(String data)
-        {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-
-            return JsonConvert.DeserializeObject<T>(data, settings);
-        }
         #endregion
     }
 }

@@ -1,16 +1,10 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SupervisorCoreRegistry.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
 namespace Web.Supervisor.Injections
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Web.Mvc;
 
     using Core.Supervisor.Synchronization;
 
@@ -25,37 +19,13 @@ namespace Web.Supervisor.Injections
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
+    using Web.Supervisor.Filters;
+
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorCoreRegistry"/> class.
-        /// </summary>
-        /// <param name="repositoryPath">
-        /// The repository path.
-        /// </param>
-        /// <param name="isEmbeded">
-        /// The is embeded.
-        /// </param>
         public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded)
-        {
-        }
+            : base(repositoryPath, isEmbeded) {}
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The get assweblys for register.
-        /// </summary>
-        /// <returns>
-        /// List of assemblies
-        /// </returns>
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
             return
@@ -66,12 +36,18 @@ namespace Web.Supervisor.Injections
                     });
         }
 
-        /// <summary>
-        /// The load.
-        /// </summary>
+        protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()
+        {
+            return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
+            {
+                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
+            });
+        }
+
         public override void Load()
         {
             base.Load();
+
             this.Unbind<IEventStreamReader>();
             this.Bind<IEventStreamReader>().To<SupervisorEventStreamReader>();
 
@@ -81,7 +57,5 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
         }
-
-        #endregion
     }
 }

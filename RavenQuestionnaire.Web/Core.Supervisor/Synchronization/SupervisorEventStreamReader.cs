@@ -37,15 +37,6 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IDenormalizer denormalizer;
 
-        /// <summary>
-        /// myEventStore object
-        /// </summary>
-        private readonly IEventStore myEventStore;
-
-        /// <summary>
-        /// The unit of work factory.
-        /// </summary>
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
 
         //private List<Guid> ARKeys; 
 
@@ -66,14 +57,6 @@ namespace Core.Supervisor.Synchronization
         public SupervisorEventStreamReader(IDenormalizer denormalizer)
         {
             this.denormalizer = denormalizer;
-            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
-            //this.ARKeys = new List<Guid>();
-
-            if (this.myEventStore == null)
-            {
-                throw new Exception("IEventStore is not correct.");
-            }
         }
 
         #endregion
@@ -100,7 +83,7 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            List<Guid> fileNames = GetFiles(questionnaires);
+            List<Guid> fileNames = GetFiles();
 
             this.AddFiles(retval, fileNames);
             
@@ -109,18 +92,18 @@ namespace Core.Supervisor.Synchronization
             return retval.OrderBy(x => x.EventSequence).ToList(); // not good but allows to push correctly
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
-            var result = new List<Tuple<string, Guid>>();
+            var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new Tuple<string, Guid>("u", i)));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", GetLastEventFromStream(i))));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new Tuple<string, Guid>("q", i)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", GetLastEventFromStream(i))));
 
-            List<Guid> files = GetFiles(questionnaires);
-            result.AddRange(files.Select(i => new Tuple<string, Guid>("f", i)));
+            List<Guid> files = GetFiles();
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", GetLastEventFromStream(i))));
 
             return result;
         }
@@ -144,10 +127,10 @@ namespace Core.Supervisor.Synchronization
             //return null;
         }
 
-        private List<Guid> GetFiles(List<Guid> questionnaires)
+       
+
+        private List<Guid> GetFiles()
         {
-            #warning select only files used in questionnaires
-            
             IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
             
             return model.Select(m => Guid.Parse(m.FileName)).ToList();

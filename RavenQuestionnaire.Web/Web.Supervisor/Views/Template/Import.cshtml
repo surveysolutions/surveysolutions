@@ -1,0 +1,24 @@
+﻿@using Web.Supervisor.Utils
+@model Object
+
+@{
+    ViewBag.Title = "Import Template";
+}
+<span style="color: red">@ViewBag.ErrorMessage</span>
+<h2>@Model.GetLabel() <small>Import</small></h2>
+
+@using (Html.BeginForm())
+{
+    <fieldset class="form-horizontal">
+        @{
+            this.Html.RenderPartial("EditForm");
+        }
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Import</button>
+            @Html.ActionLink("Cancel", "Index", "HQ", null, new { @class = "btn " })
+        </div>
+    </fieldset>
+}
+<div>
+    @Html.ActionLink("Back to List", "Index", "HQ")
+</div>

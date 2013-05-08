@@ -106,48 +106,7 @@ namespace Web.Supervisor
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            try
-            {
-                SuccessMarker.Start();
-                correctlyInitialized = true;
-            }
-            catch (Exception e)
-            {
-                this.logger.Fatal("Initialization failed", e);
-                this.logger.Fatal("Initialization failed", e.StackTrace);
-                if (e.InnerException != null)
-                {
-                    this.logger.Fatal("Initialization failed", e.InnerException);
-                    this.logger.Fatal("Initialization failed", e.InnerException.StackTrace);
-                }
-                correctlyInitialized = false;
-
-                // due to the bug in iis7 moved to Application_BeginRequest
-                /*this.BeginRequest += (sender, args) =>
-                    {
-                        base.Response.Write("Sorry, Application cann't handle your request!");
-                        this.CompleteRequest();
-                    };
-                throw;*/
-            }
         }
-
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            if (!correctlyInitialized)
-            {
-                base.Response.Write("Sorry, Application cann't handle this!");
-                this.CompleteRequest();
-            }
-
-            var context = HttpContext.Current;
-
-            var appRelativeCurrentExecutionFilePath = context.Request.AppRelativeCurrentExecutionFilePath;
-
-            var r = RouteTable.Routes.GetRouteData(new HttpContextWrapper(context));
-        }
-
 
         /// <summary>
         /// The current_ unhandled exception.

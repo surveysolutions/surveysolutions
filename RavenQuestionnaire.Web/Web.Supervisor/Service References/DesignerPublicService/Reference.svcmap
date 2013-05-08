@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="ae0841c2-5069-4634-bda1-d382f9fb6320" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://localhost/designer/PublicService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PublicService.xsd" MetadataType="Schema" ID="2cb44d5a-53e2-41b8-b114-4ffeb1aafbe9" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd2" />
+    <MetadataFile FileName="PublicService.wsdl" MetadataType="Wsdl" ID="6bb5cb93-27d4-4c50-ac73-277f0a0ac2ce" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?wsdl" />
+    <MetadataFile FileName="PublicService1.xsd" MetadataType="Schema" ID="5e76e547-fab8-4332-bc3e-b27b20c5b1a1" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd0" />
+    <MetadataFile FileName="PublicService2.xsd" MetadataType="Schema" ID="4f18dbb1-fdbd-44f2-a76e-c97b6c38f08d" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?xsd=xsd1" />
+    <MetadataFile FileName="PublicService.disco" MetadataType="Disco" ID="1ffbd4e8-f808-4c96-b0f5-e3233c0f915d" SourceId="1" SourceUrl="https://localhost/designer/PublicService.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
