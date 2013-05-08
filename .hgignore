@@ -35,3 +35,4 @@ Bin
 lib/Release
 lib/Debug
 App_Data/LocalStorage/*
+*.ncrunchsolution
