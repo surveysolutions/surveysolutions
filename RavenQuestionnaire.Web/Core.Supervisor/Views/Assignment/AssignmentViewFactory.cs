@@ -33,17 +33,17 @@ namespace Core.Supervisor.Views.Assignment
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         /// <summary>
         /// The templates.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -56,9 +56,9 @@ namespace Core.Supervisor.Views.Assignment
         /// The document item session.
         /// </param>
         public AssignmentViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
+            IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.surveys = surveys;
             this.templates = templates;
@@ -83,11 +83,11 @@ namespace Core.Supervisor.Views.Assignment
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = input.TemplateId == Guid.Empty
                             ? new TemplateLight(Guid.Empty, "Any")
-                            : this.templates.GetByGuid(input.TemplateId).GetTemplateLight();
+                            : this.templates.GetById(input.TemplateId).GetTemplateLight();
 
             view.User = input.UserId == Guid.Empty
                             ? new UserLight(Guid.Empty, "Anyone")
-                            : this.users.GetByGuid(input.UserId).GetUseLight();
+                            : this.users.GetById(input.UserId).GetUseLight();
 
             view.Status = new SurveyStatus { PublicId = Guid.Empty, Name = "Any" };
 

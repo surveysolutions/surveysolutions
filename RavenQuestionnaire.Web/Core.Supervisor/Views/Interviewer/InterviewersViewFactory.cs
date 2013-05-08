@@ -29,12 +29,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -50,8 +50,8 @@ namespace Core.Supervisor.Views.Interviewer
         /// The document session.
         /// </param>
         public InterviewersViewFactory(
-            IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
+            IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession)
         {
             this.users = users;
             this.documentItemSession = documentSession;

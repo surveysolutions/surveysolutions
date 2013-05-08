@@ -11,8 +11,8 @@ namespace CAPI.Android.Core.Model.Authorization
 {
     public class AndroidAuthentication : IAuthentication
     {
-        private readonly IDenormalizerStorage<LoginDTO> _documentStorage;
-        public AndroidAuthentication(IDenormalizerStorage<LoginDTO> documentStorage)
+        private readonly IFilterableDenormalizerStorage<LoginDTO> _documentStorage;
+        public AndroidAuthentication(IFilterableDenormalizerStorage<LoginDTO> documentStorage)
         {
             _documentStorage = documentStorage;
         }

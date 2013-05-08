@@ -175,7 +175,7 @@ namespace Main.DenormalizerStorage.Tests
         {
             var storageStub = new Mock<IDenormalizerStorage<QuestionnaireDocument>>();
 
-            storageStub.Setup(d => d.GetByGuid(document.PublicKey)).Returns(document);
+            storageStub.Setup(d => d.GetById(document.PublicKey)).Returns(document);
 
             return storageStub;
         }

@@ -30,17 +30,17 @@ namespace Core.Supervisor.Views.Summary
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
 
         /// <summary>
         /// The templates.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SummaryFactory"/> class.
@@ -55,9 +55,9 @@ namespace Core.Supervisor.Views.Summary
         /// The users.
         /// </param>
         public SummaryFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
-            IDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
+            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
+            IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.survey = survey;
             this.templates = templates;
@@ -79,7 +79,7 @@ namespace Core.Supervisor.Views.Summary
             var template = new TemplateLight(Guid.Empty, "All");
             if (input.TemplateId != Guid.Empty)
             {
-                var tbi = this.templates.GetByGuid(input.TemplateId);
+                var tbi = this.templates.GetById(input.TemplateId);
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 

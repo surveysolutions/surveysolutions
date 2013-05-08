@@ -71,7 +71,7 @@ namespace Main.DenormalizerStorage
         /// </returns>
         public T GetByGuid<T>(Guid key) where T : class
         {
-            return this.GetDenormalizer<T>().GetByGuid(key);
+            return this.GetDenormalizer<T>().GetById(key);
         }
 
         /// <summary>
@@ -120,17 +120,9 @@ namespace Main.DenormalizerStorage
 
         #region Methods
 
-        /// <summary>
-        /// The get denormalizer.
-        /// </summary>
-        /// <typeparam name="T">
-        /// </typeparam>
-        /// <returns>
-        /// The <see cref="IDenormalizerStorage"/>.
-        /// </returns>
-        protected IDenormalizerStorage<T> GetDenormalizer<T>() where T : class
+        protected IQueryableDenormalizerStorage<T> GetDenormalizer<T>() where T : class
         {
-            return this.container.Get<IDenormalizerStorage<T>>();
+            return this.container.Get<IQueryableDenormalizerStorage<T>>();
         }
 
         #endregion

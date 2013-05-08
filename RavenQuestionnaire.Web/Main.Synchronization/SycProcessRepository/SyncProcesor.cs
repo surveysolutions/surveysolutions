@@ -283,7 +283,7 @@ namespace Main.Synchronization.SycProcessRepository
                     (uncommittedEvent.Payload as SnapshootLoaded).Template.Payload as CompleteQuestionnaireDocument;
                 if (document != null)
                 {
-                    CompleteQuestionnaireBrowseItem item = this.surveys.GetByGuid(document.PublicKey);
+                    CompleteQuestionnaireBrowseItem item = this.surveys.GetById(document.PublicKey);
                     this.MeasureDifference(item, document);
                 }
             }
@@ -301,7 +301,7 @@ namespace Main.Synchronization.SycProcessRepository
             if (uncommittedEvent.Payload is QuestionnaireStatusChanged)
             {
                 var e = uncommittedEvent.Payload as QuestionnaireStatusChanged;
-                CompleteQuestionnaireBrowseItem document = this.surveys.GetByGuid(e.CompletedQuestionnaireId);
+                CompleteQuestionnaireBrowseItem document = this.surveys.GetById(e.CompletedQuestionnaireId);
 
                 var stat = new UserSyncProcessStatistics
                     {

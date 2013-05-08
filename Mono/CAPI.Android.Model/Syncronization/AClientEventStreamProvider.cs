@@ -31,7 +31,7 @@ namespace CAPI.Android.Core.Model.Syncronization
         /// <summary>
         /// The document storage.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireDTO> documentStorage;
+        private readonly IFilterableDenormalizerStorage<QuestionnaireDTO> documentStorage;
 
         /// <summary>
         /// myEventStore object
@@ -48,7 +48,7 @@ namespace CAPI.Android.Core.Model.Syncronization
         /// <param name="documentStorage">
         /// The document storage.
         /// </param>
-        public AClientEventStreamProvider(IDenormalizerStorage<QuestionnaireDTO> documentStorage)
+        public AClientEventStreamProvider(IFilterableDenormalizerStorage<QuestionnaireDTO> documentStorage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
             this.documentStorage = documentStorage;
