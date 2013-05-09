@@ -238,6 +238,7 @@
     <Compile Include="Models\GlobalHelper.cs" />
     <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
+    <Compile Include="Models\InterviewersViewInputModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
     <Compile Include="Models\Chart\SurveyChartModel.cs" />
@@ -606,7 +607,6 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="Views\Shared\_Table.cshtml" />
-    <Content Include="Views\Team\_PartialGrid_Interviewers.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
