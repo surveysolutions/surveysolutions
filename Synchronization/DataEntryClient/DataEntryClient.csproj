@@ -94,9 +94,6 @@
     <Compile Include="SycProcess\Interfaces\IWirelessSyncProcess.cs" />
     <Compile Include="SycProcess\Interfaces\IUsbSyncProcess.cs" />
     <Compile Include="SycProcessFactory\SyncProcessFactory.cs" />
-    <Compile Include="SycProcessFactory\SyncProcessType.cs" />
-    <Compile Include="SycProcess\ITemplateExportSyncProcess.cs" />
-    <Compile Include="SycProcess\TemplateExportSyncProcess.cs" />
     <Compile Include="SycProcess\WirelessSyncProcess.cs" />
     <Compile Include="SycProcess\AbstractSyncProcess.cs" />
     <Compile Include="SycProcess\UsbSyncProcess.cs" />
