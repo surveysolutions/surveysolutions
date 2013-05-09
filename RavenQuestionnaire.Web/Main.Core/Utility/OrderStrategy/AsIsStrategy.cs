@@ -6,6 +6,9 @@
 //   The as is strategy.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Entities.SubEntities;
+
 namespace Main.Core.Utility.OrderStrategy
 {
     using System.Collections.Generic;
@@ -28,7 +31,7 @@ namespace Main.Core.Utility.OrderStrategy
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
         /// </returns>
-        public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
+        public IEnumerable<T> Reorder<T>(IEnumerable<T> list) where T : IAnswer
         {
             return list;
         }
