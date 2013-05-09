@@ -293,6 +293,8 @@ namespace CAPI.Android
                                     catch (Exception exc)
                                     {
                                         result.Result = false;
+                                        if (string.IsNullOrWhiteSpace(result.ErrorMessage))
+                                            result.ErrorMessage = "Unknown Error";
                                         //throw;
                                     }
                                     finally
@@ -326,7 +328,7 @@ namespace CAPI.Android
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
                                                           ? "Process is finished."
-                                                          : "Error occured during the process: \r\n"
+                                                          : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
                                     progressDialog = null;
@@ -448,7 +450,7 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<QuestionnaireDTO>>());
+                    CapiApplication.Kernel.Get<IFilterableDenormalizerStorage<QuestionnaireDTO>>());
             var collector = new RemoteCollector(remoteSyncNode, processKey, CreateAuthenticator());
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);

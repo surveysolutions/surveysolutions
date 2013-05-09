@@ -160,30 +160,6 @@ namespace Web.Supervisor.Controllers
             return this.PartialView("_PartialGrid_Supervisors", model);
         }
 
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        public ActionResult GetInterviewers(GridDataRequestModel data)
-        {
-            var model =
-                this.Repository.Load<InterviewersInputModel, InterviewersView>(
-                    new InterviewersInputModel
-                        {
-                            ViewerId = GlobalInfo.GetCurrentUser().Id,
-                            Page = data.Pager.Page,
-                            PageSize = data.Pager.PageSize,
-                            Orders = data.SortOrder
-                        });
-            return this.PartialView("_PartialGrid_Interviewers", model);
-        }
-
         /// <summary>
         /// The index.
         /// </summary>
@@ -216,14 +192,14 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The<see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Interviewers(InterviewersInputModel data)
+        public ActionResult Interviewers(InterviewersViewInputModel data)
         {
-            UserView user = this.GetUser(data.ViewerId);
+            UserView user = this.GetUser(data.Id);
             var interviewers =
                 this.Repository.Load<InterviewersInputModel, InterviewersView>(
                     new InterviewersInputModel
                         {
-                            ViewerId = data.ViewerId,
+                            ViewerId = data.Id,
                             Page = data.Page,
                             PageSize = data.PageSize,
                             Order = data.Order

@@ -59,6 +59,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Import()
         {
+            ViewBag.ActivePage = MenuItem.Administration;
             return this.View(new ImportTemplateModel());
         }
 
@@ -74,6 +75,7 @@ namespace Web.Supervisor.Controllers
         [HttpPost]
         public ActionResult Import(ImportTemplateModel data)
         {
+            ViewBag.ActivePage = MenuItem.Administration;
             if (this.ModelState.IsValid)
             {
                 #warning Roma: need to be deleted when we getting valid ssl certificate for new designer

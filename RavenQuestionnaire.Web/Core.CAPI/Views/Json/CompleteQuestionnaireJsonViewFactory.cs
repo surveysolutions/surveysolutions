@@ -66,7 +66,7 @@ namespace Core.CAPI.Views.Json
         {
             if (input.CompleteQuestionnaireId != Guid.Empty)
             {
-                CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+                CompleteQuestionnaireStoreDocument doc = this.store.GetById(input.CompleteQuestionnaireId);
                 ICompleteGroup group = null;
                 if (input.CurrentGroupPublicKey.HasValue)
                 {

@@ -35,12 +35,12 @@ namespace Core.Supervisor.Views.Index
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         /// <summary>
         /// The stat
         /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> stat;
+        private readonly IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat;
 
         #endregion
 
@@ -59,8 +59,9 @@ namespace Core.Supervisor.Views.Index
         /// The stat.
         /// </param>
         public IndexViewFactory(
-            IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<SupervisorStatisticsItem> stat)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat)
         {
             this.users = users;
             this.stat = stat;
@@ -86,7 +87,7 @@ namespace Core.Supervisor.Views.Index
 
             if (input.InterviewerId.HasValue)
             {
-                user = this.users.GetByGuid(input.InterviewerId.Value);
+                user = this.users.GetById(input.InterviewerId.Value);
                 responsibleList = new Guid[] { input.InterviewerId.Value };
             }
             else

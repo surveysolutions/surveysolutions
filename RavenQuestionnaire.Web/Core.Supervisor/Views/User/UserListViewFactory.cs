@@ -24,7 +24,7 @@ namespace Core.Supervisor.Views.User
         /// <summary>
         ///     The accounts.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Core.Supervisor.Views.User
         /// <param name="users">
         /// The users.
         /// </param>
-        public UserListViewFactory(IDenormalizerStorage<UserDocument> users)
+        public UserListViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.users = users;
         }

@@ -76,7 +76,7 @@ namespace Core.Supervisor.Views.Survey
                 return null;
             }
 
-            var doc = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            var doc = this.store.GetById(input.CompleteQuestionnaireId);
 
             if (doc == null)
             {

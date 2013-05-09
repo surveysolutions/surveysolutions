@@ -72,7 +72,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<UpdateRegisteredDevice> evnt)
         {
-            var device = this.devices.GetByGuid(evnt.Payload.DeviceId);
+            var device = this.devices.GetById(evnt.Payload.DeviceId);
 
             if (device == null)
             {

@@ -223,7 +223,7 @@ namespace Main.Synchronization.SyncManager
                 }
 
                 this.status.Progress++;
-                this.status.CurrentStageDescription = "Process is starting.";
+                this.status.CurrentStageDescription = "Stage is starting.";
 
                 this.Invoker.Execute(
                     new CreateNewSynchronizationProcessCommand(
@@ -299,14 +299,14 @@ namespace Main.Synchronization.SyncManager
                 }
 
                 this.status.Progress = 95;
-                this.status.CurrentStageDescription = "Finishing process.";
+                this.status.CurrentStageDescription = "Finishing current stage.";
 
                 // notify collector about finishing
                 this.streamCollector.Finish();
 
                 this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
 
-                this.status.CurrentStageDescription = "Finished.";
+                this.status.CurrentStageDescription = "Stage finished.";
                 this.status.Result = true;
                 this.status.Progress = 98;
             }
@@ -315,8 +315,8 @@ namespace Main.Synchronization.SyncManager
                 // Logger logger = LogManager.GetCurrentClassLogger();
                 // logger.Fatal("Import error", e);
                 //this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
-                
-                this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
+
+                this.status.ErrorMessage = "Error occured during synchronization. [" + this.syncMessage + "]\r\n" + e.Message;
                 this.status.Progress = 98;
                 this.status.IsWorking = false;
                 throw;

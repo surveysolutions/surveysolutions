@@ -21,6 +21,8 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Threading;
 
+    using Web.Supervisor.Models;
+
     /// <summary>
     /// The backup controller.
     /// </summary>
@@ -34,6 +36,7 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Index()
         {
+            ViewBag.ActivePage = MenuItem.Administration;
             return View();
         }
 

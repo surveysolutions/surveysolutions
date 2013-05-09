@@ -112,6 +112,7 @@
     <Compile Include="SyncStreamCollector\ISyncStreamCollector.cs" />
     <Compile Include="SyncStreamCollector\LocalStorageStreamCollector.cs" />
     <Compile Include="SyncStreamCollector\RemoteServiceStreamCollector.cs" />
+    <Compile Include="Version.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">

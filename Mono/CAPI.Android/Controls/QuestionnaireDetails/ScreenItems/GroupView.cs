@@ -68,12 +68,23 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                     //img.SetBounds(0, 0, 45, 45);
                     GroupButton.SetCompoundDrawablesWithIntrinsicBounds(img, null, img, null);
                 }
+                else
+                {
+                    Model.PropertyChanged += Model_PropertyChanged;
+                }
             }
             else
             {
                 this.Visibility = ViewStates.Gone;
             }
             
+        }
+
+        void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName!="Enabled")
+                return;
+            GroupButton.Enabled = Model.Enabled;
         }
 
         void GroupButton_Click(object sender, EventArgs e)

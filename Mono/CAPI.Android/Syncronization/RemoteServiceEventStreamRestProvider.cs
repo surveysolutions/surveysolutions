@@ -51,6 +51,9 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private const string GetARPath = "importexport/GetAR";
 
+
+        private const string GetCurrentVersionPath = "importexport/GetCurrentVersion";
+
         #endregion
 
         #region Fields
@@ -161,8 +164,9 @@ namespace AndroidMain.Synchronization
             request.RequestFormat = DataFormat.Json;
 
             if (UseGZip)
+            {
                 request.AddHeader("Accept-Encoding", "gzip,deflate");
-
+            }
             var currentCredentials = validator.RequestCredentials();
             request.AddParameter("login", currentCredentials.Login);
             request.AddParameter("password", currentCredentials.Password);
@@ -177,8 +181,7 @@ namespace AndroidMain.Synchronization
             }
 
             var syncItemsMetaContainer =
-                JsonConvert.DeserializeObject<SyncItemsMetaContainer>(
-                    response.Content, new JsonSerializerSettings());
+                JsonConvert.DeserializeObject<SyncItemsMetaContainer>(response.Content, new JsonSerializerSettings());
 
             /*var roots = JsonConvert.DeserializeObject<IList<ProcessedEventChunk>>(
                 response.Content.Substring(pos), new JsonSerializerSettings());*/
@@ -214,9 +217,18 @@ namespace AndroidMain.Synchronization
                 }
 
                 var settings = new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.Objects};
-                var str = responseStream.Content.Substring(responseStream.Content.IndexOf("["));
+                
+                ///// change it
+                var index = responseStream.Content.IndexOf("[");
+                if (index < 0)
+                    throw new Exception("Operation finished unsuccessfully. Received block is incorrect.");
+                
+                var str = responseStream.Content.Substring(index);
+                /////
                 var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
+                if (evnts.Length == 0 )
+                    throw new Exception("Operation finished unsuccessfully. Received received item is not correct.");
 
                 foreach (var aggregateRootEvent in evnts)
                 {

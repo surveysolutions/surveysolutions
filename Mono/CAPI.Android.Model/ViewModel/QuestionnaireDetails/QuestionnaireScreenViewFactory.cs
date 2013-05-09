@@ -32,11 +32,11 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         public CompleteQuestionnaireView Load(QuestionnaireScreenInput input)
         {
-            var result = this._documentStorage.GetByGuid(input.QuestionnaireId);
+            var result = this._documentStorage.GetById(input.QuestionnaireId);
             if (result == null)
             {
                 GenerateEvents(input.QuestionnaireId);
-                result = this._documentStorage.GetByGuid(input.QuestionnaireId);
+                result = this._documentStorage.GetById(input.QuestionnaireId);
             }
             return result;
         }

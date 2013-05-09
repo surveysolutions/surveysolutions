@@ -17,12 +17,12 @@
                      <i class="icon icon-user icon-white"></i>Interviewers</a>
              @if (item.IsLocked)
              {
-                 <a class="btn btn-primary" href="@Url.Action("UnlockUser", "Team", new { id = item.PublicKey })">
+                 <a class="btn btn-primary" href="@Url.Action("UnlockUser", "User", new { id = item.PublicKey })">
                      <i class="icon icon-lock icon-white"></i>Unlock</a>
              }
              else
              {
-                 <a  class="btn btn-primary" href="@Url.Action("LockUser", "Team", new { id = item.PublicKey })">
+                 <a  class="btn btn-primary" href="@Url.Action("LockUser", "User", new { id = item.PublicKey })">
                      <i class="icon icon-lock icon-white"></i>Lock</a>
              }
          </td>

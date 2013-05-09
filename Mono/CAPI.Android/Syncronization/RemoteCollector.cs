@@ -42,6 +42,8 @@ namespace AndroidMain.Synchronization
         private const string pushPath = "importexport/PostStream";
 
 
+        private const string GetCurrentVersionPath = "importexport/GetCurrentVersion";
+
         /// <summary>
         /// The base address.
         /// </summary>

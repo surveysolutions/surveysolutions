@@ -17,8 +17,8 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class PersistentDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
-        where T : class
+    public class PersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
+        where TView : class
     {
         #region Fields
 
@@ -67,13 +67,13 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The get by guid.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
         /// <returns>
         /// The T.
         /// </returns>
-        public T GetByGuid(Guid key)
+        public TView GetById(Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -84,10 +84,10 @@ namespace Main.DenormalizerStorage
                     // Obtain an instance of a data 
                     // object from the cache of 
                     // of weak reference objects.
-                    T retval;
-                    if (!this._hash.Contains(key.ToString()))
+                    TView retval;
+                    if (!this._hash.Contains(id.ToString()))
                     {
-                        retval = this._storage.GetByGuid<T>(key.ToString());
+                        retval = this._storage.GetByGuid<TView>(id.ToString());
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
@@ -98,12 +98,12 @@ namespace Main.DenormalizerStorage
                         var policy = new CacheItemPolicy();
                         policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
                         policy.SlidingExpiration = TimeSpan.FromMinutes(3);
-                        this._hash.Add(key.ToString(), retval, policy);
+                        this._hash.Add(id.ToString(), retval, policy);
                     }
                     else
                     {
                       //  retval = (_hash[key].Target as WeakDisposable<T>).Data as T;
-                        retval = _hash[key.ToString()] as T;
+                        retval = _hash[id.ToString()] as TView;
                     }
                     return retval;
                 }
@@ -120,13 +120,13 @@ namespace Main.DenormalizerStorage
         /// <returns>
         /// The System.Linq.IQueryable`1[T -&gt; T].
         /// </returns>
-        public IQueryable<T> Query()
+        public IQueryable<TView> Query()
         {
             throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
             //    return this._hash.Values.AsQueryable();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
             throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
         }
@@ -134,10 +134,10 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The remove.
         /// </summary>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Remove(Guid key)
+        public void Remove(Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -150,11 +150,11 @@ namespace Main.DenormalizerStorage
                         return;
                     }
                     this._bag.Remove(key);*/
-                    if (this._hash.Contains(key.ToString()))
+                    if (this._hash.Contains(id.ToString()))
                     {
-                        this._hash.Remove(key.ToString());
+                        this._hash.Remove(id.ToString());
                     }
-                    this._storage.Remove<T>(key.ToString());
+                    this._storage.Remove<TView>(id.ToString());
                 }
             }
             finally
@@ -166,13 +166,13 @@ namespace Main.DenormalizerStorage
         /// <summary>
         /// The store.
         /// </summary>
-        /// <param name="denormalizer">
+        /// <param name="view">
         /// The denormalizer.
         /// </param>
-        /// <param name="key">
+        /// <param name="id">
         /// The key.
         /// </param>
-        public void Store(T denormalizer, Guid key)
+        public void Store(TView view, Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -187,15 +187,15 @@ namespace Main.DenormalizerStorage
 
                    // this._storage.Store<T>(denormalizer, key);
 
-                    if (this._hash[key.ToString()]==null)
+                    if (this._hash[id.ToString()]==null)
                     {
                         var policy = new CacheItemPolicy();
                         policy.RemovedCallback += weekDisposable_CacheEntryRemoved;
                         policy.SlidingExpiration = TimeSpan.FromSeconds(10);
-                        this._hash.Add(key.ToString(), denormalizer, policy);
+                        this._hash.Add(id.ToString(), view, policy);
                     }else
                     {
-                        this._hash[key.ToString()] = denormalizer;
+                        this._hash[id.ToString()] = view;
                     }
                 }
             }
@@ -212,7 +212,7 @@ namespace Main.DenormalizerStorage
         {
             Guid key = Guid.Parse(arguments.CacheItem.Key);
           //  if (this._bag.Contains(key))
-                this._storage.Store<T>(arguments.CacheItem.Value as T, key.ToString());
+                this._storage.Store<TView>(arguments.CacheItem.Value as TView, key.ToString());
         }
 
         #region Implementation of IDisposable

@@ -121,7 +121,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
@@ -141,7 +141,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument questionnaire = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
 
             bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
 
@@ -164,7 +164,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             item.RemoveQuestion(evnt.Payload.QuestionId);
             this.UpdateQuestionnaire(evnt, item);
         }
@@ -177,7 +177,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
             if (result == null)
             {
@@ -198,7 +198,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             if (question == null)
@@ -221,7 +221,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
             question.UpdateCard(evnt.Payload.ImageKey, evnt.Payload.Title, evnt.Payload.Description);
             this.UpdateQuestionnaire(evnt, item);
@@ -235,7 +235,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ImageUploaded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var newImage = new Image
                                {
                                    PublicKey = evnt.Payload.ImagePublicKey,
@@ -256,7 +256,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ImageDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
 
             question.RemoveCard(evnt.Payload.ImageKey);
@@ -271,7 +271,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             item.RemoveGroup(evnt.Payload.GroupPublicKey);
 
@@ -286,7 +286,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             item.UpdateGroup(
                 evnt.Payload.GroupPublicKey,
@@ -308,7 +308,7 @@ namespace Main.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
-            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.Title = evnt.Payload.Title;
             this.UpdateQuestionnaire(evnt, document);
@@ -330,7 +330,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
         }

@@ -180,7 +180,7 @@ namespace Web.Supervisor.Controllers
                     {
                         this.AsyncManager.Parameters["result"] = null;
                         Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.Fatal("Error on export " + e.Message, e);
+                        logger.FatalException("Error on export " + e.Message, e);
                         if (e.InnerException != null)
                         {
                             logger.Fatal("Error on export (Inner Exception)", e.InnerException);
@@ -307,7 +307,7 @@ namespace Web.Supervisor.Controllers
                 catch (Exception e)
                 {
                     Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.Fatal("Error on import ", e);
+                    logger.FatalException("Error on import ", e);
                 }
             };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
@@ -366,6 +366,7 @@ namespace Web.Supervisor.Controllers
         {
             Guid syncProcess = Guid.NewGuid();
 
+            var logger = LogManager.GetCurrentClassLogger();
             var result = new SyncItemsMetaContainer();
 
             try
@@ -376,6 +377,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
+                logger.FatalException("Error on retrieving the list of AR on sync. ", ex);
             }
 
             return result;
@@ -393,30 +395,31 @@ namespace Web.Supervisor.Controllers
 
         private ImportSynchronizationMessage GetARInt(Guid supervisorId, string aRKey, string length, string rootType)
         {
+            var result = new ImportSynchronizationMessage();
+
             Guid syncProcess = Guid.NewGuid();
 
             Guid key;
             if (!Guid.TryParse(aRKey, out key))
             {
-                return null;
+                return result;
             }
 
             int ln;
             if (!int.TryParse(length, out ln))
             {
-                return null;
+                return result;
             }
-
-            var result = new ImportSynchronizationMessage();
-
+            
             try
             {
                 var process = this.syncProcessFactory.GetRestProcess(syncProcess, supervisorId);
-
-                result = process.GetAR("ViewerId export AR events", key,rootType, ln);
+                result = process.GetAR("ViewerId export AR events.", key,rootType, ln);
             }
             catch (Exception ex)
             {
+                var logger = NLog.LogManager.GetCurrentClassLogger();
+                logger.FatalException("Error on retrieving AR on sync. ", ex);
             }
 
             return result;
@@ -459,7 +462,7 @@ namespace Web.Supervisor.Controllers
             }
             return null;
         }
-
+        
         [AcceptVerbs(HttpVerbs.Post)]
         [HandleUIException]
         public bool PostStream(string login, string password)

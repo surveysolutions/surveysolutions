@@ -59,7 +59,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 evnt.Payload.CreatedBy);
             if (evnt.Payload.CreatedBy.HasValue)
             {
-                var user = this.accountStorage.GetByGuid(evnt.Payload.CreatedBy.Value);
+                var user = this.accountStorage.GetById(evnt.Payload.CreatedBy.Value);
                 if (user != null)
                 {
                     item.CreatorName = user.UserName;
@@ -92,7 +92,7 @@ namespace WB.UI.Designer.Views.EventHandler
                 document.CreatedBy);
             if (document.CreatedBy.HasValue)
             {
-                var user = this.accountStorage.GetByGuid(document.CreatedBy.Value);
+                var user = this.accountStorage.GetById(document.CreatedBy.Value);
                 if (user != null)
                 {
                     item.CreatorName = user.UserName;
@@ -108,7 +108,7 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
-            var browseItem = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
@@ -119,7 +119,7 @@ namespace WB.UI.Designer.Views.EventHandler
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            var browseItem = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            var browseItem = this.documentStorage.GetById(evnt.EventSourceId);
             if (browseItem != null)
             {
                 browseItem.IsDeleted = true;

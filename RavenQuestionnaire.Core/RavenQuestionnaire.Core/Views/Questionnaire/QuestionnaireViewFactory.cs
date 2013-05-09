@@ -82,7 +82,7 @@ namespace RavenQuestionnaire.Core.Views.Questionnaire
 
         private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireViewInputModel input)
         {
-            QuestionnaireDocument doc = this.documentSession.GetByGuid(input.QuestionnaireId);
+            QuestionnaireDocument doc = this.documentSession.GetById(input.QuestionnaireId);
             return doc;
         }
     }
