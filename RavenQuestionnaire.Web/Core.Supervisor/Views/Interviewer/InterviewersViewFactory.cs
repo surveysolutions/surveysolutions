@@ -73,7 +73,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewersView Load(InterviewersInputModel input)
         {
-            var interviewers = this.users.GetTeamMembersForViewer(input.ViewerId);
+            var interviewers = this.users.GetInterviewersListForViewer(input.ViewerId);
 
             if (!interviewers.Any())
             {
