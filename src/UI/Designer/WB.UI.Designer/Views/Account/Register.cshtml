@@ -8,7 +8,7 @@
     Layout = "~/Views/Shared/Layout.empty.cshtml";
 }
 
-@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin" }))
+@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
 {
     @Html.AntiForgeryToken()
     <legend>@Model.GetLabel()</legend>
