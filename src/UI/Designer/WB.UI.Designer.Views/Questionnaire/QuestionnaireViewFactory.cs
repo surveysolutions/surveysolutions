@@ -31,7 +31,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         {
             try
             {
-                return this._questionnaireStorage.GetByGuid(input.QuestionnaireId);
+                return this._questionnaireStorage.GetById(input.QuestionnaireId);
             }
             catch (InvalidOperationException)
             {

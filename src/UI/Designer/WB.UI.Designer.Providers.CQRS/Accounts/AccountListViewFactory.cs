@@ -22,7 +22,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<AccountDocument> _accounts;
+        private readonly IQueryableDenormalizerStorage<AccountDocument> _accounts;
 
         #endregion
 
@@ -34,7 +34,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
         /// <param name="accounts">
         /// The users.
         /// </param>
-        public AccountListViewFactory(IDenormalizerStorage<AccountDocument> accounts)
+        public AccountListViewFactory(IQueryableDenormalizerStorage<AccountDocument> accounts)
         {
             _accounts = accounts;
         }

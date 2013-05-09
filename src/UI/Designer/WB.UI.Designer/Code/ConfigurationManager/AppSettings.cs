@@ -1,9 +1,12 @@
 ﻿
 namespace WB.UI.Designer
 {
+    using System.Collections.Specialized;
+    using System.Configuration;
+
     public sealed class AppSettings: WebConfigHelper
     {
-        public static readonly AppSettings Instance = new AppSettings();
+        public static readonly AppSettings Instance = new AppSettings(ConfigurationManager.AppSettings);
 
         const string ISRECATPCHAENABLED = "IsReCaptchaEnabled";
         const string RAVENDOCUMENTSTORE = "Raven.DocumentStore";
@@ -17,13 +20,14 @@ namespace WB.UI.Designer
         public bool IsLockingAccountPolicyForced { get; private set; }
         public int StorageLoadingChunkSize { get; private set; }
 
-        private AppSettings()
+        private AppSettings(NameValueCollection settingsCollection)
+            : base(settingsCollection)
         {
-            IsReCaptchaEnabled = GetBoolean(ISRECATPCHAENABLED, true);
-            RavenDocumentStore = GetString(RAVENDOCUMENTSTORE);
-            WKHtmlToPdfExecutablePath = GetString(WKHTMLTOPDFEXECUTABLEPATH);
-            IsLockingAccountPolicyForced = GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
-            StorageLoadingChunkSize = GetInt(STORAGELOADINGCHUNKSIZE, 1024);
+            IsReCaptchaEnabled = this.GetBoolean(ISRECATPCHAENABLED, true);
+            RavenDocumentStore = this.GetString(RAVENDOCUMENTSTORE);
+            WKHtmlToPdfExecutablePath = this.GetString(WKHTMLTOPDFEXECUTABLEPATH);
+            IsLockingAccountPolicyForced = this.GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
+            StorageLoadingChunkSize = this.GetInt(STORAGELOADINGCHUNKSIZE, 1024);
         }
     }
 }

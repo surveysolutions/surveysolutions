@@ -39,12 +39,20 @@
             margin: 10px 0 0 0;
         }
     </style>
+    @* to avoid cross-frame scripting *@
+    <script type="text/javascript">
+        function FrameCheck(){
+            if (top != self)
+                top.location.replace(self.location.href);
+        }
+    </script>
+
     @RenderSection("Styles", required: false)
     @RenderSection("Scripts", required: false)
     @Html.Partial("_html5shiv")
     @* favicons and touch icons go here *@
 </head>
-<body>
+<body onload="FrameCheck();">
     <div class="container">
 
         @Html.Partial("_alerts")
