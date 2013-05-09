@@ -1,70 +1,33 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignSurveyViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The assign survey view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
+using System.Linq;
 using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
+using Core.Supervisor.Views.DenormalizerStorageExtensions;
 
 namespace Core.Supervisor.Views.Assign
 {
-    /// <summary>
-    /// The assign survey view factory.
-    /// </summary>
     public class AssignSurveyViewFactory : IViewFactory<AssignSurveyInputModel, AssignSurveyView>
     {
-        #region Fields
-
-
-        /// <summary>
-        /// The store.
-        /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        #endregion
+        private readonly IDenormalizerStorage<UserDocument> users;
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignSurveyViewFactory"/> class.
-        /// </summary>
-        /// <param name="docs">
-        /// The docs.
-        /// </param>
-        /// <param name="store">
-        /// The store.
-        /// </param>
-        public AssignSurveyViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store)
+        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IDenormalizerStorage<UserDocument> users)
         {
             this.store = store;
+            this.users = users;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Assign.AssignSurveyView.
-        /// </returns>
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
-            CompleteQuestionnaireStoreDocument q = this.store.GetByGuid(input.CompleteQuestionnaireId);
+            var q = this.store.GetByGuid(input.CompleteQuestionnaireId);
 
-            return new AssignSurveyView(q);
+            var view = new AssignSurveyView(q)
+                {
+                    Supervisors = this.users.GetSupervisorsListForViewer(input.ViewerId).ToList()
+                };
+
+            return view;
         }
-
-        #endregion
     }
 }

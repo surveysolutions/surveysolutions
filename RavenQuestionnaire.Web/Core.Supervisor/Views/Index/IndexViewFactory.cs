@@ -92,7 +92,7 @@ namespace Core.Supervisor.Views.Index
             else
             {
                 user = null;
-                responsibleList = this.users.GetIntervieweresListForViewer(input.ViewerId).Select(i=>i.PublicKey);
+                responsibleList = this.users.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
             }
 
             var all = this.stat.Query()

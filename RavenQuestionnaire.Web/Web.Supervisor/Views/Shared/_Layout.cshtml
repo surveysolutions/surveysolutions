@@ -63,6 +63,7 @@
                                 <li class="@(page == MenuItem.Teams ? "active" : "")">
                                     @Html.ActionLink("Teams", "Index", "Team")
                                 </li>
+                                <li><a href="@Url.Action("Import", "Template")">Import Template</a></li>
                             </ul>
                         }
                         else

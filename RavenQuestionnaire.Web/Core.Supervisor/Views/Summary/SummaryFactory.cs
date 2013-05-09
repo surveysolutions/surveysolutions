@@ -77,7 +77,7 @@ namespace Core.Supervisor.Views.Summary
         /// </returns>
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            var interviewers = this.users.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
             TemplateLight template = null;
             if (input.TemplateId.HasValue)
             {

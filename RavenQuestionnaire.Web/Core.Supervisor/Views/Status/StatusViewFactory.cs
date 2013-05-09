@@ -60,7 +60,7 @@ namespace Core.Supervisor.Views.Status
         /// </returns>
         public StatusView Load(StatusViewInputModel input)
         {
-            var interviewers = this.users.GetIntervieweresListForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            var interviewers = this.users.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 

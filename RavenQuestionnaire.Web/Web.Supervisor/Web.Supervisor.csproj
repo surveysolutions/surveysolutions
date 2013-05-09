@@ -198,6 +198,7 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebActivator, Version=1.5.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -227,12 +228,15 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\ApproveRedoModel.cs" />
     <Compile Include="Models\AssigmentModel.cs" />
+    <Compile Include="Models\AssignSuveyData.cs" />
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\Chart\ChartModelBase.cs" />
+    <Compile Include="Models\ImportTemplateModel.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
+    <Compile Include="Models\HQDashboardModel.cs" />
     <Compile Include="Models\InterviewerListViewModel.cs" />
     <Compile Include="Models\InterviewerViewModel.cs" />
     <Compile Include="Models\StringExtension.cs" />
@@ -246,6 +250,11 @@
     <Compile Include="Models\SupervisorViewModel.cs" />
     <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\DesignerPublicService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Utils\Attributes\CompressContentAttribute .cs" />
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
@@ -364,6 +373,7 @@
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />
     <Content Include="Scripts\details.js" />
@@ -390,6 +400,18 @@
     <Content Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\assign\app\datacontext.js" />
+    <Content Include="Scripts\assign\app\dataservice.js" />
+    <Content Include="Scripts\assign\app\mapper.js" />
+    <Content Include="Scripts\assign\app\model.js" />
+    <Content Include="Scripts\assign\app\viewmodel.js" />
+    <Content Include="Scripts\lib\amplify.js" />
+    <Content Include="Scripts\lib\jquery.js" />
+    <Content Include="Scripts\lib\knockout.js" />
+    <Content Include="Scripts\lib\knockout.validation.js" />
+    <Content Include="Scripts\lib\lodash.js" />
+    <Content Include="Scripts\lib\require.js" />
+    <Content Include="Scripts\assign\main.js" />
     <Content Include="Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Scripts\knockout-2.2.1.js" />
     <Content Include="Scripts\knockout.validation.debug.js" />
@@ -397,6 +419,13 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
+    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
+    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />
@@ -412,6 +441,10 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -510,6 +543,14 @@
     </Content>
     <Content Include="HostMap.config" />
     <Content Include="Configuration\Stacy.Supervisor.Web.config" />
+    <Content Include="Configuration\Dev.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\Roma.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -520,7 +561,6 @@
     <Content Include="Views\ImportExport\Index.cshtml" />
     <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
-    <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
     <Content Include="Views\Maintenance\ReadLayer.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
@@ -535,43 +575,22 @@
     <Content Include="Views\Shared\_SurveyContent.cshtml" />
     <Content Include="Views\Shared\_PartialUsersGridTemplate.cshtml" />
     <Content Include="Views\Shared\_TableGroup.cshtml" />
-    <Content Include="Views\Shared\Answer\_Image.cshtml" />
-    <Content Include="Views\Shared\Answer\_Select.cshtml" />
-    <Content Include="Views\Shared\Answer\_Text.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_AutoPropagate.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_DateTime.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_DropDownList.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_GpsCoordinates.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_MultyOption.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_Numeric.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_SingleOption.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_Text.cshtml" />
-    <Content Include="Views\Shared\AnswerList\_YesNo.cshtml" />
     <Content Include="Views\Shared\Approve.cshtml" />
-    <Content Include="Views\Shared\Assign.cshtml" />
     <Content Include="Views\Shared\AssignPerson.cshtml" />
     <Content Include="Views\Shared\ChangeState.cshtml" />
     <Content Include="Views\Shared\Comments.cshtml" />
     <Content Include="Views\HQ\Details.cshtml" />
     <Content Include="Views\HQ\Documents.cshtml" />
-    <Content Include="Views\Shared\Group\_CompleteGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatebleGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatedGroup.cshtml" />
-    <Content Include="Views\Shared\Group\_PropagatedScreen.cshtml" />
-    <Content Include="Views\Shared\Group\_SimpleGroup.cshtml" />
-    <Content Include="Views\HQ\Index.cshtml">
+    <Content Include="Views\HQ\Surveys.cshtml">
       <SubType>
       </SubType>
     </Content>
     <Content Include="Views\Shared\IndexChart.cshtml" />
-    <Content Include="Views\Shared\Question\_Question.cshtml" />
     <Content Include="Views\Shared\Redo.cshtml" />
     <Content Include="Views\HQ\Status.cshtml" />
     <Content Include="Views\Shared\StatusChart.cshtml" />
     <Content Include="Views\HQ\Summary.cshtml" />
     <Content Include="Views\Shared\SummaryChart.cshtml" />
-    <Content Include="Views\Shared\Timeline.cshtml" />
-    <Content Include="Views\Shared\Timeline1.cshtml" />
     <Content Include="Views\Shared\IndexChart.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -584,6 +603,24 @@
     </Content>
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Interviewers.cshtml" />
+    <Content Include="Views\HQ\Index.cshtml" />
+    <Content Include="Views\HQ\Assign.cshtml" />
+    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\DesignerPublicService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
