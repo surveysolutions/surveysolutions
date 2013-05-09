@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.DenormalizerStorage;
@@ -72,7 +71,7 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
         /// </returns>
         /// <exception cref="ArgumentException">
         /// </exception>
-        public static IEnumerable<UserDocument> GetInterviewersListForViewer(this IDenormalizerStorage<UserDocument> users, Guid viewerId)
+        public static IEnumerable<UserDocument> GetInterviewersListForViewer(this IQueryableDenormalizerStorage<UserDocument> users, Guid viewerId)
         {
             var viewer = users.GetById(viewerId);
 
@@ -80,19 +79,19 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
                 return Enumerable.Empty<UserDocument>();
 
             if (viewer.IsHq())
-                return users.Query(u => u.IsInterviewer());
+                return users.Query().Where(u => u.IsInterviewer());
             else if (viewer.IsSupervisor())
                 return
-                    users.Query(u => u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey);
+                    users.Query().Where(u => u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey);
 
             throw new ArgumentException(
                 string.Format("Operation is allowed only for ViewerId and Hq users. Current viewer rolse is {0}",
                               string.Concat(viewer.Roles)));
         }
 
-        public static IEnumerable<UserDocument> GetSupervisorsListForViewer(this IDenormalizerStorage<UserDocument> users, Guid viewerId)
+        public static IEnumerable<UserDocument> GetSupervisorsListForViewer(this IQueryableDenormalizerStorage<UserDocument> users, Guid viewerId)
         {
-            var viewer = users.GetByGuid(viewerId);
+            var viewer = users.GetById(viewerId);
 
             if (viewer == null || !viewer.IsHq())
                 return Enumerable.Empty<UserDocument>();
