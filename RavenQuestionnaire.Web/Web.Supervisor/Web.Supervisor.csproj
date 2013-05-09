@@ -260,9 +260,6 @@
     <Compile Include="Utils\ControlGroupExtensions.cs" />
     <Compile Include="Utils\ViewHelperExtensions.cs" />
     <Compile Include="Utils\ViewHelpers.cs" />
-    <Compile Include="WCF\API.svc.cs">
-      <DependentUpon>API.svc</DependentUpon>
-    </Compile>
     <Compile Include="WCF\EventPipeService.svc.cs">
       <DependentUpon>EventPipeService.svc</DependentUpon>
     </Compile>
@@ -430,7 +427,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </Content>
-    <Content Include="WCF\API.svc" />
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />

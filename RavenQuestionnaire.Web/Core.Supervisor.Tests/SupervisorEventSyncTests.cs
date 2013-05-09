@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Core.Supervisor.Synchronization;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.View;
 using Moq;
 using NUnit.Framework;
@@ -65,17 +66,18 @@ namespace Core.Supervisor.Tests
             var streamableEventStore = eventStoreMock.As<IStreamableEventStore>();
             NcqrsEnvironment.SetDefault(eventStoreMock.Object);
             var userId = Guid.NewGuid();
+            var supervisorId = Guid.NewGuid();
             var lastEventId = Guid.NewGuid();
 
             streamableEventStore.Setup(x => x.GetLastEvent(userId))
                                 .Returns(new CommittedEvent(Guid.NewGuid(), lastEventId, userId, 1, DateTime.Now,
                                                             new object(), new Version(1, 1)));
-            var avalibleUsers = new UserDocument[] {new UserDocument() {PublicKey = userId}};
+            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId, Supervisor = new UserLight(supervisorId,"sup") } };
 
             denormalizerMock.Setup(x => x.Query<UserDocument>())
                             .Returns(avalibleUsers.AsQueryable());
 
-            SupervisorEventStreamReader unitUnderTest =new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId);
 
             // act
             var result =unitUnderTest.GetAllARIds().ToList();
@@ -92,13 +94,13 @@ namespace Core.Supervisor.Tests
             var eventStoreMock = new Mock<IEventStore>();
             NcqrsEnvironment.SetDefault(eventStoreMock.Object);
             var userId = Guid.NewGuid();
-
-            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId } };
+            var supervisorId = Guid.NewGuid();
+            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId, Supervisor = new UserLight(supervisorId,"sup")} };
 
             denormalizerMock.Setup(x => x.Query<UserDocument>())
                             .Returns(avalibleUsers.AsQueryable());
 
-            SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId);
 
             // act
             var result = unitUnderTest.GetAllARIds().ToList();
@@ -112,7 +114,7 @@ namespace Core.Supervisor.Tests
         public void GetEventStreamById_EventStoreIsEmpty_EmptyListIsReturned()
         {
             var eventStoreMock = PerpairSimpleEventStore();
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object, Guid.NewGuid());
             Guid eventSourceId = Guid.NewGuid();
             var result = target.GetEventStreamById<DummySnapshotableAR>(eventSourceId);
             Assert.IsTrue(result.Count == 0);
@@ -142,7 +144,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new object(),
                                                                                                  new Version())));
 
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object, Guid.NewGuid());
             var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
             Assert.IsTrue(result.Count == 2);
 
@@ -163,7 +165,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new object(),
                                                                                                  new Version())));
 
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object, Guid.NewGuid());
             var result = target.GetEventStreamById<DummyAR>(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
@@ -174,7 +176,7 @@ namespace Core.Supervisor.Tests
         {
             var eventStoreMock = PrepareSnapshotableEventStore();
             var aggregateRootId = Guid.NewGuid();
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object, Guid.NewGuid());
             var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
             eventStoreMock.Verify(x => x.ReadFrom(aggregateRootId, It.IsAny<long>(), It.IsAny<long>()), Times.Never());
@@ -186,7 +188,7 @@ namespace Core.Supervisor.Tests
             var eventStoreMock = PrepareSnapshotableEventStore();
             DummySnapshotableAR aggreagateRoot = new DummySnapshotableAR();
             var aggregateRootId = Guid.NewGuid();
-            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object);
+            SupervisorEventStreamReader target = new SupervisorEventStreamReader(denormalizerMock.Object, Guid.NewGuid());
             var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
             commandServiceMock.Verify(x => x.Execute(It.IsAny<CreateSnapshotForAR>()), Times.Once());
 

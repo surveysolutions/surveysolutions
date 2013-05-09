@@ -7,6 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Security.Authentication;
+using Main.Core.Entities.SubEntities;
+using Main.Synchronization.Credentials;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
@@ -36,20 +39,7 @@ namespace AndroidMain.Synchronization
     {
         #region Constants
 
-        /// <summary>
-        /// The item path.
-        /// </summary>
-        private const string itemPath = "importexport/GetItem";
-
-        /// <summary>
-        /// The item path 1.
-        /// </summary>
-        private const string GetItemAsStreamPath = "importexport/GetItemAsStream";
-
-        /// <summary>
-        /// The list path.
-        /// </summary>
-        private const string GetRootsListPath = "importexport/GetRootsList";
+      
 
         /// <summary>
         /// The list path.
@@ -74,27 +64,19 @@ namespace AndroidMain.Synchronization
         private readonly string baseAddress;
 
         private bool UseGZip = true;
-       
+
+        private readonly ISyncAuthenticator validator;
+
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RemoteServiceEventStreamRestProvider"/> class.
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        /// <param name="processGuid">
-        /// The process guid.
-        /// </param>
-        /// <param name="address">
-        /// The address.
-        /// </param>
-        public RemoteServiceEventStreamRestProvider(IKernel kernel, Guid processGuid, string address)
+        public RemoteServiceEventStreamRestProvider(Guid processGuid, string address, ISyncAuthenticator validator)
         {
             this.ProcessGuid = processGuid;
             this.baseAddress = address;
+
+            this.validator = validator;
         }
 
         #endregion
@@ -185,11 +167,16 @@ namespace AndroidMain.Synchronization
             {
                 request.AddHeader("Accept-Encoding", "gzip,deflate");
             }
+            var currentCredentials = validator.RequestCredentials();
+            request.AddParameter("login", currentCredentials.Login);
+            request.AddParameter("password", currentCredentials.Password);
 
             IRestResponse response = restClient.Execute(request);
             
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
+                if (response.StatusCode == HttpStatusCode.Forbidden)
+                    throw new AuthenticationException("user wasn't authorized");
                 throw new Exception("Target returned unsupported result.");
             }
 
@@ -213,7 +200,8 @@ namespace AndroidMain.Synchronization
                 itemRequest.AddParameter("ARKey", root.AggregateRootId);
                 itemRequest.AddParameter("length", 0);
                 itemRequest.AddParameter("rootType", root.AggregateRootType);
-
+                itemRequest.AddParameter("login", currentCredentials.Login);
+                itemRequest.AddParameter("password", currentCredentials.Password);
                 itemRequest.RequestFormat = DataFormat.Json;
 
                 if (UseGZip)
@@ -222,6 +210,8 @@ namespace AndroidMain.Synchronization
                 IRestResponse responseStream = restClient.Execute(itemRequest);
                 if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
                 {
+                    if (response.StatusCode == HttpStatusCode.Forbidden)
+                        throw new AuthenticationException("user wasn't authorized");
                     //logging
                     throw new Exception("Operation finished unsuccessfully. Item was not received.");
                 }

@@ -74,7 +74,8 @@ namespace Web.Supervisor.WCF
             Guid syncProcess = Guid.NewGuid();
             try
             {
-                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, null);
+                throw new NotImplementedException("proper synchronization with login password request is not implemented");
+                var process = this.syncProcessFactory.GetRestProcess(syncProcess, Guid.NewGuid());
 
                 return process.Export("Supervisor export AR events");
             }

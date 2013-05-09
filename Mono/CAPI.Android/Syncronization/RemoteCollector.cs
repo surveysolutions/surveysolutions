@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Security.Authentication;
+using Main.Core.Entities.SubEntities;
+using Main.Synchronization.Credentials;
+
 namespace AndroidMain.Synchronization
 {
     using System;
@@ -37,11 +41,6 @@ namespace AndroidMain.Synchronization
         /// </summary>
         private const string pushPath = "importexport/PostStream";
 
-        /// <summary>
-        /// The item path 1.
-        /// </summary>
-        private const string pushPath1 = "importexport/PostStream1";
-
 
         private const string GetCurrentVersionPath = "importexport/GetCurrentVersion";
 
@@ -49,6 +48,8 @@ namespace AndroidMain.Synchronization
         /// The base address.
         /// </summary>
         private readonly string baseAddress;
+
+        private readonly ISyncAuthenticator validator;
 
         /// <summary>
         /// Gets or sets the process guid.
@@ -76,10 +77,11 @@ namespace AndroidMain.Synchronization
         }
 
 
-        public RemoteCollector(string baseAddress, Guid processGuid)
+        public RemoteCollector(string baseAddress, Guid processGuid, ISyncAuthenticator validator)
         {
             this.baseAddress = baseAddress;
             this.ProcessGuid = processGuid;
+            this.validator = validator;
         }
 
 
@@ -100,9 +102,10 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
+          
             var restClient = new RestClient(this.baseAddress);
-
-            var request = new RestRequest(pushPath, Method.POST);
+            var currentCredentials = validator.RequestCredentials();
+            var request = new RestRequest(string.Format("{0}?login={1}&password={2}", pushPath, currentCredentials.Login, currentCredentials.Password), Method.POST);
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
@@ -116,10 +119,12 @@ namespace AndroidMain.Synchronization
 
                 // text must be changed to  "application/json; charset=utf-8"
                 request.AddParameter("text; charset=utf-8", item, ParameterType.RequestBody);
-                
+             
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
                 {
+                    if (response.StatusCode == HttpStatusCode.Forbidden)
+                        throw new AuthenticationException("user wasn't authorized");
                     return false;
                 }
 

@@ -38,7 +38,7 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
             if (user.Supervisor.Id != viewer.PublicKey)
                 throw new ArgumentException("informations for current user can't be displayed for this superviser");
         }
-
+        
         public static IEnumerable<UserDocument> GetTeamMembersForViewer(this IQueryableDenormalizerStorage<UserDocument> users, Guid viewerId)
         {
             var viewer = users.GetById(viewerId);

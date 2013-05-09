@@ -37,6 +37,7 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IDenormalizer denormalizer;
 
+        private readonly Guid supervisorId;
 
         //private List<Guid> ARKeys; 
 
@@ -45,18 +46,10 @@ namespace Core.Supervisor.Synchronization
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorEventStreamReader"/> class.
-        /// </summary>
-        /// <param name="denormalizer">
-        /// The denormalizer.
-        /// </param>
-        /// <exception cref="Exception">
-        /// added new exception
-        /// </exception>
-        public SupervisorEventStreamReader(IDenormalizer denormalizer)
+        public SupervisorEventStreamReader(IDenormalizer denormalizer, Guid supervisorId)
         {
             this.denormalizer = denormalizer;
+            this.supervisorId = supervisorId;
         }
 
         #endregion
@@ -94,6 +87,11 @@ namespace Core.Supervisor.Synchronization
 
         public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
+            return GetAllARIdsInternal(null);
+        }
+
+        public  IEnumerable<SyncItemsMeta> GetAllARIdsInternal(string userName)
+        {
             var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
@@ -107,7 +105,6 @@ namespace Core.Supervisor.Synchronization
 
             return result;
         }
-
         public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
         {
             switch (ARType)
@@ -147,21 +144,14 @@ namespace Core.Supervisor.Synchronization
 
         private List<Guid> GetUsers()
         {
-            Guid? supervisorKey = this.GetSupervisor();
 
-            IQueryable<UserDocument> model;
+            IQueryable<UserDocument> model =
+                this.denormalizer.Query<UserDocument>()
+                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId);
 
-            if (supervisorKey.HasValue)
-            {
-                model = this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorKey.Value);
-            }
-            else
-            {
-                model = this.denormalizer.Query<UserDocument>();
-            }
 
             return model.Select(u => u.PublicKey).ToList();
-            
+
         }
 
         #endregion
@@ -188,28 +178,6 @@ namespace Core.Supervisor.Synchronization
                retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
             }
         }
-
-       /* /// <summary>
-        /// The add complete questionnaires init state.
-        /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
-        protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-        {
-            IQueryable<CompleteQuestionnaireBrowseItem> model = this.denormalizer.Query<CompleteQuestionnaireBrowseItem>();
-
-            foreach (CompleteQuestionnaireBrowseItem item in model)
-            {
-                if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
-                {
-                    continue;
-                }
-
-                 retval.AddRange(
-                                this.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
-            }
-        }*/
         
         /// <summary>
         /// Responsible for added questionnaire templates
@@ -259,23 +227,6 @@ namespace Core.Supervisor.Synchronization
             }
         }
 
-        /// <summary>
-        /// The get supervisor.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="Guid?"/>.
-        /// </returns>
-        protected Guid? GetSupervisor()
-        {
-            UserDocument supervisor = this.denormalizer.Query<UserDocument>().FirstOrDefault(u => u.Roles.Contains(UserRoles.Supervisor));
-            
-            if(supervisor != null)
-            {
-                return supervisor.PublicKey;
-            }
-
-            return null;
-        }
 
         #endregion
     }

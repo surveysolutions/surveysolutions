@@ -208,7 +208,6 @@
     <Compile Include="Controllers\WillBeApiController.cs" />
     <Compile Include="Controllers\PdfController.cs" />
     <Compile Include="Models\FileBrowseItemClient.cs" />
-    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Injections\MainCoreRegistry.cs" />
     <Compile Include="Models\FlowGraph.cs" />

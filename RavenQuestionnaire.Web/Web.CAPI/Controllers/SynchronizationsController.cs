@@ -195,7 +195,7 @@ namespace Web.CAPI.Controllers
                     byte[] file;
                     try
                     {
-                        var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                        var process = this.syncProcessFactory.GetUsbProcess( syncProcess);
 
                         file = process.Export("Export DB on CAPI in zip file");
                     }
@@ -336,7 +336,7 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
+                        var process = this.syncProcessFactory.GetNetworkProcess(syncProcess);
 
                         process.Import("Network syncronization", url);
                     }
@@ -375,7 +375,7 @@ namespace Web.CAPI.Controllers
             {
                 try
                 {
-                    var process = (IUsbSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Usb, syncProcess, null);
+                    var process = this.syncProcessFactory.GetUsbProcess(syncProcess);
                     process.Import(zipData, "Usb syncronization");
                 }
                 catch (Exception e)
@@ -411,7 +411,7 @@ namespace Web.CAPI.Controllers
                 {
                     try
                     {
-                        var process = (IWirelessSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Network, syncProcess, null);
+                        var process = this.syncProcessFactory.GetNetworkProcess(syncProcess);
 
                         process.Export("Network export on CAPI", url);
                     }
