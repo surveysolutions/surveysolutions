@@ -127,7 +127,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 var eventLast = session
-                    .Query<StoredEvent>()
+                    .Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                     .Where(e => e.EventSourceId == aggregateRootId)
                     .OrderByDescending(y => y.EventSequence).FirstOrDefault();
 
@@ -141,7 +141,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                return session.Query<StoredEvent>().Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
+                return session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
             }
         }
 
@@ -262,6 +262,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 var snapshoot =
                     session.Query<StoredEvent>()
+                            .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                            .Where(e => e.IsSnapshot && e.EventSourceId == aggreagateRootId)
                            .OrderByDescending(y => y.EventSequence)
                            .FirstOrDefault();
