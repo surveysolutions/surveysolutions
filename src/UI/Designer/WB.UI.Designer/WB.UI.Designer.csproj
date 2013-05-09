@@ -195,11 +195,14 @@
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
+    <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
     <Compile Include="Code\DefaultAttribute.cs" />
     <Compile Include="Code\DesignerMembershipProvider.cs" />
     <Compile Include="Code\ObjectExtensions.cs" />
     <Compile Include="Code\OnlyForAdminAttribute.cs" />
+    <Compile Include="Code\PasswordRegularExpressionAttribute.cs" />
+    <Compile Include="Code\PasswordStringLengthAttribute.cs" />
     <Compile Include="Code\QuestionnaireHelper.cs" />
     <Compile Include="Code\ConfigurationManager\WebConfigHelper.cs" />
     <Compile Include="Controllers\MaintenanceController.cs" />
@@ -239,6 +242,7 @@
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
     <Compile Include="Models\ResetPasswordModel.cs" />

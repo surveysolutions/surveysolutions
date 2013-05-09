@@ -30,7 +30,7 @@ namespace WB.UI.Designer.Views.Tests
             target.Handle(CreateEvent(new SnapshootLoaded(){Template = new Snapshot(Guid.NewGuid(),1,new object())}));
 
             // assert
-            questionnaireStorageMock.Verify(x => x.GetByGuid(It.IsAny<Guid>()), Times.Never());
+            questionnaireStorageMock.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Never());
             questionnaireStorageMock.Verify(x => x.Store(It.IsAny<QuestionnaireListViewItem>(), It.IsAny<Guid>()),
                                             Times.Never());
         }
@@ -67,7 +67,7 @@ namespace WB.UI.Designer.Views.Tests
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle};
 
-            questionnaireStorageMock.Setup(x => x.GetByGuid(questionnaireId)).Returns(currentItem);
+            questionnaireStorageMock.Setup(x => x.GetById(questionnaireId)).Returns(currentItem);
 
             // act
             target.Handle(CreateEvent(CreateSnapshotEvent(documentReplacement)));
