@@ -390,6 +390,9 @@ namespace WB.UI.Designer.Controllers
 
                 if (element is GroupView)
                 {
+                    var group = (GroupView)element;
+                    group.ConditionExpression =
+                      transformator.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)
                     {
                         elements.Enqueue(child);
