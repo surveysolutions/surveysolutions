@@ -16,9 +16,8 @@ namespace Web.Supervisor
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using NLog;
-
-    using Questionnaire.Core.Web.Helpers;
+    using WB.UI.Shared.Log;
+    using WB.UI.Shared.NLog;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -39,7 +38,7 @@ namespace Web.Supervisor
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog logger = LogManager.Logger;
 
         /// <summary>
         /// The correctly initialized.

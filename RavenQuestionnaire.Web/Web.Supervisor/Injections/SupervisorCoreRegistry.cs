@@ -19,6 +19,9 @@ namespace Web.Supervisor.Injections
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
+    using WB.UI.Shared.Log;
+    using WB.UI.Shared.NLog;
+
     using Web.Supervisor.Filters;
 
     public class SupervisorCoreRegistry : CoreRegistry
@@ -56,6 +59,8 @@ namespace Web.Supervisor.Injections
 
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
+
+            this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
         }
     }
 }
