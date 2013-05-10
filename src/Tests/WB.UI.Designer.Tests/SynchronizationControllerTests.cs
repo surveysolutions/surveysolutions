@@ -12,12 +12,16 @@ using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ExportServices;
 using WB.Core.Questionnaire.ImportService.Commands;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
-using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
+    using System.IO;
+    using System.IO.Compression;
+
+    using WB.UI.Designer.BootstrapSupport;
+    using WB.UI.Desiner.Utilities.Compression;
+
     [TestFixture]
     public class SynchronizationControllerTests
     {
@@ -44,7 +48,17 @@ namespace WB.UI.Designer.Tests
             SynchronizationController controller = CreateSynchronizationController();
 
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
-            ZipUtilsMock.Setup(x => x.UnzipTemplate<IQuestionnaireDocument>(controller.Request, file.Object))
+
+            var inputStream = new MemoryStream();
+            using (var zip =new GZipStream(inputStream, CompressionMode.Compress, true))
+            {
+                zip.Write(new byte[] { 1 }, 0, 1);
+            }
+
+            file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
+            file.Setup(x => x.InputStream).Returns(inputStream);
+
+            ZipUtilsMock.Setup(x => x.UnZip<IQuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
             UserHelperMock.Setup(x => x.CurrentUserId).Returns(Guid.NewGuid);
 
@@ -67,12 +81,11 @@ namespace WB.UI.Designer.Tests
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
             // act
-            var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
+            controller.Import(file.Object);
 
             // assert
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Never());
-            Assert.AreEqual(actionResult.RouteValues["action"], "Index");
-            Assert.AreEqual(actionResult.RouteValues["controller"], "Error");
+            Assert.IsTrue(controller.TempData.ContainsKey(Alerts.ERROR));
         }
 
         [Test]
@@ -83,13 +96,13 @@ namespace WB.UI.Designer.Tests
             Guid templateId = Guid.NewGuid();
             string dataForZip = "zipped data";
             ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
-
+            ZipUtilsMock.Setup(x => x.Zip(dataForZip)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
             ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
-            ZipUtilsMock.Verify(x => x.ZipDate(dataForZip), Times.Once());
+            ZipUtilsMock.Verify(x => x.Zip(dataForZip), Times.Once());
         }
 
         [Test]

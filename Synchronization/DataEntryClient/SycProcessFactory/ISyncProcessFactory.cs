@@ -20,22 +20,9 @@ namespace DataEntryClient.SycProcessFactory
     {
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The get process.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        /// <param name="parentSyncKey">
-        /// The parent sync key.
-        /// </param>
-        /// <returns>
-        /// The <see cref="ISyncProcess"/>.
-        /// </returns>
-        ISyncProcess GetProcess(SyncProcessType type, Guid syncKey, Guid? parentSyncKey);
+        IWirelessSyncProcess GetNetworkProcess(Guid syncKey);
+        IUsbSyncProcess GetUsbProcess(Guid syncKey);
+        IEventSyncProcess GetRestProcess(Guid syncKey, Guid userId);
 
         #endregion
     }
