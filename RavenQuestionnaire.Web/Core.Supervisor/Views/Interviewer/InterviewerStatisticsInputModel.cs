@@ -88,12 +88,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets or sets a user public key.
         /// </summary>
-        public Guid UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets UserName.
-        /// </summary>
-        public string UserName { get; set; }
+        public Guid? InterviewerId { get; set; }
 
         #endregion
     }

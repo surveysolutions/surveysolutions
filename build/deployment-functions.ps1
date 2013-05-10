@@ -57,7 +57,10 @@ function DeployFiles($SourceFolder, $TargetFolder) {
     Write-Host "##teamcity[progressStart 'Deploying files']"
 
     Set-Content -path "$TargetFolder\app_offline.htm" -value 'Maintenance is in progress. Wait for a while, please.'
-
+	
+	#wait for unload Appdomain to avoid fault on directory clean up
+	Start-Sleep -s 10
+	
     Remove-Item "$TargetFolder\*" -Force -Recurse -Exclude 'app_offline.htm'
 
     Copy-Item "$SourceFolder\*" $TargetFolder -Recurse

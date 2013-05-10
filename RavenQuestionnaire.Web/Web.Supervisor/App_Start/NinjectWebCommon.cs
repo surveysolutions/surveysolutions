@@ -83,6 +83,8 @@ namespace Web.Supervisor.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
 
+            kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
+
             #warning Nastya: invent a new way of domain service registration
             var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
             commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand), new DefaultImportService());

@@ -7,72 +7,93 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Web.Http;
+using System.Web.Security;
 using Core.Supervisor.Views.Interviewer;
+using Main.Core.Utility;
 using Main.Core.View;
+using Questionnaire.Core.Web.Security;
 
 namespace Web.Supervisor.Controllers
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Web;
     using System.Web.Mvc;
-
-    using Core.Supervisor.Views.Summary;
 
     using Main.Core.Commands.User;
     using Main.Core.Entities.SubEntities;
-    using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
     using Web.Supervisor.Models;
-    using Web.Supervisor.Models.Chart;
 
     /// <summary>
     /// User controller responsible for dispay users, lock/unlock users, counting statistics
     /// </summary>
-    [Authorize]
-    public class UserController : Controller
+   [Authorize]
+    public class UserController : BaseController
     {
-        #region Fields
-
-        /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
-
-        /// <summary>
-        /// View repository
-        /// </summary>
-        private readonly IViewRepository viewRepository;
-
-        #endregion
-
-        #region Constructor
+        private readonly IFormsAuthentication authentication;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserController"/> class.
         /// </summary>
+        /// <param name="auth">
+        /// The auth.
+        /// </param>
         /// <param name="viewRepository">
         /// The view repository.
+        /// </param>
+        /// <param name="commandService">
+        /// The command service.
         /// </param>
         /// <param name="globalInfo">
         /// The global info.
         /// </param>
-        public UserController(IViewRepository viewRepository, IGlobalInfoProvider globalInfo)
+        public UserController(
+            IFormsAuthentication auth,
+            IViewRepository viewRepository,
+            ICommandService commandService,
+            IGlobalInfoProvider globalInfo)
+            : base(viewRepository, commandService, globalInfo)
         {
-            this.viewRepository = viewRepository;
-            this.globalInfo = globalInfo;
+            this.authentication = auth;
         }
 
-        #endregion
-
-        private static ICommandService CommandService
+        [AllowAnonymous]
+        public ActionResult CreateSupervisor()
         {
-            get { return NcqrsEnvironment.Get<ICommandService>(); }
+            var supervisor = new SupervisorModel(Guid.NewGuid(), "supervisor") {Role = UserRoles.Headquarter};
+            
+            return this.View(supervisor);
         }
 
-        #region PublicActions
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CreateSupervisor(SupervisorModel user)
+        {
+            if (ModelState.IsValid)
+            {
+                CommandService.Execute(new CreateUserCommand(user.Id, user.Name, SimpleHash.ComputeHash(user.Name),
+                                                             user.Name + "@worldbank.org", new[] {user.Role},
+                                                             false, null));
+  
+                var isSupervisor = Roles.IsUserInRole(user.Name, UserRoles.Supervisor.ToString());
+                var isHeadquarter = Roles.IsUserInRole(user.Name, UserRoles.Headquarter.ToString());
+                if (isSupervisor || isHeadquarter)
+                {
+                    this.authentication.SignIn(user.Name, false);
+                    if (isSupervisor)
+                    {
+                        return this.RedirectToAction("Index", "Survey");
+                    }
+                    else
+                    {
+                        return this.RedirectToAction("Index", "HQ");
+                    }
+                }
+            }
+
+            return this.View(user);
+        }
 
         /// <summary>
         /// Unlock user
@@ -83,13 +104,11 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
-        public ActionResult UnlockUser(string id)
+        public ActionResult UnlockUser(Guid id)
         {
-            Guid key = ParseKeyOrThrow404(id);
+            CommandService.Execute(new UnlockUserCommand(id));
 
-            CommandService.Execute(new UnlockUserCommand(key));
-
-            return this.RedirectToAction("Index");
+            return this.Redirect(GlobalHelper.PreviousPage);
         }
 
         /// <summary>
@@ -101,81 +120,11 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// Redirects to index view if everything is ok
         /// </returns>
-        public ActionResult LockUser(string id)
+        public ActionResult LockUser(Guid id)
         {
-            Guid key = ParseKeyOrThrow404(id);
+            CommandService.Execute(new LockUserCommand(id));
 
-            CommandService.Execute(new LockUserCommand(key));
-
-            return this.RedirectToAction("Index");
-        }
-
-        /// <summary>
-        /// Interviewer summary view
-        /// </summary>
-        /// <returns>
-        /// Interviewer summary view
-        /// </returns>
-        public ActionResult Summary()
-        {
-            ViewBag.ActivePage = MenuItem.Interviewers;
-            var user = this.globalInfo.GetCurrentUser();
-            var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(new SummaryInputModel(user));
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.View(model);
-        }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        public ActionResult _SummaryData(GridDataRequestModel data)
-        {
-            var user = this.globalInfo.GetCurrentUser();
-            var input = new SummaryInputModel(user)
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                TemplateId = data.TemplateId
-            };
-            var model = this.viewRepository.Load<SummaryInputModel, SummaryView>(input);
-            ViewBag.GraphData = new SurveyChartModel(model);
-            return this.PartialView("_SummaryTable", model);
-        }
-
-        /// <summary>
-        /// Display user's statistics grouped by surveys and statuses
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Show statistics view if everything is ok
-        /// </returns>
-        public ActionResult Statistics(Guid id, InterviewerStatisticsInputModel input)
-        {
-            var inputModel = input == null
-                ? new InterviewerStatisticsInputModel() { UserId = id }
-                : new InterviewerStatisticsInputModel()
-                                 {
-                                     Order = input.Order,
-                                     Orders = input.Orders,
-                                     PageSize = input.PageSize,
-                                     Page = input.Page,
-                                     UserId = id,
-                                     UserName = input.UserName
-                                 };
-            var model = this.viewRepository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(inputModel);
-            return this.View(model);
+            return this.Redirect(GlobalHelper.PreviousPage);
         }
 
         /// <summary>
@@ -190,9 +139,9 @@ namespace Web.Supervisor.Controllers
         public ActionResult Index(InterviewersInputModel input)
         {
             ViewBag.ActivePage = MenuItem.Administration;
-            var user = this.globalInfo.GetCurrentUser();
-            input.Supervisor = user;
-            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
+            var user = this.GlobalInfo.GetCurrentUser();
+            input.ViewerId = user.Id;
+            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
             return this.View(model);
         }
 
@@ -212,89 +161,10 @@ namespace Web.Supervisor.Controllers
                 Page = data.Pager.Page,
                 PageSize = data.Pager.PageSize,
                 Orders = data.SortOrder,
-                Supervisor = new UserLight(data.SupervisorId, data.SupervisorName)
+                ViewerId = this.GlobalInfo.GetCurrentUser().Id
             };
-            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
-            return this.PartialView("_Table", model);
+            var model = this.Repository.Load<InterviewersInputModel, InterviewersView>(input);
+            return this.PartialView("_PartialUsersGridTemplate", model);
         }
-
-        /// <summary>
-        /// Gets table data for some view
-        /// </summary>
-        /// <param name="data">
-        /// The data.
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        [HttpPost]
-        public ActionResult TableGroupByUser(GridDataRequestModel data)
-        {
-            var input = new InterviewerInputModel()
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                TemplateId = data.TemplateId,
-                UserId = data.UserId
-            };
-            var model = this.viewRepository.Load<InterviewerInputModel, InterviewerView>(input);
-            return this.PartialView("_TableGroupByUser", model.Items[0]);
-        }
-
-        /// <summary>
-        /// Gets user's statistics
-        /// </summary>
-        /// <param name="data">
-        /// Table order data
-        /// </param>
-        /// <returns>
-        /// Partial view with table's body
-        /// </returns>
-        [HttpPost]
-        public ActionResult UserStatistics(GridDataRequestModel data)
-        {
-            var input = new InterviewerStatisticsInputModel()
-            {
-                Page = data.Pager.Page,
-                PageSize = data.Pager.PageSize,
-                Orders = data.SortOrder,
-                UserId = data.UserId
-            };
-            var model = this.viewRepository.Load<InterviewerStatisticsInputModel, InterviewerStatisticsView>(input);
-            return this.PartialView("_UserStatistics", model);
-        }
-
-        /// <summary>
-        /// Uses to filter grids by user
-        /// </summary>
-        /// <returns>
-        /// List of all  supervisor's users
-        /// </returns>
-        public ActionResult UsersJson()
-        {
-            var user = this.globalInfo.GetCurrentUser();
-            var input = new InterviewersInputModel { PageSize = int.MaxValue, Supervisor = user };
-            var model = this.viewRepository.Load<InterviewersInputModel, InterviewersView>(input);
-            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Login), JsonRequestBehavior.AllowGet);
-        }
-
-        #endregion
-
-        #region Private
-
-        private static Guid ParseKeyOrThrow404(string id)
-        {
-            Guid key;
-
-            if (!Guid.TryParse(id, out key))
-            {
-                throw new HttpException("404");
-            }
-
-            return key;
-        }
-
-        #endregion
     }
 }

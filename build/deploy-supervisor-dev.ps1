@@ -8,7 +8,7 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 try {
 
     Deploy `
-        -Solution 'RavenQuestionnaire.Web\RavenQuestionnaire.Web.sln' `
+        -Solution 'src\Supervisor.sln' `
         -Project 'RavenQuestionnaire.Web\Web.Supervisor\Web.Supervisor.csproj' `
         -BuildConfiguration 'Release' `
         -SourceFolder 'RavenQuestionnaire.Web\Web.Supervisor\obj\Release\Package\PackageTmp' `

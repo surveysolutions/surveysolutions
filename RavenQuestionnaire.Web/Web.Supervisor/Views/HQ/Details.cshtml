@@ -1,0 +1,305 @@
+﻿@using System.Web.Script.Serialization
+@using Main.Core.Entities.SubEntities
+@using Main.Core.View.Group
+@using Core.Supervisor.Views.Survey
+@using ClientDependency.Core.Mvc
+@model SurveyScreenView
+@{
+    Html.RequiresCss("details.css", "Content", 50);
+
+    JavaScriptSerializer serializer = new JavaScriptSerializer(new SimpleTypeResolver()) { MaxJsonLength = Int32.MaxValue, RecursionLimit = 100 };
+}
+<script type="text/javascript">
+    var dataHelper = null;
+    var questionnaire = @Html.Raw(serializer.Serialize(Model)) ;
+    $(document).ready(function() {
+        dataHelper = new DataHelper('@Url.Action("Index", "HQ", new { }, "http")');
+    });
+    var DataHelper = function (host) {
+        var self = this;
+        self.host = host;
+
+        self.createAddCommentRequest = function () {
+            var request = {
+                url: self.host + "/addcomment",
+                type: "POST",
+                data: {},
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8'
+            };
+            return request;
+        };
+
+        self.createFlagQuestionRequest = function () {
+            var request = {
+                url: self.host + "/FlagQuestion",
+                type: "POST",
+                data: {},
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8'
+            };
+            return request;
+        };
+
+        self.getImageUrl = function(id) {
+            return host + "Resource/Thumb/" + id;
+        };
+
+        self.createAnswerQuestionRequest = function () {
+            var request = {
+                url: self.host + "/AnswerQuestion",
+                type: "POST",
+                data: {},
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8'
+            };
+            return request;
+        };
+    }
+</script>
+<div id="stacks">
+    <div id="groups" class="stack">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeMenu">&times</button>
+                <span data-bind="text: title"></span>. Responsible: <span data-bind="text: responsible.name"></span>. Status: <span data-bind="text: status.name"></span>
+            </div>
+            <div class="body">
+                <ul class="nav nav-list" data-bind="foreach: menu">
+                    <li data-bind="css: { active: isCurrent, level1: $data.level == 1, level2: $data.level == 2 }">
+                        <a data-bind="attr: {'href': getHref() }" href="#/group"><span class="count"
+                            data-bind="    text: totals.counters"></span><span class="link-text" data-bind="    text: title"></span></a></li>
+                </ul>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <a class="btn btn-info nav-link" id="ref-link-statusHistoryLink" href="#/status_history">Status history</a>
+                    
+                    @if (Model.Status.PublicId == SurveyStatus.Complete.PublicId || Model.Status.PublicId == SurveyStatus.Error.PublicId)
+                    {
+                       <a class="btn  btn-success" href="@Url.Action("ChangeState", new { id = Model.PublicKey, template = Model.QuestionnairePublicKey })">
+                            <i class="icon-ok-sign icon-white"></i>Change state</a>
+                   }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="answers" class="stack">
+        <div class="inner">
+            <div class="body">
+                <div data-bind="visible : showMode() != 'status_history' ">
+                    <!-- ko foreach: filteredScreen -->
+                    <!-- ko if: hasQuestions -->
+                    <h2 class="heading" data-bind="text: title"></h2>
+                    <div class="questions">
+                        <table class="table table-bordered table-condensed" data-bind="style: { width: (300 + 250 * visibleCount()) + 'px' }">
+                            <!-- ko if: (captions.length > 0) -->
+                            <thead>
+                                <tr>
+                                    <td></td>
+                                    <!-- ko foreach: captions -->
+                                    <td data-bind="visible: isVisible">
+                                        <span data-bind="text: title"></span>
+                                    </td>
+                                    <!-- /ko -->
+                                </tr>
+                            </thead>
+                            <!-- /ko -->
+                            <tbody data-bind="foreach: questions">
+                                <tr data-bind="visible: isVisible, attr : { id: 'question-' + key}, css: {avtive : isActive}">
+                                    <td style="width: 300px;">
+                                        <div class="cell-content" data-bind="text: title">
+                                        </div>
+                                    </td>
+                                    <!-- ko foreach: answers -->
+                                    <!-- ko if: isVisible -->
+                                    <td style="width: 250px;">
+                                        <div class="cell-content" data-bind="click: $root.openDetails">
+                                            <span data-bind="css: markerStyle()"></span><span data-bind="text: answer"></span>
+                                            <div class="question-toolbar pull-right">
+                                                <div class="btn-group" data-bind="css : {hidden : !((comments().length == 0) || isFlaged() == false || isReadonly == false)}">
+                                                    <a style="display: none;" class="actions btn dropdown-toggle btn-mini" data-toggle="dropdown"
+                                                        href="#"><i class="icon-cog"></i><span class="caret"></span></a>
+                                                    <ul class="dropdown-menu pull-right">
+                                                        <li data-bind="visible: isReadonly == false"><a class="" href="#" data-bind="click: $root.openDetails">Answer</a></li>
+                                                        <li><a class="" href="#" data-bind="click: $root.openDetails">Comment</a></li>
+                                                        <li data-bind="visible: isFlaged() == false"><a data-bind="click: $root.flagAnswer">Flag</a></li>
+                                                    </ul>
+                                                </div>
+                                                <a class="btn btn-mini btn-success" data-bind="click: $root.openDetails, visible: comments().length > 0">
+                                                    <span data-bind="text: comments().length + ' '"></span><i class="icon-comment icon-white"></i>
+                                                </a>
+                                                <a class="btn btn-mini btn-info" data-bind="click: $root.flagAnswer, visible: isFlaged">
+                                                    <i class="icon-flag icon-white"></i></a>
+                                                <a class="btn btn-mini btn-primary" href="#" data-bind="click: $root.openDetails, visible: isReadonly == false">answer</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <!-- /ko -->
+                                    <!-- /ko -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </div>
+                <div data-bind="visible : showMode() == 'status_history' ">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>set status</th>
+                                <th>with comment</th>
+                                <th>on</th>
+                            </tr>
+                        </thead>
+                        <tbody data-bind="foreach: statusHistory">
+                            <tr>
+                                <td><div class="cell-content" data-bind="text: user"></div></td>
+                                <td><div class="cell-content" data-bind="text: status"></div></td>
+                                <td><div class="cell-content expander" data-bind="text: comment"></div></td>
+                                <td><div class="cell-content" data-bind="date: date"></div></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                    <button class="btn" data-bind="visible: isMenuHidden, click: $root.openMenu">
+                        <i class="icon-th-list"></i>
+                    </button>
+                    <div class="btn-group pull-right">
+                        <a href="#/all" class="btn" data-bind="css: { 'btn-primary': showMode() == 'all' }">all</a> <a href="#/flaged" class="btn" data-bind="css: { 'btn-primary': showMode() == 'flaged' }">
+                            <i class="icon-flag" data-bind="    css: { 'icon-white': showMode() == 'flaged' }"></i>flagged <span data-bind="    text: flagedCount"></span></a><a href="#/answered"
+                                class="btn" data-bind="css: { 'btn-primary': showMode() == 'answered' }"><i class="icon-ok"
+                                    data-bind="    css: { 'icon-white': showMode() == 'answered' }"></i>answered
+                                    <span data-bind="    text: answeredCount"></span></a><a href="#/invalid" class="btn "
+                                        data-bind="css: { 'btn-primary': showMode() == 'invalid' }"><i class="icon-warning-sign"
+                                            data-bind="    css: { 'icon-white': showMode() == 'invalid' }"></i>invalid <span
+                                                data-bind="    text: invalidCount"></span></a><a href="#/supervisor" class="btn "
+                                                    data-bind="css: { 'btn-primary': showMode() == 'supervisor' }"><i class="icon-pencil"
+                                                        data-bind="    css: { 'icon-white': showMode() == 'supervisor' }"></i>supervisor's
+                                                    <span data-bind="    text: editableCount"></span></a>
+                        <a href="#/enabled" class="btn " data-bind="css: { 'btn-primary': showMode() == 'enabled' }">
+                            <i class="icon-pencil" data-bind="    css: { 'icon-white': showMode() == 'enabled' }"></i>enabled <span data-bind="    text: enabledCount"></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="details" data-bind="with: currentAnswer" class="stack">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
+                <span data-bind="text: question"></span>
+            </div>
+            <div class="body">
+                <div class="details-block ">
+                    <h2 class="heading">Answer</h2>
+                    <p>
+                        <span data-bind="visible: !isAnswered ">no yet</span> <span data-bind="   text: answer ">no yet answer</span>
+                    </p>
+                    <div data-bind="visible: !isReadonly">
+                    </div>
+                    <div data-bind="template: { name: displayMode, data: $root.currentAnswer }">
+                    </div>
+                </div>
+                <div class="details-block ">
+                    <h2 class="heading">Comments</h2>
+                    <table class="table table-bordered table-striped table-hover comment-table">
+                        <tbody>
+                            <!-- ko foreach: comments -->
+                            <tr>
+                                <td>
+                                    <span data-bind="text: user.name"></span>: <span data-bind="text: text"></span>
+                                </td>
+                            </tr>
+                            <!-- /ko -->
+                        </tbody>
+                        <tr>
+                            <td>
+                                <textarea data-bind="value: currentComment, valueUpdate: 'afterkeydown'"></textarea>
+                                <button class="btn" data-bind="click: addComment, enable: currentComment().trim().length > 0">
+                                    <i class="icon-comment"></i>Add comment</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="inner">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="SingleOption">
+    <ul data-bind="foreach: answerOptions" class="answer-list">
+        <li>
+            <label data-bind='attr: { "for": optionFor }'>
+                <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                <span data-bind="text: title"></span>
+            </label>
+        </li>
+    </ul>
+</script>
+<script type="text/html" id="MultyOption">
+    <ul data-bind="foreach: answerOptions" class="answer-list">
+        <li>
+            <label data-bind='attr: { "for": optionFor }'>
+                <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                <span data-bind="text: title"></span>
+            </label>
+        </li>
+    </ul>
+
+</script>
+<script type="text/html" id="SingleImage">
+    <ul data-bind="foreach: answerOptions" class="thumbnails">
+        <li class="span1_5">
+            <label class="thumbnail" data-bind='attr: { "for": optionFor }'>
+                <img data-bind="attr: {src : image, alt: title}" />
+                <div class="caption">
+                    <input type='radio' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOption, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </div>
+            </label>
+        </li>
+    </ul>
+</script>
+<script type="text/html" id="MultyImage">
+    <ul data-bind="foreach: answerOptions" class="thumbnails">
+        <li class="span1_5">
+            <label class="thumbnail" data-bind="attr: { 'for': optionFor }">
+                <img data-bind="attr: {src : image, alt: title}" />
+                <div class="caption">
+                    <input type='checkbox' data-bind="attr: { value: value, name: groupName, id: optionFor }, checked: $parent.selectedOptions, disable: $parent.isReadonly" />
+                    <span data-bind="text: title"></span>
+                </div>
+            </label>
+        </li>
+    </ul>
+
+</script>
+<script type="text/html" id="Numeric">
+    <input type="number"  data-bind="value: selectedOption, disable: isReadonly" />
+</script>
+<script type="text/html" id="DateTime">
+    <input data-bind="datepicker: selectedOption, disable: isReadonly, datepickerOptions: {format:'mm/dd/yyyy', date: selectedOption }" />
+</script>
+<script type="text/html" id="AutoPropagate">
+    <input data-bind="value: selectedOption, disable: isReadonly" />
+</script>
+<script type="text/html" id="Text">
+    <input data-bind="value: selectedOption, disable: isReadonly" />
+</script>
+@{
+    Html.RequiresJs("director.min.js", "Scripts", 50);
+    Html.RequiresJs("knockout-2.2.1.js", "Scripts", 80);
+    Html.RequiresJs("date.js", "Scripts", 85);
+    Html.RequiresJs("knockout.validation.js", "Scripts", 90);
+    Html.RequiresJs("details.js", "Scripts", 100);
+}

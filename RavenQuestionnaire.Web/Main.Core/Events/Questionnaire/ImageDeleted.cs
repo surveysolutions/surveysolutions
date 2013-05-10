@@ -15,7 +15,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The image deleted.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:ImageDeleted")]
     public class ImageDeleted
     {

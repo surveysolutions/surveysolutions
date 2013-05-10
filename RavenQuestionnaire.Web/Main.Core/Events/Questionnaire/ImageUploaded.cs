@@ -15,7 +15,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The image uploaded.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:ImageUploaded")]
     public class ImageUploaded
     {

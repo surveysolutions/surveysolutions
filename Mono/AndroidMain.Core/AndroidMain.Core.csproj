@@ -403,227 +403,174 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\AbstractQuestion.cs">
       <Link>Entities\SubEntities\AbstractQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Answer.cs">
       <Link>Entities\SubEntities\Answer.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\AnswerType.cs">
       <Link>Entities\SubEntities\AnswerType.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\CollectionItem.cs">
       <Link>Entities\SubEntities\CollectionItem.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\AbstractCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\AbstractCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\CompleteAnswer.cs">
       <Link>Entities\SubEntities\Complete\CompleteAnswer.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\CompleteGroup.cs">
       <Link>Entities\SubEntities\Complete\CompleteGroup.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IAutoPropagate.cs">
       <Link>Entities\SubEntities\Complete\IAutoPropagate.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompelteValueQuestion.cs">
       <Link>Entities\SubEntities\Complete\ICompelteValueQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteAnswer.cs">
       <Link>Entities\SubEntities\Complete\ICompleteAnswer.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteGroup.cs">
       <Link>Entities\SubEntities\Complete\ICompleteGroup.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteItem.cs">
       <Link>Entities\SubEntities\Complete\ICompleteItem.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ICompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\ICompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IDateTimeQuestion.cs">
       <Link>Entities\SubEntities\Complete\IDateTimeQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IGpsCoordinatesQuestion.cs">
       <Link>Entities\SubEntities\Complete\IGpsCoordinatesQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IMultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Complete\IMultyOptionsQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\INumericQuestion.cs">
       <Link>Entities\SubEntities\Complete\INumericQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\IPercentageQuestion.cs">
       <Link>Entities\SubEntities\Complete\IPercentageQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ISingleQuestion.cs">
       <Link>Entities\SubEntities\Complete\ISingleQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\ITextCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\ITextCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\AutoPropagateCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\AutoPropagateCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\DateTimeCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\DateTimeCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\GpsCoordinateCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\GpsCoordinateCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\MultyOptionsCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\MultyOptionsCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\NumericCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\NumericCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\SingleCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\SingleCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs">
       <Link>Entities\SubEntities\Complete\Question\TextCompleteQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowBlock.cs">
       <Link>Entities\SubEntities\FlowBlock.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowConnection.cs">
       <Link>Entities\SubEntities\FlowConnection.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\FlowRule.cs">
       <Link>Entities\SubEntities\FlowRule.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Group.cs">
       <Link>Entities\SubEntities\Group.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IAnswer.cs">
       <Link>Entities\SubEntities\IAnswer.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\ICollectionItem.cs">
       <Link>Entities\SubEntities\ICollectionItem.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IConditional.cs">
       <Link>Entities\SubEntities\IConditional.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IFlowBlock.cs">
       <Link>Entities\SubEntities\IFlowBlock.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IGroup.cs">
       <Link>Entities\SubEntities\IGroup.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Image.cs">
       <Link>Entities\SubEntities\Image.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\IQuestion.cs">
       <Link>Entities\SubEntities\IQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\LocationWithUserStatistic.cs">
       <Link>Entities\SubEntities\LocationWithUserStatistic.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Option.cs">
       <Link>Entities\SubEntities\Option.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Order.cs">
       <Link>Entities\SubEntities\Order.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Propagate.cs">
       <Link>Entities\SubEntities\Propagate.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\QuestionScope.cs">
       <Link>Entities\SubEntities\QuestionScope.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\QuestionType.cs">
       <Link>Entities\SubEntities\QuestionType.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\AutoPropagateQuestion.cs">
       <Link>Entities\SubEntities\Question\AutoPropagateQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\DateTimeQuestion.cs">
       <Link>Entities\SubEntities\Question\DateTimeQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\GpsCoordinateQuestion.cs">
       <Link>Entities\SubEntities\Question\GpsCoordinateQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\MultyOptionsQuestion.cs">
       <Link>Entities\SubEntities\Question\MultyOptionsQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\NumericQuestion.cs">
       <Link>Entities\SubEntities\Question\NumericQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\SingleQuestion.cs">
       <Link>Entities\SubEntities\Question\SingleQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\Question\TextQuestion.cs">
       <Link>Entities\SubEntities\Question\TextQuestion.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs">
       <Link>Entities\SubEntities\StatusesWithCompleteQuestionnaireStatistic.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\StatusItem.cs">
       <Link>Entities\SubEntities\StatusItem.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\SurveyStatus.cs">
       <Link>Entities\SubEntities\SurveyStatus.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\UserLight.cs">
       <Link>Entities\SubEntities\UserLight.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\UserRoles.cs">
       <Link>Entities\SubEntities\UserRoles.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\SubEntities\VisitedGroup.cs">
       <Link>Entities\SubEntities\VisitedGroup.cs</Link>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Entities\TemplateLight.cs">
       <Link>Entities\TemplateLight.cs</Link>
@@ -724,9 +671,6 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireDeleted.cs">
-      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupDeleted.cs">
       <Link>Events\Questionnaire\GroupDeleted.cs</Link>
     </Compile>
@@ -756,6 +700,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionDeleted.cs">
       <Link>Events\Questionnaire\QuestionDeleted.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireDeleted.cs">
+      <Link>Events\Questionnaire\QuestionnaireDeleted.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionnaireItemMoved.cs">
       <Link>Events\Questionnaire\QuestionnaireItemMoved.cs</Link>
@@ -1081,6 +1028,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
       <Name>AndroidLogger</Name>

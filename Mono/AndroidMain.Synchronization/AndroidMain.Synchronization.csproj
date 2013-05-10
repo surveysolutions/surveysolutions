@@ -56,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\Credentials\ISyncAuthenticator.cs">
+      <Link>Credentials\ISyncAuthenticator.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Synchronization\SycProcessRepository\ISyncProcessor.cs">
       <Link>SycProcessRepository\ISyncProcessor.cs</Link>
     </Compile>
@@ -147,6 +150,7 @@
   <ItemGroup>
     <WebReferences Include="Web References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

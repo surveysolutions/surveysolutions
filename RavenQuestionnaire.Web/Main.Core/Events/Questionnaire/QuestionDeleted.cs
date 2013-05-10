@@ -12,7 +12,6 @@ namespace Main.Core.Events.Questionnaire
 
     using Ncqrs.Eventing.Storage;
 
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionDeleted")]
     public class QuestionDeleted
     {

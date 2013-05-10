@@ -18,7 +18,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The new question added.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:NewQuestionAdded")]
     public class NewQuestionAdded
     {

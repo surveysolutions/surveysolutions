@@ -37,40 +37,19 @@ namespace DataEntryClient.SycProcessFactory
             this.kernel = kernel;
         }
 
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The get process.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="syncKey">
-        /// The sync key.
-        /// </param>
-        /// <param name="parentSyncKey">
-        /// The parent sync key.
-        /// </param>
-        /// <returns>
-        /// The AbstractSyncProcess
-        /// </returns>
-        public ISyncProcess GetProcess(SyncProcessType type, Guid syncKey, Guid? parentSyncKey)
+        public IWirelessSyncProcess GetNetworkProcess(Guid syncKey)
         {
-            switch (type)
-            {
-                case SyncProcessType.Usb:
-                    return new UsbSyncProcess(this.kernel, syncKey);
-                case SyncProcessType.Network:
-                    return new WirelessSyncProcess(this.kernel, syncKey);
-                case SyncProcessType.Template:
-                    return new TemplateExportSyncProcess(this.kernel, syncKey);
-                case SyncProcessType.Event:
-                    return new EventSyncProcess(this.kernel, syncKey);
-            }
-
-            throw new Exception("Cannot creat sync process with type:" + type.ToString());
+            return new WirelessSyncProcess(this.kernel, syncKey);
         }
 
-        #endregion
+        public IUsbSyncProcess GetUsbProcess(Guid syncKey)
+        {
+            return new UsbSyncProcess(this.kernel, syncKey);
+        }
+
+        public IEventSyncProcess GetRestProcess(Guid syncKey, Guid userId)
+        {
+            return new EventSyncProcess(this.kernel, syncKey, userId);
+        }
     }
 }
