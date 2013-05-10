@@ -132,10 +132,6 @@
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
@@ -467,6 +463,14 @@
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
+      <Project>{fe8c73a8-34f6-4ddb-b700-0416db6256a4}</Project>
+      <Name>WB.UI.Shared.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.NLog\WB.UI.Shared.NLog.csproj">
+      <Project>{6bbbb42b-3b59-45fb-8bd6-64eecec3bf5e}</Project>
+      <Name>WB.UI.Shared.NLog</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>

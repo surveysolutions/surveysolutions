@@ -14,7 +14,6 @@ namespace Web.Supervisor.Controllers
     using System.Linq;
     using System.Web.Mvc;
 
-    using Core.Supervisor.Views.Assign;
     using Core.Supervisor.Views.Assignment;
     using Core.Supervisor.Views.Index;
     using Core.Supervisor.Views.Interviewer;
@@ -26,15 +25,14 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Entities.SubEntities;
     using Main.Core.View;
     using Main.Core.View.CompleteQuestionnaire.Statistics;
-    using Main.Core.View.Question;
     using Main.Core.View.Questionnaire;
     using Main.Core.View.User;
-
-    using NLog;
 
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
+
+    using WB.UI.Shared.Log;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
@@ -62,8 +60,8 @@ namespace Web.Supervisor.Controllers
         /// The provider.
         /// </param>
         public SurveyController(
-            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider)
-            : base(viewRepository, commandService, provider)
+            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider, ILog logger)
+            : base(viewRepository, commandService, provider, logger)
         {
         }
 
@@ -98,8 +96,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -122,8 +119,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -144,8 +140,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 

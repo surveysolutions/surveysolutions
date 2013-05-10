@@ -16,11 +16,12 @@ namespace Web.Supervisor.Controllers
     using System.Web;
     using System.Web.Mvc;
 
-    using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
     using Main.Core.Commands.Questionnaire.Completed;
 
     using Questionnaire.Core.Web.Helpers;
+
+    using WB.UI.Shared.Log;
 
     using Web.Supervisor.Models;
 
@@ -31,8 +32,8 @@ namespace Web.Supervisor.Controllers
     public class DashboardController : BaseController
     { 
         public DashboardController(
-            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider)
-            : base(viewRepository, commandService, globalProvider)
+            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider globalProvider, ILog logger)
+            : base(viewRepository, commandService, globalProvider, logger)
         {
         }
       

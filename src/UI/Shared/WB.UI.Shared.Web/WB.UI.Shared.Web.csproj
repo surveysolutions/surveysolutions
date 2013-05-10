@@ -86,6 +86,10 @@
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
+      <Project>{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}</Project>
+      <Name>WB.UI.Shared.Log</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

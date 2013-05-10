@@ -19,6 +19,8 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
+    using WB.UI.Shared.Log;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -42,8 +44,8 @@ namespace Web.Supervisor.Controllers
         /// The global Info.
         /// </param>
         public TeamController(
-            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo)
-            : base(repository, commandService, globalInfo)
+            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+            : base(repository, commandService, globalInfo, logger)
         {
             this.ViewBag.ActivePage = MenuItem.Teams;
         }

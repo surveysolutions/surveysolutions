@@ -23,6 +23,9 @@ namespace Web.Supervisor.Controllers
     using Main.Core.Entities.SubEntities;
     using Ncqrs.Commanding.ServiceModel;
     using Questionnaire.Core.Web.Helpers;
+
+    using WB.UI.Shared.Log;
+
     using Web.Supervisor.Models;
 
     /// <summary>
@@ -52,8 +55,9 @@ namespace Web.Supervisor.Controllers
             IFormsAuthentication auth,
             IViewRepository viewRepository,
             ICommandService commandService,
-            IGlobalInfoProvider globalInfo)
-            : base(viewRepository, commandService, globalInfo)
+            IGlobalInfoProvider globalInfo,
+            ILog logger)
+            : base(viewRepository, commandService, globalInfo, logger)
         {
             this.authentication = auth;
         }

@@ -15,6 +15,8 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
+    using WB.UI.Shared.Log;
+
     /// <summary>
     ///     The base controller.
     /// </summary>
@@ -36,6 +38,8 @@ namespace Web.Supervisor.Controllers
         /// The global info.
         /// </summary>
         protected readonly IGlobalInfoProvider GlobalInfo;
+
+        protected readonly ILog Logger;
         #endregion
 
         #region Constructors and Destructors
@@ -52,11 +56,12 @@ namespace Web.Supervisor.Controllers
         /// <param name="globalInfo">
         /// The global Info.
         /// </param>
-        protected BaseController(IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo)
+        protected BaseController(IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
         {
             this.Repository = repository;
             this.CommandService = commandService;
             this.GlobalInfo = globalInfo;
+            this.Logger = logger;
         }
 
         #endregion
