@@ -1,18 +1,57 @@
-﻿using System.Web;
-using System.Web.Mvc;
-using NLog;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CustomHandleErrorAttribute.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace WB.UI.Designer.Code.Exceptions
+namespace WB.UI.Designer.Exceptions
 {
-    public class CustomHandleErrorAttribute : HandleErrorAttribute
-    {
-        readonly Logger _logger = LogManager.GetCurrentClassLogger(); 
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
 
-        public CustomHandleErrorAttribute()
+    using WB.UI.Shared.Log;
+
+    /// <summary>
+    /// The custom handle error attribute.
+    /// </summary>
+    public class CustomHandleErrorAttribute : FilterAttribute, IExceptionFilter
+    {
+        #region Fields
+
+        /// <summary>
+        /// The _logger.
+        /// </summary>
+        private readonly ILog logger;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomHandleErrorAttribute"/> class.
+        /// </summary>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public CustomHandleErrorAttribute(ILog logger)
         {
+            this.logger = logger;
+
+            this.Order = 1;
         }
 
-        public override void OnException(ExceptionContext filterContext)
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The on exception.
+        /// </summary>
+        /// <param name="filterContext">
+        /// The filter context.
+        /// </param>
+        public void OnException(ExceptionContext filterContext)
         {
             if (filterContext.ExceptionHandled || !filterContext.HttpContext.IsCustomErrorEnabled)
             {
@@ -24,41 +63,29 @@ namespace WB.UI.Designer.Code.Exceptions
                 return;
             }
 
-            if (!ExceptionType.IsInstanceOfType(filterContext.Exception))
-            {
-                return;
-            }
-
             // if the request is AJAX return JSON else view.
             if (filterContext.HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 filterContext.Result = new JsonResult
-                {
-                    JsonRequestBehavior = JsonRequestBehavior.AllowGet,
-                    Data = new
-                    {
-                        error = true,
-                        message = filterContext.Exception.Message
-                    }
-                };
+                                           {
+                                               JsonRequestBehavior = JsonRequestBehavior.AllowGet, 
+                                               Data =
+                                                   new
+                                                       {
+                                                           error = true, 
+                                                           message = filterContext.Exception.Message
+                                                       }
+                                           };
             }
             else
             {
-                var controllerName = (string)filterContext.RouteData.Values["controller"];
-                var actionName = (string)filterContext.RouteData.Values["action"];
-                var model = new HandleErrorInfo(filterContext.Exception, controllerName, actionName);
-
-                filterContext.Result = new ViewResult
-                {
-                    ViewName = View,
-                    MasterName = Master,
-                    ViewData = new ViewDataDictionary<HandleErrorInfo>(model),
-                    TempData = filterContext.Controller.TempData
-                };
+                filterContext.Result =
+                    new RedirectToRouteResult(
+                        new RouteValueDictionary { { "controller", "Error" }, { "action", "Index" } });
             }
 
             // log the error 
-            _logger.Error(filterContext.Exception.Message, filterContext.Exception);
+            this.logger.Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();
@@ -66,5 +93,7 @@ namespace WB.UI.Designer.Code.Exceptions
 
             filterContext.HttpContext.Response.TrySkipIisCustomErrors = true;
         }
+
+        #endregion
     }
 }
