@@ -85,34 +85,23 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
         {
-            var questionCommand = command as FullQuestionDataCommand;
-
-            if (questionCommand != null)
+            if (command is FullQuestionDataCommand)
             {
-                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                    questionCommand.Condition, questionCommand.QuestionnaireId);
+                var questionCommand = (FullQuestionDataCommand)command;
 
-                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                    questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
-                return;
+                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
+
+                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
             }
 
-            var newGroupCommand = command as NewAddGroupCommand;
 
-            if (newGroupCommand != null)
+            if (command is FullGroupDataCommand)
             {
-                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                    newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
-                return;
+                var newGroupCommand = (FullGroupDataCommand) command;
+                
+                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
             }
 
-            var editGroupCommand = command as NewUpdateGroupCommand;
-
-            if (editGroupCommand != null)
-            {
-                editGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                    editGroupCommand.Condition, editGroupCommand.QuestionnaireId);
-            }
         }
     }
 }
