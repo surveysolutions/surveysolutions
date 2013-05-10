@@ -31,9 +31,9 @@ namespace Main.Core.Utility.OrderStrategy
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
         /// </returns>
-        public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
+        public IEnumerable<T> Reorder<T>(IEnumerable<T> list) where T : IAnswer
         {
-            return list.OrderBy(n => (n as Answer).AnswerValue);
+            return list.OrderBy(n => n.AnswerValue);
         }
 
         #endregion

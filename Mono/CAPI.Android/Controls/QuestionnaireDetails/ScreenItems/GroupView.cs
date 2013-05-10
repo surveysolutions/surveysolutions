@@ -62,6 +62,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 GroupButton.Text = Model.Text;
                 GroupButton.Enabled = Model.Enabled;
                 GroupButton.Click += new EventHandler(GroupButton_Click);
+                
                 if (IconId.HasValue)
                 {
                     var img = Context.Resources.GetDrawable(IconId.Value);
@@ -79,7 +80,12 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             }
             
         }
-
+        protected override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+            if (Model != null)
+                GroupButton.Enabled = Model.Enabled;
+        }
         void Model_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if(e.PropertyName!="Enabled")
