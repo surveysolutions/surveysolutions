@@ -47,11 +47,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IDenormalizerStorage.cs">
       <Link>IDenormalizerStorage.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IFilterableDenormalizerStorage.cs">
+      <Link>IFilterableDenormalizerStorage.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\InMemoryDenormalizer.cs">
       <Link>InMemoryDenormalizer.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IPersistentStorage.cs">
       <Link>IPersistentStorage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\IQueryableDenormalizerStorage.cs">
+      <Link>IQueryableDenormalizerStorage.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.DenormalizerStorage\SmartDenormalizerAttribute.cs">
       <Link>SmartDenormalizerAttribute.cs</Link>

@@ -24,7 +24,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<UserDocument> documentItemSession;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Main.Core.View.User
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public UserBrowseViewFactory(IDenormalizerStorage<UserDocument> documentItemSession)
+        public UserBrowseViewFactory(IQueryableDenormalizerStorage<UserDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

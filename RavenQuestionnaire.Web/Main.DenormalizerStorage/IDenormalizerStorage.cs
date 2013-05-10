@@ -12,10 +12,6 @@ namespace Main.DenormalizerStorage
 
         TView GetById(Guid id);
 
-        IQueryable<TView> Query();
-
-        IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr);
-
         void Remove(Guid id);
 
         void Store(TView view, Guid id);

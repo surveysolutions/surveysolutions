@@ -36,7 +36,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
             if (result == null)
             {
                 GenerateEvents(input.QuestionnaireId);
-                result = this._documentStorage.GetByGuid(input.QuestionnaireId);
+                result = this._documentStorage.GetById(input.QuestionnaireId);
             }
             return result;
         }

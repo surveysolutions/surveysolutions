@@ -1,19 +1,20 @@
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+
 namespace Main.DenormalizerStorage
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Linq.Expressions;
-
-    public class InMemoryDenormalizer<T> : IDenormalizerStorage<T>
-        where T : class
+    public class InMemoryDenormalizer<TView> : IQueryableDenormalizerStorage<TView>
+        where TView : class
     {
-        private readonly ConcurrentDictionary<Guid, T> _hash;
+        private readonly ConcurrentDictionary<Guid, TView> _hash;
 
         public InMemoryDenormalizer()
         {
-            this._hash = new ConcurrentDictionary<Guid, T>();
+            this._hash = new ConcurrentDictionary<Guid, TView>();
         }
 
         public int Count()
@@ -21,7 +22,7 @@ namespace Main.DenormalizerStorage
             return this._hash.Count;
         }
 
-        public T GetById(Guid id)
+        public TView GetById(Guid id)
         {
             if (!this._hash.ContainsKey(id))
             {
@@ -31,23 +32,23 @@ namespace Main.DenormalizerStorage
             return this._hash[id];
         }
 
-        public IQueryable<T> Query()
+        public IQueryable<TView> Query()
         {
             return this._hash.Values.AsQueryable();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
             return this._hash.Values.Where(predExpr.Compile());
         }
 
         public void Remove(Guid id)
         {
-            T val;
+            TView val;
             this._hash.TryRemove(id, out val);
         }
 
-        public void Store(T view, Guid id)
+        public void Store(TView view, Guid id)
         {
             if (this._hash.ContainsKey(id))
             {

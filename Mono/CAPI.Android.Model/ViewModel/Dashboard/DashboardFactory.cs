@@ -8,11 +8,11 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     public class DashboardFactory : IViewFactory<DashboardInput, DashboardModel>
     {
 
-       private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
-        private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
+        private readonly IFilterableDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
+        private readonly IFilterableDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
 
-        public DashboardFactory(IDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
-            IDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
+        public DashboardFactory(IFilterableDenormalizerStorage<QuestionnaireDTO> questionnaireDTOdocumentStorage,
+            IFilterableDenormalizerStorage<SurveyDto> surveyDTOdocumentStorage
             )
         {
             _questionnaireDTOdocumentStorage = questionnaireDTOdocumentStorage;
@@ -40,7 +40,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
                                        ));
             }
             return result;
-            // return _documentStorage.GetByGuid(input.UserId);
+            // return _documentStorage.GetById(input.UserId);
             // return _documentStorage.Query().First();
 
         }

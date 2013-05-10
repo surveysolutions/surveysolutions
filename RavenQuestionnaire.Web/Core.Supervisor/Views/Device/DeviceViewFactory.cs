@@ -25,7 +25,7 @@ namespace Core.Supervisor.Views.Device
         /// <summary>
         /// Devices field devices
         /// </summary>
-        private readonly IDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Core.Supervisor.Views.Device
         /// <param name="devices">
         /// The devices.
         /// </param>
-        public DeviceViewFactory(IDenormalizerStorage<SyncDeviceRegisterDocument> devices)
+        public DeviceViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }

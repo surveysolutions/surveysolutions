@@ -17,8 +17,8 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class PersistentDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
-        where T : class
+    public class PersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
+        where TView : class
     {
         #region Fields
 
@@ -73,7 +73,7 @@ namespace Main.DenormalizerStorage
         /// <returns>
         /// The T.
         /// </returns>
-        public T GetById(Guid id)
+        public TView GetById(Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -84,10 +84,10 @@ namespace Main.DenormalizerStorage
                     // Obtain an instance of a data 
                     // object from the cache of 
                     // of weak reference objects.
-                    T retval;
+                    TView retval;
                     if (!this._hash.Contains(id.ToString()))
                     {
-                        retval = this._storage.GetByGuid<T>(id.ToString());
+                        retval = this._storage.GetByGuid<TView>(id.ToString());
                         if (retval == null)
                             throw new InvalidOperationException(
                                 "key was present in bag but objects is missing in both caches");
@@ -103,7 +103,7 @@ namespace Main.DenormalizerStorage
                     else
                     {
                       //  retval = (_hash[key].Target as WeakDisposable<T>).Data as T;
-                        retval = _hash[id.ToString()] as T;
+                        retval = _hash[id.ToString()] as TView;
                     }
                     return retval;
                 }
@@ -120,13 +120,13 @@ namespace Main.DenormalizerStorage
         /// <returns>
         /// The System.Linq.IQueryable`1[T -&gt; T].
         /// </returns>
-        public IQueryable<T> Query()
+        public IQueryable<TView> Query()
         {
             throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
             //    return this._hash.Values.AsQueryable();
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
             throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
         }
@@ -154,7 +154,7 @@ namespace Main.DenormalizerStorage
                     {
                         this._hash.Remove(id.ToString());
                     }
-                    this._storage.Remove<T>(id.ToString());
+                    this._storage.Remove<TView>(id.ToString());
                 }
             }
             finally
@@ -172,7 +172,7 @@ namespace Main.DenormalizerStorage
         /// <param name="id">
         /// The key.
         /// </param>
-        public void Store(T view, Guid id)
+        public void Store(TView view, Guid id)
         {
             bool lockWasTaken = false;
             var temp = _locker;
@@ -212,7 +212,7 @@ namespace Main.DenormalizerStorage
         {
             Guid key = Guid.Parse(arguments.CacheItem.Key);
           //  if (this._bag.Contains(key))
-                this._storage.Store<T>(arguments.CacheItem.Value as T, key.ToString());
+                this._storage.Store<TView>(arguments.CacheItem.Value as TView, key.ToString());
         }
 
         #region Implementation of IDisposable

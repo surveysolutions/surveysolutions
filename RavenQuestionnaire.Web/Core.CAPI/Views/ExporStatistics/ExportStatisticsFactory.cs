@@ -26,7 +26,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <summary>
         /// The store.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> store;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store;
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace Core.CAPI.Views.ExporStatistics
         /// <param name="store">
         /// The store.
         /// </param>
-        public ExportStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> store)
+        public ExportStatisticsFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> store)
         {
             this.store = store;
         }

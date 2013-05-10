@@ -25,7 +25,7 @@ namespace Main.Core.View.StatusReport
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.View.StatusReport
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public CQStatusReportFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public CQStatusReportFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

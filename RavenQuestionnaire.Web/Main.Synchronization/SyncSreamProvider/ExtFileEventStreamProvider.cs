@@ -8,7 +8,7 @@ namespace Main.Synchronization.SyncSreamProvider
     using Main.Core.Documents;
     using Main.Core.Events;
 
-    class ExtFileEventStreamProvider : IExtSyncEventStreamProvider
+    class ExtFileEventStreamProvider : ISyncEventStreamProvider
     {
         #region Implementation of ISyncEventStreamProvider
 

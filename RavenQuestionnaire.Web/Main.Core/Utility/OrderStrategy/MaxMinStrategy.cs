@@ -32,9 +32,9 @@ namespace Main.Core.Utility.OrderStrategy
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; T].
         /// </returns>
-        public IEnumerable<T> Reorder<T>(IEnumerable<T> list)
+        public IEnumerable<T> Reorder<T>(IEnumerable<T> list) where T : IAnswer
         {
-            return list.OrderByDescending(n => (n as Answer).AnswerValue).ToList();
+            return list.OrderByDescending(n => n.AnswerValue).ToList();
         }
 
         #endregion

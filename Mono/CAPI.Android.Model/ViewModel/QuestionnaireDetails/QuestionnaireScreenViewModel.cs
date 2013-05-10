@@ -44,7 +44,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
                     var group = item as QuestionnaireNavigationPanelItem;
                     if (group != null)
                     {
-                        Total = total + group.Total;
+                        Total += group.Total;
                         Answered = Answered + group.Answered;
                     }
                 }

@@ -21,10 +21,10 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
     /// <summary>
     /// The solid persistent denormalizer.
     /// </summary>
-    /// <typeparam name="T">
+    /// <typeparam name="TView">
     /// </typeparam>
-    public class SolidPersistentDenormalizer<T> : IDenormalizerStorage<T>, IDisposable
-        where T : class
+    public class SolidPersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
+        where TView : class
     {
         #region Fields
 
@@ -59,7 +59,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// </param>
         public SolidPersistentDenormalizer(IPersistentStorage storage)
         {
-            this._memoryhash = new MemoryCache(typeof(T).Name);
+            this._memoryhash = new MemoryCache(typeof(TView).Name);
             this._storage = storage;
 
             // this._hash = new ConcurrentDictionary<Guid, T>();
@@ -72,16 +72,16 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// <summary>
         /// Gets the hash.
         /// </summary>
-        protected ConcurrentDictionary<Guid, T> Hash
+        protected ConcurrentDictionary<Guid, TView> Hash
         {
             get
             {
                 if (this._memoryhash[this.HashKey] == null)
                 {
-                    var retval = this._storage.GetByGuid<ConcurrentDictionary<Guid, T>>(this.HashKey);
+                    var retval = this._storage.GetByGuid<ConcurrentDictionary<Guid, TView>>(this.HashKey);
                     if (retval == null)
                     {
-                        retval = new ConcurrentDictionary<Guid, T>();
+                        retval = new ConcurrentDictionary<Guid, TView>();
                     }
 
                     var policy = new CacheItemPolicy();
@@ -92,7 +92,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
                 }
                 else
                 {
-                    return this._memoryhash[this.HashKey] as ConcurrentDictionary<Guid, T>;
+                    return this._memoryhash[this.HashKey] as ConcurrentDictionary<Guid, TView>;
                 }
             }
         }
@@ -104,7 +104,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         {
             get
             {
-                return typeof(T).Name;
+                return typeof(TView).Name;
             }
         }
 
@@ -136,7 +136,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
                         if (this._memoryhash[this.HashKey] != null)
                         {
                             this._storage.Store(
-                                this._memoryhash[this.HashKey] as ConcurrentDictionary<Guid, T>, this.HashKey);
+                                this._memoryhash[this.HashKey] as ConcurrentDictionary<Guid, TView>, this.HashKey);
                         }
 
                         this._memoryhash.Dispose();
@@ -150,11 +150,11 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// The key.
         /// </param>
         /// <returns>
-        /// The <see cref="T"/>.
+        /// The <see cref="TView"/>.
         /// </returns>
-        public T GetById(Guid id)
+        public TView GetById(Guid id)
         {
-            T result = null;
+            TView result = null;
             this.ThreadSafe(
                 () =>
                     {
@@ -172,16 +172,16 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// <returns>
         /// The <see cref="IQueryable"/>.
         /// </returns>
-        public IQueryable<T> Query()
+        public IQueryable<TView> Query()
         {
-            IQueryable<T> result = null;
+            IQueryable<TView> result = null;
             this.ThreadSafe(() => { result = this.Hash.Values.AsQueryable(); });
             return result;
         }
 
-        public IEnumerable<T> Query(Expression<Func<T, bool>> predExpr)
+        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
         {
-            IEnumerable<T> result = null;
+            IEnumerable<TView> result = null;
             this.ThreadSafe(() => { result = this.Hash.Values.Where(predExpr.Compile()); });
             return result;
         }
@@ -197,7 +197,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
             this.ThreadSafe(
                 () =>
                     {
-                        T val;
+                        TView val;
                         this.Hash.TryRemove(id, out val);
                     });
         }
@@ -211,7 +211,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// <param name="id">
         /// The key.
         /// </param>
-        public void Store(T view, Guid id)
+        public void Store(TView view, Guid id)
         {
             this.ThreadSafe(
                 () =>
@@ -264,7 +264,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
         /// </param>
         private void weekDisposable_CacheEntryRemoved(CacheEntryRemovedArguments arguments)
         {
-            this._storage.Store(arguments.CacheItem.Value as ConcurrentDictionary<Guid, T>, this.HashKey);
+            this._storage.Store(arguments.CacheItem.Value as ConcurrentDictionary<Guid, TView>, this.HashKey);
         }
 
         #endregion
