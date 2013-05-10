@@ -85,16 +85,23 @@ namespace WB.UI.Designer.Controllers
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
         {
-            if (!(command is FullQuestionDataCommand))
-                return;
+            if (command is FullQuestionDataCommand)
+            {
+                var questionCommand = (FullQuestionDataCommand)command;
 
-            var questionCommand = (FullQuestionDataCommand) command;
+                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
 
-            questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                questionCommand.Condition, questionCommand.QuestionnaireId);
+                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+            }
 
-            questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+
+            if (command is FullGroupDataCommand)
+            {
+                var newGroupCommand = (FullGroupDataCommand) command;
+                
+                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
+            }
+
         }
     }
 }
