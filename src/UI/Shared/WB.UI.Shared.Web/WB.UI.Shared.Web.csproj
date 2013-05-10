@@ -80,9 +80,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
+      <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
+      <Name>Ncqrs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
+      <Project>{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}</Project>
+      <Name>WB.UI.Shared.Log</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
