@@ -73,6 +73,10 @@
       <Project>{7598c70b-5772-4ed5-81de-c0d7718bc164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Core\Questionnaire\WB.Core.Questionnaire\WB.Core.Questionnaire.csproj">
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
