@@ -55,24 +55,11 @@ namespace CAPI.Android
 
         #region Public Methods and Operators
 
-        public override void OnConfigurationChanged(Configuration newConfig)
+        protected override void OnStart()
         {
-            base.OnConfigurationChanged(newConfig);
-        }
-
-        /// <summary>
-        ///     The on create options menu.
-        /// </summary>
-        /// <param name="menu">
-        ///     The menu.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
+            base.OnStart();
             this.CreateActionBar();
-            return base.OnCreateOptionsMenu(menu);
+
         }
 
         #endregion
