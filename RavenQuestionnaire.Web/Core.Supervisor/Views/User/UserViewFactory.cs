@@ -70,7 +70,7 @@ namespace Core.Supervisor.Views.User
             }
 
             return
-                this.users.Query()
+                this.users.Query(_ => _
                     .Where(query)
                     .Select(
                         x =>
@@ -87,7 +87,7 @@ namespace Core.Supervisor.Views.User
                                 Password = x.Password, 
                                 Supervisor = x.Supervisor
                             })
-                    .FirstOrDefault();
+                    .FirstOrDefault());
         }
 
         #endregion

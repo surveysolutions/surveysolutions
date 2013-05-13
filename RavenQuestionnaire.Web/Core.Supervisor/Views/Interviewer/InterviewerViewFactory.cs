@@ -73,30 +73,36 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerView Load(InterviewerInputModel input)
         {
-            UserDocument user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.InterviwerId);
-            var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
-            IQueryable<CompleteQuestionnaireBrowseItem> docs =
-                this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
-            if (input.TemplateId.HasValue)
-            {
-                InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId.Value, docs, input);
-                if (interviewerGroupView.Items.Count > 0)
-                {
-                    items.Items.Add(interviewerGroupView);
-                }
-            }
-            else
-            {
-                IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
-                foreach (InterviewerGroupView interviewerGroupView in
-                    gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
-                        interviewerGroupView => interviewerGroupView.Items.Count > 0))
-                {
-                    items.Items.Add(interviewerGroupView);
-                }
-            }
+            UserDocument user = this.users.Query(_ => _.FirstOrDefault(u => u.PublicKey == input.InterviwerId));
 
-            return items;
+            return this.documentItemSession.Query(queryable =>
+            {
+                var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
+
+                IQueryable<CompleteQuestionnaireBrowseItem> docs =
+                    queryable.Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
+
+                if (input.TemplateId.HasValue)
+                {
+                    InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId.Value, docs, input);
+                    if (interviewerGroupView.Items.Count > 0)
+                    {
+                        items.Items.Add(interviewerGroupView);
+                    }
+                }
+                else
+                {
+                    IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
+                    foreach (InterviewerGroupView interviewerGroupView in
+                        gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
+                            interviewerGroupView => interviewerGroupView.Items.Count > 0))
+                    {
+                        items.Items.Add(interviewerGroupView);
+                    }
+                }
+
+                return items;
+            });
         }
 
         #endregion

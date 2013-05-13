@@ -85,34 +85,39 @@ namespace Core.Supervisor.Views.Summary
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 
-            var items = this.BuildItems((!input.TemplateId.HasValue
-                                             ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                                             : this.survey.Query().Where(
-                                                 x => x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
-                .GroupBy(x => x.Responsible))
-                .AsQueryable();
-
-            var retval = new SummaryView(input.Page, input.PageSize, 0, template);
-            if (input.Orders.Count > 0)
+            return this.survey.Query(queryableSurveys =>
             {
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? items.OrderBy(input.Orders[0].Field)
-                                                      : items.OrderByDescending(input.Orders[0].Field);
-            }
+                var groupedSurveys = queryableSurveys
+                    .Where(x =>
+                        !input.TemplateId.HasValue
+                        ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
+                        : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
+                    .GroupBy(x => x.Responsible);
 
-            retval.Summary = new SummaryViewItem(
-                new UserLight(Guid.Empty, "Summary"),
-                items.Sum(x => x.Total),
-                items.Sum(x => x.Initial),
-                items.Sum(x => x.Error),
-                items.Sum(x => x.Completed),
-                items.Sum(x => x.Approved),
-                items.Sum(x => x.Redo));
+                var items = this.BuildItems(groupedSurveys).AsQueryable();
 
-            retval.TotalCount = items.Count();
+                var retval = new SummaryView(input.Page, input.PageSize, 0, template);
+                if (input.Orders.Count > 0)
+                {
+                    items = input.Orders[0].Direction == OrderDirection.Asc
+                                                          ? items.OrderBy(input.Orders[0].Field)
+                                                          : items.OrderByDescending(input.Orders[0].Field);
+                }
 
-            retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-            return retval;
+                retval.Summary = new SummaryViewItem(
+                    new UserLight(Guid.Empty, "Summary"),
+                    items.Sum(x => x.Total),
+                    items.Sum(x => x.Initial),
+                    items.Sum(x => x.Error),
+                    items.Sum(x => x.Completed),
+                    items.Sum(x => x.Approved),
+                    items.Sum(x => x.Redo));
+
+                retval.TotalCount = items.Count();
+
+                retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+                return retval;
+            });
         }
 
         /// <summary>

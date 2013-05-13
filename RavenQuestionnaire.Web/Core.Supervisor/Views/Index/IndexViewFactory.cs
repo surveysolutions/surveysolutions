@@ -96,10 +96,11 @@ namespace Core.Supervisor.Views.Index
                 responsibleList = this.users.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
             }
 
-            var all = this.stat.Query()
+            var all = this.stat.Query(_ => _
                 .Where(s => s.Surveys.Count > 0)
                 .Where(x => responsibleList.Contains(x.User.Id))
-                .GroupBy(s => s.Template).ToDictionary(s => s.Key, s => s.ToList());
+                .GroupBy(s => s.Template)
+                .ToDictionary(s => s.Key, s => s.ToList()));
 
             var items = BuildStatItems(all, input);
 
