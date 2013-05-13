@@ -71,7 +71,7 @@ namespace Core.Supervisor.Views.User
             return this.users.Query(queryable =>
             {
                 var queryResult =
-                    this.users.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+                    queryable.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
                 var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
                                                 .Take(input.PageSize)
