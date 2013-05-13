@@ -32,7 +32,7 @@ namespace CAPI.Android
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi",
+    [Activity(Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
@@ -66,19 +66,11 @@ namespace CAPI.Android
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The on create options menu.
-        /// </summary>
-        /// <param name="menu">
-        /// The menu.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        protected override void OnStart()
         {
+            base.OnStart();
             this.CreateActionBar();
-            return base.OnCreateOptionsMenu(menu);
+
         }
 
         #endregion
@@ -118,7 +110,8 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                this.StartActivity(typeof(DashboardActivity));
+                this.ClearAllBackStack<DashboardActivity>();
+             
                 /*restore = () =>
                     {
                         CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
