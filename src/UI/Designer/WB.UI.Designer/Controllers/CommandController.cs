@@ -6,6 +6,7 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
 
+    using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
@@ -78,17 +79,20 @@ namespace WB.UI.Designer.Controllers
         }
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
-        {
-            if (!(command is FullQuestionDataCommand))
-                return;
-
-            var questionCommand = (FullQuestionDataCommand) command;
-
-            questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                questionCommand.Condition, questionCommand.QuestionnaireId);
-
-            questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(
-                questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
-        }
+         {
+            if (command is FullQuestionDataCommand)
+            {
+                var questionCommand = (FullQuestionDataCommand)command;
+                questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
+                questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
+             }
+ 
+            if (command is FullGroupDataCommand)
+            {
+                var newGroupCommand = (FullGroupDataCommand)command;
+                
+                newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
+             } 
+         }
     }
 }
