@@ -90,6 +90,7 @@
     <Compile Include="DenormalizerStorageItem\SupervisorStatisticsItem.cs" />
     <Compile Include="Denormalizer\SupervisorStatisticsDenormalizer.cs" />
     <Compile Include="Denormalizer\SyncProcessDenormalizer.cs" />
+    <Compile Include="Views\Assignment\DocumentViewListFactory.cs" />
     <Compile Include="Views\BaseUserViewFactory.cs" />
     <Compile Include="Views\Survey\ScreenKey.cs" />
     <Compile Include="Views\Survey\SurveyAnswer.cs" />
@@ -135,7 +136,6 @@
     <Compile Include="Views\Assignment\AssignmentInputModel.cs" />
     <Compile Include="Views\Assignment\AssignmentViewItem.cs" />
     <Compile Include="Views\Assignment\AssignmentView.cs" />
-    <Compile Include="Views\Assignment\AssignmentViewFactory.cs" />
     <Compile Include="Views\Index\IndexViewFactory.cs" />
     <Compile Include="Views\Index\IndexInputModel.cs" />
     <Compile Include="Views\Status\StatusView.cs" />
