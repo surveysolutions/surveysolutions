@@ -57,18 +57,21 @@ namespace Core.Supervisor.Views.Device
         /// </returns>
         public DeviceView Load(DeviceViewInputModel input)
         {
-            int count = this.devices.Query()
+            int count = this.devices.Query(_ => _
                 .Where(d => d.Registrator != Guid.Empty)
-                .Where(d => d.Registrator == input.RegistratorId).Count();
+                .Where(d => d.Registrator == input.RegistratorId).Count());
 
             if (count == 0)
             {
                 return new DeviceView(0, 0, 0, new List<RegisterData>(), string.Empty);
             }
 
-            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
-            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            var items = page.ToList();
+            List<SyncDeviceRegisterDocument> items = this.devices.Query(queryable =>
+            {
+                IQueryable<SyncDeviceRegisterDocument> query = queryable.Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
+                var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+                return page.ToList();
+            });
             var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.CreationDate, RegistrationId = item.PublicKey, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
             return new DeviceView(input.Page, input.PageSize, count, devices, input.Order);
         }

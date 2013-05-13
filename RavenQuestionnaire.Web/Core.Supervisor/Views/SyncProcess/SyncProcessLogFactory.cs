@@ -9,6 +9,7 @@
 
 namespace Core.Supervisor.Views.SyncProcess
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
@@ -56,8 +57,8 @@ namespace Core.Supervisor.Views.SyncProcess
         /// </returns>
         public SyncProcessLogView Load(SyncProcessLogInputModel input)
         {
-            IQueryable<SyncProcessStatisticsDocument> processes =
-                this.docs.Query().OrderByDescending(p => p.CreationDate);
+            IEnumerable<SyncProcessStatisticsDocument> processes =
+                this.docs.Query(_ => _.OrderByDescending(p => p.CreationDate).ToList());
 
             return new SyncProcessLogView(processes);
         }

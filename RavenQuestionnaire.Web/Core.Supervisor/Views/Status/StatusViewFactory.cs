@@ -64,15 +64,25 @@ namespace Core.Supervisor.Views.Status
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
+            List<TemplateLight> headers = this.surveys.Query(_ => _.Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList());
 
-            var items = this.BuildItems(
-                    (status.PublicId == SurveyStatus.Unknown.PublicId
-                         ? this.surveys.Query().Where(
-                             x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                         : this.surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
-                                                 && (x.Status.PublicId == status.PublicId))).GroupBy(x => x.Responsible),
-                headers).AsQueryable();
+            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
+                this.surveys.Query(_ => _
+                    .Where(x => 
+                        status.PublicId == SurveyStatus.Unknown.PublicId
+                        ? (
+                            x.Responsible != null 
+                            && interviewers.Contains(x.Responsible.Id)
+                        )
+                        : (
+                            x.Responsible != null 
+                            && interviewers.Contains(x.Responsible.Id) 
+                            && x.Status.PublicId == status.PublicId
+                        ))
+                    .GroupBy(x => x.Responsible)
+                    .ToList());
+
+            var items = this.BuildItems(groupedSurveys, headers).AsQueryable();
 
             var retval = new StatusView(input.Page, input.PageSize, 0, status, headers);
             if (input.Orders.Count == 0)
@@ -144,7 +154,7 @@ namespace Core.Supervisor.Views.Status
         /// <returns>
         /// The build items.
         /// </returns>
-        protected IEnumerable<StatusViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
+        protected IEnumerable<StatusViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
         {
             return from templateGroup in grouped
                    let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count())

@@ -47,10 +47,10 @@ namespace Core.Supervisor.Views.DenormalizerStorageExtensions
                 return Enumerable.Empty<UserDocument>();
 
             if (viewer.IsHq())
-                return users.Query().Where(u => u.IsInterviewer() || u.IsSupervisor());
+                return users.Query(_ => _.Where(u => u.IsInterviewer() || u.IsSupervisor()).ToList());
             else if (viewer.IsSupervisor())
                 return
-                    users.Query().Where(u => (u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey);
+                    users.Query(_ => _.Where(u => (u.IsInterviewer() && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey).ToList());
 
             throw new ArgumentException(
                 string.Format("Operation is allowed only for ViewerId and Hq users. Current viewer rolse is {0}",
