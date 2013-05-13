@@ -1,12 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="StatusViewFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-using Core.Supervisor.Views.DenormalizerStorageExtensions;
-
-namespace Core.Supervisor.Views.Status
+﻿namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -19,58 +11,31 @@ namespace Core.Supervisor.Views.Status
     using Main.Core.View.CompleteQuestionnaire;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class StatusViewFactory : IViewFactory<StatusViewInputModel, StatusView>
+    public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _surveys;
 
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusViewFactory"/> class.
-        /// </summary>
-        /// <param name="surveys">
-        /// The surveys.
-        /// </param>
-        /// <param name="users">
-        /// The users.
-        /// </param>
         public StatusViewFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
-            this.surveys = surveys;
+            this._surveys = surveys;
             this.users = users;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// </returns>
         public StatusView Load(StatusViewInputModel input)
         {
-            var interviewers = this.users.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
+            var headers = this._surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
 
             var items = this.BuildItems(
                     (status.PublicId == SurveyStatus.Unknown.PublicId
-                         ? this.surveys.Query().Where(
+                         ? this._surveys.Query().Where(
                              x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                         : this.surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
+                         : this._surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
                                                  && (x.Status.PublicId == status.PublicId))).GroupBy(x => x.Responsible),
                 headers).AsQueryable();
 
@@ -93,18 +58,6 @@ namespace Core.Supervisor.Views.Status
             return retval;
         }
 
-        /// <summary>
-        /// Value order
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <param name="field">
-        /// The field.
-        /// </param>
-        /// <returns>
-        /// Field value
-        /// </returns>
         private object GetOrderValue(StatusViewItem item, string field)
         {
             if (field == "Title")
@@ -132,18 +85,6 @@ namespace Core.Supervisor.Views.Status
             return item.User.Name;
         }
 
-        /// <summary>
-        /// Builds items
-        /// </summary>
-        /// <param name="grouped">
-        /// The grouped.
-        /// </param>
-        /// <param name="headers">
-        /// The list of templates
-        /// </param>
-        /// <returns>
-        /// The build items.
-        /// </returns>
         protected IEnumerable<StatusViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
         {
             return from templateGroup in grouped

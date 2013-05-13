@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="DeviceViewFactory.cs" company="WorldBank">
-// 2012
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Device
+﻿namespace Core.Supervisor.Views.Device
 {
     using System;
     using System.Collections.Generic;
@@ -15,51 +9,19 @@ namespace Core.Supervisor.Views.Device
     using Main.Core.View;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
     public class DeviceViewFactory : IViewFactory<DeviceViewInputModel, DeviceView>
     {
-        #region Field
-
-        /// <summary>
-        /// Devices field devices
-        /// </summary>
         private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices;
 
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DeviceViewFactory"/> class.
-        /// </summary>
-        /// <param name="devices">
-        /// The devices.
-        /// </param>
         public DeviceViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Find device from storage in memory
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// return DeviceView
-        /// </returns>
         public DeviceView Load(DeviceViewInputModel input)
         {
             int count = this.devices.Query()
-                .Where(d => d.Registrator != Guid.Empty)
-                .Where(d => d.Registrator == input.RegistratorId).Count();
+                            .Where(d => d.Registrator != Guid.Empty).Count(d => d.Registrator == input.RegistratorId);
 
             if (count == 0)
             {
@@ -72,7 +34,5 @@ namespace Core.Supervisor.Views.Device
             var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.CreationDate, RegistrationId = item.PublicKey, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
             return new DeviceView(input.Page, input.PageSize, count, devices, input.Order);
         }
-
-        #endregion
     }
 }

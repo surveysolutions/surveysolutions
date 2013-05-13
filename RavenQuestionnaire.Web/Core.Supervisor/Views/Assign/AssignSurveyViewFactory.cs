@@ -2,29 +2,26 @@ using System.Linq;
 using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
-using Core.Supervisor.Views.DenormalizerStorageExtensions;
 
 namespace Core.Supervisor.Views.Assign
 {
-    public class AssignSurveyViewFactory : IViewFactory<AssignSurveyInputModel, AssignSurveyView>
+    public class AssignSurveyViewFactory : BaseUserViewFactory, IViewFactory<AssignSurveyInputModel, AssignSurveyView> 
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _surveys;
 
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-
-        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store, IQueryableDenormalizerStorage<UserDocument> users)
+        public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
-            this.store = store;
+            this._surveys = surveys;
             this.users = users;
         }
 
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
-            var q = this.store.GetById(input.CompleteQuestionnaireId);
+            var q = this._surveys.GetById(input.CompleteQuestionnaireId);
 
             var view = new AssignSurveyView(q)
                 {
-                    Supervisors = this.users.GetSupervisorsListForViewer(input.ViewerId).ToList()
+                    Supervisors = this.GetSupervisorsListForViewer(input.ViewerId).ToList()
                 };
 
             return view;

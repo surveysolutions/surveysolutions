@@ -1,17 +1,5 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignmentViewFactory.cs" company="">
-//   
-// </copyright>
-// <summary>
-//   The survey group view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Core.Supervisor.Views.DenormalizerStorageExtensions;
-
 namespace Core.Supervisor.Views.Assignment
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -25,68 +13,29 @@ namespace Core.Supervisor.Views.Assignment
 
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// The survey group view factory.
-    /// </summary>
-    public class AssignmentViewFactory : IViewFactory<AssignmentInputModel, AssignmentView>
+    public class AssignmentViewFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
     {
-        #region Constants and Fields
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _surveys;
 
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> _templates;
 
-        /// <summary>
-        /// The templates.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
-
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignmentViewFactory"/> class.
-        /// </summary>
-        /// <param name="surveys">
-        /// The document item session.
-        /// </param>
         public AssignmentViewFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
             IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
             IQueryableDenormalizerStorage<UserDocument> users)
+            : base(users)
         {
-            this.surveys = surveys;
-            this.templates = templates;
-            this.users = users;
+            this._surveys = surveys;
+            this._templates = templates;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Survey.AssignmentView.
-        /// </returns>
         public AssignmentView Load(AssignmentInputModel input)
         {
-            var responsibleList = users.GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
+            var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
             var view = new AssignmentView(input.Page, input.PageSize, 0);
             view.Template = !input.TemplateId.HasValue
                                 ? null
-                            : this.templates.GetById(input.TemplateId.Value).GetTemplateLight();
+                            : this._templates.GetById(input.TemplateId.Value).GetTemplateLight();
 
             view.User = !input.InterviewerId.HasValue
                             ? null
@@ -100,8 +49,8 @@ namespace Core.Supervisor.Views.Assignment
             }
             #warning need to be filtered by responsible supervisr
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
-                                                                     ? this.surveys.Query()
-                                                                     : this.surveys.Query()
+                                                                     ? this._surveys.Query()
+                                                                     : this._surveys.Query()
                                                                            .Where(
                                                                                v =>
                                                                                v.Status.PublicId == view.Status.PublicId))
@@ -134,27 +83,11 @@ namespace Core.Supervisor.Views.Assignment
                 items = this.DefineOrderBy(items, input);
             }
 
-            view.SetItems(items.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize));
+            view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
 
             return view;
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The define order by.
-        /// </summary>
-        /// <param name="query">
-        /// The query.
-        /// </param>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The System.Linq.IQueryable`1[T -&gt; RavenQuestionnaire.Core.Views.CompleteQuestionnaire.CompleteQuestionnaireBrowseItem].
-        /// </returns>
         private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(
             IQueryable<CompleteQuestionnaireBrowseItem> query, AssignmentInputModel input)
         {
@@ -200,7 +133,5 @@ namespace Core.Supervisor.Views.Assignment
 
             return query;
         }
-
-        #endregion
     }
 }

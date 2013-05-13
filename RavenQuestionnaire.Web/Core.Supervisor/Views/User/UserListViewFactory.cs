@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserListViewFactory.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Core.Supervisor.Views.User
+﻿namespace Core.Supervisor.Views.User
 {
     using System;
     using System.Linq;
@@ -14,46 +9,15 @@ namespace Core.Supervisor.Views.User
     using Main.Core.View;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    ///     The user list view factory.
-    /// </summary>
     public class UserListViewFactory : IViewFactory<UserListViewInputModel, UserListView>
     {
-        #region Fields
-
-        /// <summary>
-        ///     The accounts.
-        /// </summary>
         private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserListViewFactory"/> class.
-        /// </summary>
-        /// <param name="users">
-        /// The users.
-        /// </param>
         public UserListViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.users = users;
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The <see cref="UserListView"/>.
-        /// </returns>
+        
         public UserListView Load(UserListViewInputModel input)
         {
             var hasRole = input.Role != UserRoles.Undefined;
@@ -86,7 +50,5 @@ namespace Core.Supervisor.Views.User
 
             return new UserListView(input.Page, input.PageSize, queryResult.Count(), retVal, input.Order);
         }
-
-        #endregion
     }
 }
