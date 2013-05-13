@@ -40,14 +40,7 @@
 
         public IQueryable<TView> Query()
         {
-            #warning TLK: this is incorrect because session is already closed when we return IQueryable
-
-            using (IDocumentSession session = this.ravenStore.OpenSession())
-            {
-                return session
-                    .Query<TView>()
-                    .Customize(customization => customization.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout)));
-            }
+            throw new NotImplementedException();
         }
 
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
