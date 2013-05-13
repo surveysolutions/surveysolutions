@@ -102,7 +102,6 @@
                     <th class="sorting" role="columnheader" sorter='{"key": "@item.Key"}'><span>@item.Value</span>
                     </th>
                 }
-                <td style="width: 90px;">Export Data</td>
             </tr>
         </thead>
         <tbody>
@@ -146,14 +145,7 @@
                         }
 
                     }
-                    <td>
-                        <div class="btn-group">
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "csv" })">
-                                CSV</a>
-                            <a class="btn  btn-small btn-success" href="@Url.Action("GetExportedData", "ImportExport", new { id = collect.Id, type = "tab" })">
-                                TAB</a>
-                        </div>
-                    </td>
+                   
                 </tr>
             }
             <tr>
@@ -164,7 +156,6 @@
                         @Model.Headers.GetItemValue(Model.Summary, it.Key)
                     </th>
                 }
-                <th></th>
             </tr>
         </tbody>
     </table>
