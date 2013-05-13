@@ -13,14 +13,13 @@ namespace Web.Supervisor.Controllers
 
     using Main.Core.Documents;
     using Main.Core.Utility;
-
-    using NLog;
-
+    
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
+    using WB.UI.Shared.Log;
 
     using Web.Supervisor.DesignerPublicService;
     using Web.Supervisor.Models;
@@ -42,8 +41,11 @@ namespace Web.Supervisor.Controllers
         /// <param name="globalInfo">
         /// The global info.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo)
-            : base(null, commandService, globalInfo)
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+            : base(null, commandService, globalInfo, logger)
         {
         }
 
@@ -109,7 +111,7 @@ namespace Web.Supervisor.Controllers
                 catch (Exception e)
                 {
                     this.ViewBag.ErrorMessage = "Could not download template from designer. Please, try again later";
-                    LogManager.GetCurrentClassLogger().Fatal("Error on import from designer ", e);
+                    Logger.Fatal("Error on import from designer ", e);
                 }
             }
 

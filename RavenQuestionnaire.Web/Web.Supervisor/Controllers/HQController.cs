@@ -32,11 +32,10 @@ namespace Web.Supervisor.Controllers
 
     using Ncqrs.Commanding.ServiceModel;
 
-    using NLog;
-
     using Questionnaire.Core.Web.Helpers;
 
-    using Web.Supervisor.DesignerPublicService;
+    using WB.UI.Shared.Log;
+
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;
 
@@ -50,8 +49,8 @@ namespace Web.Supervisor.Controllers
     public class HQController : BaseController
     {
         public HQController(
-            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider)
-            : base(viewRepository, commandService, provider)
+            IViewRepository viewRepository, ICommandService commandService, IGlobalInfoProvider provider, ILog logger)
+            : base(viewRepository, commandService, provider, logger)
         {
         }
 
@@ -93,8 +92,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
 
@@ -117,8 +115,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -139,8 +136,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                Logger logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return this.Json(new { status = "error", error = e.Message });
             }
 
@@ -220,8 +216,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return Json(new { status = "error", error = e.Message }, JsonRequestBehavior.AllowGet);
             }
             return Json(new { status = "ok" }, JsonRequestBehavior.AllowGet);
@@ -432,8 +427,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception e)
             {
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.Fatal(e);
+                Logger.Fatal(e);
                 return Json(new { status = "error", questionPublicKey = question.PublicKey, settings = settings[0], error = e.Message },
                             JsonRequestBehavior.AllowGet);
             }
