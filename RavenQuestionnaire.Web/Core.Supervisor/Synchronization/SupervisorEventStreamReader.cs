@@ -124,22 +124,18 @@ namespace Core.Supervisor.Synchronization
             //return null;
         }
 
-       
-
         private List<Guid> GetFiles()
         {
-            IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
-            
-            return model.Select(m => Guid.Parse(m.FileName)).ToList();
+            return this.denormalizer.Query<FileDescription, List<Guid>>(_ => _
+                .Select(m => Guid.Parse(m.FileName)).ToList());
         }
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> model = 
-                this.denormalizer.Query<CompleteQuestionnaireBrowseItem>()
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id));
-            
-            return model.Select(i => i.CompleteQuestionnaireId).ToList();
+            return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
+                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id))
+                .Select(i => i.CompleteQuestionnaireId)
+                .ToList());
         }
 
         private List<Guid> GetUsers()
