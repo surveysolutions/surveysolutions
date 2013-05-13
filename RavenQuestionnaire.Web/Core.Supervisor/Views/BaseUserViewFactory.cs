@@ -16,11 +16,24 @@ namespace Core.Supervisor.Views
         {
             this.users = users;
         }
+
+        protected bool IsHq(Guid viewerId)
+        {
+            var viewer = users.GetById(viewerId);
+            return IsHq(viewer);
+        }
+
         protected bool IsHq(UserDocument viewer)
         {
             if (viewer.Roles.Contains(UserRoles.Headquarter))
                 return true;
             return false;
+        }
+
+        protected bool IsSupervisor(Guid viewerId)
+        {
+            var viewer = users.GetById(viewerId);
+            return IsSupervisor(viewer);
         }
 
         protected bool IsSupervisor(UserDocument viewer)

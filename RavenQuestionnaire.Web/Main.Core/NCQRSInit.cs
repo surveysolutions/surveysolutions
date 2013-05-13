@@ -83,7 +83,7 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             
-            var store = InitializeEventStore(kernel.Get<DocumentStore>(), 50);
+            var store = InitializeEventStore(kernel.Get<DocumentStore>(), 1024);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 

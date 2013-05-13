@@ -13,13 +13,13 @@ namespace Core.Supervisor.Views.Assignment
 
     using Main.DenormalizerStorage;
 
-    public class AssignmentViewFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
+    public class DocumentViewListFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
     {
         private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _surveys;
 
         private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> _templates;
 
-        public AssignmentViewFactory(
+        public DocumentViewListFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
             IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
             IQueryableDenormalizerStorage<UserDocument> users)
@@ -33,6 +33,11 @@ namespace Core.Supervisor.Views.Assignment
         {
             var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
             var view = new AssignmentView(input.Page, input.PageSize, 0);
+
+            view.AssignableUsers = this.IsHq(input.ViewerId) 
+                ? this.GetSupervisorsListForViewer(input.ViewerId) 
+                : this.GetInterviewersListForViewer(input.ViewerId);
+
             view.Template = !input.TemplateId.HasValue
                                 ? null
                             : this._templates.GetById(input.TemplateId.Value).GetTemplateLight();
@@ -84,6 +89,7 @@ namespace Core.Supervisor.Views.Assignment
             }
 
             view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
+
 
             return view;
         }

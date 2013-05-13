@@ -182,15 +182,14 @@ namespace Web.Supervisor.Controllers
         public ActionResult Documents(Guid? templateId, Guid? interviewerId, Guid? status, bool? isNotAssigned)
         {
             ViewBag.ActivePage = MenuItem.Docs;
-            var inputModel = new AssignmentInputModel(GlobalInfo.GetCurrentUser().Id,
+            var user = this.GlobalInfo.GetCurrentUser();
+            var inputModel = new AssignmentInputModel(user.Id,
                                        templateId,
                                        interviewerId, null, null, null,
                                        status,
                                        isNotAssigned ?? false);
-            var user = this.GlobalInfo.GetCurrentUser();
             var model = this.Repository.Load<AssignmentInputModel, AssignmentView>(inputModel);
-            var users = this.Repository.Load<InterviewersInputModel, InterviewersView>(new InterviewersInputModel { ViewerId = user.Id });
-            ViewBag.Users = new SelectList(users.Items, "QuestionnaireId", "Login");
+            ViewBag.Users = new SelectList(model.AssignableUsers, "PublicKey", "UserName");
             return this.View(model);
         }
 
