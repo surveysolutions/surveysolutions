@@ -3,6 +3,9 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Utility;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -87,7 +90,7 @@ namespace Web.Supervisor.Controllers
                     new CreateUserCommand(
                         publicKey: Guid.NewGuid(), 
                         userName: model.Name, 
-                        password: model.Password, 
+                        password: SimpleHash.ComputeHash(model.Password), 
                         email: model.Email, 
                         isLocked: false, 
                         roles: new[] { UserRoles.Operator }, 
@@ -127,7 +130,7 @@ namespace Web.Supervisor.Controllers
                     new CreateUserCommand(
                         publicKey: Guid.NewGuid(),
                         userName: model.Name,
-                        password: model.Password,
+                        password: SimpleHash.ComputeHash(model.Password),
                         email: model.Email,
                         isLocked: false,
                         roles: new[] { UserRoles.Supervisor },
