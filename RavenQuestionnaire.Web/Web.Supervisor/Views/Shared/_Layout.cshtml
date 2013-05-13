@@ -52,6 +52,8 @@
                                data-toggle="collapse" data-target=".nav-collapse"><span class="icon-bar"></span>
                                 <span class="icon-bar"></span><span class="icon-bar"></span></a>
                             <ul id="menu" class="nav" role="menu">
+                                 <li class="@(page == MenuItem.Surveys ? "active" : "")" ><a href="@Url.Action("Surveys", "HQ")">
+                                                                                             <i class="icon-filter"></i>by Interviewers</a> </li>
                                 <li class="@(page == MenuItem.Interviewers ? "active" : "")"><a href="@Url.Action("Summary", "HQ")">
                                                                                                  <i class="icon-filter"></i>by Surveys</a> </li>
                                 <li class="@(page == MenuItem.Statuses ? "active" : "")"><a href="@Url.Action("Status", "HQ")">
