@@ -49,5 +49,17 @@
                     .Customize(customization => customization.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout)));
             }
         }
+
+        public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
+        {
+            using (IDocumentSession session = this.ravenStore.OpenSession())
+            {
+                return query.Invoke(
+                    session
+                        .Query<TView>()
+                        .Customize(customization
+                            => customization.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout))));
+            }
+        }
     }
 }
