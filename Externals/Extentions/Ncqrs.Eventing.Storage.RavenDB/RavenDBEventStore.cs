@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Ncqrs.Restoring.EventStapshoot.EventStores;
+using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
@@ -119,7 +120,28 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </exception>
         public IEnumerable<CommittedEvent> GetEventStream()
         {
-            return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+            var retval = new List<CommittedEvent>();
+            List<UniqueEventsResults> aggregateRoots;
+
+            
+            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
+
+            using (IDocumentSession session = DocumentStore.OpenSession())
+            {
+                aggregateRoots =
+                    session.Query<StoredEvent, UniqueEventsIndex>().AsProjection<UniqueEventsResults>().ToList();
+            }
+       //     return from chuaggregateRootsnk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+
+          //  return from uniqueEventsResultse in aggregateRoots select ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue);
+            
+            foreach (UniqueEventsResults uniqueEventsResultse in aggregateRoots)
+            {
+                retval.AddRange(
+                    ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue).ToList());
+            }
+
+            return retval;
         }
 
         public CommittedEvent GetLastEvent(Guid aggregateRootId)
@@ -136,45 +158,11 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 return null;
             }
         }
-
         public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 return session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
-            }
-        }
-
-        /// <summary>
-        /// The get stream by chunk.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        private IEnumerable<IEnumerable<StoredEvent>> GetStreamByChunk()
-        {
-            var page = 0;
-            while (true)
-            {
-                List<StoredEvent> chunk;
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    chunk = session
-                        .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .OrderBy(y => y.EventSequence)
-                        .Skip(page * pageSize)
-                        .Take(pageSize)
-                        .ToList();
-                }
-
-                if (chunk.Count == 0)
-                {
-                    yield break;
-                }
-
-                page++;
-                yield return chunk;
             }
         }
 
