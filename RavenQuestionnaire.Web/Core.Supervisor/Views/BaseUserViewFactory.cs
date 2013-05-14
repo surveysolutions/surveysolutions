@@ -78,12 +78,12 @@ namespace Core.Supervisor.Views
 
         protected IEnumerable<UserDocument> GetTeamMembersForSupervisor(UserDocument viewer)
         {
-            return users.Query().Where(u => (IsInterviewer(u) && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey);
+            return users.Query(_ => _.Where(u => (IsInterviewer(u) && u.Supervisor.Id == viewer.PublicKey) || u.PublicKey == viewer.PublicKey).ToList());
         }
 
         protected IEnumerable<UserDocument> GetTeamMembersForHeadquarter()
         {
-            return users.Query().Where(u => IsInterviewer(u) || IsSupervisor(u));
+            return users.Query(_ => _.Where(u => IsInterviewer(u) || IsSupervisor(u)).ToList());
         }
 
         protected IEnumerable<UserDocument> GetInterviewersListForViewer(Guid viewerId)
@@ -98,7 +98,7 @@ namespace Core.Supervisor.Views
             if (viewer == null || !IsHq(viewer))
                 return Enumerable.Empty<UserDocument>();
 
-            return users.Query().Where(u => IsSupervisor(u));
+            return users.Query(_ => _.Where(u => IsSupervisor(u)).ToList());
         }
     }
 }

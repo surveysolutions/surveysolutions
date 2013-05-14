@@ -68,8 +68,8 @@ namespace Main.Core.View.StatusReport
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
             List<CompleteQuestionnaireBrowseItem> query =
-                this.documentItemSession.Query().Where(
-                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList();
+                this.documentItemSession.Query(_ => _.Where(
+                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList());
 
             return new CQStatusReportView(query);
         }
