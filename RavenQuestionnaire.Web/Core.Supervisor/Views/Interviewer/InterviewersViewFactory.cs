@@ -11,14 +11,14 @@ namespace Core.Supervisor.Views.Interviewer
 
     public class InterviewersViewFactory : BaseUserViewFactory, IViewFactory<InterviewersInputModel, InterviewersView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _documents;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documents;
 
         public InterviewersViewFactory(
             IQueryableDenormalizerStorage<UserDocument> users,
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession) : base(users)
         {
             this.users = users;
-            this._documents = documentSession;
+            this.documents = documentSession;
         }
         
         public InterviewersView Load(InterviewersInputModel input)

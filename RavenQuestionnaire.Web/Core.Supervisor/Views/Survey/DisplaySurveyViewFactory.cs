@@ -9,15 +9,15 @@ namespace Core.Supervisor.Views.Survey
 
     public class DisplaySurveyViewFactory : IViewFactory<DisplayViewInputModel, SurveyScreenView>
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _store;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store;
 
-        private readonly ISurveyScreenSupplier _surveyScreenSupplier;
+        private readonly ISurveyScreenSupplier surveyScreenSupplier;
 
         public DisplaySurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> store,
                                         ISurveyScreenSupplier surveyScreenSupplier)
         {
-            this._store = store;
-            this._surveyScreenSupplier = surveyScreenSupplier;
+            this.store = store;
+            this.surveyScreenSupplier = surveyScreenSupplier;
         }
 
         public SurveyScreenView Load(DisplayViewInputModel input)
@@ -27,7 +27,7 @@ namespace Core.Supervisor.Views.Survey
                 return null;
             }
 
-            var doc = this._store.GetById(input.CompleteQuestionnaireId);
+            var doc = this.store.GetById(input.CompleteQuestionnaireId);
 
             if (doc == null)
             {
@@ -44,7 +44,7 @@ namespace Core.Supervisor.Views.Survey
 
             var screenView = new ScreenNavigationView(rout.MenuItems, rout.Navigation);
 
-            var result = this._surveyScreenSupplier.BuildView(doc, rout.Group, screenView);
+            var result = this.surveyScreenSupplier.BuildView(doc, rout.Group, screenView);
 
             result.User = input.User;
 

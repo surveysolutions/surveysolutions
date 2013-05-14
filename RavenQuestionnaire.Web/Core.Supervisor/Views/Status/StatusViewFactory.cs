@@ -13,13 +13,13 @@
 
     public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
         public StatusViewFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
             IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
-            this._surveys = surveys;
+            this.surveys = surveys;
             this.users = users;
         }
 
@@ -29,13 +29,13 @@
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            var headers = this._surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
+            var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
 
             var items = this.BuildItems(
                     (status.PublicId == SurveyStatus.Unknown.PublicId
-                         ? this._surveys.Query().Where(
+                         ? this.surveys.Query().Where(
                              x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                         : this._surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
+                         : this.surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
                                                  && (x.Status.PublicId == status.PublicId))).GroupBy(x => x.Responsible),
                 headers).AsQueryable();
 

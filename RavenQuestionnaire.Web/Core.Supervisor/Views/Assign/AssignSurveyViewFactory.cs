@@ -7,17 +7,17 @@ namespace Core.Supervisor.Views.Assign
 {
     public class AssignSurveyViewFactory : BaseUserViewFactory, IViewFactory<AssignSurveyInputModel, AssignSurveyView> 
     {
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> _surveys;
+        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys;
 
         public AssignSurveyViewFactory(IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveys, IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
-            this._surveys = surveys;
+            this.surveys = surveys;
             this.users = users;
         }
 
         public AssignSurveyView Load(AssignSurveyInputModel input)
         {
-            var q = this._surveys.GetById(input.CompleteQuestionnaireId);
+            var q = this.surveys.GetById(input.CompleteQuestionnaireId);
 
             var view = new AssignSurveyView(q)
                 {

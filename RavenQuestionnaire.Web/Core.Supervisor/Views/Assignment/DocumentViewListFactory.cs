@@ -15,9 +15,9 @@ namespace Core.Supervisor.Views.Assignment
 
     public class DocumentViewListFactory : BaseUserViewFactory, IViewFactory<AssignmentInputModel, AssignmentView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> _templates;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
 
         public DocumentViewListFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
@@ -25,8 +25,8 @@ namespace Core.Supervisor.Views.Assignment
             IQueryableDenormalizerStorage<UserDocument> users)
             : base(users)
         {
-            this._surveys = surveys;
-            this._templates = templates;
+            this.surveys = surveys;
+            this.templates = templates;
         }
 
         public AssignmentView Load(AssignmentInputModel input)
@@ -40,7 +40,7 @@ namespace Core.Supervisor.Views.Assignment
 
             view.Template = !input.TemplateId.HasValue
                                 ? null
-                            : this._templates.GetById(input.TemplateId.Value).GetTemplateLight();
+                            : this.templates.GetById(input.TemplateId.Value).GetTemplateLight();
 
             view.User = !input.InterviewerId.HasValue
                             ? null
@@ -54,8 +54,8 @@ namespace Core.Supervisor.Views.Assignment
             }
             #warning need to be filtered by responsible supervisr
             IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
-                                                                     ? this._surveys.Query()
-                                                                     : this._surveys.Query()
+                                                                     ? this.surveys.Query()
+                                                                     : this.surveys.Query()
                                                                            .Where(
                                                                                v =>
                                                                                v.Status.PublicId == view.Status.PublicId))
