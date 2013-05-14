@@ -72,7 +72,8 @@ namespace WB.UI.Designer
 
 
                     // Knockout and its plugins
-                    "~/Scripts/knockout-{version}.js", 
+                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/lib/knockout.mapping.js",
                     "~/Scripts/lib/knockout.activity.js", 
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
