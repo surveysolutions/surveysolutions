@@ -451,6 +451,7 @@
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
     <Content Include="Scripts\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\lib\knockout.mapping.js" />
     <Content Include="Scripts\lib\koExternalTemplateEngine.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\lib\sammy.js" />
