@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using Core.Supervisor.Synchronization;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -18,6 +19,8 @@ using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace Core.Supervisor.Tests
 {
+    using Main.Core.View.CompleteQuestionnaire;
+
     [TestFixture]
     public class SupervisorEventSyncTests
     {
@@ -72,10 +75,15 @@ namespace Core.Supervisor.Tests
             streamableEventStore.Setup(x => x.GetLastEvent(userId))
                                 .Returns(new CommittedEvent(Guid.NewGuid(), lastEventId, userId, 1, DateTime.Now,
                                                             new object(), new Version(1, 1)));
-            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId, Supervisor = new UserLight(supervisorId,"sup") } };
 
-            denormalizerMock.Setup(x => x.Query<UserDocument>())
-                            .Returns(avalibleUsers.AsQueryable());
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
+                            .Returns(new List<Guid> { userId });
+
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<FileDescription>, List<Guid>>>()))
+                            .Returns(new List<Guid> { });
+
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
+                            .Returns(new List<Guid> { });
 
             SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId);
 
@@ -95,10 +103,15 @@ namespace Core.Supervisor.Tests
             NcqrsEnvironment.SetDefault(eventStoreMock.Object);
             var userId = Guid.NewGuid();
             var supervisorId = Guid.NewGuid();
-            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId, Supervisor = new UserLight(supervisorId,"sup")} };
 
-            denormalizerMock.Setup(x => x.Query<UserDocument>())
-                            .Returns(avalibleUsers.AsQueryable());
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
+                            .Returns(new List<Guid> { userId });
+
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<FileDescription>, List<Guid>>>()))
+                            .Returns(new List<Guid> { });
+
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
+                            .Returns(new List<Guid> { });
 
             SupervisorEventStreamReader unitUnderTest = new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId);
 
