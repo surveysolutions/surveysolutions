@@ -15,6 +15,8 @@
             };
         isInitialized = false,
         cloneQuestion = function (question) {
+            if (question.isNew())
+                return;
             var parent = question.parent();
             var item = utils.findById(parent.childrenID(), question.id());
             var clonedQuestion = question.clone();
@@ -244,8 +246,19 @@
                 });
         },
         saveQuestion = function (question) {
+            var command = '';
+            if (question.isNew()) {
+                if (question.isClone()) {
+                    command = config.commands.cloneQuestion;
+                } else {
+                    command = config.commands.createQuestion;
+                }
+            } else {
+                command = config.commands.updateQuestion;
+            }
+            
             datacontext.sendCommand(
-                question.isNew() ? config.commands.createQuestion : config.commands.updateQuestion,
+                command,
                 question,
                 {
                     success: function () {
@@ -280,6 +293,12 @@
             var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
             var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
             
+            if (arg.item.isNew()) {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveUnsavedItem);
+                return;
+            }
+
             if (isDropedInChapter && moveItemType == "question") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveQuestionOutsideGroup);
