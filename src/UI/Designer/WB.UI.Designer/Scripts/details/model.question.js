@@ -7,6 +7,8 @@
               var self = this;
               self.id = ko.observable(Math.uuid());
               self.isNew = ko.observable(true);
+              self.isClone = ko.observable(false);
+              
               
               self.title = ko.observable('New Question').extend({ required: true });
               self.parent = ko.observable();
@@ -86,6 +88,7 @@
               };
               self.isSelected = ko.observable();
               self.isNullo = false;
+              self.cloneSource = ko.observable();
 
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
               self.dirtyFlag().reset();
@@ -108,11 +111,49 @@
 
         Question.prototype = function () {
             var dc = Question.datacontext,
-                children = function () {
+                children = function() {
+                },
+                clone = function () {
+                    var item = new Question();
+                    item.title(this.title());
+                    item.qtype(this.qtype());
+                    item.scope(this.scope());
+                    item.answerOrder(this.answerOrder());
+
+                    item.answerOptions(_.map(this.answerOptions(), function (answer) {
+                        return new model.AnswerOption().id(answer.id()).title(answer.title()).value(answer.value());
+                    }));
+                    
+                    item.triggers(_.map(this.triggers(), function (trigger) {
+                        return { key: trigger.key, value: trigger.value };
+                    }));
+
+                    item.isHead(this.isHead());
+                    item.isFeatured(this.isFeatured());
+                    item.isMandatory(this.isMandatory());
+                    item.condition(this.condition());
+                    item.instruction(this.instruction());
+                    item.maxValue(this.maxValue());
+
+                    item.validationExpression(this.validationExpression());
+                    item.validationMessage(this.validationMessage());
+
+                    item.parent(this.parent());
+                    item.id(Math.uuid());
+                    item.isNew(true);
+                    item.isClone(true);
+                    item.cloneSource(this);
+                    item.dirtyFlag().reset();
+                    
+                    item.alias('');
+                    item.alias.valueHasMutated();
+
+                    return item;
                 };
             return {
                 isNullo: false,
-                children: children
+                children: children,
+                clone : clone
             };
         }();
 

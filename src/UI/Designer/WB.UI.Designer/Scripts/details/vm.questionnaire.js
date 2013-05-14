@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
-    function (ko, _, config, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
+    function (ko, _, config, utils, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -13,7 +13,22 @@
                 questions: ko.observable(),
                 groups: ko.observable(),
             };
-        isInitialized = false;
+        isInitialized = false,
+        cloneQuestion = function (question) {
+            var parent = question.parent();
+            var item = utils.findById(parent.childrenID(), question.id());
+            var clonedQuestion = question.clone();
+            
+            datacontext.questions.add(clonedQuestion);
+
+            parent.childrenID.splice(item.index + 1, 0, { type: clonedQuestion.type(), id: clonedQuestion.id() });
+            parent.fillChildren();
+            router.navigateTo(clonedQuestion.getHref());
+            calcStatistics();
+        },
+        cloneGroup = function (group) {
+            
+        },
         activate = function (routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
 
@@ -62,6 +77,7 @@
             selectedQuestion(question);
             selectedQuestion.valueHasMutated();
             openDetails("show-question");
+            $('#alias').focus();
         },
         editGroup = function (id) {
             var group = datacontext.groups.getLocalById(id);
@@ -332,12 +348,7 @@
                    }
                });
         },
-        cloneQuestion = function (question) {
-            
-        },
-        cloneGroup = function (group) {
-            
-        },
+        
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
             statistics.groups(datacontext.groups.getAllLocal().length);
