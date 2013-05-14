@@ -121,7 +121,7 @@
                     item.answerOrder(this.answerOrder());
 
                     item.answerOptions(_.map(this.answerOptions(), function (answer) {
-                        return new model.AnswerOption().id(answer.id()).title(answer.title()).value(answer.value());
+                        return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
                     }));
                     
                     item.triggers(_.map(this.triggers(), function (trigger) {
@@ -142,9 +142,15 @@
                     item.id(Math.uuid());
                     item.isNew(true);
                     item.isClone(true);
-                    item.cloneSource(this);
-                    item.dirtyFlag().reset();
                     
+                    if (this.isClone() && this.isNew()) {
+                        item.cloneSource(this.cloneSource());
+                    } else {
+                        item.cloneSource(this);
+                    }
+
+                    item.dirtyFlag().reset();
+
                     item.alias('');
                     item.alias.valueHasMutated();
 

@@ -249,7 +249,7 @@
                         <ul class="dropdown-menu">
                             <li><a data-bind="click: addQuestion, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
                             <li><a data-bind="click: addGroup, visible: gtype()=='None' &&  isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
-                            <li><a data-bind="click: cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
+                            <li><a data-bind="click: cloneGroup, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -274,7 +274,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        <li><a data-bind="click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
