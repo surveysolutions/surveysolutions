@@ -10,11 +10,11 @@
 
     internal class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        private readonly IQueryableDenormalizerStorage<UserDocument> _users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
         
         public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
-            this._users = users;
+            this.users = users;
         }
         
         public UserView Load(UserViewInputModel input)
@@ -34,7 +34,7 @@
             }
 
             return
-                this._users.Query()
+                this.users.Query()
                     .Where(query)
                     .Select(
                         x =>
