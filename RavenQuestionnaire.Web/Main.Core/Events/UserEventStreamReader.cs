@@ -78,15 +78,9 @@ namespace Main.Core.Events
         /// </summary>
         protected List<AggregateRootEvent> ExtractUsers()
         {
-            var usersList = new List<AggregateRootEvent>();
-
-            IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
-            foreach (UserDocument item in model)
-            {
-                usersList.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
-            }
-
-            return usersList;
+            return this.denormalizer.Query<UserDocument, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<UserAR>(item.PublicKey))
+                .ToList());
         }
 
         #endregion

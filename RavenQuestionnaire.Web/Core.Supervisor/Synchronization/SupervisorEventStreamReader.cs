@@ -140,14 +140,11 @@ namespace Core.Supervisor.Synchronization
 
         private List<Guid> GetUsers()
         {
-
-            IQueryable<UserDocument> model =
-                this.denormalizer.Query<UserDocument>()
-                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId);
-
-
-            return model.Select(u => u.PublicKey).ToList();
-
+            return
+                this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
+                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                    .Select(u => u.PublicKey)
+                    .ToList());
         }
 
         #endregion
@@ -183,12 +180,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-            IQueryable<QuestionnaireBrowseItem> model = this.denormalizer.Query<QuestionnaireBrowseItem>();
+            var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
+                .ToList());
 
-            foreach (QuestionnaireBrowseItem item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
-            }
+            retval.AddRange(model);
         }
 
         /// <summary>
@@ -199,11 +195,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddRegisterDevice(List<AggregateRootEvent> retval)
         {
-            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
-            foreach (SyncDeviceRegisterDocument item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<DeviceAR>(item.PublicKey));
-            }
+            var model = this.denormalizer.Query<SyncDeviceRegisterDocument, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<DeviceAR>(item.PublicKey))
+                .ToList());
+
+            retval.AddRange(model);
         }
 
         /// <summary>
