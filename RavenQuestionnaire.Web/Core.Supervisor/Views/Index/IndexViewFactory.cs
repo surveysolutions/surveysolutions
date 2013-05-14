@@ -1,13 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IndexViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using Core.Supervisor.Views.DenormalizerStorageExtensions;
 using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Index
@@ -23,63 +13,17 @@ namespace Core.Supervisor.Views.Index
     using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.Core.View.CompleteQuestionnaire;
 
-    /// <summary>
-    /// The survey view factory.
-    /// </summary>
-    public class IndexViewFactory : IViewFactory<IndexInputModel, IndexView>
+    public class IndexViewFactory : BaseUserViewFactory, IViewFactory<IndexInputModel, IndexView>
     {
-        #region Fields
-
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IQueryableDenormalizerStorage<UserDocument> users;
-
-        /// <summary>
-        /// The stat
-        /// </summary>
         private readonly IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndexViewFactory"/> class.
-        /// </summary>
-        /// <param name="surveys">
-        /// The document item session.
-        /// </param>
-        /// <param name="users">
-        /// The users.
-        /// </param>
-        /// <param name="stat">
-        /// The stat.
-        /// </param>
-        public IndexViewFactory(
-            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IQueryableDenormalizerStorage<UserDocument> users,
-            IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat)
+        public IndexViewFactory(IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat) : base(users)
         {
-            this.users = users;
             this.stat = stat;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Survey.IndexView.
-        /// </returns>
         public IndexView Load(IndexInputModel input)
         {
             IEnumerable<Guid> responsibleList;
@@ -93,7 +37,7 @@ namespace Core.Supervisor.Views.Index
             else
             {
                 user = null;
-                responsibleList = this.users.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
+                responsibleList = this.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
             }
 
             var all = this.stat.Query(_ => _
@@ -107,7 +51,7 @@ namespace Core.Supervisor.Views.Index
             return new IndexView(input.Page, input.PageSize, items.ToList(), user);
         }
 
-        private IQueryable<IndexViewItem> OrderByItems(IndexInputModel input, IQueryable<IndexViewItem> items)
+        private IEnumerable<IndexViewItem> OrderByItems(IndexInputModel input, IQueryable<IndexViewItem> items)
         {
             if (input.Orders.Count > 0)
             {
@@ -119,9 +63,9 @@ namespace Core.Supervisor.Views.Index
             return items;
         }
 
-        private IQueryable<IndexViewItem> BuildStatItems(Dictionary<TemplateLight, List<SupervisorStatisticsItem>> dictionary,IndexInputModel input)
+        private IEnumerable<IndexViewItem> BuildStatItems(Dictionary<TemplateLight, List<SupervisorStatisticsItem>> dictionary,IndexInputModel input)
         {
-            List<IndexViewItem> result=new List<IndexViewItem>();
+            var result=new List<IndexViewItem>();
             foreach (var kvp in dictionary)
             {
                 var allStatuses = SurveyStatus.GetAllStatuses().ToDictionary(x => x, x => 0);
@@ -144,7 +88,5 @@ namespace Core.Supervisor.Views.Index
 
             return OrderByItems(input, result.AsQueryable());
         }
-
-        #endregion
     }
 }

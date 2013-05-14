@@ -14,13 +14,6 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Web.Mvc;
 
-    using DataEntryClient.SycProcess.Interfaces;
-    using DataEntryClient.SycProcessFactory;
-
-    using NLog;
-
-    using Questionnaire.Core.Web.Threading;
-
     using Web.Supervisor.Models;
 
     /// <summary>

@@ -3,6 +3,9 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Utility;
+
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -18,6 +21,8 @@ namespace Web.Supervisor.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using Questionnaire.Core.Web.Helpers;
+
+    using WB.UI.Shared.Log;
 
     using Web.Supervisor.Models;
 
@@ -42,8 +47,8 @@ namespace Web.Supervisor.Controllers
         /// The global Info.
         /// </param>
         public TeamController(
-            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo)
-            : base(repository, commandService, globalInfo)
+            IViewRepository repository, ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+            : base(repository, commandService, globalInfo, logger)
         {
             this.ViewBag.ActivePage = MenuItem.Teams;
         }
@@ -85,7 +90,7 @@ namespace Web.Supervisor.Controllers
                     new CreateUserCommand(
                         publicKey: Guid.NewGuid(), 
                         userName: model.Name, 
-                        password: model.Password, 
+                        password: SimpleHash.ComputeHash(model.Password), 
                         email: model.Email, 
                         isLocked: false, 
                         roles: new[] { UserRoles.Operator }, 
@@ -125,7 +130,7 @@ namespace Web.Supervisor.Controllers
                     new CreateUserCommand(
                         publicKey: Guid.NewGuid(),
                         userName: model.Name,
-                        password: model.Password,
+                        password: SimpleHash.ComputeHash(model.Password),
                         email: model.Email,
                         isLocked: false,
                         roles: new[] { UserRoles.Supervisor },

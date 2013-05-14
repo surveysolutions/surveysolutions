@@ -1,5 +1,4 @@
 ﻿using Main.Core.Commands.Questionnaire.Question;
-using WB.UI.Designer.Code.Exceptions;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
@@ -7,38 +6,34 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
 
-    using Elmah;
-
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Domain;
-
-    using NLog;
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
-    using Newtonsoft.Json.Linq;
-
     using WB.UI.Designer.Code.Helpers;
+    using WB.UI.Designer.Exceptions;
+    using WB.UI.Shared.Log;
 
     [CustomAuthorize]
     public class CommandController : Controller
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
+        private readonly ILog logger;
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
 
-        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer)
+        public CommandController(ICommandService commandService, ICommandDeserializer commandDeserializer, IExpressionReplacer expressionReplacer, ILog logger)
         {
             this.commandService = commandService;
             this.commandDeserializer = commandDeserializer;
             this.expressionReplacer = expressionReplacer;
+            this.logger = logger;
         }
 
         [HttpPost]
-        [CustomHandleError]
+        [CustomHandleErrorFilter]
         public JsonResult Execute(string type, string command)
         {
             ICommand concreteCommand;
@@ -48,7 +43,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (CommandDeserializationException e)
             {
-                Logger.ErrorException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
+                this.logger.Error(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
 
                 return this.Json(new { error = "Unexpected error occurred: " + e.Message });
             }
@@ -84,24 +79,20 @@ namespace WB.UI.Designer.Controllers
         }
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)
-        {
+         {
             if (command is FullQuestionDataCommand)
             {
                 var questionCommand = (FullQuestionDataCommand)command;
-
                 questionCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.Condition, questionCommand.QuestionnaireId);
-
                 questionCommand.ValidationExpression = this.expressionReplacer.ReplaceStataCaptionsWithGuids(questionCommand.ValidationExpression, questionCommand.QuestionnaireId);
-            }
-
-
+             }
+ 
             if (command is FullGroupDataCommand)
             {
-                var newGroupCommand = (FullGroupDataCommand) command;
+                var newGroupCommand = (FullGroupDataCommand)command;
                 
                 newGroupCommand.Condition = this.expressionReplacer.ReplaceStataCaptionsWithGuids(newGroupCommand.Condition, newGroupCommand.QuestionnaireId);
-            }
-
-        }
+             } 
+         }
     }
 }

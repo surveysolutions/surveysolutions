@@ -1,9 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="UserViewFactory.cs" company="">
-//   
-// </copyright>
-// --------------------------------------------------------------------------------------------------------------------
-namespace Core.Supervisor.Views.User
+﻿namespace Core.Supervisor.Views.User
 {
     using System;
     using System.Linq;
@@ -13,46 +8,15 @@ namespace Core.Supervisor.Views.User
     using Main.Core.View;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    ///     The user view factory.
-    /// </summary>
     internal class UserViewFactory : IViewFactory<UserViewInputModel, UserView>
     {
-        #region Fields
-
-        /// <summary>
-        ///     The users.
-        /// </summary>
         private readonly IQueryableDenormalizerStorage<UserDocument> users;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="UserViewFactory"/> class.
-        /// </summary>
-        /// <param name="users">
-        /// The users.
-        /// </param>
+        
         public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.users = users;
         }
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The <see cref="UserView"/>.
-        /// </returns>
+        
         public UserView Load(UserViewInputModel input)
         {
             Func<UserDocument, bool> query = (x) => false;
@@ -89,7 +53,5 @@ namespace Core.Supervisor.Views.User
                             })
                     .FirstOrDefault());
         }
-
-        #endregion
     }
 }

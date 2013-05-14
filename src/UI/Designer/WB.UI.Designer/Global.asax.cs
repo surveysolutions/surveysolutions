@@ -11,6 +11,8 @@ namespace WB.UI.Designer
 {
     using NConfig;
 
+    using WB.UI.Shared.NLog;
+
     public class MvcApplication : HttpApplication
     {
         /// <summary>
@@ -39,7 +41,7 @@ namespace WB.UI.Designer
 
             var ex = Server.GetLastError();
 
-            NLog.LogManager.GetCurrentClassLogger().Error(ex);
+            LogManager.Logger.Error(ex);
 
             var controller = new ErrorController();
             var routeData = new RouteData();

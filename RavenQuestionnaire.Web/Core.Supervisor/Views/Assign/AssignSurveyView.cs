@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssignSurveyView.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The assign survey view.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +8,6 @@ using Main.Core.View.Question;
 
 namespace Core.Supervisor.Views.Assign
 {
-    /// <summary>
-    /// The assign survey view.
-    /// </summary>
     public class AssignSurveyView
     {
         public AssignSurveyView(ICompleteQuestionnaireDocument completeQuestionnaire)

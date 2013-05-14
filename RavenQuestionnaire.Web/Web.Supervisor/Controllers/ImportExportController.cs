@@ -9,14 +9,9 @@
 
 using System.Net;
 using System.Web.Security;
-using Ionic.Zip;
-using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Main.Core.Utility;
 using Main.Core.View.User;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Questionnaire.ImportService.Commands;
+
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 
@@ -31,7 +26,6 @@ namespace Web.Supervisor.Controllers
 
     using Core.Supervisor.Views.SyncProcess;
 
-    using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 
     using Main.Core.Export;
@@ -40,14 +34,14 @@ namespace Web.Supervisor.Controllers
     using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
 
-    using NLog;
-
     using Newtonsoft.Json;
 
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
 
     using SynchronizationMessages.CompleteQuestionnaire;
+
+    using WB.UI.Shared.Log;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Utils.Attributes;
@@ -75,17 +69,22 @@ namespace Web.Supervisor.Controllers
         /// </summary>
         private readonly IViewRepository viewRepository;
 
+        /// <summary>
+        /// The logger.
+        /// </summary>
+        private readonly ILog logger;
         #endregion
 
         #region Constructors and Destructors
 
         
         public ImportExportController(
-            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory)
+            IDataExport exporter, IViewRepository viewRepository, ISyncProcessFactory syncProcessFactory, ILog logger)
         {
             this.exporter = exporter;
             this.viewRepository = viewRepository;
             this.syncProcessFactory = syncProcessFactory;
+            this.logger = logger;
         }
 
         #endregion
@@ -119,7 +118,6 @@ namespace Web.Supervisor.Controllers
                     catch (Exception e)
                     {
                         this.AsyncManager.Parameters["result"] = null;
-                        Logger logger = LogManager.GetCurrentClassLogger();
                         logger.Fatal("Error on export ", e);
                     }
                 });
@@ -179,8 +177,7 @@ namespace Web.Supervisor.Controllers
                     catch (Exception e)
                     {
                         this.AsyncManager.Parameters["result"] = null;
-                        Logger logger = LogManager.GetCurrentClassLogger();
-                        logger.FatalException("Error on export " + e.Message, e);
+                        logger.Fatal("Error on export " + e.Message, e);
                         if (e.InnerException != null)
                         {
                             logger.Fatal("Error on export (Inner Exception)", e.InnerException);
@@ -306,8 +303,7 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception e)
                 {
-                    Logger logger = LogManager.GetCurrentClassLogger();
-                    logger.FatalException("Error on import ", e);
+                    logger.Fatal("Error on import ", e);
                 }
             };
             ThreadPool.QueueUserWorkItem(callback, syncProcess);
@@ -366,7 +362,6 @@ namespace Web.Supervisor.Controllers
         {
             Guid syncProcess = Guid.NewGuid();
 
-            var logger = LogManager.GetCurrentClassLogger();
             var result = new SyncItemsMetaContainer();
 
             try
@@ -377,7 +372,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                logger.FatalException("Error on retrieving the list of AR on sync. ", ex);
+                logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
             }
 
             return result;
@@ -418,8 +413,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                var logger = NLog.LogManager.GetCurrentClassLogger();
-                logger.FatalException("Error on retrieving AR on sync. ", ex);
+                logger.Fatal("Error on retrieving AR on sync. ", ex);
             }
 
             return result;
@@ -504,7 +498,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                LogManager.GetCurrentClassLogger().Fatal("Error on Sync.", ex);
+                logger.Fatal("Error on Sync.", ex);
                 return false;
             }
         }

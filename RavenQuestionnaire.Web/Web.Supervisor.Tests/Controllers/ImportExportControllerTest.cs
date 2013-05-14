@@ -28,6 +28,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
+    using WB.UI.Shared.Log;
+
     using global::Web.Supervisor.Controllers;
 
     /// <summary>
@@ -81,7 +83,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             return new ImportExportController(
                 this.DataExportMock.Object,
                 (new Mock<IViewRepository>()).Object,
-                this.SyncProcessFactoryMock.Object);
+                this.SyncProcessFactoryMock.Object,
+                (new Mock<ILog>()).Object);
         }
 
         /// <summary>
