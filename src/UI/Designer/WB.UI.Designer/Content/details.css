@@ -449,20 +449,21 @@ h1 {
     }
 
     .q-item-wrap.new {
-        background-color: #5BB75B;
+        background-color: #fbb24b;
     }
 
     .q-item-wrap.q-question.new {
-        background-color:#b3deb3;
+        background-color:#fcc77d;
     }
      .q-item-wrap.new.selected
     {
-        background-color:#347834
+        background-color:#f39106
     }
 
-    .q-item-wrap.selected div > i[class^="icon-"],
-    .q-item-wrap.new div > i[class^="icon-"] {
-        background-image: url("images/glyphicons-halflings-white.png");
+    .q-item-wrap div > i[class^="icon-"]
+    {
+         color: rgba(255, 255, 255, 0.7);
+         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
     }
 
     .q-item-wrap.selected a.q-title,
