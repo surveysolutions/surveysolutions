@@ -19,6 +19,8 @@ using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
+    using WB.UI.Shared.Log;
+
     [TestFixture]
     public class CommandControllerTests
     {
@@ -88,12 +90,13 @@ namespace WB.UI.Designer.Tests
         }
 
         private CommandController CreateCommandController(ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
-            IExpressionReplacer expressionReplacer = null)
+            IExpressionReplacer expressionReplacer = null, ILog logReplacer = null)
         {
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
-                expressionReplacer ?? Mock.Of<IExpressionReplacer>()
+                expressionReplacer ?? Mock.Of<IExpressionReplacer>(),
+                logReplacer ?? Mock.Of<ILog>()
                 );
         }
     }
