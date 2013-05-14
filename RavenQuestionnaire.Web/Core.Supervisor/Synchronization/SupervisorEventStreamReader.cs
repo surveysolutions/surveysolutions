@@ -124,34 +124,27 @@ namespace Core.Supervisor.Synchronization
             //return null;
         }
 
-       
-
         private List<Guid> GetFiles()
         {
-            IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
-            
-            return model.Select(m => Guid.Parse(m.FileName)).ToList();
+            return this.denormalizer.Query<FileDescription, List<Guid>>(_ => _
+                .Select(m => Guid.Parse(m.FileName)).ToList());
         }
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> model = 
-                this.denormalizer.Query<CompleteQuestionnaireBrowseItem>()
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id));
-            
-            return model.Select(i => i.CompleteQuestionnaireId).ToList();
+            return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
+                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id))
+                .Select(i => i.CompleteQuestionnaireId)
+                .ToList());
         }
 
         private List<Guid> GetUsers()
         {
-
-            IQueryable<UserDocument> model =
-                this.denormalizer.Query<UserDocument>()
-                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId);
-
-
-            return model.Select(u => u.PublicKey).ToList();
-
+            return
+                this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
+                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                    .Select(u => u.PublicKey)
+                    .ToList());
         }
 
         #endregion
@@ -187,12 +180,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-            IQueryable<QuestionnaireBrowseItem> model = this.denormalizer.Query<QuestionnaireBrowseItem>();
+            var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
+                .ToList());
 
-            foreach (QuestionnaireBrowseItem item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
-            }
+            retval.AddRange(model);
         }
 
         /// <summary>
@@ -203,11 +195,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddRegisterDevice(List<AggregateRootEvent> retval)
         {
-            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
-            foreach (SyncDeviceRegisterDocument item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<DeviceAR>(item.PublicKey));
-            }
+            var model = this.denormalizer.Query<SyncDeviceRegisterDocument, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<DeviceAR>(item.PublicKey))
+                .ToList());
+
+            retval.AddRange(model);
         }
 
         /// <summary>

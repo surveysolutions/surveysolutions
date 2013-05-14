@@ -37,9 +37,9 @@ namespace Main.DenormalizerStorage
             return this._hash.Values.AsQueryable();
         }
 
-        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
+        public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
-            return this._hash.Values.Where(predExpr.Compile());
+            return query.Invoke(this.Query());
         }
 
         public void Remove(Guid id)

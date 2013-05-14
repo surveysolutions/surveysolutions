@@ -17,6 +17,7 @@ namespace Main.DenormalizerStorage
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
+    [Obsolete]
     public class PersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
         where TView : class
     {
@@ -112,23 +113,6 @@ namespace Main.DenormalizerStorage
             {
                 if (lockWasTaken) Monitor.Exit(temp);
             }
-        }
-
-        /// <summary>
-        /// The query.
-        /// </summary>
-        /// <returns>
-        /// The System.Linq.IQueryable`1[T -&gt; T].
-        /// </returns>
-        public IQueryable<TView> Query()
-        {
-            throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
-            //    return this._hash.Values.AsQueryable();
-        }
-
-        public IEnumerable<TView> Query(Expression<Func<TView, bool>> predExpr)
-        {
-            throw new NotImplementedException("Query is not supproted for WeakReferenceDenormalizer");
         }
 
         /// <summary>

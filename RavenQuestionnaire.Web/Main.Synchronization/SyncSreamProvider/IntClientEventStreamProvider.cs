@@ -93,10 +93,10 @@ namespace Main.Synchronization.SyncSreamProvider
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
             return
-                this.storage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
+                this.storage.Query(_ => _.Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
                     item =>
                     this.eventStore.ReadFrom(item.CompleteQuestionnaireId, int.MinValue, int.MaxValue).Select(
-                        e => new AggregateRootEvent(e)));
+                        e => new AggregateRootEvent(e))).ToList());
         }
 
         /// <summary>

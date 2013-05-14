@@ -31,67 +31,70 @@ namespace Core.Supervisor.Views.Assignment
 
         public AssignmentView Load(AssignmentInputModel input)
         {
-            var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
-            var view = new AssignmentView(input.Page, input.PageSize, 0);
+            return this.surveys.Query(queryableSurveys =>
+            {
+                var responsibleList = GetTeamMembersForViewer(input.ViewerId).Select(i => i.PublicKey);
+                var view = new AssignmentView(input.Page, input.PageSize, 0);
 
-            view.AssignableUsers = this.IsHq(input.ViewerId) 
-                ? this.GetSupervisorsListForViewer(input.ViewerId) 
-                : this.GetInterviewersListForViewer(input.ViewerId);
+                view.AssignableUsers = this.IsHq(input.ViewerId)
+                    ? this.GetSupervisorsListForViewer(input.ViewerId)
+                    : this.GetInterviewersListForViewer(input.ViewerId);
 
-            view.Template = !input.TemplateId.HasValue
+                view.Template = !input.TemplateId.HasValue
                                 ? null
-                            : this.templates.GetById(input.TemplateId.Value).GetTemplateLight();
+                                : this.templates.GetById(input.TemplateId.Value).GetTemplateLight();
 
-            view.User = !input.InterviewerId.HasValue
-                            ? null
-                            : this.users.GetById(input.InterviewerId.Value).GetUseLight();
+                view.User = !input.InterviewerId.HasValue
+                                ? null
+                                : this.users.GetById(input.InterviewerId.Value).GetUseLight();
 
-            view.Status = SurveyStatus.Unknown;
+                view.Status = SurveyStatus.Unknown;
 
-            if (input.StatusId.HasValue)
-            {
-                view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
-            }
-            #warning need to be filtered by responsible supervisr
-            IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
-                                                                     ? this.surveys.Query()
-                                                                     : this.surveys.Query()
-                                                                           .Where(
-                                                                               v =>
-                                                                               v.Status.PublicId == view.Status.PublicId))
-                .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
-                .OrderByDescending(t => t.CreationDate);
+                if (input.StatusId.HasValue)
+                {
+                    view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
+                }
+                #warning need to be filtered by responsible supervisr
+                IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
+                                                                         ? queryableSurveys
+                                                                         : queryableSurveys
+                                                                               .Where(
+                                                                                   v =>
+                                                                                   v.Status.PublicId == view.Status.PublicId))
+                    .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
+                    .OrderByDescending(t => t.CreationDate);
 
-            if (input.TemplateId.HasValue)
-            {
-                items = items.Where(x => (x.TemplateId == input.TemplateId));
-            }
+                if (input.TemplateId.HasValue)
+                {
+                    items = items.Where(x => (x.TemplateId == input.TemplateId));
+                }
 
-            if (input.IsNotAssigned)
-            {
-                items = items.Where(t => t.Responsible == null);
-            }
-            else if (input.InterviewerId.HasValue)
-            {
-                items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.InterviewerId);
-            }
+                if (input.IsNotAssigned)
+                {
+                    items = items.Where(t => t.Responsible == null);
+                }
+                else if (input.InterviewerId.HasValue)
+                {
+                    items = items.Where(t => t.Responsible != null).Where(x => x.Responsible.Id == input.InterviewerId);
+                }
 
-            if (input.QuestionnaireId.HasValue)
-            {
-                items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
-            }
+                if (input.QuestionnaireId.HasValue)
+                {
+                    items = items.Where(t => t.CompleteQuestionnaireId == input.QuestionnaireId);
+                }
 
-            view.TotalCount = items.Count();
+                view.TotalCount = items.Count();
 
-            if (input.Orders.Count > 0)
-            {
-                items = this.DefineOrderBy(items, input);
-            }
+                if (input.Orders.Count > 0)
+                {
+                    items = this.DefineOrderBy(items, input);
+                }
 
-            view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize));
+                view.SetItems(items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList());
 
 
-            return view;
+                return view;
+            });
         }
 
         private IQueryable<CompleteQuestionnaireBrowseItem> DefineOrderBy(

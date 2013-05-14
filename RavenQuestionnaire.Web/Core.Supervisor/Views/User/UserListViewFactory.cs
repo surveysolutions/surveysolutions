@@ -1,6 +1,7 @@
 ﻿namespace Core.Supervisor.Views.User
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
@@ -31,24 +32,27 @@
 
             query = query.AndAlso(x => !x.IsDeleted);
 
-            var queryResult =
-                this.users.Query().Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
+            return this.users.Query(queryable =>
+            {
+                var queryResult =
+                    queryable.Where(query).AsQueryable().OrderUsingSortExpression(input.Order);
 
-            var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
-                                            .Take(input.PageSize)
-                                            .Select(
-                                                x =>
-                                                new UserListItem
-                                                    {
-                                                        PublicKey = x.PublicKey,
-                                                        CreationDate = x.CreationDate, 
-                                                        Email = x.Email, 
-                                                        IsLocked = x.IsLocked, 
-                                                        UserName = x.UserName, 
-                                                        Roles = x.Roles
-                                                    });
+                var retVal = queryResult.Skip((input.Page - 1) * input.PageSize)
+                                                .Take(input.PageSize)
+                                                .Select(
+                                                    x =>
+                                                    new UserListItem
+                                                        {
+                                                            PublicKey = x.PublicKey,
+                                                            CreationDate = x.CreationDate, 
+                                                            Email = x.Email, 
+                                                            IsLocked = x.IsLocked, 
+                                                            UserName = x.UserName, 
+                                                            Roles = x.Roles
+                                                        });
 
-            return new UserListView(input.Page, input.PageSize, queryResult.Count(), retVal, input.Order);
+                return new UserListView(input.Page, input.PageSize, queryResult.Count(), retVal.ToList(), input.Order);
+            });
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Main.DenormalizerStorage.SolidDenormalizer
     /// </summary>
     /// <typeparam name="TView">
     /// </typeparam>
+    [Obsolete]
     public class SolidPersistentDenormalizer<TView> : IDenormalizerStorage<TView>, IDisposable
         where TView : class
     {

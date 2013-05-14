@@ -73,28 +73,31 @@ namespace Core.Supervisor.Views.Interviewer
                 return null;
             var user = this.users.GetById(input.InterviewerId.Value);
           
-            var questionnairesGroupedByTemplate =
-                BuildItems(
-                    this.documentItemSession.Query().Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).GroupBy(
-                        x => x.TemplateId)).AsQueryable();
-
-            var retval = new InterviewerStatisticsView(input.InterviewerId.Value, user.UserName, input.Order,
-                                                       new List<InterviewerStatisticsViewItem>(), input.Page,
-                                                       input.PageSize, questionnairesGroupedByTemplate.Count());
-            if (input.Orders.Count > 0)
+            return this.documentItemSession.Query(queryableDocumentItems =>
             {
-                questionnairesGroupedByTemplate = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? questionnairesGroupedByTemplate.OrderBy(input.Orders[0].Field)
-                                                      : questionnairesGroupedByTemplate.OrderByDescending(
-                                                          input.Orders[0].Field);
-            }
+                var questionnairesGroupedByTemplate =
+                    BuildItems(
+                        queryableDocumentItems.Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).GroupBy(x => x.TemplateId))
+                            .AsQueryable();
 
-            retval.Items =
-                questionnairesGroupedByTemplate.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize).ToList();
-            return retval;
+                var retval = new InterviewerStatisticsView(input.InterviewerId.Value, user.UserName, input.Order,
+                                                           new List<InterviewerStatisticsViewItem>(), input.Page,
+                                                           input.PageSize, questionnairesGroupedByTemplate.Count());
+                if (input.Orders.Count > 0)
+                {
+                    questionnairesGroupedByTemplate = input.Orders[0].Direction == OrderDirection.Asc
+                                                          ? questionnairesGroupedByTemplate.OrderBy(input.Orders[0].Field)
+                                                          : questionnairesGroupedByTemplate.OrderByDescending(
+                                                              input.Orders[0].Field);
+                }
+
+                retval.Items =
+                    questionnairesGroupedByTemplate.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize).ToList();
+                return retval;
+            });
         }
 
-        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
+        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IEnumerable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {

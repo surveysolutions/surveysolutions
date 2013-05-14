@@ -99,6 +99,7 @@
     <Compile Include="IFilterableDenormalizerStorage.cs" />
     <Compile Include="InMemoryDenormalizer.cs" />
     <Compile Include="IQueryableDenormalizerStorage.cs" />
+    <Compile Include="RavenDenormalizerStorage.cs" />
     <Compile Include="RavenPersistentStorage.cs" />
     <Compile Include="SmartDenormalizerAttribute.cs" />
     <Compile Include="SolidDenormalizer\SolidPersistentDenormalizer.cs" />

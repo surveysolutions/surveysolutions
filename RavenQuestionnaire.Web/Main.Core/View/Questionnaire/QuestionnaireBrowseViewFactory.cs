@@ -65,25 +65,26 @@ namespace Main.Core.View.Questionnaire
                     input.Page, input.PageSize, count, new QuestionnaireBrowseItem[0], string.Empty);
             }
 
-            IQueryable<QuestionnaireBrowseItem> query = this.documentGroupSession.Query();
-
-            Func<QuestionnaireBrowseItem, bool> q = (ret) => true;
-
-            if (input.IsAdminMode.HasValue)
+            return this.documentGroupSession.Query(query =>
             {
-                q =
-                    x =>
-                    (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
-                    && (input.IsAdminMode.Value || !x.IsDeleted)
-                    && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
-            }
+                Func<QuestionnaireBrowseItem, bool> q = (ret) => true;
 
-            var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
+                if (input.IsAdminMode.HasValue)
+                {
+                    q =
+                        x =>
+                        (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
+                        && (input.IsAdminMode.Value || !x.IsDeleted)
+                        && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                }
 
-            var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
+                var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
+
+                var questionnaireItems = queryResult.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToArray();
 
 
-            return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+                return new QuestionnaireBrowseView(input.Page, input.PageSize, queryResult.Count(), questionnaireItems, input.Order);
+            });
         }
 
         #endregion
