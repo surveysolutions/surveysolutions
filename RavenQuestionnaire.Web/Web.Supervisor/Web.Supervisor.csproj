@@ -546,7 +546,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="HostMap.config" />
+    <Content Include="HostMap.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configuration\Stacy.Supervisor.Web.config" />
     <Content Include="Configuration\Dev.Supervisor.Web.config">
       <SubType>Designer</SubType>
