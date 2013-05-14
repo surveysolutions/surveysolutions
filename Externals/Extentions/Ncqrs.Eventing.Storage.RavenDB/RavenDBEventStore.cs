@@ -121,28 +121,48 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             var retval = new List<CommittedEvent>();
-            List<UniqueEventsResults> aggregateRoots;
+            // List<UniqueEventsResults> aggregateRoots;
 
-            
-            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
 
-            using (IDocumentSession session = DocumentStore.OpenSession())
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
+
+
+            List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
+            int page = 0;
+            while (true)
             {
-                aggregateRoots =
-                    session.Query<StoredEvent, UniqueEventsIndex>().AsProjection<UniqueEventsResults>().ToList();
-            }
-       //     return from chuaggregateRootsnk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    List<UniqueEventsResults> chunk = session
+                        .Query<StoredEvent, UniqueEventsIndex>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<UniqueEventsResults>()
+                        .Skip(page*pageSize)
+                        .Take(pageSize)
+                        .ToList();
 
-          //  return from uniqueEventsResultse in aggregateRoots select ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue);
-            
+                    if (chunk.Count == 0)
+                    {
+                        break;
+                    }
+
+                    aggregateRoots.AddRange(chunk);
+                    page++;
+                }
+            }
+
             foreach (UniqueEventsResults uniqueEventsResultse in aggregateRoots)
             {
                 retval.AddRange(
-                    ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue).ToList());
+                    ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue)
+                        .ToList());
             }
 
             return retval;
+            //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+
         }
+
 
         public CommittedEvent GetLastEvent(Guid aggregateRootId)
         {
@@ -158,6 +178,41 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 return null;
             }
         }
+
+        /// <summary>
+        /// The get stream by chunk.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IEnumerable"/>.
+        /// </returns>
+        private IEnumerable<IEnumerable<StoredEvent>> GetStreamByChunk()
+        {
+            var page = 0;
+            while (true)
+            {
+                List<StoredEvent> chunk;
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    chunk = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(page * pageSize)
+                        .Take(pageSize)
+                        .ToList();
+                }
+
+                if (chunk.Count == 0)
+                {
+                    yield break;
+                }
+
+                page++;
+                yield return chunk;
+            }
+        }
+
+
         public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
