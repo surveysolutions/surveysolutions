@@ -332,6 +332,12 @@
                    }
                });
         },
+        cloneQuestion = function (question) {
+            
+        },
+        cloneGroup = function (group) {
+            
+        },
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
             statistics.groups(datacontext.groups.getAllLocal().length);
@@ -343,6 +349,8 @@
         init();
 
         return {
+            cloneQuestion: cloneQuestion,
+            cloneGroup : cloneGroup,
             activate: activate,
             questionnaire: questionnaire,
             chapters: chapters,
