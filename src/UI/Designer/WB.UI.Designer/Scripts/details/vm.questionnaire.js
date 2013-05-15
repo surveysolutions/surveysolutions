@@ -89,7 +89,7 @@
         },
         editQuestion = function (id) {
             var question = datacontext.questions.getLocalById(id);
-            if (question.isNullo) {
+            if (_.isNull(question) || question.isNullo) {
                 return;
             }
             question.isSelected(true);
@@ -101,7 +101,7 @@
         },
         editGroup = function (id) {
             var group = datacontext.groups.getLocalById(id);
-            if (group.isNullo) {
+            if (_.isNull(group) || group.isNullo) {
                 return;
             }
             group.isSelected(true);
@@ -246,8 +246,25 @@
             hideOutput();
         },
         saveGroup = function (group) {
+            
+            if (group.hasParent() && group.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+
+            var command = '';
+            if (group.isNew()) {
+                if (group.isClone()) {
+                    command = config.commands.cloneGroup;
+                } else {
+                    command = config.commands.createGroup;
+                }
+            } else {
+                command = config.commands.updateGroup;
+            }
+
             datacontext.sendCommand(
-                group.isNew() ? config.commands.createGroup : config.commands.updateGroup,
+                command,
                 group,
                 {
                     success: function () {
@@ -264,6 +281,12 @@
                 });
         },
         saveQuestion = function (question) {
+            
+            if (question.hasParent() && question.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+            
             var command = '';
             if (question.isNew()) {
                 if (question.isClone()) {

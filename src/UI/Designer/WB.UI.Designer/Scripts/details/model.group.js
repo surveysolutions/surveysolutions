@@ -91,16 +91,17 @@
                     item.isNew(true);
                     item.isClone(true);
 
-                    item.childrenID(_.map(this.childrenID(), function (item) {
+                    item.childrenID(_.map(this.childrenID(), function (child) {
                         var clonedItem;
                         
-                        if (item.type === "GroupView") {
-                            clonedItem = dc().groups.getLocalById(item.id).clone();
+                        if (child.type === "GroupView") {
+                            clonedItem = dc().groups.getLocalById(child.id).clone();
                             dc().groups.add(clonedItem);
                         } else {
-                            clonedItem = dc().questions.getLocalById(item.id).clone();
+                            clonedItem = dc().questions.getLocalById(child.id).clone();
                             dc().questions.add(clonedItem);
                         }
+                        clonedItem.parent(item);
                         return { type: clonedItem.type(), id: clonedItem.id() };
                     }));
 
