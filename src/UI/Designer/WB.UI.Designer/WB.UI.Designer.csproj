@@ -571,9 +571,9 @@
       <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
       <Name>WB.UI.Designer.WebServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Desiner.Utilities</Name>
+      <Name>WB.UI.Designer.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

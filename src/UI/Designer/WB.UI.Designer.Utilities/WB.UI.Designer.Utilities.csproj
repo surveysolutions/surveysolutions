@@ -7,8 +7,8 @@
     <ProjectGuid>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WB.UI.Desiner.Utilities</RootNamespace>
-    <AssemblyName>WB.UI.Desiner.Utilities</AssemblyName>
+    <RootNamespace>WB.UI.Designer.Utilities</RootNamespace>
+    <AssemblyName>WB.UI.Designer.Utilities</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
