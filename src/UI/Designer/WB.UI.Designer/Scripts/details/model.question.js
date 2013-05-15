@@ -8,8 +8,8 @@
               self.id = ko.observable(Math.uuid());
               self.isNew = ko.observable(true);
               self.isClone = ko.observable(false);
-              
-              
+
+
               self.title = ko.observable('New Question').extend({ required: true });
               self.parent = ko.observable();
               self.alias = ko.observable('').extend({
@@ -19,7 +19,7 @@
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
                   }
               });
-              
+
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
 
@@ -73,8 +73,8 @@
               };
               self.removeTrigger = function (trigger) {
                   self.triggers.remove(trigger);
-                  //self.triggers.valueHasMutated();
               };
+
 
               self.currentAnswerValue = ko.observable();
               self.currentAnswerTitle = ko.observable();
@@ -93,7 +93,9 @@
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
-              
+
+
+
               return self;
           };
 
@@ -111,7 +113,21 @@
 
         Question.prototype = function () {
             var dc = Question.datacontext,
-                children = function() {
+                children = function () {
+                },
+                index = function () {
+                    if (this.hasParent()) {
+                        var parent = this.parent();
+                        var item = utils.findById(parent.childrenID(), this.id());
+                        return item.index;
+                    }
+                    return 0;
+                },
+                hasParent = function () {
+                    if (_.isNull(this.parent()) || _.isUndefined(this.parent())) {
+                        return false;
+                    }
+                    return true;
                 },
                 clone = function () {
                     var item = new Question();
@@ -123,7 +139,7 @@
                     item.answerOptions(_.map(this.answerOptions(), function (answer) {
                         return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
                     }));
-                    
+
                     item.triggers(_.map(this.triggers(), function (trigger) {
                         return { key: trigger.key, value: trigger.value };
                     }));
@@ -142,7 +158,7 @@
                     item.id(Math.uuid());
                     item.isNew(true);
                     item.isClone(true);
-                    
+
                     if (this.isClone() && this.isNew()) {
                         item.cloneSource(this.cloneSource());
                     } else {
@@ -159,7 +175,9 @@
             return {
                 isNullo: false,
                 children: children,
-                clone : clone
+                clone: clone,
+                index: index,
+                hasParent: hasParent
             };
         }();
 
