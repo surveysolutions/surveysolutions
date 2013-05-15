@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Commands.Questionnaire.Question
+using System;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Commands.Questionnaire.Base
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
     public abstract class FullQuestionDataCommand : QuestionCommand
     {
         protected FullQuestionDataCommand(Guid questionnaireId, Guid questionId,

@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Commands.Questionnaire.Question
+﻿using Main.Core.Commands.Questionnaire.Base;
+
+namespace Main.Core.Commands.Questionnaire.Question
 {
     using System;
 

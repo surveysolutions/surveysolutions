@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Commands.Questionnaire.Group
+﻿using Main.Core.Commands.Questionnaire.Base;
+
+namespace Main.Core.Commands.Questionnaire.Group
 {
     using System;
 

@@ -1,9 +1,8 @@
-﻿namespace Main.Core.Commands.Questionnaire.Group
+using System;
+using Main.Core.Entities.SubEntities;
+
+namespace Main.Core.Commands.Questionnaire.Base
 {
-    using System;
-
-    using Main.Core.Entities.SubEntities;
-
     public abstract class FullGroupDataCommand : GroupCommand
     {
         protected FullGroupDataCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)

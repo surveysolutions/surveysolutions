@@ -1,7 +1,7 @@
-﻿namespace Main.Core.Commands.Questionnaire.Group
-{
-    using System;
+using System;
 
+namespace Main.Core.Commands.Questionnaire.Base
+{
     public abstract class GroupCommand : QuestionnaireCommand
     {
         protected GroupCommand(Guid questionnaireId, Guid groupId)
