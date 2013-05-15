@@ -593,7 +593,7 @@
     <Content Include="Views\Survey\Timeline1.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\Template\NewViewTestUploadFile.cshtml" />
-    <Content Include="Views\Maintenance\ReadLayer.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
