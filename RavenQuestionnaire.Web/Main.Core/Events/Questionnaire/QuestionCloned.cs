@@ -9,15 +9,20 @@
 namespace Main.Core.Events.Questionnaire
 {
     using System;
+    using System.Collections.Generic;
+
+    using Main.Core.Entities.SubEntities;
+
     using Ncqrs.Eventing.Storage;
 
     /// <summary>
     /// The new question added.
     /// </summary>
-    [EventName("RavenQuestionnaire.Core:Events:NewQuestionAdded")]
-    public class NewQuestionAdded : FullQuestionDataEvent
+    [EventName("RavenQuestionnaire.Core:Events:QuestionCloned")]
+    public class QuestionCloned : NewQuestionAdded
     {
-        [Obsolete]
-        public Guid TargetGroupKey { get; set; }
+        public Guid SourceQuestionId { get; set; }
+
+        public int TargetIndex { get; set; }
     }
 }

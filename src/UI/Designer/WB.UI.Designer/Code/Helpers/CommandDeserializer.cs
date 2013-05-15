@@ -17,10 +17,12 @@ namespace WB.UI.Designer.Code.Helpers
         {
             { "UpdateGroup", typeof(UpdateGroupCommand) },
             { "AddGroup", typeof(AddGroupCommand) },
+            { "CloneGroupWithoutChildren", typeof(CloneGroupCommand) },
             { "DeleteGroup", typeof(DeleteGroupCommand) },
             { "MoveGroup", typeof(MoveGroupCommand) },
             { "UpdateQuestion", typeof(UpdateQuestionCommand) },
             { "AddQuestion", typeof(AddQuestionCommand) },
+            { "CloneQuestion", typeof(CloneQuestionCommand) },
             { "DeleteQuestion", typeof(DeleteQuestionCommand) },
             { "MoveQuestion", typeof(MoveQuestionCommand) },
         };

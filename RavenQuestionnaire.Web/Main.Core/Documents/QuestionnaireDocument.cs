@@ -106,6 +106,23 @@ namespace Main.Core.Documents
 
         #endregion
 
+        public void Insert(int index, IComposite c, Guid? parent)
+        {
+            if (!parent.HasValue || this.PublicKey == parent)
+            {
+                c.SetParent(this);
+                this.Children.Insert(index, c);
+                return;
+            }
+
+            var group = this.Find<Group>(parent.Value);
+            if (@group != null)
+            {
+                c.SetParent(@group);
+                @group.Children.Insert(index, c);
+            }
+        }
+
         public void Add(IComposite c, Guid? parent, Guid? parentPropagationKey)
         {
             if (!parent.HasValue || this.PublicKey == parent)
@@ -217,7 +234,7 @@ namespace Main.Core.Documents
             if (@group == null) return;
 
             this.UpdateAutoPropagateQuestionsTriggersIfNeeded(@group, kindOfPropagation);
-            
+
             @group.Propagated = kindOfPropagation;
             @group.ConditionExpression = conditionExpression;
             @group.Description = description;

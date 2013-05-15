@@ -32,7 +32,7 @@
             ],
             commands = {
                 createGroup: "AddGroup",
-                cloneGroup: "CloneGroup",
+                cloneGroup: "CloneGroupWithoutChildren",
                 updateGroup: "UpdateGroup",
                 deleteGroup: "DeleteGroup",
                 groupMove: "MoveGroup",

@@ -166,9 +166,11 @@
     <Compile Include="Commands\Questionnaire\DeleteImageCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs" />
     <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\CloneGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -478,6 +480,10 @@
     <Compile Include="Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\FullGroupDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\FullQuestionDataEvent.cs" />
+    <Compile Include="Events\Questionnaire\QuestionCloned.cs" />
+    <Compile Include="Events\Questionnaire\GroupCloned.cs" />
     <Compile Include="Events\Questionnaire\GroupDeleted.cs">
       <SubType>Code</SubType>
     </Compile>
