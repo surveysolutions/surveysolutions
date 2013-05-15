@@ -173,13 +173,13 @@ namespace Main.Core
         {
             var genericParameter = context.GenericArguments[0];
 
-            #if !MONODROID
+         /*   #if !MONODROID
 
             if(genericParameter.GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0)
                 return Kernel.Get(typeof(PersistentDenormalizer<>).MakeGenericType(genericParameter));
 
             else
-            #endif
+            #endif*/
                 return Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
         }
 
