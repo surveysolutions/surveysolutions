@@ -516,7 +516,7 @@
     <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
-    <Content Include="Views\Maintenance\ReadLayer.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
