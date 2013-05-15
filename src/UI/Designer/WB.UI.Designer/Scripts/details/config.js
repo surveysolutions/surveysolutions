@@ -6,10 +6,10 @@
             //-----------------
             questionTypes = {
                 "SingleOption": "SingleOption",
-                "MultyOption" : "MultyOption",
-                "Numeric" : "Numeric",
-                "DateTime" : "DateTime",
-                "Text" : "Text",
+                "MultyOption": "MultyOption",
+                "Numeric": "Numeric",
+                "DateTime": "DateTime",
+                "Text": "Text",
                 "AutoPropagate": "AutoPropagate"
             },
             questionScopes = [
@@ -32,10 +32,12 @@
             ],
             commands = {
                 createGroup: "AddGroup",
+                cloneGroup: "CloneGroup",
                 updateGroup: "UpdateGroup",
                 deleteGroup: "DeleteGroup",
                 groupMove: "MoveGroup",
                 createQuestion: "AddQuestion",
+                cloneQuestion : "CloneQuestion",
                 updateQuestion: "UpdateQuestion",
                 deleteQuestion: "DeleteQuestion",
                 questionMove: "MoveQuestion"
@@ -71,17 +73,25 @@
             loggerTmeout = 2000,
 
             warnings = {
-                propagatedGroupCantBecomeChapter : {
+                propagatedGroupCantBecomeChapter: {
                     title: 'Cant move',
-                    text:  "Auto propagate group can't become a chapter"
+                    text: "Auto propagate group can't become a chapter"
                 },
                 cantMoveQuestionOutsideGroup: {
                     title: 'Cant move',
-                    text:  "You can't move question outside any group"
+                    text: "You can't move question outside any group"
                 },
                 cantMoveGroupIntoPropagatedGroup: {
                     title: 'Cant move',
                     text: "You can't move group into propagated group"
+                },
+                cantMoveUnsavedItem: {
+                    title: 'Cant move',
+                    text: "You can't move unsaved items"
+                },
+                saveParentFirst: {
+                    title: 'Cant save',
+                    text: "Save parent item first"
                 },
                 savedData: 'Data saved successfully'
             },
@@ -100,7 +110,7 @@
                     errorElementClass: 'error',
                     errorMessageClass: "help-inline"
                 });
-              
+
                 ko.bindingHandlers.sortable.options = { cursor: "move", handle: ".handler", axis: "y", placeholder: "ui-state-highlight" };
                 ko.bindingHandlers.draggable.options = { cursor: "move", handle: ".handler", axis: "y" };
 
