@@ -80,11 +80,11 @@ namespace WB.UI.Designer.Tests
             return new Exception("message", CreateTwoLevelException());
         }
 
-        private static NewUpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid? questionnaireId = null)
+        private static UpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid? questionnaireId = null)
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new NewUpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty);
 
             return command;
         }

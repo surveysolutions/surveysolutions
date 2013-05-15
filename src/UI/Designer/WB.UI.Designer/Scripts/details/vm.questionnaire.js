@@ -1,6 +1,6 @@
 ﻿define('vm.questionnaire',
-    ['ko', 'underscore', 'config', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
-    function (ko, _, config, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
+    ['ko', 'underscore', 'config', 'utils', 'datacontext', 'router', 'messenger', 'store', 'model', 'bootbox', 'ace/theme/designer', 'ace/mode/ncalc'],
+    function (ko, _, config, utils, datacontext, router, messenger, store, model, bootbox, ncalc_theme, ncalc_mode) {
         var filter = ko.observable('')/*.extend({ throttle: 400 })*/,
             isFilterMode = ko.observable(false),
             selectedGroup = ko.observable(),
@@ -13,7 +13,42 @@
                 questions: ko.observable(),
                 groups: ko.observable(),
             };
-        isInitialized = false;
+        isInitialized = false,
+        cloneQuestion = function (question) {
+            if (question.isNew())
+                return;
+            var parent = question.parent();
+            var index = question.index();
+            var clonedQuestion = question.clone();
+            
+            datacontext.questions.add(clonedQuestion);
+
+            parent.childrenID.splice(index + 1, 0, { type: clonedQuestion.type(), id: clonedQuestion.id() });
+            parent.fillChildren();
+            router.navigateTo(clonedQuestion.getHref());
+            calcStatistics();
+        },
+        cloneGroup = function (group) {
+            if (group.isNew())
+                return;
+            
+            var clonedGroup = group.clone();
+            datacontext.groups.add(clonedGroup);
+            clonedGroup.fillChildren();
+            
+            if (group.hasParent()) {
+                var parent = group.parent();
+                var index = group.index();
+                parent.childrenID.splice(index + 1, 0, { type: clonedGroup.type(), id: clonedGroup.id() });
+                parent.fillChildren();
+            } else {
+                var item = utils.findById(datacontext.questionnaire.childrenID(), group.id());
+                datacontext.questionnaire.childrenID.splice(item.index+1, 0, { type: clonedGroup.type(), id: clonedGroup.id() });
+                chapters(datacontext.groups.getChapters());
+            }
+            router.navigateTo(clonedGroup.getHref());
+            calcStatistics();
+        },
         activate = function (routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
 
@@ -54,7 +89,7 @@
         },
         editQuestion = function (id) {
             var question = datacontext.questions.getLocalById(id);
-            if (question.isNullo) {
+            if (_.isNull(question) || question.isNullo) {
                 return;
             }
             question.isSelected(true);
@@ -62,10 +97,11 @@
             selectedQuestion(question);
             selectedQuestion.valueHasMutated();
             openDetails("show-question");
+            $('#alias').focus();
         },
         editGroup = function (id) {
             var group = datacontext.groups.getLocalById(id);
-            if (group.isNullo) {
+            if (_.isNull(group) || group.isNullo) {
                 return;
             }
             group.isSelected(true);
@@ -210,8 +246,25 @@
             hideOutput();
         },
         saveGroup = function (group) {
+            
+            if (group.hasParent() && group.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+
+            var command = '';
+            if (group.isNew()) {
+                if (group.isClone()) {
+                    command = config.commands.cloneGroup;
+                } else {
+                    command = config.commands.createGroup;
+                }
+            } else {
+                command = config.commands.updateGroup;
+            }
+
             datacontext.sendCommand(
-                group.isNew() ? config.commands.createGroup : config.commands.updateGroup,
+                command,
                 group,
                 {
                     success: function () {
@@ -228,8 +281,25 @@
                 });
         },
         saveQuestion = function (question) {
+            
+            if (question.hasParent() && question.parent().isNew()) {
+                config.logger(config.warnings.saveParentFirst);
+                return;
+            }
+            
+            var command = '';
+            if (question.isNew()) {
+                if (question.isClone()) {
+                    command = config.commands.cloneQuestion;
+                } else {
+                    command = config.commands.createQuestion;
+                }
+            } else {
+                command = config.commands.updateQuestion;
+            }
+            
             datacontext.sendCommand(
-                question.isNew() ? config.commands.createQuestion : config.commands.updateQuestion,
+                command,
                 question,
                 {
                     success: function () {
@@ -264,6 +334,12 @@
             var isDropedInChapter = (_.isNull(toId) || _.isUndefined(toId));
             var isDraggedFromChapter = (_.isNull(fromId) || _.isUndefined(fromId));
             
+            if (arg.item.isNew()) {
+                arg.cancelDrop = true;
+                config.logger(config.warnings.cantMoveUnsavedItem);
+                return;
+            }
+
             if (isDropedInChapter && moveItemType == "question") {
                 arg.cancelDrop = true;
                 config.logger(config.warnings.cantMoveQuestionOutsideGroup);
@@ -332,6 +408,7 @@
                    }
                });
         },
+        
         calcStatistics = function () {
             statistics.questions(datacontext.questions.getAllLocal().length);
             statistics.groups(datacontext.groups.getAllLocal().length);
@@ -343,6 +420,8 @@
         init();
 
         return {
+            cloneQuestion: cloneQuestion,
+            cloneGroup : cloneGroup,
             activate: activate,
             questionnaire: questionnaire,
             chapters: chapters,
