@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace WB.UI.Desiner.Utilities.Compression
+namespace WB.UI.Designer.Utilities.Compression
 {
     using System.IO;
     using System.IO.Compression;

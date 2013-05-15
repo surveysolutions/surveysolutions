@@ -120,7 +120,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Questionnaire.Event
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.WebServices", "..\src\UI\Designer\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj", "{8263CA84-BFB5-4A7B-AE31-F5FC5B05E7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Desiner.Utilities", "..\src\UI\Designer\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj", "{93E5902F-332A-4F30-B81D-9DD31A4DBED9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer.Utilities", "..\src\UI\Designer\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj", "{93E5902F-332A-4F30-B81D-9DD31A4DBED9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Shared.Log", "..\src\UI\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj", "{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}"
 EndProject
