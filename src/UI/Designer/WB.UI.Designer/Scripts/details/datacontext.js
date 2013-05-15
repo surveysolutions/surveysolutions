@@ -222,8 +222,8 @@
         };
 
         commands[config.commands.cloneQuestion] = function (question) {
-            var command = commands[config.commands.createGroup](question);
-            command.sourceQuestionId = question.cloneSource();
+            var command = commands[config.commands.createQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
             return command;
         };
 

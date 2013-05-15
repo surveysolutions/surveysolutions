@@ -26,7 +26,7 @@
                         })) ;
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
             };
         });
     </script>
