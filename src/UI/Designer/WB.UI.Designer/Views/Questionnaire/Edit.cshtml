@@ -12,6 +12,9 @@
 @section Styles{
     @Styles.Render("~/content/edit")
 }
+<!--[if IE 7]>
+  <link href="~/Content/font-awesome-ie7.min.css" rel="stylesheet" />
+<![endif]-->
 @section Scripts{
     @Scripts.Render("~/designer")
     <script>
@@ -23,7 +26,7 @@
                         })) ;
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
             };
         });
     </script>
@@ -164,7 +167,7 @@
                     <div class="control-group" data-bind="validationElement: alias">
                         <label class="control-label required">Variable</label>
                         <div class="controls">
-                            <input placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
+                            <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
                         </div>
                     </div>
                 </div>
@@ -246,6 +249,7 @@
                         <ul class="dropdown-menu">
                             <li><a data-bind="click: addQuestion, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
                             <li><a data-bind="click: addGroup, visible: gtype()=='None' &&  isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li><a data-bind="click: cloneGroup, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -270,6 +274,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
