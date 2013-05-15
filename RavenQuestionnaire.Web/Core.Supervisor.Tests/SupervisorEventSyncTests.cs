@@ -47,9 +47,11 @@ namespace Core.Supervisor.Tests
         {
             var eventStoreMock = new Mock<ISnapshootEventStore>();
             NcqrsEnvironment.SetDefault<IEventStore>(eventStoreMock.Object);
+            var commitedEvent = new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now,
+                                                   new object(), new Version(1, 1, 1, 1));
             eventStoreMock.Setup(x => x.GetLatestSnapshoot(It.IsAny<Guid>()))
-                          .Returns(new CommittedEvent(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1, DateTime.Now,
-                                                      new object(), new Version(1,1,1,1)));
+                          .Returns(commitedEvent);
+            denormalizerMock.Setup(x => x.GetByGuid<CommittedEvent>(It.IsAny<Guid>())).Returns(commitedEvent);
             return eventStoreMock;
         }
 
