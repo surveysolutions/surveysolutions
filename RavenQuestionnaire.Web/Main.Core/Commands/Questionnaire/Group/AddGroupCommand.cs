@@ -11,9 +11,9 @@ namespace Main.Core.Commands.Questionnaire.Group
 
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewAddGroup")]
-    public class NewAddGroupCommand : FullGroupDataCommand
+    public class AddGroupCommand : FullGroupDataCommand
     {
-        public NewAddGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
+        public AddGroupCommand(Guid questionnaireId, Guid groupId, Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition)
             : base(questionnaireId, groupId, title, propagationKind, description, condition)
         {
             this.ParentGroupId = parentGroupId;

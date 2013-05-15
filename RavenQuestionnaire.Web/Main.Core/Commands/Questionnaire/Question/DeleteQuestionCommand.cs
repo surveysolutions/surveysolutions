@@ -10,9 +10,9 @@ namespace Main.Core.Commands.Questionnaire.Question
 
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewDeleteQuestion")]
-    public class NewDeleteQuestionCommand : QuestionCommand
+    public class DeleteQuestionCommand : QuestionCommand
     {
-        public NewDeleteQuestionCommand(Guid questionnaireId, Guid questionId)
+        public DeleteQuestionCommand(Guid questionnaireId, Guid questionId)
             : base(questionnaireId, questionId) {}
     }
 }

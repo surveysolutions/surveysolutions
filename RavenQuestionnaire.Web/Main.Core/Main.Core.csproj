@@ -168,15 +168,15 @@
     <Compile Include="Commands\Questionnaire\Flow\UpdateQuestionnaireFlowCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\NewAddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Commands\Questionnaire\Question\NewAddQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\NewDeleteGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Group\NewUpdateGroupCommand.cs" />
-    <Compile Include="Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\AddQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\DeleteGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\DeleteQuestionCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Group\UpdateGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\Question\UpdateQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\QuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\MoveQuestionnaireItemCommand.cs" />
     <Compile Include="Commands\Questionnaire\UpdateImageCommand.cs" />

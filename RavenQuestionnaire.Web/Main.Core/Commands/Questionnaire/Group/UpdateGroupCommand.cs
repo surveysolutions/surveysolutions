@@ -11,9 +11,9 @@ namespace Main.Core.Commands.Questionnaire.Group
 
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewUpdateGroup")]
-    public class NewUpdateGroupCommand : FullGroupDataCommand
+    public class UpdateGroupCommand : FullGroupDataCommand
     {
-        public NewUpdateGroupCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)
+        public UpdateGroupCommand(Guid questionnaireId, Guid groupId, string title, Propagate propagationKind, string description, string condition)
             : base(questionnaireId, groupId, title, propagationKind, description, condition) {}
     }
 }

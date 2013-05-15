@@ -11,9 +11,9 @@ namespace Main.Core.Commands.Questionnaire.Question
 
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewAddQuestion")]
-    public class NewAddQuestionCommand : FullQuestionDataCommand
+    public class AddQuestionCommand : FullQuestionDataCommand
     {
-        public NewAddQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
+        public AddQuestionCommand(Guid questionnaireId, Guid questionId, Guid groupId,
             string title, QuestionType type, string alias, bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage, string instructions,
             Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)

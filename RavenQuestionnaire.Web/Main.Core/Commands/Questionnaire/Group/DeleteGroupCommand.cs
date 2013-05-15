@@ -10,9 +10,9 @@ namespace Main.Core.Commands.Questionnaire.Group
 
     [Serializable]
     [MapsToAggregateRootMethod(typeof(QuestionnaireAR), "NewDeleteGroup")]
-    public class NewDeleteGroupCommand : GroupCommand
+    public class DeleteGroupCommand : GroupCommand
     {
-        public NewDeleteGroupCommand(Guid questionnaireId, Guid groupId)
+        public DeleteGroupCommand(Guid questionnaireId, Guid groupId)
             : base(questionnaireId, groupId) {}
     }
 }
