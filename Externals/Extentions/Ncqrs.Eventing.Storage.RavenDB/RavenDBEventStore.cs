@@ -275,7 +275,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 var snapshoot =
                     session.Query<StoredEvent, Event_ByEventSource>()
                            .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                           .FirstOrDefault(e => e.EventSourceId == aggreagateRootId &&  e.IsSnapshot );
+                           .Where(e => e.EventSourceId == aggreagateRootId &&  e.IsSnapshot ).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
                 if (snapshoot!=null)
                 {
                     return ToCommittedEvent(snapshoot);
