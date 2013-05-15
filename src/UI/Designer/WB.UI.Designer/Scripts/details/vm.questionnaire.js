@@ -18,18 +18,36 @@
             if (question.isNew())
                 return;
             var parent = question.parent();
-            var item = utils.findById(parent.childrenID(), question.id());
+            var index = question.index();
             var clonedQuestion = question.clone();
             
             datacontext.questions.add(clonedQuestion);
 
-            parent.childrenID.splice(item.index + 1, 0, { type: clonedQuestion.type(), id: clonedQuestion.id() });
+            parent.childrenID.splice(index + 1, 0, { type: clonedQuestion.type(), id: clonedQuestion.id() });
             parent.fillChildren();
             router.navigateTo(clonedQuestion.getHref());
             calcStatistics();
         },
         cloneGroup = function (group) {
+            if (group.isNew())
+                return;
             
+            var clonedGroup = group.clone();
+            datacontext.groups.add(clonedGroup);
+            clonedGroup.fillChildren();
+            
+            if (group.hasParent()) {
+                var parent = group.parent();
+                var index = group.index();
+                parent.childrenID.splice(index + 1, 0, { type: clonedGroup.type(), id: clonedGroup.id() });
+                parent.fillChildren();
+            } else {
+                var item = utils.findById(datacontext.questionnaire.childrenID(), group.id());
+                datacontext.questionnaire.childrenID.splice(item.index+1, 0, { type: clonedGroup.type(), id: clonedGroup.id() });
+                chapters(datacontext.groups.getChapters());
+            }
+            router.navigateTo(clonedGroup.getHref());
+            calcStatistics();
         },
         activate = function (routeData, callback) {
             messenger.publish.viewModelActivated({ canleaveCallback: canLeave });
