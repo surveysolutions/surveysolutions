@@ -127,7 +127,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             // List<UniqueEventsResults> aggregateRoots;
 
 
-            
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
 
 
             List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
