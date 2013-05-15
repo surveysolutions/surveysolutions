@@ -1,6 +1,6 @@
 ﻿define('model.question',
-    ['ko', 'config', 'model.answerOption'],
-    function (ko, config, answerOption) {
+    ['ko', 'config', 'utils', 'model.answerOption'],
+    function (ko, config, utils, answerOption) {
 
         var _dc = null,
           Question = function () {
