@@ -577,7 +577,7 @@
     <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
-    <Content Include="Views\Maintenance\ReadLayer.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Supervisors.cshtml" />
