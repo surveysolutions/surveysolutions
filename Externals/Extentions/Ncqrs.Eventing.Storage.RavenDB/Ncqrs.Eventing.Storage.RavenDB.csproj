@@ -108,6 +108,8 @@
     <Compile Include="RavenDBEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RavenDBSnapshotStore.cs" />
+    <Compile Include="RavenIndexes\Event_ByEventSource.cs" />
+    <Compile Include="RavenIndexes\UniqueEventsIndex.cs" />
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredSnaphot.cs" />
   </ItemGroup>

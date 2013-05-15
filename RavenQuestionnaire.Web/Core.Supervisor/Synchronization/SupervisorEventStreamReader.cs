@@ -54,7 +54,7 @@ namespace Core.Supervisor.Synchronization
         /// <exception cref="Exception">
         /// added new exception
         /// </exception>
-        public SupervisorEventStreamReader(IDenormalizer denormalizer)
+        public SupervisorEventStreamReader(IDenormalizer denormalizer):base(denormalizer)
         {
             this.denormalizer = denormalizer;
         }
