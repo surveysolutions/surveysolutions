@@ -15,13 +15,13 @@ namespace WB.UI.Designer.Code.Helpers
     {
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
-            { "UpdateGroup", typeof(NewUpdateGroupCommand) },
-            { "AddGroup", typeof(NewAddGroupCommand) },
-            { "DeleteGroup", typeof(NewDeleteGroupCommand) },
+            { "UpdateGroup", typeof(UpdateGroupCommand) },
+            { "AddGroup", typeof(AddGroupCommand) },
+            { "DeleteGroup", typeof(DeleteGroupCommand) },
             { "MoveGroup", typeof(MoveGroupCommand) },
-            { "UpdateQuestion", typeof(NewUpdateQuestionCommand) },
-            { "AddQuestion", typeof(NewAddQuestionCommand) },
-            { "DeleteQuestion", typeof(NewDeleteQuestionCommand) },
+            { "UpdateQuestion", typeof(UpdateQuestionCommand) },
+            { "AddQuestion", typeof(AddQuestionCommand) },
+            { "DeleteQuestion", typeof(DeleteQuestionCommand) },
             { "MoveQuestion", typeof(MoveQuestionCommand) },
         };
 

@@ -181,6 +181,12 @@
 
         var commands = {};
 
+        commands[config.commands.cloneGroup] = function (group) {
+            var command = commands[config.commands.createGroup](group);
+            command.sourceGroupId = group.cloneSource().id();
+            return command;
+        };
+
         commands[config.commands.createGroup] = function (group) {
             var parent = group.parent();
             if (!_.isNull(parent))
@@ -213,6 +219,12 @@
                 description: group.description(),
                 condition: group.condition()
             };
+        };
+
+        commands[config.commands.cloneQuestion] = function (question) {
+            var command = commands[config.commands.createQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            return command;
         };
 
         commands[config.commands.createQuestion] = function (question) {
