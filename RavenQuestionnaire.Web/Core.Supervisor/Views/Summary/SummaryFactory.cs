@@ -16,17 +16,17 @@
 
     public class SummaryFactory : BaseUserViewFactory, IViewFactory<SummaryInputModel, SummaryView>
     {
-        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> _survey;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
 
-        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> _templates;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
 
         public SummaryFactory(
             IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
             IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
             IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
-            this._survey = survey;
-            this._templates = templates;
+            this.survey = survey;
+            this.templates = templates;
         }
         
         public SummaryView Load(SummaryInputModel input)
@@ -35,13 +35,13 @@
             TemplateLight template = null;
             if (input.TemplateId.HasValue)
             {
-                var tbi = this._templates.GetById(input.TemplateId.Value);
+                var tbi = this.templates.GetById(input.TemplateId.Value);
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 
             var items = this.BuildItems((!input.TemplateId.HasValue
-                                             ? this._survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                                             : this._survey.Query().Where(
+                                             ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
+                                             : this.survey.Query().Where(
                                                  x => x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
                 .GroupBy(x => x.Responsible))
                 .AsQueryable();
