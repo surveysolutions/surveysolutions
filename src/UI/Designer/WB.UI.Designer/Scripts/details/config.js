@@ -89,6 +89,10 @@
                     title: 'Cant move',
                     text: "You can't move unsaved items"
                 },
+                saveParentFirst: {
+                    title: 'Cant save',
+                    text: "Save parent item first"
+                },
                 savedData: 'Data saved successfully'
             },
 
