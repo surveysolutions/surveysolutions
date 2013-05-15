@@ -393,6 +393,8 @@ namespace Web.Supervisor.Controllers
             {
                 var logger = LogManager.GetCurrentClassLogger();
                 logger.FatalException("Error on retrieving the list of AR on sync. ", ex);
+                logger.Fatal(ex.Message);
+                logger.Fatal(ex.StackTrace);
             }
 
             return result;
@@ -573,13 +575,11 @@ namespace Web.Supervisor.Controllers
         public bool PostStream(string request)
         {
             Guid syncProcess = Guid.NewGuid();
+            var logger = LogManager.GetCurrentClassLogger();
 
             try
             {
                 Request.InputStream.Position = 0;
-
-                /*var message = new EventSyncMessage();
-                message.InitializeFrom(Request.InputStream);*/
 
                 var settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
@@ -589,17 +589,25 @@ namespace Web.Supervisor.Controllers
                 {
                     item = sr.ReadToEnd();
                 }
-                
-                EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
 
+                EventSyncMessage message = null;
+
+                try
+                {
+                    message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
+                }
+                catch (Exception)
+                {
+                    logger.Fatal("Error on Deserialization. Item: " + item);
+                    throw;
+                }
+                
                 if (message == null)
                 {
                     return false;
                 }
 
-                var process =
-                    (IEventSyncProcess)
-                    this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
+                var process = (IEventSyncProcess)this.syncProcessFactory.GetProcess(SyncProcessType.Event, syncProcess, message.SynchronizationKey);
 
                 process.Import("Direct controller syncronization.", message.Command);
 
@@ -607,7 +615,10 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                LogManager.GetCurrentClassLogger().Fatal("Error on Sync.", ex);
+                logger.FatalException("Error on Sync.", ex);
+                logger.Fatal("Exception message: " + ex.Message);
+                logger.Fatal("Stack: " + ex.StackTrace);
+                
                 return false;
             }
         }
