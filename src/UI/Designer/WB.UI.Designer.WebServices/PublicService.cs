@@ -10,7 +10,7 @@ namespace WB.UI.Designer.WebServices
     using System.Web.Security;
 
     using WB.Core.Questionnaire.ExportServices;
-    using WB.UI.Desiner.Utilities.Compression;
+    using WB.UI.Designer.Utilities.Compression;
 
     /// <summary>
     ///     The public service.

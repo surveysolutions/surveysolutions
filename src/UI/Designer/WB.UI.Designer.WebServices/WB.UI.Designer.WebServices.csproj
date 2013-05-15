@@ -50,9 +50,9 @@
       <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Desiner.Utilities</Name>
+      <Name>WB.UI.Designer.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

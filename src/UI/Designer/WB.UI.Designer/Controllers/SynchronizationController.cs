@@ -17,7 +17,7 @@ namespace WB.UI.Designer.Controllers
 
     using WB.Core.Questionnaire.ExportServices;
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Desiner.Utilities.Compression;
+    using WB.UI.Designer.Utilities.Compression;
 
     /// <summary>
     /// The synchronization controller.

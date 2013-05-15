@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Tests
     using System.IO.Compression;
 
     using WB.UI.Designer.BootstrapSupport;
-    using WB.UI.Desiner.Utilities.Compression;
+    using WB.UI.Designer.Utilities.Compression;
 
     [TestFixture]
     public class SynchronizationControllerTests
