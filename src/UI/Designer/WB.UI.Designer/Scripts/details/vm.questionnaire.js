@@ -9,10 +9,7 @@
             chapters = ko.observableArray(),
             errors = ko.observableArray(),
             searchResult = ko.observableArray(),
-            statistics = {
-                questions: ko.observable(),
-                groups: ko.observable(),
-            };
+            statistics = new model.Statistic();
         isInitialized = false,
         cloneQuestion = function (question) {
             if (question.isNew())
@@ -410,8 +407,14 @@
         },
         
         calcStatistics = function () {
-            statistics.questions(datacontext.questions.getAllLocal().length);
-            statistics.groups(datacontext.groups.getAllLocal().length);
+            var questions = datacontext.questions.getAllLocal();
+            var groups = datacontext.groups.getAllLocal();
+            statistics.questions(questions.length);
+            statistics.groups(groups.length);
+            var counter = _.countBy(questions, function(q) { return q.isNew(); });
+            statistics.unsavedQuestion(_.isUndefined(counter['true']) ? 0 : counter['true']);
+            counter = _.countBy(groups, function (g) { return g.isNew(); });
+            statistics.unsavedGroups(_.isUndefined(counter['true']) ? 0 : counter['true']);
         },
         init = function () {
             filter.subscribe(filterContent);
