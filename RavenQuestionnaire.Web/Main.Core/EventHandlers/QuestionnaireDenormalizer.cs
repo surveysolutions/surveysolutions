@@ -95,7 +95,7 @@ namespace Main.Core.EventHandlers
             group.Description = evnt.Payload.Description;
 
             #warning Slava: uncomment this line and get rig of read and write side objects
-            //item.Insert(evnt.Payload.TargetIndex, group, evnt.Payload.ParentGroupPublicKey);
+            item.Insert(evnt.Payload.TargetIndex, group, evnt.Payload.ParentGroupPublicKey);
             this.UpdateQuestionnaire(evnt, item);
         }
 
@@ -133,7 +133,7 @@ namespace Main.Core.EventHandlers
                 return;
             }
             #warning Slava: uncomment this line and get rig of read and write side objects
-            //item.Insert(evnt.Payload.TargetIndex, result, evnt.Payload.GroupPublicKey);
+            item.Insert(evnt.Payload.TargetIndex, result, evnt.Payload.GroupPublicKey);
             this.UpdateQuestionnaire(evnt, item);
         }
 

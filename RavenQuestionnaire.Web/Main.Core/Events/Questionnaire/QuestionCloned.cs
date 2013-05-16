@@ -19,7 +19,7 @@ namespace Main.Core.Events.Questionnaire
     /// The new question added.
     /// </summary>
     [EventName("RavenQuestionnaire.Core:Events:QuestionCloned")]
-    public class QuestionCloned : NewQuestionAdded
+    public class QuestionCloned : FullQuestionDataEvent
     {
         public Guid SourceQuestionId { get; set; }
 
