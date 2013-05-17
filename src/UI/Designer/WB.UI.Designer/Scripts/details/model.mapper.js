@@ -48,6 +48,7 @@
                      item.childrenID(_.map(dto.Children, function (c) {
                          return { type: c.__type, id: c.PublicKey };
                      }));
+                     item.dirtyFlag().reset();
                      return item;
                  }
              },
