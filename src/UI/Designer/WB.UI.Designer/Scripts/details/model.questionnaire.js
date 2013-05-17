@@ -7,9 +7,17 @@
                 self.id = ko.observable();
                 self.title = ko.observable();
                 self.childrenID = ko.observableArray();
-                
+                self.getHref = function () {
+                    return config.hashes.detailsQuestionnaire + "/" + self.id();
+                };
+
+                self.isSelected = ko.observable();
                 self.isNullo = false;
-                self.dirtyFlag = new ko.DirtyFlag([self.title, self.type]);
+                
+                self.dirtyFlag = new ko.DirtyFlag([self.title]);
+                self.dirtyFlag().reset();
+
+                self.errors = ko.validation.group(self);
 
                 return self;
             };

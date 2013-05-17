@@ -62,6 +62,9 @@
                 selectedQuestion().isSelected(false);
             }
 
+            if (routeData.has('questionnaire')) {
+                editQuestionnaire(routeData.questionnaire);
+            }
             if (routeData.has('question')) {
                 editQuestion(routeData.question);
             }
@@ -83,6 +86,10 @@
             if (!chapters().length) {
                 chapters(datacontext.groups.getChapters());
             }
+        },
+        editQuestionnaire = function () {
+            questionnaire().isSelected(true);
+            openDetails("show-questionnaire");
         },
         editQuestion = function (id) {
             var question = datacontext.questions.getLocalById(id);
@@ -312,6 +319,8 @@
                     }
                 });
         },
+        saveQuestionnaire = function() {
+        },
         clearFilter = function () {
             filter('');
         },
@@ -446,6 +455,8 @@
             hideOutput: hideOutput,
             errors: errors,
             statistics: statistics,
-            searchResult: searchResult
+            searchResult: searchResult,
+            questionnaire: questionnaire,
+            saveQuestionnaire: saveQuestionnaire
         };
     });

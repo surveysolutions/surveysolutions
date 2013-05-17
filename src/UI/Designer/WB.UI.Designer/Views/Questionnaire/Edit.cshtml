@@ -36,7 +36,7 @@
 <div id="stacks">
     <div id="footer">
         <div class="inner">
-            
+
             <div class="statistics">
                 <ul class="nav nav-pills" data-bind="with: statistics">
                     <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
@@ -44,13 +44,12 @@
                 </ul>
             </div>
             <div class="statistics" data-bind="with: statistics">
-                <div id="unsavedWarningMessage" class="alert"  data-bind="visible: hasUnsaved()" >
+                <div id="unsavedWarningMessage" class="alert" data-bind="visible: hasUnsaved()">
                     <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
                 </div>
             </div>
-            
+
             <div class="pull-right">
-                <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Add chapter</button>
                 <button class="btn btn-info" data-bind="click: showOutput">Show errors</button>
             </div>
         </div>
@@ -73,13 +72,29 @@
     <div id="questionnaire" class="stack">
         <div class="inner">
             <div class="body">
-                <!-- ko with: questionnaire -->
-                <h1 data-bind="text: title"></h1>
-                <!-- /ko -->
                 <div id="filter">
                     <button type="button" class="close" data-bind="click: clearFilter">&times</button>
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
+                <ul data-bind="with: questionnaire" class="list">
+                    <li>
+                        <div class="q-item-wrap q-questionnaire" data-bind="css: {selected : isSelected}">
+                            <div class="q-item">
+                                <div class="group-actions  pull-right">
+                                    <div class="btn-group">
+                                        <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a data-bind="click: addChapter" tabindex="-1" href="#"><i class="icon-plus"></i>Add chapter</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a class="q-title" data-bind="attr: {href: getHref() }, text: title"></a>
+                                <i class="icon-warning-sign" data-bind="visible: dirtyFlag().isDirty"></i>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
                 <!-- ko ifnot: isFilterMode -->
                 <ul data-bind="sortable: {data: chapters, beforeMove: $root.isMovementPossible}" class="list">
                     @*<ul data-bind="foreach: chapters" class="list">*@
@@ -91,6 +106,29 @@
                     <li data-bind="template: { name: template + 'Search' }"></li>
                 </ul>
                 <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <div id="details-questionnaire" class="details stack" data-bind="with: questionnaire ">
+        <div class="inner">
+            <div class="title">
+                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <span data-bind="text: title"></span>
+            </div>
+            <div class="body container-fluid">
+                <div class="row-fluid">
+                    <div class="control-group" data-bind="validationElement: title">
+                        <label class="control-label required">Title</label>
+                        <div class="controls">
+                            <input type="text" data-bind="value: title, valueUpdate: 'afterkeydown'" class="span12" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pane-bottom">
+                <div class="inner">
+                    <button class="btn btn-success" data-bind="click: saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                </div>
             </div>
         </div>
     </div>
@@ -256,7 +294,7 @@
                         <ul class="dropdown-menu">
                             <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
                             <li><a data-bind="click: addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
-                            <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
+                            <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -281,7 +319,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
