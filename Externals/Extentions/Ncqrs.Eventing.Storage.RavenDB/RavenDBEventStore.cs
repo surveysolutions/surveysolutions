@@ -124,12 +124,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             var retval = new List<CommittedEvent>();
-            // List<UniqueEventsResults> aggregateRoots;
-
-
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
-
-
+            
             List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
             int page = 0;
             while (true)
@@ -208,7 +203,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             var storedEvents =
                 this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion/* && x.EventSequence <= maxVersion*/);
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
 
             // }
