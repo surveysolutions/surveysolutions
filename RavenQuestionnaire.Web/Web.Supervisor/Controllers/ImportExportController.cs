@@ -580,10 +580,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 Request.InputStream.Position = 0;
-
-                var settings = new JsonSerializerSettings();
-                settings.TypeNameHandling = TypeNameHandling.Objects;
-
+                
                 string item;
                 using (var sr = new StreamReader(Request.InputStream))
                 {
@@ -594,11 +591,14 @@ namespace Web.Supervisor.Controllers
 
                 try
                 {
+                    var settings = new JsonSerializerSettings();
+                    settings.TypeNameHandling = TypeNameHandling.Objects;
+
                     message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
                 }
                 catch (Exception)
                 {
-                    logger.Fatal("Error on Deserialization. Item: " + item);
+                    logger.Fatal("Error on Deserialization received stream. Item: " + item);
                     throw;
                 }
                 
