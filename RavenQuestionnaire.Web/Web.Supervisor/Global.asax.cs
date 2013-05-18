@@ -14,10 +14,13 @@ namespace Web.Supervisor
     using System;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Optimization;
     using System.Web.Routing;
 
     using WB.UI.Shared.Log;
     using WB.UI.Shared.NLog;
+
+    using Web.Supervisor.App_Start;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -95,7 +98,7 @@ namespace Web.Supervisor
             current.UnhandledException += this.CurrentUnhandledException;
             
             AreaRegistration.RegisterAllAreas();
-
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
 

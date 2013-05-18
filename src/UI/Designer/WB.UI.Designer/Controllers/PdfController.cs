@@ -9,12 +9,13 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Mvc;
     
     using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
     public class PdfController : BaseController
     {
          public PdfController(
              IViewRepository repository,
-             IUserHelper userHelper)
+             IMembershipUserService userHelper)
              : base(repository, null, userHelper)
          {
          }

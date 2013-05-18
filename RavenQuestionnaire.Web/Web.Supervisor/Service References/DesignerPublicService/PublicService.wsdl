@@ -51,10 +51,14 @@
       <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
       <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/Message" />
+      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="DownloadQuestionnaireRequest">
     <wsdl:part name="parameters" element="tns:DownloadQuestionnaireRequest" />
+  </wsdl:message>
+  <wsdl:message name="DownloadQuestionnaireRequest_Headers">
+    <wsdl:part name="QuestionnaireId" element="tns:QuestionnaireId" />
   </wsdl:message>
   <wsdl:message name="RemoteFileInfo">
     <wsdl:part name="parameters" element="tns:RemoteFileInfo" />
@@ -69,6 +73,30 @@
   <wsdl:message name="IPublicService_DownloadQuestionnaireSource_OutputMessage">
     <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSourceResponse" />
   </wsdl:message>
+  <wsdl:message name="IPublicService_Dummy_InputMessage">
+    <wsdl:part name="parameters" element="tns:Dummy" />
+  </wsdl:message>
+  <wsdl:message name="IPublicService_Dummy_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DummyResponse" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListRequest">
+    <wsdl:part name="parameters" element="tns:QuestionnaireListRequest" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListRequest_Headers">
+    <wsdl:part name="Filter" element="tns:Filter" />
+    <wsdl:part name="PageIndex" element="tns:PageIndex" />
+    <wsdl:part name="PageSize" element="tns:PageSize" />
+    <wsdl:part name="SortOrder" element="tns:SortOrder" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListView">
+    <wsdl:part name="parameters" element="tns:QuestionnaireListView" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListView_Headers">
+    <wsdl:part name="Order" element="tns:Order" />
+    <wsdl:part name="Page" element="tns:Page" />
+    <wsdl:part name="PageSize" element="tns:PageSize" />
+    <wsdl:part name="TotalCount" element="tns:TotalCount" />
+  </wsdl:message>
   <wsdl:portType name="IPublicService">
     <wsdl:operation name="DownloadQuestionnaire">
       <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaire" name="DownloadQuestionnaireRequest" message="tns:DownloadQuestionnaireRequest" />
@@ -78,6 +106,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource" message="tns:IPublicService_DownloadQuestionnaireSource_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse" message="tns:IPublicService_DownloadQuestionnaireSource_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="Dummy">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/Dummy" message="tns:IPublicService_Dummy_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DummyResponse" message="tns:IPublicService_Dummy_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetQuestionnaireList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireList" name="QuestionnaireListRequest" message="tns:QuestionnaireListRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireListResponse" name="QuestionnaireListView" message="tns:QuestionnaireListView" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="CustomBinding_IPublicService" type="tns:IPublicService">
     <wsp:PolicyReference URI="#CustomBinding_IPublicService_policy" />
@@ -85,6 +121,7 @@
     <wsdl:operation name="DownloadQuestionnaire">
       <soap12:operation soapAction="http://tempuri.org/IPublicService/DownloadQuestionnaire" style="document" />
       <wsdl:input name="DownloadQuestionnaireRequest">
+        <soap12:header message="tns:DownloadQuestionnaireRequest_Headers" part="QuestionnaireId" use="literal" />
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output name="RemoteFileInfo">
@@ -99,6 +136,32 @@
         <soap12:body use="literal" />
       </wsdl:input>
       <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Dummy">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/Dummy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetQuestionnaireList">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/GetQuestionnaireList" style="document" />
+      <wsdl:input name="QuestionnaireListRequest">
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="Filter" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="PageIndex" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="PageSize" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="SortOrder" use="literal" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="QuestionnaireListView">
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="Order" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="Page" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="PageSize" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="TotalCount" use="literal" />
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>

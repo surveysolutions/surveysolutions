@@ -43,7 +43,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -73,18 +75,31 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Filters\AbstractRequiresReadLayerFilterProvider.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
+    <Compile Include="Membership\IMembershipHelper.cs" />
+    <Compile Include="Membership\MembershipHelper.cs" />
+    <Compile Include="Membership\MembershipWebServiceUser.cs" />
+    <Compile Include="Membership\IMembershipWebServiceUser.cs" />
+    <Compile Include="Membership\MembershipWebUser.cs" />
+    <Compile Include="Membership\IMembershipWebUser.cs" />
+    <Compile Include="Membership\IMembershipUserService.cs" />
+    <Compile Include="Membership\MembershipUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Designer\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
+      <Project>{E936364C-A916-45E7-8F59-80DE2518AF2C}</Project>
+      <Name>WB.UI.Designer.Providers</Name>
     </ProjectReference>
     <ProjectReference Include="..\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
       <Project>{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}</Project>
