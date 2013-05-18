@@ -154,6 +154,10 @@
       <Project>{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}</Project>
       <Name>WB.UI.Shared.Log</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

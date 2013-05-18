@@ -13,6 +13,7 @@ namespace WB.UI.Designer
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The questionnaire helper.
@@ -24,7 +25,7 @@ namespace WB.UI.Designer
         /// <summary>
         /// The _user service.
         /// </summary>
-        private readonly IUserHelper userService;
+        private readonly IMembershipUserService userService;
 
         #endregion
 
@@ -36,7 +37,7 @@ namespace WB.UI.Designer
         /// <param name="userSevice">
         /// The user sevice.
         /// </param>
-        public QuestionnaireHelper(IUserHelper userSevice)
+        public QuestionnaireHelper(IMembershipUserService userSevice)
         {
             this.userService = userSevice;
         }
@@ -175,11 +176,11 @@ namespace WB.UI.Designer
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            CanDelete =
-                               x.CreatedBy == this.userService.CurrentUserId
-                               || this.userService.IsAdmin, 
+                               x.CreatedBy == this.userService.WebUser.UserId
+                               || this.userService.WebUser.IsAdmin, 
                            CanExport = true, 
-                           CanEdit = x.CreatedBy == this.userService.CurrentUserId, 
-                           CanSynchronize = this.userService.IsAdmin, 
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
+                           CanSynchronize = this.userService.WebUser.IsAdmin, 
                            CreatorName =
                                x.CreatedBy == null
                                    ? GlobalHelper.EmptyString
@@ -208,7 +209,7 @@ namespace WB.UI.Designer
                            CanDelete = true, 
                            CanEdit = true, 
                            CanExport = true, 
-                           CanSynchronize = this.userService.IsAdmin
+                           CanSynchronize = this.userService.WebUser.IsAdmin
                        };
         }
 
@@ -255,7 +256,7 @@ namespace WB.UI.Designer
                             {
                                 CreatedBy = userId, 
                                 IsOnlyOwnerItems = isOnlyOwnerItems, 
-                                IsAdminMode = this.userService.IsAdmin, 
+                                IsAdminMode = this.userService.WebUser.IsAdmin, 
                                 Page = pageIndex ?? 1, 
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
