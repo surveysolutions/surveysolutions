@@ -7,6 +7,7 @@
     using Main.Core.Utility;
 
     using WB.UI.Designer.Controllers;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The custom authorize.
@@ -18,7 +19,7 @@
         /// <summary>
         /// The _user service.
         /// </summary>
-        private readonly IUserHelper userService;
+        private readonly IMembershipUserService userService;
 
         #endregion
 
@@ -30,7 +31,7 @@
         /// <param name="userService">
         /// The user service.
         /// </param>
-        public CustomAuthorizeFilter(IUserHelper userService)
+        public CustomAuthorizeFilter(IMembershipUserService userService)
         {
             this.userService = userService;
         }
@@ -48,7 +49,7 @@
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             bool isInvalidUser = false;
-            MembershipUser user = this.userService.CurrentUser;
+            MembershipUser user = this.userService.WebUser.MembershipUser;
 
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
