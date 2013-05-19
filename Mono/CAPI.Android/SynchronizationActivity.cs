@@ -12,6 +12,7 @@ using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Syncronization;
 using Main.Core.View.User;
 
 namespace CAPI.Android

@@ -7,12 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ionic.Zip;
-using Main.Core.Documents;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Questionnaire.ImportService.Commands;
-
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -32,6 +26,9 @@ namespace Web.Supervisor.Controllers
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
+
+    using SynchronizationMessages.Synchronization;
+
 
     using NLog;
 
@@ -588,6 +585,11 @@ namespace Web.Supervisor.Controllers
                 }
 
                 EventSyncMessage message = null;
+
+                if(string.CompareOrdinal(request, "c") == 0) //compressed stream
+                {
+                    item = PackageHelper.Decompress(item);
+                }
 
                 try
                 {
