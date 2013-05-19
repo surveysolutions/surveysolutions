@@ -70,20 +70,19 @@ using AndroidNcqrs.Eventing.Storage.SQLite;
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The init.
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
         public static void Init(IKernel kernel)
+        {
+            Init(kernel, 50);
+        }
+
+        public static void Init(IKernel kernel, int pageSize)
         {
 #if MONODROID
             NcqrsEnvironment.SetDefault(kernel.Get<IEventStore>());
             //NcqrsEnvironment.SetDefault<IStreamableEventStore>(kernel.Get<IStreamableEventStore>());
 #else
             
-            var store = InitializeEventStore(kernel.Get<DocumentStore>(), 50);
+            var store = InitializeEventStore(kernel.Get<DocumentStore>(), pageSize);
             NcqrsEnvironment.SetDefault<IStreamableEventStore>(store);
             NcqrsEnvironment.SetDefault<IEventStore>(store); // usage in framework 
 
