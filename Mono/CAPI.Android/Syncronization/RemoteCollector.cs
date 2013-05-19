@@ -7,31 +7,27 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.IO;
-using System.Text;
-
-namespace AndroidMain.Synchronization
+namespace CAPI.Android.Syncronization
 {
+    using SynchronizationMessages.Synchronization;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Net;
-
     using Main.Core.Events;
     using Main.Core.View.SyncProcess;
     using Main.Synchronization.SyncStreamCollector;
-
     using Newtonsoft.Json;
-
     using RestSharp;
-
     using SynchronizationMessages.CompleteQuestionnaire;
+
 
     /// <summary>
     /// The remote collector.
     /// </summary>
     public class RemoteCollector : ISyncStreamCollector
     {
+        private bool useCompression = true;
 
         /// <summary>
         /// The item path.
@@ -112,11 +108,20 @@ namespace AndroidMain.Synchronization
                 
                 var settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
-                string itemToSync = JsonConvert.SerializeObject(message, Formatting.None, settings); 
+                string itemToSync = JsonConvert.SerializeObject(message, Formatting.None, settings);
 
-                // text must be changed to  "application/json; charset=utf-8"
-                request.AddParameter("text; charset=utf-8", PackMessage(itemToSync), ParameterType.RequestBody);
-                
+                if (useCompression)
+                {
+                    itemToSync = PackageHelper.Compress(itemToSync);
+                    request.AddParameter("request", "c");
+                }
+                else
+                {
+                    request.AddParameter("request", "p");
+                }
+
+                request.AddParameter("text; charset=utf-8", itemToSync, ParameterType.RequestBody);
+
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
                 {
@@ -135,13 +140,13 @@ namespace AndroidMain.Synchronization
 
         private bool IsOperationSucceded(string response)
         {
-            return string.CompareOrdinal(response, "true") >= 0;
+            return string.CompareOrdinal(response, "true") == 0;
         }
 
 
         private string PackMessage(string message)
         {
-            return message;
+            return PackageHelper.Compress(message);
         }
 
         /// <summary>
