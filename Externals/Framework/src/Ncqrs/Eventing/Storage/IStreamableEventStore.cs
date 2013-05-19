@@ -23,7 +23,8 @@ namespace Ncqrs.Eventing.Storage
         CommittedEvent GetLastEvent(Guid aggregateRootId);
         #warning move to readlayer
         bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier);
-
+        #warning move to readlayer
+        CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion);
         #endregion
     }
 }

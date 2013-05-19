@@ -184,6 +184,39 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
         }
 
+        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> result = new List<CommittedEvent>();
+            int page = 0;
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var chunk = session
+                        .Query<StoredEvent, Event_ByEventSource>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<StoredEventWithoutPayload>()
+                        .Where(
+                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                        .Skip(page*pageSize)
+                        .Take(pageSize).ToList();
+                        
+
+                    if (!chunk.Any())
+                    {
+                        break;
+                    }
+                    result.AddRange(chunk.Select(
+                            e =>
+                            new CommittedEvent(Guid.Empty, e.EventIdentifier, e.EventSourceId, e.EventSequence,
+                                               DateTime.Now, new object(), new Version(1, 1))));
+                    page++;
+                }
+            }
+
+            return new CommittedEventStream(id, result);
+        }
+
         /// <summary>
         /// The read from.
         /// </summary>

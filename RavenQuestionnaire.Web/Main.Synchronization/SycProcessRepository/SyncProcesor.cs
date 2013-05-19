@@ -44,6 +44,7 @@ namespace Main.Synchronization.SycProcessRepository
         /// </summary>
         private readonly IEventStore eventStore;
 
+        private readonly IStreamableEventStore streamableEventStore;
         /// <summary>
         /// Gets or sets statistics.
         /// </summary>
@@ -90,6 +91,7 @@ namespace Main.Synchronization.SycProcessRepository
             this.IncomeEvents = new List<UncommittedEventStream>();
 
             this.eventStore = NcqrsEnvironment.Get<IEventStore>();
+            this.streamableEventStore = eventStore as IStreamableEventStore;
             if (this.eventStore == null)
             {
                 throw new Exception("IEventStore is not properly initialized.");
@@ -195,6 +197,14 @@ namespace Main.Synchronization.SycProcessRepository
         /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
+            if (streamableEventStore != null)
+            {
+                return stream.GroupBy(x => x.EventSourceId).Select(
+                    g =>
+                    g.CreateUncommittedEventStream(this.streamableEventStore.ReadFromWithoutPayload(g.Key, long.MinValue,
+                                                                                                    long.MaxValue)));
+
+            }
             return
                 stream.GroupBy(x => x.EventSourceId).Select(
                     g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));

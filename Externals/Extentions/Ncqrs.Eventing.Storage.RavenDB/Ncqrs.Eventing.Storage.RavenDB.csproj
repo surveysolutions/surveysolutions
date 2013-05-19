@@ -111,6 +111,7 @@
     <Compile Include="RavenIndexes\Event_ByEventSource.cs" />
     <Compile Include="RavenIndexes\UniqueEventsIndex.cs" />
     <Compile Include="StoredEvent.cs" />
+    <Compile Include="StoredEventWithoutPayload.cs" />
     <Compile Include="StoredSnaphot.cs" />
   </ItemGroup>
   <ItemGroup>

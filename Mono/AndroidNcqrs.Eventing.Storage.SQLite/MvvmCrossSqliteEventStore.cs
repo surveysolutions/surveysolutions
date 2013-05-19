@@ -101,5 +101,26 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                                                     x.Sequence <= maxVersion).ToList()
                                                 .Select(x => x.ToCommitedEvent()));
         }
+
+        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
+        {
+            var idString = id.ToString();
+            return new CommittedEventStream(id,
+                                            ((TableQuery<StoredEvent>) _connection.Table<StoredEvent>())
+                                                .Where(
+                                                    x =>
+                                                    x.EventSourceId == idString && x.Sequence >= minVersion &&
+                                                    x.Sequence <= maxVersion)
+                                                .Select(
+                                                    s =>
+                                                    new StoredEventWithoutPayload()
+                                                        {
+                                                            EventId = s.EventId,
+                                                            EventSourceId = idString,
+                                                            Sequence = s.Sequence
+                                                        }).ToList()
+                                                .Select(s => s.ToCommitedEventWithoutPayload()));
+
+        }
     }
 }
