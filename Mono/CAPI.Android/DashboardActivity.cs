@@ -4,6 +4,7 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Controls;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
@@ -15,24 +16,21 @@ namespace CAPI.Android
     [Activity(Label = "CAPI", Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class
-        DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
+        DashboardActivity : ListActivity
     {
-
-
         protected override void OnCreate(Bundle bundle)
         {
 
             base.OnCreate(bundle);
             if (this.FinishIfNotLoggedIn())
                 return;
-            RequestData(() =>
-                {
-                    ViewModel = ViewModel =
-                                CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                                    new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-                    this.RunOnUiThread(() =>
+           /* RequestData(() =>
+                {*/
+            ListAdapter = new DashboardAdapter(this, CapiApplication.Membership.CurrentUser.Id);
+                               
+           /*         this.RunOnUiThread(() =>
                                        SetContentView(Resource.Layout.Main));
-                });
+                });*/
 
         }
 
@@ -52,9 +50,8 @@ namespace CAPI.Android
         protected override void OnRestart()
         {
             base.OnRestart();
-
-            RequestData(() => ViewModel.ReinitSurveys(CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                new DashboardInput(CapiApplication.Membership.CurrentUser.Id)).Surveys));
+            (ListAdapter as DashboardAdapter).Update();
+            
         }
 
 
