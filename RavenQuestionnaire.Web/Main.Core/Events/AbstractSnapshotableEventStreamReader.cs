@@ -64,7 +64,7 @@ namespace Main.Core.Events
             var stremableEventStore = myEventStore as IStreamableEventStore;
             if (stremableEventStore != null)
             {
-                return stremableEventStore.GetLastEvent(aggregateRootId).EventIdentifier;
+                return stremableEventStore.GetLastEvent(aggregateRootId);
             }
             return null;
         }

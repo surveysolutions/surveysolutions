@@ -162,16 +162,16 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
 
-        public CommittedEvent GetLastEvent(Guid aggregateRootId)
+        public Guid? GetLastEvent(Guid aggregateRootId)
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 var eventLast = session
-                    .Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                    .Query<StoredEvent, Event_ByEventSource>().AsProjection<StoredEventWithoutPayload>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                     .Where(e => e.EventSourceId == aggregateRootId).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
 
                 if (eventLast != null)
-                    return ToCommittedEvent(eventLast);
+                    return eventLast.EventIdentifier;
                 return null;
             }
         }
