@@ -72,8 +72,12 @@ namespace Web.Supervisor.App_Start
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-            
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
+            bool isApprovedSended;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
+            {
+                isApprovedSended = false;
+            }
+            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, isApprovedSended));
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
