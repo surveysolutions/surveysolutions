@@ -22,13 +22,10 @@
                 return;
             }
 
-            ((Action)NcqrsInit.EnsureReadLayerIsBuilt)
-                .BeginInvoke(null, null);
-
             filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary
             {
                 { "controller", "Maintenance" },
-                { "action", "ReadLayer" },
+                { "action", "WaitForReadLayerRebuild" },
                 { "returnUrl", filterContext.RequestContext.HttpContext.Request.Url }
             });
         }

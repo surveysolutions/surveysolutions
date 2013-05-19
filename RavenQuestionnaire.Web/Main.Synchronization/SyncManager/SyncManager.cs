@@ -249,7 +249,7 @@ namespace Main.Synchronization.SyncManager
                     chunk.Add(evnt);
                     counter++;
 
-                    if (counter == currentChunkSize)
+                    if (counter >= currentChunkSize)
                     {
                         if (this.status.Progress < 90)
                         {

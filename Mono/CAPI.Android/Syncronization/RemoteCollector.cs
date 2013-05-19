@@ -80,6 +80,7 @@ namespace AndroidMain.Synchronization
         {
             this.baseAddress = baseAddress;
             this.ProcessGuid = processGuid;
+            this.MaxChunkSize = 100;
         }
 
 
