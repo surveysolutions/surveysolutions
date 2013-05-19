@@ -7,11 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.IO;
+using System.Text;
+
 namespace AndroidMain.Synchronization
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Net;
 
@@ -24,7 +26,6 @@ namespace AndroidMain.Synchronization
     using RestSharp;
 
     using SynchronizationMessages.CompleteQuestionnaire;
-    using SynchronizationMessages.Synchronization;
 
     /// <summary>
     /// The remote collector.
@@ -36,12 +37,6 @@ namespace AndroidMain.Synchronization
         /// The item path.
         /// </summary>
         private const string pushPath = "importexport/PostStream";
-
-        /// <summary>
-        /// The item path 1.
-        /// </summary>
-        private const string pushPath1 = "importexport/PostStream1";
-
 
         private const string GetCurrentVersionPath = "importexport/GetCurrentVersion";
 
@@ -75,14 +70,12 @@ namespace AndroidMain.Synchronization
             }
         }
 
-
         public RemoteCollector(string baseAddress, Guid processGuid)
         {
             this.baseAddress = baseAddress;
             this.ProcessGuid = processGuid;
             this.MaxChunkSize = 100;
         }
-
 
         #endregion
 
@@ -102,8 +95,14 @@ namespace AndroidMain.Synchronization
         public bool Collect(IEnumerable<AggregateRootEvent> chunk)
         {
             var restClient = new RestClient(this.baseAddress);
-
+            //restClient. 
+            
             var request = new RestRequest(pushPath, Method.POST);
+            
+            //increase up to 3 attemps
+            request.IncreaseNumAttempts();
+            request.IncreaseNumAttempts();
+
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
@@ -113,10 +112,10 @@ namespace AndroidMain.Synchronization
                 
                 var settings = new JsonSerializerSettings();
                 settings.TypeNameHandling = TypeNameHandling.Objects;
-                string item = JsonConvert.SerializeObject(message, Formatting.None, settings);
+                string itemToSync = JsonConvert.SerializeObject(message, Formatting.None, settings); 
 
                 // text must be changed to  "application/json; charset=utf-8"
-                request.AddParameter("text; charset=utf-8", item, ParameterType.RequestBody);
+                request.AddParameter("text; charset=utf-8", PackMessage(itemToSync), ParameterType.RequestBody);
                 
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
@@ -124,15 +123,25 @@ namespace AndroidMain.Synchronization
                     return false;
                 }
 
-                return true;
+                return IsOperationSucceded(response.Content);
             }
             catch (Exception exc)
             {
                 // log
                 throw;
                 //return false;
-            }
-            
+            }   
+        }
+
+        private bool IsOperationSucceded(string response)
+        {
+            return string.CompareOrdinal(response, "true") >= 0;
+        }
+
+
+        private string PackMessage(string message)
+        {
+            return message;
         }
 
         /// <summary>
@@ -142,7 +151,6 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public void Finish()
         {
-            
         }
 
         /// <summary>
@@ -165,7 +173,6 @@ namespace AndroidMain.Synchronization
         /// </exception>
         public void PrepareToCollect()
         {
-            
         }
 
         #endregion
