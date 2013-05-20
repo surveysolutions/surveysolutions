@@ -146,7 +146,6 @@
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Unmanaged\CMUncaughtExceptionHandler.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
