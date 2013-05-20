@@ -52,7 +52,7 @@ namespace CAPI.Android
             base.OnRestart();
 
             RequestData(
-                () => this.RunOnUiThread(() => (ListAdapter as DashboardAdapter).Update()));
+                () => (ListAdapter as DashboardAdapter).Update());
         }
 
 

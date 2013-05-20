@@ -17,12 +17,12 @@ namespace CAPI.Android.Controls
     {
         private  DashboardModel _dashboard;
         private View[] items;
-        private readonly Context context;
-        public DashboardAdapter(Context context, Guid userId)
+        private readonly Activity activity;
+        public DashboardAdapter(Activity activity, Guid userId)
         {
             _dashboard = CapiApplication.LoadView<DashboardInput, DashboardModel>(
                 new DashboardInput(userId));
-            this.context = context;
+            this.activity = activity;
             this.items=new View[_dashboard.Surveys.Count];
         }
 
@@ -31,7 +31,8 @@ namespace CAPI.Android.Controls
             this.items = new View[_dashboard.Surveys.Count];
             _dashboard = CapiApplication.LoadView<DashboardInput, DashboardModel>(
                new DashboardInput(_dashboard.OwnerKey));
-            NotifyDataSetChanged();
+            activity.RunOnUiThread(() => NotifyDataSetChanged());
+
         }
 
         public override long GetItemId(int position)
@@ -44,7 +45,7 @@ namespace CAPI.Android.Controls
             View view = items[position];
             if (view == null)
             {
-                LayoutInflater layoutInflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+                LayoutInflater layoutInflater = (LayoutInflater)activity.GetSystemService(Context.LayoutInflaterService);
                 // no view to re-use, create new
                 view = layoutInflater.Inflate(Resource.Layout.dashboard_survey_row, null);
 
@@ -66,9 +67,9 @@ namespace CAPI.Android.Controls
                         questionnairieview.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
                     llQuestionnairie.Click += (s, e) =>
                         {
-                            var intent = new Intent(context, typeof (LoadingActivity));
+                            var intent = new Intent(activity, typeof (LoadingActivity));
                             intent.PutExtra("publicKey", qustionnarieItem.PublicKey.ToString());
-                            context.StartActivity(intent);
+                            activity.StartActivity(intent);
                         };
                     var tvStatus = questionnairieview.FindViewById<TextView>(Resource.Id.tvStatus);
                     tvStatus.Text = qustionnarieItem.Status.Name;
