@@ -77,7 +77,7 @@ namespace Core.Supervisor.Tests
             var lastEventId = Guid.NewGuid();
 
             streamableEventStore.Setup(x => x.GetLastEvent(userId))
-                                .Returns(Guid.NewGuid());
+                                .Returns(lastEventId);
             var avalibleUsers = new UserDocument[] {new UserDocument() {PublicKey = userId}};
 
             denormalizerMock.Setup(x => x.Query<UserDocument>())
