@@ -50,8 +50,9 @@ namespace CAPI.Android
         protected override void OnRestart()
         {
             base.OnRestart();
-            (ListAdapter as DashboardAdapter).Update();
-            
+
+            RequestData(
+                () => this.RunOnUiThread(() => (ListAdapter as DashboardAdapter).Update()));
         }
 
 

@@ -586,11 +586,8 @@ namespace Web.Supervisor.Controllers
 
                 EventSyncMessage message = null;
 
-                if(string.CompareOrdinal(request, "c") == 0) //compressed stream
-                {
-                    item = PackageHelper.Decompress(item);
-                }
-
+                item = PackageHelper.Decompress(item);
+                
                 try
                 {
                     var settings = new JsonSerializerSettings();

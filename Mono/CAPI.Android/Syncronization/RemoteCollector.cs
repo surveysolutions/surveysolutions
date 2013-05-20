@@ -112,15 +112,16 @@ namespace CAPI.Android.Syncronization
 
                 if (useCompression)
                 {
-                    itemToSync = PackageHelper.Compress(itemToSync);
-                    request.AddParameter("request", "c");
+                    //request.AddParameter("request", "c");
+                    request.AddParameter("text; charset=utf-8", PackageHelper.Compress(itemToSync), ParameterType.RequestBody);
                 }
                 else
                 {
-                    request.AddParameter("request", "p");
+                    //request.AddParameter("request", "p");
+                    request.AddParameter("text; charset=utf-8", itemToSync, ParameterType.RequestBody);
                 }
 
-                request.AddParameter("text; charset=utf-8", itemToSync, ParameterType.RequestBody);
+                
 
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
@@ -140,7 +141,7 @@ namespace CAPI.Android.Syncronization
 
         private bool IsOperationSucceded(string response)
         {
-            return string.CompareOrdinal(response, "true") == 0;
+            return string.CompareOrdinal(response, "True") == 0;
         }
 
 
