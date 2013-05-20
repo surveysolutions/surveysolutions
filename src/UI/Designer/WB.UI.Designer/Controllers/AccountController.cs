@@ -9,7 +9,6 @@
 
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
-using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -33,6 +32,7 @@ namespace WB.UI.Designer.Controllers
     /// </summary>
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
+    [RequireHttps]
     public class AccountController : BaseController
     {
         #region Public Methods and Operators
