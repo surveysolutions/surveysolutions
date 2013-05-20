@@ -139,6 +139,7 @@
     <Compile Include="Synchronization\IGetLastSyncEvent.cs" />
     <Compile Include="Synchronization\FormatHelper.cs" />
     <Compile Include="Synchronization\ICustomSerializable.cs" />
+    <Compile Include="Synchronization\PackageHelper.cs" />
     <Compile Include="WcfInfrastructure\ChanelFactoryWrapper.cs" />
     <Compile Include="WcfInfrastructure\IChanelFactoryWrapper.cs" />
   </ItemGroup>

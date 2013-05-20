@@ -12,6 +12,7 @@ using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Syncronization;
 using Main.Core.View.User;
 
 namespace CAPI.Android
@@ -289,22 +290,16 @@ namespace CAPI.Android
                                 {
                                     try
                                     {
-                                        if (pumpingType == PumpimgType.Push)
-                                        {
-                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Pull)
-                                        {
-                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Backup)
+                                        if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
                                         }
                                         else if (pumpingType == PumpimgType.Sync)
                                         {
                                             this.Push(SettingsManager.GetSyncAddressPoint(), result);
-                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
+
+                                            if (result.Result)
+                                                this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
                                     }
                                     catch (Exception exc)

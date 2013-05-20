@@ -225,13 +225,13 @@ namespace Main.Synchronization.SyncManager
                 this.status.Progress++;
                 this.status.CurrentStageDescription = "Stage is starting.";
 
-                this.Invoker.Execute(
+                /*this.Invoker.Execute(
                     new CreateNewSynchronizationProcessCommand(
                         this.ProcessGuid, 
                         Guid.Empty, 
                         this.eventStreamProvider.SyncType, 
                         string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
-
+*/
                 this.streamCollector.PrepareToCollect();
 
                 int currentChunkSize = Math.Min(this.streamCollector.MaxChunkSize, ChunkSize);
@@ -304,8 +304,8 @@ namespace Main.Synchronization.SyncManager
                 // notify collector about finishing
                 this.streamCollector.Finish();
 
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
-
+                /*this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
+*/
                 this.status.CurrentStageDescription = "Stage finished.";
                 this.status.Result = true;
                 this.status.Progress = 98;

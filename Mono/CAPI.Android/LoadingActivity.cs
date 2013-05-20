@@ -13,7 +13,7 @@ namespace CAPI.Android
 
     [Activity(Label = "Loading", NoHistory = true, 
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
-    public class LoadingActivity : MvxSimpleBindingFragmentActivity<CompleteQuestionnaireView>
+    public class LoadingActivity : Activity
     {
         private Action<Guid> restore; 
         protected override void OnCreate(Bundle bundle)
@@ -27,7 +27,7 @@ namespace CAPI.Android
             //img.SetBounds(0, 0, 45, 45);
             tv.SetCompoundDrawablesWithIntrinsicBounds(null, null, img, null);*/
             this.AddContentView(pb, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent, ViewGroup.LayoutParams.FillParent));
-            restore.BeginInvoke(ViewModel.PublicKey, Callback, restore);
+            restore.BeginInvoke(Guid.Parse(Intent.GetStringExtra("publicKey")), Callback, restore);
             // Create your application here
         }
         private void Callback(IAsyncResult asyncResult)
@@ -39,7 +39,7 @@ namespace CAPI.Android
         {
             try
             {
-                ViewModel = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
+                var model = CapiApplication.LoadView<QuestionnaireScreenInput, CompleteQuestionnaireView>(
                     new QuestionnaireScreenInput(publicKey));
                 
                 Intent intent = new Intent(this, typeof(DetailsActivity));
