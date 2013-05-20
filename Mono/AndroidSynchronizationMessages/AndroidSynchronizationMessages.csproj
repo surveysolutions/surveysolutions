@@ -97,6 +97,9 @@
     <Compile Include="..\..\Synchronization\SynchronizationMessages\Synchronization\IGetLastSyncEvent.cs">
       <Link>Synchronization\IGetLastSyncEvent.cs</Link>
     </Compile>
+    <Compile Include="..\..\Synchronization\SynchronizationMessages\Synchronization\PackageHelper.cs">
+      <Link>Synchronization\PackageHelper.cs</Link>
+    </Compile>
     <Compile Include="..\..\Synchronization\SynchronizationMessages\WcfInfrastructure\ChanelFactoryWrapper.cs">
       <Link>WcfInfrastructure\ChanelFactoryWrapper.cs</Link>
     </Compile>
@@ -123,7 +126,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="ad672732-3d12-48bc-8612-09547f0065d3" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="ad672732-3d12-48bc-8612-09547f0065d3" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

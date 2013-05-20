@@ -4,6 +4,7 @@ using System.Linq;
 using CAPI.Android.Core.Model.ProjectionStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using Main.Core.Documents;
+using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
@@ -38,6 +39,11 @@ namespace CAPI.Android.Core.Model.EventHandlers
         #endregion
         protected void PropeedCompleteQuestionnaire( CompleteQuestionnaireDocument doc)
         {
+            if (!IsVisible(doc.Status))
+            {
+                _questionnaireDTOdocumentStorage.Remove(doc.PublicKey);
+                return;
+            }
             var featuredItems = doc.Find<ICompleteQuestion>(q => q.Featured);
             var items = featuredItems.Select(
                 q =>
@@ -50,43 +56,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
             _questionnaireDTOdocumentStorage.Store(
                 new QuestionnaireDTO(doc.PublicKey, doc.Responsible.Id, doc.TemplateId, doc.Status, items),
                 doc.PublicKey);
-            //   AddToDashboard(item, doc.Responsible.Id, doc.TemplateId, doc.Title);
         }
 
-        /*    protected void TryToRemoveFromOtherDashboards(Guid questionnarieKey, Guid template, Guid owner)
-            {
-                foreach (var dashboard in _documentStorage.Query().Where(d=>d.OwnerKey!=owner))
-                {
-                    var survey = dashboard.GetSurvey(template);
-                    if (survey != null)
-                    {
-                        if(survey.Remove(questionnarieKey))
-                            return;
-                    }
-                }
-            }
-
-            protected void AddToDashboard(DashboardQuestionnaireItem item, Guid dashbordOwner, Guid templateKey, string templateTitle)
-            {
-                TryToRemoveFromOtherDashboards(item.PublicKey, templateKey, dashbordOwner);
-
-                var dashboard = _documentStorage.GetById(dashbordOwner);
-                if (dashboard == null)
-                {
-                    dashboard = new DashboardModel(dashbordOwner);
-                    _documentStorage.Store(dashboard, dashbordOwner);
-                }
-                var survey = dashboard.Surveys.FirstOrDefault(s => s.PublicKey == templateKey);
-                if (survey == null)
-                {
-                    survey = new DashboardSurveyItem(templateKey, templateTitle);
-                    dashboard.Surveys.Add(survey);
-                }
-           
-                survey.AddItem(item);
-        
-            }*/
-
+ 
         #region Implementation of IEventHandler<in QuestionnaireStatusChanged>
 
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
@@ -94,40 +66,21 @@ namespace CAPI.Android.Core.Model.EventHandlers
             var questionnaire = _questionnaireDTOdocumentStorage.GetById(evnt.Payload.CompletedQuestionnaireId);
             if(questionnaire==null)
                 return;
-            questionnaire.Status = evnt.Payload.Status.PublicId.ToString();
-            _questionnaireDTOdocumentStorage.Store(questionnaire, evnt.Payload.CompletedQuestionnaireId);
-            /* var dashboard = _documentStorage.GetById(evnt.Payload.Responsible.Id);
-            if (dashboard == null)
-                return;
-            foreach (var dashboardSurveyItem in dashboard.Surveys)
+            if (!IsVisible(evnt.Payload.Status))
             {
-                var questionnarie = dashboardSurveyItem[evnt.EventSourceId];
-                if (questionnarie != null)
-                {
-                    questionnarie.SetStatus(evnt.Payload.Status);
-                    return;
-                }
-              
-            }*/
+                _questionnaireDTOdocumentStorage.Remove(evnt.EventSourceId);
+            }
+            questionnaire.Status = evnt.Payload.Status.PublicId.ToString();
+
+            _questionnaireDTOdocumentStorage.Store(questionnaire, evnt.Payload.CompletedQuestionnaireId);
+          
         }
 
         #endregion
-        /*
-        public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
+        protected bool IsVisible(SurveyStatus status)
         {
-            var dashboard = _documentStorage.GetById(evnt.Payload.PreviousResponsible.Id);
-            if (dashboard == null)
-                return;
-            foreach (var dashboardSurveyItem in dashboard.Surveys)
-            {
-                var item = dashboardSurveyItem.GetItem(evnt.EventSourceId);
-                if (item != null)
-                {
-                    dashboardSurveyItem.Remove(evnt.EventSourceId);
-                    AddToDashboard(item, evnt.Payload.Responsible.Id, dashboardSurveyItem.PublicKey, dashboardSurveyItem.SurveyTitle);
-                    break;
-                }
-            }
-        }*/
+            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
+                   status == SurveyStatus.Error;
+        }
     }
 }
