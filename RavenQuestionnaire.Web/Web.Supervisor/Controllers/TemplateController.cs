@@ -9,6 +9,7 @@ namespace Web.Supervisor.Controllers
     using System;
     using System.Net;
     using System.ServiceModel;
+    using System.ServiceModel.Security;
     using System.Web.Mvc;
 
     using Main.Core.Documents;
@@ -19,6 +20,7 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
+    using WB.UI.Desiner.Utilities.Compression;
     using WB.UI.Shared.Log;
 
     using Web.Supervisor.DesignerPublicService;
@@ -30,6 +32,7 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
+        private readonly IZipUtils zipUtils;
         #region Constructors and Destructors
 
         /// <summary>
@@ -44,12 +47,40 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IZipUtils zipUtils, ILog logger)
             : base(null, commandService, globalInfo, logger)
         {
+            this.zipUtils = zipUtils;
+
+            ViewBag.ActivePage = MenuItem.Administration;
+
+            #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
+            ServicePointManager.ServerCertificateValidationCallback =
+                    (self, certificate, chain, sslPolicyErrors) => true;
         }
 
         #endregion
+
+        private IPublicService DesignerService
+        {
+            get
+            {
+                return DesignerServiceClient;
+            }
+        }
+
+        private PublicServiceClient DesignerServiceClient
+        {
+            get
+            {
+                return (PublicServiceClient)this.Session[GlobalInfo.GetCurrentUser().Name];
+            }
+
+            set
+            {
+                this.Session[GlobalInfo.GetCurrentUser().Name] = value;
+            }
+        }
 
         #region Public Methods and Operators
 
@@ -61,61 +92,107 @@ namespace Web.Supervisor.Controllers
         /// </returns>
         public ActionResult Import()
         {
-            ViewBag.ActivePage = MenuItem.Administration;
-            return this.View(new ImportTemplateModel());
+            if (this.DesignerServiceClient == null)
+            {
+                return this.RedirectToAction("LoginToDesigner");
+            }
+
+            return
+                this.View(
+                    DesignerService.GetQuestionnaireList(
+                        new QuestionnaireListRequest(
+                            Filter: string.Empty,
+                            PageIndex: 1,
+                            PageSize: GlobalHelper.GridPageItemsCount,
+                            SortOrder: string.Empty)));
         }
 
+        public ActionResult LoginToDesigner()
+        {
+            this.Attention("Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode");
+            return this.View();
+        }
+
+        [HttpPost]
+        public ActionResult LoginToDesigner(LogOnModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var service = new PublicServiceClient();
+                service.ClientCredentials.UserName.UserName = model.UserName;
+                service.ClientCredentials.UserName.Password = model.Password;
+
+                try
+                {
+                    service.Dummy();
+
+                    DesignerServiceClient = service;
+
+                    return RedirectToAction("Import");
+                }
+                catch (MessageSecurityException)
+                {
+                    this.Error("Incorrect UserName/Password");
+                }
+                catch (Exception ex)
+                {
+                    this.Error("Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>");
+                    Logger.Error(ex);
+                }
+            }
+
+            return this.View(model);
+        }
+
+
         /// <summary>
-        /// The import.
+        /// Gets table data for some view
         /// </summary>
         /// <param name="data">
         /// The data.
         /// </param>
         /// <returns>
-        /// The <see cref="ActionResult"/>.
+        /// Partial view with table's body
         /// </returns>
-        [HttpPost]
-        public ActionResult Import(ImportTemplateModel data)
+        public ActionResult List(GridDataRequestModel data)
         {
-            ViewBag.ActivePage = MenuItem.Administration;
-            if (this.ModelState.IsValid)
+            var list =
+                DesignerService.GetQuestionnaireList(
+                    new QuestionnaireListRequest(
+                        Filter: string.Empty,
+                        PageIndex: data.Pager.Page,
+                        PageSize: data.Pager.PageSize,
+                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
+
+            return this.PartialView("_PartialGrid_Questionnaires", list);
+        }
+
+        public ActionResult Get(Guid id)
+        {
+            QuestionnaireDocument document = null;
+
+            try
             {
-                #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
-                ServicePointManager.ServerCertificateValidationCallback =
-                        (self, certificate, chain, sslPolicyErrors) => true;
-
-                try
-                {
-                    using (var service = new PublicServiceClient())
-                    {
-                        service.ClientCredentials.UserName.UserName = data.UserName;
-                        service.ClientCredentials.UserName.Password = data.Password;
-
-                        string document = service.DownloadQuestionnaireSource(data.QuestionnaireId);
-
-                        this.CommandService.Execute(
-                            new ImportQuestionnaireCommand(
-                                this.GlobalInfo.GetCurrentUser().Id, document.DeserializeJson<QuestionnaireDocument>()));
-
-                        return this.RedirectToAction("Questionnaires", "Dashboard");
-                    }
-                }
-                catch (CommunicationObjectFaultedException)
-                {
-                    this.ViewBag.ErrorMessage = "You do not have permission to call this service";
-                }
-                catch (FaultException)
-                {
-                    this.ViewBag.ErrorMessage = "Check questionnaire id";
-                }
-                catch (Exception e)
-                {
-                    this.ViewBag.ErrorMessage = "Could not download template from designer. Please, try again later";
-                    Logger.Fatal("Error on import from designer ", e);
-                }
+                var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
+                document = zipUtils.UnZip<QuestionnaireDocument>(docSource.FileByteStream);
+            }
+            catch (Exception ex)
+            {
+                this.Error("Error when downloading questionnaire from designer. Please try again");
+                Logger.Error(ex);
             }
 
-            return this.View(data);
+            if (document == null)
+            {
+                return this.RedirectToAction("Import");
+            }
+            else
+            {
+                this.CommandService.Execute(
+                    new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
+
+                return this.RedirectToAction("Questionnaires", "Dashboard");    
+            }
         }
 
         #endregion
