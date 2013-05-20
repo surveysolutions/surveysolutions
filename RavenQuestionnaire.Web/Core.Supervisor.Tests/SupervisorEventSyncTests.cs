@@ -73,11 +73,11 @@ namespace Core.Supervisor.Tests
             var eventStoreMock = new Mock<IEventStore>();
             var streamableEventStore = eventStoreMock.As<IStreamableEventStore>();
             NcqrsEnvironment.SetDefault(eventStoreMock.Object);
-            var userId = Guid.NewGuid();
-            var lastEventId = Guid.NewGuid();
+            var userId = Guid.Parse("11111111111111111111111111111111");
+            var lastEventId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
             streamableEventStore.Setup(x => x.GetLastEvent(userId))
-                                .Returns(Guid.NewGuid());
+                                .Returns(lastEventId);
             var avalibleUsers = new UserDocument[] {new UserDocument() {PublicKey = userId}};
 
             denormalizerMock.Setup(x => x.Query<UserDocument>())
