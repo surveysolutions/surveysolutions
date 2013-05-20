@@ -18,6 +18,7 @@ namespace WB.UI.Designer.Controllers
     using WB.Core.Questionnaire.ExportServices;
     using WB.Core.Questionnaire.ImportService.Commands;
     using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     /// The synchronization controller.
@@ -62,7 +63,7 @@ namespace WB.UI.Designer.Controllers
         public SynchronizationController(
             IViewRepository repository, 
             ICommandService commandService, 
-            IUserHelper userHelper, 
+            IMembershipUserService userHelper, 
             IZipUtils zipUtils, 
             IExportService exportService)
             : base(repository, commandService, userHelper)
@@ -131,7 +132,7 @@ namespace WB.UI.Designer.Controllers
                 var document = this.ZipUtils.UnZip<IQuestionnaireDocument>(uploadFile.InputStream);
                 if (document != null)
                 {
-                    this.CommandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.CurrentUserId, document));
+                    this.CommandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
                     return this.RedirectToAction("Index", "Questionnaire");
                 }
             }

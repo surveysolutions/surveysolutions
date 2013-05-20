@@ -16,6 +16,7 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The base controller.
@@ -35,13 +36,13 @@ namespace WB.UI.Designer.Controllers
         protected readonly IViewRepository Repository;
 
 
-        protected readonly IUserHelper UserHelper;
+        protected readonly IMembershipUserService UserHelper;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public BaseController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
+        public BaseController(IViewRepository repository, ICommandService commandService, IMembershipUserService userHelper)
         {
             this.Repository = repository;
             this.CommandService = commandService;
