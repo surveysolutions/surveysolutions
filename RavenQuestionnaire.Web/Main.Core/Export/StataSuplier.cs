@@ -113,7 +113,7 @@ namespace Main.Core.Export
                         this.doContent.AppendFormat(string.Format("label define {0} ", labelName));
                         foreach (var label in headerItem.Labels)
                         {
-                            this.doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, label.Value.Title.Replace(System.Environment.NewLine, string.Empty));
+                            this.doContent.AppendFormat("{0} `\"{1}\"' ", label.Value.Caption, RemoveNonUnicode(label.Value.Title));
                         }
 
                         this.doContent.AppendLine();
@@ -125,7 +125,7 @@ namespace Main.Core.Export
                 }
 
                 this.doContent.AppendLine(
-                    string.Format("label var {0} `\"{1}\"'", headerItem.Caption, headerItem.Title.Replace(System.Environment.NewLine, string.Empty)));
+                    string.Format("label var {0} `\"{1}\"'", headerItem.Caption, RemoveNonUnicode(headerItem.Title)));
             }
         }
 
@@ -169,13 +169,7 @@ namespace Main.Core.Export
                 this.doContent.AppendLine("drop _merge");
             }
         }
-
-        /// <summary>
-        /// The compile result.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="byte[]"/>.
-        /// </returns>
+       
         protected byte[] CompileResult()
         {
             this.doContent.AppendLine("list");
@@ -223,8 +217,20 @@ namespace Main.Core.Export
         /// </param>
         protected void SaveTempFile(string primaryKeyColumnName)
         {
-            this.doContent.AppendLine(string.Format("tempfile {0}ind", primaryKeyColumnName));
-            this.doContent.AppendLine(string.Format("save \"`{0}ind'\"", primaryKeyColumnName));
+            string keyColumnName = "ind";
+            if (primaryKeyColumnName.Length > symbolCount-keyColumnName.Length)
+                primaryKeyColumnName = primaryKeyColumnName.Substring(0, symbolCount - keyColumnName.Length);
+            primaryKeyColumnName += keyColumnName;
+            this.doContent.AppendLine(string.Format("tempfile {0}", primaryKeyColumnName));
+            this.doContent.AppendLine(string.Format("save \"`{0}'\"", primaryKeyColumnName));
+        }
+
+        private readonly int symbolCount = 31;
+
+        protected string RemoveNonUnicode(string s)
+        {
+            var onlyUnicode = Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+            return Regex.Replace(onlyUnicode, @"\t|\n|\r", "");
         }
 
         #endregion
