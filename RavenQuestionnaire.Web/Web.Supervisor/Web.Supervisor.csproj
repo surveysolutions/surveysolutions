@@ -504,7 +504,7 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj">
+    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
       <Name>WB.UI.Desiner.Utilities</Name>
     </ProjectReference>

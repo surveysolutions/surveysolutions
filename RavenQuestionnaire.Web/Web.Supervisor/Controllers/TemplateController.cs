@@ -8,7 +8,6 @@ namespace Web.Supervisor.Controllers
 {
     using System;
     using System.Net;
-    using System.ServiceModel;
     using System.ServiceModel.Security;
     using System.Web.Mvc;
 
@@ -20,7 +19,7 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Desiner.Utilities.Compression;
+    using WB.UI.Designer.Utilities.Compression;
     using WB.UI.Shared.Log;
 
     using Web.Supervisor.DesignerPublicService;
