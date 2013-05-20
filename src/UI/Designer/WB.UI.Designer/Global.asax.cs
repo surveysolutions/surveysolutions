@@ -33,6 +33,8 @@ namespace WB.UI.Designer
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            ValidatorsConfig.Register();
         }
 
         protected void Application_Error(object sender, EventArgs e)
