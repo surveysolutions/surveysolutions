@@ -21,19 +21,19 @@ namespace WB.UI.Designer.WebServices
         /// <summary>
         /// The file byte stream.
         /// </summary>
-        [MessageBodyMember(Order = 1)]
+        [MessageBodyMember]
         public Stream FileByteStream;
 
         /// <summary>
         /// The file name.
         /// </summary>
-        [MessageHeader(MustUnderstand = true)]
+        [MessageHeader]
         public string FileName;
 
         /// <summary>
         /// The length.
         /// </summary>
-        [MessageHeader(MustUnderstand = true)]
+        [MessageHeader]
         public long Length;
 
         #endregion

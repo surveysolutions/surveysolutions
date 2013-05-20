@@ -24,6 +24,7 @@ namespace WB.UI.Designer.Controllers
 
     using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;
+    using WB.UI.Shared.Web.Membership;
 
     using WebMatrix.WebData;
 
@@ -36,7 +37,7 @@ namespace WB.UI.Designer.Controllers
     {
         #region Public Methods and Operators
 
-        public AccountController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper) : base(repository, commandService, userHelper)
+        public AccountController(IViewRepository repository, ICommandService commandService, IMembershipUserService userHelper) : base(repository, commandService, userHelper)
         {
         }
 
@@ -164,7 +165,7 @@ namespace WB.UI.Designer.Controllers
                 bool changePasswordSucceeded;
                 try
                 {
-                    changePasswordSucceeded = UserHelper.CurrentUser.ChangePassword(
+                    changePasswordSucceeded = UserHelper.WebUser.MembershipUser.ChangePassword(
                         model.OldPassword, model.Password);
                 }
                 catch (Exception)
