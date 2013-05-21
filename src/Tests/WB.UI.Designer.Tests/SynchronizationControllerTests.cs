@@ -16,7 +16,7 @@ namespace WB.UI.Designer.Tests
     using System.IO.Compression;
 
     using WB.UI.Designer.BootstrapSupport;
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Web.Membership;
 
     [TestFixture]
