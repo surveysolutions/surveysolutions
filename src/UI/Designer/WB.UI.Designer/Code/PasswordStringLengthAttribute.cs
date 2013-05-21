@@ -10,7 +10,7 @@ namespace WB.UI.Designer
 
     using Microsoft.Practices.ServiceLocation;
 
-    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
     /// <summary>
     ///     The custom string length attribute.

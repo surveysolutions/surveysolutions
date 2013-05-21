@@ -19,7 +19,7 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Log;
 
     using Web.Supervisor.DesignerPublicService;
