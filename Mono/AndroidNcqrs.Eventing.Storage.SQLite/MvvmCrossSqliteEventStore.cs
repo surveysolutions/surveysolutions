@@ -43,7 +43,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
             var idString = id.ToString();
             return ((TableQuery<StoredEvent>)_connection.Table<StoredEvent>()).Where(x => x.IsSnapshot && x.EventSourceId == idString)
                             .OrderByDescending(x => x.Sequence)
-                            .Last()
+                            .First()
                             .ToCommitedEvent();
 
         }
@@ -73,7 +73,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                                                                                                 EventSourceId = idString,
                                                                                                 Sequence = s.Sequence
                                                                                             })
-                                                                                .Last().EventId;
+                                                                                .First().EventId;
                 return Guid.Parse(eventIDIsString);
             }
             catch
