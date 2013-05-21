@@ -173,7 +173,8 @@ namespace Main.Core.Export
         protected byte[] CompileResult()
         {
             this.doContent.AppendLine("list");
-            return new ASCIIEncoding().GetBytes(this.doContent.ToString().ToLower());
+            
+            return new UTF8Encoding().GetBytes(this.doContent.ToString().ToLower());
         }
 
         /// <summary>

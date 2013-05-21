@@ -21,7 +21,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             PublicKey = publicKey;
             SurveyTitle = surveyTitle;
-            cacheddItems = items.Where(i => IsVisible(i.Status)).ToList();
+            cacheddItems = items.ToList();
         }
         public DashboardSurveyItem(Guid publicKey, string surveyTitle)
         {
@@ -43,53 +43,5 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 
         private IList<DashboardQuestionnaireItem> cacheddItems = new List<DashboardQuestionnaireItem>();
 
-        protected bool IsVisible(SurveyStatus status)
-        {
-            return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Error;
-        }
-
-    /*    private void RecacheItems()
-        {
-            cacheddItems = allItems.Where(i => IsVisible(i.Value.Status)).Select(i => i.Value).ToList();
-            this.RaisePropertyChanged("ActiveItems");
-        }
-
-        public DashboardQuestionnaireItem this[Guid key]
-        {
-            get
-            {
-                {
-                    if (!allItems.ContainsKey(key))
-                        return null;
-                    return allItems[key];
-                }
-            }
-        }
-
-        public void AddItem(DashboardQuestionnaireItem item)
-        {
-            if (!allItems.ContainsKey(item.PublicKey))
-            {
-                allItems[item.PublicKey] = item;             
-            }
-            else
-            {
-                allItems[item.PublicKey].SetStatus(item.Status);
-            }
-            RecacheItems();
-        }
-
-        public bool Remove(Guid key)
-        {
-            if (!allItems.ContainsKey(key))
-                return false;
-            allItems.Remove(key);
-            RecacheItems();
-            return true;
-        }
-
-     
-        private IDictionary<Guid,DashboardQuestionnaireItem> allItems;*/
     }
 }

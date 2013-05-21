@@ -124,12 +124,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public IEnumerable<CommittedEvent> GetEventStream()
         {
             var retval = new List<CommittedEvent>();
-            // List<UniqueEventsResults> aggregateRoots;
-
-
-            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
-
-
+            
             List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
             int page = 0;
             while (true)
@@ -167,16 +162,16 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         }
 
 
-        public CommittedEvent GetLastEvent(Guid aggregateRootId)
+        public Guid? GetLastEvent(Guid aggregateRootId)
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
                 var eventLast = session
-                    .Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                    .Query<StoredEvent, Event_ByEventSource>().AsProjection<StoredEventWithoutPayload>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                     .Where(e => e.EventSourceId == aggregateRootId).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
 
                 if (eventLast != null)
-                    return ToCommittedEvent(eventLast);
+                    return eventLast.EventIdentifier;
                 return null;
             }
         }
@@ -187,6 +182,39 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             {
                 return session.Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
             }
+        }
+
+        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> result = new List<CommittedEvent>();
+            int page = 0;
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var chunk = session
+                        .Query<StoredEvent, Event_ByEventSource>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<StoredEventWithoutPayload>()
+                        .Where(
+                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
+                        .Skip(page*pageSize)
+                        .Take(pageSize).ToList();
+                        
+
+                    if (!chunk.Any())
+                    {
+                        break;
+                    }
+                    result.AddRange(chunk.Select(
+                            e =>
+                            new CommittedEvent(Guid.Empty, e.EventIdentifier, e.EventSourceId, e.EventSequence,
+                                               DateTime.Now, new object(), new Version(1, 1))));
+                    page++;
+                }
+            }
+
+            return new CommittedEventStream(id, result);
         }
 
         /// <summary>
@@ -208,7 +236,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             var storedEvents =
                 this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion/* && x.EventSequence <= maxVersion*/);
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
 
             // }

@@ -279,6 +279,7 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\img\clear.png" />
     <Content Include="Content\img\details_bg.jpg" />
+    <Content Include="Content\img\divider.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\loading.gif" />
@@ -357,6 +358,7 @@
     <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\date.js" />

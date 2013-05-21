@@ -37,6 +37,7 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IDenormalizer denormalizer;
 
+        private readonly bool isApprovedSended;
 
         //private List<Guid> ARKeys; 
 
@@ -45,18 +46,12 @@ namespace Core.Supervisor.Synchronization
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorEventStreamReader"/> class.
-        /// </summary>
-        /// <param name="denormalizer">
-        /// The denormalizer.
-        /// </param>
-        /// <exception cref="Exception">
-        /// added new exception
-        /// </exception>
-        public SupervisorEventStreamReader(IDenormalizer denormalizer):base(denormalizer)
+       
+        public SupervisorEventStreamReader(IDenormalizer denormalizer, bool isApprovedSended)
+            : base(denormalizer)
         {
             this.denormalizer = denormalizer;
+            this.isApprovedSended = isApprovedSended;
         }
 
         #endregion
@@ -140,9 +135,16 @@ namespace Core.Supervisor.Synchronization
         {
             IQueryable<CompleteQuestionnaireBrowseItem> model = 
                 this.denormalizer.Query<CompleteQuestionnaireBrowseItem>()
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id));
+                .Where(q => IsQuestionnarieRequiresSync(users, q));
             
             return model.Select(i => i.CompleteQuestionnaireId).ToList();
+        }
+
+        private bool IsQuestionnarieRequiresSync(List<Guid> users, CompleteQuestionnaireBrowseItem q)
+        {
+            if (q.Status == SurveyStatus.Approve && !isApprovedSended)
+                return false;
+            return SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id);
         }
 
         private List<Guid> GetUsers()
