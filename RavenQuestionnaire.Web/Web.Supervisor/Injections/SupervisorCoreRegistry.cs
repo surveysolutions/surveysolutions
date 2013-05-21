@@ -16,7 +16,11 @@ namespace Web.Supervisor.Injections
     using Main.Core.Events;
     using Main.Core.Export;
     using Main.Core.View.Export;
+    using Main.DenormalizerStorage;
     using Main.Synchronization.SycProcessRepository;
+
+    using Ninject;
+    using Ninject.Activation;
 
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
@@ -40,6 +44,13 @@ namespace Web.Supervisor.Injections
                     {
                             typeof(SupervisorEventStreamReader).Assembly, typeof(QuestionnaireMembershipProvider).Assembly
                     });
+        }
+
+        protected override object GetStorage(IContext context)
+        {
+            Type storageType = typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0]);
+
+            return this.Kernel.Get(storageType);
         }
 
         protected override IEnumerable<KeyValuePair<Type, Type>> GetTypesForRegistration()

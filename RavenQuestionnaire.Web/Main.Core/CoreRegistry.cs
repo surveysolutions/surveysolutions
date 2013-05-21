@@ -169,7 +169,7 @@ namespace Main.Core
                    null;
         }
 
-        protected object GetStorage(IContext context)
+        protected virtual object GetStorage(IContext context)
         {
             var genericParameter = context.GenericArguments[0];
 
@@ -180,7 +180,7 @@ namespace Main.Core
 
             else
             #endif*/
-                return Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
+                return this.Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
         }
 
         #endregion
