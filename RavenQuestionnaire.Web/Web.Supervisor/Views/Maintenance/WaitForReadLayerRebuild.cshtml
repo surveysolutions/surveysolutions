@@ -1,0 +1,22 @@
+﻿@model string
+
+@{
+    ViewBag.Title = "Maintenance";
+}
+
+<h2>Rebooting...</h2>
+
+<br/>
+
+<h4>
+    The application is now rebooting and this may take up to 10 minutes (in some specific cases a bit more).<br/>
+    Sorry for the inconvenience.<br/>
+    <br/>
+    After the process is complete you will be automatically redirected to the page you requested.<br>
+</h4>
+
+<br/>
+
+<script type="text/javascript">
+    window.location.href = '@Url.Action("RebuildReadLayer", "Maintenance", new { returnUrl = this.Model }, Request.Url.Scheme)';
+</script>

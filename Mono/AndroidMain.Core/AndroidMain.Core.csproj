@@ -99,6 +99,21 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Location\CreateLocationCommand.cs">
       <Link>Commands\Location\CreateLocationCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Base\FullGroupDataCommand.cs">
+      <Link>Commands\Questionnaire\Base\FullGroupDataCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Base\FullQuestionDataCommand.cs">
+      <Link>Commands\Questionnaire\Base\FullQuestionDataCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Base\GroupCommand.cs">
+      <Link>Commands\Questionnaire\Base\GroupCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Base\QuestionCommand.cs">
+      <Link>Commands\Questionnaire\Base\QuestionCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\CloneQuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\CloneQuestionnaireCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs">
       <Link>Commands\Questionnaire\Completed\ChangeAssignmentCommand.cs</Link>
     </Compile>
@@ -117,14 +132,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetCommentCommand.cs">
       <Link>Commands\Questionnaire\Completed\SetCommentCommand.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Completed\SetFlagCommand.cs">
+      <Link>Commands\Questionnaire\Completed\SetFlagCommand.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\CreateQuestionnaireCommand.cs">
       <Link>Commands\Questionnaire\CreateQuestionnaireCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\DeleteQuestionnaireCommand.cs">
-      <Link>Commands\Questionnaire\DeleteQuestionnaireCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\DeleteImageCommand.cs">
       <Link>Commands\Questionnaire\DeleteImageCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\DeleteQuestionnaireCommand.cs">
+      <Link>Commands\Questionnaire\DeleteQuestionnaireCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs">
       <Link>Commands\Questionnaire\Flow\CreateFlowGraphCommand.cs</Link>
@@ -135,8 +153,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\AddGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\AddGroupCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs">
-      <Link>Commands\Questionnaire\Group\AddPropagatableGroupCommand.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\CloneGroupCommand.cs">
+      <Link>Commands\Questionnaire\Group\CloneGroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\DeleteGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\DeleteGroupCommand.cs</Link>
@@ -144,23 +162,8 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\FullGroupDataCommand.cs">
-      <Link>Commands\Questionnaire\Group\FullGroupDataCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\GroupCommand.cs">
-      <Link>Commands\Questionnaire\Group\GroupCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\MoveGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\MoveGroupCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewAddGroupCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewAddGroupCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewDeleteGroupCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewDeleteGroupCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\NewUpdateGroupCommand.cs">
-      <Link>Commands\Questionnaire\Group\NewUpdateGroupCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Group\UpdateGroupCommand.cs">
       <Link>Commands\Questionnaire\Group\UpdateGroupCommand.cs</Link>
@@ -174,29 +177,17 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\AddQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\AddQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\ChangeQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Question\ChangeQuestionCommand.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\CloneQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\CloneQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\DeleteQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\DeleteQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\FullQuestionDataCommand.cs">
-      <Link>Commands\Questionnaire\Question\FullQuestionDataCommand.cs</Link>
-    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\MoveQuestionCommand.cs">
       <Link>Commands\Questionnaire\Question\MoveQuestionCommand.cs</Link>
     </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewAddQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Question\NewAddQuestionCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Question\NewDeleteQuestionCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs">
-      <Link>Commands\Questionnaire\Question\NewUpdateQuestionCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\QuestionCommand.cs">
-      <Link>Commands\Questionnaire\Question\QuestionCommand.cs</Link>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\Question\UpdateQuestionCommand.cs">
+      <Link>Commands\Questionnaire\Question\UpdateQuestionCommand.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Commands\Questionnaire\UpdateImageCommand.cs">
       <Link>Commands\Questionnaire\UpdateImageCommand.cs</Link>
@@ -671,6 +662,15 @@
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\Completed\ValidStatusChanged.cs">
       <Link>Events\Questionnaire\Completed\ValidStatusChanged.cs</Link>
     </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\FullGroupDataEvent.cs">
+      <Link>Events\Questionnaire\FullGroupDataEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\FullQuestionDataEvent.cs">
+      <Link>Events\Questionnaire\FullQuestionDataEvent.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupCloned.cs">
+      <Link>Events\Questionnaire\GroupCloned.cs</Link>
+    </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\GroupDeleted.cs">
       <Link>Events\Questionnaire\GroupDeleted.cs</Link>
     </Compile>
@@ -697,6 +697,9 @@
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionChanged.cs">
       <Link>Events\Questionnaire\QuestionChanged.cs</Link>
+    </Compile>
+    <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionCloned.cs">
+      <Link>Events\Questionnaire\QuestionCloned.cs</Link>
     </Compile>
     <Compile Include="..\..\RavenQuestionnaire.Web\Main.Core\Events\Questionnaire\QuestionDeleted.cs">
       <Link>Events\Questionnaire\QuestionDeleted.cs</Link>

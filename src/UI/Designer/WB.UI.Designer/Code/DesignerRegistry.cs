@@ -17,6 +17,7 @@ namespace WB.UI.Designer.Code
     using System.Web.Mvc;
 
     using WB.UI.Designer.Filters;
+    using WB.UI.Designer.WebServices;
 
     public class DesignerRegistry : CoreRegistry
     {
@@ -32,6 +33,7 @@ namespace WB.UI.Designer.Code
                         typeof(QuestionnaireView).Assembly, 
                         typeof(DesignerRegistry).Assembly,
                         typeof(AccountAR).Assembly,
+                        typeof(PublicService).Assembly
                     });
         }
 

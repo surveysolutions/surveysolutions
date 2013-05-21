@@ -7,21 +7,9 @@
     using Ncqrs.Eventing.Storage;
 
     [EventName("RavenQuestionnaire.Core:Events:NewGroupAdded")]
-    public class NewGroupAdded
+    public class NewGroupAdded : FullGroupDataEvent
     {
-        public string ConditionExpression { get; set; }
-
-        public string GroupText { get; set; }
-
-        public Guid? ParentGroupPublicKey { get; set; }
-
-        public Propagate Paropagateble { get; set; }
-
-        public Guid PublicKey { get; set; }
-
         [Obsolete]
         public Guid QuestionnairePublicKey { get; set; }
-
-        public string Description { get; set; }
     }
 }

@@ -102,6 +102,7 @@
     <Compile Include="StoredEvent.cs" />
     <Compile Include="StoredSnaphot.cs" />
     <Compile Include="TypeNameSerializationBinder.cs" />
+    <Compile Include="UniqueEventsIndex.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">

@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Ncqrs.Restoring.EventStapshoot.EventStores;
+using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
@@ -119,8 +120,49 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </exception>
         public IEnumerable<CommittedEvent> GetEventStream()
         {
-            return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+            var retval = new List<CommittedEvent>();
+            // List<UniqueEventsResults> aggregateRoots;
+
+
+            IndexCreation.CreateIndexes(typeof (UniqueEventsIndex).Assembly, DocumentStore);
+
+
+            List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
+            int page = 0;
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    List<UniqueEventsResults> chunk = session
+                        .Query<StoredEvent, UniqueEventsIndex>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<UniqueEventsResults>()
+                        .Skip(page*pageSize)
+                        .Take(pageSize)
+                        .ToList();
+
+                    if (chunk.Count == 0)
+                    {
+                        break;
+                    }
+
+                    aggregateRoots.AddRange(chunk);
+                    page++;
+                }
+            }
+
+            foreach (UniqueEventsResults uniqueEventsResultse in aggregateRoots)
+            {
+                retval.AddRange(
+                    ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue)
+                        .ToList());
+            }
+
+            return retval;
+            //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+
         }
+
 
         public CommittedEvent GetLastEvent(Guid aggregateRootId)
         {
@@ -134,16 +176,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 if (eventLast != null)
                     return ToCommittedEvent(eventLast);
                 return null;
-            }
-        }
-
-        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return session.Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                    .Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
             }
         }
 
@@ -177,6 +209,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
                 page++;
                 yield return chunk;
+            }
+        }
+
+
+        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return session.Query<StoredEvent>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
             }
         }
 

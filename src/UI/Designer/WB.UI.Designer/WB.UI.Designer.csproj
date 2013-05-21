@@ -190,6 +190,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
@@ -253,7 +254,6 @@
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
-    <Compile Include="Code\UserHelper.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
     <Compile Include="PdfConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -271,6 +271,11 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\details.css" />
+    <Content Include="Content\font-awesome-ie7.css" />
+    <Content Include="Content\font-awesome-ie7.min.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\jquery.pnotify.css" />
@@ -367,6 +372,10 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="Configuration\Preview.Designer.Web.config" />
+    <Content Include="Content\font\fontawesome-webfont.woff" />
+    <Content Include="Content\font\fontawesome-webfont.ttf" />
+    <Content Include="Content\font\fontawesome-webfont.eot" />
+    <Content Include="Content\font\FontAwesome.otf" />
     <None Include="Scripts\amplify-vsdoc.js" />
     <Content Include="PublicService.svc" />
     <Content Include="Scripts\amplify.js" />
@@ -379,6 +388,7 @@
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\bootstrapper.js" />
     <Content Include="Scripts\details\config.js" />
+    <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
     <Content Include="Scripts\details\dataprimer.js" />
     <Content Include="Scripts\details\dataservice.js" />
@@ -442,6 +452,7 @@
     <Content Include="Scripts\lib\knockout.activity.js" />
     <Content Include="Scripts\lib\knockout.asyncCommand.js" />
     <Content Include="Scripts\lib\knockout.dirtyFlag.js" />
+    <Content Include="Scripts\lib\knockout.mapping.js" />
     <Content Include="Scripts\lib\koExternalTemplateEngine.js" />
     <Content Include="Scripts\lib\Math.uuid.js" />
     <Content Include="Scripts\lib\sammy.js" />
@@ -516,7 +527,7 @@
     <Content Include="Views\Shared\ListView.cshtml" />
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
-    <Content Include="Views\Maintenance\ReadLayer.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -571,9 +582,9 @@
       <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
       <Name>WB.UI.Designer.WebServices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Desiner.Utilities\WB.UI.Desiner.Utilities.csproj">
+    <ProjectReference Include="..\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Desiner.Utilities</Name>
+      <Name>WB.UI.Designer.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

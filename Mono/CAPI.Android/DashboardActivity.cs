@@ -1,5 +1,9 @@
-﻿using Android.App;
+﻿using System;
+using System.Threading;
+using Android.App;
 using Android.OS;
+using Android.Views;
+using Android.Widget;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Extensions;
 using Cirrious.MvvmCross.Binding.Droid.Simple;
@@ -13,27 +17,57 @@ namespace CAPI.Android
     public class
         DashboardActivity : MvxSimpleBindingActivity<DashboardModel>
     {
+
+
         protected override void OnCreate(Bundle bundle)
         {
 
             base.OnCreate(bundle);
             if (this.FinishIfNotLoggedIn())
                 return;
-      //      ViewModel = new DashboardModel(CapiApplication.Membership.CurrentUser.Id);
-            ViewModel =
-                CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                    new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
-            SetContentView(Resource.Layout.Main);
+            RequestData(() =>
+                {
+                    ViewModel = ViewModel =
+                                CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                                    new DashboardInput(CapiApplication.Membership.CurrentUser.Id));
+                    this.RunOnUiThread(() =>
+                                       SetContentView(Resource.Layout.Main));
+                });
+
         }
+
+        private void RequestData(Action restore)
+        {
+            var progress = new ProgressDialog(this);
+            progress.SetTitle("Loading");
+            progress.SetProgressStyle(ProgressDialogStyle.Spinner);
+            progress.SetCancelable(false);
+            progress.Show();
+
+            ThreadPool.QueueUserWorkItem((s) => { restore(); progress.Dismiss(); });
+
+            
+        }
+
         protected override void OnRestart()
         {
             base.OnRestart();
-            ViewModel.ReinitSurveys(CapiApplication.LoadView<DashboardInput, DashboardModel>(
-                new DashboardInput(CapiApplication.Membership.CurrentUser.Id)).Surveys);
+
+            RequestData(() => ViewModel.ReinitSurveys(CapiApplication.LoadView<DashboardInput, DashboardModel>(
+                new DashboardInput(CapiApplication.Membership.CurrentUser.Id)).Surveys));
         }
+
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            this.CreateActionBar();
+
+        }
+
         public override bool OnCreateOptionsMenu(global::Android.Views.IMenu menu)
         {
-            this.CreateActionBar();
+            //this.CreateActionBar();
             return base.OnCreateOptionsMenu(menu);
         }
     }

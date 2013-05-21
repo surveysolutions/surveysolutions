@@ -21,6 +21,7 @@ namespace Web.Supervisor.Injections
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
+    using WB.UI.Designer.Utilities.Compression;
     using WB.UI.Shared.Log;
     using WB.UI.Shared.NLog;
 
@@ -64,6 +65,8 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
 
             this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+
+            this.Bind<IZipUtils>().ToConstant(new ZipUtils()).InSingletonScope();
         }
     }
 }

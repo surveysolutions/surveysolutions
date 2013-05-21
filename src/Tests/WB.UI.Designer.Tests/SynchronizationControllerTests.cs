@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Documents;
@@ -20,7 +16,8 @@ namespace WB.UI.Designer.Tests
     using System.IO.Compression;
 
     using WB.UI.Designer.BootstrapSupport;
-    using WB.UI.Desiner.Utilities.Compression;
+    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Web.Membership;
 
     [TestFixture]
     public class SynchronizationControllerTests
@@ -29,7 +26,7 @@ namespace WB.UI.Designer.Tests
         protected Mock<IViewRepository> ViewRepositoryMock;
         protected Mock<IZipUtils> ZipUtilsMock;
         protected Mock<IExportService> ExportServiceMock;
-        protected Mock<IUserHelper> UserHelperMock;
+        protected Mock<IMembershipUserService> UserHelperMock;
         
         [SetUp]
         public void Setup()
@@ -38,7 +35,7 @@ namespace WB.UI.Designer.Tests
             ViewRepositoryMock=new Mock<IViewRepository>();
             ZipUtilsMock=new Mock<IZipUtils>();
             ExportServiceMock = new Mock<IExportService>();
-            UserHelperMock=new Mock<IUserHelper>();
+            UserHelperMock=new Mock<IMembershipUserService>();
         }
 
         [Test]
@@ -60,7 +57,7 @@ namespace WB.UI.Designer.Tests
 
             ZipUtilsMock.Setup(x => x.UnZip<IQuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
-            UserHelperMock.Setup(x => x.CurrentUserId).Returns(Guid.NewGuid);
+            UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 
             // act
             var actionResult = (RedirectToRouteResult)controller.Import(file.Object);

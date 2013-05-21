@@ -12,6 +12,9 @@
 @section Styles{
     @Styles.Render("~/content/edit")
 }
+<!--[if IE 7]>
+  <link href="~/Content/font-awesome-ie7.min.css" rel="stylesheet" />
+<![endif]-->
 @section Scripts{
     @Scripts.Render("~/designer")
     <script>
@@ -23,7 +26,7 @@
                         })) ;
             return {
                 questionnaire: q,
-                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, "http")'
+                commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
             };
         });
     </script>
@@ -33,14 +36,21 @@
 <div id="stacks">
     <div id="footer">
         <div class="inner">
-            <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Add chapter</button>
+            
             <div class="statistics">
                 <ul class="nav nav-pills" data-bind="with: statistics">
                     <li><a>G: <span class="badge" data-bind="text: groups"></span></a></li>
                     <li><a>Q: <span class="badge" data-bind="text: questions"></span></a></li>
                 </ul>
             </div>
+            <div class="statistics" data-bind="with: statistics">
+                <div id="unsavedWarningMessage" class="alert"  data-bind="visible: hasUnsaved()" >
+                    <strong>Warning!</strong> <span data-bind="html: unsavedWarningMessage"></span>
+                </div>
+            </div>
+            
             <div class="pull-right">
+                <button class="btn btn-success" data-bind="click: addChapter"><i class="icon-white icon-plus"></i>Add chapter</button>
                 <button class="btn btn-info" data-bind="click: showOutput">Show errors</button>
             </div>
         </div>
@@ -105,7 +115,7 @@
                         <a href="#" class="btn btn-info btn-small btn-help"
                             data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
                             data-original-title="Kind of propagation"
-                           data-html="true"
+                            data-html="true"
                             data-trigger="hover"
                             data-placement="right"
                             data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
@@ -131,10 +141,10 @@
                     <a href="#" class="btn btn-info btn btn-help"
                         data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
                         data-original-title="Condition expression"
-                       data-html="true"
+                        data-html="true"
                         data-trigger="hover"
                         data-placement="right"
-                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Condition expression</label>
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
@@ -164,7 +174,7 @@
                     <div class="control-group" data-bind="validationElement: alias">
                         <label class="control-label required">Variable</label>
                         <div class="controls">
-                            <input placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
+                            <input id="alias" placeholder="var. name" type="text" data-bind="value: alias, valueUpdate: 'afterkeydown'" class="span12" maxlength="32" />
                         </div>
                     </div>
                 </div>
@@ -192,10 +202,10 @@
                     <a href="#" class="btn btn-info btn-small btn-help"
                         data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
                         data-original-title="Condition expression"
-                       data-html="true"
+                        data-html="true"
                         data-trigger="hover"
                         data-placement="right"
-                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Condition expression</label>
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
@@ -203,11 +213,11 @@
                 <label>
                     <a href="#" class="btn btn-info btn-small btn-help"
                         data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
-                       data-original-title="Validation expression"
+                        data-original-title="Validation expression"
                         data-trigger="hover"
                         data-html="true"
                         data-placement="right"
-                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a> Validation expression</label>
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
@@ -244,8 +254,9 @@
                         <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a data-bind="click: addQuestion, visible: isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
-                            <li><a data-bind="click: addGroup, visible: gtype()=='None' &&  isNew()==false" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
+                            <li><a data-bind="click: addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -270,6 +281,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>

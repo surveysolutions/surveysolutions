@@ -87,6 +87,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.3.1.7705, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="ClientDependency.Core, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ClientDependency.1.5.1.0\lib\ClientDependency.Core.dll</HintPath>
@@ -94,6 +98,12 @@
     <Reference Include="ClientDependency.Core.Mvc, Version=1.5.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ClientDependency-Mvc.1.5.1.0\lib\ClientDependency.Core.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah">
+      <HintPath>..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <HintPath>..\Web.Headquarter\Bin\Ionic.Zip.dll</HintPath>
@@ -173,6 +183,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MVCHtml5Toolkit.1.6\lib\System.Web.Mvc.Html5.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\packages\System.Web.Optimization.1.0.0.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.AspNet.Razor.2.0.20715.0\lib\net40\System.Web.Razor.dll</HintPath>
@@ -200,8 +213,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
+    <Reference Include="WebGrease, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BackupController.cs" />
@@ -214,6 +232,7 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Controllers\TestUnhandledExceptionController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Filters\RequiresReadLayerFilterProvider.cs" />
@@ -228,7 +247,6 @@
     <Compile Include="Models\ChangeStateModel.cs" />
     <Compile Include="Models\ChartDataModel.cs" />
     <Compile Include="Models\Chart\ChartModelBase.cs" />
-    <Compile Include="Models\ImportTemplateModel.cs" />
     <Compile Include="Models\Chart\StatusChartModel.cs" />
     <Compile Include="Models\CompleteQuestionSettings.cs" />
     <Compile Include="Models\GlobalHelper.cs" />
@@ -402,6 +420,7 @@
     <Content Include="Scripts\assign\app\mapper.js" />
     <Content Include="Scripts\assign\app\model.js" />
     <Content Include="Scripts\assign\app\viewmodel.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive-custom-for-bootstrap.js" />
     <Content Include="Scripts\lib\amplify.js" />
     <Content Include="Scripts\lib\jquery.js" />
     <Content Include="Scripts\lib\knockout.js" />
@@ -416,13 +435,25 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
-    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
-    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
+    <None Include="Service References\DesignerPublicService\PublicService.disco" />
+    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />
@@ -439,9 +470,18 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListViewItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
+    <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -463,6 +503,10 @@
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
+      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
+      <Name>WB.UI.Desiner.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
       <Project>{fe8c73a8-34f6-4ddb-b700-0416db6256a4}</Project>
@@ -577,7 +621,7 @@
     <Content Include="Views\Backup\Index.cshtml" />
     <None Include="Scripts\jquery-1.9.0.min.map" />
     <Content Include="Views\User\CreateSupervisor.cshtml" />
-    <Content Include="Views\Maintenance\ReadLayer.cshtml" />
+    <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
     <Content Include="Views\Team\Index.cshtml" />
     <Content Include="Views\Team\Interviewers.cshtml" />
     <Content Include="Views\Team\_PartialGrid_Supervisors.cshtml" />
@@ -619,16 +663,7 @@
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
-    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
-    <None Include="Service References\DesignerPublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -36,7 +36,7 @@
         Html.RequiresJs("shorten.js", "Scripts", 60);
         var page = ViewBag.ActivePage ?? MenuItem.Logon;
     }
-    
+    @RenderSection("scripts", false)
 </head>
 <body>
     <div class="navbar  navbar-fixed-top">
@@ -118,6 +118,7 @@
         </div>
     </div>
     <div id="page" class="container-fluid">
+        <div style="margin-top: 20px">@Html.Partial("_alerts")</div>
         <div id="main">
             @RenderBody()
         </div>

@@ -115,17 +115,9 @@ namespace CAPI.Android.Controls.Navigation
         /// </returns>
         protected bool Dashboard(object sender, EventArgs e)
         {
-            /*if (this.context is DashboardActivity || this.context is LoginActivity)
-            {
-                return true;
-            }
-
-            this.context.StartActivity(
-                this.membership.IsLoggedIn ? 
-                typeof(DashboardActivity) : 
-                typeof(LoginActivity));
-            */
-            this.context.StartActivity(typeof(DashboardActivity));
+            var intent = new Intent(context, typeof(DashboardActivity));
+            intent.SetFlags(ActivityFlags.ReorderToFront);
+            context.StartActivity(intent);
             return true;
         }
 
@@ -163,7 +155,10 @@ namespace CAPI.Android.Controls.Navigation
         /// </returns>
         protected bool Synchronization(object sender, EventArgs e)
         {
-            this.context.StartActivity(typeof(SynchronizationActivity));
+            var intent = new Intent(context, typeof(SynchronizationActivity));
+            intent.SetFlags(ActivityFlags.ReorderToFront);
+            context.StartActivity(intent);
+       
 
             return true;
         }
@@ -182,7 +177,10 @@ namespace CAPI.Android.Controls.Navigation
         /// </returns>
         private bool Login(object arg1, EventArgs arg2)
         {
-            this.context.StartActivity(typeof(LoginActivity));
+            var intent = new Intent(context, typeof(LoginActivity));
+            intent.SetFlags(ActivityFlags.ReorderToFront);
+            context.StartActivity(intent);
+       
             return true;
         }
 
@@ -200,7 +198,10 @@ namespace CAPI.Android.Controls.Navigation
         /// </returns>
         private bool Settings(object arg1, EventArgs arg2)
         {
-            this.context.StartActivity(typeof(SettingsActivity));
+            var intent = new Intent(context, typeof(SettingsActivity));
+            intent.SetFlags(ActivityFlags.ReorderToFront);
+            context.StartActivity(intent);
+       
             return true;
         }
 
