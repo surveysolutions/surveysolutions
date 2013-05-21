@@ -81,13 +81,7 @@ namespace CAPI.Android.Controls
                 var llQuestionnairie =
                     view.FindViewById<LinearLayout>(Resource.Id.llQuestionnairie);
                 view.SetTag(Resource.Id.QuestionnaireId, dataItem.PublicKey.ToString());
-               /* llQuestionnairie.Clickable = true;*/
-                llQuestionnairie.Click += (s, e) =>
-                    {
-                        var intent = new Intent(activity, typeof (LoadingActivity));
-                        intent.PutExtra("publicKey", dataItem.PublicKey.ToString());
-                        activity.StartActivity(intent);
-                    };
+                llQuestionnairie.Focusable = false;
                 var tvStatus = view.FindViewById<TextView>(Resource.Id.tvStatus);
                 tvStatus.Text = dataItem.Status.Name;
 

@@ -53,19 +53,19 @@ namespace CAPI.Android
             var llQuestionnarieHolder = view.FindViewById<ListView>(Resource.Id.llQuestionnarieHolder);
 
             llQuestionnarieHolder.Adapter = new DashboardAdapter(this, dashboardSurveyItem.ActiveItems);
-           // llQuestionnarieHolder.ItemClick += llQuestionnarieHolder_ItemClick;
+            llQuestionnarieHolder.ItemClick += llQuestionnarieHolder_ItemClick;
 
             llQuestionnarieHolder.Clickable = true;
             llSurveyHolder.AddView(view);
             sureveyHolders.Add(dashboardSurveyItem.PublicKey, view);
         }
 
-       /* void llQuestionnarieHolder_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+        void llQuestionnarieHolder_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             var intent = new Intent(this, typeof(LoadingActivity));
             intent.PutExtra("publicKey", e.View.GetTag(Resource.Id.QuestionnaireId).ToString());
             this.StartActivity(intent);
-        }*/
+        }
         
 
         private void RequestData(Action restore)
