@@ -15,7 +15,6 @@ using Ncqrs.Restoring.EventStapshoot;
 using Ncqrs.Spec;
 using WB.Core.Questionnaire.ImportService;
 using WB.Core.Questionnaire.ImportService.Commands;
-using WB.UI.Designer.Views.Questionnaire;
 
 namespace WB.Core.Questionnaire.Tests
 {
