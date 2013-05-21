@@ -1,5 +1,5 @@
 <SolutionConfiguration>
-  <FileVersion>0</FileVersion>
+  <FileVersion>1</FileVersion>
   <AutoEnableOnStartup>True</AutoEnableOnStartup>
   <AllowParallelTestExecution>false</AllowParallelTestExecution>
   <AllowTestsToRunInParallelWithThemselves>true</AllowTestsToRunInParallelWithThemselves>

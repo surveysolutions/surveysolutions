@@ -15,7 +15,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    public class DashboardSurveyItem :MvxViewModel
+    public class DashboardSurveyItem 
     {
         public DashboardSurveyItem(Guid publicKey, string surveyTitle, IEnumerable<DashboardQuestionnaireItem> items)
         {
@@ -35,11 +35,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
             get { return cacheddItems; }
         }
 
-        public void ReplaceItems(IList<DashboardQuestionnaireItem> newActiveItems)
-        {
-            this.cacheddItems = newActiveItems;
-            this.RaisePropertyChanged("ActiveItems");
-        }
 
         private IList<DashboardQuestionnaireItem> cacheddItems = new List<DashboardQuestionnaireItem>();
 
