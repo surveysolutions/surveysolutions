@@ -6,11 +6,11 @@
     using Raven.Client;
     using Raven.Client.Document;
 
+    #warning TLK: make string identifiers here after switch to new storage
+
     public class RavenDenormalizerStorage<TView> : IQueryableDenormalizerStorage<TView>
         where TView : class
     {
-        private const int Timeout = 120;
-
         private readonly DocumentStore ravenStore;
 
         public RavenDenormalizerStorage(DocumentStore ravenStore)
@@ -20,22 +20,43 @@
 
         public int Count()
         {
-            throw new NotImplementedException();
+            using (var session = this.ravenStore.OpenSession())
+            {
+                return
+                    session
+                        .Query<TView>()
+                        .Customize(customization
+                            => customization.WaitForNonStaleResultsAsOfNow())
+                        .Count();
+            }
         }
 
         public TView GetById(Guid id)
         {
-            throw new NotImplementedException();
+            using (var session = this.ravenStore.OpenSession())
+            {
+                return session.Load<TView>(id: id.ToString());
+            }
         }
 
         public void Remove(Guid id)
         {
-            throw new NotImplementedException();
+            using (var session = this.ravenStore.OpenSession())
+            {
+                var view = session.Load<TView>(id: id.ToString());
+
+                session.Delete(view);
+                session.SaveChanges();
+            }
         }
 
         public void Store(TView view, Guid id)
         {
-            throw new NotImplementedException();
+            using (var session = this.ravenStore.OpenSession())
+            {
+                session.Store(entity: view, id: id.ToString());
+                session.SaveChanges();
+            }
         }
 
         public IQueryable<TView> Query()
@@ -51,7 +72,7 @@
                     session
                         .Query<TView>()
                         .Customize(customization
-                            => customization.WaitForNonStaleResults(TimeSpan.FromSeconds(Timeout))));
+                            => customization.WaitForNonStaleResultsAsOfNow()));
             }
         }
     }
