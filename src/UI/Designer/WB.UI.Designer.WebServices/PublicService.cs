@@ -12,7 +12,7 @@ namespace WB.UI.Designer.WebServices
 
     using WB.Core.Questionnaire.ExportServices;
     using WB.UI.Designer.WebServices.Questionnaire;
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Web.Membership;
 
     /// <summary>
