@@ -4,11 +4,10 @@
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
                android:orientation="horizontal">
-  <TextView
+  <TextView android:id="@+id/txtPropertyName"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-             android:textSize="15dp"
-             local:MvxBind="{'Text':{'Path':'Title'}}"/>
+             android:textSize="15dp"/>
 
   <TextView
             android:layout_width="wrap_content"
@@ -16,8 +15,8 @@
               android:textSize="15dp"
             android:text=":"/>
   <TextView
+   android:id="@+id/txtPropertyValue"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-              android:textSize="15dp"
-             local:MvxBind="{'Text':{'Path':'Value'}}"/>
+              android:textSize="15dp"/>
 </LinearLayout>
