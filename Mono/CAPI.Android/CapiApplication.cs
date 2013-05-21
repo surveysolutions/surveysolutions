@@ -183,18 +183,18 @@ namespace CAPI.Android
 
         private void RestoreAppState()
         {
-            var manager = this.GetSystemService(Context.ActivityService) as ActivityManager;
-            var topActivity = manager.GetRunningTasks(1).Last().TopActivity;
-            if (!topActivity.ClassName.Contains(typeof (SplashScreenActivity).Name))
-            {
-                this.ClearAllBackStack<SplashScreenActivity>();
+            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironmentUnhandledExceptionRaiser;
+        }
 
-                var questionnarieDenormalizer = kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>() as InMemoryDenormalizer<CompleteQuestionnaireView>;
-                if (questionnarieDenormalizer != null)
-                    questionnarieDenormalizer.Clear();
-                /* var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-                InitQuestionnariesStorage(bus);*/
-            }
+        private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
+        {
+            this.ClearAllBackStack<SplashScreenActivity>();
+
+            var questionnarieDenormalizer =
+                kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>() as
+                InMemoryDenormalizer<CompleteQuestionnaireView>;
+            if (questionnarieDenormalizer != null)
+                questionnarieDenormalizer.Clear();
         }
 
         private IKernel kernel;
