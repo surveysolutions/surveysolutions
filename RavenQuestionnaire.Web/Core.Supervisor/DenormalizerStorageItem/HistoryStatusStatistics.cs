@@ -14,9 +14,8 @@ namespace Core.Supervisor.DenormalizerStorageItem
 
     using Main.Core.Entities.SubEntities;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
+    #warning TLK: delete as no longer needed
+    [Obsolete]
     public class HistoryStatusStatistics
     {
         #region Constructors and Destructors
