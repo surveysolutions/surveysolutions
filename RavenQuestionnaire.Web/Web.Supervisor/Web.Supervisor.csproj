@@ -105,9 +105,6 @@
     <Reference Include="Elmah.Mvc">
       <HintPath>..\..\packages\Elmah.MVC.2.0.2\lib\net40\Elmah.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
-      <HintPath>..\Web.Headquarter\Bin\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="Main.DenormalizerStorage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\src\UI\Designer\WB.UI.Designer.Views\bin\Debug\Main.DenormalizerStorage.dll</HintPath>
