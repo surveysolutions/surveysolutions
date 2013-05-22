@@ -8,10 +8,11 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Security.Authentication;
-namespace CAPI.Android.Syncronization
+
 using Main.Core.Entities.SubEntities;
 using Main.Synchronization.Credentials;
 
+namespace CAPI.Android.Syncronization
 {
     using SynchronizationMessages.Synchronization;
     using System;

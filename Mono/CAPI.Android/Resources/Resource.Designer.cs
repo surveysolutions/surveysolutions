@@ -352,8 +352,8 @@ namespace CAPI.Android
 			// aapt resource value: 0x7f030011
 			public const int sync_dialog = 2130903057;
 			
-			// aapt resource value: 0x7f030011
-			public const int SyncLogin = 2130903057;
+			// aapt resource value: 0x7f030012
+			public const int SyncLogin = 2130903058;
 			
 			private Layout()
 			{

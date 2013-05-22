@@ -11,7 +11,7 @@ using System.Net;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View.User;
-
+using WB.UI.Shared.NLog;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 namespace Web.Supervisor.Controllers
@@ -469,8 +469,6 @@ namespace Web.Supervisor.Controllers
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
             Guid syncProcess = Guid.NewGuid();
-            var logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Request.InputStream.Position = 0;
@@ -513,7 +511,7 @@ namespace Web.Supervisor.Controllers
             }
             catch (Exception ex)
             {
-                logger.FatalException("Error on Sync.", ex);
+                logger.Fatal("Error on Sync.", ex);
                 logger.Fatal("Exception message: " + ex.Message);
                 logger.Fatal("Stack: " + ex.StackTrace);
                 

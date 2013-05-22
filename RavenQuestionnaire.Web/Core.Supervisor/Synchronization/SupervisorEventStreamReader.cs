@@ -138,7 +138,7 @@ namespace Core.Supervisor.Synchronization
         {
             return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
                 .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id))                
-                .Where(q => IsQuestionnarieRequiresSync(users, q));
+                .Where(q => IsQuestionnarieRequiresSync(users, q))
                 .Select(i => i.CompleteQuestionnaireId)
                 .ToList());
         }

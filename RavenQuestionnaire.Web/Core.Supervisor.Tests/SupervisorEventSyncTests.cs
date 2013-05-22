@@ -102,13 +102,13 @@ namespace Core.Supervisor.Tests
             Assert.That(result[0].AggregateRootId, Is.EqualTo(userId));
         }
 
-        private SupervisorEventStreamReader CreateNewStreamReaderWhichIsSendApproved()
+        private SupervisorEventStreamReader CreateNewStreamReaderWhichIsSendApproved(Guid? supervisorId=null)
         {
-            return new SupervisorEventStreamReader(denormalizerMock.Object,true);
+            return new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId??Guid.NewGuid(), true);
         }
-        private SupervisorEventStreamReader CreateNewStreamReaderWhichIsNotSendApproved()
+        private SupervisorEventStreamReader CreateNewStreamReaderWhichIsNotSendApproved(Guid? supervisorId = null)
         {
-            return new SupervisorEventStreamReader(denormalizerMock.Object, false);
+            return new SupervisorEventStreamReader(denormalizerMock.Object, supervisorId ?? Guid.NewGuid(), true);
         }
         [Test]
         public void GetAllARIds_When_NotStreamableEventStore_Then_LastEventByRootisNull()
@@ -128,7 +128,7 @@ namespace Core.Supervisor.Tests
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
                             .Returns(new List<Guid> { });
 
-  SupervisorEventStreamReader unitUnderTest = CreateNewStreamReaderWhichIsSendApproved();
+            SupervisorEventStreamReader unitUnderTest = CreateNewStreamReaderWhichIsSendApproved(supervisorId);
 
 
             // act
