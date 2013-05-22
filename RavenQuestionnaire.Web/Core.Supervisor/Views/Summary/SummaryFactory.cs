@@ -36,7 +36,7 @@
             if (input.TemplateId.HasValue)
             {
                 var tbi = this.templates.GetById(input.TemplateId.Value);
-                template = new TemplateLight(tbi.Id, tbi.Title);
+                template = new TemplateLight(tbi.QuestionnaireId, tbi.Title);
             }
 
             return this.survey.Query(queryableSurveys =>

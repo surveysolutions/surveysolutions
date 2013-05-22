@@ -27,7 +27,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// Initializes a new instance of the <see cref="QuestionnaireBrowseItem"/> class.
         /// </summary>
-        /// <param name="id">
+        /// <param name="questionnaireId">
         /// The id.
         /// </param>
         /// <param name="title">
@@ -42,9 +42,9 @@ namespace Main.Core.View.Questionnaire
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
+        public QuestionnaireBrowseItem(Guid questionnaireId, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
         {
-            this.Id = id;
+            this.QuestionnaireId = questionnaireId;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
@@ -75,7 +75,7 @@ namespace Main.Core.View.Questionnaire
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid QuestionnaireId { get; private set; }
 
         /// <summary>
         /// Gets the last entry date.
@@ -120,7 +120,7 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public TemplateLight GetTemplateLight()
         {
-            return new TemplateLight(this.Id, this.Title);
+            return new TemplateLight(this.QuestionnaireId, this.Title);
         }
 
         #endregion

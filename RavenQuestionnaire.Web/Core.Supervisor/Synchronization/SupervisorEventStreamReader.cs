@@ -181,7 +181,7 @@ namespace Core.Supervisor.Synchronization
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
             var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
-                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
+                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.QuestionnaireId))
                 .ToList());
 
             retval.AddRange(model);
