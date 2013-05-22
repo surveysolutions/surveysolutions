@@ -11,7 +11,6 @@ using System.Net;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View.User;
-using WB.UI.Shared.NLog;
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
 namespace Web.Supervisor.Controllers
