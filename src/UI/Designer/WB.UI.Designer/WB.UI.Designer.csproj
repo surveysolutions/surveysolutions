@@ -555,17 +555,13 @@
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Compression\WB.UI.Shared.Compression.csproj">
-      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Shared.Compression</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
-      <Project>{fe8c73a8-34f6-4ddb-b700-0416db6256a4}</Project>
-      <Name>WB.UI.Shared.Log</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WB.UI.Shared.NLog\WB.UI.Shared.NLog.csproj">
-      <Project>{6bbbb42b-3b59-45fb-8bd6-64eecec3bf5e}</Project>
-      <Name>WB.UI.Shared.NLog</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4e9b-845a-5400c038a499}</Project>

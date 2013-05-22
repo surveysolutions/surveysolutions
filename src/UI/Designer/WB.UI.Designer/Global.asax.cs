@@ -11,7 +11,7 @@ namespace WB.UI.Designer
 {
     using NConfig;
 
-    using WB.UI.Shared.NLog;
+    using WB.Core.SharedKernel.Utils.NLog;
 
     public class MvcApplication : HttpApplication
     {
