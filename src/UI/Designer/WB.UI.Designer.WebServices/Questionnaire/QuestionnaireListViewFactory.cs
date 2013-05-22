@@ -76,7 +76,7 @@ namespace WB.UI.Designer.WebServices.Questionnaire
                                    x =>
                                    new QuestionnaireListViewItem
                                        {
-                                           Id = x.Id,
+                                           Id = x.QuestionnaireId,
                                            Title = x.Title
                                        }).ToArray(),
                            Order = input.Order
