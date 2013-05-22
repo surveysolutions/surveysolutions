@@ -21,9 +21,9 @@ namespace Web.Supervisor.Injections
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
-    using WB.UI.Shared.Compression;
-    using WB.UI.Shared.Log;
-    using WB.UI.Shared.NLog;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Compression;
+    using WB.Core.SharedKernel.Utils.NLog;
 
     using Web.Supervisor.Filters;
 
@@ -73,7 +73,7 @@ namespace Web.Supervisor.Injections
 
             this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
 
-            this.Bind<IZipUtils>().ToConstant(new ZipUtils()).InSingletonScope();
+            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
         }
     }
 }

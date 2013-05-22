@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace WB.UI.Shared.Log
+namespace WB.Core.SharedKernel.Logger
 {
     using System;
 

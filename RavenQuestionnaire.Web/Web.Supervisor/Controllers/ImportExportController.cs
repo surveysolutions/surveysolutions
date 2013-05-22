@@ -43,7 +43,7 @@ namespace Web.Supervisor.Controllers
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Utils.Attributes;
