@@ -8,24 +8,22 @@
     >-->
 <LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
       android:orientation="vertical"
                android:padding="10px"
     >
 
-  <ScrollView 
+  <!--<ScrollView 
                android:id="@+id/MyLayout"
       android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:scrollbars="horizontal|vertical">
-    <Mvx.MvxBindableLinearLayout
+      android:layout_height="fill_parent"
+      android:scrollbars="horizontal|vertical">-->
+    
+    <LinearLayout android:id="@+id/llSurveyHolder"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:paddingTop="10px"
-    android:orientation="vertical"
-    local:MvxItemTemplate="@layout/dashboard_survey_row"
-    local:MvxBind="{'ItemsSource':{'Path':'Surveys'}}"
-  />
-  </ScrollView>
+    android:orientation="vertical" />
+  <!--</ScrollView>-->
 </LinearLayout>

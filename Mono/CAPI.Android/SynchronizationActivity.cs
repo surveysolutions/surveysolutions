@@ -36,6 +36,8 @@ namespace CAPI.Android
     using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
 
+    using Newtonsoft.Json;
+
     using Ninject;
 
     using global::Android.App;
@@ -144,43 +146,72 @@ namespace CAPI.Android
 
             if (result)
             {
-                string extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
-                if (Directory.Exists(extStorage))
-                {
-                    extStorage = Path.Combine(extStorage, CAPI);
-                    if (!Directory.Exists(extStorage))
-                    {
-                        Directory.CreateDirectory(extStorage);
-                    }
-                }
-                else
-                {
-                    extStorage =
-                        global::System.Environment.GetFolderPath(global::System.Environment.SpecialFolder.Personal);
-                }
+                var extStorage = GetBackupDirectory();
 
                 string filename = Path.Combine(
                     extStorage, string.Format("backup-{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
-                using (FileStream file = File.Open(filename, FileMode.Create))
-                {
-                    var buf = new byte[1024];
-                    int r;
-                    MemoryStream stream = collector.GetExportedStream();
-                    while ((r = stream.Read(buf, 0, buf.Length)) > 0)
-                    {
-                        file.Write(buf, 0, r);
-                    }
 
-                    file.Flush();
-                }
-
-                /*filename = Path.Combine(extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}--1.acapi", DateTime.UtcNow));
-                File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
-*/
+                WriteBackupToFile(filename, collector); // is was WriteExportedStreamToFile before
             }
 
             status.Progress = 99;
             return result;
+        }
+
+        private static void WriteBackupToFile(string filename, CompressedStreamStreamCollector collector)
+        {
+            using (var writer = new StreamWriter(filename))
+            {
+                foreach (var @event in collector.GetEventStoreForBackup())
+                {
+                    string serializedEvent = JsonConvert.SerializeObject(@event,
+                        Formatting.None,
+                        new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+
+                    writer.WriteLine(serializedEvent);
+                    writer.WriteLine("===== ===== ===== ===== =====");
+                }
+
+                writer.Flush();
+            }
+        }
+
+        private static void WriteExportedStreamToFile(string filename, CompressedStreamStreamCollector collector)
+        {
+            using (FileStream file = File.Open(filename, FileMode.Create))
+            {
+                var buf = new byte[1024];
+                int r;
+                MemoryStream stream = collector.GetExportedStream();
+                while ((r = stream.Read(buf, 0, buf.Length)) > 0)
+                {
+                    file.Write(buf, 0, r);
+                }
+
+                file.Flush();
+            }
+
+            /*filename = Path.Combine(extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}--1.acapi", DateTime.UtcNow));
+            File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
+*/
+        }
+
+        private static string GetBackupDirectory()
+        {
+            string extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
+            if (Directory.Exists(extStorage))
+            {
+                extStorage = Path.Combine(extStorage, CAPI);
+                if (!Directory.Exists(extStorage))
+                {
+                    Directory.CreateDirectory(extStorage);
+                }
+            }
+            else
+            {
+                extStorage = global::System.Environment.GetFolderPath(global::System.Environment.SpecialFolder.Personal);
+            }
+            return extStorage;
         }
 
         /// <summary>
@@ -259,22 +290,16 @@ namespace CAPI.Android
                                 {
                                     try
                                     {
-                                        if (pumpingType == PumpimgType.Push)
-                                        {
-                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Pull)
-                                        {
-                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Backup)
+                                        if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
                                         }
                                         else if (pumpingType == PumpimgType.Sync)
                                         {
                                             this.Push(SettingsManager.GetSyncAddressPoint(), result);
-                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
+
+                                            if (result.Result)
+                                                this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
                                     }
                                     catch (Exception exc)

@@ -22,7 +22,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         {
             Id = id.ToString();
             Status = status.PublicId.ToString();
-            Properties = GetJsonData(properties);
+            Properties = GetJsonData(properties.ToArray());
             Responsible = responsible.ToString();
             Survey = survey.ToString();
         }
@@ -49,31 +49,25 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         }
 
 
-        private string GetJsonData(IList<FeaturedItem> payload)
+        private string GetJsonData(FeaturedItem[] payload)
         {
             var data = JsonConvert.SerializeObject(payload, Formatting.None,
                                                    new JsonSerializerSettings
                                                    {
-                                                       TypeNameHandling = TypeNameHandling.Objects,
-                                                       ContractResolver = new CriteriaContractResolver()/*,
-                                                           Converters =
-                                                               new List<JsonConverter>() {new ItemPublicKeyConverter()}*/
+                                                       TypeNameHandling = TypeNameHandling.Objects
                                                    });
             Console.WriteLine(data);
             return data;
         }
 
-        private IList<FeaturedItem> GetProperties()
+        private FeaturedItem[] GetProperties()
         {
             if (string.IsNullOrEmpty(Properties))
-                return new List<FeaturedItem>();
-            return JsonConvert.DeserializeObject<IList<FeaturedItem>>(Properties,
+                return new FeaturedItem[0];
+            return JsonConvert.DeserializeObject<FeaturedItem[]>(Properties,
                 new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    ContractResolver = new CriteriaContractResolver()/*,
-                    Converters =
-                        new List<JsonConverter>() { new ItemPublicKeyConverter() }*/
+                    TypeNameHandling = TypeNameHandling.Objects
                 });
         }
     }

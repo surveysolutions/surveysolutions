@@ -309,6 +309,7 @@
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\img\clear.png" />
     <Content Include="Content\img\details_bg.jpg" />
+    <Content Include="Content\img\divider.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\loading.gif" />
@@ -387,6 +388,7 @@
     <Content Include="Content\TimelineJS\js\storyjs-embed.js" />
     <Content Include="Content\TimelineJS\js\timeline-min.js" />
     <Content Include="Content\TimelineJS\js\timeline.js" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.file-input.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -599,6 +601,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Configuration\Amazon.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Configuration\Dev.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -155,6 +155,11 @@ namespace Main.Synchronization.SyncStreamCollector
             return zipStream;
         }
 
+        public List<AggregateRootEvent> GetEventStoreForBackup()
+        {
+            return this.eventStore;
+        }
+
 
         private MemoryStream zipStream;
 

@@ -221,14 +221,14 @@ namespace AndroidMain.Synchronization
                 ///// change it
                 var index = responseStream.Content.IndexOf("[");
                 if (index < 0)
-                    throw new Exception("Operation finished unsuccessfully. Received block is incorrect.");
+                    throw new Exception("Operation finished unsuccessfully. Received information block is incorrect.");
                 
                 var str = responseStream.Content.Substring(index);
                 /////
                 var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
                 if (evnts.Length == 0 )
-                    throw new Exception("Operation finished unsuccessfully. Received received item is not correct.");
+                    throw new Exception("Operation finished unsuccessfully. Received item is not correct.");
 
                 foreach (var aggregateRootEvent in evnts)
                 {

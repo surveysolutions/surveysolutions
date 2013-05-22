@@ -43,7 +43,7 @@ namespace Main.Core.Events
 
         #region Constructor
 
-        public UserEventStreamReader(IDenormalizer denormalizer)
+        public UserEventStreamReader(IDenormalizer denormalizer):base(denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();

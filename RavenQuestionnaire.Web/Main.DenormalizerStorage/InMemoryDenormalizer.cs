@@ -58,5 +58,10 @@ namespace Main.DenormalizerStorage
 
             this._hash.TryAdd(id, view);
         }
+
+        public void Clear()
+        {
+            this._hash.Clear();
+        }
     }
 }

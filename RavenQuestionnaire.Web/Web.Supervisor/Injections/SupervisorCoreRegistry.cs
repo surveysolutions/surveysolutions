@@ -29,8 +29,13 @@ namespace Web.Supervisor.Injections
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded) {}
+        private readonly bool isApprovedSended;
+
+        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, bool isApprovedSended)
+            : base(repositoryPath, isEmbeded)
+        {
+            this.isApprovedSended = isApprovedSended;
+        }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
@@ -56,7 +61,9 @@ namespace Web.Supervisor.Injections
             base.Load();
 
             this.Unbind<IEventStreamReader>();
-            this.Bind<IEventStreamReader>().To<SupervisorEventStreamReader>();
+            this.Bind<IEventStreamReader>()
+                .To<SupervisorEventStreamReader>()
+                .WithConstructorArgument("isApprovedSended", isApprovedSended);
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();

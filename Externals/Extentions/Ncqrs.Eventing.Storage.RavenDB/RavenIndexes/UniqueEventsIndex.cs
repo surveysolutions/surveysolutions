@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text;
-using Ncqrs.Commanding.CommandExecution.Mapping.Fluent;
 using Raven.Client.Indexes;
 
-namespace Ncqrs.Eventing.Storage.RavenDB
+namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
 {
     public class UniqueEventsIndex : AbstractIndexCreationTask<StoredEvent, UniqueEventsResults>
     {
@@ -33,4 +30,5 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public Guid EventSourceId { get; set; }
         public int LastSnapshot { get; set; }
     }
+    
 }

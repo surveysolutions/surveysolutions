@@ -46,6 +46,7 @@ namespace Core.HQ.Synchronization
         #region Constructor
 
         public HqEventStreamReader(IDenormalizer denormalizer)
+            : base(denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();

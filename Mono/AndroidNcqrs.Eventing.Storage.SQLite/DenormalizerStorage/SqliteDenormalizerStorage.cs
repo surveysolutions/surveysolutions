@@ -53,7 +53,7 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite.DenormalizerStorage
 
         public void Remove(Guid id)
         {
-            _connection.Delete<TView>(id);
+            _connection.Delete<TView>(id.ToString());
         }
 
         public void Store(TView view, Guid id)
