@@ -61,7 +61,8 @@
             if (!_.isUndefined(selectedQuestion())) {
                 selectedQuestion().isSelected(false);
             }
-
+            questionnaire().isSelected(false);
+            
             if (routeData.has('questionnaire')) {
                 editQuestionnaire(routeData.questionnaire);
             }
