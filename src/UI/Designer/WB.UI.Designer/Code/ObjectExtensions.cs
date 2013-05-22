@@ -82,5 +82,19 @@ namespace WB.UI.Designer
             return !string.IsNullOrEmpty(value);
         }
 
+        public static T As<T>(this Exception source) where T: class 
+        {
+            if (source is T)
+            {
+                return source as T;
+            }
+
+            while (source.InnerException != null)
+            {
+                return source.InnerException.As<T>();
+            }
+
+            return null;
+        }
     }
 }

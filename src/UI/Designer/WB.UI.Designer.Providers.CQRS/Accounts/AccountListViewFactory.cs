@@ -1,6 +1,4 @@
-﻿using WB.UI.Designer.Providers.CQRS.Accounts.View;
-using WB.UI.Designer.Providers.Roles;
-using Main.Core.Utility;
+﻿using Main.Core.Utility;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using System;
@@ -10,7 +8,7 @@ using System.Linq;
 namespace WB.UI.Designer.Providers.CQRS.Accounts
 {
     using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     /// <summary>
     /// The account view factory.

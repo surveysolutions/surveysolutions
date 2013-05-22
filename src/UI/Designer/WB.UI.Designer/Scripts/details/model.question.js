@@ -94,7 +94,7 @@
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
 
-
+              self.canUpdate = ko.observable(true);
 
               return self;
           };

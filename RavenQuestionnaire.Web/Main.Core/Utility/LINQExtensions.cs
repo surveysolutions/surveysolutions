@@ -82,9 +82,11 @@ namespace Main.Core.Utility
         {
             string[] orderFields = sortExpression.Split(',').Where(x => !string.IsNullOrEmpty(x)).ToArray();
             IOrderedQueryable<TEntity> result = null;
+            var delimiters = new[] { " " };
             for (int currentFieldIndex = 0; currentFieldIndex < orderFields.Count(); currentFieldIndex++)
             {
-                string[] expressionPart = orderFields[currentFieldIndex].Trim().Split(' ');
+                string[] expressionPart =
+                    orderFields[currentFieldIndex].Trim().Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
                 string sortField = expressionPart[0];
                 bool sortDescending = (expressionPart.Length == 2)
                                       && expressionPart[1].Equals("DESC", StringComparison.OrdinalIgnoreCase);
