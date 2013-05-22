@@ -5,7 +5,7 @@ namespace WB.UI.Designer.Tests.Integration
 {
     using System.IO.Compression;
 
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Compression;
 
     [TestFixture]
     public class ZipUtilsTests

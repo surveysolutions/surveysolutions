@@ -61,7 +61,11 @@
             if (!_.isUndefined(selectedQuestion())) {
                 selectedQuestion().isSelected(false);
             }
-
+            questionnaire().isSelected(false);
+            
+            if (routeData.has('questionnaire')) {
+                editQuestionnaire(routeData.questionnaire);
+            }
             if (routeData.has('question')) {
                 editQuestion(routeData.question);
             }
@@ -83,6 +87,10 @@
             if (!chapters().length) {
                 chapters(datacontext.groups.getChapters());
             }
+        },
+        editQuestionnaire = function () {
+            questionnaire().isSelected(true);
+            openDetails("show-questionnaire");
         },
         editQuestion = function (id) {
             var question = datacontext.questions.getLocalById(id);
@@ -260,6 +268,8 @@
                 command = config.commands.updateGroup;
             }
 
+            group.canUpdate(false);
+
             datacontext.sendCommand(
                 command,
                 group,
@@ -269,11 +279,13 @@
                         group.dirtyFlag().reset();
                         calcStatistics();
                         hideOutput();
+                        group.canUpdate(true);
                     },
                     error: function (d) {
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
+                        group.canUpdate(true);
                     }
                 });
         },
@@ -294,6 +306,8 @@
             } else {
                 command = config.commands.updateQuestion;
             }
+
+            question.canUpdate(false);
             
             datacontext.sendCommand(
                 command,
@@ -304,11 +318,31 @@
                         question.dirtyFlag().reset();
                         calcStatistics();
                         hideOutput();
+                        question.canUpdate(true);
                     },
                     error: function (d) {
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
+                        question.canUpdate(true);
+                    }
+                });
+        },
+        saveQuestionnaire = function (questionnaire) {
+            datacontext.sendCommand(
+                config.commands.updateQuestionnaire,
+                questionnaire,
+                {
+                    success: function () {
+                        questionnaire.dirtyFlag().reset();
+                        hideOutput();
+                        questionnaire.canUpdate(true);
+                    },
+                    error: function (d) {
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                        questionnaire.canUpdate(true);
                     }
                 });
         },
@@ -446,6 +480,8 @@
             hideOutput: hideOutput,
             errors: errors,
             statistics: statistics,
-            searchResult: searchResult
+            searchResult: searchResult,
+            questionnaire: questionnaire,
+            saveQuestionnaire: saveQuestionnaire
         };
     });

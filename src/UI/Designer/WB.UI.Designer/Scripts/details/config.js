@@ -31,6 +31,7 @@
                 "AutoPropagated"
             ],
             commands = {
+                updateQuestionnaire: "UpdateQuestionnaire",
                 createGroup: "AddGroup",
                 cloneGroup: "CloneGroupWithoutChildren",
                 updateGroup: "UpdateGroup",
