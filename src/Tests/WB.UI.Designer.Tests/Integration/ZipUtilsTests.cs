@@ -5,7 +5,7 @@ namespace WB.UI.Designer.Tests.Integration
 {
     using System.IO.Compression;
 
-    using WB.UI.Shared.Compression;
+    using WB.Core.SharedKernel.Utils.Compression;
 
     [TestFixture]
     public class ZipUtilsTests
@@ -14,12 +14,12 @@ namespace WB.UI.Designer.Tests.Integration
         public void ZipDate_When_DataIsNotEmptyString_Then_FileIsCreatedWithUtf8Encodig()
         {
             // arrange
-            ZipUtils target = CreateZipUtils();
+            IStringCompressor target = CreateZipUtils();
 
             // act
             string helloworld = "helloworld";
 
-            var file = target.Zip(helloworld);
+            var file = target.Compress(helloworld);
 
             // assert
 
@@ -34,9 +34,9 @@ namespace WB.UI.Designer.Tests.Integration
 
         }
 
-        private ZipUtils CreateZipUtils()
+        private IStringCompressor CreateZipUtils()
         {
-            return new ZipUtils();
+            return new GZipJsonCompressor();
         }
     }
 }

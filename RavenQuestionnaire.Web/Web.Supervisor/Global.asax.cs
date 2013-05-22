@@ -17,8 +17,8 @@ namespace Web.Supervisor
     using System.Web.Optimization;
     using System.Web.Routing;
 
-    using WB.UI.Shared.Log;
-    using WB.UI.Shared.NLog;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.NLog;
 
     using Web.Supervisor.App_Start;
 

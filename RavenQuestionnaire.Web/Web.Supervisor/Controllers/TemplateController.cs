@@ -19,8 +19,8 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Shared.Compression;
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Compression;
 
     using Web.Supervisor.DesignerPublicService;
     using Web.Supervisor.Models;
@@ -31,7 +31,7 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IZipUtils zipUtils;
+        private readonly IStringCompressor zipUtils;
         #region Constructors and Destructors
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IZipUtils zipUtils, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
             : base(null, commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -173,7 +173,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
-                document = zipUtils.UnZip<QuestionnaireDocument>(docSource.FileByteStream);
+                document = zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
             }
             catch (Exception ex)
             {

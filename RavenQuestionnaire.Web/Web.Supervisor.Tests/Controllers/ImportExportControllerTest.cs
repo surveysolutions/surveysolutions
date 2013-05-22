@@ -7,17 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Questionnaire.Core.Web.Helpers;
-
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
-    using System.IO;
     using System.Threading;
-    using System.Web;
     using System.Web.Mvc;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 
@@ -28,7 +23,7 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
 
     using NUnit.Framework;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     using global::Web.Supervisor.Controllers;
 
