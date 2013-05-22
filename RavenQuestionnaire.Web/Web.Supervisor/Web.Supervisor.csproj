@@ -508,9 +508,9 @@
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\UI\Designer\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
+    <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Compression\WB.UI.Shared.Compression.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Desiner.Utilities</Name>
+      <Name>WB.UI.Shared.Compression</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\UI\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
       <Project>{fe8c73a8-34f6-4ddb-b700-0416db6256a4}</Project>

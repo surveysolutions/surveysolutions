@@ -5,6 +5,7 @@ namespace WB.UI.Designer.Code.Helpers
 
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Commands.Questionnaire;
 
     using Ncqrs.Commanding;
 
@@ -15,6 +16,7 @@ namespace WB.UI.Designer.Code.Helpers
     {
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
+            { "UpdateQuestionnaire", typeof(UpdateQuestionnaireCommand) },
             { "UpdateGroup", typeof(UpdateGroupCommand) },
             { "AddGroup", typeof(AddGroupCommand) },
             { "CloneGroupWithoutChildren", typeof(CloneGroupCommand) },
@@ -31,7 +33,17 @@ namespace WB.UI.Designer.Code.Helpers
         {
             Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
 
-            return (ICommand) JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            ICommand command = null;
+            try
+            {
+                command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            }
+            catch
+            {
+                throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+            }
+            
+            return command;
         }
 
         private static Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

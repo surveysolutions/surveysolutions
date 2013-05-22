@@ -6,7 +6,7 @@
 
 namespace WB.UI.Designer
 {
-    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
     /// <summary>
     /// The password policy factory.

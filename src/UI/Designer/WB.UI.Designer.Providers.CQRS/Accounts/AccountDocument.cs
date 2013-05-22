@@ -13,8 +13,8 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
     using System.Collections.Generic;
     using System.Linq;
 
-    using WB.UI.Designer.Providers.Membership;
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     /// <summary>
     /// The account document.

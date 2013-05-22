@@ -8,7 +8,7 @@ namespace WB.UI.Shared.Web.Membership
 {
     using System;
 
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     /// <summary>
     /// The membership helper.

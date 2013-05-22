@@ -7,7 +7,7 @@
     using Ninject.Web.Mvc.FilterBindingSyntax;
 
     using WB.UI.Designer.Exceptions;
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Log;
     using WB.UI.Shared.NLog;
     using WB.UI.Shared.Web.Membership;
