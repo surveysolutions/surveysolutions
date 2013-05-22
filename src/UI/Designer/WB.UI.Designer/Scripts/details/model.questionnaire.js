@@ -13,7 +13,7 @@
 
                 self.isSelected = ko.observable();
                 self.isNullo = false;
-                
+                self.canUpdate = ko.observable(true);
                 self.dirtyFlag = new ko.DirtyFlag([self.title]);
                 self.dirtyFlag().reset();
 

@@ -327,7 +327,23 @@
                     }
                 });
         },
-        saveQuestionnaire = function() {
+        saveQuestionnaire = function (questionnaire) {
+            datacontext.sendCommand(
+                config.commands.updateQuestionnaire,
+                questionnaire,
+                {
+                    success: function () {
+                        questionnaire.dirtyFlag().reset();
+                        hideOutput();
+                        questionnaire.canUpdate(true);
+                    },
+                    error: function (d) {
+                        errors.removeAll();
+                        errors.push(d);
+                        showOutput();
+                        questionnaire.canUpdate(true);
+                    }
+                });
         },
         clearFilter = function () {
             filter('');
