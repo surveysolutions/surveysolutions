@@ -17,7 +17,7 @@ namespace WB.UI.Designer.Controllers
 
     using WB.Core.Questionnaire.ExportServices;
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Shared.Compression;
+    using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Shared.Web.Membership;
 
     /// <summary>
@@ -36,7 +36,7 @@ namespace WB.UI.Designer.Controllers
         /// <summary>
         /// The zip utils.
         /// </summary>
-        protected readonly IZipUtils ZipUtils;
+        protected readonly IStringCompressor ZipUtils;
 
         #endregion
 
@@ -64,7 +64,7 @@ namespace WB.UI.Designer.Controllers
             IViewRepository repository, 
             ICommandService commandService, 
             IMembershipUserService userHelper, 
-            IZipUtils zipUtils, 
+            IStringCompressor zipUtils, 
             IExportService exportService)
             : base(repository, commandService, userHelper)
         {
@@ -95,7 +95,7 @@ namespace WB.UI.Designer.Controllers
                 return null;
             }
 
-            return new FileStreamResult(this.ZipUtils.Zip(data), "application/zip")
+            return new FileStreamResult(this.ZipUtils.Compress(data), "application/zip")
                        {
                            FileDownloadName = "template.zip"
                        };
@@ -129,7 +129,7 @@ namespace WB.UI.Designer.Controllers
 
             if (uploadFile != null && uploadFile.ContentLength > 0)
             {
-                var document = this.ZipUtils.UnZip<IQuestionnaireDocument>(uploadFile.InputStream);
+                var document = this.ZipUtils.Decompress<IQuestionnaireDocument>(uploadFile.InputStream);
                 if (document != null)
                 {
                     this.CommandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
