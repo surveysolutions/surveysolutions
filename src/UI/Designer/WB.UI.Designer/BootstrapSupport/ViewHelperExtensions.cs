@@ -15,6 +15,7 @@ using WB.UI.Designer.Code;
 namespace WB.UI.Designer.BootstrapSupport
 {
     using WB.UI.Designer.Models;
+    using WB.UI.Shared.Web.Membership;
 
     public static class DefaultScaffoldingExtensions
     {
@@ -28,7 +29,7 @@ namespace WB.UI.Designer.BootstrapSupport
             return ((MethodCallExpression)actionExpression.Body).Method.Name;
         }
 
-        public static PropertyInfo[] VisibleProperties(this IEnumerable Model, IUserHelper userHelper)
+        public static PropertyInfo[] VisibleProperties(this IEnumerable Model, IMembershipUserService userHelper)
         {
 
             var elementType = Model.GetType().GetElementType() ?? Model.GetType().GetGenericArguments()[0];
@@ -39,7 +40,7 @@ namespace WB.UI.Designer.BootstrapSupport
                                info =>
                                (info.Name != elementType.IdentifierPropertyName())
                                && actionProperties.All(x => x.Name != info.Name)
-                               && (userHelper.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
+                               && (userHelper.WebUser.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
                            .OrderedByDisplayAttr()
                            .ToArray();
         }

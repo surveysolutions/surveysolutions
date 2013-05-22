@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace WB.UI.Designer.WebServices
+namespace WB.UI.Designer.WebServices.Questionnaire
 {
     using System;
     using System.ServiceModel;
@@ -20,8 +20,8 @@ namespace WB.UI.Designer.WebServices
         /// <summary>
         /// The file name.
         /// </summary>
-        [MessageBodyMember]
-        public Guid QuestionnaireId;
+        [MessageHeader]
+        public Guid QuestionnaireId { get; set; }
 
         #endregion
     }

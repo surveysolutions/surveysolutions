@@ -7,10 +7,13 @@ namespace WB.UI.Designer.WebServices
 {
     using System;
     using System.IO;
-    using System.Web.Security;
+
+    using Main.Core.View;
 
     using WB.Core.Questionnaire.ExportServices;
-    using WB.UI.Designer.Utilities.Compression;
+    using WB.UI.Designer.WebServices.Questionnaire;
+    using WB.UI.Shared.Compression;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The public service.
@@ -23,6 +26,16 @@ namespace WB.UI.Designer.WebServices
         ///     The export service.
         /// </summary>
         private readonly IExportService exportService;
+
+        /// <summary>
+        ///     The repository.
+        /// </summary>
+        private readonly IViewRepository repository;
+
+        /// <summary>
+        ///     The user helper.
+        /// </summary>
+        private readonly IMembershipUserService userHelper;
 
         /// <summary>
         ///     The zip utils.
@@ -42,10 +55,22 @@ namespace WB.UI.Designer.WebServices
         /// <param name="zipUtils">
         /// The zip utils.
         /// </param>
-        public PublicService(IExportService exportService, IZipUtils zipUtils)
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="userHelper">
+        /// The user helper.
+        /// </param>
+        public PublicService(
+            IExportService exportService, 
+            IZipUtils zipUtils, 
+            IViewRepository repository, 
+            IMembershipUserService userHelper)
         {
             this.exportService = exportService;
             this.zipUtils = zipUtils;
+            this.repository = repository;
+            this.userHelper = userHelper;
         }
 
         #endregion
@@ -87,6 +112,38 @@ namespace WB.UI.Designer.WebServices
         public string DownloadQuestionnaireSource(Guid request)
         {
             return this.exportService.GetQuestionnaireTemplate(request);
+        }
+
+        /// <summary>
+        /// The dummy.
+        /// </summary>
+        public void Dummy()
+        {
+        }
+
+        /// <summary>
+        /// The get questionnaire list.
+        /// </summary>
+        /// <param name="request">
+        /// The request.
+        /// </param>
+        /// <returns>
+        /// The <see cref="QuestionnaireListView"/>.
+        /// </returns>
+        public QuestionnaireListView GetQuestionnaireList(QuestionnaireListRequest request)
+        {
+            return
+                this.repository.Load<QuestionnaireListViewInputModel, QuestionnaireListView>(
+                    input:
+                        new QuestionnaireListViewInputModel
+                            {
+                                CreatedBy = this.userHelper.WebServiceUser.UserId, 
+                                IsAdmin = this.userHelper.WebServiceUser.IsAdmin, 
+                                Page = request.PageIndex, 
+                                PageSize = request.PageSize, 
+                                Order = request.SortOrder, 
+                                Filter = request.Filter
+                            });
         }
 
         #endregion

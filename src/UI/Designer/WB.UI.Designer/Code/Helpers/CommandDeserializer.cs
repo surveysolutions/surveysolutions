@@ -31,7 +31,17 @@ namespace WB.UI.Designer.Code.Helpers
         {
             Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
 
-            return (ICommand) JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            ICommand command = null;
+            try
+            {
+                command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            }
+            catch
+            {
+                throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+            }
+            
+            return command;
         }
 
         private static Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

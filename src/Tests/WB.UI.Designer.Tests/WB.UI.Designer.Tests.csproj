@@ -146,13 +146,17 @@
       <Project>{3464F3AE-094C-4DEC-8725-59506328E597}</Project>
       <Name>WB.UI.Designer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Compression\WB.UI.Shared.Compression.csproj">
       <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Designer.Utilities</Name>
+      <Name>WB.UI.Shared.Compression</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
       <Project>{FE8C73A8-34F6-4DDB-B700-0416DB6256A4}</Project>
       <Name>WB.UI.Shared.Log</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

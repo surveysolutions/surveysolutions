@@ -17,7 +17,7 @@ namespace WB.UI.Designer.Providers.CQRS.Accounts
     using Ncqrs.Eventing.ServiceModel.Bus;
 
     using WB.UI.Designer.Providers.CQRS.Accounts.Events;
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     /// <summary>
     ///     The user denormalizer.

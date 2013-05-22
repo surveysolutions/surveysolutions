@@ -1,7 +1,6 @@
 ﻿@using System.Runtime.Serialization.Formatters
 @using System.Web.Script.Serialization
 @using Newtonsoft.Json
-@using Newtonsoft.Json.Converters
 @using WB.UI.Designer.Utils
 @model WB.UI.Designer.Views.Questionnaire.QuestionnaireView
 
@@ -19,7 +18,7 @@
     @Scripts.Render("~/designer")
     <script>
         define('input', [], function() {
-            var q = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.None, new JsonSerializerSettings()
+            var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings()
                         {
                             TypeNameHandling = TypeNameHandling.Objects,
                             TypeNameAssemblyFormat = FormatterAssemblyStyle.Simple
@@ -63,7 +62,7 @@
             <div class="body">
                 <ul data-bind="foreach: errors" class="error-list">
                     <li class="error">
-                        <span data-bind="text: error"></span>
+                        <span data-bind="html: error"></span>
                     </li>
                 </ul>
             </div>
@@ -190,7 +189,7 @@
             </div>
             <div class="pane-bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
@@ -274,7 +273,7 @@
 
             <div class="pane-bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>

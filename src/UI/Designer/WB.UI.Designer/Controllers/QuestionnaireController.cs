@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Domain;
-using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -29,6 +28,7 @@ namespace WB.UI.Designer.Controllers
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Utils;
     using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The questionnaire controller.
@@ -44,7 +44,7 @@ namespace WB.UI.Designer.Controllers
         public QuestionnaireController(
             IViewRepository repository,
             ICommandService commandService,
-            IUserHelper userHelper,
+            IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper)
             : base(repository, commandService, userHelper)
         {
@@ -96,7 +96,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     this.CommandService.Execute(
                         new CloneQuestionnaireCommand(
-                            Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
+                            Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId, sourceModel.Source));
                     return this.RedirectToAction("Index");
                 }
                 catch (Exception e)
@@ -142,7 +142,7 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 this.CommandService.Execute(
-                    new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title, UserHelper.CurrentUserId));
+                    new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId));
                 return this.RedirectToActionPermanent("Index");
             }
 
@@ -164,7 +164,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Delete(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
-            if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
+            if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
             {
                 this.Error("You don't  have permissions to delete this questionnaire.");
             }
@@ -190,7 +190,7 @@ namespace WB.UI.Designer.Controllers
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
 
-            if (model.CreatedBy != UserHelper.CurrentUserId)
+            if (model.CreatedBy != UserHelper.WebUser.UserId)
             {
                 throw new HttpException(403, string.Empty);
             }
@@ -298,7 +298,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.CurrentUserId);
+                userId: UserHelper.WebUser.UserId);
         }
 
         /// <summary>
@@ -354,7 +354,7 @@ namespace WB.UI.Designer.Controllers
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.CurrentUserId);
+                userId: UserHelper.WebUser.UserId);
         }
 
         /// <summary>
