@@ -5,7 +5,7 @@ Get-ChildItem -Filter *.csproj -Recurse `
     | %{
         $project = $_
         $incorrectReferences =  @(
-            ([xml] (Get-Content $_)).Project.ItemGroup.Reference.HintPath | ?{ $_ -ne $null -and $_.Contains('bin') }
+            ([xml] (Get-Content $_)).Project.ItemGroup.Reference.HintPath | ?{ $_ -ne $null -and $_.ToLower().Contains('\bin\') }
         )
         return $incorrectReferences | %{ New-Object PSObject -Property @{ `
             Project = $project;
