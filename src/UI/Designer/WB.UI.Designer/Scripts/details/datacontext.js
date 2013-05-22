@@ -197,6 +197,14 @@
 
         var commands = {};
 
+
+        commands[config.commands.updateQuestionnaire] = function (questionnaire) {
+            return {
+                questionnaireId: questionnaire.id(),
+                title: questionnaire.title()
+            };
+        };
+
         commands[config.commands.cloneGroup] = function (group) {
             var command = commands[config.commands.createGroup](group);
             command.sourceGroupId = group.cloneSource().id();
