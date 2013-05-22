@@ -18,6 +18,11 @@
             this.ravenStore = ravenStore;
         }
 
+        private static string ViewName
+        {
+            get { return typeof(TView).FullName; }
+        }
+
         public int Count()
         {
             using (var session = this.ravenStore.OpenSession())
@@ -33,17 +38,21 @@
 
         public TView GetById(Guid id)
         {
+            string ravenId = ToRavenId(id);
+
             using (var session = this.ravenStore.OpenSession())
             {
-                return session.Load<TView>(id: id.ToString());
+                return session.Load<TView>(id: ravenId);
             }
         }
 
         public void Remove(Guid id)
         {
+            string ravenId = ToRavenId(id);
+
             using (var session = this.ravenStore.OpenSession())
             {
-                var view = session.Load<TView>(id: id.ToString());
+                var view = session.Load<TView>(id: ravenId);
 
                 session.Delete(view);
                 session.SaveChanges();
@@ -52,9 +61,11 @@
 
         public void Store(TView view, Guid id)
         {
+            string ravenId = ToRavenId(id);
+
             using (var session = this.ravenStore.OpenSession())
             {
-                session.Store(entity: view, id: id.ToString());
+                session.Store(entity: view, id: ravenId);
                 session.SaveChanges();
             }
         }
@@ -74,6 +85,11 @@
                         .Customize(customization
                             => customization.WaitForNonStaleResultsAsOfNow()));
             }
+        }
+
+        private static string ToRavenId(Guid id)
+        {
+            return string.Format("{0}:{1}", ViewName, id.ToString());
         }
     }
 }
