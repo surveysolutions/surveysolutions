@@ -443,7 +443,7 @@ h1 {
     }
 
     .q-item-wrap.q-questionnaire {
-        background-color: #2a8fc8;
+        background-color: #AAA;
         margin-left: 0;
         font-size: 120%;
         font-weight: bold;
@@ -477,6 +477,7 @@ h1 {
          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
     }
 
+    .q-item-wrap.q-questionnaire a.q-title,
     .q-item-wrap.selected a.q-title,
     .q-item-wrap.new a.q-title,
     .q-item-wrap.q-question.new.selected a.q-title  {
