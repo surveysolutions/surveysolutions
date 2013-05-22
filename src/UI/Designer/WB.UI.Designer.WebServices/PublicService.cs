@@ -11,8 +11,8 @@ namespace WB.UI.Designer.WebServices
     using Main.Core.View;
 
     using WB.Core.Questionnaire.ExportServices;
+    using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.WebServices.Questionnaire;
-    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Web.Membership;
 
     /// <summary>
@@ -40,7 +40,7 @@ namespace WB.UI.Designer.WebServices
         /// <summary>
         ///     The zip utils.
         /// </summary>
-        private readonly IZipUtils zipUtils;
+        private readonly IStringCompressor zipUtils;
 
         #endregion
 
@@ -62,8 +62,8 @@ namespace WB.UI.Designer.WebServices
         /// The user helper.
         /// </param>
         public PublicService(
-            IExportService exportService, 
-            IZipUtils zipUtils, 
+            IExportService exportService,
+            IStringCompressor zipUtils, 
             IViewRepository repository, 
             IMembershipUserService userHelper)
         {
@@ -95,7 +95,7 @@ namespace WB.UI.Designer.WebServices
                 return null;
             }
 
-            Stream stream = this.zipUtils.Zip(data);
+            Stream stream = this.zipUtils.Compress(data);
 
             return new RemoteFileInfo { FileName = "template.zip", Length = stream.Length, FileByteStream = stream };
         }
