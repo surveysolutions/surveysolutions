@@ -6,8 +6,9 @@
     using Raven.Client;
     using Raven.Client.Document;
 
-    #warning TLK: make string identifiers here after switch to new storage
+    using Raven.Client.Extensions;
 
+    #warning TLK: make string identifiers here after switch to new storage
     public class RavenDenormalizerStorage<TView> : IQueryableDenormalizerStorage<TView>
         where TView : class
     {
@@ -25,7 +26,7 @@
 
         public int Count()
         {
-            using (var session = this.ravenStore.OpenSession())
+            using (var session = this.OpenSession())
             {
                 return
                     session
@@ -40,7 +41,7 @@
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.ravenStore.OpenSession())
+            using (var session = this.OpenSession())
             {
                 return session.Load<TView>(id: ravenId);
             }
@@ -50,7 +51,7 @@
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.ravenStore.OpenSession())
+            using (var session = this.OpenSession())
             {
                 var view = session.Load<TView>(id: ravenId);
 
@@ -63,7 +64,7 @@
         {
             string ravenId = ToRavenId(id);
 
-            using (var session = this.ravenStore.OpenSession())
+            using (var session = this.OpenSession())
             {
                 session.Store(entity: view, id: ravenId);
                 session.SaveChanges();
@@ -77,7 +78,7 @@
 
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
-            using (IDocumentSession session = this.ravenStore.OpenSession())
+            using (IDocumentSession session = this.OpenSession())
             {
                 return query.Invoke(
                     session
@@ -85,6 +86,11 @@
                         .Customize(customization
                             => customization.WaitForNonStaleResultsAsOfNow()));
             }
+        }
+
+        private IDocumentSession OpenSession()
+        {
+            return this.ravenStore.OpenSession();
         }
 
         private static string ToRavenId(Guid id)
