@@ -5,6 +5,7 @@ namespace WB.UI.Designer.Code.Helpers
 
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Commands.Questionnaire;
 
     using Ncqrs.Commanding;
 
@@ -15,6 +16,7 @@ namespace WB.UI.Designer.Code.Helpers
     {
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
+            { "UpdateQuestionnaire", typeof(UpdateQuestionnaireCommand) },
             { "UpdateGroup", typeof(UpdateGroupCommand) },
             { "AddGroup", typeof(AddGroupCommand) },
             { "CloneGroupWithoutChildren", typeof(CloneGroupCommand) },
