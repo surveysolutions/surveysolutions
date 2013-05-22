@@ -42,8 +42,11 @@
       <HintPath>..\..\..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\..\..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.Helpers.dll</HintPath>
@@ -73,12 +76,38 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebMatrix.WebData, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\HttpStatusException.cs" />
     <Compile Include="Filters\AbstractRequiresReadLayerFilterProvider.cs" />
     <Compile Include="Filters\HandleUIExceptionAttribute.cs" />
     <Compile Include="Filters\RequiresReadLayerFilter.cs" />
+    <Compile Include="MembershipProvider\Accounts\IAccountPasswordInfo.cs" />
+    <Compile Include="MembershipProvider\Accounts\IAccountRepository.cs" />
+    <Compile Include="MembershipProvider\Accounts\IMembershipAccount.cs" />
+    <Compile Include="MembershipProvider\Accounts\IPasswordPolicy.cs" />
+    <Compile Include="MembershipProvider\Accounts\IPasswordStrategy.cs" />
+    <Compile Include="MembershipProvider\Accounts\MembershipEventType.cs" />
+    <Compile Include="MembershipProvider\Accounts\MembershipProvider.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordExtensions.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\ClearTextStrategy.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\HashPasswordStrategy.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\PasswordPolicyExtensions.cs" />
+    <Compile Include="MembershipProvider\Accounts\PasswordStrategies\TripleDesStrategy.cs" />
+    <Compile Include="MembershipProvider\Roles\IRoleRepository.cs" />
+    <Compile Include="MembershipProvider\Roles\IUserWithRoles.cs" />
+    <Compile Include="MembershipProvider\Roles\RoleProvider.cs" />
+    <Compile Include="MembershipProvider\Roles\SimpleRoleEnum.cs" />
+    <Compile Include="Membership\IMembershipHelper.cs" />
+    <Compile Include="Membership\MembershipHelper.cs" />
+    <Compile Include="Membership\MembershipWebServiceUser.cs" />
+    <Compile Include="Membership\IMembershipWebServiceUser.cs" />
+    <Compile Include="Membership\MembershipWebUser.cs" />
+    <Compile Include="Membership\IMembershipWebUser.cs" />
+    <Compile Include="Membership\IMembershipUserService.cs" />
+    <Compile Include="Membership\MembershipUserService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

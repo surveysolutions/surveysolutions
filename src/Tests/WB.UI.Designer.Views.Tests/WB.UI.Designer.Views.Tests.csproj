@@ -80,13 +80,13 @@
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
       <Name>WB.UI.Designer.Providers.CQRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
-      <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
-      <Name>WB.UI.Designer.Providers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\UI\Designer\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
       <Project>{4489f996-d379-43d1-8932-3c48d59d9ab5}</Project>
       <Name>WB.UI.Designer.Views</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\UI\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

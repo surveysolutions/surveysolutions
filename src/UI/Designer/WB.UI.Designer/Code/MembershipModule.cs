@@ -17,9 +17,9 @@ namespace WB.UI.Designer
     using Ninject.Modules;
 
     using WB.UI.Designer.Providers.CQRS;
-    using WB.UI.Designer.Providers.Membership;
-    using WB.UI.Designer.Providers.Membership.PasswordStrategies;
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts.PasswordStrategies;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     public class MembershipModule : NinjectModule
     {

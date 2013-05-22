@@ -267,6 +267,8 @@
                 command = config.commands.updateGroup;
             }
 
+            group.canUpdate(false);
+
             datacontext.sendCommand(
                 command,
                 group,
@@ -276,11 +278,13 @@
                         group.dirtyFlag().reset();
                         calcStatistics();
                         hideOutput();
+                        group.canUpdate(true);
                     },
                     error: function (d) {
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
+                        group.canUpdate(true);
                     }
                 });
         },
@@ -301,6 +305,8 @@
             } else {
                 command = config.commands.updateQuestion;
             }
+
+            question.canUpdate(false);
             
             datacontext.sendCommand(
                 command,
@@ -311,11 +317,13 @@
                         question.dirtyFlag().reset();
                         calcStatistics();
                         hideOutput();
+                        question.canUpdate(true);
                     },
                     error: function (d) {
                         errors.removeAll();
                         errors.push(d);
                         showOutput();
+                        question.canUpdate(true);
                     }
                 });
         },

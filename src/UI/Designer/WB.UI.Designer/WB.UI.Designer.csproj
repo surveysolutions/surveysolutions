@@ -190,6 +190,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\MainModule.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="App_Start\ValidatorsConfig.cs" />
     <Compile Include="Code\ConfigurationManager\AppSettings.cs" />
     <Compile Include="Code\ConfigurationManager\MembershipProviderSettings.cs" />
     <Compile Include="Code\CustomAuthorizeFilter.cs" />
@@ -253,7 +254,6 @@
     <Compile Include="Models\LocalPasswordModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
-    <Compile Include="Code\UserHelper.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
     <Compile Include="PdfConvert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -554,6 +554,10 @@
       <Project>{dedc7ecf-21f8-4d39-81c4-5dbe2e8b9d5d}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Compression\WB.UI.Shared.Compression.csproj">
+      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
+      <Name>WB.UI.Shared.Compression</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Log\WB.UI.Shared.Log.csproj">
       <Project>{fe8c73a8-34f6-4ddb-b700-0416db6256a4}</Project>
       <Name>WB.UI.Shared.Log</Name>
@@ -570,10 +574,6 @@
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
       <Name>WB.UI.Designer.Providers.CQRS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
-      <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
-      <Name>WB.UI.Designer.Providers</Name>
-    </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.Views\WB.UI.Designer.Views.csproj">
       <Project>{4489F996-D379-43D1-8932-3C48D59D9AB5}</Project>
       <Name>WB.UI.Designer.Views</Name>
@@ -581,10 +581,6 @@
     <ProjectReference Include="..\WB.UI.Designer.WebServices\WB.UI.Designer.WebServices.csproj">
       <Project>{8263ca84-bfb5-4a7b-ae31-f5fc5b05e7c1}</Project>
       <Name>WB.UI.Designer.WebServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Utilities\WB.UI.Designer.Utilities.csproj">
-      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Designer.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

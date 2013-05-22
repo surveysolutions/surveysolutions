@@ -25,6 +25,7 @@ namespace WB.UI.Designer.Controllers
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Extensions;
     using WB.UI.Designer.Models;
+    using WB.UI.Shared.Web.Membership;
 
     using WebMatrix.WebData;
 
@@ -41,7 +42,7 @@ namespace WB.UI.Designer.Controllers
         public AdminController(
             IViewRepository repository,
             ICommandService commandService,
-            IUserHelper userHelper,
+            IMembershipUserService userHelper,
             IQuestionnaireHelper questionnaireHelper)
             : base(repository, commandService, userHelper)
         {
