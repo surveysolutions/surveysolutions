@@ -33,6 +33,8 @@ namespace Core.Supervisor.Tests
          /*   eventStoreMock.Setup(x => x.ReadFrom(It.IsAny<Guid>(),
                                                  int.MinValue, int.MaxValue)).Returns(
                                                      new CommittedEventStream(Guid.NewGuid()));*/
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<FileDescription>, List<Guid>>>()))
+                          .Returns(new List<Guid> { });
             commandServiceMock=new Mock<ICommandService>();
         //    NcqrsEnvironment.SetDefault(eventStoreMock.Object);
             NcqrsEnvironment.SetDefault(commandServiceMock.Object);
@@ -85,8 +87,7 @@ namespace Core.Supervisor.Tests
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
                             .Returns(new List<Guid> { userId });
 
-            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<FileDescription>, List<Guid>>>()))
-                            .Returns(new List<Guid> { });
+          
 
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
                             .Returns(new List<Guid> { });
@@ -122,8 +123,7 @@ namespace Core.Supervisor.Tests
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
                             .Returns(new List<Guid> { userId });
 
-            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<FileDescription>, List<Guid>>>()))
-                            .Returns(new List<Guid> { });
+        
 
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
                             .Returns(new List<Guid> { });
@@ -229,22 +229,13 @@ namespace Core.Supervisor.Tests
             // arrange
             var questionnarieId = Guid.NewGuid();
             var userId = Guid.NewGuid();
-            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId } };
+            var avalibleUsers = new List<Guid> { userId };
+            var avalibleQuestionnaries = new List<Guid> { questionnarieId };
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
+                            .Returns(avalibleUsers);
 
-            
-                            
-            var avalibleQuestionnaries = new CompleteQuestionnaireBrowseItem[]
-                {
-                    new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument()
-                        {
-                            PublicKey = questionnarieId,
-                            Responsible = new UserLight(userId,"test"),
-                            Status = SurveyStatus.Approve
-                        })
-                };
-            denormalizerMock.Setup(x => x.Query<UserDocument>()).Returns(avalibleUsers.AsQueryable());
-            denormalizerMock.Setup(x => x.Query<CompleteQuestionnaireBrowseItem>())
-                            .Returns(avalibleQuestionnaries.AsQueryable());
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
+                            .Returns(avalibleQuestionnaries);
 
             var target = CreateNewStreamReaderWhichIsSendApproved();
 
@@ -263,22 +254,14 @@ namespace Core.Supervisor.Tests
             // arrange
             var questionnarieId = Guid.NewGuid();
             var userId = Guid.NewGuid();
-            var avalibleUsers = new UserDocument[] { new UserDocument() { PublicKey = userId } };
+            var avalibleUsers = new List<Guid> { userId };
 
+            var avalibleQuestionnaries = new List<Guid>();
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
+                           .Returns(avalibleUsers);
 
-
-            var avalibleQuestionnaries = new CompleteQuestionnaireBrowseItem[]
-                {
-                    new CompleteQuestionnaireBrowseItem(new CompleteQuestionnaireDocument()
-                        {
-                            PublicKey = questionnarieId,
-                            Responsible = new UserLight(userId,"test"),
-                            Status = SurveyStatus.Approve
-                        })
-                };
-            denormalizerMock.Setup(x => x.Query<UserDocument>()).Returns(avalibleUsers.AsQueryable());
-            denormalizerMock.Setup(x => x.Query<CompleteQuestionnaireBrowseItem>())
-                            .Returns(avalibleQuestionnaries.AsQueryable());
+            denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<CompleteQuestionnaireBrowseItem>, List<Guid>>>()))
+                          .Returns(avalibleQuestionnaries);
 
             var target = CreateNewStreamReaderWhichIsNotSendApproved();
 

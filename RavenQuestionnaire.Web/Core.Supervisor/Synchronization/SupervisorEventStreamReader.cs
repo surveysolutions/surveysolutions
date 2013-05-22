@@ -137,7 +137,7 @@ namespace Core.Supervisor.Synchronization
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
             return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id))                
+                                
                 .Where(q => IsQuestionnarieRequiresSync(users, q))
                 .Select(i => i.CompleteQuestionnaireId)
                 .ToList());
@@ -153,10 +153,11 @@ namespace Core.Supervisor.Synchronization
         private List<Guid> GetUsers()
         {
             return
-                this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
-                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
-                    .Select(u => u.PublicKey)
-                    .ToList());
+                 this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                     .Select(u => u.PublicKey)
+                     .ToList());
+
         }
 
         #endregion
