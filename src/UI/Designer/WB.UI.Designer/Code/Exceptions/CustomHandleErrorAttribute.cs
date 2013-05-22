@@ -10,7 +10,7 @@ namespace WB.UI.Designer.Exceptions
     using System.Web.Mvc;
     using System.Web.Routing;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     /// <summary>
     /// The custom handle error attribute.
