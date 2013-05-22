@@ -1,7 +1,4 @@
-﻿using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
-using WB.UI.Designer.Providers.CQRS.Accounts.View;
-using WB.UI.Designer.Providers.Roles;
-using Main.Core.View;
+﻿using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
 using System;
 using System.Collections.Generic;
@@ -11,7 +8,7 @@ namespace WB.UI.Designer.Providers.CQRS
 {
     using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
     using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Designer.Providers.Roles;
+    using WB.UI.Shared.Web.MembershipProvider.Roles;
 
     public class CQRSRoleRepository : IRoleRepository
     {

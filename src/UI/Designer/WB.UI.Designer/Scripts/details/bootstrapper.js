@@ -3,6 +3,9 @@
     function ($, config, presenter, dataprimer, binder, routeConfig) {
         var
             run = function () {
+                
+                $.fn.activity.defaults.color = "#fff";
+                
                 presenter.toggleActivity(true);
 
                 $.when(dataprimer.fetch())

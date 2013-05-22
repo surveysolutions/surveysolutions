@@ -1,5 +1,4 @@
 ﻿using Main.Core.Commands.Questionnaire.Base;
-using Main.Core.Commands.Questionnaire.Question;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Controllers
@@ -7,7 +6,6 @@ namespace WB.UI.Designer.Controllers
     using System;
     using System.Web.Mvc;
 
-    using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Domain;
 
     using Ncqrs.Commanding;
@@ -37,46 +35,32 @@ namespace WB.UI.Designer.Controllers
         [CustomHandleErrorFilter]
         public JsonResult Execute(string type, string command)
         {
-            ICommand concreteCommand;
+            string error = string.Empty;
             try
             {
-                concreteCommand = this.commandDeserializer.Deserialize(type, command);
-            }
-            catch (CommandDeserializationException e)
-            {
-                this.logger.Error(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
-
-                return this.Json(new { error = "Unexpected error occurred: " + e.Message });
-            }
-
-            this.PrepareCommandForExecution(concreteCommand);
-
-            try
-            {
+                var concreteCommand = this.commandDeserializer.Deserialize(type, command);
+                this.ReplaceStataCaptionsWithGuidsIfNeeded(concreteCommand);
                 this.commandService.Execute(concreteCommand);
             }
             catch (Exception e)
             {
-                if (e.InnerException is DomainException)
+                var domainEx = e.As<DomainException>();
+                if (domainEx == null)
                 {
-                    return this.Json(new { error = e.InnerException.Message });
-                }
-                else if (e.InnerException!=null && e.InnerException.InnerException is DomainException)
-                {
-                    return this.Json(new { error = e.InnerException.InnerException.Message });
+                    this.logger.Error(e);
+                    error =
+                        string.Format(
+                            "Unexpected error occurred. Please contact support via following email: <a href=\"mailto:{0}\">{0}</a>",
+                            AppSettings.Instance.AdminEmail);
                 }
                 else
                 {
-                    throw;
+                    error = domainEx.Message;
                 }
+
             }
 
-            return this.Json(new { });
-        }
-
-        private void PrepareCommandForExecution(ICommand command)
-        {
-            this.ReplaceStataCaptionsWithGuidsIfNeeded(command);
+            return this.Json(string.IsNullOrEmpty(error) ? (object)new { } : new { error = error });
         }
 
         private void ReplaceStataCaptionsWithGuidsIfNeeded(ICommand command)

@@ -26,11 +26,20 @@
         });
         requirejs([
                 'ko.bindingHandlers',
-                'ko.debug.helpers'
+                'ko.debug.helpers',
+                'input',
+                'ace/theme/designer',
+                'ace/mode/ncalc'
         ], boot);
     }
 
     function boot() {
-        require(['bootstrapper'], function (bs) { bs.run(); });
+        require(['bootstrapper'], function(bs) {
+            try {
+                bs.run();
+            } catch(e) {
+                window.location.reload();
+            }
+        });
     }
 })();
