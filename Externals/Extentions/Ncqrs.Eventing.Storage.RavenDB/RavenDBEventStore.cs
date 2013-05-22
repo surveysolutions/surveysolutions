@@ -197,8 +197,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
                         .AsProjection<StoredEventWithoutPayload>()
                         .Where(
-                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion)
-                        .Skip(page*pageSize)
+                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(e => e.EventSequence)
+                        .Skip(page * pageSize)
                         .Take(pageSize).ToList();
                         
 
@@ -336,7 +336,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     List<StoredEvent> chunk = session
                         .Query<StoredEvent, Event_ByEventSource>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .Where(query)
+                        .Where(query).OrderBy(e => e.EventSequence)
                         .Skip(page * pageSize)
                         .Take(pageSize)
                         .ToList();
