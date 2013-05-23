@@ -6,6 +6,9 @@
 //   Implements comma-separated values export format.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Text;
+
 namespace Questionnaire.Core.Web.Export.csv
 {
     using System;
@@ -89,7 +92,7 @@ namespace Questionnaire.Core.Web.Export.csv
         {
             // Stream result = new MemoryStream();
             using (var memoryStream = new MemoryStream())
-            using (var streamWriter = new StreamWriter(memoryStream))
+            using (var streamWriter = new StreamWriter(memoryStream,Encoding.UTF8))
             using (var writer = new CsvWriter(streamWriter))
             {
                 writer.Configuration.Delimiter = this.Delimeter.ToString();

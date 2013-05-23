@@ -130,6 +130,7 @@
     <Compile Include="Bindings\CustomImageGetter.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
@@ -145,7 +146,6 @@
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Unmanaged\CMUncaughtExceptionHandler.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -349,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
+    <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
     <EmbeddedResource Include="researchDeptSurvey.txt" />
     <EmbeddedResource Include="userEvent.txt" />
     <EmbeddedResource Include="initEvent.txt" />

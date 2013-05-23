@@ -34,7 +34,7 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Models.Chart;

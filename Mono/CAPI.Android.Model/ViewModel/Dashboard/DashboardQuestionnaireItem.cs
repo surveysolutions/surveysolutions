@@ -20,7 +20,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
     /// <summary>
     /// The dashboard questionnaire item.
     /// </summary>
-    public class DashboardQuestionnaireItem : MvxViewModel
+    public class DashboardQuestionnaireItem 
     {
         #region Constructors and Destructors
 
@@ -63,28 +63,6 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         
      
 
-        /// <summary>
-        /// Gets the view detail command.
-        /// </summary>
-        public ICommand ViewDetailCommand
-        {
-            get
-            {
-                return
-                    new MvxRelayCommand(
-                        () =>
-                        RequestNavigate<CompleteQuestionnaireView>(
-                            new { publicKey = this.PublicKey.ToString() }));
-            }
-        }
-
         #endregion
-        public void SetStatus(SurveyStatus newStatus)
-        {
-            if (newStatus == this.status)
-                return;
-            this.status = newStatus;
-            this.RaisePropertyChanged("Status");
-        }
     }
 }

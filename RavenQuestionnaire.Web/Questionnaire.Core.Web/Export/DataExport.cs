@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Text.RegularExpressions;
+
 namespace Questionnaire.Core.Web.Export
 {
     using System;
@@ -190,7 +192,7 @@ namespace Questionnaire.Core.Web.Export
             {
                 if (!container.ContainsKey(name + ".csv"))
                 {
-                    return name + ".csv";
+                    return RemoveNonUnicode(name) + ".csv";
                 }
                 else
                 {
@@ -200,14 +202,17 @@ namespace Questionnaire.Core.Web.Export
 
             if (!container.ContainsKey(name + i + ".csv"))
             {
-                return name + i + ".csv";
+                return RemoveNonUnicode(name) + i + ".csv";
             }
             else
             {
                 return this.GetName(name, container, i + 1);
             }
         }
-
+        protected string RemoveNonUnicode(string s)
+        {
+            return Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
+        }
         #endregion
     }
 }

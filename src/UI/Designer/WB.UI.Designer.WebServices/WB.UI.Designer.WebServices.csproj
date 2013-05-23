@@ -67,9 +67,9 @@
       <Project>{DEDC7ECF-21F8-4D39-81C4-5DBE2E8B9D5D}</Project>
       <Name>WB.Core.Questionnaire</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Compression\WB.UI.Shared.Compression.csproj">
-      <Project>{93E5902F-332A-4F30-B81D-9DD31A4DBED9}</Project>
-      <Name>WB.UI.Shared.Compression</Name>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
