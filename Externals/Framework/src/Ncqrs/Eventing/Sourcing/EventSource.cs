@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Reflection;
-#if MONODROID
-using AndroidLogger;
-#endif
 
 using Ncqrs.Domain;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Common;
+using WB.Common.Core.Logging;
 
 namespace Ncqrs.Eventing.Sourcing
 {

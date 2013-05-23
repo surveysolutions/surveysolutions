@@ -1,8 +1,9 @@
 ﻿using System;
+using Common.Logging;
 
 namespace Ncqrs
 {
-    internal class Log4NetLogger : Ncqrs.ILog
+    internal class Log4NetLogger : ILog
     {
         private readonly log4net.ILog _log;
 

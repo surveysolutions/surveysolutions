@@ -41,7 +41,7 @@ namespace Web.Supervisor.Controllers
     using Web.Supervisor.Models.Chart;
 
     using CompleteQuestionnaireViewInputModel = Main.Core.View.CompleteQuestionnaire.CompleteQuestionnaireViewInputModel;
-    using LogManager = Ncqrs.LogManager;
+    //using LogManager = Ncqrs.LogManager;
 
     /// <summary>
     /// Responsible for display surveys and statistic info about surveys

@@ -4,9 +4,9 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Common;
+using WB.Common.Core.Logging;
+
 namespace Ncqrs.Domain
 {
     /// <summary>

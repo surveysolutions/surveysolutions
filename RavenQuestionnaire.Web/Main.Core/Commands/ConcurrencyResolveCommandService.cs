@@ -6,6 +6,10 @@
 //   Repeates command execution until success.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+
+using WB.Common;
+
 namespace Main.Core.Commands
 {
     using Ncqrs.Commanding;
@@ -27,12 +31,6 @@ namespace Main.Core.Commands
         /// <summary>
         /// The logger.
         /// </summary>
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-		private readonly AndroidLogger.ILog logger = AndroidLogger.LogManager.GetLogger(typeof(ConcurrencyResolveCommandService));
-#else
-        private readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
         
         #endregion
 
@@ -58,7 +56,7 @@ namespace Main.Core.Commands
                 }
                 catch (ConcurrencyException exc)
                 {
-                    this.logger.Info(string.Format("Concurrency execution retry ({0})! ({1})" , currentTry, exc.Message));
+                    LogManager.GetLogger(this.GetType()).Info(string.Format("Concurrency execution retry ({0})! ({1})", currentTry, exc.Message));
                     currentTry++;
                 }
             }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using WB.Common;
+using WB.Common.Core.Logging;
 
-namespace AndroidLogger
+
+namespace Ncqrs
 {
 	public static class LogManager
 	{

@@ -6,6 +6,9 @@
 //   The mvc application.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Common;
+
 namespace RavenQuestionnaire.Web
 {
     using System;
@@ -16,8 +19,6 @@ namespace RavenQuestionnaire.Web
     using System.Web.Routing;
 
     using NConfig;
-
-    using NLog;
 
     using Questionnaire.Core.Web.Helpers;
 
@@ -38,11 +39,6 @@ namespace RavenQuestionnaire.Web
         }
 
         #region Fields
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// The correctly initialyzed.
@@ -126,7 +122,7 @@ namespace RavenQuestionnaire.Web
             }
             catch (Exception e)
             {
-                this.logger.Fatal("Initialization failed", e);
+                LogManager.GetLogger(this.GetType()).Fatal("Initialization failed", e);
                 correctlyInitialyzed = false;
                 intializationException = e;
 
@@ -202,7 +198,7 @@ namespace RavenQuestionnaire.Web
         /// </param>
         private void CurrentUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            this.logger.Fatal(e.ExceptionObject);
+            LogManager.GetLogger(this.GetType()).Fatal(e.ExceptionObject);
         }
 
         private static void SetupNConfig()

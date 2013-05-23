@@ -509,9 +509,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
-      <Name>AndroidLogger</Name>
+      <Name>AndroidCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -527,7 +531,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="01f84441-80d3-49b4-ab18-96894acb2f90" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

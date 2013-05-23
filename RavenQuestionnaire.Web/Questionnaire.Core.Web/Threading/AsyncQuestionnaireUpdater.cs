@@ -6,13 +6,15 @@
 //   The async questionnaire updater.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Common;
+
 namespace Questionnaire.Core.Web.Threading
 {
     using System;
     using System.Threading;
     using System.Web.Mvc.Async;
 
-    using NLog;
 
     /// <summary>
     /// The async questionnaire updater.
@@ -67,11 +69,7 @@ namespace Questionnaire.Core.Web.Threading
 
             #region Fields
 
-            /// <summary>
-            /// The logger.
-            /// </summary>
-            private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
+            
             /// <summary>
             /// The m thread.
             /// </summary>
@@ -118,7 +116,7 @@ namespace Questionnaire.Core.Web.Threading
                             }
                             catch (Exception e)
                             {
-                                this.logger.ErrorException(e.Message, e);
+                                LogManager.GetLogger(this.GetType()).Error(e.Message, e);
                             }
 
                             manager.OutstandingOperations.Decrement();

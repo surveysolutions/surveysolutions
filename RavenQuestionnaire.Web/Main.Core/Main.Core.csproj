@@ -118,9 +118,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
@@ -518,6 +515,10 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\WB.Common.csproj">
+      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
+      <Name>WB.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>

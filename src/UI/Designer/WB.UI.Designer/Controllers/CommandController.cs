@@ -1,4 +1,5 @@
 ﻿using Main.Core.Commands.Questionnaire.Question;
+using WB.Common;
 using WB.UI.Designer.Code.Exceptions;
 using WB.UI.Designer.Utils;
 
@@ -12,7 +13,7 @@ namespace WB.UI.Designer.Controllers
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Domain;
 
-    using NLog;
+    
 
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
@@ -24,8 +25,6 @@ namespace WB.UI.Designer.Controllers
     [CustomAuthorize]
     public class CommandController : Controller
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         private readonly ICommandService commandService;
         private readonly ICommandDeserializer commandDeserializer;
         private readonly IExpressionReplacer expressionReplacer;
@@ -48,7 +47,7 @@ namespace WB.UI.Designer.Controllers
             }
             catch (CommandDeserializationException e)
             {
-                Logger.ErrorException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
+                LogManager.GetLogger(this.GetType()).Error(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", type, command), e);
 
                 return this.Json(new { error = "Unexpected error occurred: " + e.Message });
             }

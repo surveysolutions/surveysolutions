@@ -1,8 +1,10 @@
 ﻿using Android.Util;
+
 using Java.Lang;
+using WB.Common.Core.Logging;
 using Exception = System.Exception;
 
-namespace AndroidLogger
+namespace WB.Common
 {
 	public static class ExceptionExtension
 	{

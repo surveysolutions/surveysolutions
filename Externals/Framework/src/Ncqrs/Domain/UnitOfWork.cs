@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+
 using Ncqrs.Commanding;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -11,9 +12,9 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Common;
+using WB.Common.Core.Logging;
+
 namespace Ncqrs.Domain
 {
     public class UnitOfWork : UnitOfWorkBase

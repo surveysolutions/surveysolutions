@@ -9,6 +9,7 @@
 
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
+using WB.Common;
 
 namespace Main.Core.Documents
 {
@@ -25,12 +26,6 @@ namespace Main.Core.Documents
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireDocument));
-#else
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
 
         private readonly List<Guid> triggers = new List<Guid>();
 
@@ -172,7 +167,7 @@ namespace Main.Core.Documents
             }
             else
             {
-                Logger.Warn(string.Format(
+                LogManager.GetLogger(this.GetType()).Warn(string.Format(
                     "Failed to replace question '{0}' with new because it's parent is not found.",
                     oldQuestionId));
             }
@@ -207,7 +202,8 @@ namespace Main.Core.Documents
             }
             else
             {
-                Logger.Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
+                LogManager.GetLogger(this.GetType())
+                    .Warn(string.Format("Failed to remove group '{0}' because it's parent is not found.", groupId));
             }
         }
 
@@ -246,7 +242,8 @@ namespace Main.Core.Documents
             }
             else
             {
-                Logger.Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
+                LogManager.GetLogger(typeof(QuestionnaireDocument))
+                    .Warn(string.Format("Failed to remove question '{0}' because it's parent is not found.", questionId));
             }
         }
 
@@ -389,7 +386,7 @@ namespace Main.Core.Documents
 
             if (itemToMove == null)
             {
-                Logger.Warn(string.Format("Failed to locate item {0}.", itemId));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to locate item {0}.", itemId));
             }
 
             return itemToMove;
@@ -401,7 +398,7 @@ namespace Main.Core.Documents
 
             if (foundParent == null)
             {
-                Logger.Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to find parent of item {0}.", item.PublicKey));
             }
 
             return foundParent;
@@ -416,7 +413,7 @@ namespace Main.Core.Documents
 
             if (foundGroup == null)
             {
-                Logger.Warn(string.Format("Failed to find group {0}.", groupId.Value));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Failed to find group {0}.", groupId.Value));
             }
 
             return foundGroup;

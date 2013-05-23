@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
+
 #if !MONODROID
 using System.Transactions;
 #endif
-#if MONODROID
-using AndroidLogger;
-#endif
+
+using WB.Common;
+using WB.Common.Core.Logging;
+
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public class InProcessEventBus : IEventBus

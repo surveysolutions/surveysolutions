@@ -2,9 +2,10 @@
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Common;
+using WB.Common.Core.Logging;
+
+
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
     public static class RegisterAllHandlersInAssemblyExtension
@@ -32,7 +33,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
 
         private static object CreateInstance(Type type)
         {
-            #if USE_CONTRACTS
+#if USE_CONTRACTS
             Contract.Requires<ArgumentNullException>(type != null);
 #endif
             return Activator.CreateInstance(type);

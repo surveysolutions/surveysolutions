@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using WB.Common;
 
 namespace Main.Core.Domain
 {
@@ -14,18 +15,12 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire;
     using Main.Core.Utility;
 
+    
     using Ncqrs;
     using Ncqrs.Restoring.EventStapshoot;
 
     public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
     {
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireAR));
-#else
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
-
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
         private readonly ICompleteQuestionFactory questionFactory;
@@ -491,7 +486,7 @@ namespace Main.Core.Domain
 
             if (isLegacyEvent)
             {
-                Logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 

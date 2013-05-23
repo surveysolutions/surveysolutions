@@ -7,6 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+
+using WB.Common;
+using WB.Common.Core.Logging;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
@@ -16,11 +20,7 @@ namespace RavenQuestionnaire.Web.Controllers
     using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
-
-    using Ionic.Zip;
-
-    using NLog;
-
+    
     using Questionnaire.Core.Web.Helpers;
     using Questionnaire.Core.Web.Threading;
 
@@ -75,7 +75,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         catch (Exception e)
                         {
                             this.AsyncManager.Parameters["result"] = null;
-                            Logger logger = LogManager.GetCurrentClassLogger();
+                            ILog logger = LogManager.GetLogger(typeof(ImportExportController));
                             logger.Fatal("Error on export ", e);
                         }
                     });
@@ -183,7 +183,7 @@ namespace RavenQuestionnaire.Web.Controllers
                         }
                         catch (Exception e)
                         {
-                            Logger logger = LogManager.GetCurrentClassLogger();
+                            ILog logger = LogManager.GetLogger(typeof(ImportExportController));
                             logger.Fatal("Error on import ", e);
                         }
                     });

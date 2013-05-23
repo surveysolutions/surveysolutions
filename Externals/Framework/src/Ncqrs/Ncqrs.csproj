@@ -101,10 +101,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -240,10 +236,7 @@
     <Compile Include="Eventing\Storage\SQL\Queries.cs" />
     <Compile Include="Eventing\Storage\StoredEvent.cs" />
     <Compile Include="IClock.cs" />
-    <Compile Include="ILog.cs" />
     <Compile Include="InternalExtensions.cs" />
-    <Compile Include="Log4NetLogger.cs" />
-    <Compile Include="LogManager.cs" />
     <Compile Include="NamespaceDoc.cs" />
     <Compile Include="NcqrsEnvironment.cs" />
     <Compile Include="Config\IEnvironmentConfiguration.cs" />
@@ -274,10 +267,15 @@
     <Compile Include="Eventing\Storage\InMemoryEventStore.cs" />
     <Compile Include="Eventing\Storage\SQL\MsSqlServerEventStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TraceLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
+      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
+      <Name>WB.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

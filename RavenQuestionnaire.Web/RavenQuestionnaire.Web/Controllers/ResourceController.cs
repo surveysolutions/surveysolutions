@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using WB.Common;
+
 namespace RavenQuestionnaire.Web.Controllers
 {
     using System;
@@ -27,26 +29,19 @@ namespace RavenQuestionnaire.Web.Controllers
     using Ncqrs;
     using Ncqrs.Commanding.ServiceModel;
 
-    using NLog;
-
+    
     using Questionnaire.Core.Web.Security;
 
     using RavenQuestionnaire.Core.Views.Event.File;
     using RavenQuestionnaire.Web.Models;
 
-    using LogManager = NLog.LogManager;
-
+    
     /// <summary>
     /// The resource controller.
     /// </summary>
     public class ResourceController : Controller
     {
         #region Constants and Fields
-
-        /// <summary>
-        /// The logger.
-        /// </summary>
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         // private ICommandInvoker commandInvoker;
 
@@ -109,7 +104,7 @@ namespace RavenQuestionnaire.Web.Controllers
             }
             catch (Exception exception)
             {
-                Logger.Error("Can't delete image. " + exception.Message);
+                LogManager.GetLogger(this.GetType()).Error("Can't delete image. " + exception.Message);
             }
 
             return this.RedirectToAction("Index", "Resource", new FileBrowseInputModel());
