@@ -135,7 +135,10 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.Error("Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>");
+                    this.Error(
+                        string.Format(
+                            "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
+                            GlobalHelper.GenerateUrl("Import", "Template", null)));
                     Logger.Error(ex);
                 }
             }
