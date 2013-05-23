@@ -272,6 +272,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
       <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
       <Name>WB.Common</Name>

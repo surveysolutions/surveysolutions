@@ -9,6 +9,7 @@
 
 using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Utility;
+using Ncqrs;
 using WB.Common;
 
 namespace Main.Core.Documents

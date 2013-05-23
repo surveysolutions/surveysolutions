@@ -118,6 +118,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
       <Name>AndroidFluentAssertions</Name>
