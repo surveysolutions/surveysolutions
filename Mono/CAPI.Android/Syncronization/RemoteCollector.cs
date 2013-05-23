@@ -40,6 +40,7 @@ namespace CAPI.Android.Syncronization
         private const string pushPath = "importexport/PostStream";
 
         private const string GetCurrentVersionPath = "importexport/GetCurrentVersion";
+        private const string fileName = "eventstream";
 
         /// <summary>
         /// The base address.
@@ -102,13 +103,16 @@ namespace CAPI.Android.Syncronization
           
             var restClient = new RestClient(this.baseAddress);
             var currentCredentials = validator.RequestCredentials();
-            var request = new RestRequest(string.Format("{0}?login={1}&password={2}", pushPath, currentCredentials.Login, currentCredentials.Password), Method.POST);
+            var request = new RestRequest(pushPath/*string.Format("{0}?login={1}&password={2}", pushPath, currentCredentials.Login, currentCredentials.Password)*/, Method.POST);
             request.IncreaseNumAttempts();
             request.IncreaseNumAttempts();
 
             request.RequestFormat = DataFormat.Json;
             request.AddHeader("Accept-Encoding", "gzip,deflate");
 
+            request.AddParameter("login", currentCredentials.Login, ParameterType.GetOrPost);
+            request.AddParameter("password", currentCredentials.Password, ParameterType.GetOrPost);
+            
             try
             {
                 var message = new EventSyncMessage { Command = chunk.ToArray(), SynchronizationKey = this.ProcessGuid };
@@ -119,16 +123,12 @@ namespace CAPI.Android.Syncronization
 
                 if (useCompression)
                 {
-                    //request.AddParameter("request", "c");
-                    request.AddParameter("text; charset=utf-8", PackageHelper.Compress(itemToSync), ParameterType.RequestBody);
+                    request.AddFile(fileName, PackageHelper.Compress(itemToSync), fileName);
                 }
                 else
                 {
-                    //request.AddParameter("request", "p");
-                    request.AddParameter("text; charset=utf-8", itemToSync, ParameterType.RequestBody);
+                    request.AddFile(fileName, GetBytes(itemToSync), fileName);
                 }
-
-                
              
                 IRestResponse response = restClient.Execute(request);
                 if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
@@ -147,16 +147,16 @@ namespace CAPI.Android.Syncronization
                 //return false;
             }   
         }
+        private byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
 
         private bool IsOperationSucceded(string response)
         {
             return string.CompareOrdinal(response, "True") == 0;
-        }
-
-
-        private string PackMessage(string message)
-        {
-            return PackageHelper.Compress(message);
         }
 
         /// <summary>

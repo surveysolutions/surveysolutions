@@ -468,20 +468,13 @@ namespace Web.Supervisor.Controllers
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
-            Guid syncProcess = Guid.NewGuid();
+            if (Request.Files==null || Request.Files.Count == 0)
+                return false;
             try
             {
-                Request.InputStream.Position = 0;
-                
-                string item;
-                using (var sr = new StreamReader(Request.InputStream))
-                {
-                    item = sr.ReadToEnd();
-                }
-
                 EventSyncMessage message = null;
 
-                item = PackageHelper.Decompress(item);
+                string item = PackageHelper.Decompress(Request.Files[0].InputStream);
                 
                 try
                 {
