@@ -34,8 +34,12 @@
     }
 
     function boot() {
-        require(['bootstrapper'], function(bs) {
-                bs.run();
+        require(['jquery', 'bootstrapper', 'presenter', 'ace/theme/designer', 'ace/mode/ncalc'], function ($, bs, presenter, designer_theme, ncalc_style_rules) {
+            $.fn.activity.defaults.color = "#fff";
+
+            presenter.toggleActivity(true);
+            
+            bs.run();
         });
     }
 })();
