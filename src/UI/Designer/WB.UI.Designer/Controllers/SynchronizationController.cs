@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using Ionic.Zip;
 using Main.Core.Documents;
 using Main.Core.View;
-using NLog;
+
 using Ncqrs.Commanding.ServiceModel;
 using Newtonsoft.Json;
 using RazorEngine;

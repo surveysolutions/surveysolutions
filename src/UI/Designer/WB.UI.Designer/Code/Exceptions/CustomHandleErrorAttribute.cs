@@ -1,13 +1,13 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using NLog;
+using WB.Common;
+
 
 namespace WB.UI.Designer.Code.Exceptions
 {
     public class CustomHandleErrorAttribute : HandleErrorAttribute
     {
-        readonly Logger _logger = LogManager.GetCurrentClassLogger(); 
-
+        
         public CustomHandleErrorAttribute()
         {
         }
@@ -58,7 +58,7 @@ namespace WB.UI.Designer.Code.Exceptions
             }
 
             // log the error 
-            _logger.Error(filterContext.Exception.Message, filterContext.Exception);
+            LogManager.GetLogger(typeof(CustomHandleErrorAttribute)).Error(filterContext.Exception.Message, filterContext.Exception);
 
             filterContext.ExceptionHandled = true;
             filterContext.HttpContext.Response.Clear();
