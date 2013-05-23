@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Questionnaire.ExportServices;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Helpers;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
+    using WB.Core.SharedKernel.Logger;
+
     [TestFixture]
     public class CommandControllerTests
     {
@@ -78,22 +72,23 @@ namespace WB.UI.Designer.Tests
             return new Exception("message", CreateTwoLevelException());
         }
 
-        private static NewUpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid? questionnaireId = null)
+        private static UpdateGroupCommand CreateInvalidUpdateGroupCommand(Guid? questionnaireId = null)
         {
             var qId = questionnaireId.HasValue ? questionnaireId.Value : Guid.NewGuid();
 
-            var command = new NewUpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty);
+            var command = new UpdateGroupCommand(qId, Guid.NewGuid(), string.Empty, Propagate.None, string.Empty, string.Empty);
 
             return command;
         }
 
         private CommandController CreateCommandController(ICommandService commandService = null, ICommandDeserializer commandDeserializer = null, 
-            IExpressionReplacer expressionReplacer = null)
+            IExpressionReplacer expressionReplacer = null, ILog logReplacer = null)
         {
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
-                expressionReplacer ?? Mock.Of<IExpressionReplacer>()
+                expressionReplacer ?? Mock.Of<IExpressionReplacer>(),
+                logReplacer ?? Mock.Of<ILog>()
                 );
         }
     }

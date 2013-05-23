@@ -1,5 +1,34 @@
-﻿@Html.Partial("Create")
+﻿@using WB.UI.Designer.BootstrapSupport
+@model WB.UI.Designer.Models.LocalPasswordModel
+
+@{
+    ViewBag.Title = "Change Password";
+    Layout = "~/Views/Shared/Layout.empty.cshtml";
+}
+
+@using (Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off"}))
+{
+    @Html.AntiForgeryToken()
+    <legend>@Model.GetLabel()</legend>
+    <fieldset class="form-horizontal">
+
+        @{
+    this.Html.RenderPartial("EditForm");
+        }
+        <div class="form-actions">
+            <button class="btn btn-large btn-primary pull-right" type="submit">Change Password</button>
+        </div>
+    </fieldset>
+}
 
 @section Scripts {
     @Scripts.Render("~/editform")
 }
+
+@*
+@Html.Partial("Create")
+
+@section Scripts {
+    @Scripts.Render("~/editform")
+}
+*@

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -9,24 +10,15 @@ using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Mvc.Html;
 using System.Web.Routing;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.Practices.ServiceLocation;
-using NinjectAdapter;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.BootstrapSupport
 {
     using WB.UI.Designer.Models;
+    using WB.UI.Shared.Web.Membership;
 
     public static class DefaultScaffoldingExtensions
     {
-        #warning remove this shit
-        private static IUserHelper UserHelperInstance
-        {
-            get { return Code.UserHelper.Instance; }
-        }
-
-
         public static string GetControllerName(this Type controllerType)
         {
             return controllerType.Name.Replace("Controller", String.Empty);
@@ -37,9 +29,9 @@ namespace WB.UI.Designer.BootstrapSupport
             return ((MethodCallExpression)actionExpression.Body).Method.Name;
         }
 
-        public static PropertyInfo[] VisibleProperties(this IEnumerable Model)
+        public static PropertyInfo[] VisibleProperties(this IEnumerable Model, IMembershipUserService userHelper)
         {
-            
+
             var elementType = Model.GetType().GetElementType() ?? Model.GetType().GetGenericArguments()[0];
             var actionProperties = typeof(IActionItem).GetProperties();
             return
@@ -48,7 +40,7 @@ namespace WB.UI.Designer.BootstrapSupport
                                info =>
                                (info.Name != elementType.IdentifierPropertyName())
                                && actionProperties.All(x => x.Name != info.Name)
-                               && (UserHelperInstance.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
+                               && (userHelper.WebUser.IsAdmin || info.GetAttribute<OnlyForAdminAttribute>() == null))
                            .OrderedByDisplayAttr()
                            .ToArray();
         }

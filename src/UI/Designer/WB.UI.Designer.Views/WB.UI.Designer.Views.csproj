@@ -76,13 +76,21 @@
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\Questionnaire\WB.Core.Questionnaire.Events\WB.Core.Questionnaire.Events.csproj">
+      <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
+      <Name>WB.Core.Questionnaire.Events</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WB.UI.Designer.Providers.CQRS\WB.UI.Designer.Providers.CQRS.csproj">
       <Project>{400cde74-7407-4388-8d57-bf429e7c508d}</Project>
       <Name>WB.UI.Designer.Providers.CQRS</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
-      <Project>{E936364C-A916-45E7-8F59-80DE2518AF2C}</Project>
-      <Name>WB.UI.Designer.Providers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

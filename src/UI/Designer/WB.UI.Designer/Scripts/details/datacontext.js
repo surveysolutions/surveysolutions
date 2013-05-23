@@ -63,7 +63,7 @@
                     },
                     getLocalById = function (id) {
                         // This is the only place we set to NULLO
-                        return !!id && !!items[id] ? items[id] : nullo;
+                        return !!id && !!items[id] ? items[id] : null;
                     },
                     getAllLocal = function () {
                         return utils.mapMemoToArray(items);
@@ -143,7 +143,7 @@
         groups.getChapters = function() {
             var chapters = _.map(questionnaire.childrenID(), function(children) {
                 var item = groups.getLocalById(children.id);
-                item.parent(parent);
+                //item.parent(parent);
                 return item;
             });
             //_.filter(groups.getAllLocal(), function (item) {
@@ -170,12 +170,47 @@
             _.each(questions.getAllLocal(), function (question) {
                 var child = _.find(question.triggers(), { 'key': group.id });
                 if (!_.isUndefined(child)) {
+                    var isDirty = question.dirtyFlag().isDirty();
                     question.triggers.remove(child);
+                    if (!isDirty) {
+                        question.dirtyFlag().reset();
+                    }
                 }
             });
         };
 
+        var getChildItemByIdAndType = function(item) {
+            if (item.type === "GroupView")
+                return groups.getLocalById(item.id);
+            return questions.getLocalById(item.id);
+        };
+
+        var firstSavedIndexInCollection = function (collection, id) {
+            var item = utils.findById(collection, id);
+            for (var i = item.index; i >= 0; i--) {
+                var child = getChildItemByIdAndType(collection[i]);
+                if (!child.isNew())
+                    return i + 1;
+            }
+            return 0;
+        };
+
         var commands = {};
+
+
+        commands[config.commands.updateQuestionnaire] = function (questionnaire) {
+            return {
+                questionnaireId: questionnaire.id(),
+                title: questionnaire.title()
+            };
+        };
+
+        commands[config.commands.cloneGroup] = function (group) {
+            var command = commands[config.commands.createGroup](group);
+            command.sourceGroupId = group.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(group.hasParent() ? group.parent().childrenID() : questionnaire.childrenID(), group.id());
+            return command;
+        };
 
         commands[config.commands.createGroup] = function (group) {
             var parent = group.parent();
@@ -209,6 +244,13 @@
                 description: group.description(),
                 condition: group.condition()
             };
+        };
+
+        commands[config.commands.cloneQuestion] = function (question) {
+            var command = commands[config.commands.createQuestion](question);
+            command.sourceQuestionId = question.cloneSource().id();
+            command.targetIndex = firstSavedIndexInCollection(question.parent().childrenID(), question.id());
+            return command;
         };
 
         commands[config.commands.createQuestion] = function (question) {

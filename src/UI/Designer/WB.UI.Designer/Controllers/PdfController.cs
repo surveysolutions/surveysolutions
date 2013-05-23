@@ -7,16 +7,18 @@ namespace WB.UI.Designer.Controllers
     using System.Configuration;
     using System.IO;
     using System.Web.Mvc;
+    
     using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
-    public class PdfController : Controller
+    public class PdfController : BaseController
     {
-        private readonly IViewRepository viewRepository;
-
-        public PdfController(IViewRepository viewRepository)
-        {
-            this.viewRepository = viewRepository;
-        }
+         public PdfController(
+             IViewRepository repository,
+             IMembershipUserService userHelper)
+             : base(repository, null, userHelper)
+         {
+         }
 
         [Authorize]
         public ActionResult PreviewQuestionnaire(Guid id)
@@ -77,7 +79,7 @@ namespace WB.UI.Designer.Controllers
 
         private QuestionnaireView LoadQuestionnaire(Guid id)
         {
-            return this.viewRepository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
+            return this.Repository.Load<QuestionnaireViewInputModel, QuestionnaireView>(new QuestionnaireViewInputModel(id));
         }
     }
 }

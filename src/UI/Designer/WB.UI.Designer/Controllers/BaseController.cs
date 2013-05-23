@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using WB.UI.Designer.Code;
-
 namespace WB.UI.Designer.Controllers
 {
     using System.Web.Mvc;
@@ -18,6 +16,7 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding.ServiceModel;
 
     using WB.UI.Designer.BootstrapSupport;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The base controller.
@@ -37,13 +36,13 @@ namespace WB.UI.Designer.Controllers
         protected readonly IViewRepository Repository;
 
 
-        protected readonly IUserHelper UserHelper;
+        protected readonly IMembershipUserService UserHelper;
 
         #endregion
 
         #region Constructors and Destructors
 
-        public BaseController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
+        public BaseController(IViewRepository repository, ICommandService commandService, IMembershipUserService userHelper)
         {
             this.Repository = repository;
             this.CommandService = commandService;
@@ -96,6 +95,17 @@ namespace WB.UI.Designer.Controllers
         public void Success(string message)
         {
             this.WriteToTempData(Alerts.SUCCESS, message);
+        }
+
+        /// <summary>
+        /// Initializes data that might not be available when the constructor is called.
+        /// </summary>
+        /// <param name="requestContext">The HTTP context and route data.</param>
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+
+            ViewBag.UserHelper = UserHelper;
         }
 
         #endregion
