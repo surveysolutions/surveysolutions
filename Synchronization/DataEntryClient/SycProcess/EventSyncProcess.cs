@@ -34,21 +34,12 @@ namespace DataEntryClient.SycProcess
         /// </summary>
         private EventPipeCollector collector;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EventSyncProcess"/> class.
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        /// <param name="syncProcess">
-        /// The sync process.
-        /// </param>
-        /// <param name="parentSyncProcess">
-        /// The parent Sync Process.
-        /// </param>
-        public EventSyncProcess(IKernel kernel, Guid syncProcess, Guid? parentSyncProcess = null)
-            : base(kernel, syncProcess, parentSyncProcess)
+        private readonly Guid userId;
+
+        public EventSyncProcess(IKernel kernel, Guid syncProcess, Guid userId)
+            : base(kernel, syncProcess, null)
         {
+            this.userId = userId;
         }
 
         /// <summary>
@@ -128,7 +119,7 @@ namespace DataEntryClient.SycProcess
 
         public SyncItemsMetaContainer GetListOfAggregateRoots(string syncProcessDescription)
         {
-            return new SyncItemsMetaContainer { ARId = EventStoreReader.GetAllARIds().ToList() };
+            return new SyncItemsMetaContainer { ARId = GetReaderForUser(userId).GetAllARIds().ToList() };
 
         }
 
@@ -136,7 +127,7 @@ namespace DataEntryClient.SycProcess
         {
             return new ImportSynchronizationMessage
             {
-                EventStream = EventStoreReader.GetARById(aRKey, ARType, null).ToArray()
+                EventStream = GetReaderForUser(userId).GetARById(aRKey, ARType, null).ToArray()
             };
         }
 
