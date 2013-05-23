@@ -84,25 +84,6 @@ namespace DataEntryClientTests.SycProcessFactory
             this.kernel.Bind<IChanelFactoryWrapper>().ToConstant(chanelFactoryStub);
         }
 
-        /// <summary>
-        /// Factory should return objects for all SyncProcessTypes
-        /// </summary>
-        [Test]
-        public void Factory_should_return_objects_for_all_SyncProcessTypes()
-        {
-            var factory = new SyncProcessFactory(this.kernel);
-            foreach (SyncProcessType type in Enum.GetValues(typeof(SyncProcessType)))
-            {
-                try
-                {
-                    ISyncProcess syncProcess = factory.GetProcess(type, Guid.NewGuid(), null);
-                }
-                catch (Exception ex)
-                {
-                    Assert.Fail("Expected no exception, but got: " + ex.Message);
-                }
-            }
-        }
 
         #endregion
     }

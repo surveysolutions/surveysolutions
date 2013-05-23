@@ -1,17 +1,26 @@
-$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 $ErrorActionPreference = "Stop"
+
+$scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 
 . "$scriptFolder\deployment-functions.ps1"
 
 
-Copy-Item `
-    src/UI/Designer/WB.UI.Designer/Configuration/Dev-Stable.Designer.Web.config `
-    src/UI/Designer/WB.UI.Designer/Configuration/Dev.Designer.Web.config `
+try {
 
+    Copy-Item `
+        src/UI/Designer/WB.UI.Designer/Configuration/Dev-Stable.Designer.Web.config `
+        src/UI/Designer/WB.UI.Designer/Configuration/Dev.Designer.Web.config `
 
-Deploy `
-    -Solution 'src\Designer.sln' `
-    -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
-    -BuildConfiguration 'Release' `
-    -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `
-    -TargetFolder '\\192.168.3.113\Web\Stable\Designer' `
+    Deploy `
+        -Solution 'src\Designer.sln' `
+        -Project 'src\UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj' `
+        -BuildConfiguration 'Release' `
+        -SourceFolder 'src\UI\Designer\WB.UI.Designer\obj\Release\Package\PackageTmp' `
+        -TargetFolder '\\192.168.3.113\Web\Stable\Designer' `
+
+}
+catch {
+    Write-Host "##teamcity[message status='ERROR' text='Unexpected error occurred']"
+    Write-Host "##teamcity[buildStatus status='FAILURE' text='Unexpected error occurred']"
+    throw
+}

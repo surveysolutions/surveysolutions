@@ -63,15 +63,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Deploy-Main-Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Deploy-Main-Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -98,11 +89,20 @@
     <Compile Include="SnapshootDomainEventHandler.cs" />
     <Compile Include="SnapshootLoaded.cs" />
     <Compile Include="SnapshotCommandMapper.cs" />
+    <Compile Include="SnapshotDenormalizer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
+      <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
+      <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

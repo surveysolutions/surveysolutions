@@ -67,7 +67,7 @@ namespace Core.Supervisor.Tests
                 };
 
             var storage = new Mock<IDenormalizerStorage<SyncProcessStatisticsDocument>>();
-            storage.Setup(d => d.GetByGuid(Guid.Empty)).Returns(statistics);
+            storage.Setup(d => d.GetById(Guid.Empty)).Returns(statistics);
 
 
             var denormalizer = new SyncProcessDenormalizer(storage.Object);

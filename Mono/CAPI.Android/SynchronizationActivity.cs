@@ -9,9 +9,15 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
+using Android.Text.Method;
 using CAPI.Android.Core.Model.ProjectionStorage;
+using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
+using CAPI.Android.Syncronization;
+using Main.Core.Utility;
 using Main.Core.View.User;
+using Main.Synchronization.Credentials;
 
 namespace CAPI.Android
 {
@@ -24,12 +30,13 @@ namespace CAPI.Android
     using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
     using CAPI.Android.Extensions;
     using CAPI.Android.Settings;
-    using CAPI.Android.Syncronization;
-
+    using CAPI.Android.Utils;
     using Main.DenormalizerStorage;
     using Main.Synchronization.SyncManager;
     using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
+
+    using Newtonsoft.Json;
 
     using Ninject;
 
@@ -55,24 +62,11 @@ namespace CAPI.Android
 
         #region Public Methods and Operators
 
-        public override void OnConfigurationChanged(Configuration newConfig)
+        protected override void OnStart()
         {
-            base.OnConfigurationChanged(newConfig);
-        }
-
-        /// <summary>
-        ///     The on create options menu.
-        /// </summary>
-        /// <param name="menu">
-        ///     The menu.
-        /// </param>
-        /// <returns>
-        ///     The <see cref="bool" />.
-        /// </returns>
-        public override bool OnCreateOptionsMenu(IMenu menu)
-        {
+            base.OnStart();
             this.CreateActionBar();
-            return base.OnCreateOptionsMenu(menu);
+
         }
 
         #endregion
@@ -95,20 +89,9 @@ namespace CAPI.Android
             if (buttonSync != null)
             {
                 buttonSync.Click += this.ButtonSyncClick;
+                buttonSync.Enabled = NetworkHelper.IsNetworkEnabled(this);
             }
-
-            var buttonPull = this.FindViewById<Button>(Resource.Id.btnPull);
-            if (buttonPull != null)
-            {
-                buttonPull.Click += this.buttonPull_Click;
-            }
-
-            var buttonPush = this.FindViewById<Button>(Resource.Id.btnPush);
-            if (buttonPush != null)
-            {
-                buttonPush.Click += this.buttonPush_Click;
-            }
-
+            
             var buttonBackup = this.FindViewById<Button>(Resource.Id.btnBackup);
             if (buttonBackup != null)
             {
@@ -124,8 +107,7 @@ namespace CAPI.Android
 
         private void ButtonSyncClick(object sender, EventArgs e)
         {
-            this.DoSync(PumpimgType.Push);
-            this.DoSync(PumpimgType.Pull);
+            this.DoSync(PumpimgType.Sync);
         }
 
         /// <summary>
@@ -144,7 +126,7 @@ namespace CAPI.Android
 
         /// <summary>
         ///     The pull.
-        /// </summary>
+        /// </summary>e
         /// <param name="remoteSyncNode">
         ///     The remote Sync Node.
         /// </param>
@@ -164,43 +146,72 @@ namespace CAPI.Android
 
             if (result)
             {
-                string extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
-                if (Directory.Exists(extStorage))
-                {
-                    extStorage = Path.Combine(extStorage, CAPI);
-                    if (!Directory.Exists(extStorage))
-                    {
-                        Directory.CreateDirectory(extStorage);
-                    }
-                }
-                else
-                {
-                    extStorage =
-                        global::System.Environment.GetFolderPath(global::System.Environment.SpecialFolder.Personal);
-                }
+                var extStorage = GetBackupDirectory();
 
                 string filename = Path.Combine(
                     extStorage, string.Format("backup-{0:yyyy-MM-dd_hh-mm-ss-tt}.acapi", DateTime.UtcNow));
-                using (FileStream file = File.Open(filename, FileMode.Create))
-                {
-                    var buf = new byte[1024];
-                    int r;
-                    MemoryStream stream = collector.GetExportedStream();
-                    while ((r = stream.Read(buf, 0, buf.Length)) > 0)
-                    {
-                        file.Write(buf, 0, r);
-                    }
 
-                    file.Flush();
-                }
-
-                /*filename = Path.Combine(extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}--1.acapi", DateTime.UtcNow));
-                File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
-*/
+                WriteBackupToFile(filename, collector); // is was WriteExportedStreamToFile before
             }
 
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
+        }
+
+        private static void WriteBackupToFile(string filename, CompressedStreamStreamCollector collector)
+        {
+            using (var writer = new StreamWriter(filename))
+            {
+                foreach (var @event in collector.GetEventStoreForBackup())
+                {
+                    string serializedEvent = JsonConvert.SerializeObject(@event,
+                        Formatting.None,
+                        new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+
+                    writer.WriteLine(serializedEvent);
+                    writer.WriteLine("===== ===== ===== ===== =====");
+                }
+
+                writer.Flush();
+            }
+        }
+
+        private static void WriteExportedStreamToFile(string filename, CompressedStreamStreamCollector collector)
+        {
+            using (FileStream file = File.Open(filename, FileMode.Create))
+            {
+                var buf = new byte[1024];
+                int r;
+                MemoryStream stream = collector.GetExportedStream();
+                while ((r = stream.Read(buf, 0, buf.Length)) > 0)
+                {
+                    file.Write(buf, 0, r);
+                }
+
+                file.Flush();
+            }
+
+            /*filename = Path.Combine(extStorage, string.Format("backup{0:yyyy-MM-dd_hh-mm-ss-tt}--1.acapi", DateTime.UtcNow));
+            File.WriteAllBytes(filename, collector.GetExportedStream().ToArray());
+*/
+        }
+
+        private static string GetBackupDirectory()
+        {
+            string extStorage = Environment.ExternalStorageDirectory.AbsolutePath;
+            if (Directory.Exists(extStorage))
+            {
+                extStorage = Path.Combine(extStorage, CAPI);
+                if (!Directory.Exists(extStorage))
+                {
+                    Directory.CreateDirectory(extStorage);
+                }
+            }
+            else
+            {
+                extStorage = global::System.Environment.GetFolderPath(global::System.Environment.SpecialFolder.Personal);
+            }
+            return extStorage;
         }
 
         /// <summary>
@@ -220,16 +231,12 @@ namespace CAPI.Android
         private bool CheckSyncPoint()
         {
             string syncPoint = SettingsManager.GetSyncAddressPoint();
-
-            Uri test = null;
-            bool valid = Uri.TryCreate(syncPoint, UriKind.Absolute, out test)
-                         && (test.Scheme == "http" || test.Scheme == "https");
-
-            if (!valid)
+            
+            if (!SettingsManager.ValidateAddress(syncPoint))
             {
                 var builder = new AlertDialog.Builder(this);
-                builder.SetTitle("Incorrect Address Point");
-                builder.SetMessage("Please set in settings");
+                builder.SetTitle("Incorrect Address Point.");
+                builder.SetMessage("Please set in settings.");
                 AlertDialog dialog = builder.Create();
                 dialog.Show();
                 return false;
@@ -237,6 +244,7 @@ namespace CAPI.Android
             return true;
         }
 
+        private ProgressDialog progressDialog = null;
         /// <summary>
         ///     The do sync.
         /// </summary>
@@ -245,58 +253,60 @@ namespace CAPI.Android
         /// </param>
         private void DoSync(PumpimgType pumpingType)
         {
+            this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
+
             if (!this.CheckSyncPoint())
             {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Sync point is set incorrect.";
                 return;
             }
 
-            // async task protection
-            //ScreenOrientation oldOrientation = this.RequestedOrientation;
-            //this.RequestedOrientation = ScreenOrientation.Nosensor;
-
-            var progressDialog = new ProgressDialog(this);
-
-            progressDialog.SetTitle("Synchronization process");
-            progressDialog.SetProgressStyle(ProgressDialogStyle.Horizontal);
-            progressDialog.SetMessage("Initialyzing");
-            progressDialog.SetCancelable(false);
+            if (!NetworkHelper.IsNetworkEnabled(this))
+            {
+                this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = "Network is not avalable.";
+                return;
+            }
 
             this.FindViewById<TextView>(Resource.Id.tvSyncResult).Text = string.Empty;
 
-            int currentProgress = 0;
+            progressDialog = CreateDialog();
+            progressDialog.Show();
+
             ThreadPool.QueueUserWorkItem(
                 state =>
                     {
-                        this.RunOnUiThread(
+                        /*this.RunOnUiThread(
                             () =>
                                 {
                                     progressDialog.Show();
                                     progressDialog.IncrementProgressBy(1);
                                 });
-
+*/
                         var result = new SyncronizationStatus();
-                        currentProgress = result.Progress;
+                        int currentProgress = result.Progress;
 
                         ThreadPool.QueueUserWorkItem(
                             proc =>
                                 {
                                     try
                                     {
-                                        if (pumpingType == PumpimgType.Push)
-                                        {
-                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Pull)
-                                        {
-                                            this.Pull(SettingsManager.GetSyncAddressPoint(), result);
-                                        }
-                                        else if (pumpingType == PumpimgType.Backup)
+                                        if (pumpingType == PumpimgType.Backup)
                                         {
                                             this.Backup(result);
+                                        }
+                                        else if (pumpingType == PumpimgType.Sync)
+                                        {
+                                            this.Push(SettingsManager.GetSyncAddressPoint(), result);
+
+                                            if (result.Result)
+                                                this.Pull(SettingsManager.GetSyncAddressPoint(), result);
                                         }
                                     }
                                     catch (Exception exc)
                                     {
+                                        result.Result = false;
+                                        if (string.IsNullOrWhiteSpace(result.ErrorMessage))
+                                            result.ErrorMessage = "Unknown Error";
                                         //throw;
                                     }
                                     finally
@@ -329,10 +339,11 @@ namespace CAPI.Android
                                 {
                                     var syncResult = this.FindViewById<TextView>(Resource.Id.tvSyncResult);
                                     syncResult.Text = result.Result
-                                                          ? "Process is finished"
+                                                          ? "Process is finished."
                                                           : "Error occured during the process. \r\n"
                                                             + result.ErrorMessage;
                                     progressDialog.Hide();
+                                    progressDialog = null;
                                 });
                     });
 
@@ -346,22 +357,69 @@ namespace CAPI.Android
             SyncronizationStatus status,
             Guid processKey)
         {
-            try
-            {
-                var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
-                manager.StartPump();
-                CapiApplication.SaveProjections();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                // log
-                status.IsWorking = false;
-                return false;
-            }
+            var manager = new SyncManager(provider, collector, processKey, syncMessage, null, status);
+            manager.StartPump();
+            return true;
+         
+        }
+         private ProgressDialog CreateDialog()
+        {
+            var progressDialogResult = new ProgressDialog(this);
+
+            progressDialogResult.SetTitle("Synchronizing");
+            progressDialogResult.SetProgressStyle(ProgressDialogStyle.Spinner);
+            progressDialogResult.SetMessage("Initialyzing");
+            progressDialogResult.SetCancelable(false);
+
+            return progressDialogResult;
         }
 
-       
+  protected ISyncAuthenticator CreateAuthenticator()
+        {
+            var authentificator = new RestAuthenticator();
+            authentificator.RequestCredentialsCallback += RequestCredentialsCallBack;
+            return authentificator;
+        }
+
+
+
+
+        protected SyncCredentials? RequestCredentialsCallBack(object sender)
+        {
+            if (CapiApplication.Membership.IsLoggedIn)
+            {
+                return CapiApplication.Membership.RequestSyncCredentials();
+            }
+
+            SyncCredentials? result = null;
+            this.RunOnUiThread(
+                () =>
+                    {
+                        if (progressDialog != null)
+                            progressDialog.Dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                        var view = this.LayoutInflater.Inflate(Resource.Layout.SyncLogin, null);
+                        var teLogin = view.FindViewById<EditText>(Resource.Id.teLogin);
+                        var tePassword = view.FindViewById<EditText>(Resource.Id.tePassword);
+                        var btnLogin = view.FindViewById<Button>(Resource.Id.btnLogin);
+                        alert.SetView(view);
+                        var loginDialog = alert.Show();
+                        loginDialog.SetCancelable(false);
+                        btnLogin.Click += (s, e) =>
+                            {
+                                loginDialog.Hide();
+                                if (progressDialog != null)
+                                    progressDialog.Show();
+                                result = new SyncCredentials(teLogin.Text, SimpleHash.ComputeHash(tePassword.Text));
+                            };
+                    });
+            while (!result.HasValue)
+            {
+                Thread.Sleep(200);
+            }
+            return result;
+        }
 
         /// <summary>
         ///     The pull.
@@ -378,11 +436,12 @@ namespace CAPI.Android
         private bool Pull(string remoteSyncNode, SyncronizationStatus status)
         {
             Guid processKey = Guid.NewGuid();
-            var provider = new RemoteServiceEventStreamRestProvider(CapiApplication.Kernel, processKey, remoteSyncNode);
+            var provider = new RemoteServiceEventStreamRestProvider(processKey, remoteSyncNode, CreateAuthenticator());
             var collector = new LocalStorageStreamCollector(CapiApplication.Kernel, processKey);
 
             bool result = this.Process(provider, collector, "Remote sync (Pulling)", status, processKey);
-            status.Progress = 100;
+            
+            status.Progress = 99;
             return result;
         }
 
@@ -403,11 +462,11 @@ namespace CAPI.Android
             Guid processKey = Guid.NewGuid();
             var provider =
                 new AClientEventStreamProvider(
-                    CapiApplication.Kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
-            var collector = new RemoteCollector(remoteSyncNode, processKey);
+                    CapiApplication.Kernel.Get<IFilterableDenormalizerStorage<QuestionnaireDTO>>());
+            var collector = new RemoteCollector(remoteSyncNode, processKey, CreateAuthenticator());
 
             bool result = this.Process(provider, collector, "Remote sync (Pushing)", status, processKey);
-            status.Progress = 100;
+            status.Progress = 99;
             return result;
         }
 
@@ -415,37 +474,7 @@ namespace CAPI.Android
         {
             this.DoSync(PumpimgType.Backup);
         }
-
-        /// <summary>
-        ///     The button pull_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPull_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Pull);
-        }
-
-        /// <summary>
-        ///     The button push_ click.
-        /// </summary>
-        /// <param name="sender">
-        ///     The sender.
-        /// </param>
-        /// <param name="e">
-        ///     The e.
-        /// </param>
-        private void buttonPush_Click(object sender, EventArgs e)
-        {
-            return;
-            this.DoSync(PumpimgType.Push);
-        }
-
+        
         private void buttonRestore_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
@@ -456,10 +485,9 @@ namespace CAPI.Android
 
     public enum PumpimgType
     {
-        Push,
-
-        Pull,
-
-        Backup
+        Push = 0,
+        Pull = 1,
+        Backup = 2,
+        Sync = 4
     }
 }

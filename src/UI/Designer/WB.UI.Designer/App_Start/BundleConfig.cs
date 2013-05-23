@@ -35,7 +35,8 @@ namespace WB.UI.Designer
 
             bundles.Add(
                 new StyleBundle("~/content/css").Include(
-                    "~/Content/bootstrap.css", 
+                    "~/Content/bootstrap.css",
+                    "~/Content/font-awesome.min.css",
                     "~/Content/body.css", 
                     "~/Content/bootstrap-responsive.css", 
                     "~/Content/bootstrap-mvc-validation.css"));
@@ -71,7 +72,8 @@ namespace WB.UI.Designer
 
 
                     // Knockout and its plugins
-                    "~/Scripts/knockout-{version}.js", 
+                    "~/Scripts/knockout-{version}.js",
+                    "~/Scripts/lib/knockout.mapping.js",
                     "~/Scripts/lib/knockout.activity.js", 
                     "~/Scripts/lib/knockout.asyncCommand.js", 
                     "~/Scripts/lib/knockout.dirtyFlag.js", 
@@ -90,30 +92,7 @@ namespace WB.UI.Designer
                     "~/Scripts/lib/Math.uuid.js",
  
                     "~/Scripts/require.js", 
-                    "~/Scripts/details/utils.js", 
-                    "~/Scripts/details/binder.js", 
-                    "~/Scripts/details/bootstrapper.js", 
-                    "~/Scripts/details/config.js", 
-                    "~/Scripts/details/datacontext.js", 
-                    "~/Scripts/details/dataprimer.js", 
-                    "~/Scripts/details/dataservice.js", 
-                    "~/Scripts/details/ko.bindingHandlers.js", 
-                    "~/Scripts/details/ko.debug.helpers.js", 
-                    "~/Scripts/details/messenger.js", 
-                    "~/Scripts/details/model.answerOption.js", 
-                    "~/Scripts/details/model.group.js", 
-                    "~/Scripts/details/model.js", 
-                    "~/Scripts/details/model.mapper.js", 
-                    "~/Scripts/details/model.question.js", 
-                    "~/Scripts/details/model.questionnaire.js", 
-                    "~/Scripts/details/presenter.js", 
-                    "~/Scripts/details/route-mediator.js", 
-                    "~/Scripts/details/router.js", 
-                    "~/Scripts/details/route-config.js", 
-                    "~/Scripts/details/store.js", 
-                    "~/Scripts/details/vm.js", 
-                    "~/Scripts/details/vm.questionnaire.js", 
-
+                    "~/Scripts/details/*.js", 
                     "~/Scripts/lib/ace/*.js", 
 
                     "~/Scripts/details/main.js"));

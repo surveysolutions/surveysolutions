@@ -27,7 +27,7 @@ namespace RavenQuestionnaire.Core.Views.Event.File
         /// <summary>
         /// The attachments.
         /// </summary>
-        private readonly IDenormalizerStorage<FileDescription> attachments;
+        private readonly IQueryableDenormalizerStorage<FileDescription> attachments;
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace RavenQuestionnaire.Core.Views.Event.File
         /// <param name="attachments">
         /// The attachments.
         /// </param>
-        public FileBrowseViewFactory(IDenormalizerStorage<FileDescription> attachments)
+        public FileBrowseViewFactory(IQueryableDenormalizerStorage<FileDescription> attachments)
         {
             this.attachments = attachments;
         }

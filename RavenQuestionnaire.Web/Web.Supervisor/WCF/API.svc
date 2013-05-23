@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Web.Supervisor.WCF.API" Factory="Ninject.Extensions.Wcf.NinjectServiceHostFactory" CodeBehind="API.svc.cs" %>

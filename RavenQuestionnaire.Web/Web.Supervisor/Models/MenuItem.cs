@@ -52,6 +52,11 @@ namespace Web.Supervisor.Models
         /// <summary>
         /// The SyncLog
         /// </summary>
-        SyncLog = 8
+        SyncLog = 8,
+
+        /// <summary>
+        /// The teams
+        /// </summary>
+        Teams
     }
 }

@@ -218,20 +218,20 @@ namespace Main.Synchronization.SyncManager
                 if (this.streamCollector == null)
                 {
                     this.status.Result = false;
-                    this.status.ErrorMessage = "Incorrect receiver";
+                    this.status.ErrorMessage = "Incorrect receiver.";
                     this.status.Progress = 98;
                 }
 
                 this.status.Progress++;
-                this.status.CurrentStageDescription = "Process is starting";
+                this.status.CurrentStageDescription = "Stage is starting.";
 
-                this.Invoker.Execute(
+                /*this.Invoker.Execute(
                     new CreateNewSynchronizationProcessCommand(
                         this.ProcessGuid, 
                         Guid.Empty, 
                         this.eventStreamProvider.SyncType, 
                         string.Format("{0}({1})", this.syncMessage, this.eventStreamProvider.ProviderName)));
-
+*/
                 this.streamCollector.PrepareToCollect();
 
                 int currentChunkSize = Math.Min(this.streamCollector.MaxChunkSize, ChunkSize);
@@ -240,7 +240,7 @@ namespace Main.Synchronization.SyncManager
                 var chunk = new List<AggregateRootEvent>();
 
                 this.status.Progress = 15;
-                this.status.CurrentStageDescription = "In progress";
+                this.status.CurrentStageDescription = "Process is in progress.";
 
                 // read from stream and handle by chunk
                 foreach (AggregateRootEvent evnt in this.eventStreamProvider.GetEventStream())
@@ -249,7 +249,7 @@ namespace Main.Synchronization.SyncManager
                     chunk.Add(evnt);
                     counter++;
 
-                    if (counter == currentChunkSize)
+                    if (counter >= currentChunkSize)
                     {
                         if (this.status.Progress < 90)
                         {
@@ -259,7 +259,7 @@ namespace Main.Synchronization.SyncManager
                         if (!this.streamCollector.Collect(chunk))
                         {
                             this.status.Result = false;
-                            this.status.ErrorMessage = "Target refused stream";
+                            this.status.ErrorMessage = "Target refused stream.";
                             this.status.Progress = 98;
                             this.status.IsWorking = false;
                             return;
@@ -283,7 +283,7 @@ namespace Main.Synchronization.SyncManager
                     if (!this.streamCollector.Collect(chunk))
                     {
                         this.status.Result = false;
-                        this.status.ErrorMessage = "Target refused stream";
+                        this.status.ErrorMessage = "Target refused stream.";
                         this.status.Progress = 98;
                         this.status.IsWorking = false;
                         return;
@@ -299,14 +299,14 @@ namespace Main.Synchronization.SyncManager
                 }
 
                 this.status.Progress = 95;
-                this.status.CurrentStageDescription = "Finishing process";
+                this.status.CurrentStageDescription = "Finishing current stage.";
 
                 // notify collector about finishing
                 this.streamCollector.Finish();
 
-                this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
-
-                this.status.CurrentStageDescription = "Finished";
+                /*this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Completed, "Ok"));
+*/
+                this.status.CurrentStageDescription = "Stage finished.";
                 this.status.Result = true;
                 this.status.Progress = 98;
             }
@@ -315,11 +315,11 @@ namespace Main.Synchronization.SyncManager
                 // Logger logger = LogManager.GetCurrentClassLogger();
                 // logger.Fatal("Import error", e);
                 //this.Invoker.Execute(new EndProcessComand(this.ProcessGuid, EventState.Error, e.Message));
-                
-                this.status.ErrorMessage = "Error occured during synchronization. \r\n" + e.Message;
+
+                this.status.ErrorMessage = "Error occured during synchronization. [" + this.syncMessage + "]\r\n" + e.Message;
                 this.status.Progress = 98;
                 this.status.IsWorking = false;
-                //throw;
+                throw;
 
                 // return ErrorCodes.Fail;
             }

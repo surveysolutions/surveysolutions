@@ -79,6 +79,24 @@ namespace Main.Core.Domain
                 {
                     Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
 
+                    var g = x as IGroup;
+                    if (g != null)
+                    {
+                        this.NewAddGroup(
+                            groupId: g.PublicKey,
+                            parentGroupId: parentId,
+                            title: g.Title,
+                            propagationKind: g.Propagated,
+                            description: g.Description,
+                            condition: g.ConditionExpression);
+                    }
+                });
+            source.Children.ApplyAction(
+                x => x.Children,
+                (parent, x) =>
+                {
+                    Guid? parentId = parent == null ? (Guid?)null : parent.PublicKey;
+
                     var q = x as IQuestion;
                     if (q != null)
                     {
@@ -101,17 +119,6 @@ namespace Main.Core.Domain
                             optionsOrder: q.AnswerOrder,
                             maxValue: autoQuestion == null ? 0 : autoQuestion.MaxValue,
                             triggedGroupIds: autoQuestion == null ? null : autoQuestion.Triggers.ToArray());
-                    }
-                    var g = x as IGroup;
-                    if (g != null)
-                    {
-                        this.NewAddGroup(
-                            groupId: g.PublicKey,
-                            parentGroupId: parentId,
-                            title: g.Title,
-                            propagationKind: g.Propagated,
-                            description: g.Description,
-                            condition: g.ConditionExpression);
                     }
                 });
         }
@@ -185,6 +192,31 @@ namespace Main.Core.Domain
             });
         }
 
+
+        public void CloneGroup(Guid groupId,
+            Guid? parentGroupId, string title, Propagate propagationKind, string description, string condition, Guid sourceGroupId, int targetIndex)
+        {
+            this.ThrowDomainExceptionIfGroupAlreadyExists(groupId);
+            this.ThrowDomainExceptionIfParentGroupCantHaveChildGroups(parentGroupId);
+
+            this.ThrowDomainExceptionIfGroupTitleIsEmptyOrWhitespaces(title);
+
+            this.ThrowDomainExceptionIfGroupsPropagationKindIsNotSupported(propagationKind);
+
+            this.ApplyEvent(new GroupCloned
+            {
+                PublicKey = groupId,
+                GroupText = title,
+                ParentGroupPublicKey = parentGroupId,
+                Paropagateble = propagationKind,
+                Description = description,
+                ConditionExpression = condition,
+                SourceGroupId = sourceGroupId,
+                TargetIndex = targetIndex
+            });
+        }
+
+
         public void NewDeleteGroup(Guid groupId)
         {
             this.ThrowDomainExceptionIfGroupDoesNotExist(groupId);
@@ -237,11 +269,63 @@ namespace Main.Core.Domain
             });
         }
 
-        public void NewAddQuestion(Guid questionId,
+        public void CloneQuestion(Guid questionId,
             Guid groupId, string title, QuestionType type, string alias,
             bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
             QuestionScope scope, string condition, string validationExpression, string validationMessage,
-            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
+            string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds, Guid sourceQuestionId, int targetIndex)
+        {
+            alias = alias.Trim();
+
+            this.ThrowDomainExceptionIfQuestionAlreadyExists(questionId);
+
+            this.ThrowDomainExceptionIfTitleIsEmpty(title);
+
+            this.ThrowDomainExceptionIfStataCaptionIsInvalid(questionId, alias);
+
+            this.ThrowDomainExceptionIfQuestionWithOptionsIsInvalid(type, options);
+
+            var group = this.innerDocument.Find<IGroup>(groupId);
+            this.ThrowDomainExceptionIfQuestionIsFeaturedButGroupIsPropagated(isFeatured, group);
+            this.ThrowDomainExceptionIfQuestionIsHeadOfGroupButGroupIsNotPropagated(isHeaderOfPropagatableGroup, group);
+
+            this.ThrowDomainExceptionIfAnyTriggerLinksToAbsentOrNotPropagatedGroup(type, triggedGroupIds);
+
+            this.ThrowDomainExceptionIfQuestionTypeIsNotAllowed(type);
+
+            this.ApplyEvent(new QuestionCloned
+            {
+                PublicKey = questionId,
+
+                GroupPublicKey = groupId,
+                QuestionText = title,
+                QuestionType = type,
+                StataExportCaption = alias,
+
+                Mandatory = isMandatory,
+                Featured = isFeatured,
+                Capital = isHeaderOfPropagatableGroup,
+
+                QuestionScope = scope,
+                ConditionExpression = condition,
+                ValidationExpression = validationExpression,
+                ValidationMessage = validationMessage,
+                Instructions = instructions,
+
+                Answers = ConvertOptionsToAnswers(options),
+                AnswerOrder = optionsOrder,
+                MaxValue = maxValue ?? 10,
+                Triggers = triggedGroupIds != null ? triggedGroupIds.ToList() : null,
+                SourceQuestionId = sourceQuestionId,
+                TargetIndex = targetIndex
+            });
+        }
+
+        public void NewAddQuestion(Guid questionId,
+           Guid groupId, string title, QuestionType type, string alias,
+           bool isMandatory, bool isFeatured, bool isHeaderOfPropagatableGroup,
+           QuestionScope scope, string condition, string validationExpression, string validationMessage,
+           string instructions, Option[] options, Order optionsOrder, int? maxValue, Guid[] triggedGroupIds)
         {
             alias = alias.Trim();
 
@@ -446,6 +530,18 @@ namespace Main.Core.Domain
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
+        protected internal void OnGroupCloned(GroupCloned e)
+        {
+            var group = new Group();
+            group.Title = e.GroupText;
+            group.Propagated = e.Paropagateble;
+            group.PublicKey = e.PublicKey;
+            group.Description = e.Description;
+            group.ConditionExpression = e.ConditionExpression;
+            this.innerDocument.Insert(e.TargetIndex, group, e.ParentGroupPublicKey);
+        }
+
+
         protected internal void OnNewQuestionAdded(NewQuestionAdded e)
         {
             AbstractQuestion question = new CompleteQuestionFactory().Create(e);
@@ -455,6 +551,17 @@ namespace Main.Core.Domain
             }
 
             this.innerDocument.Add(question, e.GroupPublicKey, null);
+        }
+
+        protected internal void OnQuestionCloned(QuestionCloned e)
+        {
+            AbstractQuestion question = new CompleteQuestionFactory().Create(e);
+            if (question == null)
+            {
+                return;
+            }
+
+            this.innerDocument.Insert(e.TargetIndex, question, e.GroupPublicKey);
         }
 
         protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)

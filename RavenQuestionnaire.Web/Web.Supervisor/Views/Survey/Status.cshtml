@@ -12,7 +12,7 @@
 <script type="text/javascript">
     var sortData = undefined;
     var pageSize = @Model.PageSize;
-    var statusFilter = '@Model.Status.PublicId';
+    var statusFilter = @(Model.Status.PublicId==SurveyStatus.Unknown.PublicId? "null":Model.Status.PublicId.ToString());
     
     var chart;
     $(document).ready(function() {
@@ -87,7 +87,7 @@
                   data-type="select" 
                   data-prepend='All'             
                   data-source="@Html.Raw(statuses)"
-                  data-original-title="Select status">@this.Model.Status.Name</a></h2>
+                  data-original-title="Select status">@(this.Model.Status.PublicId==SurveyStatus.Unknown.PublicId ?"All":this.Model.Status.Name)</a></h2>
 
 
 <div id="questionnaireTable">

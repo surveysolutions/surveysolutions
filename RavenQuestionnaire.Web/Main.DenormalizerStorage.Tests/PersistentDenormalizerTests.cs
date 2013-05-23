@@ -37,11 +37,11 @@ namespace Main.DenormalizerStorage.Tests
 
             storageMock.Setup(x => x.GetByGuid<object>(key.ToString())).Returns(objectToStore);
 
-            var result = target.GetByGuid(key);
+            var result = target.GetById(key);
             Assert.IsTrue(objectToStore == result);
 
             storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
-            result = target.GetByGuid(key);
+            result = target.GetById(key);
             
             //still once!
             storageMock.Verify(x => x.GetByGuid<object>(key.ToString()), Times.Once());
@@ -65,7 +65,7 @@ namespace Main.DenormalizerStorage.Tests
 
             target.Store(objectToStore, key);
          //   storageMock.Setup(x => x.GetByGuid<TestObjectDump>(key)).Returns(objectToStore);
-            var result = target.GetByGuid(key);
+            var result = target.GetById(key);
             result.Name = "hello world";
 
            // objectToStore = null;
@@ -84,7 +84,7 @@ namespace Main.DenormalizerStorage.Tests
             PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
            
 
-            var result = target.GetByGuid(key);
+            var result = target.GetById(key);
 
             target.Remove(key);
             Thread.Sleep(1000);
@@ -124,7 +124,7 @@ namespace Main.DenormalizerStorage.Tests
 
             PersistentDenormalizer<TestObjectDump> target = new PersistentDenormalizer<TestObjectDump>(cache, storageMock.Object);
 
-            var result = target.GetByGuid(key);
+            var result = target.GetById(key);
             Assert.AreEqual(result, objectToStore);
         }
     }

@@ -30,12 +30,12 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -51,8 +51,8 @@ namespace Core.Supervisor.Views.Interviewer
         /// The users.
         /// </param>
         public InterviewerViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession, 
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentSession,
+            IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.documentItemSession = documentSession;
             this.users = users;
@@ -73,30 +73,36 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerView Load(InterviewerInputModel input)
         {
-            UserDocument user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
-            var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
-            IQueryable<CompleteQuestionnaireBrowseItem> docs =
-                this.documentItemSession.Query().Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
-            if (input.TemplateId != Guid.Empty)
-            {
-                InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId, docs, input);
-                if (interviewerGroupView.Items.Count > 0)
-                {
-                    items.Items.Add(interviewerGroupView);
-                }
-            }
-            else
-            {
-                IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
-                foreach (InterviewerGroupView interviewerGroupView in
-                    gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
-                        interviewerGroupView => interviewerGroupView.Items.Count > 0))
-                {
-                    items.Items.Add(interviewerGroupView);
-                }
-            }
+            UserDocument user = this.users.Query(_ => _.FirstOrDefault(u => u.PublicKey == input.InterviwerId));
 
-            return items;
+            return this.documentItemSession.Query(queryable =>
+            {
+                var items = new InterviewerView(user.UserName, user.PublicKey, new List<InterviewerGroupView>());
+
+                IQueryable<CompleteQuestionnaireBrowseItem> docs =
+                    queryable.Where(q => q.Responsible != null && q.Responsible.Id == user.PublicKey);
+
+                if (input.TemplateId.HasValue)
+                {
+                    InterviewerGroupView interviewerGroupView = this.SelectItems(input.TemplateId.Value, docs, input);
+                    if (interviewerGroupView.Items.Count > 0)
+                    {
+                        items.Items.Add(interviewerGroupView);
+                    }
+                }
+                else
+                {
+                    IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> gr = docs.GroupBy(t => t.TemplateId);
+                    foreach (InterviewerGroupView interviewerGroupView in
+                        gr.ToList().Select(template => this.SelectItems(template.Key, docs, input)).Where(
+                            interviewerGroupView => interviewerGroupView.Items.Count > 0))
+                    {
+                        items.Items.Add(interviewerGroupView);
+                    }
+                }
+
+                return items;
+            });
         }
 
         #endregion

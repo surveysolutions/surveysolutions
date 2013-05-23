@@ -15,7 +15,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// TODO: Update summary.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionnaireUpdated")]
     public class QuestionnaireUpdated
     {

@@ -130,7 +130,7 @@ namespace Core.Supervisor.Denormalizer
         {
             this.HandleStatusChanges(evnt.Payload.PreviousStatus, evnt.Payload.Status, evnt.EventTimeStamp, evnt.Payload.CompletedQuestionnaireId);
             
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
             if (doc == null)
             {
                 return;
@@ -141,7 +141,7 @@ namespace Core.Supervisor.Denormalizer
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
             Guid key = this.GetKey(doc.TemplateId, evnt.Payload.Status.PublicId, userId);
-            SupervisorStatisticsItem item = this.statistics.GetByGuid(key)
+            SupervisorStatisticsItem item = this.statistics.GetById(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
@@ -163,7 +163,7 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
-            CompleteQuestionnaireBrowseItem doc = this.surveys.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+            CompleteQuestionnaireBrowseItem doc = this.surveys.GetById(evnt.Payload.CompletedQuestionnaireId);
             if (doc == null)
             {
                 return;
@@ -172,7 +172,7 @@ namespace Core.Supervisor.Denormalizer
             this.RemoveOldStatistics(doc.CompleteQuestionnaireId);
 
             Guid key = this.GetKey(doc.TemplateId, doc.Status.PublicId, evnt.Payload.Responsible.Id);
-            SupervisorStatisticsItem item = this.statistics.GetByGuid(key)
+            SupervisorStatisticsItem item = this.statistics.GetById(key)
                                             ??
                                             new SupervisorStatisticsItem
                                                 {
@@ -208,7 +208,7 @@ namespace Core.Supervisor.Denormalizer
         protected void HandleStatusChanges(SurveyStatus prev, SurveyStatus next, DateTime date, Guid cqId)
         {
             var key = this.GetDateKey(date);
-            var historyItem = this.history.GetByGuid(key) ?? new HistoryStatusStatistics(date);
+            var historyItem = this.history.GetById(key) ?? new HistoryStatusStatistics(date);
 
             if (prev != SurveyStatus.Unknown && prev.PublicId != Guid.Empty)
             {
@@ -237,7 +237,7 @@ namespace Core.Supervisor.Denormalizer
                 document.Status.PublicId, 
                 document.Responsible == null ? Guid.Empty : document.Responsible.Id);
 
-            SupervisorStatisticsItem item = this.statistics.GetByGuid(key) ?? new SupervisorStatisticsItem(document);
+            SupervisorStatisticsItem item = this.statistics.GetById(key) ?? new SupervisorStatisticsItem(document);
             item.Surveys.Add(document.PublicKey);
             this.statistics.Store(item, key);
             this.keysHash.Store(new StatisticsItemKeysHash { StorageKey = key }, document.PublicKey);
@@ -287,14 +287,14 @@ namespace Core.Supervisor.Denormalizer
         /// </param>
         private void RemoveOldStatistics(Guid completedQuestionnaireId)
         {
-            var oldKey = this.keysHash.GetByGuid(completedQuestionnaireId);
+            var oldKey = this.keysHash.GetById(completedQuestionnaireId);
 
             if (oldKey == null)
             {
                 return;
             }
 
-            var old = this.statistics.GetByGuid(oldKey.StorageKey);
+            var old = this.statistics.GetById(oldKey.StorageKey);
             old.Surveys.Remove(completedQuestionnaireId);
             this.statistics.Store(old, oldKey.StorageKey);
         }

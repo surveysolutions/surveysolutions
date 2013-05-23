@@ -39,7 +39,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// </param>
         public InterviewersItem(Guid id, string name, string email, DateTime creationDate, bool isLocked)
         {
-            this.Id = id;
+            this.QuestionnaireId = id;
             this.Login = name;
             this.Email = email;
             this.CreationDate = creationDate;
@@ -73,7 +73,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// Gets the id.
         /// </summary>
-        public Guid Id { get; private set; }
+        public Guid QuestionnaireId { get; private set; }
 
         /// <summary>
         /// Gets the login.

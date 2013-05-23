@@ -6,6 +6,9 @@
 //   The date time complete question.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using System.Threading;
+
 namespace Main.Core.Entities.SubEntities.Complete.Question
 {
     using System;
@@ -145,7 +148,9 @@ namespace Main.Core.Entities.SubEntities.Complete.Question
         /// </param>
         public override void SetAnswer(List<Guid> answer, string answerValue)
         {
-            this.Answer = Convert.ToDateTime(answerValue, CultureInfo.InvariantCulture);
+            DateTime date;
+            if (DateTime.TryParse(answerValue, out date))
+                this.Answer = date;
         }
 
         #endregion

@@ -25,7 +25,7 @@ namespace Main.Core.View.StatusReport
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace Main.Core.View.StatusReport
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public CQStatusReportFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+        public CQStatusReportFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
@@ -68,8 +68,8 @@ namespace Main.Core.View.StatusReport
 
             // statuses.FirstOrDefault(s => s.PublicId == input.StatusId);}
             List<CompleteQuestionnaireBrowseItem> query =
-                this.documentItemSession.Query().Where(
-                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList();
+                this.documentItemSession.Query(_ => _.Where(
+                    x => (x.TemplateId == input.QuestionnaireId) && ((input.StatusId.HasValue && x.Status.PublicId == input.StatusId)||!input.StatusId.HasValue)).ToList());
 
             return new CQStatusReportView(query);
         }

@@ -20,45 +20,16 @@ namespace Web.Supervisor.Models
     /// </summary>
     public class GridDataRequestModel
     {
-        /// <summary>
-        /// Gets or sets Id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
-        /// Gets or sets UserId.
-        /// </summary>
-        public Guid UserId { get; set; }
-
-        /// <summary>
-        /// Gets or sets SortOrder.
-        /// </summary>
+        
         public List<OrderRequestItem> SortOrder { get; set; }
 
-        /// <summary>
-        /// Gets or sets Pager.
-        /// </summary>
         public PagerData Pager { get; set; }
 
-        /// <summary>
-        /// Gets or sets SupervisorId.
-        /// </summary>
-        public Guid SupervisorId { get; set; }
+        public Guid? TemplateId { get; set; }
+        
+        public Guid? StatusId { get; set; }
 
-        /// <summary>
-        /// Gets or sets SupervisorName.
-        /// </summary>
-        public string SupervisorName { get; set; }
-
-        /// <summary>
-        /// Gets or sets TemplateId.
-        /// </summary>
-        public Guid TemplateId { get; set; }
-
-        /// <summary>
-        /// Gets or sets StatusId.
-        /// </summary>
-        public Guid StatusId { get; set; }
+        public Guid? InterviwerId { get; set; }
     }
 
     /// <summary>

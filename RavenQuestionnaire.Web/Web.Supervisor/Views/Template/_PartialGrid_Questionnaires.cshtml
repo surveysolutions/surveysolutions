@@ -1,0 +1,17 @@
+﻿@model Web.Supervisor.DesignerPublicService.QuestionnaireListView
+
+@if (Model.Items != null)
+{
+    foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                <a class="btn btn-primary" href="@Url.Action("Get", "Template", new { id = item.Id })">
+                    <i class="icon icon-info-sign icon-white"></i>Import</a>
+            </td>
+        </tr>
+    }
+}

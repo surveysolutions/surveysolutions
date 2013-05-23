@@ -59,7 +59,7 @@ namespace Core.CAPI.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<AggregateRootEventStreamPushed> evnt)
         {
-            SyncProcessDocument process = this.denormalizer.GetByGuid(evnt.EventSourceId);
+            SyncProcessDocument process = this.denormalizer.GetById(evnt.EventSourceId);
             if (process == null)
             {
                 return;
@@ -76,7 +76,7 @@ namespace Core.CAPI.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<AggregateRootStatusChanged> evnt)
         {
-            SyncProcessDocument process = this.denormalizer.GetByGuid(evnt.EventSourceId);
+            SyncProcessDocument process = this.denormalizer.GetById(evnt.EventSourceId);
             if (process == null)
             {
                 return;
@@ -113,7 +113,7 @@ namespace Core.CAPI.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ProcessEnded> evnt)
         {
-            SyncProcessDocument process = this.denormalizer.GetByGuid(evnt.EventSourceId);
+            SyncProcessDocument process = this.denormalizer.GetById(evnt.EventSourceId);
             if (process == null)
             {
                 return;

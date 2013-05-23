@@ -23,7 +23,7 @@ namespace Main.Core.View.Device
         /// <summary>
         /// Devices field devices
         /// </summary>
-        private readonly IDenormalizerStorage<SyncDeviceRegisterDocument> devices;
+        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices;
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace Main.Core.View.Device
         /// <param name="devices">
         /// The devices.
         /// </param>
-        public DeviceViewFactory(IDenormalizerStorage<SyncDeviceRegisterDocument> devices)
+        public DeviceViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> devices)
         {
             this.devices = devices;
         }
@@ -56,17 +56,21 @@ namespace Main.Core.View.Device
         public DeviceView Load(DeviceViewInputModel input)
         {
             int count =
-                this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(
-                    d => d.Registrator == input.RegistratorId).Count();
+                this.devices.Query(_ => _.Where(d => d.Registrator != Guid.Empty).Where(
+                    d => d.Registrator == input.RegistratorId).Count());
 
             if (count == 0)
             {
                 return new DeviceView(0, 0, 0, new List<RegisterData>(), string.Empty);
             }
 
-            IQueryable<SyncDeviceRegisterDocument> query = this.devices.Query().Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
-            var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
-            var items = page.ToList();
+            var items = this.devices.Query(queryableDevices =>
+            {
+                IQueryable<SyncDeviceRegisterDocument> query = queryableDevices.Where(d => d.Registrator != Guid.Empty).Where(d => d.Registrator == input.RegistratorId);
+                var page = query.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+                return page.ToList();
+            });
+
             var devices = items.Select(item => new RegisterData() { Description = item.Description, RegisterDate = item.CreationDate, RegistrationId = item.PublicKey, Registrator = item.Registrator, SecretKey = item.SecretKey }).ToList();
             return new DeviceView(input.Page, input.PageSize, count, devices, input.Order);
         }

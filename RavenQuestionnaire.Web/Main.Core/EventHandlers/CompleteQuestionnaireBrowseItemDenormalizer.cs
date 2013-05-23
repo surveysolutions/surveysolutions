@@ -96,7 +96,7 @@ namespace Main.Core.EventHandlers
         {
             if (evnt.Payload.Featured)
             {
-                CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetByGuid(evnt.EventSourceId);
+                CompleteQuestionnaireBrowseItem item = this.documentItemStore.GetById(evnt.EventSourceId);
                 if (item == null)
                 {
                     return;
@@ -136,7 +136,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireStatusChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
-                this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             item.Status = evnt.Payload.Status;
             item.LastEntryDate = evnt.EventTimeStamp;
@@ -152,7 +152,7 @@ namespace Main.Core.EventHandlers
         public void Handle(IPublishedEvent<QuestionnaireAssignmentChanged> evnt)
         {
             CompleteQuestionnaireBrowseItem item =
-                this.documentItemStore.GetByGuid(evnt.Payload.CompletedQuestionnaireId);
+                this.documentItemStore.GetById(evnt.Payload.CompletedQuestionnaireId);
 
             item.Responsible = evnt.Payload.Responsible;
             item.LastEntryDate = evnt.EventTimeStamp;

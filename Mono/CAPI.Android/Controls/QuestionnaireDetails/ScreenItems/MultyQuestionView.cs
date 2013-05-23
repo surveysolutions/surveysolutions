@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Views;
 using Android.Widget;
@@ -37,38 +38,33 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
         protected override void Initialize()
         {
             base.Initialize();
-            this.Orientation = Orientation.Horizontal;
+            this.Orientation = Orientation.Vertical;
 
             typedMode = Model as SelectebleQuestionViewModel;
-            var rl = new RelativeLayout(this.Context);
-            rl.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
-                                                             ViewGroup.LayoutParams.FillParent);
+       /*   */
            
-            int i = 1;
+         //   int i = 0;
+            var optionsWrapper = new LinearLayout(this.Context);
+            optionsWrapper.Orientation = Orientation.Vertical;
+            optionsWrapper.LayoutParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
+                                                             ViewGroup.LayoutParams.FillParent);
+      //      var checkboxes = new CheckBox[typedMode.Answers.Count()];
             foreach (var answer in typedMode.Answers)
             {
                 CheckBox cb = new CheckBox(this.Context);
-                cb.Id = i;
-                var layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                                                                   ViewGroup.LayoutParams.WrapContent);
-                if (i>1)
-                {
-                    layoutParams.AddRule(LayoutRules.AlignTop, i-1);
-                    layoutParams.AddRule(LayoutRules.RightOf, i-1);
-                }
-                else
-                    layoutParams.AddRule(LayoutRules.AlignLeft);
-                cb.LayoutParameters = layoutParams;
                 cb.Text = answer.Title;
                 cb.Checked = answer.Selected;
                 cb.CheckedChange += cb_CheckedChange;
                 cb.SetTag(Resource.Id.AnswerId, answer.PublicKey.ToString());
 
                 cb.AttachImage(answer);
-                rl.AddView(cb);
-                i++;
+                optionsWrapper.AddView(cb);
+            /*    checkboxes[i] = cb;
+                i++;*/
             }
-            llWrapper.AddView(rl);
+          /* 
+            PopulateComboboxes(optionsWrapper, checkboxes, this.Context);*/
+            llWrapper.AddView(optionsWrapper);
         }
 
         private SelectebleQuestionViewModel typedMode;
@@ -91,6 +87,5 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             SaveAnswer();
 
         }
-
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cirrious.MvvmCross.ViewModels;
+using Java.IO;
 
 namespace CAPI.Android.Core.Model.ViewModel.Dashboard
 {
@@ -19,10 +20,8 @@ namespace CAPI.Android.Core.Model.ViewModel.Dashboard
         }
 
         public Guid OwnerKey { get; private set; }
+
         public IList<DashboardSurveyItem> Surveys { get; private set; }
-        public DashboardSurveyItem GetSurvey(Guid key)
-        {
-            return Surveys.FirstOrDefault(s => s.PublicKey == key);
-        }
+
     }
 }

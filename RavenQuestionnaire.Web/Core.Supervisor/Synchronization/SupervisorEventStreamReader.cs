@@ -37,15 +37,8 @@ namespace Core.Supervisor.Synchronization
         /// </summary>
         private readonly IDenormalizer denormalizer;
 
-        /// <summary>
-        /// myEventStore object
-        /// </summary>
-        private readonly IEventStore myEventStore;
-
-        /// <summary>
-        /// The unit of work factory.
-        /// </summary>
-        private readonly IUnitOfWorkFactory unitOfWorkFactory;
+        private readonly Guid supervisorId;
+        private readonly bool isApprovedSended;
 
         //private List<Guid> ARKeys; 
 
@@ -54,26 +47,13 @@ namespace Core.Supervisor.Synchronization
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SupervisorEventStreamReader"/> class.
-        /// </summary>
-        /// <param name="denormalizer">
-        /// The denormalizer.
-        /// </param>
-        /// <exception cref="Exception">
-        /// added new exception
-        /// </exception>
-        public SupervisorEventStreamReader(IDenormalizer denormalizer)
+       
+        public SupervisorEventStreamReader(IDenormalizer denormalizer, Guid supervisorId, bool isApprovedSended)
+            : base(denormalizer)
         {
             this.denormalizer = denormalizer;
-            this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
-            this.unitOfWorkFactory = NcqrsEnvironment.Get<IUnitOfWorkFactory>();
-            //this.ARKeys = new List<Guid>();
-
-            if (this.myEventStore == null)
-            {
-                throw new Exception("IEventStore is not correct.");
-            }
+            this.supervisorId = supervisorId;
+            this.isApprovedSended = isApprovedSended;
         }
 
         #endregion
@@ -100,7 +80,7 @@ namespace Core.Supervisor.Synchronization
 
             //this.AddQuestionnairesTemplates(retval);
 
-            List<Guid> fileNames = GetFiles(questionnaires);
+            List<Guid> fileNames = GetFiles();
 
             this.AddFiles(retval, fileNames);
             
@@ -109,22 +89,26 @@ namespace Core.Supervisor.Synchronization
             return retval.OrderBy(x => x.EventSequence).ToList(); // not good but allows to push correctly
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
-            var result = new List<Tuple<string, Guid>>();
+            return GetAllARIdsInternal(null);
+        }
+
+        public  IEnumerable<SyncItemsMeta> GetAllARIdsInternal(string userName)
+        {
+            var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new Tuple<string, Guid>("u", i)));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", GetLastEventFromStream(i))));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new Tuple<string, Guid>("q", i)));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", GetLastEventFromStream(i))));
 
-            List<Guid> files = GetFiles(questionnaires);
-            result.AddRange(files.Select(i => new Tuple<string, Guid>("f", i)));
+            List<Guid> files = GetFiles();
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", GetLastEventFromStream(i))));
 
             return result;
         }
-
         public override IEnumerable<AggregateRootEvent> GetARById(Guid ARId, string ARType, Guid? startFrom)
         {
             switch (ARType)
@@ -144,41 +128,36 @@ namespace Core.Supervisor.Synchronization
             //return null;
         }
 
-        private List<Guid> GetFiles(List<Guid> questionnaires)
+        private List<Guid> GetFiles()
         {
-            #warning select only files used in questionnaires
-            
-            IQueryable<FileDescription> model = this.denormalizer.Query<FileDescription>();
-            
-            return model.Select(m => Guid.Parse(m.FileName)).ToList();
+            return this.denormalizer.Query<FileDescription, List<Guid>>(_ => _
+                .Select(m => Guid.Parse(m.FileName)).ToList());
         }
 
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
-            IQueryable<CompleteQuestionnaireBrowseItem> model = 
-                this.denormalizer.Query<CompleteQuestionnaireBrowseItem>()
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id));
-            
-            return model.Select(i => i.CompleteQuestionnaireId).ToList();
+            return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
+                                
+                .Where(q => IsQuestionnarieRequiresSync(users, q))
+                .Select(i => i.CompleteQuestionnaireId)
+                .ToList());
+        }
+
+        private bool IsQuestionnarieRequiresSync(List<Guid> users, CompleteQuestionnaireBrowseItem q)
+        {
+            if (q.Status == SurveyStatus.Approve && !isApprovedSended)
+                return false;
+            return SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id);
         }
 
         private List<Guid> GetUsers()
         {
-            Guid? supervisorKey = this.GetSupervisor();
+            return
+                 this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                     .Select(u => u.PublicKey)
+                     .ToList());
 
-            IQueryable<UserDocument> model;
-
-            if (supervisorKey.HasValue)
-            {
-                model = this.denormalizer.Query<UserDocument>().Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorKey.Value);
-            }
-            else
-            {
-                model = this.denormalizer.Query<UserDocument>();
-            }
-
-            return model.Select(u => u.PublicKey).ToList();
-            
         }
 
         #endregion
@@ -205,28 +184,6 @@ namespace Core.Supervisor.Synchronization
                retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
             }
         }
-
-       /* /// <summary>
-        /// The add complete questionnaires init state.
-        /// </summary>
-        /// <param name="retval">
-        /// The retval.
-        /// </param>
-        protected void AddCompleteQuestionnairesInitState(List<AggregateRootEvent> retval)
-        {
-            IQueryable<CompleteQuestionnaireBrowseItem> model = this.denormalizer.Query<CompleteQuestionnaireBrowseItem>();
-
-            foreach (CompleteQuestionnaireBrowseItem item in model)
-            {
-                if (!SurveyStatus.IsStatusAllowDownSupervisorSync(item.Status))
-                {
-                    continue;
-                }
-
-                 retval.AddRange(
-                                this.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
-            }
-        }*/
         
         /// <summary>
         /// Responsible for added questionnaire templates
@@ -236,12 +193,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddQuestionnairesTemplates(List<AggregateRootEvent> retval)
         {
-            IQueryable<QuestionnaireBrowseItem> model = this.denormalizer.Query<QuestionnaireBrowseItem>();
+            var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
+                .ToList());
 
-            foreach (QuestionnaireBrowseItem item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
-            }
+            retval.AddRange(model);
         }
 
         /// <summary>
@@ -252,11 +208,11 @@ namespace Core.Supervisor.Synchronization
         /// </param>
         protected void AddRegisterDevice(List<AggregateRootEvent> retval)
         {
-            IQueryable<SyncDeviceRegisterDocument> model = this.denormalizer.Query<SyncDeviceRegisterDocument>();
-            foreach (SyncDeviceRegisterDocument item in model)
-            {
-               retval.AddRange(this.GetEventStreamById<DeviceAR>(item.PublicKey));
-            }
+            var model = this.denormalizer.Query<SyncDeviceRegisterDocument, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<DeviceAR>(item.PublicKey))
+                .ToList());
+
+            retval.AddRange(model);
         }
 
         /// <summary>
@@ -276,23 +232,6 @@ namespace Core.Supervisor.Synchronization
             }
         }
 
-        /// <summary>
-        /// The get supervisor.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="Guid?"/>.
-        /// </returns>
-        protected Guid? GetSupervisor()
-        {
-            UserDocument supervisor = this.denormalizer.Query<UserDocument>().FirstOrDefault(u => u.Roles.Contains(UserRoles.Supervisor));
-            
-            if(supervisor != null)
-            {
-                return supervisor.PublicKey;
-            }
-
-            return null;
-        }
 
         #endregion
     }

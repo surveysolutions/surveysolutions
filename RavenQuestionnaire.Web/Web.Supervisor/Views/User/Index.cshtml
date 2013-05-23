@@ -8,7 +8,7 @@
                     $.ajax({
                             type: "POST",
                             url: "@Url.Action("_TableData", "User")",
-                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }, SupervisorId:'@Model.SupervisorId', SupervisorName: '@Model.SupervisorName' }),
+                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.Page , PageSize: @Model.PageSize }, SupervisorId:'@Model.ViewerId' }),
                             contentType: 'application/json, charset=utf-8',
                             statusCode: {
                                 200: function(response) {
@@ -32,7 +32,7 @@
         </tr>
     </thead>
     <tbody>
-        @Html.Partial("_Table", Model)
+        @Html.Partial("_PartialUsersGridTemplate", Model)
     </tbody>
 </table>
 <div class="pagination">

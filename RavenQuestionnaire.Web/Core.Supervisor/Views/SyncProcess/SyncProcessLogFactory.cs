@@ -9,6 +9,7 @@
 
 namespace Core.Supervisor.Views.SyncProcess
 {
+    using System.Collections.Generic;
     using System.Linq;
 
     using Main.Core.Documents;
@@ -25,7 +26,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <summary>
         /// The docs.
         /// </summary>
-        private readonly IDenormalizerStorage<SyncProcessStatisticsDocument> docs;
+        private readonly IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs;
 
         #endregion
 
@@ -37,7 +38,7 @@ namespace Core.Supervisor.Views.SyncProcess
         /// <param name="docs">
         /// The docs.
         /// </param>
-        public SyncProcessLogFactory(IDenormalizerStorage<SyncProcessStatisticsDocument> docs)
+        public SyncProcessLogFactory(IQueryableDenormalizerStorage<SyncProcessStatisticsDocument> docs)
         {
             this.docs = docs;
         }
@@ -56,8 +57,8 @@ namespace Core.Supervisor.Views.SyncProcess
         /// </returns>
         public SyncProcessLogView Load(SyncProcessLogInputModel input)
         {
-            IQueryable<SyncProcessStatisticsDocument> processes =
-                this.docs.Query().OrderByDescending(p => p.CreationDate);
+            IEnumerable<SyncProcessStatisticsDocument> processes =
+                this.docs.Query(_ => _.OrderByDescending(p => p.CreationDate).ToList());
 
             return new SyncProcessLogView(processes);
         }

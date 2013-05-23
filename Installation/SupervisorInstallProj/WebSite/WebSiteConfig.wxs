@@ -40,6 +40,8 @@
 										  AnonymousAccess="yes" 
 										  WindowsAuthentication="no"
 										  DefaultDocuments="Default.aspx" />
+
+          <iis:MimeMap Id="MimeMapAPK" Extension=".apk" Type="application/vnd.android.package-archive" />
 				</iis:WebSite>
 			</Component>
 

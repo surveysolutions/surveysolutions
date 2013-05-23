@@ -7,7 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Main.DenormalizerStorage;
 using Ncqrs.Commanding.ServiceModel;
+using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace Main.Core.Events
@@ -30,6 +32,7 @@ namespace Main.Core.Events
     {
         #region Fields
 
+        private readonly IDenormalizer denormalizer;
         /// <summary>
         /// myEventStore object
         /// </summary>
@@ -45,14 +48,9 @@ namespace Main.Core.Events
 
         #region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractSnapshotableEventStreamReader"/> class.
-        /// </summary>
-        /// <exception cref="Exception">
-        /// exception not found event store
-        /// </exception>
-        protected AbstractSnapshotableEventStreamReader()
+        protected AbstractSnapshotableEventStreamReader(IDenormalizer denormalizer)
         {
+            this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
             if (this.myEventStore == null)
                 throw new Exception("IEventStore is not correct.");
@@ -60,6 +58,16 @@ namespace Main.Core.Events
         }
 
         #endregion
+
+        protected Guid? GetLastEventFromStream(Guid aggregateRootId)
+        {
+            var stremableEventStore = myEventStore as IStreamableEventStore;
+            if (stremableEventStore != null)
+            {
+                return stremableEventStore.GetLastEvent(aggregateRootId);
+            }
+            return null;
+        }
 
         protected List<AggregateRootEvent> ReturnAllEventStream(Guid aggregateRootId)
         {
@@ -104,59 +112,13 @@ namespace Main.Core.Events
                 return ReturnAllEventStream(aggregateRootId);
             }
 
-            /*    if (events.Last().Payload is SnapshootLoaded)
-                {
-                    return new List<AggregateRootEvent>()
-                               {
-                                   new AggregateRootEvent(events.Last())
-                               };
-                }*/
             this.commandInvoker.Execute(new CreateSnapshotForAR(aggregateRootId, arType));
-            var snapshotLoaded = snapshotableEventStore.GetLatestSnapshoot(aggregateRootId);
-              return new List<AggregateRootEvent>()
+            var snapshotLoaded = denormalizer.GetByGuid<CommittedEvent>(aggregateRootId);
+
+            return new List<AggregateRootEvent>()
                 {
                     new AggregateRootEvent(snapshotLoaded)
                 };
-             
-           /* T aggregateRoot;
-            using (var unitOfWork = this.unitOfWorkFactory.CreateUnitOfWork(Guid.NewGuid()))
-            {
-                if (unitOfWork == null)
-                {
-                    return ReturnAllEventStream(aggregateRootId);
-                }
-
-                aggregateRoot = unitOfWork.GetById(arType, aggregateRootId, null) as T;
-                if (aggregateRoot == null)
-                {
-                    return ReturnAllEventStream(aggregateRootId);
-                }
-            }*/
-
-            /*   var snapshoot = arType.GetMethod("CreateSnapshot").Invoke(aggregateRoot, new object[0]);
-               var eventSnapshoot = new SnapshootLoaded() { Template = new Snapshot(aggregateRootId, 1, snapshoot) };
-               Guid commitId = Guid.NewGuid();
-               Guid eventId = Guid.NewGuid();
-               var uncommitedStream = new UncommittedEventStream(commitId);
-               var dateOfEvent = NcqrsEnvironment.Get<IClock>().UtcNow();
-
-               uncommitedStream.Append(
-                   new UncommittedEvent(
-                       eventId,
-                       aggregateRootId,
-                       aggregateRoot.Version + 1,
-                       aggregateRoot.InitialVersion,
-                       dateOfEvent,
-                       eventSnapshoot,
-                       events.Last().GetType().Assembly.GetName().Version));
-
-               this.myEventStore.Store(uncommitedStream);*/
-           /* return new List<AggregateRootEvent>()
-                {
-                    new AggregateRootEvent(
-                        arType.GetMethod("GetSnapshotedStreem").Invoke(aggregateRoot, new object[0]) as CommittedEvent)
-                };*/
-
         }
 
         #endregion
