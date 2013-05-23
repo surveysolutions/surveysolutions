@@ -1,59 +1,199 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Main.Core.Documents;
-using Ncqrs;
-using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
-using Questionnaire.Core.Web.Helpers;
-using WB.Core.Questionnaire.ImportService.Commands;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="TemplateController.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using Main.Core.Commands.Questionnaire;
 
 namespace Web.Supervisor.Controllers
 {
-    public class TemplateController : Controller
-    {
-        /// <summary>
-        /// Global info object
-        /// </summary>
-        private readonly IGlobalInfoProvider globalInfo;
+    using System;
+    using System.Net;
+    using System.ServiceModel.Security;
+    using System.Web.Mvc;
 
-        public TemplateController(IGlobalInfoProvider globalInfo)
+    using Main.Core.Documents;
+    using Main.Core.Utility;
+    
+    using Ncqrs.Commanding.ServiceModel;
+
+    using Questionnaire.Core.Web.Helpers;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Compression;
+
+    using Web.Supervisor.DesignerPublicService;
+    using Web.Supervisor.Models;
+
+    /// <summary>
+    /// The template controller.
+    /// </summary>
+    [Authorize(Roles = "Headquarter")]
+    public class TemplateController : BaseController
+    {
+        private readonly IStringCompressor zipUtils;
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TemplateController"/> class.
+        /// </summary>
+        /// <param name="commandService">
+        /// The command service.
+        /// </param>
+        /// <param name="globalInfo">
+        /// The global info.
+        /// </param>
+        /// <param name="logger">
+        /// The logger.
+        /// </param>
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
+            : base(null, commandService, globalInfo, logger)
         {
-            this.globalInfo = globalInfo;
+            this.zipUtils = zipUtils;
+
+            ViewBag.ActivePage = MenuItem.Administration;
+
+            #warning Roma: need to be deleted when we getting valid ssl certificate for new designer
+            ServicePointManager.ServerCertificateValidationCallback =
+                    (self, certificate, chain, sslPolicyErrors) => true;
         }
 
-        #region Import from new designer
-        [Authorize]
-        [AcceptVerbs(HttpVerbs.Get)]
+        #endregion
+
+        private IPublicService DesignerService
+        {
+            get
+            {
+                return DesignerServiceClient;
+            }
+        }
+
+        private PublicServiceClient DesignerServiceClient
+        {
+            get
+            {
+                return (PublicServiceClient)this.Session[GlobalInfo.GetCurrentUser().Name];
+            }
+
+            set
+            {
+                this.Session[GlobalInfo.GetCurrentUser().Name] = value;
+            }
+        }
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
         public ActionResult Import()
         {
-            return this.View("NewViewTestUploadFile");
-        }
-        [Authorize]
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Import(HttpPostedFileBase uploadFile)
-        {
-            List<string> zipData = ZipHelper.ZipFileReader(this.Request, uploadFile);
-            if (zipData == null || zipData.Count == 0)
+            if (this.DesignerServiceClient == null)
             {
-                return null;
+                return this.RedirectToAction("LoginToDesigner");
             }
-            var document = DesserializeString<QuestionnaireDocument>(zipData[0]);
-            NcqrsEnvironment.Get<ICommandService>()
-                            .Execute(new ImportQuestionnaireCommand(globalInfo.GetCurrentUser().Id, document));
 
-
-            return this.RedirectToAction("Index", "Survey");
+            return
+                this.View(
+                    DesignerService.GetQuestionnaireList(
+                        new QuestionnaireListRequest(
+                            Filter: string.Empty,
+                            PageIndex: 1,
+                            PageSize: GlobalHelper.GridPageItemsCount,
+                            SortOrder: string.Empty)));
         }
 
-        protected T DesserializeString<T>(String data)
+        public ActionResult LoginToDesigner()
         {
-            var settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects };
-
-            return JsonConvert.DeserializeObject<T>(data, settings);
+            this.Attention("Before log in, please make sure that the 'Designer' website is available and it's not in the maintenance mode");
+            return this.View();
         }
+
+        [HttpPost]
+        public ActionResult LoginToDesigner(LogOnModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var service = new PublicServiceClient();
+                service.ClientCredentials.UserName.UserName = model.UserName;
+                service.ClientCredentials.UserName.Password = model.Password;
+
+                try
+                {
+                    service.Dummy();
+
+                    DesignerServiceClient = service;
+
+                    return RedirectToAction("Import");
+                }
+                catch (MessageSecurityException)
+                {
+                    this.Error("Incorrect UserName/Password");
+                }
+                catch (Exception ex)
+                {
+                    this.Error("Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>");
+                    Logger.Error(ex);
+                }
+            }
+
+            return this.View(model);
+        }
+
+
+        /// <summary>
+        /// Gets table data for some view
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        public ActionResult List(GridDataRequestModel data)
+        {
+            var list =
+                DesignerService.GetQuestionnaireList(
+                    new QuestionnaireListRequest(
+                        Filter: string.Empty,
+                        PageIndex: data.Pager.Page,
+                        PageSize: data.Pager.PageSize,
+                        SortOrder: StringUtil.GetOrderRequestString(data.SortOrder)));
+
+            return this.PartialView("_PartialGrid_Questionnaires", list);
+        }
+
+        public ActionResult Get(Guid id)
+        {
+            QuestionnaireDocument document = null;
+
+            try
+            {
+                var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
+                document = zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
+            }
+            catch (Exception ex)
+            {
+                this.Error("Error when downloading questionnaire from designer. Please try again");
+                Logger.Error(ex);
+            }
+
+            if (document == null)
+            {
+                return this.RedirectToAction("Import");
+            }
+            else
+            {
+                this.CommandService.Execute(
+                    new ImportQuestionnaireCommand(this.GlobalInfo.GetCurrentUser().Id, document));
+
+                return this.RedirectToAction("Questionnaires", "Dashboard");    
+            }
+        }
+
         #endregion
     }
 }

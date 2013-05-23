@@ -39,7 +39,8 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<GroupDeleted>,
                                              IEventHandler<GroupUpdated>,
                                              IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>
+                                             IEventHandler<QuestionnaireDeleted>,
+        IEventHandler<TemplateImported>
     {
 #warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
 #if MONODROID
@@ -333,6 +334,12 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
     }
 }

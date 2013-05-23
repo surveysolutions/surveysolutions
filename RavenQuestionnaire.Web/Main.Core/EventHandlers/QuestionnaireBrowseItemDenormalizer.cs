@@ -23,6 +23,7 @@ namespace Main.Core.EventHandlers
     /// </summary>
     public class QuestionnaireBrowseItemDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                                        IEventHandler<SnapshootLoaded>,
+        IEventHandler<TemplateImported>,
                                                        IEventHandler<QuestionnaireUpdated>,
         IEventHandler<QuestionnaireDeleted>
     {
@@ -103,6 +104,20 @@ namespace Main.Core.EventHandlers
             {
                 browseItem.IsDeleted = true;
             }
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            var browseItem = new QuestionnaireBrowseItem(
+                document.PublicKey,
+                document.Title,
+                document.CreationDate,
+                document.LastEntryDate,
+                document.CreatedBy);
+
+            //}
+            this.documentStorage.Store(browseItem, document.PublicKey);
         }
     }
 }
