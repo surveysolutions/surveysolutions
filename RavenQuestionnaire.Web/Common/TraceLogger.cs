@@ -3,9 +3,9 @@ using System.Diagnostics;
 
 using WB.Common.Core.Logging;
 
-namespace Ncqrs
+namespace WB.Common
 {
-    internal class TraceLogger : ILog
+    public class TraceLogger : ILog
     {
         private TraceSwitch _switch = new TraceSwitch("ncqrs", "Ncqrs Framework trace switch");
 

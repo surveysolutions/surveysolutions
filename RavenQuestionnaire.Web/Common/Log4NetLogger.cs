@@ -2,9 +2,9 @@
 
 using WB.Common.Core.Logging;
 
-namespace Ncqrs
+namespace WB.Common
 {
-    internal class Log4NetLogger : ILog
+    public class Log4NetLogger : ILog
     {
         private readonly log4net.ILog _log;
 

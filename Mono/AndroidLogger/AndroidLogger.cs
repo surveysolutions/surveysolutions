@@ -16,7 +16,7 @@ namespace WB.Common
 
 	public class AndroidLogger : ILog
 	{
-		private const string Tag = "NCQRS";
+		private const string Tag = "Android.WBCapi";
 
 		public AndroidLogger()
 		{

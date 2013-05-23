@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Common;
 using WB.Common.Core.Logging;
 
 
-namespace Ncqrs
+namespace WB.Common
 {
 	public static class LogManager
 	{

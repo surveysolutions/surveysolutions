@@ -242,6 +242,10 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>

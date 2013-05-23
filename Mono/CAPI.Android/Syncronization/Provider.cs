@@ -10,6 +10,7 @@
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
+using WB.Common;
 
 namespace AndroidMain.Synchronization
 {
@@ -190,7 +191,12 @@ namespace AndroidMain.Synchronization
             
             if (string.IsNullOrWhiteSpace(response.Content) || response.StatusCode != HttpStatusCode.OK)
             {
-                throw new Exception("Target returned unsupported result.");
+                var exception = new Exception("Target returned unsupported result.");
+
+                LogManager.GetLogger(typeof(RemoteServiceEventStreamRestProvider))
+                    .Error("Sync error. Responce status:" + response.StatusCode, exception);
+
+                throw exception;
             }
 
             var syncItemsMetaContainer =
@@ -222,8 +228,12 @@ namespace AndroidMain.Synchronization
                 IRestResponse responseStream = restClient.Execute(itemRequest);
                 if (string.IsNullOrWhiteSpace(responseStream.Content) || responseStream.StatusCode != HttpStatusCode.OK)
                 {
-                    //logging
-                    throw new Exception("Operation finished unsuccessfully. Item was not received.");
+                    var exception = new Exception("Operation finished unsuccessfully. Item was not received.");
+
+                    LogManager.GetLogger(typeof(RemoteServiceEventStreamRestProvider))
+                        .Error("Sync error[item receiving]. Responce status:" + response.StatusCode, exception);
+                    
+                    throw exception;
                 }
 
                 var settings = new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.Objects};
@@ -237,9 +247,16 @@ namespace AndroidMain.Synchronization
                 /////
                 var evnts = JsonConvert.DeserializeObject<AggregateRootEvent[]>(str, settings);
 
-                if (evnts.Length == 0 )
-                    throw new Exception("Operation finished unsuccessfully. Received item is not correct.");
+                if (evnts.Length == 0)
+                {
+                    var exception = new Exception("Operation finished unsuccessfully. Received item is not correct.");
+                    
+                    LogManager.GetLogger(typeof(RemoteServiceEventStreamRestProvider))
+                        .Error("Sync error[container is empty]. Responce status:" + response.StatusCode, exception);
 
+                    throw exception;
+                }
+                
                 foreach (var aggregateRootEvent in evnts)
                 {
                     yield return aggregateRootEvent;
