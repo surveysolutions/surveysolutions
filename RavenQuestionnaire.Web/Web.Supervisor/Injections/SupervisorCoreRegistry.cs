@@ -33,8 +33,8 @@ namespace Web.Supervisor.Injections
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded)
-            : base(repositoryPath, isEmbeded) {}
+        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, string username, string password)
+            : base(repositoryPath, isEmbeded, username, password) {}
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {

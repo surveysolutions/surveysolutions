@@ -72,8 +72,11 @@ namespace Web.Supervisor.App_Start
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
-            
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded));
+
+            string username = WebConfigurationManager.AppSettings["Raven.Username"];
+            string password = WebConfigurationManager.AppSettings["Raven.Password"];
+
+            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, username, password));
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

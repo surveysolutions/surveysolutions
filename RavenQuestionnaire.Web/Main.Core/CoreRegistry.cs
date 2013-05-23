@@ -37,41 +37,22 @@ namespace Main.Core
     /// </summary>
     public abstract class CoreRegistry : NinjectModule
     {
-        #region Fields
-
-        /// <summary>
-        /// The _is embeded.
-        /// </summary>
         private readonly bool isEmbeded;
-
-        /// <summary>
-        /// The _repository path.
-        /// </summary>
         private readonly string repositoryPath;
-
-        #endregion
+        private readonly string username;
+        private readonly string password;
 
         // private bool _isWeb;
-        #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoreRegistry"/> class.
-        /// </summary>
-        /// <param name="repositoryPath">
-        /// The repository path.
-        /// </param>
-        /// <param name="isEmbeded">
-        /// The is embeded.
-        /// </param>
-        public CoreRegistry(string repositoryPath, bool isEmbeded)
+        public CoreRegistry(string repositoryPath, bool isEmbeded, string username = null, string password = null)
         {
             this.repositoryPath = repositoryPath;
             this.isEmbeded = isEmbeded;
+            this.username = username;
+            this.password = password;
 
             // _isWeb = isWeb;
         }
-
-        #endregion
 
         #region Public Methods and Operators
 
@@ -115,7 +96,7 @@ namespace Main.Core
         protected virtual void RegisterAdditionalElements()
         {
 #if !MONODROID
-            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded);
+            var storeProvider = new DocumentStoreProvider(this.repositoryPath, this.isEmbeded, this.username, this.password);
             this.Bind<DocumentStoreProvider>().ToConstant(storeProvider);
             this.Bind<DocumentStore>().ToProvider<DocumentStoreProvider>();
 #endif
