@@ -11,9 +11,9 @@ namespace WB.UI.Designer.Controllers
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
 
+    using WB.Core.SharedKernel.Logger;
     using WB.UI.Designer.Code.Helpers;
     using WB.UI.Designer.Exceptions;
-    using WB.UI.Shared.Log;
 
     [CustomAuthorize]
     public class CommandController : Controller
