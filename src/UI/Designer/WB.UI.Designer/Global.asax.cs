@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Main.Core;
+using WB.Common;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer
@@ -39,7 +40,7 @@ namespace WB.UI.Designer
 
             var ex = Server.GetLastError();
 
-            NLog.LogManager.GetCurrentClassLogger().Error(ex);
+            LogManager.GetLogger(this.GetType()).Error(ex);
 
             var controller = new ErrorController();
             var routeData = new RouteData();
