@@ -170,6 +170,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Spec\Ncqrs.Spec.csproj">
       <Project>{AA90754B-CA47-429E-BDC8-2A83E94179B7}</Project>
       <Name>Ncqrs.Spec</Name>
