@@ -8,7 +8,6 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Domain;
-using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -29,6 +28,7 @@ namespace WB.UI.Designer.Controllers
     using WB.UI.Designer.Models;
     using WB.UI.Designer.Utils;
     using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The questionnaire controller.
@@ -39,9 +39,16 @@ namespace WB.UI.Designer.Controllers
         // GET: /Questionnaires/
         #region Constructors and Destructors
 
-        public QuestionnaireController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper)
-            : base(repository, commandService,userHelper)
+        private readonly IQuestionnaireHelper _questionnaireHelper;
+
+        public QuestionnaireController(
+            IViewRepository repository,
+            ICommandService commandService,
+            IMembershipUserService userHelper,
+            IQuestionnaireHelper questionnaireHelper)
+            : base(repository, commandService, userHelper)
         {
+            this._questionnaireHelper = questionnaireHelper;
         }
 
         #endregion
@@ -62,7 +69,7 @@ namespace WB.UI.Designer.Controllers
             QuestionnaireView model = this.GetQuestionnaire(id);
             return
                 this.View(
-                    new QuestionnaireCloneModel { Title = string.Format("{0}_Copy", model.Title), Id = model.PublicKey });
+                    new QuestionnaireCloneModel { Title = string.Format("Copy of {0}", model.Title), Id = model.PublicKey });
         }
 
         /// <summary>
@@ -89,7 +96,7 @@ namespace WB.UI.Designer.Controllers
                 {
                     this.CommandService.Execute(
                         new CloneQuestionnaireCommand(
-                            Guid.NewGuid(), model.Title, UserHelper.CurrentUserId, sourceModel.Source));
+                            Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId, sourceModel.Source));
                     return this.RedirectToAction("Index");
                 }
                 catch (Exception e)
@@ -135,7 +142,7 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 this.CommandService.Execute(
-                    new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title, UserHelper.CurrentUserId));
+                    new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId));
                 return this.RedirectToActionPermanent("Index");
             }
 
@@ -157,7 +164,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult Delete(Guid id)
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
-            if ((model.CreatedBy != UserHelper.CurrentUserId) && !UserHelper.IsAdmin)
+            if ((model.CreatedBy != UserHelper.WebUser.UserId) && !UserHelper.WebUser.IsAdmin)
             {
                 this.Error("You don't  have permissions to delete this questionnaire.");
             }
@@ -183,7 +190,7 @@ namespace WB.UI.Designer.Controllers
         {
             QuestionnaireView model = this.GetQuestionnaire(id);
 
-            if (model.CreatedBy != UserHelper.CurrentUserId)
+            if (model.CreatedBy != UserHelper.WebUser.UserId)
             {
                 throw new HttpException(403, string.Empty);
             }
@@ -285,13 +292,13 @@ namespace WB.UI.Designer.Controllers
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return QuestionnaireHelper.GetPublicQuestionnaires(
+            return this._questionnaireHelper.GetPublicQuestionnaires(
                 repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.CurrentUserId);
+                userId: UserHelper.WebUser.UserId);
         }
 
         /// <summary>
@@ -341,13 +348,13 @@ namespace WB.UI.Designer.Controllers
         {
             this.SaveRequest(pageIndex: pageIndex, sortBy: ref sortBy, sortOrder: sortOrder, filter: filter);
 
-            return QuestionnaireHelper.GetQuestionnaires(
+            return this._questionnaireHelper.GetQuestionnaires(
                 repository: this.Repository, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
                 filter: filter, 
-                userId: UserHelper.CurrentUserId);
+                userId: UserHelper.WebUser.UserId);
         }
 
         /// <summary>
@@ -383,6 +390,9 @@ namespace WB.UI.Designer.Controllers
 
                 if (element is GroupView)
                 {
+                    var group = (GroupView)element;
+                    group.ConditionExpression =
+                      transformator.ReplaceGuidsWithStataCaptions(group.ConditionExpression, model.PublicKey);
                     foreach (ICompositeView child in element.Children)
                     {
                         elements.Enqueue(child);

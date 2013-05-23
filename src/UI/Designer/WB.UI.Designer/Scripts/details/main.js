@@ -16,6 +16,7 @@
         define('pnotify', [], function () { return root.jQuery.pnotify; });
         define('underscore', [], function () { return root._; });
         define('bootbox', [], function () { return root.bootbox; });
+        define('input', [], function () { return root.input; });
     }
 
     function loadPluginsAndBoot() {
@@ -26,11 +27,19 @@
         });
         requirejs([
                 'ko.bindingHandlers',
-                'ko.debug.helpers'
+                'ko.debug.helpers',
+                'ace/theme/designer',
+                'ace/mode/ncalc'
         ], boot);
     }
 
     function boot() {
-        require(['bootstrapper'], function (bs) { bs.run(); });
+        require(['jquery', 'bootstrapper', 'presenter', 'ace/theme/designer', 'ace/mode/ncalc'], function ($, bs, presenter, designer_theme, ncalc_style_rules) {
+            $.fn.activity.defaults.color = "#fff";
+
+            presenter.toggleActivity(true);
+            
+            bs.run();
+        });
     }
 })();

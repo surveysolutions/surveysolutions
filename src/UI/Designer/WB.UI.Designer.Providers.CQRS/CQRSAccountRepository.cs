@@ -20,7 +20,7 @@ namespace WB.UI.Designer.Providers.CQRS
 
     using WB.UI.Designer.Providers.CQRS.Accounts.Commands;
     using WB.UI.Designer.Providers.CQRS.Accounts.View;
-    using WB.UI.Designer.Providers.Membership;
+    using WB.UI.Shared.Web.MembershipProvider.Accounts;
 
     /// <summary>
     /// The cqrs account repository.

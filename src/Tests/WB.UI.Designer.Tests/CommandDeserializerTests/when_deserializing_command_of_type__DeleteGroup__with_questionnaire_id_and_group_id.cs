@@ -31,13 +31,13 @@
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewDeleteGroupCommand = () =>
-            result.ShouldBeOfType<NewDeleteGroupCommand>();
+            result.ShouldBeOfType<DeleteGroupCommand>();
 
         It should_return_same_questionnaire_id_in_NewDeleteGroupCommand = () =>
-            ((NewDeleteGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((DeleteGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         It should_return_same_group_id_in_NewDeleteGroupCommand = () =>
-            ((NewDeleteGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((DeleteGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         private static ICommand result;
         private static CommandDeserializer deserializer;

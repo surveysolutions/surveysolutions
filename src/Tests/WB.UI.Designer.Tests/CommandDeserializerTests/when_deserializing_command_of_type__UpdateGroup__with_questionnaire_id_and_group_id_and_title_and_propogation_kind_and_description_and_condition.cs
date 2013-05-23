@@ -40,25 +40,25 @@
             result = deserializer.Deserialize(type, command);
 
         It should_return_NewUpdateGroupCommand = () =>
-            result.ShouldBeOfType<NewUpdateGroupCommand>();
+            result.ShouldBeOfType<UpdateGroupCommand>();
 
         It should_return_same_title_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).Title.ShouldEqual(title);
+            ((UpdateGroupCommand)result).Title.ShouldEqual(title);
 
         It should_return_same_questionnaire_id_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
+            ((UpdateGroupCommand)result).QuestionnaireId.ShouldEqual(Guid.Parse(questionnaireId));
 
         It should_return_same_group_id_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
+            ((UpdateGroupCommand)result).GroupId.ShouldEqual(Guid.Parse(groupId));
 
         It should_return_same_propagation_kind_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).PropagationKind.ShouldEqual(Enum.Parse(typeof(Propagate), propagationKind));
+            ((UpdateGroupCommand)result).PropagationKind.ShouldEqual(Enum.Parse(typeof(Propagate), propagationKind));
 
         It should_return_same_description_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).Description.ShouldEqual(description);
+            ((UpdateGroupCommand)result).Description.ShouldEqual(description);
 
         It should_return_same_condition_in_NewUpdateGroupCommand = () =>
-            ((NewUpdateGroupCommand)result).Condition.ShouldEqual(condition);
+            ((UpdateGroupCommand)result).Condition.ShouldEqual(condition);
 
         private static ICommand result;
         private static CommandDeserializer deserializer;
