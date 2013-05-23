@@ -136,6 +136,13 @@ namespace Main.Core.Domain
             return this.innerDocument;
         }
 
+
+        protected void OnCreateNewSnapshot(SnapshootLoaded e)
+        {
+            RestoreFromSnapshot(e.Template.Payload as QuestionnaireDocument);
+        }
+
+
         public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
             this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
