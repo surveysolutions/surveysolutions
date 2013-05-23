@@ -14,28 +14,35 @@ namespace Main.Core.Entities.SubEntities
     public enum UserRoles
     {
         /// <summary>
+        /// The user.
+        /// </summary>
+        Undefined =0,
+
+        /// <summary>
         /// The administrator.
         /// </summary>
-        Administrator, 
+        Administrator =1, 
 
         /// <summary>
         /// The supervisor.
         /// </summary>
-        Supervisor, 
+        Supervisor=2, 
 
         /// <summary>
         /// The manager.
         /// </summary>
-        Manager, 
+        Manager=3, 
 
         /// <summary>
         /// The operator.
         /// </summary>
-        Operator, 
+        Operator=4, 
 
         /// <summary>
         /// The user.
         /// </summary>
-        User
+        User=5,
+
+        Headquarter=6
     }
 }

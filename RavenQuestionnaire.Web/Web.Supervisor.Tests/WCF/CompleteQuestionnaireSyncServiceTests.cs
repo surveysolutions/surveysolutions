@@ -40,7 +40,7 @@ namespace RavenQuestionnaire.Web.Tests.WCF
         /// The process_ avent arrived_ eventprocessed.
         /// </summary>
         [Test]
-        public void Process_EventArrived_Eventprocessed()
+        public void Process_EventArrived_ProcessFaildBecouseOfNotImplementedException()
         {
             IKernel kernel = new StandardKernel();
             var eventSync = new Mock<IEventStreamReader>();
@@ -48,10 +48,9 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             var factory = new Mock<ISyncProcessFactory>();
             var syncProcessMock = new Mock<IEventSyncProcess>();
 
-            factory.Setup(f => f.GetProcess(
-                It.IsAny<SyncProcessType>(), 
+            factory.Setup(f => f.GetRestProcess(
                 It.IsAny<Guid>(), 
-                It.IsAny<Guid?>()))
+                It.IsAny<Guid>()))
                 .Returns(syncProcessMock.Object);
 
             var target = new EventPipeService(kernel, factory.Object);
@@ -60,7 +59,7 @@ namespace RavenQuestionnaire.Web.Tests.WCF
             for (int i = 0; i < 10; i++)
             {
                 ErrorCodes result = target.Process(new EventSyncMessage());
-                Assert.AreEqual(result, ErrorCodes.None);
+                Assert.AreEqual(result, ErrorCodes.Fail);
             }
             
             //eventSync.Verify(x => x.WriteEvents(It.IsAny<IEnumerable<AggregateRootEvent>>()), Times.Exactly(10));

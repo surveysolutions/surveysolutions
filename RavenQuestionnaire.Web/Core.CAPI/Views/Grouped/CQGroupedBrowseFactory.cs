@@ -28,7 +28,7 @@ namespace Core.CAPI.Views.Grouped
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace Core.CAPI.Views.Grouped
         /// The document group session.
         /// </param>
         public CQGroupedBrowseFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }

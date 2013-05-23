@@ -24,7 +24,7 @@ namespace Main.Synchronization.SyncSreamProvider
     /// <summary>
     /// The int client event stream provider.
     /// </summary>
-    public class IntClientEventStreamProvider : IIntSyncEventStreamProvider
+    public class IntClientEventStreamProvider : ISyncEventStreamProvider
     {
         #region Fields
 
@@ -36,7 +36,7 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <summary>
         /// The storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
 
         #endregion
 
@@ -48,7 +48,7 @@ namespace Main.Synchronization.SyncSreamProvider
         /// <param name="storage">
         /// The storage.
         /// </param>
-        public IntClientEventStreamProvider(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
+        public IntClientEventStreamProvider(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage)
         {
             this.eventStore = NcqrsEnvironment.Get<IStreamableEventStore>();
             this.storage = storage;
@@ -93,10 +93,10 @@ namespace Main.Synchronization.SyncSreamProvider
         public IEnumerable<AggregateRootEvent> GetEventStream()
         {
             return
-                this.storage.Query().Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
+                this.storage.Query(_ => _.Where(item => SurveyStatus.IsStatusAllowCapiSync(item.Status)).SelectMany(
                     item =>
                     this.eventStore.ReadFrom(item.CompleteQuestionnaireId, int.MinValue, int.MaxValue).Select(
-                        e => new AggregateRootEvent(e)));
+                        e => new AggregateRootEvent(e))).ToList());
         }
 
         /// <summary>

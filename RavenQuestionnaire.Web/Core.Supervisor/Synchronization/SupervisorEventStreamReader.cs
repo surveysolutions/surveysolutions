@@ -185,6 +185,10 @@ namespace Core.Supervisor.Synchronization
             }
         }
         
+            var model = this.denormalizer.Query<QuestionnaireBrowseItem, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<QuestionnaireAR>(item.Id))
+                .ToList());
+            retval.AddRange(model);
         /// <summary>
         /// The add register device.
         /// </summary>

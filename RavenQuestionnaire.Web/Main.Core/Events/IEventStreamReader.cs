@@ -27,7 +27,7 @@ namespace Main.Core.Events
         IEnumerable<AggregateRootEvent> ReadEvents();
 
 
-        IEnumerable<Tuple<string, Guid>> GetAllARIds();
+        IEnumerable<SyncItemsMeta> GetAllARIds();
 
         IEnumerable<AggregateRootEvent> GetARById(Guid aRId, string rootType ,Guid? startFrom);
 

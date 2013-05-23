@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Ncqrs.Eventing.Sourcing.Snapshotting;
-using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
+using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
 {
@@ -18,6 +18,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     using System.Collections.Generic;
     using System.Linq;
     using System.Linq.Expressions;
+
+    using Ncqrs.Restoring.EventStapshoot;
 
     using Raven.Client;
     using Raven.Client.Document;
@@ -39,7 +41,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <summary>
         /// The use async save.
         /// </summary>
-        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.  
+        private bool useAsyncSave = false; // research: in the embedded mode true is not valid.
+
+        /// <summary>
+        /// PageSize for loading by chunk
+        /// </summary>
+        private readonly int pageSize = 1024;
+
+        /// <summary>
+        /// PageSize for loading by chunk
+        /// </summary>
+        private readonly int timeout = 120;
 
         #endregion
 
@@ -51,9 +63,16 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="ravenUrl">
         /// The raven url.
         /// </param>
-        public RavenDBEventStore(string ravenUrl)
+        /// <param name="pageSize"></param>
+        public RavenDBEventStore(string ravenUrl, int pageSize)
         {
             this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
+            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
+                {
+                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                };
+            this.pageSize = pageSize;
+            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
         }
 
         /// <summary>
@@ -62,10 +81,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="externalDocumentStore">
         /// The external document store.
         /// </param>
-        public RavenDBEventStore(DocumentStore externalDocumentStore)
+        /// <param name="pageSize"></param>
+        public RavenDBEventStore(DocumentStore externalDocumentStore, int pageSize)
         {
             externalDocumentStore.Conventions = CreateConventions();
             this.DocumentStore = externalDocumentStore;
+            this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
+                {
+                    e.Request.Timeout = 10 * 60 * 1000; /*ms*/
+                };
+            this.pageSize = pageSize;
+            IndexCreation.CreateIndexes(typeof(UniqueEventsIndex).Assembly, DocumentStore);
         }
 
         #endregion
@@ -97,42 +123,98 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </exception>
         public IEnumerable<CommittedEvent> GetEventStream()
         {
-            return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
-        }
-
-        /// <summary>
-        /// The get stream by chunk.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="IEnumerable"/>.
-        /// </returns>
-        private IEnumerable<IEnumerable<StoredEvent>> GetStreamByChunk()
-        {
-            const int PageSize = 1024;
-            var page = 0;
-
+            var retval = new List<CommittedEvent>();
+            
+            List<UniqueEventsResults> aggregateRoots = Enumerable.Empty<UniqueEventsResults>().ToList();
+            int page = 0;
             while (true)
             {
-                List<StoredEvent> chunk;
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    chunk = session
-                        .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults())
-                        .OrderBy(y => y.EventSequence)
-                        .Skip(page * PageSize)
-                        .Take(PageSize)
+                    List<UniqueEventsResults> chunk = session
+                        .Query<StoredEvent, UniqueEventsIndex>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<UniqueEventsResults>()
+                        .Skip(page*pageSize)
+                        .Take(pageSize)
                         .ToList();
-                }
 
-                if (chunk.Count == 0)
-                {
-                    yield break;
-                }
+                    if (chunk.Count == 0)
+                    {
+                        break;
+                    }
 
-                page++;
-                yield return chunk;
+                    aggregateRoots.AddRange(chunk);
+                    page++;
+                }
             }
+
+            foreach (UniqueEventsResults uniqueEventsResultse in aggregateRoots)
+            {
+                retval.AddRange(
+                    ReadFrom(uniqueEventsResultse.EventSourceId, uniqueEventsResultse.LastSnapshot, long.MaxValue)
+                        .ToList());
+            }
+
+            return retval;
+            //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
+
+        }
+
+
+        public Guid? GetLastEvent(Guid aggregateRootId)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                var eventLast = session
+                    .Query<StoredEvent, Event_ByEventSource>().AsProjection<StoredEventWithoutPayload>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                    .Where(e => e.EventSourceId == aggregateRootId).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
+
+                if (eventLast != null)
+                    return eventLast.EventIdentifier;
+                return null;
+            }
+        }
+
+        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return session.Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
+            }
+        }
+
+        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
+        {
+            List<CommittedEvent> result = new List<CommittedEvent>();
+            int page = 0;
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var chunk = session
+                        .Query<StoredEvent, Event_ByEventSource>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .AsProjection<StoredEventWithoutPayload>()
+                        .Where(
+                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(e => e.EventSequence)
+                        .Skip(page * pageSize)
+                        .Take(pageSize).ToList();
+                        
+
+                    if (!chunk.Any())
+                    {
+                        break;
+                    }
+                    result.AddRange(chunk.Select(
+                            e =>
+                            new CommittedEvent(Guid.Empty, e.EventIdentifier, e.EventSourceId, e.EventSequence,
+                                               DateTime.Now, new object(), new Version(1, 1))));
+                    page++;
+                }
+            }
+
+            return new CommittedEventStream(id, result);
         }
 
         /// <summary>
@@ -152,9 +234,9 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// </returns>
         public virtual CommittedEventStream ReadFrom(Guid id, long minVersion, long maxVersion)
         {
-            IOrderedEnumerable<StoredEvent> storedEvents =
+            var storedEvents =
                 this.AccumulateEvents(
-                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(x => x.EventSequence);
+                    x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion);
             return new CommittedEventStream(id, storedEvents.Select(ToCommittedEvent));
 
             // }
@@ -217,11 +299,14 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             using (IDocumentSession session = this.DocumentStore.OpenSession())
             {
-                IDocumentQuery<StoredEvent> snapshoots = session.Advanced.LuceneQuery<StoredEvent>().WaitForNonStaleResults().Where(
-                        string.Format("Data.$type:*SnapshootLoaded* AND EventSourceId:{0}", aggreagateRootId));
-                if (snapshoots.Any())
+
+                var snapshoot =
+                    session.Query<StoredEvent, Event_ByEventSource>()
+                           .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                           .Where(e => e.EventSourceId == aggreagateRootId &&  e.IsSnapshot ).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
+                if (snapshoot!=null)
                 {
-                    return ToCommittedEvent(snapshoots.Last());
+                    return ToCommittedEvent(snapshoot);
                 }
             }
             return null;
@@ -243,18 +328,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         protected virtual IEnumerable<StoredEvent> AccumulateEvents(Expression<Func<StoredEvent, bool>> query)
         {
             IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable();
-            int maxPageSize = 1024;
             int page = 0;
             while (true)
             {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
                     List<StoredEvent> chunk = session
-                        .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults())
-                        .Skip(page * maxPageSize)
-                        .Take(maxPageSize)
-                        .Where(query)
+                        .Query<StoredEvent, Event_ByEventSource>()
+                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
+                        .Where(query).OrderBy(e => e.EventSequence)
+                        .Skip(page * pageSize)
+                        .Take(pageSize)
                         .ToList();
 
                     if (chunk.Count == 0)
@@ -267,7 +351,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                 }
             }
 
-            return result.OrderBy(x => x.EventSequence);
+            return result;
         }
 
         /// <summary>
@@ -276,35 +360,17 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <returns>
         /// The <see cref="DocumentConvention"/>.
         /// </returns>
-        private static DocumentConvention CreateConventions()
+        public static DocumentConvention CreateConventions()
         {
-            return new DocumentConvention
-                {
-                    JsonContractResolver = new PropertiesOnlyContractResolver(), 
-                    FindTypeTagName = x => "Events"
-                    // NewDocumentETagGenerator = GenerateETag
-                };
+           var docStore = new DocumentConvention
+               {
+                   JsonContractResolver = new PropertiesOnlyContractResolver(),
+                   FindTypeTagName = x => "Events"
+                   /*, CustomizeJsonSerializer = serializer => serializer.Binder = new TypeNameSerializationBinder("{0}");*/
+               };
+            return docStore;
         }
 
-        /*/// <summary>
-        /// The generate e tag.
-        /// </summary>
-        /// <param name="entity">
-        /// The entity.
-        /// </param>
-        /// <returns>
-        /// The <see cref="Guid?"/>.
-        /// </returns>
-        private static Guid? GenerateETag(object entity)
-        {
-            var sourcedEvent = entity as StoredEvent;
-            if (sourcedEvent != null)
-            {
-                return Guid.NewGuid();
-            }
-
-            return null;
-        }*/
 
         /// <summary>
         /// The to stored event.
@@ -322,14 +388,15 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         {
             return new StoredEvent
                 {
-                    Id = uncommittedEvent.EventSourceId + "/" + uncommittedEvent.EventSequence, 
-                    EventIdentifier = uncommittedEvent.EventIdentifier, 
-                    EventTimeStamp = uncommittedEvent.EventTimeStamp, 
-                    Version = uncommittedEvent.EventVersion, 
-                    CommitId = commitId, 
-                    Data = uncommittedEvent.Payload, 
-                    EventSequence = uncommittedEvent.EventSequence, 
-                    EventSourceId = uncommittedEvent.EventSourceId, 
+                    Id = uncommittedEvent.EventSourceId + "/" + uncommittedEvent.EventSequence,
+                    EventIdentifier = uncommittedEvent.EventIdentifier,
+                    EventTimeStamp = uncommittedEvent.EventTimeStamp,
+                    Version = uncommittedEvent.EventVersion,
+                    CommitId = commitId,
+                    Data = uncommittedEvent.Payload,
+                    EventSequence = uncommittedEvent.EventSequence,
+                    EventSourceId = uncommittedEvent.EventSourceId,
+                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded
                 };
         }
 

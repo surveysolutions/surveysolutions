@@ -77,7 +77,7 @@ namespace Main.Synchronization.SycProcessRepository
         /// </returns>
         public ISyncProcessor GetProcessor(Guid syncProcessKey)
         {
-            return new SyncProcessor(this.processes.GetByGuid(syncProcessKey), this.surveys, this.users);
+            return new SyncProcessor(this.processes.GetById(syncProcessKey), this.surveys, this.users);
         }
 
         #endregion

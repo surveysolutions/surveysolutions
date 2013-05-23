@@ -1,10 +1,4 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="StatusViewFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Status
+﻿namespace Core.Supervisor.Views.Status
 {
     using System;
     using System.Collections.Generic;
@@ -17,63 +11,43 @@ namespace Core.Supervisor.Views.Status
     using Main.Core.View.CompleteQuestionnaire;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class StatusViewFactory : IViewFactory<StatusViewInputModel, StatusView>
+    public class StatusViewFactory : BaseUserViewFactory, IViewFactory<StatusViewInputModel, StatusView>
     {
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
 
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StatusViewFactory"/> class.
-        /// </summary>
-        /// <param name="surveys">
-        /// The surveys.
-        /// </param>
-        /// <param name="users">
-        /// The users.
-        /// </param>
         public StatusViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
+            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
             this.surveys = surveys;
             this.users = users;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// </returns>
         public StatusView Load(StatusViewInputModel input)
         {
-            var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
+            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
-            if (status == SurveyStatus.Unknown)
-            {
-                status = new SurveyStatus { PublicId = Guid.Empty, Name = "All" };
-            }
 
-            var headers = this.surveys.Query().Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList();
+            List<TemplateLight> headers = this.surveys.Query(_ => _.Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList());
 
-            var items = this.BuildItems(
-                    (status.PublicId == Guid.Empty
-                         ? this.surveys.Query().Where(
-                             x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                         : this.surveys.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id)
-                                                 && (x.Status.PublicId == status.PublicId))).GroupBy(x => x.Responsible),
-                headers).AsQueryable();
+            List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
+                this.surveys.Query(_ => _
+                    .Where(x => 
+                        status.PublicId == SurveyStatus.Unknown.PublicId
+                        ? (
+                            x.Responsible != null 
+                            && interviewers.Contains(x.Responsible.Id)
+                        )
+                        : (
+                            x.Responsible != null 
+                            && interviewers.Contains(x.Responsible.Id) 
+                            && x.Status.PublicId == status.PublicId
+                        ))
+                    .GroupBy(x => x.Responsible)
+                    .ToList());
+
+            var items = this.BuildItems(groupedSurveys, headers).AsQueryable();
 
             var retval = new StatusView(input.Page, input.PageSize, 0, status, headers);
             if (input.Orders.Count == 0)
@@ -90,22 +64,10 @@ namespace Core.Supervisor.Views.Status
 
             retval.TotalCount = items.Count();
 
-            retval.Items = items.ToList();//.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+            retval.Items = items.ToList();
             return retval;
         }
 
-        /// <summary>
-        /// Value order
-        /// </summary>
-        /// <param name="item">
-        /// The item.
-        /// </param>
-        /// <param name="field">
-        /// The field.
-        /// </param>
-        /// <returns>
-        /// Field value
-        /// </returns>
         private object GetOrderValue(StatusViewItem item, string field)
         {
             if (field == "Title")
@@ -133,19 +95,7 @@ namespace Core.Supervisor.Views.Status
             return item.User.Name;
         }
 
-        /// <summary>
-        /// Builds items
-        /// </summary>
-        /// <param name="grouped">
-        /// The grouped.
-        /// </param>
-        /// <param name="headers">
-        /// The list of templates
-        /// </param>
-        /// <returns>
-        /// The build items.
-        /// </returns>
-        protected IEnumerable<StatusViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
+        protected IEnumerable<StatusViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped, List<TemplateLight> headers)
         {
             return from templateGroup in grouped
                    let tgroup = templateGroup.GroupBy(g => g.TemplateId).ToDictionary(k => k.Key, v => v.Count())

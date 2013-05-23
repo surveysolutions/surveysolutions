@@ -1,17 +1,9 @@
-﻿// -----------------------------------------------------------------------
-// <copyright file="SummaryFactory.cs" company="">
-// TODO: Update copyright text.
-// </copyright>
-// -----------------------------------------------------------------------
-
-namespace Core.Supervisor.Views.Summary
+﻿namespace Core.Supervisor.Views.Summary
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
-
-    using Core.Supervisor.Views.Index;
 
     using Main.Core.Documents;
     using Main.Core.Entities;
@@ -22,106 +14,66 @@ namespace Core.Supervisor.Views.Summary
     using Main.Core.View.Questionnaire;
     using Main.DenormalizerStorage;
 
-    /// <summary>
-    /// TODO: Update summary.
-    /// </summary>
-    public class SummaryFactory : IViewFactory<SummaryInputModel, SummaryView>
+    public class SummaryFactory : BaseUserViewFactory, IViewFactory<SummaryInputModel, SummaryView>
     {
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey;
 
-        /// <summary>
-        /// The templates.
-        /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireBrowseItem> templates;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates;
 
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SummaryFactory"/> class.
-        /// </summary>
-        /// <param name="survey">
-        /// The survey.
-        /// </param>
-        /// <param name="templates">
-        /// The templates.
-        /// </param>
-        /// <param name="users">
-        /// The users.
-        /// </param>
         public SummaryFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
-            IDenormalizerStorage<QuestionnaireBrowseItem> templates,
-            IDenormalizerStorage<UserDocument> users)
+            IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> survey,
+            IQueryableDenormalizerStorage<QuestionnaireBrowseItem> templates,
+            IQueryableDenormalizerStorage<UserDocument> users) : base(users)
         {
             this.survey = survey;
             this.templates = templates;
-            this.users = users;
         }
-
-        /// <summary>
-        /// Summary view factory load method
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// Summary view
-        /// </returns>
+        
         public SummaryView Load(SummaryInputModel input)
         {
-            var interviewers = this.users.Query().Where(u => u.Supervisor != null && u.Supervisor.Id == input.Supervisor.Id).Select(u => u.PublicKey).ToList();
-            var template = new TemplateLight(Guid.Empty, "All");
-            if (input.TemplateId != Guid.Empty)
+            var interviewers = this.GetTeamMembersForViewer(input.ViewerId).Select(u => u.PublicKey).ToList();
+            TemplateLight template = null;
+            if (input.TemplateId.HasValue)
             {
-                var tbi = this.templates.GetByGuid(input.TemplateId);
+                var tbi = this.templates.GetById(input.TemplateId.Value);
                 template = new TemplateLight(tbi.Id, tbi.Title);
             }
 
-            var items = this.BuildItems((input.TemplateId == Guid.Empty
-                                             ? this.survey.Query().Where(x => x.Responsible != null && interviewers.Contains(x.Responsible.Id))
-                                             : this.survey.Query().Where(
-                                                 x => x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
-                .GroupBy(x => x.Responsible))
-                .AsQueryable();
-
-            var retval = new SummaryView(input.Page, input.PageSize, 0, template);
-            if (input.Orders.Count > 0)
+            return this.survey.Query(queryableSurveys =>
             {
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? items.OrderBy(input.Orders[0].Field)
-                                                      : items.OrderByDescending(input.Orders[0].Field);
-            }
+                var groupedSurveys = queryableSurveys
+                    .Where(x =>
+                        !input.TemplateId.HasValue
+                        ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
+                        : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
+                    .GroupBy(x => x.Responsible);
 
-            retval.Summary = new SummaryViewItem(
-                new UserLight(Guid.Empty, "Summary"),
-                items.Sum(x => x.Total),
-                items.Sum(x => x.Initial),
-                items.Sum(x => x.Error),
-                items.Sum(x => x.Completed),
-                items.Sum(x => x.Approved),
-                items.Sum(x => x.Redo));
+                var items = this.BuildItems(groupedSurveys).AsQueryable();
 
-            retval.TotalCount = items.Count();
+                var retval = new SummaryView(input.Page, input.PageSize, 0, template);
+                if (input.Orders.Count > 0)
+                {
+                    items = input.Orders[0].Direction == OrderDirection.Asc
+                                                          ? items.OrderBy(input.Orders[0].Field)
+                                                          : items.OrderByDescending(input.Orders[0].Field);
+                }
 
-            retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-            return retval;
+                retval.Summary = new SummaryViewItem(
+                    new UserLight(Guid.Empty, "Summary"),
+                    items.Sum(x => x.Total),
+                    items.Sum(x => x.Initial),
+                    items.Sum(x => x.Error),
+                    items.Sum(x => x.Completed),
+                    items.Sum(x => x.Approved),
+                    items.Sum(x => x.Redo));
+
+                retval.TotalCount = items.Count();
+
+                retval.Items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
+                return retval;
+            });
         }
 
-        /// <summary>
-        /// Builds items
-        /// </summary>
-        /// <param name="grouped">
-        /// The grouped.
-        /// </param>
-        /// <param name="dictionary">
-        /// The dictionary.
-        /// </param>
         protected IEnumerable<SummaryViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)

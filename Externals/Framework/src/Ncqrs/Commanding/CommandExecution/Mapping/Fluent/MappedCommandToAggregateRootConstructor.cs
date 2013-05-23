@@ -21,7 +21,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <remarks>Marked as internal because the construction is only allowed in the framework.</remarks>
         internal MappedCommandToAggregateRootConstructor(Func<TCommand, TAggRoot> creatorfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(creatorfunc != null, "creatorfunc can not be null.");
+#endif
             _aggregaterootcreatorfunc = creatorfunc;
         }
 
@@ -32,7 +34,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>The <see cref="ICommandExecutor&lt;TCommand&gt;"/> which is able to execute this command.</returns>
         public ICommandExecutor<TCommand> StoreIn(Action<TCommand, TAggRoot> storeaggregaterootinfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(storeaggregaterootinfunc != null, "storeaggregaterootinfunc can not be null.");
+#endif
             _storeaggregaterootinfunc = storeaggregaterootinfunc;
 
             return this;

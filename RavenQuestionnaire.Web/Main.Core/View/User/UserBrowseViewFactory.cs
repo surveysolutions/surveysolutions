@@ -24,7 +24,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<UserDocument> documentItemSession;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Main.Core.View.User
         /// <param name="documentItemSession">
         /// The document item session.
         /// </param>
-        public UserBrowseViewFactory(IDenormalizerStorage<UserDocument> documentItemSession)
+        public UserBrowseViewFactory(IQueryableDenormalizerStorage<UserDocument> documentItemSession)
         {
             this.documentItemSession = documentItemSession;
         }
@@ -56,19 +56,22 @@ namespace Main.Core.View.User
         /// </returns>
         public UserBrowseView Load(UserBrowseInputModel input)
         {
-            int count = this.documentItemSession.Query().Count();
-            if (count == 0) 
-                return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
+            return this.documentItemSession.Query(queryableItems =>
+            {
+                int count = queryableItems.Count();
+                if (count == 0)
+                    return new UserBrowseView(input.Page, input.PageSize, count, new UserBrowseItem[0]);
 
-            // Perform the paged query
-            IEnumerable<UserDocument> query =
-                this.documentItemSession.Query().Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
-                    input.PageSize);
+                // Perform the paged query
+                IEnumerable<UserDocument> query =
+                    queryableItems.Where(input.Expression).Skip((input.Page - 1) * input.PageSize).Take(
+                        input.PageSize);
 
-            // And enact this query
-            UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email, 
-                x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).ToArray();
-            return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
+                // And enact this query
+                UserBrowseItem[] items = query.Select(x => new UserBrowseItem(x.PublicKey, x.UserName, x.Email,
+                    x.CreationDate, x.IsLocked, x.Supervisor, x.Location.Location)).ToArray();
+                return new UserBrowseView(input.Page, input.PageSize, count, items.ToArray());
+            });
         }
 
         #endregion

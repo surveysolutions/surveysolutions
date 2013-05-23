@@ -43,7 +43,7 @@ namespace Main.Core.Events
 
         #region Constructor
 
-        public UserEventStreamReader(IDenormalizer denormalizer)
+        public UserEventStreamReader(IDenormalizer denormalizer):base(denormalizer)
         {
             this.denormalizer = denormalizer;
             this.myEventStore = NcqrsEnvironment.Get<IEventStore>();
@@ -78,15 +78,9 @@ namespace Main.Core.Events
         /// </summary>
         protected List<AggregateRootEvent> ExtractUsers()
         {
-            var usersList = new List<AggregateRootEvent>();
-
-            IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>();
-            foreach (UserDocument item in model)
-            {
-                usersList.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
-            }
-
-            return usersList;
+            return this.denormalizer.Query<UserDocument, List<AggregateRootEvent>>(_ => _
+                .SelectMany(item => this.GetEventStreamById<UserAR>(item.PublicKey))
+                .ToList());
         }
 
         #endregion
@@ -98,7 +92,7 @@ namespace Main.Core.Events
             throw new NotImplementedException();
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
             throw new NotImplementedException();
         }

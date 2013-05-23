@@ -8,28 +8,23 @@
       android:background="@drawable/dashboardquestionnaire"
                
                >  <!--local:MvxBind="{'Visible':{'Path':'Visible'}}"--> 
-    <LinearLayout
+    <LinearLayout android:id="@+id/llQuestionnairie"
           android:orientation=    "horizontal"
           android:layout_width=    "fill_parent"
           android:layout_height=    "wrap_content"
           android:background="?android:attr/selectableItemBackground"
-          android:padding="10dip"
-          android:clickable="true"
-          local:MvxBind="{'Click':{'Path':'ViewDetailCommand'}}" >
+          android:padding="10dip">
       <!--android:layout_alignParentLeft="true"-->
       <TextView  android:id="@+id/tvStatus"
                android:layout_width="200px"
                android:layout_height="wrap_content"
                android:gravity=    "center"
-               android:textSize="20dp"
-               local:MvxBind="{'Text':{'Path':'Status.Name'}}"/>
-      <Mvx.MvxBindableLinearLayout
+               android:textSize="20dp"/>
+      <LinearLayout android:id="@+id/llPropertyHolder"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:gravity=    "center_horizontal"
            android:orientation="vertical"
-           local:MvxItemTemplate="@layout/dashboard_survey_property_item"
-           local:MvxBind="{'ItemsSource':{'Path':'Properties'}}"
       />
     </LinearLayout>
   <!--</RelativeLayout>-->

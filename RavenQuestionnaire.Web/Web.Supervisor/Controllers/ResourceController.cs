@@ -12,7 +12,6 @@ using Main.Core.Services;
 namespace Web.Supervisor.Controllers
 {
     using System.Web.Mvc;
-    using NLog;
 
     /// <summary>
     /// Responsible for load images
@@ -21,12 +20,7 @@ namespace Web.Supervisor.Controllers
     {
         #region FieldsConstants
 
-        /// <summary>
-        /// documentation log
-        /// </summary>
-        private static Logger logger = LogManager.GetCurrentClassLogger();
-
-        private IFileStorageService fileStorageService;
+        private readonly IFileStorageService fileStorageService;
 
         #endregion
 

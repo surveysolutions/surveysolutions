@@ -24,7 +24,7 @@ namespace Main.Core.View.User
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
+        private readonly IQueryableDenormalizerStorage<UserDocument> users;
 
         #endregion
 
@@ -36,7 +36,7 @@ namespace Main.Core.View.User
         /// <param name="users">
         /// The users.
         /// </param>
-        public UserViewFactory(IDenormalizerStorage<UserDocument> users)
+        public UserViewFactory(IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.users = users;
         }
@@ -56,29 +56,32 @@ namespace Main.Core.View.User
         /// </returns>
         public UserView Load(UserViewInputModel input)
         {
-            UserDocument doc = null;
-            if (input.UserId != Guid.Empty) 
-                doc = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
-            else 
-                if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
+            return this.users.Query(queryableUsers =>
+            {
+                UserDocument doc = null;
+                if (input.UserId != Guid.Empty)
+                    doc = queryableUsers.FirstOrDefault(u => u.PublicKey == input.UserId);
+                else
+                    if (!string.IsNullOrEmpty(input.UserName) && string.IsNullOrEmpty(input.Password))
+                    {
+                        doc =
+                            queryableUsers.FirstOrDefault(
+                                u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                    }
+
+                if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
                 {
-                doc =
-                    this.users.Query().FirstOrDefault(
-                        u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                    doc = queryableUsers.FirstOrDefault(u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                    if (doc != null && doc.Password != input.Password)
+                        return null;
                 }
 
-            if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
-            {
-                doc = this.users.Query().FirstOrDefault(u => u.UserName == input.UserName);
-                if (doc != null && doc.Password != input.Password) 
+                if (doc == null || doc.IsDeleted)
                     return null;
-            }
 
-            if (doc == null || doc.IsDeleted) 
-                return null;
-
-            return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email, 
-                                doc.CreationDate, doc.Roles, doc.IsLocked, doc.Supervisor, doc.Location.Id);
+                return new UserView(doc.PublicKey, doc.UserName, doc.Password, doc.Email,
+                                    doc.CreationDate, doc.Roles, doc.IsLocked, doc.Supervisor, doc.Location.Id);
+            });
         }
 
         #endregion

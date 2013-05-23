@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="PublicService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="CustomBinding_IPublicService_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <sp:HttpsToken RequireClientCertificate="false" />
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256 />
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict />
+              </wsp:Policy>
+            </sp:Layout>
+            <sp:IncludeTimestamp />
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <sp:SignedSupportingTokens xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:UsernameToken sp:IncludeToken="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy/IncludeToken/AlwaysToRecipient">
+              <wsp:Policy>
+                <sp:WssUsernameToken10 />
+              </wsp:Policy>
+            </sp:UsernameToken>
+          </wsp:Policy>
+        </sp:SignedSupportingTokens>
+        <sp:Wss11 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy />
+        </sp:Wss11>
+        <sp:Trust10 xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:MustSupportIssuedTokens />
+            <sp:RequireClientEntropy />
+            <sp:RequireServerEntropy />
+          </wsp:Policy>
+        </sp:Trust10>
+        <wsaw:UsingAddressing />
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd0" namespace="http://tempuri.org/" />
+      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd2" namespace="http://schemas.microsoft.com/Message" />
+      <xsd:import schemaLocation="https://localhost/designer/PublicService.svc?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/WB.UI.Designer.WebServices.Questionnaire" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="DownloadQuestionnaireRequest">
+    <wsdl:part name="parameters" element="tns:DownloadQuestionnaireRequest" />
+  </wsdl:message>
+  <wsdl:message name="DownloadQuestionnaireRequest_Headers">
+    <wsdl:part name="QuestionnaireId" element="tns:QuestionnaireId" />
+  </wsdl:message>
+  <wsdl:message name="RemoteFileInfo">
+    <wsdl:part name="parameters" element="tns:RemoteFileInfo" />
+  </wsdl:message>
+  <wsdl:message name="RemoteFileInfo_Headers">
+    <wsdl:part name="FileName" element="tns:FileName" />
+    <wsdl:part name="Length" element="tns:Length" />
+  </wsdl:message>
+  <wsdl:message name="IPublicService_DownloadQuestionnaireSource_InputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSource" />
+  </wsdl:message>
+  <wsdl:message name="IPublicService_DownloadQuestionnaireSource_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DownloadQuestionnaireSourceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IPublicService_Dummy_InputMessage">
+    <wsdl:part name="parameters" element="tns:Dummy" />
+  </wsdl:message>
+  <wsdl:message name="IPublicService_Dummy_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DummyResponse" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListRequest">
+    <wsdl:part name="parameters" element="tns:QuestionnaireListRequest" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListRequest_Headers">
+    <wsdl:part name="Filter" element="tns:Filter" />
+    <wsdl:part name="PageIndex" element="tns:PageIndex" />
+    <wsdl:part name="PageSize" element="tns:PageSize" />
+    <wsdl:part name="SortOrder" element="tns:SortOrder" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListView">
+    <wsdl:part name="parameters" element="tns:QuestionnaireListView" />
+  </wsdl:message>
+  <wsdl:message name="QuestionnaireListView_Headers">
+    <wsdl:part name="Order" element="tns:Order" />
+    <wsdl:part name="Page" element="tns:Page" />
+    <wsdl:part name="PageSize" element="tns:PageSize" />
+    <wsdl:part name="TotalCount" element="tns:TotalCount" />
+  </wsdl:message>
+  <wsdl:portType name="IPublicService">
+    <wsdl:operation name="DownloadQuestionnaire">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaire" name="DownloadQuestionnaireRequest" message="tns:DownloadQuestionnaireRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireResponse" name="RemoteFileInfo" message="tns:RemoteFileInfo" />
+    </wsdl:operation>
+    <wsdl:operation name="DownloadQuestionnaireSource">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSource" message="tns:IPublicService_DownloadQuestionnaireSource_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DownloadQuestionnaireSourceResponse" message="tns:IPublicService_DownloadQuestionnaireSource_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Dummy">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/Dummy" message="tns:IPublicService_Dummy_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/DummyResponse" message="tns:IPublicService_Dummy_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetQuestionnaireList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireList" name="QuestionnaireListRequest" message="tns:QuestionnaireListRequest" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IPublicService/GetQuestionnaireListResponse" name="QuestionnaireListView" message="tns:QuestionnaireListView" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CustomBinding_IPublicService" type="tns:IPublicService">
+    <wsp:PolicyReference URI="#CustomBinding_IPublicService_policy" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DownloadQuestionnaire">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/DownloadQuestionnaire" style="document" />
+      <wsdl:input name="DownloadQuestionnaireRequest">
+        <soap12:header message="tns:DownloadQuestionnaireRequest_Headers" part="QuestionnaireId" use="literal" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="RemoteFileInfo">
+        <soap12:header message="tns:RemoteFileInfo_Headers" part="FileName" use="literal" />
+        <soap12:header message="tns:RemoteFileInfo_Headers" part="Length" use="literal" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DownloadQuestionnaireSource">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/DownloadQuestionnaireSource" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Dummy">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/Dummy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetQuestionnaireList">
+      <soap12:operation soapAction="http://tempuri.org/IPublicService/GetQuestionnaireList" style="document" />
+      <wsdl:input name="QuestionnaireListRequest">
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="Filter" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="PageIndex" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="PageSize" use="literal" />
+        <soap12:header message="tns:QuestionnaireListRequest_Headers" part="SortOrder" use="literal" />
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output name="QuestionnaireListView">
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="Order" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="Page" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="PageSize" use="literal" />
+        <soap12:header message="tns:QuestionnaireListView_Headers" part="TotalCount" use="literal" />
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PublicService">
+    <wsdl:port name="CustomBinding_IPublicService" binding="tns:CustomBinding_IPublicService">
+      <soap12:address location="https://localhost/designer/PublicService.svc" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>https://localhost/designer/PublicService.svc</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Dns>localhost</Dns>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -51,7 +51,7 @@ namespace RavenQuestionnaire.Core.Tests
         [Test]
         public void Load_QuestionnairiesIsAbsent_EmptyResultISReturned()
         {
-            this.TemplateStore.Setup(x => x.GetByGuid(It.IsAny<Guid>())).Returns(new QuestionnaireDocument());
+            this.TemplateStore.Setup(x => x.GetById(It.IsAny<Guid>())).Returns(new QuestionnaireDocument());
             var result = this.Target.Load(new CompleteQuestionnaireExportInputModel(Enumerable.Empty<Guid>(),Guid.NewGuid()));
             Assert.IsTrue(!result.Items.Any());
             Assert.IsTrue(!result.Header.Any());

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Main.Core.Commands.Questionnaire;
@@ -12,29 +8,34 @@ using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
 using WB.Core.Questionnaire.ExportServices;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Controllers;
-using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
+    using System.IO;
+    using System.IO.Compression;
+
+    using WB.Core.SharedKernel.Utils.Compression;
+    using WB.UI.Designer.BootstrapSupport;
+    using WB.UI.Shared.Web.Membership;
+
     [TestFixture]
     public class SynchronizationControllerTests
     {
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IViewRepository> ViewRepositoryMock;
-        protected Mock<IZipUtils> ZipUtilsMock;
+        protected Mock<IStringCompressor> ZipUtilsMock;
         protected Mock<IExportService> ExportServiceMock;
-        protected Mock<IUserHelper> UserHelperMock;
+        protected Mock<IMembershipUserService> UserHelperMock;
         
         [SetUp]
         public void Setup()
         {
             CommandServiceMock=new Mock<ICommandService>();
             ViewRepositoryMock=new Mock<IViewRepository>();
-            ZipUtilsMock=new Mock<IZipUtils>();
+            ZipUtilsMock = new Mock<IStringCompressor>();
             ExportServiceMock = new Mock<IExportService>();
-            UserHelperMock=new Mock<IUserHelper>();
+            UserHelperMock=new Mock<IMembershipUserService>();
         }
 
         [Test]
@@ -44,9 +45,19 @@ namespace WB.UI.Designer.Tests
             SynchronizationController controller = CreateSynchronizationController();
 
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
-            ZipUtilsMock.Setup(x => x.UnzipTemplate<IQuestionnaireDocument>(controller.Request, file.Object))
+
+            var inputStream = new MemoryStream();
+            using (var zip =new GZipStream(inputStream, CompressionMode.Compress, true))
+            {
+                zip.Write(new byte[] { 1 }, 0, 1);
+            }
+
+            file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
+            file.Setup(x => x.InputStream).Returns(inputStream);
+
+            ZipUtilsMock.Setup(x => x.Decompress<IQuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
-            UserHelperMock.Setup(x => x.CurrentUserId).Returns(Guid.NewGuid);
+            UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 
             // act
             var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
@@ -67,12 +78,11 @@ namespace WB.UI.Designer.Tests
             Mock<HttpPostedFileBase> file = new Mock<HttpPostedFileBase>();
 
             // act
-            var actionResult = (RedirectToRouteResult)controller.Import(file.Object);
+            controller.Import(file.Object);
 
             // assert
             CommandServiceMock.Verify(x => x.Execute(It.IsAny<ImportQuestionnaireCommand>()), Times.Never());
-            Assert.AreEqual(actionResult.RouteValues["action"], "Index");
-            Assert.AreEqual(actionResult.RouteValues["controller"], "Error");
+            Assert.IsTrue(controller.TempData.ContainsKey(Alerts.ERROR));
         }
 
         [Test]
@@ -83,13 +93,13 @@ namespace WB.UI.Designer.Tests
             Guid templateId = Guid.NewGuid();
             string dataForZip = "zipped data";
             ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
-
+            ZipUtilsMock.Setup(x => x.Compress(dataForZip)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
             ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
-            ZipUtilsMock.Verify(x => x.ZipDate(dataForZip), Times.Once());
+            ZipUtilsMock.Verify(x => x.Compress(dataForZip), Times.Once());
         }
 
         [Test]

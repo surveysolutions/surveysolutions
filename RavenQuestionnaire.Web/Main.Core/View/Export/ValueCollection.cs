@@ -57,16 +57,16 @@ namespace Main.Core.View.Export
         {
             if (question == null)
             {
-                this.container.Add(key, new string[] { string.Empty });
+                this.container.Add(key, new string[] {string.Empty});
                 return;
             }
 
-            if (question.QuestionType == QuestionType.MultyOption)
+            if (question is IMultyOptionsQuestion)
             {
                 var answers = new List<string>();
                 foreach (ICompleteAnswer answer in question.Answers)
                 {
-                    answers.Add(answer.Selected ? "1" : "0");
+                    answers.Add(!question.Enabled ? string.Empty : answer.Selected ? "1" : "0");
                 }
                 
                 this.container.Add(key, answers);
@@ -74,6 +74,11 @@ namespace Main.Core.View.Export
 
             else
             {
+                if (!question.Enabled)
+                {
+                    this.container.Add(key, new string[] {string.Empty});
+                    return;
+                }
                 var answer = question.GetAnswerObject();
                 this.container.Add(key, new[] { answer == null ? "" : answer.ToString() });
             }

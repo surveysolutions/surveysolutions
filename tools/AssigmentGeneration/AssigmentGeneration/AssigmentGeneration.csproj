@@ -61,6 +61,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj">
+      <Project>{aa90754b-ca47-429e-bdc8-2a83e94179b7}</Project>
+      <Name>Ncqrs.Spec</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>

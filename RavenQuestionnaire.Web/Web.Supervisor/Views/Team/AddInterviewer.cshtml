@@ -1,0 +1,24 @@
+﻿@using Web.Supervisor.Utils
+@model Web.Supervisor.Models.InterviewerViewModel
+
+@{
+    ViewBag.Title = "Add interviewer";
+}
+
+<h2>@Model.GetLabel() <small>create</small></h2>
+
+@using (Html.BeginForm())
+{
+    <fieldset class="form-horizontal">
+        @{
+            this.Html.RenderPartial("EditForm");
+        }
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            @Html.ActionLink("Cancel", "Interviewers", new { id = Model.Id }, new { @class = "btn " })
+        </div>
+    </fieldset>
+}
+<div>
+    @Html.ActionLink("Back to List", "Interviewers", new { id = Model.Id })
+</div>

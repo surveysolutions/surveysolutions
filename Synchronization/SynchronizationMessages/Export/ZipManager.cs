@@ -53,8 +53,12 @@ namespace SynchronizationMessages.Export
                         {
                             e.Extract(stream);
                         }
-
-                        list.Add(Encoding.Default.GetString(stream.ToArray()));
+                        stream.Position = 0;
+                        using (StreamReader reader = new StreamReader(stream))
+                        {
+                            string text = reader.ReadToEnd();
+                            list.Add(text);
+                        }
                     }
                 }
 
@@ -65,7 +69,6 @@ namespace SynchronizationMessages.Export
                 return null;
             }
         }
-
         #endregion
     }
 }

@@ -48,6 +48,23 @@ namespace Main.Core.Tests.Export
             Assert.AreEqual(target.Container[key], new string[] { string.Empty });
         }
         [Test]
+        public void Add_QuestionIsDisabled_EmptyStringIsAdded()
+        {
+            ValueCollectionTestable target = new ValueCollectionTestable();
+            var key = Guid.NewGuid();
+            target.Add(key, new TextCompleteQuestion("text") {PublicKey = key, Answer = "val", Enabled = false});
+            Assert.AreEqual(target.Container[key], new string[] { string.Empty });
+        }
+        [Test]
+        public void Add_QuestionIsDisabledMultyOptions_EmptyStringIsAdded()
+        {
+            ValueCollectionTestable target = new ValueCollectionTestable();
+            var key = Guid.NewGuid();
+            target.Add(key, new MultyOptionsCompleteQuestion("text") { PublicKey = key, Answers = new List<IAnswer>{new CompleteAnswer(),new CompleteAnswer()}, Enabled = false });
+            Assert.AreEqual(target.Container[key].Count(),2);
+            Assert.IsTrue(target.Container[key].All(t => t == string.Empty));
+        }
+        [Test]
         public void Add_SingleQuestion_AnswerValueIsAdded()
         {
             ValueCollectionTestable target = new ValueCollectionTestable();

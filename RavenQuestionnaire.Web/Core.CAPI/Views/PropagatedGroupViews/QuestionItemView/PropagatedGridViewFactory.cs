@@ -40,7 +40,7 @@ namespace Core.CAPI.Views.PropagatedGroupViews.QuestionItemView
 
         public PropagatedGroupGridContainer Load(PropagatedGridViewInputModel input)
         {
-            CompleteQuestionnaireStoreDocument doc = this.store.GetByGuid(input.CompelteQuestionnairePublicKey);
+            CompleteQuestionnaireStoreDocument doc = this.store.GetById(input.CompelteQuestionnairePublicKey);
             if (doc == null)
                 return null;
             var groupTemplate =

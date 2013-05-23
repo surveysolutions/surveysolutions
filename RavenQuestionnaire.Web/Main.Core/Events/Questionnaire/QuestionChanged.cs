@@ -18,7 +18,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The question changed.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:QuestionChangeded")]
     public class QuestionChanged
     {

@@ -16,19 +16,11 @@ namespace CAPI.Android
                                 ConfigChanges.ScreenSize)]
     public class SettingsActivity : Activity
     {
-        /// <summary>
-        /// The on create options menu.
-        /// </summary>
-        /// <param name="menu">
-        /// The menu.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        protected override void OnStart()
         {
+            base.OnStart();
             this.CreateActionBar();
-            return base.OnCreateOptionsMenu(menu);
+
         }
 
         protected override void OnCreate(Bundle bundle)

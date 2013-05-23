@@ -1,12 +1,3 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IndexViewFactory.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   The survey view factory.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using Main.DenormalizerStorage;
 
 namespace Core.Supervisor.Views.Index
@@ -22,129 +13,59 @@ namespace Core.Supervisor.Views.Index
     using Main.Core.Entities.SubEntities;
     using Main.Core.Utility;
     using Main.Core.View;
-    using Main.Core.View.CompleteQuestionnaire;
 
-    /// <summary>
-    /// The survey view factory.
-    /// </summary>
-    public class IndexViewFactory : IViewFactory<IndexInputModel, IndexView>
+    public class IndexViewFactory : BaseUserViewFactory, IViewFactory<IndexInputModel, IndexView>
     {
-        #region Fields
+        private readonly IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat;
 
-        /// <summary>
-        /// The document item session.
-        /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys;
-
-        /// <summary>
-        /// The users.
-        /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> users;
-
-        /// <summary>
-        /// The stat
-        /// </summary>
-        private readonly IDenormalizerStorage<SupervisorStatisticsItem> stat;
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IndexViewFactory"/> class.
-        /// </summary>
-        /// <param name="surveys">
-        /// The document item session.
-        /// </param>
-        /// <param name="users">
-        /// The users.
-        /// </param>
-        /// <param name="stat">
-        /// The stat.
-        /// </param>
-        public IndexViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireBrowseItem> surveys,
-            IDenormalizerStorage<UserDocument> users,
-            IDenormalizerStorage<SupervisorStatisticsItem> stat)
+        public IndexViewFactory(IQueryableDenormalizerStorage<UserDocument> users,
+            IQueryableDenormalizerStorage<SupervisorStatisticsItem> stat) : base(users)
         {
-            this.surveys = surveys;
-            this.users = users;
             this.stat = stat;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The load.
-        /// </summary>
-        /// <param name="input">
-        /// The input.
-        /// </param>
-        /// <returns>
-        /// The RavenQuestionnaire.Core.Views.Survey.IndexView.
-        /// </returns>
         public IndexView Load(IndexInputModel input)
         {
+            IEnumerable<Guid> responsibleList;
+            UserDocument user;
 
-            UserDocument user = null;
-            if (input.UserId != Guid.Empty)
+            if (input.InterviewerId.HasValue)
             {
-                user = this.users.Query().FirstOrDefault(u => u.PublicKey == input.UserId);
+                user = this.users.GetById(input.InterviewerId.Value);
+                responsibleList = new Guid[] { input.InterviewerId.Value };
+            }
+            else
+            {
+                user = null;
+                responsibleList = this.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
             }
 
-            var all = this.stat.Query()
+            var all = this.stat.Query(_ => _
                 .Where(s => s.Surveys.Count > 0)
-                .Where(x => input.UserId == Guid.Empty ? true : (x.User.Id == input.UserId))
-                .GroupBy(s => s.Template).ToDictionary(s => s.Key, s => s.ToList());
+                .Where(x => responsibleList.Contains(x.User.Id))
+                .GroupBy(s => s.Template)
+                .ToDictionary(s => s.Key, s => s.ToList()));
 
-            var items = this.BuildStatItems(all).AsQueryable();
+            var items = BuildStatItems(all, input);
 
-            /* var items = this.BuildItems((input.UserId == Guid.Empty
-                     ? this.surveys.Query()
-                     : this.surveys.Query().Where(
-                         x => x.Responsible != null && (x.Responsible.Id == input.UserId))).GroupBy(x => x.TemplateId)).
-                    AsQueryable();*/
+            return new IndexView(input.Page, input.PageSize, items.ToList(), user);
+        }
 
-            var retval = new IndexView(input.Page, input.PageSize, 0, new List<IndexViewItem>(), user);
+        private IEnumerable<IndexViewItem> OrderByItems(IndexInputModel input, IQueryable<IndexViewItem> items)
+        {
             if (input.Orders.Count > 0)
             {
                 items = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? items.OrderBy(input.Orders[0].Field)
-                                                      : items.OrderByDescending(
-                                                          input.Orders[0].Field);
+                            ? items.OrderBy(input.Orders[0].Field)
+                            : items.OrderByDescending(
+                                input.Orders[0].Field);
             }
-
-            retval.Summary = new IndexViewItem(
-                Guid.Empty,
-                "Summary",
-                items.Sum(x => x.Unassigned),
-                items.Sum(x => x.Total),
-                items.Sum(x => x.Initial),
-                items.Sum(x => x.Error),
-                items.Sum(x => x.Completed),
-                items.Sum(x => x.Approved),
-                items.Sum(x => x.Redo));
-
-            retval.TotalCount = items.Count();
-
-            retval.Items = items.ToList();
-            //items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize).ToList();
-            return retval;
+            return items;
         }
 
-        /// <summary>
-        /// Builds items
-        /// </summary>
-        /// <param name="dictionary">
-        /// The dictionary.
-        /// </param>
-        /// <returns>
-        /// List of survey browse items
-        /// </returns>
-        private IEnumerable<IndexViewItem> BuildStatItems(Dictionary<TemplateLight, List<SupervisorStatisticsItem>> dictionary)
+        private IEnumerable<IndexViewItem> BuildStatItems(Dictionary<TemplateLight, List<SupervisorStatisticsItem>> dictionary,IndexInputModel input)
         {
+            var result=new List<IndexViewItem>();
             foreach (var kvp in dictionary)
             {
                 var allStatuses = SurveyStatus.GetAllStatuses().ToDictionary(x => x, x => 0);
@@ -153,19 +74,19 @@ namespace Core.Supervisor.Views.Index
                     allStatuses[statisticsItem.Status] += statisticsItem.Surveys.Count;
                 }
 
-                yield return new IndexViewItem(
-                        kvp.Key.TemplateId,
-                        kvp.Key.Title,
-                        allStatuses[SurveyStatus.Unassign],
-                        allStatuses.Values.Sum(),
-                        allStatuses[SurveyStatus.Initial],
-                        allStatuses[SurveyStatus.Error],
-                        allStatuses[SurveyStatus.Complete],
-                        allStatuses[SurveyStatus.Approve],
-                        allStatuses[SurveyStatus.Redo]);
+                result.Add(new IndexViewItem(
+                               kvp.Key.TemplateId,
+                               kvp.Key.Title,
+                               allStatuses[SurveyStatus.Unassign],
+                               allStatuses.Values.Sum(),
+                               allStatuses[SurveyStatus.Initial],
+                               allStatuses[SurveyStatus.Error],
+                               allStatuses[SurveyStatus.Complete],
+                               allStatuses[SurveyStatus.Approve],
+                               allStatuses[SurveyStatus.Redo]));
             }
-        }
 
-        #endregion
+            return OrderByItems(input, result.AsQueryable());
+        }
     }
 }

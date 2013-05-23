@@ -19,7 +19,7 @@ namespace Main.Core.View.Register
         /// <summary>
         /// field documentItemSession
         /// </summary>
-        private readonly IDenormalizerStorage<SyncDeviceRegisterDocument> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> documentItemSession;
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace Main.Core.View.Register
         /// <param name="item">
         /// The item.
         /// </param>
-        public RegisterViewFactory(IDenormalizerStorage<SyncDeviceRegisterDocument> item)
+        public RegisterViewFactory(IQueryableDenormalizerStorage<SyncDeviceRegisterDocument> item)
         {
             this.documentItemSession = item;
         }
@@ -51,7 +51,7 @@ namespace Main.Core.View.Register
         /// </returns>
         public RegisterView Load(RegisterInputModel input)
         {
-            var item = this.documentItemSession.Query().Where(t => t.TabletId == input.TabletId).FirstOrDefault();
+            var item = this.documentItemSession.Query(_ => _.Where(t => t.TabletId == input.TabletId).FirstOrDefault());
             if (item == null) 
                 return new RegisterView(new SyncDeviceRegisterDocument());
             return new RegisterView(item);

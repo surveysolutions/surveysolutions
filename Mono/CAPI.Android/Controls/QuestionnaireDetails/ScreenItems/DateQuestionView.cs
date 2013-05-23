@@ -38,6 +38,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
          /*   pickDate =new Button(this.Context);
             pickDate.Text = "Change the date";
             llWrapper.AddView(pickDate);*/
+            DateTime date;
+            if (!DateTime.TryParse(Model.AnswerString, out date))
+                date = DateTime.Now;
             dialog = new DatePickerDialog(this.Context, OnDateSet, date.Year, date.Month - 1, date.Day);
            
             // add a click event handler to the button
@@ -72,7 +75,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 dateDisplay.Text = newValue;
             }
             
-            this.date = e.Date;
+           // this.date = e.Date;
             SaveAnswer();
           //  UpdateDisplay();
         }
@@ -89,7 +92,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 
         private TextView dateDisplay;
        // private Button pickDate;
-        private DateTime date;
+     //   private DateTime date=DateTime.Now;
         private DatePickerDialog dialog;
         // const int DATE_DIALOG_ID = 0;
     }

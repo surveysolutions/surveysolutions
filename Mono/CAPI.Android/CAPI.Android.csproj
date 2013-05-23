@@ -30,7 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
-    <AndroidLinkMode>None</AndroidLinkMode>
+    <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidLinkSkip />
     <EmbedAssembliesIntoApk>False</EmbedAssembliesIntoApk>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -90,6 +90,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Cirrious.MvvmCross.Plugins.Sqlite.Droid">
+      <HintPath>..\MvvmCross\Cirrious.MvvmCross.Plugins.Sqlite.Droid.dll</HintPath>
+    </Reference>
     <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\ExternalsMonodroid\Ionic.Zip.dll</HintPath>
@@ -123,6 +130,7 @@
     <Compile Include="Bindings\CustomImageGetter.cs" />
     <Compile Include="Bindings\ValidationMessageBinding.cs" />
     <Compile Include="Bindings\VisibilityBinding.cs" />
+    <Compile Include="Controls\DashboardAdapter.cs" />
     <Compile Include="Controls\Navigation\NavigationItem.cs" />
     <Compile Include="Controls\Navigation\NavigationItemsCollection.cs" />
     <Compile Include="Controls\Navigation\NavigationListener.cs" />
@@ -138,7 +146,6 @@
     <Compile Include="Core\ParcelableWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\Unmanaged\CMUncaughtExceptionHandler.cs" />
     <Compile Include="DashboardActivity.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Bindings\BackgroundBinding.cs" />
@@ -179,9 +186,10 @@
     <Compile Include="StartApplicationObject.cs" />
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
-    <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
-    <Compile Include="Syncronization\Provider.cs" />
+    <Compile Include="Syncronization\RemoteServiceEventStreamRestProvider.cs" />
     <Compile Include="Syncronization\RemoteCollector.cs" />
+    <Compile Include="Syncronization\RestAuthenticator.cs" />
+    <Compile Include="Utils\NetworkHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -225,6 +233,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\Layout\ScreenContentFragment.axml" />
+    <AndroidResource Include="Resources\Layout\SyncLogin.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Layout\Main.axml">
@@ -235,6 +246,14 @@
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
+      <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
+      <Name>Ncqrs.Portable</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidAntlr3.Runtime\AndroidAntlr3.Runtime.csproj">
       <Project>{8237c4d5-6f0e-4de4-b145-f471d49ebaac}</Project>
       <Name>AndroidAntlr3.Runtime</Name>
@@ -330,6 +349,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\Drawable\questionDisabledShape.xml" />
+    <AndroidResource Include="Resources\Layout\dashboard_survey_header.xml" />
     <EmbeddedResource Include="researchDeptSurvey.txt" />
     <EmbeddedResource Include="userEvent.txt" />
     <EmbeddedResource Include="initEvent.txt" />
