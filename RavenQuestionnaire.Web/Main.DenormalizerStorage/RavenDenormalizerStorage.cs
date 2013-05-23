@@ -90,7 +90,8 @@
 
         private IDocumentSession OpenSession()
         {
-            return this.ravenStore.OpenSession();
+            this.ravenStore.DatabaseCommands.EnsureDatabaseExists("Views");
+            return this.ravenStore.OpenSession("Views");
         }
 
         private static string ToRavenId(Guid id)
