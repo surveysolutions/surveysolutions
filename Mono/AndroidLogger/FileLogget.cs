@@ -126,7 +126,6 @@ namespace WB.Common
             {
                 s.WriteLine(string.Format("{0} {1} {2}", DateTime.Now, tag, message));
             }
-
         }
 
         private void WriteLogMessage(string tag, Throwable exc, string message)
@@ -135,7 +134,6 @@ namespace WB.Common
             {
                 s.WriteLine(string.Format("{0} {1} {2} {3}", DateTime.Now, tag, message, exc.ToString()));
             }
-
         }
 
         private void WriteLogMessage(string tag, string format, params object[] args)
