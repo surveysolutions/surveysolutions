@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AndroidLogger.cs" />
+    <Compile Include="FileLogget.cs" />
     <Compile Include="LogManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
