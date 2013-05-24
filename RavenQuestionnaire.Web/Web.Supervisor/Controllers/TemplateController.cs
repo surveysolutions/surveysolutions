@@ -11,6 +11,8 @@ namespace Web.Supervisor.Controllers
     using System.ServiceModel.Security;
     using System.Web.Mvc;
 
+    using Core.Supervisor.Views.Template;
+
     using Main.Core.Documents;
     using Main.Core.Utility;
     
@@ -89,7 +91,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Import()
+        public ActionResult Import(QuestionnaireListInputModel model)
         {
             if (this.DesignerServiceClient == null)
             {
@@ -101,9 +103,9 @@ namespace Web.Supervisor.Controllers
                     DesignerService.GetQuestionnaireList(
                         new QuestionnaireListRequest(
                             Filter: string.Empty,
-                            PageIndex: 1,
-                            PageSize: GlobalHelper.GridPageItemsCount,
-                            SortOrder: string.Empty)));
+                            PageIndex: model.Page,
+                            PageSize: model.PageSize,
+                            SortOrder: model.Order)));
         }
 
         public ActionResult LoginToDesigner()
