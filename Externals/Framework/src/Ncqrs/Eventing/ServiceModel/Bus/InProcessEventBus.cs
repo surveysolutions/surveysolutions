@@ -72,7 +72,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
 #endif
             PublishToHandlers(eventMessage, eventMessageType, handlers);
-            #if !MONODROID
+#if !MONODROID
                 transaction.Complete();
             }
 #endif
