@@ -24,33 +24,14 @@ namespace Core.Supervisor.Views.Interviewer
         public InterviewersView Load(InterviewersInputModel input)
         {
             var interviewers = this.GetInterviewersListForViewer(input.ViewerId);
-
-            if (!interviewers.Any())
-            {
-                return new InterviewersView(
-                    input.Page, 
-                    input.PageSize, 
-                    new InterviewersItem[0],
-                    input.ViewerId);
-            }
-
-            IQueryable<InterviewersItem> items =
-                interviewers.Select(
-                    x =>
-                    new InterviewersItem(
-                        x.PublicKey, 
-                        x.UserName, 
-                        x.Email, 
-                        x.CreationDate, 
-                        x.IsLocked)).AsQueryable();
-            if (input.Orders.Count > 0)
-            {
-                items = input.Orders[0].Direction == OrderDirection.Asc
-                            ? items.OrderBy(input.Orders[0].Field)
-                            : items.OrderByDescending(input.Orders[0].Field);
-            }
-
-            items = items.Skip((input.Page - 1) * input.PageSize).Take(input.PageSize);
+            
+            var items =
+                interviewers.AsQueryable()
+                            .OrderUsingSortExpression(input.Order)
+                            .Skip((input.Page - 1) * input.PageSize)
+                            .Take(input.PageSize)
+                            .Select(
+                                x => new InterviewersItem(x.PublicKey, x.UserName, x.Email, x.CreationDate, x.IsLocked));
             return new InterviewersView(
                 input.Page, input.PageSize, items, input.ViewerId);
         }

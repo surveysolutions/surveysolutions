@@ -481,6 +481,7 @@
     <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
+    <Content Include="Views\Team\_PartialGridInterviewers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
