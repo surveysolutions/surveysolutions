@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using Main.Core.Commands.Questionnaire.Group;
 using Main.Core.Domain;
 using Main.Core.Entities.SubEntities;
-using Main.Core.View;
 using Moq;
 using NUnit.Framework;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Core.Questionnaire.ExportServices;
-using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.Helpers;
 using WB.UI.Designer.Controllers;
 using WB.UI.Designer.Utils;
 
 namespace WB.UI.Designer.Tests
 {
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     [TestFixture]
     public class CommandControllerTests

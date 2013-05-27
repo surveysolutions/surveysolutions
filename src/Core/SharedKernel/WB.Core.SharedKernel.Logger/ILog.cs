@@ -1,76 +1,44 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Class1.cs" company="">
+// <copyright file="ILog.cs" company="">
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace WB.UI.Shared.NLog
+namespace WB.Core.SharedKernel.Logger
 {
     using System;
 
-    using WB.UI.Shared.Log;
-
     /// <summary>
-    /// The log.
+    /// The Log interface.
     /// </summary>
-    public class Log : ILog
+    public interface ILog
     {
-        /// <summary>
-        /// The log.
-        /// </summary>
-        private readonly global::NLog.Logger log = global::NLog.LogManager.GetCurrentClassLogger();
-
         #region Public Properties
 
         /// <summary>
         /// Gets a value indicating whether is debug enabled.
         /// </summary>
-        public bool IsDebugEnabled {
-            get
-            {
-                return this.log.IsDebugEnabled;
-            }
-        }
+        bool IsDebugEnabled { get; }
 
         /// <summary>
         /// Gets a value indicating whether is error enabled.
         /// </summary>
-        public bool IsErrorEnabled {
-            get
-            {
-                return this.log.IsErrorEnabled;
-            }
-        }
+        bool IsErrorEnabled { get; }
 
         /// <summary>
         /// Gets a value indicating whether is fatal enabled.
         /// </summary>
-        public bool IsFatalEnabled { 
-            get
-            {
-                return this.log.IsFatalEnabled;
-            }
-        }
+        bool IsFatalEnabled { get; }
 
         /// <summary>
         /// Gets a value indicating whether is info enabled.
         /// </summary>
-        public bool IsInfoEnabled { 
-            get
-            {
-                return this.log.IsInfoEnabled;
-            }
-        }
+        bool IsInfoEnabled { get; }
 
         /// <summary>
         /// Gets a value indicating whether is warn enabled.
         /// </summary>
-        public bool IsWarnEnabled {
-            get
-            {
-                return this.log.IsWarnEnabled;
-            }
-        }
+        bool IsWarnEnabled { get; }
 
         #endregion
 
@@ -82,12 +50,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="message">
         /// The message.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Debug(object message)
-        {
-            this.log.Debug(message);
-        }
+        void Debug(object message);
 
         /// <summary>
         /// The debug.
@@ -98,12 +61,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="exception">
         /// The exception.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Debug(object message, Exception exception)
-        {
-            this.log.Debug((string)message, exception);
-        }
+        void Debug(object message, Exception exception);
 
         /// <summary>
         /// The debug format.
@@ -114,12 +72,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="args">
         /// The args.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void DebugFormat(string format, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        void DebugFormat(string format, params object[] args);
 
         /// <summary>
         /// The error.
@@ -127,12 +80,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="message">
         /// The message.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Error(object message)
-        {
-            this.log.Error(message);
-        }
+        void Error(object message);
 
         /// <summary>
         /// The error.
@@ -143,12 +91,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="exception">
         /// The exception.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Error(object message, Exception exception)
-        {
-            this.log.Error((string)message, exception);
-        }
+        void Error(object message, Exception exception);
 
         /// <summary>
         /// The error format.
@@ -159,12 +102,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="args">
         /// The args.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void ErrorFormat(string format, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        void ErrorFormat(string format, params object[] args);
 
         /// <summary>
         /// The fatal.
@@ -172,12 +110,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="message">
         /// The message.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Fatal(object message)
-        {
-            this.log.Fatal(message);
-        }
+        void Fatal(object message);
 
         /// <summary>
         /// The fatal.
@@ -188,12 +121,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="exception">
         /// The exception.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Fatal(object message, Exception exception)
-        {
-            this.log.Fatal((string)message, exception);
-        }
+        void Fatal(object message, Exception exception);
 
         /// <summary>
         /// The fatal format.
@@ -204,12 +132,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="args">
         /// The args.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void FatalFormat(string format, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        void FatalFormat(string format, params object[] args);
 
         /// <summary>
         /// The info.
@@ -217,12 +140,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="message">
         /// The message.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Info(object message)
-        {
-            this.log.Info(message);
-        }
+        void Info(object message);
 
         /// <summary>
         /// The info.
@@ -233,12 +151,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="exception">
         /// The exception.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Info(object message, Exception exception)
-        {
-            this.log.Info((string)message, exception);
-        }
+        void Info(object message, Exception exception);
 
         /// <summary>
         /// The info format.
@@ -249,12 +162,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="args">
         /// The args.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void InfoFormat(string format, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        void InfoFormat(string format, params object[] args);
 
         /// <summary>
         /// The warn.
@@ -262,12 +170,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="message">
         /// The message.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Warn(object message)
-        {
-            this.log.Warn(message);
-        }
+        void Warn(object message);
 
         /// <summary>
         /// The warn.
@@ -278,12 +181,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="exception">
         /// The exception.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void Warn(object message, Exception exception)
-        {
-            this.log.Warn((string)message,exception);
-        }
+        void Warn(object message, Exception exception);
 
         /// <summary>
         /// The warn format.
@@ -294,12 +192,7 @@ namespace WB.UI.Shared.NLog
         /// <param name="args">
         /// The args.
         /// </param>
-        /// <exception cref="NotImplementedException">
-        /// </exception>
-        public void WarnFormat(string format, params object[] args)
-        {
-            throw new NotImplementedException();
-        }
+        void WarnFormat(string format, params object[] args);
 
         #endregion
     }

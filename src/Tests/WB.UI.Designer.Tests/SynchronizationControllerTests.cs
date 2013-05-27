@@ -15,8 +15,8 @@ namespace WB.UI.Designer.Tests
     using System.IO;
     using System.IO.Compression;
 
+    using WB.Core.SharedKernel.Utils.Compression;
     using WB.UI.Designer.BootstrapSupport;
-    using WB.UI.Shared.Compression;
     using WB.UI.Shared.Web.Membership;
 
     [TestFixture]
@@ -24,7 +24,7 @@ namespace WB.UI.Designer.Tests
     {
         protected Mock<ICommandService> CommandServiceMock;
         protected Mock<IViewRepository> ViewRepositoryMock;
-        protected Mock<IZipUtils> ZipUtilsMock;
+        protected Mock<IStringCompressor> ZipUtilsMock;
         protected Mock<IExportService> ExportServiceMock;
         protected Mock<IMembershipUserService> UserHelperMock;
         
@@ -33,7 +33,7 @@ namespace WB.UI.Designer.Tests
         {
             CommandServiceMock=new Mock<ICommandService>();
             ViewRepositoryMock=new Mock<IViewRepository>();
-            ZipUtilsMock=new Mock<IZipUtils>();
+            ZipUtilsMock = new Mock<IStringCompressor>();
             ExportServiceMock = new Mock<IExportService>();
             UserHelperMock=new Mock<IMembershipUserService>();
         }
@@ -55,7 +55,7 @@ namespace WB.UI.Designer.Tests
             file.Setup(x => x.ContentLength).Returns((int)inputStream.Length);
             file.Setup(x => x.InputStream).Returns(inputStream);
 
-            ZipUtilsMock.Setup(x => x.UnZip<IQuestionnaireDocument>(file.Object.InputStream))
+            ZipUtilsMock.Setup(x => x.Decompress<IQuestionnaireDocument>(file.Object.InputStream))
                         .Returns(new QuestionnaireDocument());
             UserHelperMock.Setup(x => x.WebUser.UserId).Returns(Guid.NewGuid);
 
@@ -93,13 +93,13 @@ namespace WB.UI.Designer.Tests
             Guid templateId = Guid.NewGuid();
             string dataForZip = "zipped data";
             ExportServiceMock.Setup(x => x.GetQuestionnaireTemplate(templateId)).Returns(dataForZip);
-            ZipUtilsMock.Setup(x => x.Zip(dataForZip)).Returns(new MemoryStream());
+            ZipUtilsMock.Setup(x => x.Compress(dataForZip)).Returns(new MemoryStream());
             // act
             controller.Export(templateId);
 
             // assert
             ExportServiceMock.Verify(x => x.GetQuestionnaireTemplate(templateId), Times.Once());
-            ZipUtilsMock.Verify(x => x.Zip(dataForZip), Times.Once());
+            ZipUtilsMock.Verify(x => x.Compress(dataForZip), Times.Once());
         }
 
         [Test]
