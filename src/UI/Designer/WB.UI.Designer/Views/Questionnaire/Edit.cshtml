@@ -10,14 +10,14 @@
 }
 @section Styles{
     @Styles.Render("~/content/edit")
+    <!--[if IE 7]>
+      <link href="~/Content/font-awesome-ie7.min.css" rel="stylesheet" />
+    <![endif]-->
 }
-<!--[if IE 7]>
-  <link href="~/Content/font-awesome-ie7.min.css" rel="stylesheet" />
-<![endif]-->
 @section Scripts{
-    @Scripts.Render("~/designer")
     <script type="text/javascript">
-        define('input', [], function() {
+        var input = window.input || (function(document) {
+            'use strict';
             var q = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, new JsonSerializerSettings()
                         {
                             TypeNameHandling = TypeNameHandling.Objects,
@@ -27,8 +27,12 @@
                 questionnaire: q,
                 commandExecutionUrl: '@Url.Action("Execute", "Command", new { }, Request.Url.Scheme)'
             };
-        });
+        }(document));
+        
+        window.input = input;
     </script>
+    @Scripts.Render("~/designer")
+    
 }
 
 <div id="busyindicator"></div>
@@ -51,14 +55,14 @@
             </div>
 
             <div class="pull-right">
-                <button class="btn btn-info" data-bind="click: showOutput">Show errors</button>
+                <button class="btn btn-info" data-bind="click: $root.showOutput">Show errors</button>
             </div>
         </div>
     </div>
     <div id="output" class="stack">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: hideOutput">&times</button>
+                <button type="button" class="close" data-bind="click: $root.hideOutput">&times</button>
                 <span>Errors log</span>
             </div>
             <div class="body">
@@ -74,7 +78,7 @@
         <div class="inner">
             <div class="body">
                 <div id="filter">
-                    <button type="button" class="close" data-bind="click: clearFilter">&times</button>
+                    <button type="button" class="close" data-bind="click: $root.clearFilter">&times</button>
                     <input type="text" class="transparent" maxlength="255" placeholder="search text" data-bind="value: filter, valueUpdate: 'afterkeydown'">
                 </div>
                 <ul data-bind="with: questionnaire" class="list">
@@ -86,7 +90,7 @@
                                         <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                                         </a>
                                         <ul class="dropdown-menu">
-                                            <li><a data-bind="click: addChapter" tabindex="-1" href="#"><i class="icon-plus"></i>Add chapter</a></li>
+                                            <li><a data-bind="click: $root.addChapter" tabindex="-1" href="#"><i class="icon-plus"></i>Add chapter</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -112,7 +116,7 @@
     <div id="details-questionnaire" class="details stack" data-bind="with: questionnaire ">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
@@ -127,7 +131,7 @@
             </div>
             <div class="pane-bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: $root.saveQuestionnaire, visible: dirtyFlag().isDirty(), enable: errors().length == 0"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
@@ -135,7 +139,7 @@
     <div id="details-group" class="details stack" data-bind="with:selectedGroup ">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
@@ -190,7 +194,7 @@
             </div>
             <div class="pane-bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: $root.saveGroup, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
@@ -198,7 +202,7 @@
     <div id="details-question" class="details stack" data-bind="with:selectedQuestion ">
         <div class="inner">
             <div class="title">
-                <button type="button" class="close" data-bind="click: closeDetails">&times</button>
+                <button type="button" class="close" data-bind="click: $root.closeDetails">&times</button>
                 <span data-bind="text: title"></span>
             </div>
             <div class="body container-fluid">
@@ -270,7 +274,7 @@
 
             <div class="pane-bottom">
                 <div class="inner">
-                    <button class="btn btn-success" data-bind="click: saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
+                    <button class="btn btn-success" data-bind="click: $root.saveQuestion, visible: dirtyFlag().isDirty() || isNew(), enable: errors().length == 0 && canUpdate()"><i class="icon-white icon-ok"></i>Save</button>
                 </div>
             </div>
         </div>
@@ -289,10 +293,10 @@
                         <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a data-bind="click: addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
-                            <li><a data-bind="click: addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
-                            <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
-                            <li><a data-bind="click: deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                            <li><a data-bind="click: $root.addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
+                            <li><a data-bind="click: $root.addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
+                            <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
+                            <li><a data-bind="click: $root.deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
                 </div>
@@ -315,8 +319,8 @@
                     <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
+                        <li><a data-bind="click: $root.deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
@@ -334,7 +338,7 @@
                     <a class="btn dropdown-toggle btn-success btn-mini" data-toggle="dropdown" href="#"><i class=" icon-download icon-white"></i>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a data-bind="click: deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
+                        <li><a data-bind="click: $root.deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                     </ul>
                 </div>
             </div>

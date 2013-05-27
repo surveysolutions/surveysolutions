@@ -73,10 +73,15 @@ namespace Web.Supervisor.App_Start
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
 
+            bool isApprovedSended;
+            if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
+            {
+                isApprovedSended = false;
+            }
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, username, password));
+            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended));
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
@@ -84,7 +89,15 @@ namespace Web.Supervisor.App_Start
             ServiceLocator.SetLocatorProvider(() => new NinjectServiceLocator(kernel));
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            NcqrsInit.Init(/*WebConfigurationManager.AppSettings["Raven.DocumentStore"],*/ kernel);
+
+
+            int pageSize;
+            if (int.TryParse(WebConfigurationManager.AppSettings["EventStorePageSize"], out pageSize))
+            {
+                NcqrsInit.Init(kernel, pageSize);
+            }
+            else
+                NcqrsInit.Init(kernel);
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 

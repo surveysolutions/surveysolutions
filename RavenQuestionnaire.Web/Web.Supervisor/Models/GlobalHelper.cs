@@ -86,7 +86,7 @@ namespace Web.Supervisor.Models
         {
             var url = new UrlHelper(HttpContext.Current.Request.RequestContext);
 
-            return url.Action(action, controller, routes, "http");
+            return url.Action(action, controller, routes, HttpContext.Current.Request.Url.Scheme);
         }
 
         #endregion

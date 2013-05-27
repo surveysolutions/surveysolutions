@@ -38,6 +38,7 @@ namespace Core.Supervisor.Synchronization
         private readonly IDenormalizer denormalizer;
 
         private readonly Guid supervisorId;
+        private readonly bool isApprovedSended;
 
         //private List<Guid> ARKeys; 
 
@@ -46,10 +47,13 @@ namespace Core.Supervisor.Synchronization
 
         #region Constructors and Destructors
 
-        public SupervisorEventStreamReader(IDenormalizer denormalizer, Guid supervisorId)
+       
+        public SupervisorEventStreamReader(IDenormalizer denormalizer, Guid supervisorId, bool isApprovedSended)
+            : base(denormalizer)
         {
             this.denormalizer = denormalizer;
             this.supervisorId = supervisorId;
+            this.isApprovedSended = isApprovedSended;
         }
 
         #endregion
@@ -133,18 +137,27 @@ namespace Core.Supervisor.Synchronization
         private List<Guid> GetQuestionnaires(List<Guid> users)
         {
             return this.denormalizer.Query<CompleteQuestionnaireBrowseItem, List<Guid>>(_ => _
-                .Where(q => SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id))
+                                
+                .Where(q => IsQuestionnarieRequiresSync(users, q))
                 .Select(i => i.CompleteQuestionnaireId)
                 .ToList());
+        }
+
+        private bool IsQuestionnarieRequiresSync(List<Guid> users, CompleteQuestionnaireBrowseItem q)
+        {
+            if (q.Status == SurveyStatus.Approve && !isApprovedSended)
+                return false;
+            return SurveyStatus.IsStatusAllowDownSupervisorSync(q.Status) && q.Responsible != null && users.Contains(q.Responsible.Id);
         }
 
         private List<Guid> GetUsers()
         {
             return
-                this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
-                    .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
-                    .Select(u => u.PublicKey)
-                    .ToList());
+                 this.denormalizer.Query<UserDocument, List<Guid>>(_ => _
+                     .Where(t => t.Supervisor != null && t.Supervisor.Id == supervisorId)
+                     .Select(u => u.PublicKey)
+                     .ToList());
+
         }
 
         #endregion

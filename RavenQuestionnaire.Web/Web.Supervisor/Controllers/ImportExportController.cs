@@ -11,10 +11,8 @@ using System.Net;
 using System.Web.Security;
 using Main.Core.Entities.SubEntities;
 using Main.Core.View.User;
-
 using WB.UI.Shared.Web.Exceptions;
 using WB.UI.Shared.Web.Filters;
-
 namespace Web.Supervisor.Controllers
 {
     using System;
@@ -34,6 +32,9 @@ namespace Web.Supervisor.Controllers
     using Main.Synchronization.SyncSreamProvider;
     using Main.Synchronization.SyncStreamCollector;
 
+    using SynchronizationMessages.Synchronization;
+
+
     using Newtonsoft.Json;
 
     using Questionnaire.Core.Web.Helpers;
@@ -41,7 +42,7 @@ namespace Web.Supervisor.Controllers
 
     using SynchronizationMessages.CompleteQuestionnaire;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     using Web.Supervisor.Models;
     using Web.Supervisor.Utils.Attributes;
@@ -373,6 +374,8 @@ namespace Web.Supervisor.Controllers
             catch (Exception ex)
             {
                 logger.Fatal("Error on retrieving the list of AR on sync. ", ex);
+                logger.Fatal(ex.Message);
+                logger.Fatal(ex.StackTrace);
             }
 
             return result;
@@ -464,33 +467,35 @@ namespace Web.Supervisor.Controllers
             var user = GetUser(login, password);
             if (user == null)
                 throw new HttpStatusException(HttpStatusCode.Forbidden);
-            Guid syncProcess = Guid.NewGuid();
-
+            if (Request.Files==null || Request.Files.Count == 0)
+                return false;
             try
             {
-                Request.InputStream.Position = 0;
+                EventSyncMessage message = null;
 
-                /*var message = new EventSyncMessage();
-                message.InitializeFrom(Request.InputStream);*/
-
-                var settings = new JsonSerializerSettings();
-                settings.TypeNameHandling = TypeNameHandling.Objects;
-
-                string item;
-                using (var sr = new StreamReader(Request.InputStream))
+                string item = PackageHelper.Decompress(Request.Files[0].InputStream);
+                
+                try
                 {
-                    item = sr.ReadToEnd();
+                    var settings = new JsonSerializerSettings();
+                    settings.TypeNameHandling = TypeNameHandling.Objects;
+
+                    message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
+                }
+                catch (Exception)
+                {
+                    logger.Fatal("Error on Deserialization received stream. Item: " + item);
+                    throw;
                 }
                 
-                EventSyncMessage message = JsonConvert.DeserializeObject<EventSyncMessage>(item, settings);
-
                 if (message == null)
                 {
                     return false;
                 }
 
-                var process =
+                 var process =
                     this.syncProcessFactory.GetRestProcess(message.SynchronizationKey, user.Supervisor.Id);
+
 
                 process.Import("Direct controller syncronization.", message.Command);
 
@@ -499,6 +504,9 @@ namespace Web.Supervisor.Controllers
             catch (Exception ex)
             {
                 logger.Fatal("Error on Sync.", ex);
+                logger.Fatal("Exception message: " + ex.Message);
+                logger.Fatal("Stack: " + ex.StackTrace);
+                
                 return false;
             }
         }

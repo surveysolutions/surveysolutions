@@ -13,7 +13,6 @@ using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
-using CAPI.Android.Core.Unmanaged;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -176,32 +175,29 @@ namespace CAPI.Android
 
         public override void OnCreate()
         {
-            Java.Lang.Thread.DefaultUncaughtExceptionHandler = new
-                CMUncaughtExceptionHandler();
-            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-            
             base.OnCreate();
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
-            var manager = this.GetSystemService(Context.ActivityService) as ActivityManager;
-            var topActivity = manager.GetRunningTasks(1).Last().TopActivity;
-            if (!topActivity.ClassName.Contains(typeof (SplashScreenActivity).Name))
-                this.ClearAllBackStack<SplashScreenActivity>();
+            RestoreAppState();
         }
-        
+
+        private void RestoreAppState()
+        {
+            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironmentUnhandledExceptionRaiser;
+        }
+
+        private void AndroidEnvironmentUnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
+        {
+            this.ClearAllBackStack<SplashScreenActivity>();
+
+            var questionnarieDenormalizer =
+                kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>() as
+                InMemoryDenormalizer<CompleteQuestionnaireView>;
+            if (questionnarieDenormalizer != null)
+                questionnarieDenormalizer.Clear();
+        }
+
         private IKernel kernel;
-        public  static void Restart()
-        {
-            Intent i = Context.PackageManager.GetLaunchIntentForPackage(Context.PackageName);
-            i.AddFlags(ActivityFlags.ClearTop);
-            Context.StartActivity(i);
-            
-        }
-        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-        }
-
-
 
         public override void OnLowMemory()
         {

@@ -11,6 +11,8 @@ namespace Web.Supervisor.Controllers
     using System.ServiceModel.Security;
     using System.Web.Mvc;
 
+    using Core.Supervisor.Views.Template;
+
     using Main.Core.Documents;
     using Main.Core.Utility;
     
@@ -19,8 +21,8 @@ namespace Web.Supervisor.Controllers
     using Questionnaire.Core.Web.Helpers;
 
     using WB.Core.Questionnaire.ImportService.Commands;
-    using WB.UI.Shared.Compression;
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Compression;
 
     using Web.Supervisor.DesignerPublicService;
     using Web.Supervisor.Models;
@@ -31,7 +33,7 @@ namespace Web.Supervisor.Controllers
     [Authorize(Roles = "Headquarter")]
     public class TemplateController : BaseController
     {
-        private readonly IZipUtils zipUtils;
+        private readonly IStringCompressor zipUtils;
         #region Constructors and Destructors
 
         /// <summary>
@@ -46,7 +48,7 @@ namespace Web.Supervisor.Controllers
         /// <param name="logger">
         /// The logger.
         /// </param>
-        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IZipUtils zipUtils, ILog logger)
+        public TemplateController(ICommandService commandService, IGlobalInfoProvider globalInfo, IStringCompressor zipUtils, ILog logger)
             : base(null, commandService, globalInfo, logger)
         {
             this.zipUtils = zipUtils;
@@ -89,7 +91,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>
         /// The <see cref="ActionResult"/>.
         /// </returns>
-        public ActionResult Import()
+        public ActionResult Import(QuestionnaireListInputModel model)
         {
             if (this.DesignerServiceClient == null)
             {
@@ -101,9 +103,9 @@ namespace Web.Supervisor.Controllers
                     DesignerService.GetQuestionnaireList(
                         new QuestionnaireListRequest(
                             Filter: string.Empty,
-                            PageIndex: 1,
-                            PageSize: GlobalHelper.GridPageItemsCount,
-                            SortOrder: string.Empty)));
+                            PageIndex: model.Page,
+                            PageSize: model.PageSize,
+                            SortOrder: model.Order)));
         }
 
         public ActionResult LoginToDesigner()
@@ -135,7 +137,10 @@ namespace Web.Supervisor.Controllers
                 }
                 catch (Exception ex)
                 {
-                    this.Error("Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>");
+                    this.Error(
+                        string.Format(
+                            "Could not connect to designer. Please check that designer is available and try <a href='{0}'>again</a>",
+                            GlobalHelper.GenerateUrl("Import", "Template", null)));
                     Logger.Error(ex);
                 }
             }
@@ -173,7 +178,7 @@ namespace Web.Supervisor.Controllers
             try
             {
                 var docSource = DesignerService.DownloadQuestionnaire(new DownloadQuestionnaireRequest(id));
-                document = zipUtils.UnZip<QuestionnaireDocument>(docSource.FileByteStream);
+                document = zipUtils.Decompress<QuestionnaireDocument>(docSource.FileByteStream);
             }
             catch (Exception ex)
             {

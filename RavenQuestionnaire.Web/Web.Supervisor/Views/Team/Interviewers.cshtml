@@ -11,8 +11,8 @@
                 send: function(data) {
                     $.ajax({
                             type: "POST",
-                            url: "@Url.Action("_TableData", "User")",
-                            data: JSON.stringify({ SortOrder: data, Pager: { Page: @Model.View.Page , PageSize: @Model.View.PageSize }, SupervisorId:'@Model.View.ViewerId' }),
+                            url: "@Url.Action("GetInterviewers", "Team")",
+                            data: JSON.stringify({ Orders: data, Page: @Model.View.Page , PageSize: @Model.View.PageSize, Id:'@Model.View.ViewerId' }),
                             contentType: 'application/json, charset=utf-8',
                             statusCode: {
                                 200: function(response) {
@@ -28,7 +28,7 @@
 <table id="questionnaireTable" class="table table-striped table-bordered table-condensed">
     <thead>
         <tr>
-            <th class="sorting" sorter='{"key":"Login"}'>Login</th>
+            <th class="sorting" sorter='{"key":"UserName"}'>Login</th>
             <th class="sorting" sorter='{"key":"CreationDate"}'>Creation date </th>
             <th class="sorting" sorter='{"key":"Email"}'>Email </th>
             <td>
@@ -36,7 +36,7 @@
         </tr>
     </thead>
     <tbody>
-        @Html.Partial("_PartialUsersGridTemplate", Model.View)
+        @Html.Partial("_PartialGridInterviewers", Model.View)
     </tbody>
 </table>
 <div class="pagination">

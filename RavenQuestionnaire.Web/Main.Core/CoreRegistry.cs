@@ -18,6 +18,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -118,12 +119,12 @@ namespace Main.Core
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(typeof (IViewFactory<,>), (c) => Guid.NewGuid());
+            BindInterface(GetAssweblysForRegister(),typeof (IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(typeof (IEventHandler<>), (c) => this.Kernel);
+            BindInterface(GetAssweblysForRegister().Union(new Assembly[]{typeof(SnapshootLoaded).Assembly}), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
@@ -131,8 +132,8 @@ namespace Main.Core
             foreach (
                 var denormalizer in
                     GetAssweblysForRegister()
-                        .SelectMany(a => a.GetTypes())
-                        .Where(DenormalizerStorageImplementation))
+                                             .SelectMany(a => a.GetTypes())
+                                             .Where(DenormalizerStorageImplementation))
             {
 
                 this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
@@ -165,11 +166,11 @@ namespace Main.Core
         }
 
         #endregion
-        protected void BindInterface(Type interfaceType, Func<IContext,object> scope)
+        protected void BindInterface(IEnumerable<Assembly> assembyes,Type interfaceType, Func<IContext,object> scope)
         {
 
             var implementations =
-             GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
+             assembyes.SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
 

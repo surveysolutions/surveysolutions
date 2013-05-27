@@ -71,7 +71,7 @@ namespace Main.Core.View.User
 
                 if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
                 {
-                    doc = queryableUsers.FirstOrDefault(u => u.UserName == input.UserName);
+                    doc = queryableUsers.FirstOrDefault(u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
                     if (doc != null && doc.Password != input.Password)
                         return null;
                 }

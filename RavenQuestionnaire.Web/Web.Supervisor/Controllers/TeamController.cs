@@ -22,7 +22,7 @@ namespace Web.Supervisor.Controllers
 
     using Questionnaire.Core.Web.Helpers;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     using Web.Supervisor.Models;
 
@@ -86,16 +86,26 @@ namespace Web.Supervisor.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                this.CommandService.Execute(
-                    new CreateUserCommand(
-                        publicKey: Guid.NewGuid(), 
-                        userName: model.Name, 
-                        password: SimpleHash.ComputeHash(model.Password), 
-                        email: model.Email, 
-                        isLocked: false, 
-                        roles: new[] { UserRoles.Operator }, 
-                        supervsor: this.GetUser(model.Id).GetUseLight()));
-                return this.RedirectToAction("Interviewers", new { id = model.Id });
+                var user =
+                    this.Repository.Load<UserViewInputModel, UserView>(
+                        new UserViewInputModel(UserName: model.Name, UserEmail: null));
+                if (user == null)
+                {
+                    this.CommandService.Execute(
+                        new CreateUserCommand(
+                            publicKey: Guid.NewGuid(),
+                            userName: model.Name,
+                            password: SimpleHash.ComputeHash(model.Password),
+                            email: model.Email,
+                            isLocked: false,
+                            roles: new[] { UserRoles.Operator },
+                            supervsor: this.GetUser(model.Id).GetUseLight()));
+                    return this.RedirectToAction("Interviewers", new { id = model.Id });
+                }
+                else
+                {
+                    this.Error("User name already exists. Please enter a different user name.");
+                }
             }
 
             return this.View(model);
@@ -126,17 +136,27 @@ namespace Web.Supervisor.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                this.CommandService.Execute(
-                    new CreateUserCommand(
-                        publicKey: Guid.NewGuid(),
-                        userName: model.Name,
-                        password: SimpleHash.ComputeHash(model.Password),
-                        email: model.Email,
-                        isLocked: false,
-                        roles: new[] { UserRoles.Supervisor },
-                        supervsor: null));
+                var user =
+                    this.Repository.Load<UserViewInputModel, UserView>(
+                        new UserViewInputModel(UserName: model.Name, UserEmail: null));
+                if (user == null)
+                {
+                    this.CommandService.Execute(
+                        new CreateUserCommand(
+                            publicKey: Guid.NewGuid(),
+                            userName: model.Name,
+                            password: SimpleHash.ComputeHash(model.Password),
+                            email: model.Email,
+                            isLocked: false,
+                            roles: new[] { UserRoles.Supervisor },
+                            supervsor: null));
 
-                return this.RedirectToAction("Index");
+                    return this.RedirectToAction("Index");
+                }
+                else
+                {
+                    this.Error("User name already exists. Please enter a different user name.");
+                }
             }
 
             return this.View(model);
@@ -217,6 +237,30 @@ namespace Web.Supervisor.Controllers
                             Id = user.PublicKey,
                             SupervisorName = user.UserName
                         });
+        }
+
+        /// <summary>
+        /// Gets table data for some view
+        /// </summary>
+        /// <param name="data">
+        /// The data.
+        /// </param>
+        /// <returns>
+        /// Partial view with table's body
+        /// </returns>
+        public ActionResult GetInterviewers(InterviewersViewInputModel data)
+        {
+            UserView user = this.GetUser(data.Id);
+            var interviewers =
+                this.Repository.Load<InterviewersInputModel, InterviewersView>(
+                    new InterviewersInputModel
+                    {
+                        ViewerId = data.Id,
+                        Page = data.Page,
+                        PageSize = data.PageSize,
+                        Order = data.Order
+                    });
+            return this.PartialView("_PartialGridInterviewers", interviewers);
         }
 
         /// <summary>

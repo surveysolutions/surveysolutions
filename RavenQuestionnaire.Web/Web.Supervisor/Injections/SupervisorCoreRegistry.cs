@@ -25,16 +25,21 @@ namespace Web.Supervisor.Injections
     using Questionnaire.Core.Web.Export.csv;
     using Questionnaire.Core.Web.Security;
 
-    using WB.UI.Shared.Compression;
-    using WB.UI.Shared.Log;
-    using WB.UI.Shared.NLog;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.Compression;
+    using WB.Core.SharedKernel.Utils.NLog;
 
     using Web.Supervisor.Filters;
 
     public class SupervisorCoreRegistry : CoreRegistry
     {
-        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, string username, string password)
+        private readonly bool isApprovedSended;
+
+        public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, string username, string password, bool isApprovedSended)
             : base(repositoryPath, isEmbeded, username, password) {}
+        {
+            this.isApprovedSended = isApprovedSended;
+        }
 
         public override IEnumerable<Assembly> GetAssweblysForRegister()
         {
@@ -67,7 +72,9 @@ namespace Web.Supervisor.Injections
             base.Load();
 
             this.Unbind<IEventStreamReader>();
-            this.Bind<IEventStreamReader>().To<SupervisorEventStreamReader>();
+            this.Bind<IEventStreamReader>()
+                .To<SupervisorEventStreamReader>()
+                .WithConstructorArgument("isApprovedSended", isApprovedSended);
 
             this.Bind<IExportProvider<CompleteQuestionnaireExportView>>().To<CSVExporter>();
             this.Bind<IEnvironmentSupplier<CompleteQuestionnaireExportView>>().To<StataSuplier>();
@@ -77,7 +84,7 @@ namespace Web.Supervisor.Injections
 
             this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
 
-            this.Bind<IZipUtils>().ToConstant(new ZipUtils()).InSingletonScope();
+            this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
         }
     }
 }
