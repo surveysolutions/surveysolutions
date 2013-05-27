@@ -55,12 +55,15 @@ namespace Core.Supervisor.Views.Assignment
                     view.Status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
                 }
                 #warning need to be filtered by responsible supervisr
+                #warning ReadLayer: Contains is not supported in Raven, but In should be used, but here we are abstracted and cannot use it, so more data is now processed on client-side
                 IQueryable<CompleteQuestionnaireBrowseItem> items = (view.Status.PublicId == SurveyStatus.Unknown.PublicId
                                                                          ? queryableSurveys
                                                                          : queryableSurveys
                                                                                .Where(
                                                                                    v =>
                                                                                    v.Status.PublicId == view.Status.PublicId))
+                    .ToList()
+                    .AsQueryable()
                     .Where(q => (q.Responsible == null) || responsibleList.Contains(q.Responsible.Id))
                     .OrderByDescending(t => t.CreationDate);
 

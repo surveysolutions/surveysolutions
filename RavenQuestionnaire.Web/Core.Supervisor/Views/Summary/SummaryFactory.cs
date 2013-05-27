@@ -46,6 +46,7 @@
                         !input.TemplateId.HasValue
                         ? (x.Responsible != null && interviewers.Contains(x.Responsible.Id))
                         : (x.Responsible != null && interviewers.Contains(x.Responsible.Id) && (x.TemplateId == input.TemplateId)))
+                    .ToList()
                     .GroupBy(x => x.Responsible);
 
                 var items = this.BuildItems(groupedSurveys).AsQueryable();
@@ -74,7 +75,7 @@
             });
         }
 
-        protected IEnumerable<SummaryViewItem> BuildItems(IQueryable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
+        protected IEnumerable<SummaryViewItem> BuildItems(IEnumerable<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {
