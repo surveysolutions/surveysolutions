@@ -3,11 +3,11 @@
 //   
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-namespace WB.UI.Shared.NLog
+namespace WB.Core.SharedKernel.Utils.NLog
 {
     using Microsoft.Practices.ServiceLocation;
 
-    using WB.UI.Shared.Log;
+    using WB.Core.SharedKernel.Logger;
 
     /// <summary>
     ///     The log manager.
