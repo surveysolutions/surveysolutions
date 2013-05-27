@@ -36,7 +36,7 @@ namespace Web.Supervisor.Injections
         private readonly bool isApprovedSended;
 
         public SupervisorCoreRegistry(string repositoryPath, bool isEmbeded, string username, string password, bool isApprovedSended)
-            : base(repositoryPath, isEmbeded, username, password) {}
+            : base(repositoryPath, isEmbeded, username, password)
         {
             this.isApprovedSended = isApprovedSended;
         }
