@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
+
 namespace WB.Core.Infrastructure.Implementation
 {
     internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
@@ -13,6 +17,15 @@ namespace WB.Core.Infrastructure.Implementation
 
         private static string statusMessage = "No administration operations were performed so far.";
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
+
+        private readonly IStreamableEventStore eventStore;
+        private readonly IEventBus eventBus;
+
+        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus)
+        {
+            this.eventStore = eventStore;
+            this.eventBus = eventBus;
+        }
 
         #region IReadLayerStatusService implementation
 
@@ -61,9 +74,9 @@ namespace WB.Core.Infrastructure.Implementation
             {
                 areViewsBeingRebuiltNow = true;
 
-                DropAllViews();
+                this.DropAllViews();
 
-                RepublishAllEvents();
+                this.RepublishAllEvents();
             }
             catch (Exception exception)
             {
@@ -74,6 +87,43 @@ namespace WB.Core.Infrastructure.Implementation
             {
                 areViewsBeingRebuiltNow = false;
             }
+        }
+
+        private void RepublishAllEvents()
+        {
+            int processedEventsCount = 0;
+            int failedEventsCount = 0;
+
+            UpdateStatusMessage("Determining count of events to be republished.");
+
+            int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
+
+            UpdateStatusMessage(string.Format("Preparing to republish {0} events.", allEventsCount));
+
+            foreach (CommittedEvent @event in this.eventStore.GetAllEventsWithoutSnapshots())
+            {
+                UpdateStatusMessage(string.Format("Publishing event {0} of {1}. Failed events: {2}.",
+                    processedEventsCount + 1, allEventsCount, failedEventsCount));
+
+                try
+                {
+                    this.eventBus.Publish(@event);
+                }
+                catch (Exception exception)
+                {
+                    SaveErrorForStatusReport(
+                        string.Format("Failed to publish event {0} of {1} ({2})",
+                            processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
+                        exception);
+
+                    failedEventsCount++;
+                }
+
+                processedEventsCount++;
+            }
+
+            UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
+                processedEventsCount, failedEventsCount));
         }
 
         #region Error reporting methods
