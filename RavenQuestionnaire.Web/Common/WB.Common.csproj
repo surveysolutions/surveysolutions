@@ -53,9 +53,9 @@
     <Compile Include="TraceLogger.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.Core\WB.Common.Core.csproj">
-      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
-      <Name>WB.Common.Core</Name>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,9 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Entities.SubEntities.Complete;
-using Main.Core.Utility;
-using Ncqrs;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.Documents
 {

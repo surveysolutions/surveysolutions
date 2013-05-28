@@ -1,6 +1,6 @@
 ﻿using System;
+using WB.Core.SharedKernel.Logger;
 
-using WB.Common.Core.Logging;
 
 namespace WB.Common
 {

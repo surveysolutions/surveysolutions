@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
 
 namespace WB.Common
 {

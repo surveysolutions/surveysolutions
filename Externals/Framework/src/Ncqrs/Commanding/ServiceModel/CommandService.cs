@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Ncqrs.Commanding.CommandExecution;
-using WB.Common;
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Commanding.ServiceModel
 {

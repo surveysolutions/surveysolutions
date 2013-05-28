@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 using Java.Lang;
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
 using Environment = Android.OS.Environment;
 using Exception = System.Exception;
 
-namespace WB.Common
+namespace WB.Core.SharedKernel.Utils.Logging
 {
 
     public class FileLogger : ILog

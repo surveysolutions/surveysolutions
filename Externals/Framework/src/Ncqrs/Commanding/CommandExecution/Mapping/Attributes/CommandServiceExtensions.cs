@@ -2,14 +2,15 @@
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.ServiceModel;
-using WB.Common;
-using WB.Common.Core.Logging;
+
+using WB.Core.SharedKernel.Logger;
+
 
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public static class RegisterExecutorForAllMappedCommandsInAssemblyExtension
     {
-        private static ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        //private static ILog logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         public static void RegisterExecutorsInAssembly(this CommandService target, Assembly asm)
         {

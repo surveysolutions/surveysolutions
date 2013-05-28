@@ -4,9 +4,8 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing;
 using Ncqrs.Eventing.Sourcing.Mapping;
-using WB.Common;
-using WB.Common.Core.Logging;
-
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
 namespace Ncqrs.Domain
 {
     /// <summary>

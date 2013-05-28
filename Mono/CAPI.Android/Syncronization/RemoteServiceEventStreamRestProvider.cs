@@ -7,13 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Security.Authentication;
-using Main.Core.Entities.SubEntities;
-using Main.Synchronization.Credentials;
-using Ncqrs;
-using Ncqrs.Eventing;
-using Ncqrs.Eventing.Storage;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace AndroidMain.Synchronization
 {
@@ -27,7 +21,12 @@ namespace AndroidMain.Synchronization
 
     using Newtonsoft.Json;
 
-    using Ninject;
+    using System.Security.Authentication;
+    using Main.Core.Entities.SubEntities;
+    using Main.Synchronization.Credentials;
+    using Ncqrs;
+    using Ncqrs.Eventing;
+    using Ncqrs.Eventing.Storage;
 
     using RestSharp;
 

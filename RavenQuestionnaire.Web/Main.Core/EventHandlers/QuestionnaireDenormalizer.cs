@@ -8,7 +8,7 @@ using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.EventHandlers
 {

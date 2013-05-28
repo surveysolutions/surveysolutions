@@ -14,9 +14,10 @@ using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Syncronization;
 using Main.Core.Utility;
-using WB.Common;
+
 using Main.Core.View.User;
 using Main.Synchronization.Credentials;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android
 {

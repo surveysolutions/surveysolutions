@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using Ncqrs.Domain;
-using WB.Common;
+
 using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.Domain
 {

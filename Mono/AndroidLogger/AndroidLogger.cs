@@ -1,10 +1,10 @@
 ﻿using Android.Util;
 
 using Java.Lang;
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
 using Exception = System.Exception;
 
-namespace WB.Common
+namespace WB.Core.SharedKernel.Utils.Logging
 {
     public static class ExceptionExtension
     {

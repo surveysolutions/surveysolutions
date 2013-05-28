@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
 
 
-namespace WB.Common
+namespace WB.Core.SharedKernel.Utils.Logging
 {
     public static class LogManager
     {

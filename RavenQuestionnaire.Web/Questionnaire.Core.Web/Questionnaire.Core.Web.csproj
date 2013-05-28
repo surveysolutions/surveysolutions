@@ -148,21 +148,21 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common.Core\WB.Common.Core.csproj">
-      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
-      <Name>WB.Common.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Common\WB.Common.csproj">
-      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
-      <Name>WB.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
       <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>

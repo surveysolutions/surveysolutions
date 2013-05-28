@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-
-using Ncqrs;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.Commands
 {
     using Ncqrs.Commanding;
     using Ncqrs.Commanding.ServiceModel;
     using Ncqrs.Eventing.Storage;
+
+    
 
     /// <summary>
     /// Repeates command execution until success.

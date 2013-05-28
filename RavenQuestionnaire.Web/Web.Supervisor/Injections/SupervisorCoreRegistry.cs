@@ -23,8 +23,7 @@ namespace Web.Supervisor.Injections
 
     using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
-    using WB.Core.SharedKernel.Utils.NLog;
-
+    
     using Web.Supervisor.Filters;
 
     public class SupervisorCoreRegistry : CoreRegistry
@@ -71,7 +70,7 @@ namespace Web.Supervisor.Injections
             this.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
             this.Bind<ISyncProcessFactory>().To<SyncProcessFactory>();
 
-            this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+            //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
 
             this.Bind<IStringCompressor>().ToConstant(new GZipJsonCompressor()).InSingletonScope();
         }

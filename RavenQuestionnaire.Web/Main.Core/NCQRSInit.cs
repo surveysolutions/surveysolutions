@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core
 {

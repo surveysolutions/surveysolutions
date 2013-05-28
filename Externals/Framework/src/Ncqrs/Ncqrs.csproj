@@ -105,6 +105,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -272,16 +275,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
-      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
-      <Name>WB.Common.Core</Name>
+    <ProjectReference Include="..\..\..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
-      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
-      <Name>WB.Common</Name>
+    <ProjectReference Include="..\..\..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Ncqrs.Portable\Ncqrs.Portable.csproj">
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>

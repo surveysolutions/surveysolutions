@@ -4,8 +4,8 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using WB.Common;
-using WB.Common.Core.Logging;
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Ncqrs.Eventing.Sourcing.Mapping
 {

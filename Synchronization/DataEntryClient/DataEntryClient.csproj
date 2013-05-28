@@ -107,14 +107,6 @@
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
-      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
-      <Name>WB.Common.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
-      <Project>{399C5FA0-6FF0-4EF6-8F3A-F796D4B515FC}</Project>
-      <Name>WB.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
@@ -130,6 +122,14 @@
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Ncqrs.Restoring.EventStapshoot\Ncqrs.Restoring.EventStapshoot.csproj">
       <Project>{7598C70B-5772-4ED5-81DE-C0D7718BC164}</Project>
       <Name>Ncqrs.Restoring.EventStapshoot</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39AEBC09-5A81-47C8-B68D-4984199AE1FE}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
