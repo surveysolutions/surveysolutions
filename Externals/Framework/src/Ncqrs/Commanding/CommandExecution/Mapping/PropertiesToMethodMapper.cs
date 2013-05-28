@@ -4,9 +4,9 @@ using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Common;
+using WB.Common.Core.Logging;
+
 namespace Ncqrs.Commanding.CommandExecution.Mapping
 {
     public class PropertiesToMethodMapper
@@ -57,9 +57,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping
             var mappedProps = new PropertyInfo[propertiesToMap.Count];
 #if MONODROID
  var targets = new List<MethodBase>();
-			targets.AddRange(potentialTargets
-				.Select(t => (MethodBase)t)
-				.ToList());
+            targets.AddRange(potentialTargets
+                .Select(t => (MethodBase)t)
+                .ToList());
 #else
             var targets = new List<MethodBase>(potentialTargets);
 #endif

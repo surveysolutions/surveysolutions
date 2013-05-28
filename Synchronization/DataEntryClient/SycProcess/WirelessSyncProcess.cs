@@ -6,6 +6,9 @@
 //   The complete questionnaire sync.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Common;
+
 namespace DataEntryClient.SycProcess
 {
     using System;
@@ -19,9 +22,7 @@ namespace DataEntryClient.SycProcess
     using Main.Core.Events;
 
     using Ninject;
-
-    using NLog;
-
+    
     using SynchronizationMessages.CompleteQuestionnaire;
     using SynchronizationMessages.Synchronization;
     using SynchronizationMessages.WcfInfrastructure;
@@ -191,8 +192,8 @@ namespace DataEntryClient.SycProcess
                             }
                             catch (Exception ex)
                             {
-                                Logger logger = LogManager.GetCurrentClassLogger();
-                                logger.Fatal("Import error", ex);
+                                
+                                LogManager.GetLogger(this.GetType()).Fatal("Import error", ex);
 
                                 events = null;
                                 this.Invoker.Execute(

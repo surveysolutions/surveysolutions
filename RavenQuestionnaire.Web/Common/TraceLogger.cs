@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
-using Common.Logging;
 
-namespace Ncqrs
+using WB.Common.Core.Logging;
+
+namespace WB.Common
 {
-    internal class TraceLogger : ILog
+    public class TraceLogger : ILog
     {
         private TraceSwitch _switch = new TraceSwitch("ncqrs", "Ncqrs Framework trace switch");
 

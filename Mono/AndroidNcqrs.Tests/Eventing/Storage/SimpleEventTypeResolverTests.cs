@@ -1,7 +1,8 @@
-using AndroidLogger;
+
 using FluentAssertions;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using WB.Common.Core.Logging;
 
 namespace Ncqrs.Tests.Eventing.Storage
 {

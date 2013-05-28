@@ -122,13 +122,17 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidFluentAssertions\AndroidFluentAssertions.csproj">
       <Project>{667b05ae-cf79-4a4b-b9f8-dcc0999a729b}</Project>
       <Name>AndroidFluentAssertions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2DA6C60D-CB06-40B4-91AF-A903451E3DB4}</Project>
-      <Name>AndroidLogger</Name>
+      <Name>AndroidCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMoq\AndroidMoq.csproj">
       <Project>{b1606f2f-da6a-400d-9313-f7822d326931}</Project>

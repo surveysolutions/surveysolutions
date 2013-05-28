@@ -251,6 +251,10 @@
       <Project>{a6164ae1-61b3-453b-89a5-f813cc1f809b}</Project>
       <Name>Ncqrs.Portable</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
@@ -263,9 +267,9 @@
       <Project>{ed790aed-465e-4787-a9a3-8380229e0470}</Project>
       <Name>AndroidCore.Capi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AndroidLogger\AndroidLogger.csproj">
+    <ProjectReference Include="..\AndroidLogger\AndroidCommon.csproj">
       <Project>{2da6c60d-cb06-40b4-91af-a903451e3db4}</Project>
-      <Name>AndroidLogger</Name>
+      <Name>AndroidCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>

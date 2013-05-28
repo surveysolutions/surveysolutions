@@ -1,11 +1,14 @@
 using System;
+
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
+using Ncqrs;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Restoring.EventStapshoot;
+using WB.Common;
 
 namespace Main.Core.EventHandlers
 {
@@ -29,12 +32,6 @@ namespace Main.Core.EventHandlers
                                              IEventHandler<QuestionnaireDeleted>,
         IEventHandler<TemplateImported>
     {
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireDenormalizer));
-#else
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
 
         private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
 
@@ -108,7 +105,7 @@ namespace Main.Core.EventHandlers
 
             if (isLegacyEvent)
             {
-                Logger.Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event {0} from event source {1}", evnt.EventIdentifier, evnt.EventSourceId));
                 return;
             }
 

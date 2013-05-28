@@ -105,9 +105,6 @@
     <Reference Include="Ninject">
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -158,6 +155,14 @@
     <ProjectReference Include="..\..\Synchronization\SynchronizationMessages\SynchronizationMessages.csproj">
       <Project>{AD672732-3D12-48BC-8612-09547F0065D3}</Project>
       <Name>SynchronizationMessages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Common\WB.Common.csproj">
+      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
+      <Name>WB.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core.Supervisor\Core.Supervisor.csproj">
       <Project>{072C1754-ADF8-4F41-8D96-9C2E1083E6A7}</Project>
