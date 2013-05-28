@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Ninject.Parameters;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace DataEntryClient.SycProcess
 {
