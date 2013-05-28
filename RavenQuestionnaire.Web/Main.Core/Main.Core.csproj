@@ -662,7 +662,7 @@
       <Name>NCalc</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
-      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Project>{ea93a91d-7bc9-4ec0-8a22-8a772afd76c3}</Project>
       <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs.Portable\Ncqrs.Portable.csproj">
