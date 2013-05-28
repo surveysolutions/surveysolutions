@@ -139,6 +139,7 @@
     <Compile Include="Controls\QuestionnaireDetails\Breadcrumbs.cs" />
     <Compile Include="Controls\QuestionnaireDetails\IScreenChanging.cs" />
     <Compile Include="Controls\QuestionnaireDetails\Roster\RosterItemDialog.cs" />
+    <Compile Include="Controls\QuestionnaireDetails\ScreenItems\AutoPropagateQuestionView.cs" />
     <Compile Include="Controls\Statistics\StatisticsTableQuestionsView.cs" />
     <Compile Include="Core\CAPIParcelableCreator.cs">
       <SubType>Code</SubType>
