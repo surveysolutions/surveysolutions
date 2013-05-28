@@ -150,6 +150,7 @@
     <Compile Include="Views\SyncProcess\SyncProcessLogFactory.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogInputModel.cs" />
     <Compile Include="Views\SyncProcess\SyncProcessLogView.cs" />
+    <Compile Include="Views\Template\QuestionnaireListInputModel.cs" />
     <Compile Include="Views\User\UserListItem.cs" />
     <Compile Include="Views\User\UserListView.cs" />
     <Compile Include="Views\User\UserListViewFactory.cs" />
