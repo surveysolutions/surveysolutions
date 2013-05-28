@@ -50,7 +50,7 @@ namespace CAPI.Android
     {
         #region Constants
 
-        private const string CAPI = "Capi";
+        private const string CAPI = "WBCapi";
 
         #endregion
 
