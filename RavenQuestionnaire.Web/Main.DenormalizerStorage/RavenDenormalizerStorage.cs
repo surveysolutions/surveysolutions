@@ -1,4 +1,6 @@
-﻿namespace Main.DenormalizerStorage
+﻿using WB.Core.Infrastructure;
+
+namespace Main.DenormalizerStorage
 {
     using System;
     using System.Linq;
@@ -13,10 +15,12 @@
         where TView : class
     {
         private readonly DocumentStore ravenStore;
+        private readonly IReadLayerStatusService readLayerStatusService;
 
-        public RavenDenormalizerStorage(DocumentStore ravenStore)
+        public RavenDenormalizerStorage(DocumentStore ravenStore, IReadLayerStatusService readLayerStatusService)
         {
             this.ravenStore = ravenStore;
+            this.readLayerStatusService = readLayerStatusService;
         }
 
         private static string ViewName
@@ -26,6 +30,8 @@
 
         public int Count()
         {
+            this.ThrowIfViewIsNotAccessible();
+
             using (var session = this.OpenSession())
             {
                 return
@@ -39,6 +45,8 @@
 
         public TView GetById(Guid id)
         {
+            this.ThrowIfViewIsNotAccessible();
+
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -49,6 +57,8 @@
 
         public void Remove(Guid id)
         {
+            this.ThrowIfViewIsNotAccessible();
+
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -62,6 +72,8 @@
 
         public void Store(TView view, Guid id)
         {
+            this.ThrowIfViewIsNotAccessible();
+
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -78,6 +90,8 @@
 
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
+            this.ThrowIfViewIsNotAccessible();
+
             using (IDocumentSession session = this.OpenSession())
             {
                 return query.Invoke(
@@ -97,6 +111,12 @@
         private static string ToRavenId(Guid id)
         {
             return string.Format("{0}:{1}", ViewName, id.ToString());
+        }
+
+        private void ThrowIfViewIsNotAccessible()
+        {
+            if (this.readLayerStatusService.AreViewsBeingRebuiltNow())
+                throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
         }
     }
 }
