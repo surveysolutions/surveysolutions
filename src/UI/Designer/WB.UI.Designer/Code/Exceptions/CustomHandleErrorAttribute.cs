@@ -9,8 +9,6 @@ namespace WB.UI.Designer.Exceptions
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
-    using WB.Common;
-
 
     using WB.Core.SharedKernel.Logger;
 

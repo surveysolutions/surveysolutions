@@ -5,14 +5,14 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Main.Core;
-using WB.Common;
+using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Designer.Controllers;
 
 namespace WB.UI.Designer
 {
     using NConfig;
 
-    using WB.Core.SharedKernel.Utils.NLog;
+    //using WB.Core.SharedKernel.Utils.NLog;
 
     public class MvcApplication : HttpApplication
     {
