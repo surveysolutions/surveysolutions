@@ -9,6 +9,8 @@ namespace WB.UI.Designer.Exceptions
     using System.Web;
     using System.Web.Mvc;
     using System.Web.Routing;
+    using WB.Common;
+
 
     using WB.Core.SharedKernel.Logger;
 
@@ -18,7 +20,7 @@ namespace WB.UI.Designer.Exceptions
     public class CustomHandleErrorAttribute : FilterAttribute, IExceptionFilter
     {
         #region Fields
-
+        
         /// <summary>
         /// The _logger.
         /// </summary>
