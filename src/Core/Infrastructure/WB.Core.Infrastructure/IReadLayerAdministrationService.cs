@@ -8,6 +8,8 @@ namespace WB.Core.Infrastructure
 {
     public interface IReadLayerAdministrationService
     {
+        string GetReadableStatus();
+
         void RebuildAllViewsAsync();
     }
 }

@@ -9,6 +9,7 @@ namespace WB.Core.Infrastructure
         public override void Load()
         {
             this.Bind<IReadLayerStatusService>().To<ReadLayerService>().InSingletonScope();
+            this.Bind<IReadLayerAdministrationService>().To<ReadLayerService>().InSingletonScope();
         }
     }
 }
