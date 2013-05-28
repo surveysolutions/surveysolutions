@@ -80,7 +80,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -107,6 +106,14 @@
     <ProjectReference Include="..\..\Externals\Framework\src\Ncqrs\Ncqrs.csproj">
       <Project>{01F84441-80D3-49B4-AB18-96894ACB2F90}</Project>
       <Name>Ncqrs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905AF-61EE-4F1A-B65A-38BE7C9C91BD}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
+      <Project>{399C5FA0-6FF0-4EF6-8F3A-F796D4B515FC}</Project>
+      <Name>WB.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>

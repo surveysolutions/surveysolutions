@@ -544,6 +544,14 @@
       <Project>{01f84441-80d3-49b4-ab18-96894acb2f90}</Project>
       <Name>Ncqrs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common.Core\WB.Common.Core.csproj">
+      <Project>{420905af-61ee-4f1a-b65a-38be7c9c91bd}</Project>
+      <Name>WB.Common.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Common\WB.Common.csproj">
+      <Project>{399c5fa0-6ff0-4ef6-8f3a-f796d4b515fc}</Project>
+      <Name>WB.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332bcd2-dc58-466e-8d80-5bcb1faccd6c}</Project>
       <Name>Main.Core</Name>
