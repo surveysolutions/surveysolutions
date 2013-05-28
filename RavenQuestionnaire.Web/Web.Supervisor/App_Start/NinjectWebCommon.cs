@@ -10,6 +10,8 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
+
+using WB.Core.Infrastructure;
 using WB.Core.Questionnaire.ImportService;
 using WB.Core.Questionnaire.ImportService.Commands;
 using Web.Supervisor.App_Start;
@@ -81,7 +83,9 @@ namespace Web.Supervisor.App_Start
             string username = WebConfigurationManager.AppSettings["Raven.Username"];
             string password = WebConfigurationManager.AppSettings["Raven.Password"];
 
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended));
+            var kernel = new StandardKernel(
+                new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended),
+                new CoreInfrastructureModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 
