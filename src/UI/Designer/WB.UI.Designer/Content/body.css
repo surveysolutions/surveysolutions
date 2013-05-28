@@ -1,4 +1,18 @@
-  body {
-            padding-top: 60px;
-            padding-bottom: 40px;
-          }
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+.network-name {
+    float: left;
+    width: 300px;
+    height: 80px;
+    margin: 0px 0px 23px;
+    text-indent: -999px;
+    background: url(images/wb_logo.png) 0px 20px no-repeat;
+}
+
+.network-name-container {
+    float: left;
+    width: 160px;
+}
