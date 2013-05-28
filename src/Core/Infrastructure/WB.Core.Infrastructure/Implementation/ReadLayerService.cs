@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace WB.Core.Infrastructure.Implementation
@@ -7,8 +9,10 @@ namespace WB.Core.Infrastructure.Implementation
     {
         private static readonly object LockObject = new object();
 
-        private static string statusMessage = "No administration operations were performed so far.";
         private static bool areViewsBeingRebuiltNow = false;
+
+        private static string statusMessage = "No administration operations were performed so far.";
+        private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
 
         #region IReadLayerStatusService implementation
 
@@ -23,8 +27,11 @@ namespace WB.Core.Infrastructure.Implementation
 
         public string GetReadableStatus()
         {
-            return string.Format("{0}{1}Are views being rebuilt now: {2}",
-                statusMessage, Environment.NewLine, areViewsBeingRebuiltNow ? "Yes" : "No");
+            return string.Format("{1}{0}Are views being rebuilt now: {2}{0}Errors: {3}",
+                Environment.NewLine,
+                statusMessage,
+                areViewsBeingRebuiltNow ? "Yes" : "No",
+                GetReadableErrors());
         }
 
         public void RebuildAllViewsAsync()
@@ -54,12 +61,46 @@ namespace WB.Core.Infrastructure.Implementation
             {
                 areViewsBeingRebuiltNow = true;
 
-                throw new NotImplementedException();
+                DropAllViews();
+
+                RepublishAllEvents();
+            }
+            catch (Exception exception)
+            {
+                SaveErrorForStatusReport("Unexpected error occurred", exception);
+                throw;
             }
             finally
             {
                 areViewsBeingRebuiltNow = false;
             }
         }
+
+        #region Error reporting methods
+
+        private static void SaveErrorForStatusReport(string message, Exception exception)
+        {
+            errors.Add(Tuple.Create(DateTime.Now, message, exception));
+        }
+
+        private static string GetReadableErrors()
+        {
+            bool areThereNoErrors = errors.Count == 0;
+
+            return areThereNoErrors
+                ? "Errors: None"
+                : string.Format(
+                    "Errors: {1}{0}{2}",
+                    Environment.NewLine,
+                    errors.Count,
+                    string.Join(Environment.NewLine, errors.Select(GetReadableError).ToArray()));
+        }
+
+        private static string GetReadableError(Tuple<DateTime, string, Exception> error)
+        {
+            return string.Format("{1}: {2}{0}{3}", Environment.NewLine, error.Item1, error.Item2, error.Item3);
+        }
+
+        #endregion // Error reporting methods
     }
 }
