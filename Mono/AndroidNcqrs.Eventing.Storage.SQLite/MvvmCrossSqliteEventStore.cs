@@ -129,5 +129,15 @@ namespace AndroidNcqrs.Eventing.Storage.SQLite
                                                 .Select(s => s.ToCommitedEventWithoutPayload()));
 
         }
+
+        public int CountOfAllEventsWithoutSnapshots()
+        {
+            throw new NotImplementedException("Not needed for Mono so far.");
+        }
+
+        public IEnumerable<CommittedEvent> GetAllEventsWithoutSnapshots()
+        {
+            throw new NotImplementedException("Not needed for Mono so far.");
+        }
     }
 }

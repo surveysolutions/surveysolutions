@@ -40,8 +40,10 @@ namespace Core.Supervisor.Views.Index
                 responsibleList = this.GetTeamMembersForViewer(input.ViewerId).Select(i=>i.PublicKey);
             }
 
+            #warning ReadLayer: Contains is not supported in Raven, but In should be used, but here we are abstracted and cannot use it, so more data is now processed on client-side
             var all = this.stat.Query(_ => _
                 .Where(s => s.Surveys.Count > 0)
+                .ToList()
                 .Where(x => responsibleList.Contains(x.User.Id))
                 .GroupBy(s => s.Template)
                 .ToDictionary(s => s.Key, s => s.ToList()));

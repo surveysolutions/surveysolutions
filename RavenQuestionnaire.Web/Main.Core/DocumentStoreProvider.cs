@@ -1,97 +1,65 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DocumentStoreProvider.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   TODO: Update summary.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-#if !MONODROID
+﻿#if !MONODROID
 
 namespace Main.Core
 {
     using System;
+    using System.Net;
 
     using Ninject.Activation;
 
     using Raven.Client.Document;
     using Raven.Client.Embedded;
+    using Raven.Client.Extensions;
 
-    /// <summary>
-    /// The document store provider.
-    /// </summary>
     public class DocumentStoreProvider : Provider<DocumentStore>
     {
-        #region Fields
-
-        /// <summary>
-        /// The is embedded.
-        /// </summary>
         private readonly bool isEmbedded;
+        private readonly string username;
+        private readonly string password;
+        private readonly string storagePath;
 
-        /// <summary>
-        /// The _storage.
-        /// </summary>
-        private readonly string storage;
+        private EmbeddableDocumentStore embeddedStorage;
 
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DocumentStoreProvider"/> class.
-        /// </summary>
-        /// <param name="storage">
-        /// The storage.
-        /// </param>
-        /// <param name="isEmbedded">
-        /// The is embedded.
-        /// </param>
-        public DocumentStoreProvider(string storage, bool isEmbedded)
+        public DocumentStoreProvider(string storagePath, bool isEmbedded, string username, string password)
         {
-            this.storage = storage;
+            this.storagePath = storagePath;
             this.isEmbedded = isEmbedded;
+            this.username = username;
+            this.password = password;
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// The create instance.
-        /// </summary>
-        /// <param name="context">
-        /// The context.
-        /// </param>
-        /// <returns>
-        /// The Raven.Client.Document.DocumentStore.
-        /// </returns>
         protected override DocumentStore CreateInstance(IContext context)
         {
-            DocumentStore store;
-
-            store = this.isEmbedded ?
-                        this.GetEmbededStorage() :
-                        new DocumentStore { Url = this.storage };
+            DocumentStore store = this.isEmbedded ? this.GetEmbededStorage() : this.GetServerStorage();
 
             store.Initialize();
 
             return store;
         }
-        protected EmbeddableDocumentStore GetEmbededStorage()
+
+        private DocumentStore GetServerStorage()
+        {
+            bool shouldSupplyCredentials = !string.IsNullOrWhiteSpace(this.username);
+
+            return shouldSupplyCredentials
+                ? new DocumentStore { Url = this.storagePath, Credentials = new NetworkCredential(this.username, this.password) }
+                : new DocumentStore { Url = this.storagePath };
+        }
+
+        private EmbeddableDocumentStore GetEmbededStorage()
         {
             if (!isEmbedded)
                 throw new InvalidOperationException("You can't call this method");
-            if (embStorage == null || embStorage.WasDisposed)
+
+            if (this.embeddedStorage == null || this.embeddedStorage.WasDisposed)
             {
-                embStorage = new EmbeddableDocumentStore() { DataDirectory = this.storage, UseEmbeddedHttpServer = false };
-                embStorage.ResourceManagerId = Guid.NewGuid();
+                this.embeddedStorage = new EmbeddableDocumentStore() { DataDirectory = this.storagePath, UseEmbeddedHttpServer = false };
+                this.embeddedStorage.ResourceManagerId = Guid.NewGuid();
             }
-            return embStorage;
+
+            return this.embeddedStorage;
         }
-        private EmbeddableDocumentStore embStorage;
-        #endregion
     }
 }
+
 #endif

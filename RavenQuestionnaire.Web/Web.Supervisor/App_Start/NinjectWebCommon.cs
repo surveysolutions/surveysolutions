@@ -10,6 +10,8 @@ using Ninject;
 using Ninject.Web.Common;
 using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
+
+using WB.Core.Infrastructure;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
@@ -70,12 +72,18 @@ namespace Web.Supervisor.App_Start
             string storePath = isEmbeded
                                    ? WebConfigurationManager.AppSettings["Raven.DocumentStoreEmbeded"]
                                    : WebConfigurationManager.AppSettings["Raven.DocumentStore"];
+
             bool isApprovedSended;
             if (!bool.TryParse(WebConfigurationManager.AppSettings["IsApprovedSended"], out isApprovedSended))
             {
                 isApprovedSended = false;
             }
-            var kernel = new StandardKernel(new SupervisorCoreRegistry(storePath, isEmbeded, isApprovedSended));
+            string username = WebConfigurationManager.AppSettings["Raven.Username"];
+            string password = WebConfigurationManager.AppSettings["Raven.Password"];
+
+            var kernel = new StandardKernel(
+                new SupervisorCoreRegistry(storePath, isEmbeded, username, password, isApprovedSended),
+                new CoreInfrastructureModule());
 
             kernel.Bind<IServiceLocator>().ToMethod(_ => ServiceLocator.Current);
 

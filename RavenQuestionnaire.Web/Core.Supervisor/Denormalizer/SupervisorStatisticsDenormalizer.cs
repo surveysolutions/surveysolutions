@@ -205,8 +205,12 @@ namespace Core.Supervisor.Denormalizer
         /// <param name="cqId">
         /// The cq id.
         /// </param>
+        #warning TLK: delete as no longer needed
+        [Obsolete]
         protected void HandleStatusChanges(SurveyStatus prev, SurveyStatus next, DateTime date, Guid cqId)
         {
+            return;
+
             var key = this.GetDateKey(date);
             var historyItem = this.history.GetById(key) ?? new HistoryStatusStatistics(date);
 

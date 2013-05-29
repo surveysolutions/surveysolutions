@@ -175,7 +175,7 @@ namespace Web.Supervisor.Controllers
                 {
                     PageSize = int.MaxValue
                 });
-            return this.Json(model.Items.ToDictionary(item => item.Id.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
+            return this.Json(model.Items.ToDictionary(item => item.QuestionnaireId.ToString(), item => item.Title), JsonRequestBehavior.AllowGet);
         }
 
 

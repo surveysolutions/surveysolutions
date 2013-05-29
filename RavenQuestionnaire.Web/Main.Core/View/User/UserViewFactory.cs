@@ -66,12 +66,12 @@ namespace Main.Core.View.User
                     {
                         doc =
                             queryableUsers.FirstOrDefault(
-                                u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                                u => u.UserName == input.UserName);
                     }
 
                 if (!string.IsNullOrEmpty(input.UserName) && !string.IsNullOrEmpty(input.Password))
                 {
-                    doc = queryableUsers.FirstOrDefault(u => string.Compare(u.UserName, input.UserName, StringComparison.OrdinalIgnoreCase) == 0);
+                    doc = queryableUsers.FirstOrDefault(u => u.UserName == input.UserName);
                     if (doc != null && doc.Password != input.Password)
                         return null;
                 }

@@ -217,6 +217,45 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             return new CommittedEventStream(id, result);
         }
 
+        public int CountOfAllEventsWithoutSnapshots()
+        {
+            using (IDocumentSession session = this.DocumentStore.OpenSession())
+            {
+                return session
+                    .Query<StoredEvent>()
+                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                    .Where(@event => !@event.IsSnapshot)
+                    .Count();
+            }
+        }
+
+        public IEnumerable<CommittedEvent> GetAllEventsWithoutSnapshots()
+        {
+            int returnedEventCount = 0;
+
+            while (true)
+            {
+                using (IDocumentSession session = this.DocumentStore.OpenSession())
+                {
+                    var storedEvent = session
+                        .Query<StoredEvent>()
+                        .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                        .Where(@event => !@event.IsSnapshot)
+                        .OrderBy(y => y.EventSequence)
+                        .Skip(returnedEventCount)
+                        .Take(1)
+                        .SingleOrDefault();
+
+                    bool allEventsWereReturned = storedEvent == null;
+                    if (allEventsWereReturned)
+                        yield break;
+
+                    yield return ToCommittedEvent(storedEvent);
+                    returnedEventCount++;
+                }
+            }
+        }
+
         /// <summary>
         /// The read from.
         /// </summary>

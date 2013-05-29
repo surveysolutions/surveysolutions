@@ -117,7 +117,7 @@ namespace Core.HQ.Synchronization
 
             foreach (var item in model)
             {
-                retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.Id));
+                retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.QuestionnaireId));
             }
         }
 

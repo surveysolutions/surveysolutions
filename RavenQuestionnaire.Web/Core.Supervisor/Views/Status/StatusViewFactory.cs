@@ -29,7 +29,12 @@
 
             var status = SurveyStatus.GetStatusByIdOrDefault(input.StatusId);
 
-            List<TemplateLight> headers = this.surveys.Query(_ => _.Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle)).Distinct().ToList());
+            #warning ReadLayer: Select is not supported on Raven side (fails with NRE)
+            List<TemplateLight> headers = this.surveys.Query(_ => _
+                .ToList()
+                .Select(s => new TemplateLight(s.TemplateId, s.QuestionnaireTitle))
+                .Distinct()
+                .ToList());
 
             List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
                 this.surveys.Query(_ => _
@@ -44,6 +49,7 @@
                             && interviewers.Contains(x.Responsible.Id) 
                             && x.Status.PublicId == status.PublicId
                         ))
+                    .ToList()
                     .GroupBy(x => x.Responsible)
                     .ToList());
 
