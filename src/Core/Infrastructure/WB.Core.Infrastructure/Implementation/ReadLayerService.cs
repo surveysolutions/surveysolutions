@@ -188,6 +188,11 @@ namespace WB.Core.Infrastructure.Implementation
                 processedEventsCount, failedEventsCount));
         }
 
+        private static void UpdateStatusMessage(string newMessage)
+        {
+            statusMessage = string.Format("{0}: {1}", DateTime.Now, newMessage);
+        }
+
         #region Error reporting methods
 
         private static void SaveErrorForStatusReport(string message, Exception exception)
