@@ -7,6 +7,13 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 
+using Raven.Abstractions.Data;
+using Raven.Abstractions.Indexing;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Extensions;
+using Raven.Client.Indexes;
+
 namespace WB.Core.Infrastructure.Implementation
 {
     internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
@@ -20,11 +27,13 @@ namespace WB.Core.Infrastructure.Implementation
 
         private readonly IStreamableEventStore eventStore;
         private readonly IEventBus eventBus;
+        private readonly DocumentStore ravenStore;
 
-        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus)
+        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
+            this.ravenStore = ravenStore;
         }
 
         #region IReadLayerStatusService implementation
@@ -74,7 +83,7 @@ namespace WB.Core.Infrastructure.Implementation
             {
                 areViewsBeingRebuiltNow = true;
 
-                this.DropAllViews();
+                this.DeleteAllViews();
 
                 this.RepublishAllEvents();
             }
@@ -87,6 +96,59 @@ namespace WB.Core.Infrastructure.Implementation
             {
                 areViewsBeingRebuiltNow = false;
             }
+        }
+
+        private void DeleteAllViews()
+        {
+            UpdateStatusMessage("Determining count of views to be deleted.");
+
+            this.ravenStore
+                .DatabaseCommands
+                .EnsureDatabaseExists("Views");
+
+            this.ravenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .PutIndex("AllViews",
+                    new IndexDefinition
+                    {
+                        Map = "from view in views let ViewId = doc[\"@metadata\"][\"@id\"] select new { ViewId };"
+                    });
+
+            int initialViewCount;
+            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            {
+                // this will also materialize index if it is out of date or was just created
+                initialViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
+
+            this.ravenStore
+                .DatabaseCommands
+                .ForDatabase("Views")
+                .DeleteByIndex("AllViews", new IndexQuery());
+
+            UpdateStatusMessage("Checking remaining views count.");
+
+            int resultViewCount;
+            using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
+            {
+                resultViewCount = session
+                    .Query<object>("AllViews")
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
+                    .Count();
+            }
+
+            if (resultViewCount > 0)
+                throw new Exception(string.Format(
+                    "Failed to delete all views. Initial view count: {0}, remaining view count: {1}.",
+                    initialViewCount, resultViewCount));
+
+            UpdateStatusMessage(string.Format("{0} views were deleted.", initialViewCount));
         }
 
         private void RepublishAllEvents()
