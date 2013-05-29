@@ -8,7 +8,7 @@
 
     using WB.Core.SharedKernel.Logger;
     using WB.Core.SharedKernel.Utils.Compression;
-    using WB.Core.SharedKernel.Utils.NLog;
+    
     using WB.UI.Designer.Exceptions;
     using WB.UI.Shared.Web.Membership;
 
@@ -19,7 +19,7 @@
     {
         public override void Load()
         {
-            this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+            //this.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
             this.BindFilter<CustomHandleErrorFilter>(FilterScope.Global, 0).InSingletonScope();
             this.BindFilter<CustomAuthorizeFilter>(FilterScope.Controller, 0).WhenControllerHas<CustomAuthorizeAttribute>().InSingletonScope();
             this.Bind<ICommandService>().ToConstant(Ncqrs.NcqrsEnvironment.Get<ICommandService>());

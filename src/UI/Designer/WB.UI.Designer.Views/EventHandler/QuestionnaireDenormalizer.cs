@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Views.EventHandler
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                              IEventHandler<SnapshootLoaded>,
                                              IEventHandler<QuestionnaireUpdated>,
-                                             IEventHandler<QuestionnaireDeleted>
+                                             IEventHandler<QuestionnaireDeleted>,IEventHandler<TemplateImported>
     {
         #region Fields
 
@@ -124,6 +124,26 @@ namespace WB.UI.Designer.Views.EventHandler
             {
                 browseItem.IsDeleted = true;
             }
+        }
+
+        public void Handle(IPublishedEvent<TemplateImported> evnt)
+        {
+            var document = evnt.Payload.Source;
+            var item = new QuestionnaireListViewItem(
+                document.PublicKey,
+                document.Title,
+                document.CreationDate,
+                document.LastEntryDate,
+                document.CreatedBy);
+            if (document.CreatedBy.HasValue)
+            {
+                var user = this.accountStorage.GetById(document.CreatedBy.Value);
+                if (user != null)
+                {
+                    item.CreatorName = user.UserName;
+                }
+            }
+            this.documentStorage.Store(item, document.PublicKey);
         }
     }
 }
