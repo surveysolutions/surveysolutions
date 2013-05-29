@@ -24,6 +24,7 @@ _ReSharper.*
 
 *.ncrunchsolution.user
 _NCrunch_*
+nCrunchTemp_*
 
 ClientDependency
 
