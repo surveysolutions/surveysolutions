@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using Main.Core.Documents;
+using Main.Core.Domain;
 using Ncqrs.Commanding;
+using Ncqrs.Commanding.CommandExecution.Mapping.Attributes;
 
-namespace WB.Core.Questionnaire.ImportService.Commands
+namespace Main.Core.Commands.Questionnaire
 {
+    [MapsToAggregateRootMethodOrConstructor(typeof(QuestionnaireAR), "ImportQuestionnaire")]
     public class ImportQuestionnaireCommand : CommandBase
     {
         public ImportQuestionnaireCommand(Guid createdBy, IQuestionnaireDocument source)
@@ -11,6 +14,7 @@ namespace WB.Core.Questionnaire.ImportService.Commands
         {
             CreatedBy = createdBy;
             Source = source;
+            QuestionnaireId = source.PublicKey;
         }
 
         /// <summary>
@@ -20,6 +24,9 @@ namespace WB.Core.Questionnaire.ImportService.Commands
         /// <summary>
         /// Gets or sets the source.
         /// </summary>
-        public IQuestionnaireDocument Source { get; set; }
+        public IQuestionnaireDocument Source { get; private set; }
+
+        [AggregateRootId]
+        public Guid QuestionnaireId { get; private set; }
     }
 }

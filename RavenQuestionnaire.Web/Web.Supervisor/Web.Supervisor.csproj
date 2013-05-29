@@ -434,25 +434,13 @@
     <Content Include="Scripts\plotSettings.js" />
     <Content Include="Scripts\shorten.js" />
     <Content Include="Scripts\sorter.js" />
-    <None Include="Service References\DesignerPublicService\PublicService.disco" />
-    <None Include="Service References\DesignerPublicService\configuration91.svcinfo" />
-    <None Include="Service References\DesignerPublicService\configuration.svcinfo" />
-    <None Include="Service References\DesignerPublicService\PublicService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\DesignerPublicService\Reference.svcmap">
+    <Content Include="Service References\DesignerPublicService\PublicService.disco" />
+    <Content Include="Service References\DesignerPublicService\configuration91.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\configuration.svcinfo" />
+    <Content Include="Service References\DesignerPublicService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    </Content>
     <Content Include="WCF\EventPipeService.svc" />
     <Content Include="WCF\GetAggragateRootListService.svc" />
     <Content Include="WCF\GetEventStreamService.svc" />
@@ -469,6 +457,16 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Template\Import.cshtml" />
+    <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
+    <Content Include="Views\Template\LoginToDesigner.cshtml" />
+    <Content Include="Views\Shared\_alerts.cshtml" />
+    <Content Include="Views\Team\_PartialGridInterviewers.cshtml" />
+    <None Include="Service References\DesignerPublicService\PublicService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.QuestionnaireListView.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -478,10 +476,6 @@
     <Content Include="Service References\DesignerPublicService\Web.Supervisor.DesignerPublicService.RemoteFileInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Views\Template\_PartialGrid_Questionnaires.cshtml" />
-    <Content Include="Views\Template\LoginToDesigner.cshtml" />
-    <Content Include="Views\Shared\_alerts.cshtml" />
-    <Content Include="Views\Team\_PartialGridInterviewers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -667,7 +661,13 @@
     <Content Include="Views\Shared\_Table.cshtml" />
     <Content Include="Views\HQ\Index.cshtml" />
     <Content Include="Views\HQ\Assign.cshtml" />
-    <None Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <Content Include="Service References\DesignerPublicService\PublicService.wsdl" />
+    <None Include="Service References\DesignerPublicService\PublicService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\DesignerPublicService\PublicService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

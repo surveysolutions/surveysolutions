@@ -170,6 +170,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{AE5B9E45-0758-47AA-AFB4-E2795F09F850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ncqrs.Portable\Ncqrs.Portable.csproj">
       <Project>{A6164AE1-61B3-453B-89A5-F813CC1F809B}</Project>
       <Name>Ncqrs.Portable</Name>

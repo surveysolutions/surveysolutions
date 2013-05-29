@@ -1,4 +1,8 @@
 ﻿using System.Linq;
+using Ncqrs.Domain;
+
+using Ncqrs.Eventing.Sourcing.Snapshotting;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace Main.Core.Domain
 {
@@ -14,18 +18,12 @@ namespace Main.Core.Domain
     using Main.Core.Events.Questionnaire;
     using Main.Core.Utility;
 
+    
     using Ncqrs;
     using Ncqrs.Restoring.EventStapshoot;
 
-    public class QuestionnaireAR : SnapshootableAggregateRoot<QuestionnaireDocument>
+    public class QuestionnaireAR : AggregateRootMappedByConvention, ISnapshotable<QuestionnaireDocument>
     {
-#warning 'if MONODROID' is bad. should use abstract logger (ILogger?) which implementation will be different in different apps
-#if MONODROID
-        private static readonly AndroidLogger.ILog Logger = AndroidLogger.LogManager.GetLogger(typeof(QuestionnaireAR));
-#else
-        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
-#endif
-
         private QuestionnaireDocument innerDocument = new QuestionnaireDocument();
 
         private readonly ICompleteQuestionFactory questionFactory;
@@ -46,6 +44,7 @@ namespace Main.Core.Domain
             this.questionFactory = new CompleteQuestionFactory();
         }
 
+      
         public QuestionnaireAR(Guid publicKey)
             : base(publicKey)
         {
@@ -68,6 +67,11 @@ namespace Main.Core.Domain
                         CreationDate = clock.UtcNow(),
                         CreatedBy = createdBy
                     });
+        }
+        
+        public  QuestionnaireAR(Guid createdBy, IQuestionnaireDocument source): base(source.PublicKey)
+        {
+            ImportQuestionnaire(createdBy, source);
         }
 
         public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
@@ -123,15 +127,35 @@ namespace Main.Core.Domain
                 });
         }
 
-        public override QuestionnaireDocument CreateSnapshot()
+        public QuestionnaireDocument CreateSnapshot()
         {
             return this.innerDocument;
         }
 
-        public override void RestoreFromSnapshot(QuestionnaireDocument snapshot)
+
+        protected void OnCreateNewSnapshot(SnapshootLoaded e)
+        {
+            RestoreFromSnapshot(e.Template.Payload as QuestionnaireDocument);
+        }
+
+
+        public void RestoreFromSnapshot(QuestionnaireDocument snapshot)
         {
             this.innerDocument = snapshot.Clone() as QuestionnaireDocument;
         }
+
+        public void ImportQuestionnaire(Guid createdBy, IQuestionnaireDocument source)
+        {
+           
+            var document = source as QuestionnaireDocument;
+            if (document == null)
+                throw new DomainException(DomainExceptionType.TemplateIsInvalid
+                                          , "only QuestionnaireDocuments are supported for now");
+            document.CreatedBy = this.innerDocument.CreatedBy;
+            ApplyEvent(new TemplateImported() {Source = document});
+           
+        }
+
 
         public void UpdateQuestionnaire(string title)
 #warning CRUD
@@ -530,6 +554,11 @@ namespace Main.Core.Domain
             this.innerDocument.Add(group, e.ParentGroupPublicKey, null);
         }
 
+        protected internal void OnTemplateImported(TemplateImported e)
+        {
+            this.innerDocument = e.Source;
+        }
+
         protected internal void OnGroupCloned(GroupCloned e)
         {
             var group = new Group();
@@ -591,7 +620,7 @@ namespace Main.Core.Domain
 
             if (isLegacyEvent)
             {
-                Logger.Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
+                LogManager.GetLogger(this.GetType()).Warn(string.Format("Ignored legacy MoveItem event in questionnaire {0}", this.EventSourceId));
                 return;
             }
 

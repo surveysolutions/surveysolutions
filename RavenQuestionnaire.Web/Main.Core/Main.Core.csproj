@@ -104,9 +104,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
-      <HintPath>..\..\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
-    </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
@@ -174,6 +171,7 @@
     <Compile Include="Commands\Questionnaire\Group\DeletePropagatableGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\MoveGroupCommand.cs" />
     <Compile Include="Commands\Questionnaire\Group\AddGroupCommand.cs" />
+    <Compile Include="Commands\Questionnaire\ImportQuestionnaireCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\CloneQuestionCommand.cs" />
     <Compile Include="Commands\Questionnaire\Question\MoveQuestionCommand.cs">
       <SubType>Code</SubType>
@@ -527,6 +525,7 @@
     <Compile Include="Events\Questionnaire\QuestionnaireUpdated.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Events\Questionnaire\TemplateImported.cs" />
     <Compile Include="Events\Synchronization\AggregateRootStatusChanged.cs" />
     <Compile Include="Events\Synchronization\AggregateRootEventStreamPushed.cs" />
     <Compile Include="Events\Synchronization\UpdateRegisteredDevice.cs" />
@@ -679,9 +678,17 @@
       <Project>{e188a976-e54a-412b-b7b3-3b28e688d4c7}</Project>
       <Name>WB.Core.Questionnaire.Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Logger\WB.Core.SharedKernel.Logger.csproj">
+      <Project>{ae5b9e45-0758-47aa-afb4-e2795f09f850}</Project>
+      <Name>WB.Core.SharedKernel.Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
       <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
       <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Utils\WB.Core.SharedKernel.Utils.csproj">
+      <Project>{39aebc09-5a81-47c8-b68d-4984199ae1fe}</Project>
+      <Name>WB.Core.SharedKernel.Utils</Name>
     </ProjectReference>
     <ProjectReference Include="..\Main.DenormalizerStorage\Main.DenormalizerStorage.csproj">
       <Project>{51825D6C-4A28-4C33-8598-004462023A27}</Project>

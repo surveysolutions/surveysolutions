@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Threading;
+using Common.Logging;
 
 namespace Ncqrs
 {

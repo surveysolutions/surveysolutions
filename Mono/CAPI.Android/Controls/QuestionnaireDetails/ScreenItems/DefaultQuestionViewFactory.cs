@@ -6,11 +6,12 @@ using Main.Core.Entities.SubEntities;
 
 namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
 {
-    public class DefaultQuestionViewFactory:IQuestionViewFactory
+    public class DefaultQuestionViewFactory : IQuestionViewFactory
     {
         #region Implementation of IQuestionViewFactory
 
-        public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model, Guid questionnairePublicKey)
+        public AbstractQuestionView CreateQuestionView(Context context, QuestionViewModel model,
+                                                       Guid questionnairePublicKey)
         {
             var bindingActivity = context as IMvxBindingActivity;
             AbstractQuestionView itemView;
@@ -31,6 +32,9 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
                 case QuestionType.MultyOption:
                     itemView = new MultyQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
+                case QuestionType.AutoPropagate:
+                    itemView = new AutoPropagateQuestionView(context, bindingActivity, model, questionnairePublicKey);
+                    break;
                 default:
                     itemView = new TextQuestionView(context, bindingActivity, model, questionnairePublicKey);
                     break;
@@ -38,17 +42,17 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             return itemView;
         }
 
-    /*    public AbstractQuestionView CreateQuestionView(Context context, AbstractQuestionRowItem model, HeaderItem header)
-        {
-            var selectable = header as SelectableHeaderItem;
-            QuestionViewModel viewModel;
-            if (selectable != null)
-                viewModel = new SelectebleQuestionViewModel(model, selectable);
-            else
-                viewModel = new ValueQuestionViewModel(model, header);
+        /*    public AbstractQuestionView CreateQuestionView(Context context, AbstractQuestionRowItem model, HeaderItem header)
+            {
+                var selectable = header as SelectableHeaderItem;
+                QuestionViewModel viewModel;
+                if (selectable != null)
+                    viewModel = new SelectebleQuestionViewModel(model, selectable);
+                else
+                    viewModel = new ValueQuestionViewModel(model, header);
 
-            return CreateQuestionView(context, viewModel);
-        }*/
+                return CreateQuestionView(context, viewModel);
+            }*/
 
         #endregion
     }

@@ -18,7 +18,7 @@ namespace WB.UI.Designer.Exceptions
     public class CustomHandleErrorAttribute : FilterAttribute, IExceptionFilter
     {
         #region Fields
-
+        
         /// <summary>
         /// The _logger.
         /// </summary>

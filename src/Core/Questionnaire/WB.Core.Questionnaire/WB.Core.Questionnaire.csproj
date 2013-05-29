@@ -52,8 +52,6 @@
   <ItemGroup>
     <Compile Include="ExportServices\JsonExportService.cs" />
     <Compile Include="ExportServices\IExportService.cs" />
-    <Compile Include="ImportService\DefaultImportService.cs" />
-    <Compile Include="ImportService\Commands\ImportQuestionnaireCommand.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

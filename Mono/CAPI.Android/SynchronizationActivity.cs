@@ -7,8 +7,6 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Authentication;
 using Android.Text.Method;
 using CAPI.Android.Core.Model.ProjectionStorage;
@@ -16,8 +14,10 @@ using CAPI.Android.Core.Model.Syncronization;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Syncronization;
 using Main.Core.Utility;
+
 using Main.Core.View.User;
 using Main.Synchronization.Credentials;
+using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android
 {
@@ -56,7 +56,7 @@ namespace CAPI.Android
     {
         #region Constants
 
-        private const string CAPI = "Capi";
+        private const string CAPI = "WBCapi";
 
         #endregion
 
@@ -304,6 +304,7 @@ namespace CAPI.Android
                                     }
                                     catch (Exception exc)
                                     {
+                                        LogManager.GetLogger(typeof(SynchronizationActivity)).Error("Sync error. " + result.ErrorMessage);
                                         result.Result = false;
                                         if (string.IsNullOrWhiteSpace(result.ErrorMessage))
                                             result.ErrorMessage = "Unknown Error";
@@ -485,8 +486,8 @@ namespace CAPI.Android
 
     public enum PumpimgType
     {
-        Push = 0,
-        Pull = 1,
+        /*Push = 0,
+        Pull = 1,*/
         Backup = 2,
         Sync = 4
     }

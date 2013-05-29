@@ -3,9 +3,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using Ncqrs.Commanding.CommandExecution;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Commanding.ServiceModel
 {
     public class CommandService : ICommandService

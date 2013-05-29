@@ -126,20 +126,6 @@ namespace Ncqrs.Restoring.EventStapshoot.test
             Assert.IsTrue(snapshotEvent.Payload is SnapshootLoaded);
         }
 
-        [Test]
-        public void CreateNewSnapshot_When_ArgumentIsNotNull_Then_ARStateIsRestoredTottalyFromMethodArgument()
-        {
-            // arrange
-            DummyAR ar = CreateDummyAr();
-            var newState = new object();
-
-            // act
-            ar.CreateNewSnapshot(newState);
-
-            // assert
-            var currentSnapshot = ar.CreateSnapshot();
-            Assert.That(currentSnapshot, Is.EqualTo(newState));
-        }
 
         [Test]
         public void CreateNewSnapshot_LastEventIsNotSnapshot_SnapshotIsCreatedAndStored()

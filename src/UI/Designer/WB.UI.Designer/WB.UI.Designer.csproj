@@ -279,6 +279,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\loader.gif" />
+    <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
     <Content Include="Content\jquery.pnotify.icons.css" />
     <Content Include="Content\pdf.css" />
@@ -598,7 +599,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8011</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/designer</IISUrl>
+          <IISUrl>https://localhost</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

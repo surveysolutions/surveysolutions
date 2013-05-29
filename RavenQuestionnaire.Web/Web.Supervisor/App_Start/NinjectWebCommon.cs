@@ -12,8 +12,6 @@ using Questionnaire.Core.Web.Binding;
 using Questionnaire.Core.Web.Helpers;
 
 using WB.Core.Infrastructure;
-using WB.Core.Questionnaire.ImportService;
-using WB.Core.Questionnaire.ImportService.Commands;
 using Web.Supervisor.App_Start;
 using Web.Supervisor.Injections;
 using WebActivator;
@@ -105,9 +103,6 @@ namespace Web.Supervisor.App_Start
 
             kernel.Bind<ICommandService>().ToConstant(NcqrsEnvironment.Get<ICommandService>());
 
-            #warning Nastya: invent a new way of domain service registration
-            var commandService = NcqrsEnvironment.Get<ICommandService>() as CommandService;
-            commandService.RegisterExecutor(typeof(ImportQuestionnaireCommand), new DefaultImportService());
             // SuccessMarker.Start(kernel);
             return kernel;
         }

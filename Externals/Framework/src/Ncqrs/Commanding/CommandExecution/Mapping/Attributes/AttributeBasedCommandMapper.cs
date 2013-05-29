@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
+
+
 namespace Ncqrs.Commanding.CommandExecution.Mapping.Attributes
 {
     public class AttributeBasedCommandMapper : ICommandMapper

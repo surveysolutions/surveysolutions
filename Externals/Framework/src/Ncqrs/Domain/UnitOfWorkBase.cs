@@ -2,10 +2,11 @@
 using System.Diagnostics.Contracts;
 using System.Reflection;
 using System.Threading;
+
 using Ncqrs.Eventing;
-#if MONODROID
-using AndroidLogger;
-#endif
+using WB.Core.SharedKernel.Logger;
+using WB.Core.SharedKernel.Utils.Logging;
+
 namespace Ncqrs.Domain
 {
     public abstract class UnitOfWorkBase : IUnitOfWorkContext
