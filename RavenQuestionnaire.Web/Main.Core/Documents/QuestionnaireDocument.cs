@@ -19,7 +19,9 @@ namespace Main.Core.Documents
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
-    
+
+    using WB.Core.SharedKernel.Utils.Logging;
+
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
