@@ -57,25 +57,26 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// </returns>
         public QuestionnaireListView Load(QuestionnaireListViewInputModel input)
         {
-            // Adjust the model appropriately
-            int count = this.documentGroupSession.Count();
-            if (count == 0)
-            {
-                return new QuestionnaireListView(
-                    input.Page, input.PageSize, count, new QuestionnaireListViewItem[0], string.Empty);
-            }
-
             IQueryable<QuestionnaireListViewItem> query = this.documentGroupSession.Query();
 
-            Func<QuestionnaireListViewItem, bool> q = (ret) => true;
+            Func<QuestionnaireListViewItem, bool> q =
+                (x) =>
+                string.IsNullOrEmpty(input.Filter)
+                || (x.Title.ContainsIgnoreCaseSensitive(input.Filter)
+                    || x.CreatorName.ContainsIgnoreCaseSensitive(input.Filter));
+             
 
-            if (input.IsAdminMode.HasValue)
+            if (input.IsAdminMode)
+            {
+                q = q.AndAlso(x => (input.IsPublic || (x.CreatedBy == input.CreatedBy)));
+            }
+            else
             {
                 q =
-                    x =>
-                    (!input.IsOnlyOwnerItems || x.CreatedBy == input.CreatedBy)
-                    && (input.IsAdminMode.Value || !x.IsDeleted)
-                    && (string.IsNullOrEmpty(input.Filter) || x.Title.ContainsIgnoreCaseSensitive(input.Filter));
+                    q.AndAlso(
+                        x =>
+                        !x.IsDeleted
+                        && (((x.CreatedBy == input.CreatedBy) && !input.IsPublic) || (input.IsPublic && x.IsPublic)));
             }
 
             var queryResult = query.Where(q).AsQueryable().OrderUsingSortExpression(input.Order);
