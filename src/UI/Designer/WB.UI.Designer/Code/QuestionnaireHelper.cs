@@ -81,7 +81,7 @@ namespace WB.UI.Designer
             QuestionnaireListView model = this.GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
-                isOnlyOwnerItems: false, 
+                isPublic: true, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -126,7 +126,7 @@ namespace WB.UI.Designer
             QuestionnaireListView model = this.GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
-                isOnlyOwnerItems: true, 
+                isPublic: false, 
                 pageIndex: pageIndex, 
                 sortBy: sortBy, 
                 sortOrder: sortOrder, 
@@ -175,6 +175,7 @@ namespace WB.UI.Designer
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
+                           IsPublic = x.IsPublic,
                            CanDelete =
                                x.CreatedBy == this.userService.WebUser.UserId
                                || this.userService.WebUser.IsAdmin, 
@@ -206,6 +207,7 @@ namespace WB.UI.Designer
                            LastEntryDate = x.LastEntryDate, 
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
+                           IsPublic = x.IsPublic,
                            CanDelete = true, 
                            CanEdit = true, 
                            CanExport = true, 
@@ -222,8 +224,8 @@ namespace WB.UI.Designer
         /// <param name="userId">
         /// The user id.
         /// </param>
-        /// <param name="isOnlyOwnerItems">
-        /// The is only owner items.
+        /// <param name="isPublic">
+        /// Only public questionnaires.
         /// </param>
         /// <param name="pageIndex">
         /// The page index.
@@ -243,7 +245,7 @@ namespace WB.UI.Designer
         private QuestionnaireListView GetQuestionnaireView(
             IViewRepository repository, 
             Guid userId, 
-            bool isOnlyOwnerItems = true, 
+            bool isPublic = true, 
             int? pageIndex = null, 
             string sortBy = null, 
             int? sortOrder = null, 
@@ -255,7 +257,7 @@ namespace WB.UI.Designer
                         new QuestionnaireListViewInputModel
                             {
                                 CreatedBy = userId, 
-                                IsOnlyOwnerItems = isOnlyOwnerItems, 
+                                IsPublic = isPublic, 
                                 IsAdminMode = this.userService.WebUser.IsAdmin, 
                                 Page = pageIndex ?? 1, 
                                 PageSize = GlobalHelper.GridPageItemsCount, 

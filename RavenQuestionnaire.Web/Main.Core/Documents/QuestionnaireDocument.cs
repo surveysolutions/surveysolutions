@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Main.Core.Entities.SubEntities.Complete;
-using WB.Core.SharedKernel.Utils.Logging;
+using Main.Core.Utility;
 
 namespace Main.Core.Documents
 {
@@ -19,9 +19,7 @@ namespace Main.Core.Documents
     using Main.Core.Entities.Composite;
     using Main.Core.Entities.SubEntities;
     using Main.DenormalizerStorage;
-
-    using Newtonsoft.Json;
-
+    
     [SmartDenormalizer]
     public class QuestionnaireDocument : IQuestionnaireDocument
     {
@@ -35,6 +33,7 @@ namespace Main.Core.Documents
             this.PublicKey = Guid.NewGuid();
             this.Children = new List<IComposite>();
             this.ConditionExpression = string.Empty;
+            this.IsPublic = false;
         }
 
 
@@ -55,6 +54,8 @@ namespace Main.Core.Documents
         public bool IsDeleted { get; set; }
 
         public Guid? CreatedBy { get; set; }
+
+        public bool IsPublic { get; set; }
 
         private IComposite parent;
 
