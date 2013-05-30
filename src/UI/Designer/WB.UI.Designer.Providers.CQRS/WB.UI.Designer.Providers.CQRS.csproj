@@ -113,9 +113,9 @@
       <Project>{51825d6c-4a28-4c33-8598-004462023a27}</Project>
       <Name>Main.DenormalizerStorage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\WB.UI.Designer.Providers\WB.UI.Designer.Providers.csproj">
-      <Project>{e936364c-a916-45e7-8f59-80de2518af2c}</Project>
-      <Name>WB.UI.Designer.Providers</Name>
+    <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
+      <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
+      <Name>WB.UI.Shared.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

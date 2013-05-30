@@ -5,6 +5,7 @@
     left: 50%;
     margin-top: -8px;
     margin-left: -8px;
+    z-index: 9999999
 }
 
 footer {
@@ -356,7 +357,8 @@ h1 {
 
 #stacks.output-visible #questionnaire,
 #stacks.output-visible #details-question,
-#stacks.output-visible #details-group {
+#stacks.output-visible #details-group,
+#stacks.output-visible #details-questionnaire {
     bottom: 200px;
 }
 
@@ -364,9 +366,14 @@ h1 {
     right: 50%;
 }
 
-#details-question, #details-group {
+#details-question, #details-group, #details-questionnaire {
     right: -50%;
 }
+
+#stacks.detail-visible.show-questionnaire #details-questionnaire {
+    right: 0;
+}
+
 
 #stacks.detail-visible.show-question #details-question {
     right: 0;
@@ -433,13 +440,17 @@ h1 {
 
     .q-item-wrap.q-group {
         background-color: #E3E3E3;
-       
-        /*
-    background-image: -moz-linear-gradient(center top , #dff0d8, #d0e9c6);
-    border-bottom: 1px solid #c1e2b3;
-    */
     }
 
+    .q-item-wrap.q-questionnaire {
+        background-color: #AAA;
+        margin-left: 0;
+        font-size: 120%;
+        font-weight: bold;
+    }
+    .q-item-wrap.q-questionnaire .q-item {
+        padding-left: 20px;
+    }
     .q-item-wrap.selected {
         background-color: #2a8fc8;
     }
@@ -449,22 +460,24 @@ h1 {
     }
 
     .q-item-wrap.new {
-        background-color: #5BB75B;
+        background-color: #fbb24b;
     }
 
     .q-item-wrap.q-question.new {
-        background-color:#b3deb3;
+        background-color:#fcc77d;
     }
      .q-item-wrap.new.selected
     {
-        background-color:#347834
+        background-color:#f39106
     }
 
-    .q-item-wrap.selected div > i[class^="icon-"],
-    .q-item-wrap.new div > i[class^="icon-"] {
-        background-image: url("images/glyphicons-halflings-white.png");
+    .q-item-wrap div > i[class^="icon-"]
+    {
+         color: rgba(255, 255, 255, 0.7);
+         text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
     }
 
+    .q-item-wrap.q-questionnaire a.q-title,
     .q-item-wrap.selected a.q-title,
     .q-item-wrap.new a.q-title,
     .q-item-wrap.q-question.new.selected a.q-title  {
@@ -481,7 +494,7 @@ h1 {
     }
 
 .q-item {
-    padding-left: 20px;
+    padding-left: 25px;
     background: rgba(255, 255, 255, 0.1);
     background: -webkit-gradient(linear,left top,left bottom,from(rgba(255, 255, 255, 0.1)),to(rgba(0, 0, 0, 0.05)));
     background: -moz-linear-gradient(top,rgba(255, 255, 255, 0.1),rgba(0, 0, 0, 0.05));
@@ -653,7 +666,7 @@ h1 {
     left: 0;
     position: absolute;
     top: 0;
-    width: 15px;
+    width: 20px;
     border-right: 1px solid rgba(0,0,0,0.2);
     box-shadow: -1px 0 0 rgba(255,255,255,0.3) inset;
     cursor: move;
@@ -705,4 +718,14 @@ a.btn.btn-help {
 }
 .row-fluid .btn-group {
     margin-bottom: 10px;
+}
+#unsavedWarningMessage{
+
+    background-color: #F39106;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    color: #FFFFFF;
+    padding-bottom: 4px;
+    padding-top: 4px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+
 }

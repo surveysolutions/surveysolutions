@@ -2,37 +2,47 @@
 // <copyright file="QuestionnaireHelper.cs" company="">
 //   
 // </copyright>
-// <summary>
-//   The questionnaire helper.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-using Microsoft.Practices.ServiceLocation;
-using NinjectAdapter;
-using WB.UI.Designer.Code;
-using WB.UI.Designer.Views.Questionnaire;
-
 namespace WB.UI.Designer
 {
     using System;
     using System.Linq;
-    using System.Web.Security;
 
     using Main.Core.View;
-    using Main.Core.View.Questionnaire;
 
     using WB.UI.Designer.BootstrapSupport.HtmlHelpers;
     using WB.UI.Designer.Models;
+    using WB.UI.Designer.Views.Questionnaire;
+    using WB.UI.Shared.Web.Membership;
 
     /// <summary>
     ///     The questionnaire helper.
     /// </summary>
-    public class QuestionnaireHelper
+    public class QuestionnaireHelper : IQuestionnaireHelper
     {
-        #warning remove this shit
-        private static IUserHelper UserHelperInstance {
-            get { return Code.UserHelper.Instance; }
+        #region Fields
+
+        /// <summary>
+        /// The _user service.
+        /// </summary>
+        private readonly IMembershipUserService userService;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QuestionnaireHelper"/> class.
+        /// </summary>
+        /// <param name="userSevice">
+        /// The user sevice.
+        /// </param>
+        public QuestionnaireHelper(IMembershipUserService userSevice)
+        {
+            this.userService = userSevice;
         }
+
+        #endregion
 
         #region Public Methods and Operators
 
@@ -60,7 +70,7 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="IPagedList"/>.
         /// </returns>
-        public static IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
+        public IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
             IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
@@ -68,7 +78,7 @@ namespace WB.UI.Designer
             int? sortOrder = null, 
             string filter = null)
         {
-            QuestionnaireListView model = GetQuestionnaireView(
+            QuestionnaireListView model = this.GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
                 isOnlyOwnerItems: false, 
@@ -77,7 +87,7 @@ namespace WB.UI.Designer
                 sortOrder: sortOrder, 
                 filter: filter);
 
-            return model.Items.Select(GetPublicQuestionnaire)
+            return model.Items.Select(this.GetPublicQuestionnaire)
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
         }
 
@@ -105,7 +115,7 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="IPagedList"/>.
         /// </returns>
-        public static IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
             IViewRepository repository, 
             Guid userId, 
             int? pageIndex = null, 
@@ -113,7 +123,7 @@ namespace WB.UI.Designer
             int? sortOrder = null, 
             string filter = null)
         {
-            QuestionnaireListView model = GetQuestionnaireView(
+            QuestionnaireListView model = this.GetQuestionnaireView(
                 repository: repository, 
                 userId: userId, 
                 isOnlyOwnerItems: true, 
@@ -122,7 +132,7 @@ namespace WB.UI.Designer
                 sortOrder: sortOrder, 
                 filter: filter);
 
-            return model.Items.Select(GetQuestionnaire)
+            return model.Items.Select(this.GetQuestionnaire)
                         .ToPagedList(page: model.Page, pageSize: model.PageSize, totalCount: model.TotalCount);
         }
 
@@ -138,10 +148,9 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="IPagedList"/>.
         /// </returns>
-        public static IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(
-            IViewRepository repository, Guid userId)
+        public IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(IViewRepository repository, Guid userId)
         {
-            return GetQuestionnaires(repository: repository, userId: userId);
+            return this.GetQuestionnaires(repository: repository, userId: userId);
         }
 
         #endregion
@@ -157,23 +166,26 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="QuestionnairePublicListViewModel"/>.
         /// </returns>
-        private static QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
+        private QuestionnairePublicListViewModel GetPublicQuestionnaire(QuestionnaireListViewItem x)
         {
-            var createdBy = x.CreatedBy != null ? Membership.GetUser(x.CreatedBy, false) : null;
-
             return new QuestionnairePublicListViewModel
-                {
-                    Id = x.Id,
-                    CreationDate = x.CreationDate,
-                    LastEntryDate = x.LastEntryDate,
-                    Title = x.Title,
-                    IsDeleted = x.IsDeleted,
-                    CanDelete = UserHelperInstance.IsAdmin,
-                    CanExport = true,
-                    CanEdit = false,
-                    CanSynchronize = UserHelperInstance.IsAdmin,
-                    CreatorName = createdBy == null ? GlobalHelper.EmptyString : createdBy.UserName
-                };
+                       {
+                           Id = x.Id, 
+                           CreationDate = x.CreationDate, 
+                           LastEntryDate = x.LastEntryDate, 
+                           Title = x.Title, 
+                           IsDeleted = x.IsDeleted, 
+                           CanDelete =
+                               x.CreatedBy == this.userService.WebUser.UserId
+                               || this.userService.WebUser.IsAdmin, 
+                           CanExport = true, 
+                           CanEdit = x.CreatedBy == this.userService.WebUser.UserId, 
+                           CanSynchronize = this.userService.WebUser.IsAdmin, 
+                           CreatorName =
+                               x.CreatedBy == null
+                                   ? GlobalHelper.EmptyString
+                                   : x.CreatorName
+                       };
         }
 
         /// <summary>
@@ -185,7 +197,7 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="QuestionnaireListViewModel"/>.
         /// </returns>
-        private static QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x)
+        private QuestionnaireListViewModel GetQuestionnaire(QuestionnaireListViewItem x)
         {
             return new QuestionnaireListViewModel
                        {
@@ -195,9 +207,9 @@ namespace WB.UI.Designer
                            Title = x.Title, 
                            IsDeleted = x.IsDeleted, 
                            CanDelete = true, 
-                           CanEdit = true,
-                           CanExport = true,
-                           CanSynchronize = UserHelperInstance.IsAdmin
+                           CanEdit = true, 
+                           CanExport = true, 
+                           CanSynchronize = this.userService.WebUser.IsAdmin
                        };
         }
 
@@ -228,7 +240,7 @@ namespace WB.UI.Designer
         /// <returns>
         /// The <see cref="QuestionnaireListView"/>.
         /// </returns>
-        private static QuestionnaireListView GetQuestionnaireView(
+        private QuestionnaireListView GetQuestionnaireView(
             IViewRepository repository, 
             Guid userId, 
             bool isOnlyOwnerItems = true, 
@@ -244,13 +256,101 @@ namespace WB.UI.Designer
                             {
                                 CreatedBy = userId, 
                                 IsOnlyOwnerItems = isOnlyOwnerItems, 
-                                IsAdminMode = UserHelperInstance.IsAdmin, 
+                                IsAdminMode = this.userService.WebUser.IsAdmin, 
                                 Page = pageIndex ?? 1, 
                                 PageSize = GlobalHelper.GridPageItemsCount, 
                                 Order = sortBy, 
                                 Filter = filter
                             });
         }
+
+        #endregion
+    }
+
+    /// <summary>
+    /// The QuestionnaireHelper interface.
+    /// </summary>
+    public interface IQuestionnaireHelper
+    {
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The get public questionnaires.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <param name="pageIndex">
+        /// The page index.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortOrder">
+        /// The sort order.
+        /// </param>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPagedList"/>.
+        /// </returns>
+        IPagedList<QuestionnairePublicListViewModel> GetPublicQuestionnaires(
+            IViewRepository repository, 
+            Guid userId, 
+            int? pageIndex = null, 
+            string sortBy = null, 
+            int? sortOrder = null, 
+            string filter = null);
+
+        /// <summary>
+        /// The get questionnaires.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <param name="pageIndex">
+        /// The page index.
+        /// </param>
+        /// <param name="sortBy">
+        /// The sort by.
+        /// </param>
+        /// <param name="sortOrder">
+        /// The sort order.
+        /// </param>
+        /// <param name="filter">
+        /// The filter.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPagedList"/>.
+        /// </returns>
+        IPagedList<QuestionnaireListViewModel> GetQuestionnaires(
+            IViewRepository repository, 
+            Guid userId, 
+            int? pageIndex = null, 
+            string sortBy = null, 
+            int? sortOrder = null, 
+            string filter = null);
+
+        /// <summary>
+        /// The get questionnaires by user id.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="userId">
+        /// The user id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IPagedList"/>.
+        /// </returns>
+        IPagedList<QuestionnaireListViewModel> GetQuestionnairesByUserId(IViewRepository repository, Guid userId);
 
         #endregion
     }

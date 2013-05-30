@@ -3,7 +3,6 @@
     function ($, config, presenter, dataprimer, binder, routeConfig) {
         var
             run = function () {
-                presenter.toggleActivity(true);
 
                 $.when(dataprimer.fetch())
                     .done(binder.bind)
