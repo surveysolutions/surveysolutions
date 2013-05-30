@@ -5,6 +5,7 @@ namespace WB.UI.Designer.Code.Helpers
 
     using Main.Core.Commands.Questionnaire.Group;
     using Main.Core.Commands.Questionnaire.Question;
+    using Main.Core.Commands.Questionnaire;
 
     using Ncqrs.Commanding;
 
@@ -15,13 +16,16 @@ namespace WB.UI.Designer.Code.Helpers
     {
         private static readonly Dictionary<string, Type> knownCommandTypes = new Dictionary<string, Type>
         {
-            { "UpdateGroup", typeof(NewUpdateGroupCommand) },
-            { "AddGroup", typeof(NewAddGroupCommand) },
-            { "DeleteGroup", typeof(NewDeleteGroupCommand) },
+            { "UpdateQuestionnaire", typeof(UpdateQuestionnaireCommand) },
+            { "UpdateGroup", typeof(UpdateGroupCommand) },
+            { "AddGroup", typeof(AddGroupCommand) },
+            { "CloneGroupWithoutChildren", typeof(CloneGroupCommand) },
+            { "DeleteGroup", typeof(DeleteGroupCommand) },
             { "MoveGroup", typeof(MoveGroupCommand) },
-            { "UpdateQuestion", typeof(NewUpdateQuestionCommand) },
-            { "AddQuestion", typeof(NewAddQuestionCommand) },
-            { "DeleteQuestion", typeof(NewDeleteQuestionCommand) },
+            { "UpdateQuestion", typeof(UpdateQuestionCommand) },
+            { "AddQuestion", typeof(AddQuestionCommand) },
+            { "CloneQuestion", typeof(CloneQuestionCommand) },
+            { "DeleteQuestion", typeof(DeleteQuestionCommand) },
             { "MoveQuestion", typeof(MoveQuestionCommand) },
         };
 
@@ -29,7 +33,17 @@ namespace WB.UI.Designer.Code.Helpers
         {
             Type resultCommandType = GetTypeOfResultCommandOrThrowArgumentException(commandType);
 
-            return (ICommand) JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            ICommand command = null;
+            try
+            {
+                command = (ICommand)JsonConvert.DeserializeObject(serializedCommand, resultCommandType);
+            }
+            catch
+            {
+                throw new CommandDeserializationException(string.Format("Failed to deserialize command of type '{0}':\r\n{1}", commandType, serializedCommand));
+            }
+            
+            return command;
         }
 
         private static Type GetTypeOfResultCommandOrThrowArgumentException(string commandType)

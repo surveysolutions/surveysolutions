@@ -79,7 +79,7 @@ namespace RavenQuestionnaire.Core.EventHandlers
         /// </param>
         public void Handle(IPublishedEvent<ProcessEnded> evnt)
         {
-            SyncProcessStatisticsDocument item = this.docs.GetByGuid(evnt.Payload.ProcessKey);
+            SyncProcessStatisticsDocument item = this.docs.GetById(evnt.Payload.ProcessKey);
             if (item == null)
             {
                 return;
