@@ -156,7 +156,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .ToList());
             }
 
-            return retval;
+            return retval.OrderBy(e=>e.EventTimeStamp);
             //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
 
         }

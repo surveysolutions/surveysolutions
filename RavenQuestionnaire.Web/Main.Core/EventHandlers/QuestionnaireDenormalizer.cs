@@ -52,6 +52,7 @@ namespace Main.Core.EventHandlers
             var item = new QuestionnaireDocument();
 
             item.Title = evnt.Payload.Title;
+            item.IsPublic = evnt.Payload.IsPublic;
             item.PublicKey = evnt.Payload.PublicKey;
             item.CreationDate = evnt.Payload.CreationDate;
             item.CreatedBy = evnt.Payload.CreatedBy;

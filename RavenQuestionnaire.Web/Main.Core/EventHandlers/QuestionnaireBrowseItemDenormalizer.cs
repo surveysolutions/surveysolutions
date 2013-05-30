@@ -117,7 +117,8 @@ namespace Main.Core.EventHandlers
                 document.Title,
                 document.CreationDate,
                 document.LastEntryDate,
-                document.CreatedBy);
+                document.CreatedBy,
+                document.IsPublic);
 
             //}
             this.documentStorage.Store(browseItem, document.PublicKey);
