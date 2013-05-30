@@ -1,44 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Runtime.InteropServices;
+using NConfig;
 using Ncqrs.Eventing.Storage.RavenDB;
+using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 
 namespace StorageAnalyzer
 {
     class Program
     {
+        public class EventInfo
+        {
+            public string Type { get; set; }
+            public Guid EventSourceId { get; set; }
+        }
+
         static void Main(string[] args)
         {
-            /*
-            var store = (new DocumentStore { Url = "http://localhost:8080" }).Initialize();
-            int pageSize = 1024;
-            int timeout = 120;
-            IQueryable<StoredEvent> result = Enumerable.Empty<StoredEvent>().AsQueryable();
-            int page = 0;
-            while (true)
+            NConfigurator.UsingFile(@"Configuration\StorageAnalyzer.config").SetAsSystemDefault();
+            var url = ConfigurationManager.AppSettings["Raven.DocumentStore"];
+            
+            var store = (new DocumentStore { Url = url }).Initialize();
+
+            IndexCreation.CreateIndexes(typeof (Events_EventsByDataType).Assembly, store);
+
+            var eventsInfo = new List<Events_EventsByDataType.ReduceResult>();
+
+            using (IDocumentSession session = store.OpenSession())
             {
-                using (IDocumentSession session = store.OpenSession())
-                {
-                    List<StoredEvent> chunk = session
-                        .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .OrderBy(e => e.EventSequence)
-                        .Skip(page * pageSize)
-                        .Take(pageSize)
-                        .ToList();
-
-                    if (chunk.Count == 0)
-                    {
-                        break;
-                    }
-
-                    result = result.Concat(chunk);
-                    page++;
-                }
+                eventsInfo.AddRange(session.Query<Events_EventsByDataType.ReduceResult, Events_EventsByDataType>()
+                    .Customize(x=>x.WaitForNonStaleResultsAsOfNow())
+                    .ToList()
+                    .OrderBy(x=>x.Count));
             }
-            */
+
+            foreach (var reduceResult in eventsInfo)
+            {
+                Console.WriteLine("{0,6}: {1}", reduceResult.Count, reduceResult.Type);
+            }
         }
     }
 }
