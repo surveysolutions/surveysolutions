@@ -598,7 +598,7 @@
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>8011</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost</IISUrl>
+          <IISUrl>https://localhost/designer/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
