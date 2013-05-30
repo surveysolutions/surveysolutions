@@ -1,5 +1,4 @@
 using System.Linq;
-using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
@@ -18,9 +17,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB.RavenIndexes
                              select
                                  new
                                      {
-                                         Type = sEvent.EventSourceId.ToString(),
-                                         Count = MetadataFor(sEvent).Value<int>("Content-Length")
-                                         //Count = 1
+                                         Type = sEvent.EventType,
+                                         Count = 1
                                      };
 
             Reduce = results => from result in results

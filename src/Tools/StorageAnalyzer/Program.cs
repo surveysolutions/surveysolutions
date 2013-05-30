@@ -29,20 +29,36 @@ namespace StorageAnalyzer
 
             IndexCreation.CreateIndexes(typeof (Events_EventsByDataType).Assembly, store);
 
-            var eventsInfo = new List<Events_EventsByDataType.ReduceResult>();
-
-            using (IDocumentSession session = store.OpenSession())
+            int returnedEventCount = 0;
+            var allEventsWereReturned = false;
+            do
             {
-                eventsInfo.AddRange(session.Query<Events_EventsByDataType.ReduceResult, Events_EventsByDataType>()
-                    .Customize(x=>x.WaitForNonStaleResultsAsOfNow())
-                    .ToList()
-                    .OrderBy(x=>x.Count));
-            }
+                using (IDocumentSession session = store.OpenSession())
+                {
+                    using (IDocumentSession dsession = store.OpenSession("DjiboutiSupervisor"))
+                    {
+                        var storedEvent = session
+                            .Query<StoredEvent>()
+                            .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                            .Skip(returnedEventCount)
+                            .Take(1)
+                            .SingleOrDefault();
 
-            foreach (var reduceResult in eventsInfo)
-            {
-                Console.WriteLine("{0,6}: {1}", reduceResult.Count, reduceResult.Type);
-            }
+                        allEventsWereReturned = (storedEvent == null);
+
+                        if (!allEventsWereReturned)
+                        {
+                            returnedEventCount++;
+
+                            storedEvent.EventType = storedEvent.Data.GetType().Name;
+
+                            dsession.Store(storedEvent);
+
+                            dsession.SaveChanges();
+                        }
+                    }
+                }
+            } while (allEventsWereReturned);
         }
     }
 }

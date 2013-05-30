@@ -39,7 +39,7 @@
       <HintPath>..\..\..\packages\RavenDB.Client.2.0.2370\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
-      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2370\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
