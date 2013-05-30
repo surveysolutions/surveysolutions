@@ -126,6 +126,17 @@ namespace WB.UI.Designer.Views.Questionnaire
             }
         }
 
+        /// <summary>
+        /// Gets the is public.
+        /// </summary>
+        public bool IsPublic
+        {
+            get
+            {
+                return this.Source.IsPublic;
+            }
+        }
+
         #endregion
     }
 }
