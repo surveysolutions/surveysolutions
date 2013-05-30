@@ -1,18 +1,6 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="QuestionnaireDenormalizer.cs" company="The World Bank">
-//   2012
-// </copyright>
-// <summary>
-//   Defines the QuestionnaireDenormalizer type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Main.Core.AbstractFactories;
 using Main.Core.Documents;
-using Main.Core.Entities.Extensions;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Events.Questionnaire;
 using Main.DenormalizerStorage;
@@ -23,15 +11,14 @@ namespace Main.Core.EventHandlers
 {
     using Ncqrs.Eventing;
 
-    /// <summary>
-    /// The questionnaire denormalizer.
-    /// </summary>
     public class QuestionnaireDenormalizer : IEventHandler<NewQuestionnaireCreated>,
                                              IEventHandler<SnapshootLoaded>,
                                              IEventHandler<NewGroupAdded>,
+                                             IEventHandler<GroupCloned>,
                                              IEventHandler<QuestionnaireItemMoved>,
                                              IEventHandler<QuestionDeleted>,
                                              IEventHandler<NewQuestionAdded>,
+                                             IEventHandler<QuestionCloned>,
                                              IEventHandler<QuestionChanged>,
                                              IEventHandler<ImageUpdated>,
                                              IEventHandler<ImageUploaded>,
@@ -48,25 +35,10 @@ namespace Main.Core.EventHandlers
         private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 #endif
 
-        #region Fields
-
-        /// <summary>
-        /// The document storage.
-        /// </summary>
         private readonly IDenormalizerStorage<QuestionnaireDocument> documentStorage;
 
         private readonly ICompleteQuestionFactory questionFactory;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="QuestionnaireDenormalizer"/> class.
-        /// </summary>
-        /// <param name="documentStorage">
-        /// The document storage.
-        /// </param>
         public QuestionnaireDenormalizer(
             IDenormalizerStorage<QuestionnaireDocument> documentStorage, ICompleteQuestionFactory questionFactory)
         {
@@ -74,16 +46,6 @@ namespace Main.Core.EventHandlers
             this.questionFactory = questionFactory;
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<NewQuestionnaireCreated> evnt)
         {
             var item = new QuestionnaireDocument();
@@ -96,12 +58,6 @@ namespace Main.Core.EventHandlers
             this.documentStorage.Store(item, item.PublicKey);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
         {
             var document = evnt.Payload.Template.Payload as QuestionnaireDocument;
@@ -113,15 +69,9 @@ namespace Main.Core.EventHandlers
             this.documentStorage.Store(document.Clone() as QuestionnaireDocument, document.PublicKey);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<NewGroupAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             var group = new Group();
             group.Title = evnt.Payload.GroupText;
@@ -133,15 +83,25 @@ namespace Main.Core.EventHandlers
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
+        public void Handle(IPublishedEvent<GroupCloned> evnt)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+
+            var group = new Group();
+            group.Title = evnt.Payload.GroupText;
+            group.Propagated = evnt.Payload.Paropagateble;
+            group.PublicKey = evnt.Payload.PublicKey;
+            group.ConditionExpression = evnt.Payload.ConditionExpression;
+            group.Description = evnt.Payload.Description;
+
+            #warning Slava: uncomment this line and get rig of read and write side objects
+            item.Insert(evnt.Payload.TargetIndex, group, evnt.Payload.ParentGroupPublicKey);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
         public void Handle(IPublishedEvent<QuestionnaireItemMoved> evnt)
         {
-            QuestionnaireDocument questionnaire = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument questionnaire = this.documentStorage.GetById(evnt.EventSourceId);
 
             bool isLegacyEvent = evnt.Payload.AfterItemKey != null;
 
@@ -156,28 +116,30 @@ namespace Main.Core.EventHandlers
             this.UpdateQuestionnaire(evnt, questionnaire);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<QuestionDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             item.RemoveQuestion(evnt.Payload.QuestionId);
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
+        public void Handle(IPublishedEvent<QuestionCloned> evnt)
+        {
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
+            AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
+
+            if (result == null)
+            {
+                return;
+            }
+            #warning Slava: uncomment this line and get rig of read and write side objects
+            item.Insert(evnt.Payload.TargetIndex, result, evnt.Payload.GroupPublicKey);
+            this.UpdateQuestionnaire(evnt, item);
+        }
+
         public void Handle(IPublishedEvent<NewQuestionAdded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             AbstractQuestion result = new CompleteQuestionFactory().Create(evnt.Payload);
             if (result == null)
             {
@@ -189,16 +151,9 @@ namespace Main.Core.EventHandlers
         }
 
         //// move it out of there
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<QuestionChanged> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             var question = item.Find<AbstractQuestion>(evnt.Payload.PublicKey);
             if (question == null)
@@ -213,29 +168,17 @@ namespace Main.Core.EventHandlers
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<ImageUpdated> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
             question.UpdateCard(evnt.Payload.ImageKey, evnt.Payload.Title, evnt.Payload.Description);
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<ImageUploaded> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var newImage = new Image
                                {
                                    PublicKey = evnt.Payload.ImagePublicKey,
@@ -248,45 +191,27 @@ namespace Main.Core.EventHandlers
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<ImageDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
             var question = item.Find<AbstractQuestion>(evnt.Payload.QuestionKey);
 
             question.RemoveCard(evnt.Payload.ImageKey);
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<GroupDeleted> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             item.RemoveGroup(evnt.Payload.GroupPublicKey);
 
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<GroupUpdated> evnt)
         {
-            QuestionnaireDocument item = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument item = this.documentStorage.GetById(evnt.EventSourceId);
 
             item.UpdateGroup(
                 evnt.Payload.GroupPublicKey,
@@ -298,31 +223,14 @@ namespace Main.Core.EventHandlers
             this.UpdateQuestionnaire(evnt, item);
         }
 
-        #endregion
-
-        /// <summary>
-        /// The handle.
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
         public void Handle(IPublishedEvent<QuestionnaireUpdated> evnt)
         {
-            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.Title = evnt.Payload.Title;
             this.UpdateQuestionnaire(evnt, document);
         }
 
-        /// <summary>
-        /// Updates questionnaire with event' service information
-        /// </summary>
-        /// <param name="evnt">
-        /// The evnt.
-        /// </param>
-        /// <param name="document">
-        /// The document.
-        /// </param>
         private void UpdateQuestionnaire(IEvent evnt, QuestionnaireDocument document)
         {
             document.LastEntryDate = evnt.EventTimeStamp;
@@ -330,7 +238,7 @@ namespace Main.Core.EventHandlers
 
         public void Handle(IPublishedEvent<QuestionnaireDeleted> evnt)
         {
-            QuestionnaireDocument document = this.documentStorage.GetByGuid(evnt.EventSourceId);
+            QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.IsDeleted = true;
         }

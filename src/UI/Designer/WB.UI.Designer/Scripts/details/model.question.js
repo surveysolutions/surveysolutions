@@ -1,13 +1,15 @@
 ﻿define('model.question',
-    ['ko', 'config', 'model.answerOption'],
-    function (ko, config, answerOption) {
+    ['ko', 'config', 'utils', 'model.answerOption'],
+    function (ko, config, utils, answerOption) {
 
         var _dc = null,
           Question = function () {
               var self = this;
               self.id = ko.observable(Math.uuid());
               self.isNew = ko.observable(true);
-              
+              self.isClone = ko.observable(false);
+
+
               self.title = ko.observable('New Question').extend({ required: true });
               self.parent = ko.observable();
               self.alias = ko.observable('').extend({
@@ -17,7 +19,7 @@
                       params: '^[_A-Za-z][_A-Za-z0-9]*$'
                   }
               });
-              
+
               self.type = ko.observable("QuestionView"); // Object type
               self.template = "QuestionView"; // tempate id in html file
 
@@ -71,8 +73,8 @@
               };
               self.removeTrigger = function (trigger) {
                   self.triggers.remove(trigger);
-                  //self.triggers.valueHasMutated();
               };
+
 
               self.currentAnswerValue = ko.observable();
               self.currentAnswerTitle = ko.observable();
@@ -86,11 +88,14 @@
               };
               self.isSelected = ko.observable();
               self.isNullo = false;
+              self.cloneSource = ko.observable();
 
               self.dirtyFlag = new ko.DirtyFlag([self.title, self.alias, self.qtype, self.isHead, self.isFeatured, self.isMandatory, self.scope, self.condition, self.validationExpression, self.validationMessage, self.instruction, self.answerOrder, self.answerOptions, self.maxValue, self.triggers]);
               self.dirtyFlag().reset();
               self.errors = ko.validation.group(self);
-              
+
+              self.canUpdate = ko.observable(true);
+
               return self;
           };
 
@@ -109,10 +114,70 @@
         Question.prototype = function () {
             var dc = Question.datacontext,
                 children = function () {
+                },
+                index = function () {
+                    if (this.hasParent()) {
+                        var parent = this.parent();
+                        var item = utils.findById(parent.childrenID(), this.id());
+                        return item.index;
+                    }
+                    return 0;
+                },
+                hasParent = function () {
+                    if (_.isNull(this.parent()) || _.isUndefined(this.parent())) {
+                        return false;
+                    }
+                    return true;
+                },
+                clone = function () {
+                    var item = new Question();
+                    item.title(this.title());
+                    item.qtype(this.qtype());
+                    item.scope(this.scope());
+                    item.answerOrder(this.answerOrder());
+
+                    item.answerOptions(_.map(this.answerOptions(), function (answer) {
+                        return new answerOption().id(answer.id()).title(answer.title()).value(answer.value());
+                    }));
+
+                    item.triggers(_.map(this.triggers(), function (trigger) {
+                        return { key: trigger.key, value: trigger.value };
+                    }));
+
+                    item.isHead(this.isHead());
+                    item.isFeatured(this.isFeatured());
+                    item.isMandatory(this.isMandatory());
+                    item.condition(this.condition());
+                    item.instruction(this.instruction());
+                    item.maxValue(this.maxValue());
+
+                    item.validationExpression(this.validationExpression());
+                    item.validationMessage(this.validationMessage());
+
+                    item.parent(this.parent());
+                    item.id(Math.uuid());
+                    item.isNew(true);
+                    item.isClone(true);
+
+                    if (this.isClone() && this.isNew()) {
+                        item.cloneSource(this.cloneSource());
+                    } else {
+                        item.cloneSource(this);
+                    }
+
+                    item.dirtyFlag().reset();
+
+                    item.alias('');
+                    item.alias.valueHasMutated();
+
+                    return item;
                 };
             return {
                 isNullo: false,
-                children: children
+                children: children,
+                clone: clone,
+                index: index,
+                hasParent: hasParent
             };
         }();
 

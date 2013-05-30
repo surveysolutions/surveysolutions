@@ -11,33 +11,16 @@ using System;
 
 namespace Core.Supervisor.Views.Assign
 {
-    /// <summary>
-    /// The assign survey input model.
-    /// </summary>
     public class AssignSurveyInputModel
     {
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssignSurveyInputModel"/> class.
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        public AssignSurveyInputModel(Guid id)
+        public AssignSurveyInputModel(Guid id, Guid viewerId)
         {
             this.CompleteQuestionnaireId = id;
+            this.ViewerId = viewerId;
         }
 
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        /// Gets the complete questionnaire id.
-        /// </summary>
+        public Guid ViewerId { get; set; }
+        
         public Guid CompleteQuestionnaireId { get; private set; }
-
-        #endregion
     }
 }

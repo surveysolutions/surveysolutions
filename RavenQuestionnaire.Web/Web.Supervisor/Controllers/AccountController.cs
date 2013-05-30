@@ -102,11 +102,19 @@ namespace Web.Supervisor.Controllers
             {
                 if (Membership.ValidateUser(model.UserName, SimpleHash.ComputeHash(model.Password)))
                 {
-                    if (Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString())
-                        || Roles.IsUserInRole(model.UserName, UserRoles.Administrator.ToString()))
+                    var isSupervisor = Roles.IsUserInRole(model.UserName, UserRoles.Supervisor.ToString());
+                    var isHeadquarter = Roles.IsUserInRole(model.UserName, UserRoles.Headquarter.ToString());
+                    if (isSupervisor || isHeadquarter)
                     {
                         this.authentication.SignIn(model.UserName, false);
-                        return this.Redirect("~/");
+                        if (isSupervisor)
+                        {
+                            return this.RedirectToAction("Index", "Survey");
+                        }
+                        else
+                        {
+                            return this.RedirectToAction("Index", "HQ");
+                        }
                     }
 
                     ModelState.AddModelError(string.Empty, "You have no access to this site. Contact your administrator.");
@@ -147,7 +155,7 @@ namespace Web.Supervisor.Controllers
         /// <returns>whether users</returns>
         public bool IsUserInBase()
         {
-            var count = _userEventSync.GetUsers(Main.Core.Entities.SubEntities.UserRoles.Supervisor);
+            var count = _userEventSync.GetUsers(UserRoles.Supervisor);
             if (count == null) return false;
             return count.ToList().Count > 0;
 

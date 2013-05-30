@@ -1,33 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Ionic.Zip;
-using Main.Core.Documents;
-using Main.Core.View;
-using NLog;
-using Ncqrs.Commanding.ServiceModel;
-using Newtonsoft.Json;
-using RazorEngine;
-using WB.Core.Questionnaire.ExportServices;
-using WB.Core.Questionnaire.ImportService.Commands;
-using WB.UI.Designer.Code;
-using WB.UI.Designer.Models;
-using WB.UI.Designer.Utils;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="SynchronizationController.cs" company="">
+//   
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace WB.UI.Designer.Controllers
 {
+    using System;
+    using System.Web;
+    using System.Web.Mvc;
+
+    using Main.Core.Documents;
+    using Main.Core.View;
+
+    using Ncqrs.Commanding.ServiceModel;
+
+    using WB.Core.Questionnaire.ExportServices;
+    using WB.Core.Questionnaire.ImportService.Commands;
+    using WB.Core.SharedKernel.Utils.Compression;
+    using WB.UI.Shared.Web.Membership;
+
+    /// <summary>
+    /// The synchronization controller.
+    /// </summary>
     [CustomAuthorize(Roles = "Administrator")]
     public class SynchronizationController : BaseController
     {
+        #region Fields
 
-        protected readonly IZipUtils ZipUtils;
+        /// <summary>
+        /// The export service.
+        /// </summary>
         protected readonly IExportService ExportService;
+
+        /// <summary>
+        /// The zip utils.
+        /// </summary>
+        protected readonly IStringCompressor ZipUtils;
+
+        #endregion
+
         #region Constructors and Destructors
 
-        public SynchronizationController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper, IZipUtils zipUtils, IExportService exportService)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SynchronizationController"/> class.
+        /// </summary>
+        /// <param name="repository">
+        /// The repository.
+        /// </param>
+        /// <param name="commandService">
+        /// The command service.
+        /// </param>
+        /// <param name="userHelper">
+        /// The user helper.
+        /// </param>
+        /// <param name="zipUtils">
+        /// The zip utils.
+        /// </param>
+        /// <param name="exportService">
+        /// The export service.
+        /// </param>
+        public SynchronizationController(
+            IViewRepository repository, 
+            ICommandService commandService, 
+            IMembershipUserService userHelper, 
+            IStringCompressor zipUtils, 
+            IExportService exportService)
             : base(repository, commandService, userHelper)
         {
             this.ZipUtils = zipUtils;
@@ -36,32 +74,76 @@ namespace WB.UI.Designer.Controllers
 
         #endregion
 
-        [AcceptVerbs(HttpVerbs.Get)]
-        public FileResult Export(Guid id)
+        #region Public Methods and Operators
+
+        /// <summary>
+        /// The export.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="FileStreamResult"/>.
+        /// </returns>
+        [HttpGet]
+        public FileStreamResult Export(Guid id)
         {
-            var data = ExportService.GetQuestionnaireTemplate(id);
+            string data = this.ExportService.GetQuestionnaireTemplate(id);
+
             if (string.IsNullOrEmpty(data))
+            {
                 return null;
-            return this.File(ZipUtils.ZipDate(data), "application/zip",
-                             "template.zip");
+            }
+
+            return new FileStreamResult(this.ZipUtils.Compress(data), "application/zip")
+                       {
+                           FileDownloadName = "template.zip"
+                       };
         }
 
-        [AcceptVerbs(HttpVerbs.Get)]
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpGet]
         public ActionResult Import()
         {
             return this.View("ViewTestUploadFile");
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
+        /// <summary>
+        /// The import.
+        /// </summary>
+        /// <param name="uploadFile">
+        /// The upload file.
+        /// </param>
+        /// <returns>
+        /// The <see cref="ActionResult"/>.
+        /// </returns>
+        [HttpPost]
         public ActionResult Import(HttpPostedFileBase uploadFile)
         {
-            var document = this.ZipUtils.UnzipTemplate<IQuestionnaireDocument>(this.Request, uploadFile);
-            if(document==null)
-                return this.RedirectToAction("Index", "Error");
-            CommandService.Execute(new ImportQuestionnaireCommand(UserHelper.CurrentUserId, document));
-            return this.RedirectToAction("Index", "Questionnaire");
+            uploadFile = uploadFile ?? this.Request.Files[0];
+
+            if (uploadFile != null && uploadFile.ContentLength > 0)
+            {
+                var document = this.ZipUtils.Decompress<IQuestionnaireDocument>(uploadFile.InputStream);
+                if (document != null)
+                {
+                    this.CommandService.Execute(new ImportQuestionnaireCommand(this.UserHelper.WebUser.UserId, document));
+                    return this.RedirectToAction("Index", "Questionnaire");
+                }
+            }
+            else
+            {
+                this.Error("Uploaded file is empty");    
+            }
+            
+            return this.Import();
         }
 
-
+        #endregion
     }
 }

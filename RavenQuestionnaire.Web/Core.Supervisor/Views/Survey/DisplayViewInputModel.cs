@@ -18,14 +18,6 @@ namespace Core.Supervisor.Views.Survey
     /// </summary>
     public class DisplayViewInputModel
     {
-        #region Fields
-
-        /// <summary>
-        /// The _current group public key.
-        /// </summary>
-        private Guid? _currentGroupPublicKey;
-
-        #endregion
 
         #region Constructors and Destructors
 
@@ -87,18 +79,7 @@ namespace Core.Supervisor.Views.Survey
         /// <summary>
         /// Gets or sets the current group public key.
         /// </summary>
-        public Guid? CurrentGroupPublicKey
-        {
-            get
-            {
-                return this._currentGroupPublicKey;
-            }
-
-            set
-            {
-                this._currentGroupPublicKey = value == Guid.Empty ? null : value;
-            }
-        }
+        public Guid? CurrentGroupPublicKey { get; set; }
 
         /// <summary>
         /// Gets a value indicating whether is reverse.

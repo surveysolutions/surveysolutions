@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using Ninject.Parameters;
+
 namespace DataEntryClient.SycProcess
 {
     using System;
@@ -51,16 +53,13 @@ namespace DataEntryClient.SycProcess
         /// </summary>
         protected readonly ICommandService Invoker;
 
-        /// <summary>
-        /// The event store.
-        /// </summary>
-        protected readonly IEventStreamReader EventStoreReader;
 
         /// <summary>
         /// sync process repository
         /// </summary>
         protected readonly ISyncProcessRepository SyncProcessRepository;
 
+        protected readonly IKernel kernel;
         #endregion
 
         #region Constructors and Destructors
@@ -79,7 +78,7 @@ namespace DataEntryClient.SycProcess
         /// </param>
         protected AbstractSyncProcess(IKernel kernel, Guid syncProcess, Guid? parentSyncProcess = null)
         {
-            this.EventStoreReader = kernel.Get<IEventStreamReader>();
+            this.kernel = kernel;
             this.Invoker = NcqrsEnvironment.Get<ICommandService>();
             this.ProcessGuid = syncProcess;
             this.ParentProcessGuid = parentSyncProcess;
@@ -88,6 +87,14 @@ namespace DataEntryClient.SycProcess
 
         #endregion
 
+        protected IEventStreamReader GetReaderForUser(Guid userId)
+        {
+            return kernel.Get<IEventStreamReader>(new ConstructorArgument("supervisorId", userId));
+        }
+        protected IEventStreamReader GetReader()
+        {
+            return kernel.Get<IEventStreamReader>();
+        }
         #region Public Methods and Operators
 
         /// <summary>
@@ -195,7 +202,7 @@ namespace DataEntryClient.SycProcess
         {
             ErrorCodes returnCode = ErrorCodes.None;
 
-            List<IEnumerable<AggregateRootEvent>> events = this.EventStoreReader.ReadEventsByChunks().ToList();
+            List<IEnumerable<AggregateRootEvent>> events = this.GetReader().ReadEventsByChunks().ToList();
 
             this.Invoker.Execute(new PushEventsCommand(this.ProcessGuid, events));
             foreach (IEnumerable<AggregateRootEvent> t in events)

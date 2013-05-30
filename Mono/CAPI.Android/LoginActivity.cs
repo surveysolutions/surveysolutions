@@ -32,7 +32,7 @@ namespace CAPI.Android
     /// <summary>
     /// The login activity.
     /// </summary>
-    [Activity(NoHistory = true, Icon = "@drawable/capi",
+    [Activity(Icon = "@drawable/capi",
         ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.KeyboardHidden | ConfigChanges.ScreenSize)]
     public class LoginActivity : MvxSimpleBindingActivity<LoginViewModel> /*, ActionBar.ITabListener*/
     {
@@ -66,19 +66,11 @@ namespace CAPI.Android
 
         #region Public Methods and Operators
 
-        /// <summary>
-        /// The on create options menu.
-        /// </summary>
-        /// <param name="menu">
-        /// The menu.
-        /// </param>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public override bool OnCreateOptionsMenu(IMenu menu)
+        protected override void OnStart()
         {
+            base.OnStart();
             this.CreateActionBar();
-            return base.OnCreateOptionsMenu(menu);
+
         }
 
         #endregion
@@ -118,7 +110,9 @@ namespace CAPI.Android
             bool result = CapiApplication.Membership.LogOn(this.teLogin.Text, this.tePassword.Text);
             if (result)
             {
-                restore = () =>
+                this.ClearAllBackStack<DashboardActivity>();
+             
+                /*restore = () =>
                     {
                         CapiApplication.GenerateEvents(CapiApplication.Membership.CurrentUser.Id);
                         this.StartActivity(typeof (DashboardActivity));
@@ -128,21 +122,21 @@ namespace CAPI.Android
                                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FillParent,
                                                                ViewGroup.LayoutParams.FillParent));
                 restore.BeginInvoke(Callback, restore);
-
+                */
                 return;
             }
 
             this.teLogin.SetBackgroundColor(Color.Red);
             this.tePassword.SetBackgroundColor(Color.Red);
         }
-
+/*
         private void Callback(IAsyncResult asyncResult)
         {
             Action asyncAction = (Action)asyncResult.AsyncState;
             asyncAction.EndInvoke(asyncResult);
         }
 
-        private Action restore;
+        private Action restore;*/
 
         #endregion
     }

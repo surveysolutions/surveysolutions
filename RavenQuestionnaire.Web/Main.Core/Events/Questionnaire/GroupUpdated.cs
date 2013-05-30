@@ -17,7 +17,6 @@ namespace Main.Core.Events.Questionnaire
     /// <summary>
     /// The group updated.
     /// </summary>
-    [Serializable]
     [EventName("RavenQuestionnaire.Core:Events:GroupUpdated")]
     public class GroupUpdated
     {

@@ -18,7 +18,7 @@ namespace CAPI.Android.Core.Model.ViewModel.Statistics
 
         public StatisticsViewModel Load(StatisticsInput input)
         {
-            var doc = this._documentStorage.GetByGuid(input.QuestionnaireId);
+            var doc = this._documentStorage.GetById(input.QuestionnaireId);
             var enabledQuestion =
                 doc.FindQuestion(
                     q => q.Status.HasFlag(QuestionStatus.Enabled));

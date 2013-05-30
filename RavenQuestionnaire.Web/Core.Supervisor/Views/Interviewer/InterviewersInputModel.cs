@@ -14,6 +14,8 @@ using Main.Core.Utility;
 
 namespace Core.Supervisor.Views.Interviewer
 {
+    using System;
+
     /// <summary>
     /// The interviewers input model.
     /// </summary>
@@ -86,9 +88,9 @@ namespace Core.Supervisor.Views.Interviewer
         public int PageSize { get; set; }
 
         /// <summary>
-        /// Gets or sets the supervisor.
+        /// Gets or sets the supervisor id.
         /// </summary>
-        public UserLight Supervisor { get; set; }
+        public Guid ViewerId { get; set; }
 
         #endregion
     }

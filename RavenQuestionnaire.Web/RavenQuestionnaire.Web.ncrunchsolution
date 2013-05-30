@@ -1,7 +1,7 @@
 <SolutionConfiguration>
   <FileVersion>1</FileVersion>
-  <AutoEnableOnStartup>False</AutoEnableOnStartup>
-  <AllowParallelTestExecution>false</AllowParallelTestExecution>
+  <AutoEnableOnStartup>True</AutoEnableOnStartup>
+  <AllowParallelTestExecution>true</AllowParallelTestExecution>
   <AllowTestsToRunInParallelWithThemselves>true</AllowTestsToRunInParallelWithThemselves>
   <FrameworkUtilisationTypeForNUnit>UseDynamicAnalysis</FrameworkUtilisationTypeForNUnit>
   <FrameworkUtilisationTypeForGallio>UseStaticAnalysis</FrameworkUtilisationTypeForGallio>
@@ -9,22 +9,5 @@
   <FrameworkUtilisationTypeForMSTest>UseStaticAnalysis</FrameworkUtilisationTypeForMSTest>
   <EngineModes>Run all tests automatically:BFRydWU=;Run all tests manually:BUZhbHNl;Run impacted tests automatically, others manually (experimental!):CklzSW1wYWN0ZWQ=;Run pinned tests automatically, others manually:CElzUGlubmVk</EngineModes>
   <MetricsExclusionList>
-..\ExpressionEvaluator\Evaluant.Calculator.Tests\NCalc.Tests.csproj
-..\ExpressionEvaluator\Evaluant.Calculator\NCalc.csproj
-..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB.Tests\Ncqrs.Eventing.Storage.RavenDB.Tests.csproj
-..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj
-..\Externals\Framework\src\Ncqrs.Spec\Ncqrs.Spec.csproj
-..\Synchronization\DataEntryClientTests\DataEntryClientTests.csproj
-Core.CAPI.Tests\Core.CAPI.Tests.csproj
-Core.Supervisor.Tests\Core.Supervisor.Tests.csproj
-Main.Core.Tests\Main.Core.Tests.csproj
-Main.DenormalizerStorage.Tests\Main.DenormalizerStorage.Tests.csproj
-Main.Synchronization.Tests\Main.Synchronization.Tests.csproj
-Ncqrs.Restoring.EventStapshoot.test\Ncqrs.Restoring.EventStapshoot.test.csproj
-Questionnaire.Core.Web.Tests\Questionnaire.Core.Web.Tests.csproj
-RavenQuestionnaire.Core.Tests\RavenQuestionnaire.Core.Tests.csproj
-RavenQuestionnaire.Web.Tests\RavenQuestionnaire.Web.Tests.csproj
-Web.CAPI.Tests\Web.CAPI.Tests.csproj
-Web.Supervisor.Tests\Web.Supervisor.Tests.csproj
 </MetricsExclusionList>
 </SolutionConfiguration>

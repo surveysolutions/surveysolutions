@@ -6,16 +6,21 @@
 //   The mvc application.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using NConfig;
+
 namespace Web.Supervisor
 {
     using System;
     using System.Web;
     using System.Web.Mvc;
+    using System.Web.Optimization;
     using System.Web.Routing;
 
-    using NLog;
+    using WB.Core.SharedKernel.Logger;
+    using WB.Core.SharedKernel.Utils.NLog;
 
-    using Questionnaire.Core.Web.Helpers;
+    using Web.Supervisor.App_Start;
 
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
@@ -25,21 +30,23 @@ namespace Web.Supervisor
     /// </summary>
     public class MvcApplication : HttpApplication
     {
-        #region Fields
+        /// <summary>
+        /// Initialization per AppDomain.
+        /// </summary>
+        static MvcApplication()
+        {
+            SetupNConfig();
+        }
 
         /// <summary>
         /// The logger.
         /// </summary>
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly ILog logger = LogManager.Logger;
 
         /// <summary>
         /// The correctly initialized.
         /// </summary>
         private static bool correctlyInitialized;
-
-        #endregion
-
-        #region Public Methods and Operators
 
         /// <summary>
         /// The register global filters.
@@ -62,21 +69,12 @@ namespace Web.Supervisor
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
             
-            // routes.IgnoreRoute("{resource}.svc/{*pathInfo}");
-            /*routes.IgnoreRoute("{WCF}/{*pathInfo}");*/
-
             routes.MapRoute(
                 "Default", 
-                // Route name
                 "{controller}/{action}/{id}", 
-                // URL with parameters
-                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } // Parameter defaults
-                );
+                new { controller = "Survey", action = "Index", id = UrlParameter.Optional } 
+            );
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// The application_ error.
@@ -100,7 +98,7 @@ namespace Web.Supervisor
             current.UnhandledException += this.CurrentUnhandledException;
             
             AreaRegistration.RegisterAllAreas();
-
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             // RouteTable.Routes.Add(new ServiceRoute("", new Ninject.Extensions.Wcf.NinjectServiceHostFactory(), typeof(API)));
 
@@ -110,48 +108,7 @@ namespace Web.Supervisor
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
-
-            try
-            {
-                SuccessMarker.Start();
-                correctlyInitialized = true;
-            }
-            catch (Exception e)
-            {
-                this.logger.Fatal("Initialization failed", e);
-                this.logger.Fatal("Initialization failed", e.StackTrace);
-                if (e.InnerException != null)
-                {
-                    this.logger.Fatal("Initialization failed", e.InnerException);
-                    this.logger.Fatal("Initialization failed", e.InnerException.StackTrace);
-                }
-                correctlyInitialized = false;
-
-                // due to the bug in iis7 moved to Application_BeginRequest
-                /*this.BeginRequest += (sender, args) =>
-                    {
-                        base.Response.Write("Sorry, Application cann't handle your request!");
-                        this.CompleteRequest();
-                    };
-                throw;*/
-            }
         }
-
-        protected void Application_BeginRequest(object sender, EventArgs e)
-        {
-            if (!correctlyInitialized)
-            {
-                base.Response.Write("Sorry, Application cann't handle this!");
-                this.CompleteRequest();
-            }
-
-            var context = HttpContext.Current;
-
-            var appRelativeCurrentExecutionFilePath = context.Request.AppRelativeCurrentExecutionFilePath;
-
-            var r = RouteTable.Routes.GetRouteData(new HttpContextWrapper(context));
-        }
-
 
         /// <summary>
         /// The current_ unhandled exception.
@@ -178,6 +135,12 @@ namespace Web.Supervisor
             
         }
 
-        #endregion
+        private static void SetupNConfig()
+        {
+            NConfigurator.UsingFiles(@"~\Configuration\Supervisor.Web.config").SetAsSystemDefault();
+        }
+
+        #warning TLK: delete this when NCQRS initialization moved to Global.asax
+        public static void Initialize() { }
     }
 }

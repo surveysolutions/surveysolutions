@@ -169,12 +169,9 @@ namespace Main.Core.Documents
         /// <summary>
         /// Gets the question hash.
         /// </summary>
-        private GroupHash QuestionHash
+        private GroupHash GetQuestionHash()
         {
-            get
-            {
-                return this.questionHash ?? (this.questionHash = new GroupHash(this));
-            }
+            return this.questionHash ?? (this.questionHash = new GroupHash(this));
         }
 
 
@@ -200,7 +197,7 @@ namespace Main.Core.Documents
         /// </returns>
         public IEnumerable<ICompleteQuestion> GetQuestions()
         {
-            return this.QuestionHash.Questions;
+            return this.GetQuestionHash().Questions;
         }
 
         /// <summary>
@@ -248,7 +245,7 @@ namespace Main.Core.Documents
         /// </summary>
         public IEnumerable<CompleteQuestionWrapper> WrappedQuestions()
         {
-                return this.QuestionHash.WrapedQuestions;
+                return this.GetQuestionHash().WrapedQuestions;
         }
 
         #endregion
@@ -344,7 +341,7 @@ namespace Main.Core.Documents
             {
                 c.SetParent(itemToadd);
                 itemToadd.Children.Add(c);
-                this.QuestionHash.AddGroup(group);
+                this.GetQuestionHash().AddGroup(group);
                 return;
             }
 
@@ -472,7 +469,7 @@ namespace Main.Core.Documents
         /// </returns>
         public IEnumerable<ICompleteQuestion> GetFeaturedQuestions()
         {
-            return this.QuestionHash.GetFeaturedQuestions();
+            return this.GetQuestionHash().GetFeaturedQuestions();
         }
 
         /// <summary>
@@ -489,7 +486,7 @@ namespace Main.Core.Documents
         /// </returns>
         public ICompleteQuestion GetQuestion(Guid publicKey, Guid? propagationKey)
         {
-            return this.QuestionHash.GetQuestion(publicKey, propagationKey);
+            return this.GetQuestionHash().GetQuestion(publicKey, propagationKey);
         }
 
         /// <summary>
@@ -506,7 +503,7 @@ namespace Main.Core.Documents
         /// </returns>
         public CompleteQuestionWrapper GetQuestionWrapper(Guid publicKey, Guid? propagationKey)
         {
-            return this.QuestionHash.GetQuestionWrapper(publicKey, propagationKey);
+            return this.GetQuestionHash().GetQuestionWrapper(publicKey, propagationKey);
         }
 
         /// <summary>

@@ -1,0 +1,28 @@
+﻿@using System.Web.Optimization
+@model Web.Supervisor.Models.LogOnModel
+
+@{
+    ViewBag.Title = "Sign in to designer";
+}
+
+@section scripts
+{
+    @Scripts.Render("~/validate")
+}
+
+<div class="container">
+    @using (Html.BeginForm("LoginToDesigner", "Template", FormMethod.Post, new { @class = "form-signin" }))
+    {
+        <h2 class="form-signin-heading">Please sign in to designer</h2>
+        
+        @Html.TextBoxFor(m => m.UserName, new { @class = "input-block-level", placeholder = "Login" })
+        <span class="help-inline">@Html.ValidationMessageFor(m => m.UserName)</span>
+        
+        @Html.PasswordFor(m => m.Password, new { @class = "input-block-level", placeholder = "Password" })
+        <span class="help-inline">@Html.ValidationMessageFor(m => m.Password)</span>
+        <p class="pull-right">
+            <button class="btn btn-large btn-primary " type="submit">Sign in</button>
+        </p>
+    }
+</div>
+

@@ -34,7 +34,7 @@
             });
 
             var documentStorage = Mock.Of<IDenormalizerStorage<QuestionnaireDocument>>(storage
-                => storage.GetByGuid(it.IsAny<Guid>()) == questionnaire);
+                => storage.GetById(it.IsAny<Guid>()) == questionnaire);
 
             denormalizer = CreateQuestionnaireDenormalizer(documentStorage: documentStorage);
         };

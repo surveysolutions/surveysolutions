@@ -63,7 +63,6 @@
     <Compile Include="EventHandlers\DashboardDenormalizer.cs" />
     <Compile Include="EventHandlers\UserDenormalizer.cs" />
     <Compile Include="FileStorage\FileStorageService.cs" />
-    <Compile Include="ProjectionStorage\CriteriaContractResolver.cs" />
     <Compile Include="ProjectionStorage\DefaultProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\InternalProjectionStorage.cs" />
     <Compile Include="ProjectionStorage\IProjection.cs" />
@@ -71,12 +70,16 @@
     <Compile Include="ProjectionStorage\ProjectionQuery.cs" />
     <Compile Include="ProjectionStorage\ProjectionsDataBaseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardModel.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardQuestionnaireItem.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardSurveyItem.cs" />
     <Compile Include="ViewModel\Dashboard\FeaturedItem.cs" />
+    <Compile Include="ViewModel\Dashboard\QuestionnaireDTO.cs" />
+    <Compile Include="ViewModel\Dashboard\SurveyDTO.cs" />
+    <Compile Include="ViewModel\Login\LoginDTO.cs" />
     <Compile Include="ViewModel\Login\LoginViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\AnswerViewModel.cs" />
     <Compile Include="ViewModel\QuestionnaireDetails\CompleteQuestionnaireView.cs" />
@@ -104,6 +107,10 @@
     <Compile Include="ViewModel\Synchronization\SyncViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Core\SharedKernel\WB.Core.SharedKernel.Structures\WB.Core.SharedKernel.Structures.csproj">
+      <Project>{c96ea28a-cdc4-468b-b111-d54b4c6c00c1}</Project>
+      <Name>WB.Core.SharedKernel.Structures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidMain.Core\AndroidMain.Core.csproj">
       <Project>{6b9b6ab7-8858-49a3-a44a-4b56ee31c12c}</Project>
       <Name>AndroidMain.Core</Name>
@@ -112,9 +119,17 @@
       <Project>{f0db4d2a-a47a-4268-a688-91d097a93237}</Project>
       <Name>AndroidMain.DenormalizerStorage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidMain.Synchronization\AndroidMain.Synchronization.csproj">
+      <Project>{613558d5-9ab8-4908-b904-3b8ea86ffb96}</Project>
+      <Name>AndroidMain.Synchronization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AndroidNCalc\AndroidNCalc.csproj">
       <Project>{f0476c33-6f4f-4524-9cea-37e87d55e67e}</Project>
       <Name>AndroidNCalc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
+      <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
+      <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
       <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
@@ -124,6 +139,9 @@
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ViewModel\User\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -18,6 +18,7 @@ using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs.Commanding;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Restoring.EventStapshoot;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.Conventions;
@@ -137,38 +138,58 @@ namespace Main.Core
 
         protected virtual void RegisterViewFactories()
         {
-            BindInterface(typeof (IViewFactory<,>), (c) => Guid.NewGuid());
+            BindInterface(GetAssweblysForRegister(),typeof (IViewFactory<,>), (c) => Guid.NewGuid());
         }
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(typeof (IEventHandler<>), (c) => this.Kernel);
+            BindInterface(GetAssweblysForRegister().Union(new Assembly[]{typeof(SnapshootLoaded).Assembly}), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()
         {
-            this.Kernel.Bind(
-                x =>
-                x.From(GetAssweblysForRegister()).Select(
-                    t =>
-                    t.GetInterfaces().FirstOrDefault(
-                        i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) != null)
-                    .BindToSelf().Configure(binding => binding.InSingletonScope()));
-            this.Kernel.Bind(
-                x =>
-                x.From(GetAssweblysForRegister()).Select(
-                    t => t.IsGenericType && t.GetGenericTypeDefinition() == typeof (DenormalizerStorageProvider<>)).
-                    BindToSelf().Configure(binding => binding.InSingletonScope()));
-            Bind(typeof (IDenormalizerStorage<>)).ToMethod(ActivteDenormalizerFromProvider);
+            foreach (
+                var denormalizer in
+                    GetAssweblysForRegister()
+                                             .SelectMany(a => a.GetTypes())
+                                             .Where(DenormalizerStorageImplementation))
+            {
 
+                this.Kernel.Bind(denormalizer).ToSelf().InSingletonScope();
+            }
+            this.Kernel.Bind(typeof (IDenormalizerStorage<>)).ToMethod(GetStorage);
+            this.Kernel.Bind(typeof (IQueryableDenormalizerStorage<>)).ToMethod(GetStorage);
+        }
+
+        private bool DenormalizerStorageImplementation(Type t)
+        {
+            if (t.IsInterface || t.IsAbstract)
+                return false;
+            return t.GetInterfaces().FirstOrDefault(i => i.IsGenericType &&
+                                                         i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) !=
+                   null;
+        }
+
+        protected object GetStorage(IContext context)
+        {
+            var genericParameter = context.GenericArguments[0];
+
+         /*   #if !MONODROID
+
+            if(genericParameter.GetCustomAttributes(typeof(SmartDenormalizerAttribute), true).Length > 0)
+                return Kernel.Get(typeof(PersistentDenormalizer<>).MakeGenericType(genericParameter));
+
+            else
+            #endif*/
+                return Kernel.Get(typeof(InMemoryDenormalizer<>).MakeGenericType(genericParameter));
         }
 
         #endregion
-        protected void BindInterface(Type interfaceType, Func<IContext,object> scope)
+        protected void BindInterface(IEnumerable<Assembly> assembyes,Type interfaceType, Func<IContext,object> scope)
         {
 
             var implementations =
-             GetAssweblysForRegister().SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
+             assembyes.SelectMany(a => a.GetTypes()).Where(t => ImplementsAtLeastOneInterface(t, interfaceType));
             foreach (Type implementation in implementations)
             {
 
@@ -184,51 +205,21 @@ namespace Main.Core
                                 implementation).InScope(scope);
                     }
                 }
-             /*   else{
-                    this.Kernel.Bind(interfaceType).To(implementation);
-                }*/
             }
         }
-
-        /// <summary>
-        /// The implements at least one i event handler interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
+       
         private bool ImplementsAtLeastOneInterface(Type type, Type interfaceType)
         {
             return type.IsClass && !type.IsAbstract &&
                    type.GetInterfaces().Any(i => IsInterfaceInterface(i, interfaceType));
         }
-        /// <summary>
-        /// The is i event handler interface.
-        /// </summary>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <returns>
-        /// The System.Boolean.
-        /// </returns>
+
         private  bool IsInterfaceInterface(Type type, Type interfaceType)
         {
             return type.IsInterface &&
                    ((interfaceType.IsGenericType && type.IsGenericType &&
                      type.GetGenericTypeDefinition() == interfaceType) ||
                     (!type.IsGenericType && !interfaceType.IsGenericType && type==interfaceType));
-        }
-      
-        protected IEnumerable<Type> ProcessDenormalizer(Assembly assembly)
-        {
-            return assembly.GetTypes().Where(t => t.GetInterfaces().FirstOrDefault(
-                i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IDenormalizerStorage<>)) != null);
-        }
-        protected object ActivteDenormalizerFromProvider(IContext ctx)
-        {
-            return (ctx.Kernel.Get(typeof (DenormalizerStorageProvider<>).MakeGenericType(ctx.GenericArguments)) as IProvider).Create(ctx);
         }
     }
 }

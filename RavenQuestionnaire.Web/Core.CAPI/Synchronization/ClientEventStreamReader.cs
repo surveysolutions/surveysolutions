@@ -39,12 +39,12 @@ namespace Core.CAPI.Synchronization
         /// <summary>
         /// The storage.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage;
 
         /// <summary>
         /// The users
         /// </summary>
-        private readonly IDenormalizerStorage<UserDocument> user;
+        private readonly IQueryableDenormalizerStorage<UserDocument> user;
 
         #endregion
 
@@ -59,7 +59,7 @@ namespace Core.CAPI.Synchronization
         /// <param name="users">
         /// The users.
         /// </param>
-        public ClientEventStreamReader(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage, IDenormalizerStorage<UserDocument> users)
+        public ClientEventStreamReader(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> storage, IQueryableDenormalizerStorage<UserDocument> users)
         {
             this.user = users;
             this.storage = storage;
@@ -98,7 +98,7 @@ namespace Core.CAPI.Synchronization
             return retval.OrderBy(x => x.EventSequence);
         }
 
-        public override IEnumerable<Tuple<string, Guid>> GetAllARIds()
+        public override IEnumerable<SyncItemsMeta> GetAllARIds()
         {
             throw new NotImplementedException();
         }

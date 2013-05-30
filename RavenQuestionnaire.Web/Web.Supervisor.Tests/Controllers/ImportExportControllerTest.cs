@@ -7,17 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-using Questionnaire.Core.Web.Helpers;
-
 namespace RavenQuestionnaire.Web.Tests.Controllers
 {
     using System;
-    using System.IO;
     using System.Threading;
-    using System.Web;
     using System.Web.Mvc;
 
-    using DataEntryClient.SycProcess;
     using DataEntryClient.SycProcess.Interfaces;
     using DataEntryClient.SycProcessFactory;
 
@@ -27,6 +22,8 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
     using Moq;
 
     using NUnit.Framework;
+
+    using WB.Core.SharedKernel.Logger;
 
     using global::Web.Supervisor.Controllers;
 
@@ -76,12 +73,13 @@ namespace RavenQuestionnaire.Web.Tests.Controllers
             var syncProcessMock = new Mock<IUsbSyncProcess>();
 
             this.SyncProcessFactoryMock.Setup(
-                f => f.GetProcess(It.IsAny<SyncProcessType>(), It.IsAny<Guid>(), It.IsAny<Guid?>())).Returns(
+                f => f.GetUsbProcess(It.IsAny<Guid>())).Returns(
                     syncProcessMock.Object);
             return new ImportExportController(
                 this.DataExportMock.Object,
                 (new Mock<IViewRepository>()).Object,
-                this.SyncProcessFactoryMock.Object);
+                this.SyncProcessFactoryMock.Object,
+                (new Mock<ILog>()).Object);
         }
 
         /// <summary>

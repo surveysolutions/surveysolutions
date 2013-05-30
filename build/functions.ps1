@@ -67,10 +67,10 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     $wasBuildSuccessfull = $LASTEXITCODE -eq 0
 
     if (-not $wasBuildSuccessfull) {
-        Write-Host "##teamcity[message status='ERROR' text='Failed to build $Solution']"
+        Write-Host "##teamcity[message status='ERROR' text='Failed to build solution $Solution']"
 
         if (-not $MultipleSolutions) {
-            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build $Solution']"
+            Write-Host "##teamcity[buildStatus status='FAILURE' text='Failed to build solution $Solution']"
         }
     }
 
@@ -80,7 +80,7 @@ function BuildSolution($Solution, $BuildConfiguration, [switch] $MultipleSolutio
     return $wasBuildSuccessfull
 }
 
-function BuildSolutions($BuildConfiguration) {
+function BuildSolutions($BuildConfiguration,  [switch] $ClearBinAndObjFoldersBeforeEachSolution) {
     Write-Host "##teamcity[blockOpened name='Building solutions']"
 
     $solutionsToBuild = GetSolutionsToBuild
@@ -89,6 +89,10 @@ function BuildSolutions($BuildConfiguration) {
 
     if ($solutionsToBuild -ne $null) {
         foreach ($solution in $solutionsToBuild) {
+
+            if ($ClearBinAndObjFoldersBeforeEachSolution) {
+                CleanBinAndObjFolders
+            }
 
             $wasBuildSuccessfull = BuildSolution `
                 -Solution $solution `

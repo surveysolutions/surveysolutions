@@ -83,8 +83,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             var data = JsonConvert.SerializeObject(payload, Formatting.None,
                                                    new JsonSerializerSettings
                                                    {
-                                                       TypeNameHandling = TypeNameHandling.Objects,
-                                                       ContractResolver = new CriteriaContractResolver()/*,
+                                                       TypeNameHandling = TypeNameHandling.Objects/*,
                                                            Converters =
                                                                new List<JsonConverter>() {new ItemPublicKeyConverter()}*/
                                                    });
@@ -97,8 +96,7 @@ namespace CAPI.Android.Core.Model.ProjectionStorage
             return JsonConvert.DeserializeObject<T>(json,
                 new JsonSerializerSettings
                 {
-                    TypeNameHandling = TypeNameHandling.Objects,
-                    ContractResolver = new CriteriaContractResolver()/*,
+                    TypeNameHandling = TypeNameHandling.Objects/*,
                     Converters =
                         new List<JsonConverter>() { new ItemPublicKeyConverter() }*/
                 });

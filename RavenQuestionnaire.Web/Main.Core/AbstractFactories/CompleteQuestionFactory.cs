@@ -129,7 +129,7 @@ namespace Main.Core.AbstractFactories
         /// <returns>
         /// The <see cref="AbstractQuestion"/>.
         /// </returns>
-        public AbstractQuestion Create(NewQuestionAdded e)
+        public AbstractQuestion Create(FullQuestionDataEvent e)
         {
             AbstractQuestion q = CreateQuestion(e.QuestionType);
 

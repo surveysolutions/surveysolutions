@@ -31,7 +31,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// <summary>
         /// The document item session.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession;
 
         /// <summary>
         /// The group factory.
@@ -52,7 +52,7 @@ namespace RavenQuestionnaire.Core.Views.CompleteQuestionnaire
         /// The group factory.
         /// </param>
         public CompleteQuestionnaireEnumerableViewFactory(
-            IDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession, 
+            IQueryableDenormalizerStorage<CompleteQuestionnaireStoreDocument> documentItemSession, 
             ICompleteGroupFactory groupFactory)
         {
             this.documentItemSession = documentItemSession;

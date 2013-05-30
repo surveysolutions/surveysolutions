@@ -50,7 +50,7 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 
         private void screen_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName != "Answered" && e.PropertyName != "Total")
+            if (e.PropertyName != "Answered" && e.PropertyName != "Total" && e.PropertyName != "Enabled")
                 return;
             RaisePropertyChanged(e.PropertyName);
         }

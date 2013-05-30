@@ -25,7 +25,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <summary>
         /// The document group session.
         /// </summary>
-        private readonly IDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession;
+        private readonly IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession;
 
         #endregion
 
@@ -37,7 +37,7 @@ namespace WB.UI.Designer.Views.Questionnaire
         /// <param name="documentGroupSession">
         /// The document group session.
         /// </param>
-        public QuestionnaireListViewFactory(IDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession)
+        public QuestionnaireListViewFactory(IQueryableDenormalizerStorage<QuestionnaireListViewItem> documentGroupSession)
         {
             this.documentGroupSession = documentGroupSession;
         }

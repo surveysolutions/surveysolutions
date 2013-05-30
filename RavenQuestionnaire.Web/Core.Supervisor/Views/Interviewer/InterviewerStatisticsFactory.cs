@@ -32,7 +32,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <summary>
         /// The users.
         /// </summary>
-        private readonly IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
+        private readonly IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession;
         /// <summary>
         /// The users.
         /// </summary>
@@ -48,7 +48,7 @@ namespace Core.Supervisor.Views.Interviewer
         /// <param name="users">
         /// The users.
         /// </param>
-        public InterviewerStatisticsFactory(IDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
+        public InterviewerStatisticsFactory(IQueryableDenormalizerStorage<CompleteQuestionnaireBrowseItem> documentItemSession, IDenormalizerStorage<UserDocument> users)
         {
             this.documentItemSession = documentItemSession;
             this.users = users;
@@ -69,31 +69,35 @@ namespace Core.Supervisor.Views.Interviewer
         /// </returns>
         public InterviewerStatisticsView Load(InterviewerStatisticsInputModel input)
         {
-            var user = this.users.GetByGuid(input.UserId);
-            if (user == null)
+            if (!input.InterviewerId.HasValue)
                 return null;
-            var questionnairesGroupedByTemplate =
-                BuildItems(
-                    this.documentItemSession.Query().Where(q => q.Responsible!=null && q.Responsible.Id == input.UserId).GroupBy(
-                        x => x.TemplateId)).AsQueryable();
-
-            var retval = new InterviewerStatisticsView(input.UserId, user.UserName, input.Order,
-                                                       new List<InterviewerStatisticsViewItem>(), input.Page,
-                                                       input.PageSize, questionnairesGroupedByTemplate.Count());
-            if (input.Orders.Count > 0)
+            var user = this.users.GetById(input.InterviewerId.Value);
+          
+            return this.documentItemSession.Query(queryableDocumentItems =>
             {
-                questionnairesGroupedByTemplate = input.Orders[0].Direction == OrderDirection.Asc
-                                                      ? questionnairesGroupedByTemplate.OrderBy(input.Orders[0].Field)
-                                                      : questionnairesGroupedByTemplate.OrderByDescending(
-                                                          input.Orders[0].Field);
-            }
+                var questionnairesGroupedByTemplate =
+                    BuildItems(
+                        queryableDocumentItems.Where(q => q.Responsible!=null && q.Responsible.Id == input.InterviewerId).GroupBy(x => x.TemplateId))
+                            .AsQueryable();
 
-            retval.Items =
-                questionnairesGroupedByTemplate.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize).ToList();
-            return retval;
+                var retval = new InterviewerStatisticsView(input.InterviewerId.Value, user.UserName, input.Order,
+                                                           new List<InterviewerStatisticsViewItem>(), input.Page,
+                                                           input.PageSize, questionnairesGroupedByTemplate.Count());
+                if (input.Orders.Count > 0)
+                {
+                    questionnairesGroupedByTemplate = input.Orders[0].Direction == OrderDirection.Asc
+                                                          ? questionnairesGroupedByTemplate.OrderBy(input.Orders[0].Field)
+                                                          : questionnairesGroupedByTemplate.OrderByDescending(
+                                                              input.Orders[0].Field);
+                }
+
+                retval.Items =
+                    questionnairesGroupedByTemplate.Skip((input.Page - 1)*input.PageSize).Take(input.PageSize).ToList();
+                return retval;
+            });
         }
 
-        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IQueryable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
+        protected IEnumerable<InterviewerStatisticsViewItem> BuildItems(IEnumerable<IGrouping<Guid, CompleteQuestionnaireBrowseItem>> grouped)
         {
             foreach (var templateGroup in grouped)
             {

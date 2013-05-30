@@ -58,6 +58,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails.ScreenItems
             CommandService.Execute(new SetAnswerCommand(this.QuestionnairePublicKey, Model.PublicKey.PublicKey,
                                                         new List<Guid>(1) {answerGuid}, "",
                                                         Model.PublicKey.PropagationKey));
+            SaveAnswer();
         }
 
 

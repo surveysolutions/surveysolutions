@@ -41,8 +41,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <param name="command">The <see cref="TCommand"/> to execute.</param>
         internal override void Execute(TCommand command)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(command != null, "command can not be null.");
-
+#endif
             _mappedaggregaterootmethod.Execute(command);
         }
 
@@ -54,7 +55,9 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>A <see cref="MappedCommandToAggregateRootMethod&lt;TCommand, TAggRoot&gt;"/>.</returns>
         public MappedCommandToAggregateRootMethod<TCommand, TAggRoot> WithId(Func<TCommand, Guid> getidfromcommandfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(getidfromcommandfunc != null, "getidfromcommandfunc can not be null.");
+#endif
             var mappedmethod = new MappedCommandToAggregateRootMethod<TCommand, TAggRoot>(getidfromcommandfunc);
 
             _mappedaggregaterootmethod = mappedmethod;
@@ -70,8 +73,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>A <see cref="MappedCommandToAggregateRootMethod&lt;TCommand, TAggRoot&gt;"/>.</returns>
         public MappedCommandToAggregateRootMethod<TCommand, TAggRoot> WithId(Func<TCommand, Guid> getidfromcommandfunc, Func<Guid, long?, TAggRoot> getaggregaterootfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(getidfromcommandfunc != null, "getidfromcommandfunc can not be null.");
             Contract.Requires<ArgumentNullException>(getaggregaterootfunc != null, "getaggregaterootfunc can not be null.");
+#endif
 
             var mappedmethod = new MappedCommandToAggregateRootMethod<TCommand, TAggRoot>(getaggregaterootfunc, getidfromcommandfunc);
             _mappedaggregaterootmethod = mappedmethod;
@@ -88,8 +93,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>A <see cref="MappedCommandToAggregateRootMethodOrConstructor&lt;TCommand, TAggRoot&gt;"/>.</returns>
         public MappedCommandToAggregateRootMethodOrConstructor<TCommand, TAggRoot> UseExistingOrCreateNew(Func<TCommand, Guid> getidfromcommandfunc, Func<TCommand, TAggRoot> aggregaterootcreatorfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(getidfromcommandfunc != null, "getidfromcommandfunc can not be null.");
             Contract.Requires<ArgumentNullException>(aggregaterootcreatorfunc != null, "aggregaterootcreatorfunc can not be null.");
+#endif
             var mappedmethod = new MappedCommandToAggregateRootMethodOrConstructor<TCommand, TAggRoot>(getidfromcommandfunc, aggregaterootcreatorfunc);
 
             _mappedaggregaterootmethod = mappedmethod;
@@ -105,10 +112,11 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>A <see cref="MappedCommandToAggregateRootMethodOrConstructor&lt;TCommand, TAggRoot&gt;"/>.</returns>
         public MappedCommandToAggregateRootMethodOrConstructor<TCommand, TAggRoot> UseExistingOrCreateNew(Func<TCommand, Guid> getidfromcommandfunc, Func<Guid, long?, TAggRoot> getaggregaterootfunc, Func<TCommand, TAggRoot> aggregaterootcreatorfunc)
         {
+            #if !MONODROID
             Contract.Requires<ArgumentNullException>(getidfromcommandfunc != null, "getidfromcommandfunc can not be null.");
             Contract.Requires<ArgumentNullException>(aggregaterootcreatorfunc != null, "aggregaterootcreatorfunc can not be null.");
             Contract.Requires<ArgumentNullException>(getaggregaterootfunc != null, "getaggregaterootfunc can not be null.");
-
+#endif
             var mappedmethod = new MappedCommandToAggregateRootMethodOrConstructor<TCommand, TAggRoot>(getidfromcommandfunc, getaggregaterootfunc, aggregaterootcreatorfunc);
 
             _mappedaggregaterootmethod = mappedmethod;
@@ -123,8 +131,10 @@ namespace Ncqrs.Commanding.CommandExecution.Mapping.Fluent
         /// <returns>A <see cref="MappedCommandToAggregateRootConstructor&lt;Command, TAggRoot&gt;"/>.</returns>
         public MappedCommandToAggregateRootConstructor<TCommand, TAggRoot> CreateNew(Func<TCommand, TAggRoot> aggregaterootcreatorfunc)
         {
-            Contract.Requires<ArgumentNullException>(aggregaterootcreatorfunc != null, "aggregaterootcreatorfunc can not be null.");
 
+#if !MONODROID
+            Contract.Requires<ArgumentNullException>(aggregaterootcreatorfunc != null, "aggregaterootcreatorfunc can not be null.");
+        #endif
             var mappedcreator = new MappedCommandToAggregateRootConstructor<TCommand, TAggRoot>(aggregaterootcreatorfunc);
             _mappedaggregaterootmethod = mappedcreator;
 

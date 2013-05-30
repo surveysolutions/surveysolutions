@@ -42,10 +42,10 @@ namespace CAPI.Android
         {
             var lookups = base.GetViewModelViewLookup();
 
-            if (!lookups.ContainsKey(typeof(CompleteQuestionnaireView)))
+        /*    if (!lookups.ContainsKey(typeof(CompleteQuestionnaireView)))
                 lookups.Add(typeof(CompleteQuestionnaireView), typeof(LoadingActivity));
             if (!lookups.ContainsKey(typeof(DashboardModel)))
-                lookups.Add(typeof(DashboardModel), typeof(DashboardActivity));
+                lookups.Add(typeof(DashboardModel), typeof(DashboardActivity));*/
 
             if (!lookups.ContainsKey(typeof(LoginViewModel)))
                 lookups.Add(typeof(LoginViewModel), typeof(LoginActivity));

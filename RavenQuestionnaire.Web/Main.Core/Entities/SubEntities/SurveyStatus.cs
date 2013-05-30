@@ -184,10 +184,11 @@ namespace Main.Core.Entities.SubEntities
         /// <returns>
         /// The <see cref="SurveyStatus"/>.
         /// </returns>
-        public static SurveyStatus GetStatusByIdOrDefault(Guid id)
+        public static SurveyStatus GetStatusByIdOrDefault(Guid? id)
         {
-            var status = SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id);
-            return status.PublicId == Guid.Empty ? SurveyStatus.Unknown : status;
+            if (!id.HasValue)
+                return SurveyStatus.Unknown;
+            return SurveyStatus.GetAllStatuses().FirstOrDefault(s => s.PublicId == id.Value);
         }
 
         /// <summary>
@@ -248,9 +249,12 @@ namespace Main.Core.Entities.SubEntities
         /// </returns>
         public static bool IsStatusAllowCapiSync(SurveyStatus status)
         {
-            return status.PublicId == Complete.PublicId || status.PublicId == Error.PublicId;
+            return GetListOfAllowerdStatusesForSync().Contains(status.PublicId);
         }
-
+        public static IEnumerable<Guid> GetListOfAllowerdStatusesForSync()
+        {
+            return new Guid[] {Complete.PublicId, Error.PublicId};
+        } 
         /// <summary>
         /// The is status allow down supervisor sync.
         /// </summary>
