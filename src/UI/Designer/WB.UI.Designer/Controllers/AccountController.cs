@@ -239,13 +239,10 @@ namespace WB.UI.Designer.Controllers
                 }
                 else
                 {
-                    string token = WebSecurity.GeneratePasswordResetToken(user.UserName);
+                    string confirmationToken = WebSecurity.GeneratePasswordResetToken(user.UserName);
 
-                    dynamic email = new Email("ResetPasswordEmail");
-                    email.To = user.Email;
-                    email.UserName = model.UserName;
-                    email.ResetPasswordToken = token;
-                    email.Send();
+                    this.SendEmail("ResetPasswordEmail",
+                                recepientEmail: user.Email, userName: model.UserName, token: confirmationToken);
 
                     this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
                     return this.RedirectToAction("Login");
@@ -306,8 +303,8 @@ namespace WB.UI.Designer.Controllers
                         {
                             Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
 
-                            this.SendConfirmationEmail(
-                                to: model.Email, userName: model.UserName, token: confirmationToken);
+                            this.SendEmail("ConfirmationEmail",
+                                 model.Email, userName: model.UserName, token: confirmationToken);
 
                             return this.RegisterStepTwo();
                         }
@@ -369,7 +366,7 @@ namespace WB.UI.Designer.Controllers
                         ((DesignerMembershipProvider)Membership.Provider).GetConfirmationTokenByUserName(model.UserName);
                     if (!string.IsNullOrEmpty(token))
                     {
-                        this.SendConfirmationEmail(to: model.Email, userName: model.UserName, token: token);
+                        this.SendEmail( "ConfirmationEmail", model.Email, userName: model.UserName, token: token);
                         return this.RegisterStepTwo();
                     }
                     else
@@ -489,7 +486,8 @@ namespace WB.UI.Designer.Controllers
         /// <summary>
         /// The send confirmation email.
         /// </summary>
-        /// <param name="to">
+        /// <param name="title"></param>
+        /// <param name="recepientEmail">
         /// The to.
         /// </param>
         /// <param name="userName">
@@ -498,12 +496,17 @@ namespace WB.UI.Designer.Controllers
         /// <param name="token">
         /// The token.
         /// </param>
-        private async void SendConfirmationEmail(string to, string userName, string token)
+        private async void SendEmail(string title, string recepientEmail, string userName, string token)
         {
-            dynamic email = new Email("ConfirmationEmail");
-            email.To = to;
+            dynamic email = new Email(title);
+
+            if (AppSettings.Instance.ReformatEmail)
+                recepientEmail = String.Format("<{0}>", recepientEmail);
+
+            email.To = recepientEmail;
             email.UserName = userName;
             email.ConfirmationToken = token;
+
             await email.SendAsync();
         }
 
