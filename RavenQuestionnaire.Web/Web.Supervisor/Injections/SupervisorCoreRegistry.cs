@@ -62,7 +62,6 @@ namespace Web.Supervisor.Injections
         {
             return base.GetTypesForRegistration().Concat(new Dictionary<Type, Type>
             {
-                { typeof(IFilterProvider), typeof(RequiresReadLayerFilterProvider) },
                 {typeof(IExceptionFilter), typeof(HandleUIExceptionAttribute)}
             });
         }
