@@ -62,7 +62,7 @@ namespace WB.UI.Designer.Views.Tests
             Guid questionnaireId = Guid.NewGuid();
 
             QuestionnaireListViewItem currentItem = new QuestionnaireListViewItem(questionnaireId, "title", DateTime.Now,
-                                                                                  DateTime.Now, null);
+                                                                                  DateTime.Now, null, false);
 
             string newtitle = "newTitle";
             QuestionnaireDocument documentReplacement = new QuestionnaireDocument() { PublicKey = questionnaireId, Title = newtitle};
