@@ -229,6 +229,7 @@ namespace Main.Core.EventHandlers
             QuestionnaireDocument document = this.documentStorage.GetById(evnt.EventSourceId);
             if (document == null) return;
             document.Title = evnt.Payload.Title;
+            document.IsPublic = evnt.Payload.IsPublic;
             this.UpdateQuestionnaire(evnt, document);
         }
 

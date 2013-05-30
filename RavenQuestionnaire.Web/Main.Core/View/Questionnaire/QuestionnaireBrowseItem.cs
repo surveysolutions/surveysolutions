@@ -42,13 +42,14 @@ namespace Main.Core.View.Questionnaire
         /// <param name="createdBy">
         /// The created by.
         /// </param>
-        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy)
+        public QuestionnaireBrowseItem(Guid id, string title, DateTime creationDate, DateTime lastEntryDate, Guid? createdBy, bool isPublic)
         {
             this.Id = id;
             this.Title = title;
             this.CreationDate = creationDate;
             this.LastEntryDate = lastEntryDate;
             this.CreatedBy = createdBy;
+            this.IsPublic = isPublic;
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Main.Core.View.Questionnaire
         /// The doc.
         /// </param>
         public QuestionnaireBrowseItem(QuestionnaireDocument doc)
-            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy)
+            : this(doc.PublicKey, doc.Title, doc.CreationDate, doc.LastEntryDate, doc.CreatedBy, doc.IsPublic)
         {
         }
 
@@ -88,6 +89,11 @@ namespace Main.Core.View.Questionnaire
         public string Title { get;  set; }
 
         /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
+
+        /// <summary>
         /// Gets the created by.
         /// </summary>
         public Guid? CreatedBy { get; private set; }
@@ -109,7 +115,7 @@ namespace Main.Core.View.Questionnaire
         /// </returns>
         public static QuestionnaireBrowseItem New()
         {
-            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null);
+            return new QuestionnaireBrowseItem(Guid.Empty, null, DateTime.Now, DateTime.Now, null, false);
         }
 
         /// <summary>

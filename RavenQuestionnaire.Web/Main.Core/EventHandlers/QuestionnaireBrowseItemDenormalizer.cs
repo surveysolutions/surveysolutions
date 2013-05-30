@@ -51,7 +51,8 @@ namespace Main.Core.EventHandlers
                     evnt.Payload.Title,
                     evnt.Payload.CreationDate,
                     DateTime.Now,
-                    evnt.Payload.CreatedBy),
+                    evnt.Payload.CreatedBy,
+                    evnt.Payload.IsPublic),
                 evnt.EventSourceId);
         }
 
@@ -76,7 +77,8 @@ namespace Main.Core.EventHandlers
                     document.Title,
                     document.CreationDate,
                     document.LastEntryDate,
-                    document.CreatedBy);
+                    document.CreatedBy,
+                    document.IsPublic);
               
             //}
             this.documentStorage.Store(browseItem, document.PublicKey);
@@ -92,6 +94,7 @@ namespace Main.Core.EventHandlers
             if (browseItem != null)
             {
                 browseItem.Title = evnt.Payload.Title;
+                browseItem.IsPublic = evnt.Payload.IsPublic;
             }
         }
 

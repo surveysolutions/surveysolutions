@@ -55,7 +55,7 @@ namespace Main.Core.Domain
             this.questionFactory = new CompleteQuestionFactory();
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null)
+        public QuestionnaireAR(Guid publicKey, string title, Guid? createdBy = null, bool isPublic = false)
             : base(publicKey)
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
@@ -66,6 +66,7 @@ namespace Main.Core.Domain
             this.ApplyEvent(
                 new NewQuestionnaireCreated
                     {
+                        IsPublic = isPublic,
                         PublicKey = publicKey,
                         Title = title,
                         CreationDate = clock.UtcNow(),
@@ -78,8 +79,8 @@ namespace Main.Core.Domain
             ImportQuestionnaire(createdBy, source);
         }
 
-        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source)
-            : this(publicKey, title, createdBy)
+        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
+            : this(publicKey, title, createdBy, isPublic)
         {
             source.Children.ApplyAction(
                 x => x.Children,
@@ -161,12 +162,12 @@ namespace Main.Core.Domain
         }
 
 
-        public void UpdateQuestionnaire(string title)
+        public void UpdateQuestionnaire(string title, bool isPublic = false)
 #warning CRUD
         {
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmptyOrWhitespaces(title);
 
-            this.ApplyEvent(new QuestionnaireUpdated() { Title = title });
+            this.ApplyEvent(new QuestionnaireUpdated() { Title = title, IsPublic = isPublic });
         }
 
         public void DeleteQuestionnaire()
@@ -497,6 +498,7 @@ namespace Main.Core.Domain
         protected void OnQuestionnaireUpdated(QuestionnaireUpdated e)
         {
             this.innerDocument.Title = e.Title;
+            this.innerDocument.IsPublic = e.IsPublic;
         }
 
         protected void OnQuestionnaireDeleted(QuestionnaireDeleted e)
@@ -599,6 +601,7 @@ namespace Main.Core.Domain
 
         protected void OnNewQuestionnaireCreated(NewQuestionnaireCreated e)
         {
+            this.innerDocument.IsPublic = e.IsPublic;
             this.innerDocument.Title = e.Title;
             this.innerDocument.PublicKey = e.PublicKey;
             this.innerDocument.CreationDate = e.CreationDate;
