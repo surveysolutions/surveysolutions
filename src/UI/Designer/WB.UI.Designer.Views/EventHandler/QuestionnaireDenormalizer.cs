@@ -137,7 +137,8 @@ namespace WB.UI.Designer.Views.EventHandler
                 document.Title,
                 document.CreationDate,
                 document.LastEntryDate,
-                document.CreatedBy);
+                document.CreatedBy,
+                document.IsPublic);
             if (document.CreatedBy.HasValue)
             {
                 var user = this.accountStorage.GetById(document.CreatedBy.Value);
