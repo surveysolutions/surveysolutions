@@ -53,7 +53,7 @@ namespace Web.Supervisor.Injections
 
         protected override object GetStorage(IContext context)
         {
-            Type storageType = typeof(InMemoryDenormalizer<>).MakeGenericType(context.GenericArguments[0]);
+            Type storageType = typeof(RavenDenormalizerStorage<>).MakeGenericType(context.GenericArguments[0]);
 
             return this.Kernel.Get(storageType);
         }
