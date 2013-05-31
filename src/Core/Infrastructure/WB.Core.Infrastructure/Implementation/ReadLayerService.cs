@@ -49,7 +49,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public string GetReadableStatus()
         {
-            return string.Format("{1}{0}Are views being rebuilt now: {2}{0}Errors: {3}",
+            return string.Format("{1}{0}Are views being rebuilt now: {2}{0}{3}",
                 Environment.NewLine,
                 statusMessage,
                 areViewsBeingRebuiltNow ? "Yes" : "No",

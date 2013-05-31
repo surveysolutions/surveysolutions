@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Control Panel: Read Layer";
+}
+
+<h3>Read Layer Control Panel</h3>
+
+<textarea id="statusArea" style="width: 100%; height: 200px; cursor: text;" readonly="readonly">
+Requesting status...
+</textarea>
+
+<script type="text/javascript">
+
+    function updateReadLayerStatus() {
+        $.ajax({
+            url: '@Url.Action("GetReadLayerStatus")'
+        }).done(function (result) {
+            $('#statusArea').text(result + '\r\nUpdated from server: ' + new Date().toTimeString());
+        });
+    }
+
+    $(function () {
+        window.setInterval(updateReadLayerStatus, 1000);
+    });
+
+</script>
