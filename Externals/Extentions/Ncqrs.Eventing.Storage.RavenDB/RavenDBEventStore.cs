@@ -134,7 +134,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     List<UniqueEventsResults> chunk = session
                         .Query<StoredEvent, UniqueEventsIndex>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .AsProjection<UniqueEventsResults>()
+                        .AsProjection<UniqueEventsResults>().OrderBy(x=>x.EventTimeStamp)
                         .Skip(page*pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -156,7 +156,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .ToList());
             }
 
-            return retval.OrderBy(e=>e.EventTimeStamp);
+            return retval/*.OrderBy(e=>e.EventTimeStamp)*/;
             //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
 
         }
