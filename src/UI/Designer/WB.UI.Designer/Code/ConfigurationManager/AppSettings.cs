@@ -10,12 +10,12 @@
         const string ISRECATPCHAENABLED = "IsReCaptchaEnabled";
         const string RAVENDOCUMENTSTORE = "Raven.DocumentStore";
         const string WKHTMLTOPDFEXECUTABLEPATH = "WKHtmlToPdfExecutablePath";
-        const string ISLOCKINGACCOUNTPOLICYFORCED = "IsLockingAccountPolicyForced";
+        const string ISTRACKINGENABLED = "IsTrackingEnabled";
 
         public bool IsReCaptchaEnabled { get; private set; }
         public string RavenDocumentStore { get; private set; }
         public string WKHtmlToPdfExecutablePath { get; private set; }
-        public bool IsLockingAccountPolicyForced { get; private set; }
+        public bool IsTrackingEnabled { get; private set; }
 
         private AppSettings(NameValueCollection settingsCollection)
             : base(settingsCollection)
@@ -23,7 +23,7 @@
             IsReCaptchaEnabled = GetBoolean(ISRECATPCHAENABLED, true);
             RavenDocumentStore = this.GetString(RAVENDOCUMENTSTORE);
             WKHtmlToPdfExecutablePath = this.GetString(WKHTMLTOPDFEXECUTABLEPATH);
-            IsLockingAccountPolicyForced = GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
+            IsTrackingEnabled = this.GetBoolean(ISTRACKINGENABLED, true);
         }
     }
 }
