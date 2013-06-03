@@ -244,6 +244,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .OrderBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
                         .Take(1)
+                        .ToList() // note from TLK: without materialization SingleOrDefault fails saying it is more thah one element in collection
                         .SingleOrDefault();
 
                     bool allEventsWereReturned = storedEvent == null;
