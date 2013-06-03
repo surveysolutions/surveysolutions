@@ -1,36 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                xmlns:local="http://schemas.android.com/apk/res/CAPI.Android"
               android:id="@+id/llContainer"
       android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-  <!--<fragment class="capi.android.controls.questionnairedetails.QuestionnaireNavigationFragment"
-          android:id="@+id/NavList" android:layout_weight="1"
-          android:layout_width="0px"
-          android:layout_height="match_parent" />-->
-  <LinearLayout android:id="@+id/llNavigationContainer"
-      android:orientation="vertical" android:layout_weight="1"
-         android:layout_width="0px"
-        android:layout_height="fill_parent"/>
-  <!--local:MvxItemTemplate="@layout/listitem_main"-->
-  <!--<Mvx.MvxBindableListView
-       android:id="@android:id/list"
-       android:layout_width="0px"
-       android:layout_height="match_parent"
-       android:layout_weight="1"
-       local:MvxBind="{'ItemsSource':{'Path':'Chapters'}}"
-       local:MvxItemTemplate="@layout/list_navigation_item"
-    />-->
+  <LinearLayout android:id="@+id/llNavigationHolder"
+                 android:focusable="true" android:focusableInTouchMode="true"
+       android:orientation="vertical"
+                 android:paddingLeft="10dp"
+                android:paddingRight="30dp"
+          android:layout_width="wrap_content"
+         android:layout_height="fill_parent"/>
   <android.support.v4.view.ViewPager
           android:id="@+id/vpContent"
-          android:layout_width="0px"
-          android:layout_height="match_parent"
-          android:layout_weight="5">
+          android:layout_width="wrap_content"
+          android:layout_height="fill_parent">
   </android.support.v4.view.ViewPager>
-  <!--<FrameLayout android:id="@+id/flDetails" android:layout_weight="5"
-          android:layout_width="0px"
-          android:layout_height="match_parent" />-->
 
-</LinearLayout>
+</RelativeLayout>
