@@ -115,8 +115,8 @@ namespace Main.DenormalizerStorage
 
         private void ThrowIfViewIsNotAccessible()
         {
-            if (this.readLayerStatusService.AreViewsBeingRebuiltNow())
-                throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
+            //if (this.readLayerStatusService.AreViewsBeingRebuiltNow())
+            //    throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
         }
     }
 }
