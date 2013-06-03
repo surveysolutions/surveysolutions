@@ -8,11 +8,14 @@
 Requesting status...
 </textarea>
 
+@Html.ActionLink("Rebuild", "RebuildReadLayer", new {}, new { @class = "btn " })
+
 <script type="text/javascript">
 
     function updateReadLayerStatus() {
         $.ajax({
-            url: '@Url.Action("GetReadLayerStatus")'
+            url: '@Url.Action("GetReadLayerStatus")',
+            data: { timestamp: new Date().getMilliseconds() }
         }).done(function (result) {
             $('#statusArea').text(result + '\r\nUpdated from server: ' + new Date().toTimeString());
         }).fail(function (xhr, status, error) {
@@ -21,7 +24,7 @@ Requesting status...
     }
 
     $(function () {
-        window.setInterval(updateReadLayerStatus, 1000);
+        window.setInterval(updateReadLayerStatus, 500);
     });
 
 </script>

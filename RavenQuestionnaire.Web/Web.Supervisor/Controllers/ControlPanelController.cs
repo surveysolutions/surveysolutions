@@ -18,6 +18,13 @@ namespace Web.Supervisor.Controllers
             return this.View();
         }
 
+        public ActionResult RebuildReadLayer()
+        {
+            this.readLayerAdministrationService.RebuildAllViewsAsync();
+
+            return this.RedirectToAction("ReadLayer");
+        }
+
         public string GetReadLayerStatus()
         {
             return this.readLayerAdministrationService.GetReadableStatus();
