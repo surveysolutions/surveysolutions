@@ -79,6 +79,11 @@ namespace Main.Core.Utility
             return source.ToLower().Contains(dest.ToLower());
         }
 
+        public static string ToWBEmailAddress(this string source)
+        {
+            return string.Concat("<", source, ">");
+        }
+
         #endregion
     }
 }

@@ -12,15 +12,10 @@
         const string WKHTMLTOPDFEXECUTABLEPATH = "WKHtmlToPdfExecutablePath";
         const string ISLOCKINGACCOUNTPOLICYFORCED = "IsLockingAccountPolicyForced";
 
-
-        const string REFORMATEMAIL = "ReformatEmail";
-
         public bool IsReCaptchaEnabled { get; private set; }
         public string RavenDocumentStore { get; private set; }
         public string WKHtmlToPdfExecutablePath { get; private set; }
         public bool IsLockingAccountPolicyForced { get; private set; }
-
-        public bool ReformatEmail { get; private set; }
 
         private AppSettings(NameValueCollection settingsCollection)
             : base(settingsCollection)
@@ -29,8 +24,6 @@
             RavenDocumentStore = this.GetString(RAVENDOCUMENTSTORE);
             WKHtmlToPdfExecutablePath = this.GetString(WKHTMLTOPDFEXECUTABLEPATH);
             IsLockingAccountPolicyForced = GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
-
-            ReformatEmail = this.GetBoolean(REFORMATEMAIL, true);
         }
     }
 }
