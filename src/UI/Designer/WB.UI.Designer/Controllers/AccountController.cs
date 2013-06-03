@@ -9,6 +9,7 @@
 
 using Main.Core.View;
 using Ncqrs.Commanding.ServiceModel;
+using WB.Core.SharedKernel.Utils.NLog;
 using WB.UI.Designer.Code;
 
 namespace WB.UI.Designer.Controllers
@@ -333,7 +334,7 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        NLog.LogManager.GetCurrentClassLogger().Error(e);
+                        LogManager.Logger.Error(e);
                     }
                 }
             }
