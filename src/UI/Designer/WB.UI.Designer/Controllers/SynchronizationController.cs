@@ -14,7 +14,6 @@ namespace WB.UI.Designer.Controllers
     using Main.Core.View;
 
     using Ncqrs.Commanding.ServiceModel;
-
     using WB.Core.Questionnaire.ExportServices;
     using WB.Core.Questionnaire.ImportService.Commands;
     using WB.Core.SharedKernel.Utils.Compression;

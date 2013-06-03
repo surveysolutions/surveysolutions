@@ -67,6 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\packages\Mvc2Futures.2.0.50217.0\lib\Microsoft.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Mvc.Mailer">
+      <HintPath>..\..\..\..\packages\MvcMailer.4.5\lib\45\Mvc.Mailer.dll</HintPath>
+    </Reference>
     <Reference Include="NConfig">
       <HintPath>..\..\..\..\packages\NConfig.1.0.14\lib\Net40\NConfig.dll</HintPath>
     </Reference>
@@ -91,14 +94,6 @@
     </Reference>
     <Reference Include="NinjectAdapter">
       <HintPath>..\..\..\..\packages\CommonServiceLocator.NinjectAdapter.1.0.0.0\lib\NinjectAdapter.dll</HintPath>
-    </Reference>
-    <Reference Include="Postal, Version=0.7.3.0, Culture=neutral, PublicKeyToken=45719375b8b4d528, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\postal.0.8.0\lib\net45\Postal.dll</HintPath>
-    </Reference>
-    <Reference Include="RazorEngine, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha, Version=1.0.5.0, Culture=neutral, PublicKeyToken=9afc4d65b28c38c2, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -237,9 +232,12 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Code\MembershipModule.cs" />
+    <Compile Include="Mailers\ISystemMailer.cs" />
+    <Compile Include="Mailers\SystemMailer.cs" />
     <Compile Include="Models\AccountListViewItemModel.cs" />
     <Compile Include="Models\AccountViewModel.cs" />
     <Compile Include="Models\ActionItem.cs" />
+    <Compile Include="Models\EmailConfirmationModel.cs" />
     <Compile Include="Models\PasswordModel.cs" />
     <Compile Include="Models\QuestionnairePublicListViewModel.cs" />
     <Compile Include="Models\ResetPasswordConfirmationModel.cs" />
@@ -279,6 +277,7 @@
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Content\images\loader.gif" />
+    <Content Include="Content\images\wb_logo.png" />
     <Content Include="Content\jquery.pnotify.css" />
     <Content Include="Content\jquery.pnotify.icons.css" />
     <Content Include="Content\pdf.css" />
@@ -495,9 +494,7 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\Account\ConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\Index.cshtml" />
-    <Content Include="Views\Emails\ConfirmationEmail.cshtml" />
     <Content Include="Views\Shared\Delete.cshtml" />
-    <Content Include="Views\Emails\_ViewStart.cshtml" />
     <Content Include="Views\Questionnaire\Public.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Shared\Layout.empty.cshtml" />
@@ -520,7 +517,6 @@
     <Content Include="Views\Pdf\RenderQuestionnaire.cshtml" />
     <Content Include="Views\Shared\EditForm.cshtml" />
     <Content Include="Views\Account\PasswordReset.cshtml" />
-    <Content Include="Views\Emails\ResetPasswordEmail.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmationFailure.cshtml" />
     <Content Include="Views\Shared\DeleteModalDialog.cshtml" />
@@ -529,6 +525,10 @@
     <Content Include="Views\Error\Forbidden.cshtml" />
     <Content Include="Views\Synchronization\ViewTestUploadFile.cshtml" />
     <Content Include="Views\Maintenance\WaitForReadLayerRebuild.cshtml" />
+    <Content Include="Views\SystemMailer\_Layout.cshtml" />
+    <Content Include="Views\SystemMailer\ConfirmationEmail.cshtml" />
+    <Content Include="Views\SystemMailer\ResetPasswordEmail.cshtml" />
+    <Content Include="Views\Shared\_trackers.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
