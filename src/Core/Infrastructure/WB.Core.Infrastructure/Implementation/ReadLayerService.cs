@@ -18,16 +18,22 @@ namespace WB.Core.Infrastructure.Implementation
 {
     internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
     {
-        private static readonly object LockObject = new object();
+        private static readonly object RebuildAllViewsLockObject = new object();
+        private static readonly object ErrorsLockObject = new object();
 
         private static bool areViewsBeingRebuiltNow = false;
 
-        private static string statusMessage = "No administration operations were performed so far.";
+        private static string statusMessage;
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
 
         private readonly IStreamableEventStore eventStore;
         private readonly IEventBus eventBus;
         private readonly DocumentStore ravenStore;
+
+        static ReadLayerService()
+        {
+            UpdateStatusMessage("No administration operations were performed so far.");
+        }
 
         public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore)
         {
@@ -67,7 +73,7 @@ namespace WB.Core.Infrastructure.Implementation
         {
             if (!areViewsBeingRebuiltNow)
             {
-                lock (LockObject)
+                lock (RebuildAllViewsLockObject)
                 {
                     if (!areViewsBeingRebuiltNow)
                     {
@@ -90,6 +96,8 @@ namespace WB.Core.Infrastructure.Implementation
             catch (Exception exception)
             {
                 SaveErrorForStatusReport("Unexpected error occurred", exception);
+                UpdateStatusMessage(string.Format("Unexpectedly failed. Last status message:{0}{1}",
+                    Environment.NewLine, statusMessage));
                 throw;
             }
             finally
@@ -109,11 +117,10 @@ namespace WB.Core.Infrastructure.Implementation
             this.ravenStore
                 .DatabaseCommands
                 .ForDatabase("Views")
-                .PutIndex("AllViews",
-                    new IndexDefinition
-                    {
-                        Map = "from view in views let ViewId = doc[\"@metadata\"][\"@id\"] select new { ViewId };"
-                    });
+                .PutIndex(
+                    "AllViews",
+                    new IndexDefinition { Map = "from doc in docs let DocId = doc[\"@metadata\"][\"@id\"] select new {DocId};" },
+                    overwrite: true);
 
             int initialViewCount;
             using (IDocumentSession session = this.ravenStore.OpenSession("Views"))
@@ -197,25 +204,35 @@ namespace WB.Core.Infrastructure.Implementation
 
         private static void SaveErrorForStatusReport(string message, Exception exception)
         {
-            errors.Add(Tuple.Create(DateTime.Now, message, exception));
+            lock (ErrorsLockObject)
+            {
+                errors.Add(Tuple.Create(DateTime.Now, message, exception));
+            }
         }
 
         private static string GetReadableErrors()
         {
-            bool areThereNoErrors = errors.Count == 0;
+            lock (ErrorsLockObject)
+            {
+                bool areThereNoErrors = errors.Count == 0;
+                bool shouldShowStackTrace = errors.Count < 10;
 
-            return areThereNoErrors
-                ? "Errors: None"
-                : string.Format(
-                    "Errors: {1}{0}{2}",
-                    Environment.NewLine,
-                    errors.Count,
-                    string.Join(Environment.NewLine, errors.Select(GetReadableError).ToArray()));
+                return areThereNoErrors
+                    ? "Errors: None"
+                    : string.Format(
+                        "Errors: {1}{0}{2}",
+                        Environment.NewLine,
+                        errors.Count,
+                        string.Join(Environment.NewLine, errors.Select(error => GetReadableError(error, shouldShowStackTrace)).ToArray()));
+            }
         }
 
-        private static string GetReadableError(Tuple<DateTime, string, Exception> error)
+        private static string GetReadableError(Tuple<DateTime, string, Exception> error, bool shouldShowStackTrace)
         {
-            return string.Format("{1}: {2}{0}{3}", Environment.NewLine, error.Item1, error.Item2, error.Item3);
+            return string.Format("{1}: {2}{0}{3}", Environment.NewLine,
+                error.Item1,
+                error.Item2,
+                shouldShowStackTrace ? error.Item3.ToString() : error.Item3.Message);
         }
 
         #endregion // Error reporting methods
