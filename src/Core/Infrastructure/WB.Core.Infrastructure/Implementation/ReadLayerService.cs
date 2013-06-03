@@ -18,6 +18,8 @@ namespace WB.Core.Infrastructure.Implementation
 {
     internal class ReadLayerService : IReadLayerStatusService, IReadLayerAdministrationService
     {
+        private const int MaxAllowedFailedEvents = 100;
+
         private static readonly object RebuildAllViewsLockObject = new object();
         private static readonly object ErrorsLockObject = new object();
 
@@ -189,6 +191,9 @@ namespace WB.Core.Infrastructure.Implementation
                 }
 
                 processedEventsCount++;
+
+                if (failedEventsCount >= MaxAllowedFailedEvents)
+                    throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
             }
 
             UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
