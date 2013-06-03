@@ -75,6 +75,10 @@ namespace Main.Core.Domain
             ImportQuestionnaire(createdBy, source);
         }
 
+        public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, IQuestionnaireDocument source) : this(publicKey, title,createdBy,false,source)
+        {
+        }
+
         public QuestionnaireAR(Guid publicKey, string title, Guid createdBy, bool isPublic, IQuestionnaireDocument source)
             : this(publicKey, title, createdBy, isPublic)
         {
