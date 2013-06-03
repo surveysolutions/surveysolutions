@@ -228,8 +228,14 @@ namespace WB.Core.Infrastructure.Implementation
                         "Errors: {1}{0}{2}",
                         Environment.NewLine,
                         errors.Count,
-                        string.Join(Environment.NewLine, errors.Select(error => GetReadableError(error, shouldShowStackTrace)).ToArray()));
+                        string.Join(Environment.NewLine, ReverseList(errors).Select(error => GetReadableError(error, shouldShowStackTrace)).ToArray()));
             }
+        }
+
+        private static IEnumerable<T> ReverseList<T>(List<T> list)
+        {
+            for (int indexOfElement = list.Count - 1; indexOfElement >= 0; indexOfElement--)
+                yield return list[indexOfElement];
         }
 
         private static string GetReadableError(Tuple<DateTime, string, Exception> error, bool shouldShowStackTrace)
