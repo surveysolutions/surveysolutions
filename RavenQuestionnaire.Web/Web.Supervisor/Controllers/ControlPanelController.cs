@@ -25,6 +25,7 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("ReadLayer");
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
         public string GetReadLayerStatus()
         {
             return this.readLayerAdministrationService.GetReadableStatus();
