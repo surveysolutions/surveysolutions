@@ -18,11 +18,12 @@ namespace WB.UI.Designer.Controllers
     using System.Web.Security;
     using System.Web.UI;
 
-    using Postal;
+    using Main.Core.Utility;
 
     using Recaptcha;
 
     using WB.UI.Designer.Extensions;
+    using WB.UI.Designer.Mailers;
     using WB.UI.Designer.Models;
 
     using WebMatrix.WebData;
@@ -32,12 +33,16 @@ namespace WB.UI.Designer.Controllers
     /// </summary>
     [CustomAuthorize]
     [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
+    [RequireHttps]
     public class AccountController : BaseController
     {
+        private readonly ISystemMailer Mailer;
+
         #region Public Methods and Operators
 
-        public AccountController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper) : base(repository, commandService, userHelper)
+        public AccountController(IViewRepository repository, ICommandService commandService, IUserHelper userHelper, ISystemMailer mailer) : base(repository, commandService, userHelper)
         {
+            this.Mailer = mailer;
         }
 
         /// <summary>
@@ -241,8 +246,13 @@ namespace WB.UI.Designer.Controllers
                 {
                     string confirmationToken = WebSecurity.GeneratePasswordResetToken(user.UserName);
 
-                    this.SendEmail("ResetPasswordEmail",
-                                recepientEmail: user.Email, userName: model.UserName, token: confirmationToken);
+                    this.Mailer.ResetPasswordEmail(
+                        new EmailConfirmationModel()
+                            {
+                                Email = user.Email.ToWBEmailAddress(),
+                                UserName = model.UserName,
+                                ConfirmationToken = confirmationToken
+                            }).SendAsync();
 
                     this.Attention("To complete the reset password process look for an email in your inbox that provides further instructions.");
                     return this.RedirectToAction("Login");
@@ -285,6 +295,7 @@ namespace WB.UI.Designer.Controllers
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
         public ActionResult Register(RegisterModel model, bool captchaValid)
         {
+            var isUserRegisterSuccessfully = false;
             if (AppSettings.Instance.IsReCaptchaEnabled && !captchaValid)
             {
                 this.Error("You did not type the verification word correctly. Please try again.");
@@ -293,6 +304,7 @@ namespace WB.UI.Designer.Controllers
             {
                 if (this.ModelState.IsValid)
                 {
+
                     // Attempt to register the user
                     try
                     {
@@ -303,10 +315,15 @@ namespace WB.UI.Designer.Controllers
                         {
                             Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { UserHelper.USERROLENAME });
 
-                            this.SendEmail("ConfirmationEmail",
-                                 model.Email, userName: model.UserName, token: confirmationToken);
+                            isUserRegisterSuccessfully = true;
 
-                            return this.RegisterStepTwo();
+                            this.Mailer.ConfirmationEmail(
+                                new EmailConfirmationModel()
+                                    {
+                                        Email = model.Email.ToWBEmailAddress(),
+                                        UserName = model.UserName,
+                                        ConfirmationToken = confirmationToken
+                                    }).SendAsync();
                         }
                     }
                     catch (MembershipCreateUserException e)
@@ -315,13 +332,12 @@ namespace WB.UI.Designer.Controllers
                     }
                     catch (Exception e)
                     {
-                        this.Error(e.Message);
+                        NLog.LogManager.GetCurrentClassLogger().Error(e);
                     }
                 }
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+            return isUserRegisterSuccessfully ? this.RegisterStepTwo() : this.View(model);
         }
 
         /// <summary>
@@ -366,7 +382,14 @@ namespace WB.UI.Designer.Controllers
                         ((DesignerMembershipProvider)Membership.Provider).GetConfirmationTokenByUserName(model.UserName);
                     if (!string.IsNullOrEmpty(token))
                     {
-                        this.SendEmail( "ConfirmationEmail", model.Email, userName: model.UserName, token: token);
+                        this.Mailer.ConfirmationEmail(
+                            new EmailConfirmationModel()
+                                {
+                                    Email = model.Email.ToWBEmailAddress(),
+                                    UserName = model.UserName,
+                                    ConfirmationToken = token
+                                }).SendAsync();
+
                         return this.RegisterStepTwo();
                     }
                     else
@@ -481,33 +504,6 @@ namespace WB.UI.Designer.Controllers
             this.Attention(
                 "To complete the registration process look for an email in your inbox that provides further instructions.");
             return this.RedirectToAction("Login");
-        }
-
-        /// <summary>
-        /// The send confirmation email.
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="recepientEmail">
-        /// The to.
-        /// </param>
-        /// <param name="userName">
-        /// The user name.
-        /// </param>
-        /// <param name="token">
-        /// The token.
-        /// </param>
-        private async void SendEmail(string title, string recepientEmail, string userName, string token)
-        {
-            dynamic email = new Email(title);
-
-            if (AppSettings.Instance.ReformatEmail)
-                recepientEmail = String.Format("<{0}>", recepientEmail);
-
-            email.To = recepientEmail;
-            email.UserName = userName;
-            email.ConfirmationToken = token;
-
-            await email.SendAsync();
         }
 
         #endregion
