@@ -38,20 +38,23 @@ namespace CAPI.Android
 
             textMem.Click += textMem_Click;
 
-            textMem.Text = String.Format(
-                "Memory:{0} bytes, assemblies loaded:{1}", 
-                GC.GetTotalMemory(false), 
-                AppDomain.CurrentDomain.GetAssemblies().Length);
+            textMem.Text = GetResourceUsage();
 
         }
 
         private void textMem_Click(object sender, EventArgs e)
         {
-            textMem.Text = String.Format(
-                "Memory:{0} bytes, assemblies loaded:{1}",
+            textMem.Text = GetResourceUsage();
+        }
+
+        private string GetResourceUsage()
+        {
+            return String.Format("[{0}] [{1}] [{2}]",
                 GC.GetTotalMemory(false),
+                GC.GetGeneration(GC.MaxGeneration - 1),
                 AppDomain.CurrentDomain.GetAssemblies().Length);
         }
+
 
         void llContainer_Click(object sender, EventArgs e)
         {
