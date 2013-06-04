@@ -24,6 +24,7 @@ namespace WB.Core.Infrastructure.Implementation
         private static readonly object ErrorsLockObject = new object();
 
         private static bool areViewsBeingRebuiltNow = false;
+        private static bool shouldStopViewsRebuilding = false;
 
         private static string statusMessage;
         private static List<Tuple<DateTime, string, Exception>> errors = new List<Tuple<DateTime,string,Exception>>();
@@ -69,6 +70,14 @@ namespace WB.Core.Infrastructure.Implementation
             new Task(this.RebuildAllViews).Start();
         }
 
+        public void StopAllViewsRebuilding()
+        {
+            if (!areViewsBeingRebuiltNow)
+                return;
+
+            shouldStopViewsRebuilding = true;
+        }
+
         #endregion // IReadLayerAdministrationService implementation
 
         private void RebuildAllViews()
@@ -110,6 +119,8 @@ namespace WB.Core.Infrastructure.Implementation
 
         private void DeleteAllViews()
         {
+            ThrowIfShouldStopViewsRebuilding();
+
             UpdateStatusMessage("Determining count of views to be deleted.");
 
             this.ravenStore
@@ -133,6 +144,8 @@ namespace WB.Core.Infrastructure.Implementation
                     .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
                     .Count();
             }
+
+            ThrowIfShouldStopViewsRebuilding();
 
             UpdateStatusMessage(string.Format("Deleting {0} views.", initialViewCount));
 
@@ -165,6 +178,8 @@ namespace WB.Core.Infrastructure.Implementation
             int processedEventsCount = 0;
             int failedEventsCount = 0;
 
+            ThrowIfShouldStopViewsRebuilding();
+
             UpdateStatusMessage("Determining count of events to be republished.");
 
             int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
@@ -173,6 +188,8 @@ namespace WB.Core.Infrastructure.Implementation
 
             foreach (CommittedEvent @event in this.eventStore.GetAllEventsWithoutSnapshots())
             {
+                ThrowIfShouldStopViewsRebuilding();
+
                 UpdateStatusMessage(string.Format("Publishing event {0} of {1}. Failed events: {2}.",
                     processedEventsCount + 1, allEventsCount, failedEventsCount));
 
@@ -198,6 +215,15 @@ namespace WB.Core.Infrastructure.Implementation
 
             UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
                 processedEventsCount, failedEventsCount));
+        }
+
+        private static void ThrowIfShouldStopViewsRebuilding()
+        {
+            if (shouldStopViewsRebuilding)
+            {
+                shouldStopViewsRebuilding = false;
+                throw new Exception("Views rebuilding stopped by request.");
+            }
         }
 
         private static void UpdateStatusMessage(string newMessage)

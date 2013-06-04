@@ -18,6 +18,12 @@ namespace Web.Supervisor.Controllers
             return this.View();
         }
 
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+        public string GetReadLayerStatus()
+        {
+            return this.readLayerAdministrationService.GetReadableStatus();
+        }
+
         public ActionResult RebuildReadLayer()
         {
             this.readLayerAdministrationService.RebuildAllViewsAsync();
@@ -25,10 +31,11 @@ namespace Web.Supervisor.Controllers
             return this.RedirectToAction("ReadLayer");
         }
 
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public string GetReadLayerStatus()
+        public ActionResult StopReadLayerRebuilding()
         {
-            return this.readLayerAdministrationService.GetReadableStatus();
+            this.readLayerAdministrationService.StopAllViewsRebuilding();
+
+            return this.RedirectToAction("ReadLayer");
         }
     }
 }
