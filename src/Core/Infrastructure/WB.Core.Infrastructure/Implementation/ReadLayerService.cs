@@ -184,40 +184,65 @@ namespace WB.Core.Infrastructure.Implementation
 
             int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
 
-            UpdateStatusMessage(string.Format("Preparing to republish {0} events.", allEventsCount));
             DateTime republishStarted = DateTime.Now;
+            UpdateStatusMessage(
+                "Acquiring first portion of events. "
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
-            foreach (CommittedEvent @event in this.eventStore.GetAllEventsWithoutSnapshots())
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEventsWithoutSnapshots())
             {
-                ThrowIfShouldStopViewsRebuilding();
-
-                TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
-                int speedInEventsPerMinute = (int) (republishTimeSpent.TotalSeconds == 0 ? 0 : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
-                UpdateStatusMessage(string.Format("Publishing event {1} of {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute.",
-                    Environment.NewLine, processedEventsCount + 1, allEventsCount, failedEventsCount, republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute));
-
-                try
+                foreach (CommittedEvent @event in eventBulk)
                 {
-                    this.eventBus.Publish(@event);
+                    ThrowIfShouldStopViewsRebuilding();
+
+                    UpdateStatusMessage(
+                        string.Format("Publishing event {0}. ", processedEventsCount + 1)
+                        + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
+
+                    try
+                    {
+                        this.eventBus.Publish(@event);
+                    }
+                    catch (Exception exception)
+                    {
+                        SaveErrorForStatusReport(
+                            string.Format("Failed to publish event {0} of {1} ({2})",
+                                processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
+                            exception);
+
+                        failedEventsCount++;
+                    }
+
+                    processedEventsCount++;
+
+                    if (failedEventsCount >= MaxAllowedFailedEvents)
+                        throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
                 }
-                catch (Exception exception)
-                {
-                    SaveErrorForStatusReport(
-                        string.Format("Failed to publish event {0} of {1} ({2})",
-                            processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
-                        exception);
 
-                    failedEventsCount++;
-                }
-
-                processedEventsCount++;
-
-                if (failedEventsCount >= MaxAllowedFailedEvents)
-                    throw new Exception(string.Format("Failed to rebuild read layer. Too many events failed: {0}.", failedEventsCount));
+                UpdateStatusMessage(
+                    "Acquiring next portion of events. "
+                    + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
             }
 
-            UpdateStatusMessage(string.Format("{0} events were republished. Failed events: {1}.",
-                processedEventsCount, failedEventsCount));
+            UpdateStatusMessage(string.Format("All events were republished. "
+                + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount)));
+        }
+
+        private static string GetReadablePublishingDetails(DateTime republishStarted,
+            int processedEventsCount, int allEventsCount, int failedEventsCount)
+        {
+            TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
+
+            int speedInEventsPerMinute = (int)(
+                republishTimeSpent.TotalSeconds == 0
+                ? 0
+                : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
+
+            return string.Format(
+                "Processed events: {1}. Total events: {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute.",
+                Environment.NewLine,
+                processedEventsCount, allEventsCount, failedEventsCount,
+                republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute);
         }
 
         private static void ThrowIfShouldStopViewsRebuilding()
