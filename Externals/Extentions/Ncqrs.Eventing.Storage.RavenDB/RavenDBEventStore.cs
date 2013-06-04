@@ -229,30 +229,31 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
         }
 
-        public IEnumerable<CommittedEvent> GetAllEventsWithoutSnapshots()
+        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots()
         {
+            int bulkSize = 32;
             int returnedEventCount = 0;
 
             while (true)
             {
                 using (IDocumentSession session = this.DocumentStore.OpenSession())
                 {
-                    var storedEvent = session
+                    StoredEvent[] storedEventsBulk = session
                         .Query<StoredEvent>()
                         .Customize(x => x.WaitForNonStaleResultsAsOfNow())
                         .Where(@event => !@event.IsSnapshot)
                         .OrderBy(y => y.EventSequence)
                         .Skip(returnedEventCount)
-                        .Take(1)
-                        .ToList() // note from TLK: without materialization SingleOrDefault fails saying it is more thah one element in collection
-                        .SingleOrDefault();
+                        .Take(bulkSize)
+                        .ToArray();
 
-                    bool allEventsWereReturned = storedEvent == null;
-                    if (allEventsWereReturned)
+                    bool allEventsWereAlreadyReturned = storedEventsBulk.Length == 0;
+                    if (allEventsWereAlreadyReturned)
                         yield break;
 
-                    yield return ToCommittedEvent(storedEvent);
-                    returnedEventCount++;
+                    yield return Array.ConvertAll(storedEventsBulk, ToCommittedEvent);
+
+                    returnedEventCount += bulkSize;
                 }
             }
         }
