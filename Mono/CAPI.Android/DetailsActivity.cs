@@ -115,11 +115,6 @@ namespace CAPI.Android
             }
             base.OnAttachFragment(p0);
         }
-        public override void Finish()
-        {
-            CapiApplication.CommandService.Execute(new CreateSnapshotForAR(QuestionnaireId, typeof(CompleteQuestionnaireAR)));
-            base.Finish();
-        }
         void ContentFrameAdapter_ScreenChanged(object sender, ScreenChangedEventArgs e)
         {
 
