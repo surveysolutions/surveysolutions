@@ -11,5 +11,7 @@ namespace WB.Core.Infrastructure
         string GetReadableStatus();
 
         void RebuildAllViewsAsync();
+
+        void StopAllViewsRebuilding();
     }
 }
