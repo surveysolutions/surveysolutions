@@ -142,7 +142,11 @@ namespace WB.UI.Designer.Controllers
             if (this.ModelState.IsValid)
             {
                 this.CommandService.Execute(
-                    new CreateQuestionnaireCommand(Guid.NewGuid(), model.Title, UserHelper.WebUser.UserId));
+                    new CreateQuestionnaireCommand(
+                        questionnaireId: Guid.NewGuid(),
+                        text: model.Title,
+                        createdBy: UserHelper.WebUser.UserId,
+                        isPublic: model.IsPublic));
                 return this.RedirectToActionPermanent("Index");
             }
 

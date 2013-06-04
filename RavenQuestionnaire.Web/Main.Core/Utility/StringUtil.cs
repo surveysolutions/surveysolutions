@@ -139,6 +139,11 @@ namespace Main.Core.Utility
                 json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
         }
 
+        public static string ToWBEmailAddress(this string source)
+        {
+            return string.Concat("<", source, ">");
+        }
+
         #endregion
     }
 }

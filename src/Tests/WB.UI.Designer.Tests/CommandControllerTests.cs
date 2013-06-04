@@ -87,9 +87,7 @@ namespace WB.UI.Designer.Tests
             return new CommandController(
                 commandService ?? Mock.Of<ICommandService>(),
                 commandDeserializer ?? Mock.Of<ICommandDeserializer>(),
-                expressionReplacer ?? Mock.Of<IExpressionReplacer>(),
-                logReplacer ?? Mock.Of<ILog>()
-                );
+                expressionReplacer ?? Mock.Of<IExpressionReplacer>());
         }
     }
 }

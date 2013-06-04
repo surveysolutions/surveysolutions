@@ -49,6 +49,11 @@ namespace Main.Core.Documents
         Guid? CreatedBy { get; set; }
 
         /// <summary>
+        /// Gets or sets whether questionnaire owner wants to share questionnaire document with other teams
+        /// </summary>
+        bool IsPublic { get; set; }
+
+        /// <summary>
         /// The add.
         /// </summary>
         /// <param name="c">

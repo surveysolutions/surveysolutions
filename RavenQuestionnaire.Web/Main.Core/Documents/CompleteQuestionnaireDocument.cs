@@ -117,6 +117,11 @@ namespace Main.Core.Documents
         public Guid? CreatedBy { get; set; }
 
         /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
+
+        /// <summary>
         /// Gets or sets the parent.
         /// </summary>
         private IComposite parent;

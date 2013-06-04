@@ -40,6 +40,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public Guid? CreatedBy { get; set; }
 
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
+
         #endregion
     }
 }
