@@ -32,13 +32,13 @@
         window.input = input;
     </script>
     @Scripts.Render("~/designer")
-    
+
 }
 
 <div id="busyindicator"></div>
 
 <div id="stacks">
-    
+
     <div id="footer">
         <div class="inner">
 
@@ -129,9 +129,35 @@
                     </div>
                 </div>
                 <div class="row-fluid">
-                    <label class="checkbox">
-                        <input type="checkbox" data-bind="checked: isPublic" />Make public
-                    </label>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" data-bind="checked: isPublic" />Make public
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <label class="control-label">Shared with persons</label>
+                    <div class="answer-options">
+                        <!-- ko foreach: sharePersons -->
+                        <div class="control-group">
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input  type="text" class="span8" data-bind="value: userName" disabled />
+                                    <button class="btn btn-danger" style="margin-left: 0px;" type="button" data-bind="click: $parent.removeSharePerson"><i class="icon-remove icon-white"></i></button>
+                                </div>
+                                <span class="help-inline"> confirmed</span>
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                    <div class="row-fluid">
+                        <div class="input-append">
+                            <input id="currentUserName" type="text" placeholder="Enter user name:" class="span8"  data-bind="value: currentUserName" />
+                            <button class="btn btn-success" type="button" data-bind="click: addSharePerson"><i class="icon-plus icon-white"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="pane-bottom">
@@ -160,12 +186,12 @@
                 <div class="row-fluid">
                     <label class="required">
                         <a href="#" class="btn btn-info btn-small btn-help"
-                           data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
-                           data-original-title="Kind of propagation"
-                           data-html="true"
-                           data-trigger="hover"
-                           data-placement="right"
-                           data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
+                            data-content="<b>None</b> &mdash; some description<br /><b>Auto</b> &mdash; some description"
+                            data-original-title="Kind of propagation"
+                            data-html="true"
+                            data-trigger="hover"
+                            data-placement="right"
+                            data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>
                         Kind of propagation</label>
                     <div class="btn-group">
                         <button
@@ -186,12 +212,12 @@
 
                 <label>
                     <a href="#" class="btn btn-info btn btn-help"
-                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                       data-original-title="Condition expression"
-                       data-html="true"
-                       data-trigger="hover"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                        data-original-title="Condition expression"
+                        data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
@@ -243,24 +269,24 @@
                 </div>
                 <label>
                     <a href="#" class="btn btn-info btn-small btn-help"
-                       data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
-                       data-original-title="Condition expression"
-                       data-html="true"
-                       data-trigger="hover"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
+                        data-content="A logical expression that activates(disactivates) the current question(group) depending on the answers on the other questions."
+                        data-original-title="Condition expression"
+                        data-html="true"
+                        data-trigger="hover"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Condition expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: condition, aceOptions: { mode: 'ncalc', theme: 'designer' }"></div>
                 </div>
 
                 <label>
                     <a href="#" class="btn btn-info btn-small btn-help"
-                       data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
-                       data-original-title="Validation expression"
-                       data-trigger="hover"
-                       data-html="true"
-                       data-placement="right"
-                       data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation expression</label>
+                        data-content="A logical expression that validates an answer to the current question. Might include values of other questions."
+                        data-original-title="Validation expression"
+                        data-trigger="hover"
+                        data-html="true"
+                        data-placement="right"
+                        data-toggle="popover"><i class="icon-info-sign icon-white"></i></a>Validation expression</label>
                 <div class="editor-container">
                     <div class="editor" data-bind="ace: validationExpression, aceOptions: { mode: 'ncalc',theme: 'designer' }"></div>
                 </div>
@@ -284,7 +310,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <script type="text/html" id="GroupView">
@@ -300,7 +326,7 @@
                         <ul class="dropdown-menu">
                             <li><a data-bind="click: $root.addQuestion" tabindex="-1" href="#"><i class="icon-plus"></i>Add Question</a></li>
                             <li><a data-bind="click: $root.addGroup, visible: gtype()=='None'" tabindex="-1" href="#"><i class="icon-plus"></i>Add Group</a></li>
-                            <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
+                            <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: $root.cloneGroup" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Group</a></li>
                             <li><a data-bind="click: $root.deleteGroup" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
                         </ul>
                     </div>
@@ -325,7 +351,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a data-bind="click: $root.deleteQuestion" tabindex="-1" href="#"><i class="icon-remove"></i>Remove</a></li>
-                        <li data-bind="css: {disabled: isNew()}"><a data-bind="click: $root.cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
+                        <li data-bind="css: {disabled: isNew()}"><a data-bind="    click: $root.cloneQuestion" tabindex="-1" href="#"><i class="icon-copy"></i>Clone Question</a></li>
                     </ul>
                 </div>
             </div>
