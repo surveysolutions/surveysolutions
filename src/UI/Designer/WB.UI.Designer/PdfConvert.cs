@@ -25,10 +25,16 @@ namespace Codaxy.WkHtmlToPdf
 
 	public class PdfDocument
 	{
-		public String Url { get; set; }
+        public PdfDocument()
+        {
+            this.PageNumbersFormat = "Page [page] of [toPage]";
+        }
+
+	    public String Url { get; set; }
 		public String HeaderUrl { get; set; }
 		public String FooterUrl { get; set; }
 		public object State { get; set; }
+        public string PageNumbersFormat { get; set; }
 	}
 
 	public class PdfConvertEnvironment
@@ -101,7 +107,12 @@ namespace Codaxy.WkHtmlToPdf
                 paramsBuilder.Append("--margin-bottom 25 ");
                 paramsBuilder.Append("--footer-spacing 5 ");
             }
-            
+
+            if (!string.IsNullOrEmpty(document.PageNumbersFormat))
+            {
+                paramsBuilder.AppendFormat("--header-right \"{0}\" ", document.PageNumbersFormat);
+            }
+
 			paramsBuilder.AppendFormat("\"{0}\" \"{1}\"", document.Url, outputPdfFilePath);
            
 
