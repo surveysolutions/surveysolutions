@@ -185,13 +185,16 @@ namespace WB.Core.Infrastructure.Implementation
             int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
 
             UpdateStatusMessage(string.Format("Preparing to republish {0} events.", allEventsCount));
+            DateTime republishStarted = DateTime.Now;
 
             foreach (CommittedEvent @event in this.eventStore.GetAllEventsWithoutSnapshots())
             {
                 ThrowIfShouldStopViewsRebuilding();
 
-                UpdateStatusMessage(string.Format("Publishing event {0} of {1}. Failed events: {2}.",
-                    processedEventsCount + 1, allEventsCount, failedEventsCount));
+                TimeSpan republishTimeSpent = DateTime.Now - republishStarted;
+                int speedInEventsPerMinute = (int) (republishTimeSpent.TotalSeconds == 0 ? 0 : 60 * processedEventsCount / republishTimeSpent.TotalSeconds);
+                UpdateStatusMessage(string.Format("Publishing event {1} of {2}. Failed events: {3}.{0}Time spent republishing: {4}. Speed: {5} events per minute.",
+                    Environment.NewLine, processedEventsCount + 1, allEventsCount, failedEventsCount, republishTimeSpent.ToString(@"hh\:mm\:ss"), speedInEventsPerMinute));
 
                 try
                 {
