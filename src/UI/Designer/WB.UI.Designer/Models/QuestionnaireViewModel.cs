@@ -25,6 +25,9 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Title")]
         public string Title { get; set; }
 
+        [Display(Name = "Is Public")]
+        public bool IsPublic { get; set; }
+
         #endregion
     }
 }
