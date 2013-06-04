@@ -129,7 +129,7 @@ namespace CAPI.Android
             var eventHandler =
                 new CompleteQuestionnaireViewDenormalizer(
                     kernel.Get<IDenormalizerStorage<CompleteQuestionnaireView>>());
-            bus.RegisterHandler(eventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(eventHandler, typeof(NewCompleteQuestionnaireCreated));
             bus.RegisterHandler(eventHandler, typeof (AnswerSet));
             bus.RegisterHandler(eventHandler, typeof (CommentSet));
             bus.RegisterHandler(eventHandler, typeof (ConditionalStatusChanged));

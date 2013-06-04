@@ -80,7 +80,7 @@ namespace CAPI.Android.Core.Model.EventHandlers
         protected bool IsVisible(SurveyStatus status)
         {
             return status == SurveyStatus.Initial || status == SurveyStatus.Redo || status == SurveyStatus.Complete ||
-                   status == SurveyStatus.Error;
+                   status == SurveyStatus.Reinit || status == SurveyStatus.Error;
         }
     }
 }

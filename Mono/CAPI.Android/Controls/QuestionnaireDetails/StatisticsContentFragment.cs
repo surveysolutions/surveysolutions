@@ -158,7 +158,7 @@ namespace CAPI.Android.Controls.QuestionnaireDetails
         {
 
             var status = SurveyStatus.IsStatusAllowCapiSync(this.Model.Status)
-                             ? SurveyStatus.Initial
+                             ? SurveyStatus.Reinit
                              : Model.InvalidQuestions.Count == 0 ? SurveyStatus.Complete : SurveyStatus.Error;
             status.ChangeComment = etComments.Text;
             var command = new ChangeStatusCommand()

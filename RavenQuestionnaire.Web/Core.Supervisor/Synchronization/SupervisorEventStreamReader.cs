@@ -114,13 +114,13 @@ namespace Core.Supervisor.Synchronization
             switch (ARType)
             {
                 case "f":
-                    return this.GetEventStreamById<FileAR>(ARId);
+                    return this.GetEventStreamById(ARId);
                     break;
                 case "q":
-                    return this.GetEventStreamById<CompleteQuestionnaireAR>(ARId);
+                    return this.GetEventStreamById(ARId);
                     break;
                 case "u":
-                    return this.GetEventStreamById<UserAR>(ARId);
+                    return this.GetEventStreamById(ARId);
                     break;
                 default:
                     return null;
@@ -173,7 +173,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (var item in fileNames)
             {
-                retval.AddRange(this.GetEventStreamById<FileAR>(item));
+                retval.AddRange(this.GetEventStreamById(item));
             }
         }
         
@@ -181,7 +181,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (Guid item in questionnaries)
             {
-               retval.AddRange(this.GetEventStreamById<CompleteQuestionnaireAR>(item));
+               retval.AddRange(this.GetEventStreamById(item));
             }
         }
         /// <summary>
@@ -193,7 +193,7 @@ namespace Core.Supervisor.Synchronization
         protected void AddRegisterDevice(List<AggregateRootEvent> retval)
         {
             var model = this.denormalizer.Query<SyncDeviceRegisterDocument, List<AggregateRootEvent>>(_ => _
-                .SelectMany(item => this.GetEventStreamById<DeviceAR>(item.PublicKey))
+                .SelectMany(item => this.GetEventStreamById(item.PublicKey))
                 .ToList());
 
             retval.AddRange(model);
@@ -212,7 +212,7 @@ namespace Core.Supervisor.Synchronization
         {
             foreach (var item in users)
             {
-                retval.AddRange(this.GetEventStreamById<UserAR>(item));
+                retval.AddRange(this.GetEventStreamById(item));
             }
         }
 

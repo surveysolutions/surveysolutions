@@ -8,10 +8,10 @@ using Ncqrs.Restoring.EventStapshoot;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class CompleteQuestionnaireViewDenormalizer:/* IEventHandler<NewCompleteQuestionnaireCreated>, */
+    public class CompleteQuestionnaireViewDenormalizer: IEventHandler<NewCompleteQuestionnaireCreated>,
         IEventHandler<ConditionalStatusChanged>,
     IEventHandler<CommentSet>, 
-                                                     IEventHandler<SnapshootLoaded>,
+                                                    /* IEventHandler<SnapshootLoaded>,*/
                                                      /*IEventHandler<CompleteQuestionnaireDeleted>, */
                                                      IEventHandler<AnswerSet>, 
                                                      IEventHandler<PropagatableGroupAdded>, 
@@ -30,11 +30,10 @@ namespace CAPI.Android.Core.Model.EventHandlers
             _documentStorage = documentStorage;
         }
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-                return;
+            var document = evnt.Payload.Questionnaire;
+            
             var view = new CompleteQuestionnaireView(document);
 
             _documentStorage.Store(view, document.PublicKey);

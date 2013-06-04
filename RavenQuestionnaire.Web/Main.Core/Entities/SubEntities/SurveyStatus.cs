@@ -105,7 +105,20 @@ namespace Main.Core.Entities.SubEntities
                     };
             }
         }
-
+        /// <summary>
+        /// Gets the initial.
+        /// </summary>
+        public static SurveyStatus Reinit
+        {
+            get
+            {
+                return new SurveyStatus
+                {
+                    PublicId = new Guid("67e7ec3e-66d3-40ff-995a-94b8b5d0583c"),
+                    Name = "Reinit"
+                };
+            }
+        }
         /// <summary>
         /// Gets Redo.
         /// </summary>

@@ -145,7 +145,7 @@ namespace Core.Supervisor.Tests
             var eventStoreMock = PerpairSimpleEventStore();
             SupervisorEventStreamReader target = CreateNewStreamReaderWhichIsSendApproved();
             Guid eventSourceId = Guid.NewGuid();
-            var result = target.GetEventStreamById<DummySnapshotableAR>(eventSourceId);
+            var result = target.GetEventStreamById(eventSourceId);
             Assert.IsTrue(result.Count == 0);
             eventStoreMock.Verify(x => x.ReadFrom(eventSourceId,
                                                   int.MinValue, int.MaxValue), Times.Once());
@@ -174,7 +174,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
             SupervisorEventStreamReader target = CreateNewStreamReaderWhichIsSendApproved();
-            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
+            var result = target.GetEventStreamById(aggregateRootId);
             Assert.IsTrue(result.Count == 2);
 
         }
@@ -195,7 +195,7 @@ namespace Core.Supervisor.Tests
                                                                                                  new Version())));
 
             SupervisorEventStreamReader target = CreateNewStreamReaderWhichIsSendApproved();
-            var result = target.GetEventStreamById<DummyAR>(aggregateRootId);
+            var result = target.GetEventStreamById(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
             Assert.IsTrue(result[0].EventIdentifier == eventId);
 
@@ -206,7 +206,7 @@ namespace Core.Supervisor.Tests
             var eventStoreMock = PrepareSnapshotableEventStore();
             var aggregateRootId = Guid.NewGuid();
             SupervisorEventStreamReader target = CreateNewStreamReaderWhichIsSendApproved();
-            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
+            var result = target.GetEventStreamById(aggregateRootId);
             Assert.IsTrue(result.Count == 1);
             eventStoreMock.Verify(x => x.ReadFrom(aggregateRootId, It.IsAny<long>(), It.IsAny<long>()), Times.Never());
         }
@@ -218,7 +218,7 @@ namespace Core.Supervisor.Tests
             DummySnapshotableAR aggreagateRoot = new DummySnapshotableAR();
             var aggregateRootId = Guid.NewGuid();
             SupervisorEventStreamReader target = CreateNewStreamReaderWhichIsSendApproved();
-            var result = target.GetEventStreamById<DummySnapshotableAR>(aggregateRootId);
+            var result = target.GetEventStreamById(aggregateRootId);
             commandServiceMock.Verify(x => x.Execute(It.IsAny<CreateSnapshotForAR>()), Times.Once());
 
         }

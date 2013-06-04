@@ -82,19 +82,14 @@ namespace Main.Core.Events
 
         #region PublicMethods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="aggregateRootId"></param>
-        /// <returns></returns>
-        public virtual List<AggregateRootEvent> GetEventStreamById<T>(Guid aggregateRootId) where T : AggregateRoot
+       
+        public virtual List<AggregateRootEvent> GetEventStreamById(Guid aggregateRootId)
         {
-            var snapshotableEventStore = this.myEventStore as ISnapshootEventStore;
+          /*  var snapshotableEventStore = this.myEventStore as ISnapshootEventStore;
             if (snapshotableEventStore == null)
-            {
+            {*/
                 return ReturnAllEventStream(aggregateRootId);
-            }
+         /*   }
 
             Type arType = typeof (T);
             var snapshotables = from i in arType.GetInterfaces()
@@ -118,7 +113,7 @@ namespace Main.Core.Events
             return new List<AggregateRootEvent>()
                 {
                     new AggregateRootEvent(snapshotLoaded)
-                };
+                };*/
         }
 
         #endregion
