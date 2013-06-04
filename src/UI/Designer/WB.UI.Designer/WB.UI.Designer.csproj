@@ -390,6 +390,7 @@
     <Content Include="Scripts\details\binder.js" />
     <Content Include="Scripts\details\bootstrapper.js" />
     <Content Include="Scripts\details\config.js" />
+    <Content Include="Scripts\details\model.sharePerson.js" />
     <Content Include="Scripts\details\model.statistic.js" />
     <Content Include="Scripts\details\datacontext.js" />
     <Content Include="Scripts\details\dataprimer.js" />
