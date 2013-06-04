@@ -14,9 +14,9 @@ using Raven.Client.Indexes;
 
 namespace StorageAnalyzer
 {
-    class Program
+    public class StorageConverterProgram
     {
-        static void Main(string[] args)
+        static void WasMain()
         {
             NConfigurator.UsingFile(@"Configuration\StorageAnalyzer.config").SetAsSystemDefault();
             var url = ConfigurationManager.AppSettings["Raven.DocumentStore"];
