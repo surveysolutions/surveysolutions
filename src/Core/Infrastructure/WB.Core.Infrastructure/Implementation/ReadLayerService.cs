@@ -9,10 +9,13 @@ using Ncqrs.Eventing.Storage;
 
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Indexing;
+using Raven.Abstractions.Logging;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Extensions;
 using Raven.Client.Indexes;
+
+using ILog = WB.Core.SharedKernel.Logger.ILog;
 
 namespace WB.Core.Infrastructure.Implementation
 {
@@ -32,17 +35,19 @@ namespace WB.Core.Infrastructure.Implementation
         private readonly IStreamableEventStore eventStore;
         private readonly IEventBus eventBus;
         private readonly DocumentStore ravenStore;
+        private readonly ILog logger;
 
         static ReadLayerService()
         {
             UpdateStatusMessage("No administration operations were performed so far.");
         }
 
-        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore)
+        public ReadLayerService(IStreamableEventStore eventStore, IEventBus eventBus, DocumentStore ravenStore, ILog logger)
         {
             this.eventStore = eventStore;
             this.eventBus = eventBus;
             this.ravenStore = ravenStore;
+            this.logger = logger;
         }
 
         #region IReadLayerStatusService implementation
@@ -106,7 +111,7 @@ namespace WB.Core.Infrastructure.Implementation
             }
             catch (Exception exception)
             {
-                SaveErrorForStatusReport("Unexpected error occurred", exception);
+                this.SaveErrorForStatusReport("Unexpected error occurred", exception);
                 UpdateStatusMessage(string.Format("Unexpectedly failed. Last status message:{0}{1}",
                     Environment.NewLine, statusMessage));
                 throw;
@@ -205,7 +210,7 @@ namespace WB.Core.Infrastructure.Implementation
                     }
                     catch (Exception exception)
                     {
-                        SaveErrorForStatusReport(
+                        this.SaveErrorForStatusReport(
                             string.Format("Failed to publish event {0} of {1} ({2})",
                                 processedEventsCount + 1, allEventsCount, @event.EventIdentifier),
                             exception);
@@ -261,12 +266,14 @@ namespace WB.Core.Infrastructure.Implementation
 
         #region Error reporting methods
 
-        private static void SaveErrorForStatusReport(string message, Exception exception)
+        private void SaveErrorForStatusReport(string message, Exception exception)
         {
             lock (ErrorsLockObject)
             {
                 errors.Add(Tuple.Create(DateTime.Now, message, exception));
             }
+
+            this.logger.Error(message, exception);
         }
 
         private static string GetReadableErrors()
