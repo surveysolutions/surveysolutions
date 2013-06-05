@@ -38,7 +38,8 @@ namespace LoadTestDataGenerator
         protected readonly ICommandService CommandService;
         protected readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> SurveyStorage;
         protected readonly DocumentStore RavenStore;
-        const string IndexForDeleteName = "AllEvents";
+        const string IndexForDelete = "AllEvents";
+        const string IndexForStatistics = "EventsStatistics";
         string databaseName = "";
 
         public LoadTestDataGenerator(ICommandService commandService,
@@ -52,24 +53,65 @@ namespace LoadTestDataGenerator
 
             this.databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
             defaultDatabaseName.Text = this.databaseName;
+
+            this.UpdateEventsStatistics();
         }
 
         private void generate_Click(object sender, EventArgs e)
         {
             this.PrepareDatabase();
 
-            if (clearDatabase.Checked)
+            
+
+            if (this.clearDatabase.Checked)
             {
+                UpdateStatus("start cleaning database");
                 this.ClearDatabase();
+                UpdateStatus("database cleaned successfully");
             }
-            if (generateSupervisorEvents.Checked)
+
+            this.UpdateEventsStatistics();
+
+            if (this.generateSupervisorEvents.Checked)
             {
+                UpdateStatus("start generating supervisor's events");
                 this.GenerateSupervisorsEvents();
+                UpdateStatus("supervisor's events generated successfully");
             }
-            if (generateCapiEvents.Checked)
+
+            this.UpdateEventsStatistics();
+
+            if (this.generateCapiEvents.Checked)
             {
-                GenerateCapiEvents();
+                UpdateStatus("start generating CAPI's events");
+                this.GenerateCapiEvents();
+                UpdateStatus("CAPI's events generated successfully");
             }
+
+            this.UpdateEventsStatistics();
+        }
+
+        private void UpdateStatus(string status)
+        {
+            processStatus.Text = status;
+        }
+
+        private void UpdateEventsStatistics()
+        {
+            var statistics = new List<EventStatisticItem>();
+            using (IDocumentSession session = this.RavenStore.OpenSession())
+            {
+                statistics.AddRange(session
+                    .Query<EventStatisticItem>(IndexForStatistics)
+                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
+            }
+            var sb = new StringBuilder();
+            foreach (var statistic in statistics.OrderByDescending(x => x.Count))
+            {
+                sb.AppendFormat("{0,-7} {1}", statistic.Count, statistic.Type);
+                sb.AppendLine();
+            }
+            eventsStatistics.Text = sb.ToString();
         }
 
         private void PrepareDatabase()
@@ -80,13 +122,22 @@ namespace LoadTestDataGenerator
 
             this.RavenStore
                 .DatabaseCommands
-                .PutIndex(IndexForDeleteName,
+                .PutIndex(IndexForDelete,
                           new IndexDefinition
                               {
                                   Map =
                                       "from doc in docs let EventId = doc[\"@metadata\"][\"@id\"] select new { EventId };"
                               },
                           overwrite: true);
+            this.RavenStore
+          .DatabaseCommands
+          .PutIndex(IndexForStatistics,
+                    new IndexDefinition
+                    {
+                        Map = "from sEvent in docs.Events select new { Type = sEvent.EventType, Count = 1 };",
+                        Reduce = "from result in results group result by result.Type into g select new { Type = g.Key, Count = g.Sum(x => x.Count) }"
+                    },
+                    overwrite: true);
         }
 
         private void GenerateCapiEvents()
@@ -95,17 +146,59 @@ namespace LoadTestDataGenerator
             foreach (var surveyId in surveyIds)
             {
                 FillAnswers(surveyId);
-                CompleteSurvey(surveyId);
+                var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
+                CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
+                this.CreateSnapshoot(surveyId);
+            }
+
+            var rand = GetRandom();
+
+            foreach (var surveyId in surveyIds)
+            {
+                if (rand.Next(10) != 5) continue;
+
+                var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
+                this.CompleteSurvey(surveyId, SurveyStatus.Initial, responsible);
+                this.FillAnswers(surveyId, true);
+                this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
+                this.CreateSnapshoot(surveyId);
             }
         }
 
-        private void FillAnswers(Guid surveyId)
+        private void FillAnswers(Guid surveyId, bool partially = false)
         {
+            var rand = GetRandom();
             var survey = this.SurveyStorage.GetById(surveyId);
+            survey.ConnectChildsWithParent();
+            var autoPropagateQuestoins = survey.GetQuestions().Where(x => x is IAutoPropagate).ToList();
+            // to answer AutoPropagate questions
+            foreach (var question in autoPropagateQuestoins)
+            {
+                if (partially && rand.Next(10) != 7)
+                {
+                    continue;
+                }
+                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, this.GetDummyAnswers(question), GetDummyAnswer(question), null));
+            }
+            var allQuestions = survey.GetQuestions().Where(x => !(x is IAutoPropagate)).ToList();
+            foreach (var question in allQuestions)
+            {
+                if (partially && rand.Next(10) != 7)
+                {
+                    continue;
+                }
+                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyAnswers(question), GetDummyAnswer(question), question.PropagationPublicKey));
+            }
         }
 
-        private void CompleteSurvey(Guid surveyId)
+        private void CompleteSurvey(Guid surveyId, SurveyStatus status, UserLight initiator)
         {
+            this.CommandService.Execute(new ChangeStatusCommand()
+            {
+                CompleteQuestionnaireId = surveyId,
+                Status = status,
+                Responsible = initiator
+            });
         }
 
         private List<Guid> GetSurveyIds()
@@ -137,20 +230,20 @@ namespace LoadTestDataGenerator
             {
                 // this will also materialize index if it is out of date or was just created
                 initialViewCount = session
-                    .Query<object>(IndexForDeleteName)
+                    .Query<object>(IndexForDelete)
                     .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
                     .Count();
             }
 
             this.RavenStore
                 .DatabaseCommands
-                .DeleteByIndex(IndexForDeleteName, new IndexQuery());
+                .DeleteByIndex(IndexForDelete, new IndexQuery());
 
             int resultViewCount;
             using (IDocumentSession session = this.RavenStore.OpenSession())
             {
                 resultViewCount = session
-                    .Query<object>(IndexForDeleteName)
+                    .Query<object>(IndexForDelete)
                     .Customize(customization => customization.WaitForNonStaleResultsAsOfNow())
                     .Count();
             }
@@ -277,9 +370,7 @@ namespace LoadTestDataGenerator
             }
             if (q is ISingleQuestion)
             {
-                var question = (SingleQuestion)q;
-                var answersCount = question.Answers.Count;
-                return question.Answers[rand.Next(answersCount)].PublicKey.ToString();
+                return null;
             }
             if (q is IDateTimeQuestion)
             {
@@ -291,9 +382,9 @@ namespace LoadTestDataGenerator
             }
             if (q is IAutoPropagate)
             {
-                var question = (AutoPropagateQuestion)q;
+                var question = (AutoPropagateCompleteQuestion)q;
                 var maxValue = question.MaxValue;
-                return rand.Next(maxValue / 2, maxValue + 1).ToString(CultureInfo.InvariantCulture);
+                return rand.Next(maxValue).ToString(CultureInfo.InvariantCulture);
             }
             if (q is ITextCompleteQuestion)
             {
@@ -304,11 +395,11 @@ namespace LoadTestDataGenerator
 
         private List<Guid> GetDummyAnswers(IQuestion q)
         {
+            var random = GetRandom();
             if (q is IMultyOptionsQuestion)
             {
-                var random = GetRandom();
                 var rand = random;
-                var question = (MultyOptionsQuestion)q;
+                var question = (MultyOptionsCompleteQuestion)q;
                 var answersCount = question.Answers.Count;
                 var selectedAnswersCount = rand.Next(1, answersCount + 1);
                 var result = new List<Guid>();
@@ -318,6 +409,15 @@ namespace LoadTestDataGenerator
                     result.Add(answer.PublicKey);
                 }
                 return result.Distinct().ToList();
+            }
+            if (q is ISingleQuestion)
+            {
+                var question = (SingleCompleteQuestion)q;
+                var answersCount = question.Answers.Count;
+                return new List<Guid>()
+                    {
+                        question.Answers[random.Next(answersCount)].PublicKey
+                    };
             }
             return new List<Guid>();
         }

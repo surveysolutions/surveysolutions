@@ -51,6 +51,7 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventStatisticItem.cs" />
     <Compile Include="LoadTestDataGeneratorRegistry.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="CompositionRoot.cs" />

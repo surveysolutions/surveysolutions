@@ -42,11 +42,16 @@
             this.generateCapiEvents = new System.Windows.Forms.CheckBox();
             this.defaultDatabaseName = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.eventsStatistics = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.processStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // generate
             // 
-            this.generate.Location = new System.Drawing.Point(438, 399);
+            this.generate.Location = new System.Drawing.Point(312, 355);
             this.generate.Name = "generate";
             this.generate.Size = new System.Drawing.Size(108, 66);
             this.generate.TabIndex = 0;
@@ -176,11 +181,46 @@
             this.label5.TabIndex = 13;
             this.label5.Text = "Database name";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(435, 13);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(131, 13);
+            this.label6.TabIndex = 15;
+            this.label6.Text = "Database events statistics";
+            // 
+            // eventsStatistics
+            // 
+            this.eventsStatistics.Location = new System.Drawing.Point(438, 30);
+            this.eventsStatistics.Multiline = true;
+            this.eventsStatistics.Name = "eventsStatistics";
+            this.eventsStatistics.Size = new System.Drawing.Size(380, 240);
+            this.eventsStatistics.TabIndex = 16;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.processStatus});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 465);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(830, 22);
+            this.statusStrip1.TabIndex = 17;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // processStatus
+            // 
+            this.processStatus.Name = "processStatus";
+            this.processStatus.Size = new System.Drawing.Size(0, 17);
+            // 
             // LoadTestDataGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(558, 477);
+            this.ClientSize = new System.Drawing.Size(830, 487);
+            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.eventsStatistics);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.defaultDatabaseName);
             this.Controls.Add(this.generateCapiEvents);
@@ -197,6 +237,8 @@
             this.Controls.Add(this.generate);
             this.Name = "LoadTestDataGenerator";
             this.Text = "Load Test Data Generator";
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -218,6 +260,10 @@
         private System.Windows.Forms.CheckBox generateCapiEvents;
         private System.Windows.Forms.TextBox defaultDatabaseName;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox eventsStatistics;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel processStatus;
     }
 }
 
