@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using Main.Core.Events;
 using Newtonsoft.Json;
+using SynchronizationMessages.Synchronization;
 
 namespace CAPI.Android.Core.Model.ChangeLog
 {
@@ -16,7 +17,7 @@ namespace CAPI.Android.Core.Model.ChangeLog
             var path = GetFileName(recordId);
             using (var fs = File.Open(path, FileMode.CreateNew))
             {
-                var bytes = GetBytes(GetJsonData(recordData));
+                var bytes = PackageHelper.Compress(GetJsonData(recordData));
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
@@ -33,19 +34,14 @@ namespace CAPI.Android.Core.Model.ChangeLog
                                           publicKey.ToString());
         }
 
-        private byte[] GetBytes(string str)
-        {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
-            return bytes;
-        }
 
         private string GetJsonData(AggregateRootEvent[] payload)
         {
             var data = JsonConvert.SerializeObject(payload, Formatting.None,
                                                    new JsonSerializerSettings
                                                        {
-                                                           TypeNameHandling = TypeNameHandling.Objects
+                                                           TypeNameHandling = TypeNameHandling.Objects,
+                                                           NullValueHandling = NullValueHandling.Ignore
                                                        });
             return data;
         }

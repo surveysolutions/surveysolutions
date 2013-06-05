@@ -88,7 +88,16 @@ namespace CAPI.Android.Settings
                          && (test.Scheme == "http" || test.Scheme == "https");
 
         }
+        public static bool CheckSyncPoint()
+        {
+            string syncPoint = SettingsManager.GetSyncAddressPoint();
 
+            if (!SettingsManager.ValidateAddress(syncPoint))
+            {
+                return false;
+            }
+            return true;
+        }
         #endregion
     }
 }

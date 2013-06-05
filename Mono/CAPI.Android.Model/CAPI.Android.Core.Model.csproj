@@ -146,6 +146,10 @@
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>
       <Name>AndroidNCQRS</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AndroidSynchronizationMessages\AndroidSynchronizationMessages.csproj">
+      <Project>{0b303848-98ef-4c13-b344-548b5df5b1b5}</Project>
+      <Name>AndroidSynchronizationMessages</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModel\User\" />
