@@ -38,18 +38,17 @@
     <Reference Include="Ncqrs">
       <HintPath>..\..\Core\Infrastructure\WB.Core.Infrastructure\bin\Debug\Ncqrs.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\RavenQuestionnaire.Web\Main.Core\bin\Debug\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="Ninject">
       <HintPath>..\..\..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+    <Reference Include="Raven.Abstractions">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\..\..\packages\RavenDB.Client.2.0.2375\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -108,6 +107,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Externals\Extentions\Ncqrs.Eventing.Storage.RavenDB\Ncqrs.Eventing.Storage.RavenDB.csproj">
+      <Project>{EA93A91D-7BC9-4EC0-8A22-8A772AFD76C3}</Project>
+      <Name>Ncqrs.Eventing.Storage.RavenDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\RavenQuestionnaire.Web\Main.Core\Main.Core.csproj">
       <Project>{8332BCD2-DC58-466E-8D80-5BCB1FACCD6C}</Project>
       <Name>Main.Core</Name>
