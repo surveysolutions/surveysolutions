@@ -4,9 +4,9 @@
 
 <h3>Read Layer Control Panel</h3>
 
-<textarea id="statusArea" style="width: 100%; height: 200px; cursor: text;" readonly="readonly">
+<pre id="statusArea" style="height: 400px; overflow-y: scroll;">
 Requesting status...
-</textarea>
+</pre>
 
 @Html.ActionLink("Rebuild", "RebuildReadLayer", new {}, new { @class = "btn " })
 
@@ -19,9 +19,9 @@ Requesting status...
             url: '@Url.Action("GetReadLayerStatus")',
             data: { timestamp: new Date().getMilliseconds() }
         }).done(function (result) {
-            $('#statusArea').text(result + '\r\nUpdated from server: ' + new Date().toTimeString());
+            $('#statusArea').text(result + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
         }).fail(function (xhr, status, error) {
-            $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\nUpdated from server: ' + new Date().toTimeString());
+            $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
         });
     }
 
