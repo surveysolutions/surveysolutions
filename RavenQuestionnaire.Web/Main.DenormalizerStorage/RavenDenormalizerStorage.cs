@@ -1,6 +1,4 @@
-﻿using WB.Core.Infrastructure;
-
-namespace Main.DenormalizerStorage
+﻿namespace Main.DenormalizerStorage
 {
     using System;
     using System.Linq;
@@ -15,12 +13,10 @@ namespace Main.DenormalizerStorage
         where TView : class
     {
         private readonly DocumentStore ravenStore;
-        private readonly IReadLayerStatusService readLayerStatusService;
 
-        public RavenDenormalizerStorage(DocumentStore ravenStore, IReadLayerStatusService readLayerStatusService)
+        public RavenDenormalizerStorage(DocumentStore ravenStore)
         {
             this.ravenStore = ravenStore;
-            this.readLayerStatusService = readLayerStatusService;
         }
 
         private static string ViewName
@@ -30,8 +26,6 @@ namespace Main.DenormalizerStorage
 
         public int Count()
         {
-            this.ThrowIfViewIsNotAccessible();
-
             using (var session = this.OpenSession())
             {
                 return
@@ -45,8 +39,6 @@ namespace Main.DenormalizerStorage
 
         public TView GetById(Guid id)
         {
-            this.ThrowIfViewIsNotAccessible();
-
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -57,8 +49,6 @@ namespace Main.DenormalizerStorage
 
         public void Remove(Guid id)
         {
-            this.ThrowIfViewIsNotAccessible();
-
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -72,8 +62,6 @@ namespace Main.DenormalizerStorage
 
         public void Store(TView view, Guid id)
         {
-            this.ThrowIfViewIsNotAccessible();
-
             string ravenId = ToRavenId(id);
 
             using (var session = this.OpenSession())
@@ -90,8 +78,6 @@ namespace Main.DenormalizerStorage
 
         public TResult Query<TResult>(Func<IQueryable<TView>, TResult> query)
         {
-            this.ThrowIfViewIsNotAccessible();
-
             using (IDocumentSession session = this.OpenSession())
             {
                 return query.Invoke(
@@ -111,12 +97,6 @@ namespace Main.DenormalizerStorage
         private static string ToRavenId(Guid id)
         {
             return string.Format("{0}:{1}", ViewName, id.ToString());
-        }
-
-        private void ThrowIfViewIsNotAccessible()
-        {
-            //if (this.readLayerStatusService.AreViewsBeingRebuiltNow())
-            //    throw new MaintenanceException("Views are currently being rebuilt. Therefore your request cannot be complete now.");
         }
     }
 }
