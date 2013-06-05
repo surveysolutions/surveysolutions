@@ -38,18 +38,10 @@
 
             List<IGrouping<UserLight, CompleteQuestionnaireBrowseItem>> groupedSurveys = 
                 this.surveys.Query(_ => _
-                    .Where(x => 
-                        status.PublicId == SurveyStatus.Unknown.PublicId
-                        ? (
-                            x.Responsible != null 
-                            && interviewers.Contains(x.Responsible.Id)
-                        )
-                        : (
-                            x.Responsible != null 
-                            && interviewers.Contains(x.Responsible.Id) 
-                            && x.Status.PublicId == status.PublicId
-                        ))
+                    .Where(x => x.Responsible != null)
+                    .Where(x => status.PublicId == SurveyStatus.Unknown.PublicId || x.Status.PublicId == status.PublicId)
                     .ToList()
+                    .Where(x => interviewers.Contains(x.Responsible.Id))
                     .GroupBy(x => x.Responsible)
                     .ToList());
 

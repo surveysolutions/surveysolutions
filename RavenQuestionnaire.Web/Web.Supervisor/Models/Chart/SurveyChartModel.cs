@@ -87,7 +87,7 @@ namespace Web.Supervisor.Models.Chart
                         new
                             {
                                 name = t.User.Name, 
-                                color = this.GetColor(index), 
+                                color = GetColor(index), 
                                 data = new[] { new[] { t.Initial + t.Redo, t.Completed + t.Approved } }
                             }).ToArray());
         }
@@ -107,23 +107,25 @@ namespace Web.Supervisor.Models.Chart
         /// </returns>
         private IEnumerable<PieData> GetPiePreData(SummaryView model)
         {
-            return
-                model.Items.Select(
-                    (t, index) =>
-                    new PieData
-                        {
-                            y = t.Total, 
-                            color = this.GetColor(index), 
-                            name = t.User.Name, 
-                            title = t.User.Name, 
-                            categories =
-                                new[]
-                                    {
-                                        SurveyStatus.Initial.Name, SurveyStatus.Redo.Name, SurveyStatus.Complete.Name, 
-                                        SurveyStatus.Approve.Name, SurveyStatus.Error.Name
-                                    }, 
-                            data = new[] { t.Initial, t.Redo, t.Completed, t.Approved, t.Error }, 
-                        }).ToArray();
+            return model.Items.Select(GetPieData).ToArray();
+        }
+
+        private static PieData GetPieData(SummaryViewItem item, int itemIndex)
+        {
+            return new PieData
+            {
+                y = item.Total, 
+                color = GetColor(itemIndex), 
+                name = item.User.Name, 
+                title = item.User.Name, 
+                categories =
+                    new[]
+                    {
+                        SurveyStatus.Initial.Name, SurveyStatus.Redo.Name, SurveyStatus.Complete.Name, 
+                        SurveyStatus.Approve.Name, SurveyStatus.Error.Name
+                    }, 
+                data = new[] { item.Initial, item.Redo, item.Completed, item.Approved, item.Error }, 
+            };
         }
 
         #endregion

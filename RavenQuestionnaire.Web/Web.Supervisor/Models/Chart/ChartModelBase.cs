@@ -40,7 +40,7 @@ namespace Web.Supervisor.Models.Chart
         /// <summary>
         /// The colors
         /// </summary>
-        private readonly string[] colors = new[]
+        private static readonly string[] colors = new[]
             {
                "#049cdb", "#46a546", "#c3325f", "#f89406", "#673301", "#ffc40d", "#400180", "#018080", "#9d261d" 
             };
@@ -166,9 +166,9 @@ namespace Web.Supervisor.Models.Chart
         /// <returns>
         /// Hex color as string
         /// </returns>
-        protected string GetColor(int index)
+        protected static string GetColor(int index)
         {
-            return this.colors[index % this.colors.Count()];
+            return colors[index % colors.Count()];
         }
 
         #endregion
