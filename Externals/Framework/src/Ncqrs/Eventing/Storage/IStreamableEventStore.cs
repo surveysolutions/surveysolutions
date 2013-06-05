@@ -19,6 +19,10 @@ namespace Ncqrs.Eventing.Storage
 
         int CountOfAllEventsWithoutSnapshots();
 
-        IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize = 32);
+        int CountOfAllEventsIncludingSnapshots();
+
+        IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize = 256);
+
+        IEnumerable<CommittedEvent[]> GetAllEventsIncludingSnapshots(int bulkSize = 32);
     }
 }
