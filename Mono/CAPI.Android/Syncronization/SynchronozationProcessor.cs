@@ -75,42 +75,38 @@ namespace CAPI.Android.Syncronization
         {
             tokenSource2 = new CancellationTokenSource();
             ct = tokenSource2.Token;
-            
-            task = Task.Factory.StartNew(() =>
-                {
-                    Handshake();
-                    Push();
-                    Pull();
-                    Validate();
-                    OnProcessFinished();
-                }, ct);
+            task = Task.Factory.StartNew(RunInternal, ct);
+        }
+
+        private void RunInternal()
+        {
+            Handshake();
+            Push();
+            Pull();
+            Validate();
+            OnProcessFinished();
         }
 
         public void Cancel()
         {
-            
-
-            Task.Factory.StartNew(() =>
-                {
-                    OnStatusChanged(new SynchronizationEvent("Synchronization is canceling"));
-                    tokenSource2.Cancel();
-
-                    try
-                    {
-                        Task.WaitAll(task);
-                    }
-                    catch (AggregateException e)
-                    {
-                        // For demonstration purposes, show the OCE message. 
-                       /* foreach (var v in e.InnerExceptions)
-                            OnStatusChanged(new SynchronizationEvent(v.Message));*/
-                        //Console.WriteLine("msg: " + v.Message);
-                    }
-
-                    OnProcessCanceled();
-                });
+            Task.Factory.StartNew(CancelInternal);
         }
 
+        private void CancelInternal()
+        {
+            OnStatusChanged(new SynchronizationEvent("Synchronization is canceling"));
+            tokenSource2.Cancel();
+
+            try
+            {
+                Task.WaitAll(task);
+            }
+            catch (AggregateException e)
+            {
+            }
+
+            OnProcessCanceled();
+        }
 
         #region events
 
