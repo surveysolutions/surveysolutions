@@ -187,14 +187,14 @@ namespace WB.Core.Infrastructure.Implementation
 
             UpdateStatusMessage("Determining count of events to be republished.");
 
-            int allEventsCount = this.eventStore.CountOfAllEventsWithoutSnapshots();
+            int allEventsCount = this.eventStore.CountOfAllEventsIncludingSnapshots();
 
             DateTime republishStarted = DateTime.Now;
             UpdateStatusMessage(
                 "Acquiring first portion of events. "
                 + GetReadablePublishingDetails(republishStarted, processedEventsCount, allEventsCount, failedEventsCount));
 
-            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEventsWithoutSnapshots())
+            foreach (CommittedEvent[] eventBulk in this.eventStore.GetAllEventsIncludingSnapshots())
             {
                 foreach (CommittedEvent @event in eventBulk)
                 {
