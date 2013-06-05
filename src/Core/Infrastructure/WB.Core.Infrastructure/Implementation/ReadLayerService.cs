@@ -63,7 +63,7 @@ namespace WB.Core.Infrastructure.Implementation
 
         public string GetReadableStatus()
         {
-            return string.Format("{1}{0}Are views being rebuilt now: {2}{0}{3}",
+            return string.Format("{1}{0}{0}Are views being rebuilt now: {2}{0}{0}{3}",
                 Environment.NewLine,
                 statusMessage,
                 areViewsBeingRebuiltNow ? "Yes" : "No",
@@ -281,15 +281,18 @@ namespace WB.Core.Infrastructure.Implementation
             lock (ErrorsLockObject)
             {
                 bool areThereNoErrors = errors.Count == 0;
-                bool shouldShowStackTrace = errors.Count < 10;
 
                 return areThereNoErrors
                     ? "Errors: None"
                     : string.Format(
-                        "Errors: {1}{0}{2}",
+                        "Errors: {1}{0}{0}{2}",
                         Environment.NewLine,
                         errors.Count,
-                        string.Join(Environment.NewLine, ReverseList(errors).Select(error => GetReadableError(error, shouldShowStackTrace)).ToArray()));
+                        string.Join(
+                            Environment.NewLine + Environment.NewLine,
+                            ReverseList(errors)
+                                .Select((error, index) => GetReadableError(error, shouldShowStackTrace: index < 10))
+                                .ToArray()));
             }
         }
 
