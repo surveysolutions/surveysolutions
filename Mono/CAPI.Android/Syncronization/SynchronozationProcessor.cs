@@ -20,7 +20,10 @@ namespace CAPI.Android.Syncronization
         private const int millisecondsTimeout = 2000;
         private const int chunkCount = 10;
         private readonly Context context;
-        public bool IsRunning { get; private set; }
+        private CancellationToken ct;
+        private CancellationTokenSource tokenSource2;
+        private Task task;
+        
 
         public SynchronozationProcessor(Context context)
         {
@@ -28,8 +31,115 @@ namespace CAPI.Android.Syncronization
             Preparation();
         }
 
+        #region operations
+
+        private void Validate()
+        {
+            ExitIfCanceled();
+            OnStatusChanged(new SynchronizationEvent("validating"));
+            Thread.Sleep(millisecondsTimeout);
+            
+        }
+
+        private void Pull()
+        {
+            for (int i = 0; i < chunkCount; i++)
+            {
+                ExitIfCanceled();
+                OnStatusChanged(new SynchronizationEventWithPercent("pulling", i*chunkCount));
+                Thread.Sleep(millisecondsTimeout);
+            }
+                    
+        }
+
+        private void Push()
+        {
+            ExitIfCanceled();
+            for (int i = 0; i < chunkCount; i++)
+            {
+                OnStatusChanged(new SynchronizationEventWithPercent("pushing", i*chunkCount));
+                Thread.Sleep(millisecondsTimeout);
+            }
+        }
+
+        private void Handshake()
+        {
+            ExitIfCanceled();
+            OnStatusChanged(new SynchronizationEvent("handshake"));
+            Thread.Sleep(millisecondsTimeout);
+        }
+
+        #endregion
+
+        public void Run()
+        {
+            tokenSource2 = new CancellationTokenSource();
+            ct = tokenSource2.Token;
+            
+            task = Task.Factory.StartNew(() =>
+                {
+                    Handshake();
+                    Push();
+                    Pull();
+                    Validate();
+                    OnProcessFinished();
+                }, ct);
+        }
+
+        public void Cancel()
+        {
+            
+
+            Task.Factory.StartNew(() =>
+                {
+                    OnStatusChanged(new SynchronizationEvent("Synchronization is canceling"));
+                    tokenSource2.Cancel();
+
+                    try
+                    {
+                        Task.WaitAll(task);
+                    }
+                    catch (AggregateException e)
+                    {
+                        // For demonstration purposes, show the OCE message. 
+                       /* foreach (var v in e.InnerExceptions)
+                            OnStatusChanged(new SynchronizationEvent(v.Message));*/
+                        //Console.WriteLine("msg: " + v.Message);
+                    }
+
+                    OnProcessCanceled();
+                });
+        }
+
+
+        #region events
+
         public event EventHandler<SynchronizationEvent> StatusChanged;
         public event EventHandler ProcessFinished;
+        public event EventHandler ProcessCanceled;
+
+        protected void OnProcessFinished()
+        {
+            var handler = ProcessFinished;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+        protected void OnProcessCanceled()
+        {
+            var handler = ProcessCanceled;
+            if (handler != null)
+                handler(this, EventArgs.Empty);
+        }
+        protected void OnStatusChanged(SynchronizationEvent evt)
+        {
+            if(tokenSource2.IsCancellationRequested)
+                return;
+            var handler = StatusChanged;
+            if (handler != null)
+                handler(this, evt);
+        }
+        #endregion
+
  
         protected void Preparation()
         {
@@ -49,46 +159,11 @@ namespace CAPI.Android.Syncronization
             }
         }
 
-        public void Run()
+        private void ExitIfCanceled()
         {
-            ThreadPool.QueueUserWorkItem(
-                state => RunInternal());
+            if (ct.IsCancellationRequested)
+                ct.ThrowIfCancellationRequested();
         }
-        protected void RunInternal()
-        {
-            IsRunning = true;
-            OnStatusChanged(new SynchronizationEvent("handshake"));
-            Thread.Sleep(millisecondsTimeout);
-
-            for (int i = 0; i < chunkCount; i++)
-            {
-                OnStatusChanged(new SynchronizationEventWithPercent("pushing", i*chunkCount));
-                Thread.Sleep(millisecondsTimeout);
-            }
-            for (int i = 0; i < chunkCount; i++)
-            {
-                OnStatusChanged(new SynchronizationEventWithPercent("pulling", i * chunkCount));
-                Thread.Sleep(millisecondsTimeout);
-            }
-
-            OnStatusChanged(new SynchronizationEvent("validating"));
-            Thread.Sleep(millisecondsTimeout);
-            IsRunning = false;
-            OnProcessFinished();
-        }
-
-        protected void OnProcessFinished()
-        {
-            var handler = ProcessFinished;
-            if (handler != null)
-                handler(this, EventArgs.Empty);
-        }
-
-        protected void OnStatusChanged(SynchronizationEvent evt)
-        {
-            var handler = StatusChanged;
-            if (handler != null)
-                handler(this, evt);
-        }
+ 
     }
 }

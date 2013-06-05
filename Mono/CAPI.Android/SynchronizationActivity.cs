@@ -28,6 +28,7 @@ namespace CAPI.Android
         }
 
         protected ProgressDialog progressDialog;
+        protected SynchronozationProcessor synchronizer;
         #endregion
 
 
@@ -55,8 +56,6 @@ namespace CAPI.Android
             ThrowExeptionIfDialogIsOpened();
 
             PreperaUI();
-
-            SynchronozationProcessor synchronizer;
             try
             {
                  synchronizer = new SynchronozationProcessor(this);
@@ -68,13 +67,15 @@ namespace CAPI.Android
             }
 
             synchronizer.StatusChanged += (s, evt) => this.RunOnUiThread(() => synchronizer_StatusChanged(s, evt));
-            synchronizer.ProcessFinished += (s, evt) => this.RunOnUiThread(() => synchronizer_ProcessFinished(s, evt));
+            synchronizer.ProcessFinished += synchronizer_ProcessFinished;
+            synchronizer.ProcessCanceled += synchronizer_ProcessCanceled;
 
             CreateDialog(ProgressDialogStyle.Spinner, "Initializing");
 
             synchronizer.Run();
         }
 
+        
         private void PreperaUI()
         {
             tvSyncResult.Text = string.Empty;
@@ -89,6 +90,20 @@ namespace CAPI.Android
         private void synchronizer_ProcessFinished(object sender, EventArgs e)
         {
             DestroyDialog();
+            DestroySynchronizer();
+        }
+        private void synchronizer_ProcessCanceled(object sender, EventArgs evt)
+        {
+            DestroyDialog();
+            DestroySynchronizer();
+        }
+
+        private void DestroySynchronizer()
+        {
+            synchronizer.ProcessCanceled -= synchronizer_ProcessCanceled;
+            synchronizer.ProcessFinished -= synchronizer_ProcessFinished;
+            synchronizer.StatusChanged -= synchronizer_StatusChanged;
+            synchronizer = null;
         }
 
         private void synchronizer_StatusChanged(object sender, SynchronizationEvent e)
@@ -134,17 +149,19 @@ namespace CAPI.Android
 
         private void progressDialog_Cancel(object sender, DialogClickEventArgs e)
         {
-            DestroyDialog(); 
+            synchronizer.Cancel();
         }
 
         private void DestroyDialog()
         {
-            if (progressDialog == null)
-                return;
-            progressDialog.Dismiss();
-
-            progressDialog.Dispose();
-            progressDialog = null;
+            this.RunOnUiThread(() =>
+                {
+                    if (progressDialog == null)
+                        return;
+                    progressDialog.Dismiss();
+                    progressDialog.Dispose();
+                    progressDialog = null;
+                });
         }
 
         #endregion
