@@ -11,14 +11,14 @@ namespace WB.UI.Designer
         const string ISRECATPCHAENABLED = "IsReCaptchaEnabled";
         const string RAVENDOCUMENTSTORE = "Raven.DocumentStore";
         const string WKHTMLTOPDFEXECUTABLEPATH = "WKHtmlToPdfExecutablePath";
-        const string ISLOCKINGACCOUNTPOLICYFORCED = "IsLockingAccountPolicyForced";
+        const string ISTRACKINGENABLED = "IsTrackingEnabled";
         const string STORAGELOADINGCHUNKSIZE = "StorageLoadingChunkSize";
         const string ADMINEMAIL = "AdminEmail";
 
         public bool IsReCaptchaEnabled { get; private set; }
         public string RavenDocumentStore { get; private set; }
         public string WKHtmlToPdfExecutablePath { get; private set; }
-        public bool IsLockingAccountPolicyForced { get; private set; }
+        public bool IsTrackingEnabled { get; private set; }
         public int StorageLoadingChunkSize { get; private set; }
         public string AdminEmail { get; set; }
 
@@ -28,7 +28,7 @@ namespace WB.UI.Designer
             IsReCaptchaEnabled = this.GetBoolean(ISRECATPCHAENABLED, true);
             RavenDocumentStore = this.GetString(RAVENDOCUMENTSTORE);
             WKHtmlToPdfExecutablePath = this.GetString(WKHTMLTOPDFEXECUTABLEPATH);
-            IsLockingAccountPolicyForced = this.GetBoolean(ISLOCKINGACCOUNTPOLICYFORCED, true);
+            IsTrackingEnabled = this.GetBoolean(ISTRACKINGENABLED, true);
             StorageLoadingChunkSize = this.GetInt(STORAGELOADINGCHUNKSIZE, 1024);
             AdminEmail = this.GetString(ADMINEMAIL);
         }
