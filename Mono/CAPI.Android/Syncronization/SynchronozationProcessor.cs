@@ -10,8 +10,13 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Settings;
+using CAPI.Android.Syncronization.Pull;
 using CAPI.Android.Utils;
+using Main.Synchronization.Credentials;
+using Ncqrs;
+using Ncqrs.Commanding.ServiceModel;
 
 namespace CAPI.Android.Syncronization
 {
@@ -24,32 +29,43 @@ namespace CAPI.Android.Syncronization
         private CancellationTokenSource tokenSource2;
         private Task task;
         
+        private readonly  RestPuller puller;
+        private readonly PulledDataProcessor pulledDataProcessor;
+        private readonly Dictionary<Guid, bool> remoteChuncksForDownload = new Dictionary<Guid, bool>(); 
 
-        public SynchronozationProcessor(Context context)
+        public SynchronozationProcessor(Context context, ISyncAuthenticator authentificator, IChangeLogManipulator changelog)
         {
             this.context = context;
+            
             Preparation();
+            puller = new RestPuller(SettingsManager.GetSyncAddressPoint(), authentificator);
+            pulledDataProcessor = new PulledDataProcessor(changelog, NcqrsEnvironment.Get<ICommandService>());
         }
 
         #region operations
 
         private void Validate()
         {
-            ExitIfCanceled();
             OnStatusChanged(new SynchronizationEvent("validating"));
-            Thread.Sleep(millisecondsTimeout);
-            
+            foreach (var chunck in remoteChuncksForDownload.Where(c=>c.Value))
+            {
+                pulledDataProcessor.Proccess(chunck.Key);
+            }
         }
 
         private void Pull()
         {
-            for (int i = 0; i < chunkCount; i++)
+            int i = 0;
+            foreach (var chunckId in remoteChuncksForDownload.Keys)
             {
                 ExitIfCanceled();
-                OnStatusChanged(new SynchronizationEventWithPercent("pulling", i*chunkCount));
-                Thread.Sleep(millisecondsTimeout);
+                var data = puller.RequestChunck(chunckId);
+                pulledDataProcessor.Save(data, chunckId);
+                remoteChuncksForDownload[chunckId] = true;
+                OnStatusChanged(new SynchronizationEventWithPercent("pulling",
+                                                                    (int) ((i/remoteChuncksForDownload.Count)*100)));
+                i++;
             }
-                    
         }
 
         private void Push()
@@ -66,6 +82,10 @@ namespace CAPI.Android.Syncronization
         {
             ExitIfCanceled();
             OnStatusChanged(new SynchronizationEvent("handshake"));
+            for (int i = 0; i < 3; i++)
+            {
+                remoteChuncksForDownload.Add(Guid.NewGuid(), false);
+            }
             Thread.Sleep(millisecondsTimeout);
         }
 

@@ -21,6 +21,10 @@ namespace CAPI.Android.Core.Model.ViewModel.Synchronization
             End = end;
         }
 
+        public DraftChangesetDTO()
+        {
+        }
+
         public long Start { get; set; }
         public long? End { get; set; }
     }

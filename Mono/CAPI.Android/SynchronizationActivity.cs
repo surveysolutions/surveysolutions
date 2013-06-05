@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
@@ -10,9 +10,13 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.ChangeLog;
 using CAPI.Android.Extensions;
 using CAPI.Android.Syncronization;
 using CAPI.Android.Utils;
+using Main.Core.Utility;
+using Main.Synchronization.Credentials;
+using Ninject;
 
 namespace CAPI.Android
 {
@@ -58,7 +62,8 @@ namespace CAPI.Android
             PreperaUI();
             try
             {
-                 synchronizer = new SynchronozationProcessor(this);
+                synchronizer = new SynchronozationProcessor(this, CreateAuthenticator(),
+                                                            CapiApplication.Kernel.Get<IChangeLogManipulator>());
             }
             catch (Exception ex)
             {
@@ -75,7 +80,50 @@ namespace CAPI.Android
             synchronizer.Run();
         }
 
-        
+        protected ISyncAuthenticator CreateAuthenticator()
+        {
+            var authentificator = new RestAuthenticator();
+            authentificator.RequestCredentialsCallback += RequestCredentialsCallBack;
+            return authentificator;
+        }
+
+        protected SyncCredentials? RequestCredentialsCallBack(object sender)
+        {
+            if (CapiApplication.Membership.IsLoggedIn)
+            {
+                return CapiApplication.Membership.RequestSyncCredentials();
+            }
+
+            SyncCredentials? result = null;
+            this.RunOnUiThread(
+                () =>
+                {
+                    if (progressDialog != null)
+                        progressDialog.Dismiss();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+                    var view = this.LayoutInflater.Inflate(Resource.Layout.SyncLogin, null);
+                    var teLogin = view.FindViewById<EditText>(Resource.Id.teLogin);
+                    var tePassword = view.FindViewById<EditText>(Resource.Id.tePassword);
+                    var btnLogin = view.FindViewById<Button>(Resource.Id.btnLogin);
+                    alert.SetView(view);
+                    var loginDialog = alert.Show();
+                    loginDialog.SetCancelable(false);
+                    btnLogin.Click += (s, e) =>
+                    {
+                        loginDialog.Hide();
+                        if (progressDialog != null)
+                            progressDialog.Show();
+                        result = new SyncCredentials(teLogin.Text, SimpleHash.ComputeHash(tePassword.Text));
+                    };
+                });
+            while (!result.HasValue)
+            {
+                Thread.Sleep(200);
+            }
+            return result;
+        }
+
         private void PreperaUI()
         {
             tvSyncResult.Text = string.Empty;

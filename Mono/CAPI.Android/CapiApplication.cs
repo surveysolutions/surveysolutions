@@ -13,6 +13,7 @@ using CAPI.Android.Core.Model.FileStorage;
 using CAPI.Android.Core.Model.ViewModel.Dashboard;
 using CAPI.Android.Core.Model.ViewModel.Login;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
+using CAPI.Android.Core.Model.ViewModel.Synchronization;
 using CAPI.Android.Extensions;
 using CAPI.Android.Injections;
 using Cirrious.MvvmCross.Droid.Platform;
@@ -118,10 +119,12 @@ namespace CAPI.Android
             InitFileStorage(bus);
 
             InitDashboard(bus);
+            
+           // InitChangeLog(bus);
 
             #endregion
 
-           
+
         }
 
         private void InitQuestionnariesStorage(InProcessEventBus bus)
@@ -173,6 +176,17 @@ namespace CAPI.Android
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
         }
 
+        private void InitChangeLog(InProcessEventBus bus)
+        {
+            var publicStore = new SqliteDenormalizerStorage<PublicChangeSetDTO>();
+            var draftStore = new SqliteDenormalizerStorage<DraftChangesetDTO>();
+
+            Kernel.Unbind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<PublicChangeSetDTO>>().ToConstant(publicStore);
+
+            Kernel.Unbind<IFilterableDenormalizerStorage<DraftChangesetDTO>>();
+            Kernel.Bind<IFilterableDenormalizerStorage<DraftChangesetDTO>>().ToConstant(draftStore);
+        }
         public override void OnCreate()
         {
             base.OnCreate();
