@@ -229,9 +229,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
             }
         }
 
-        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots()
+        public IEnumerable<CommittedEvent[]> GetAllEventsWithoutSnapshots(int bulkSize)
         {
-            int bulkSize = 32;
             int returnedEventCount = 0;
 
             while (true)
