@@ -126,7 +126,15 @@ namespace CAPI.Android
             progressDialog.SetProgressStyle(dialogStyle);
             progressDialog.SetMessage(title);
             progressDialog.SetCancelable(false);
+
+            progressDialog.SetButton("Cancel", progressDialog_Cancel);
+
             progressDialog.Show();
+        }
+
+        private void progressDialog_Cancel(object sender, DialogClickEventArgs e)
+        {
+            DestroyDialog(); 
         }
 
         private void DestroyDialog()
