@@ -96,7 +96,7 @@
 
         private static string ToRavenId(Guid id)
         {
-            return string.Format("{0}:{1}", ViewName, id.ToString());
+            return string.Format("{0}${1}", ViewName, id.ToString());
         }
     }
 }
