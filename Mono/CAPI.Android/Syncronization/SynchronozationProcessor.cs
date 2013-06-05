@@ -17,7 +17,7 @@ namespace CAPI.Android.Syncronization
 {
     public class SynchronozationProcessor
     {
-        private const int millisecondsTimeout = 2000;
+        private const int millisecondsTimeout = 1000;
         private const int chunkCount = 10;
         private readonly Context context;
         private CancellationToken ct;
