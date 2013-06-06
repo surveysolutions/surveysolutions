@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Authentication;
 using System.Text;
+using System.Threading;
 using Main.Synchronization.Credentials;
 using RestSharp;
 using SynchronizationMessages.Synchronization;
@@ -11,20 +12,21 @@ using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android.Syncronization.Pull
 {
-    public class RestPuller
+    public class RestPull
     {
         private readonly string baseAddress;
         private const string getChunckPath = "GetChunckPath";
         private readonly ISyncAuthenticator validator;
 
-        public RestPuller(string baseAddress, ISyncAuthenticator validator)
+        public RestPull(string baseAddress, ISyncAuthenticator validator)
         {
             this.baseAddress = baseAddress;
             this.validator = validator;
         }
         public byte[] RequestChunck(Guid id)
         {
-            return PackageHelper.Compress(string.Format("hello capi {0}", id));
+            Thread.Sleep(500);
+            return PackageHelper.Compress(string.Format("hello capi pull {0}", id));
             /*var restClient = new RestClient(this.baseAddress);
             var request = new RestRequest(getChunckPath, Method.POST);
             var currentCredentials = validator.RequestCredentials();

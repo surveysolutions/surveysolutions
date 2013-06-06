@@ -188,8 +188,12 @@
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="SynchronizationActivity.cs" />
     <Compile Include="SynchronizationActivityOld.cs" />
-    <Compile Include="Syncronization\Pull\PulledDataProcessor.cs" />
-    <Compile Include="Syncronization\Pull\RestPuller.cs" />
+    <Compile Include="Syncronization\Handshake\RestHandshake.cs" />
+    <Compile Include="Syncronization\Pull\PullDataProcessor.cs" />
+    <Compile Include="Syncronization\Pull\RestPull.cs" />
+    <Compile Include="Syncronization\Push\ChunckDescription.cs" />
+    <Compile Include="Syncronization\Push\PushDataProcessor.cs" />
+    <Compile Include="Syncronization\Push\RestPush.cs" />
     <Compile Include="Syncronization\RemoteServiceEventStreamRestProvider.cs" />
     <Compile Include="Syncronization\RemoteCollector.cs" />
     <Compile Include="Syncronization\RestAuthenticator.cs" />

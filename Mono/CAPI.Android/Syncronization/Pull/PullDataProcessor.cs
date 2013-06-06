@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using System.Threading;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -18,11 +18,11 @@ using SynchronizationMessages.Synchronization;
 
 namespace CAPI.Android.Syncronization.Pull
 {
-    public class PulledDataProcessor
+    public class PullDataProcessor
     {
         private const string syncTemp = "sync_temp";
 
-        public PulledDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
+        public PullDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
             this.changelog = changelog;
             this.commandService = commandService;
@@ -44,6 +44,8 @@ namespace CAPI.Android.Syncronization.Pull
 
         public void Proccess(Guid chunckId)
         {
+
+            Thread.Sleep(500);
             var path = GetFileName(chunckId);
             var unzippedData = string.Empty;
             using (var fs = File.Open(path, FileMode.Open))
