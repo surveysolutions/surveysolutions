@@ -2,14 +2,32 @@
 @using Main.Core.View.Question
 @model Main.Core.View.ICompositeView
 
-<p>
-
-    @this.Model.Title
-    <br/>
-
+<div>
+    
     @if (this.Model is QuestionView)
     {
         Html.RenderPartial("_RenderQuestionDetails", (QuestionView) this.Model);
+    }
+    else
+    {
+
+
+        if (this.Model.Parent == ViewBag.QuestionnaireGuid)
+        {
+            <h1>
+                @this.Model.Title
+            </h1>
+        }
+        else
+        {
+            <h2>
+                @this.Model.Title
+            </h2>
+        }
+        @*<dl>
+            <dt>Guid: </dt><dd>@Model.PublicKey</dd>
+            <dt>parentguid:</dt><dd>@Model.Parent</dd>
+        </dl>*@
     }
 
     @if (this.Model.Children != null && this.Model.Children.Count > 0)
@@ -22,4 +40,4 @@
         </div>
     }
 
-</p>
+</div>
