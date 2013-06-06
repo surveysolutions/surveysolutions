@@ -4,7 +4,6 @@ using Main.Core.Documents;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
@@ -23,12 +22,13 @@ namespace CAPI.Android.Core.Model.EventHandlers
         /// The _document storage.
         /// </summary>
         private readonly IDenormalizerStorage<CompleteQuestionnaireView> _documentStorage;
-        #region Implementation of IEventHandler<in SnapshootLoaded>
+      
 
         public CompleteQuestionnaireViewDenormalizer(IDenormalizerStorage<CompleteQuestionnaireView> documentStorage)
         {
             _documentStorage = documentStorage;
         }
+        #region Implementation of IEventHandler<in NewCompleteQuestionnaireCreated>
 
         public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {

@@ -88,8 +88,7 @@ namespace Main.Core
 
             NcqrsEnvironment.SetDefault<ISnapshottingPolicy>(new SimpleSnapshottingPolicy(1));
 
-            var snpshotStore = new InMemorySnapshootStore(NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore,
-                                                          new InMemoryEventStore());
+            var snpshotStore = new InMemoryEventStore();
             // key param for storing im memory
             NcqrsEnvironment.SetDefault<ISnapshotStore>(snpshotStore);
 
@@ -98,8 +97,6 @@ namespace Main.Core
 #if !MONODROID
             RegisterEventHandlers(bus, kernel);
 #endif
-            NcqrsEnvironment.SetDefault<IAggregateSnapshotter>(
-                new CommitedAggregateSnapshotter(NcqrsEnvironment.Get<IAggregateSnapshotter>()));
             NcqrsEnvironment.SetDefault<IEventBus>(bus);
         }
 
@@ -174,9 +171,6 @@ namespace Main.Core
                 service.RegisterExecutor(type, new UoWMappedCommandExecutor(mapper));
             }
 
-            service.RegisterExecutor(typeof(CreateSnapshotForAR),
-                                    new UoWMappedCommandExecutor(new SnapshotCommandMapper()));
-        
             return service;
         }
 

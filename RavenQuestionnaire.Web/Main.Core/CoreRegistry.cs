@@ -124,7 +124,7 @@ namespace Main.Core
 
         protected virtual void RegisterEventHandlers()
         {
-            BindInterface(GetAssweblysForRegister().Union(new Assembly[]{typeof(SnapshootLoaded).Assembly}), typeof(IEventHandler<>), (c) => this.Kernel);
+            BindInterface(GetAssweblysForRegister(), typeof(IEventHandler<>), (c) => this.Kernel);
         }
 
         protected virtual void RegisterDenormalizers()

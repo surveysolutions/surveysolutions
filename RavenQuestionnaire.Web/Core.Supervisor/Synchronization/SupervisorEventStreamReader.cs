@@ -99,13 +99,13 @@ namespace Core.Supervisor.Synchronization
             var result = new List<SyncItemsMeta>();
 
             List<Guid> users = GetUsers();
-            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", GetLastEventFromStream(i))));
+            result.AddRange(users.Select(i => new SyncItemsMeta(i, "u", null)));
 
             List<Guid> questionnaires = GetQuestionnaires(users);
-            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", GetLastEventFromStream(i))));
+            result.AddRange(questionnaires.Select(i => new SyncItemsMeta(i, "q", null)));
 
             List<Guid> files = GetFiles();
-            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", GetLastEventFromStream(i))));
+            result.AddRange(files.Select(i => new SyncItemsMeta(i, "f", null)));
 
             return result;
         }

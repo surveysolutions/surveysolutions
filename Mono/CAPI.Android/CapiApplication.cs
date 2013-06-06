@@ -36,8 +36,6 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 using Ninject;
 using Main.Synchronization.SycProcessRepository;
 using UserDenormalizer = CAPI.Android.Core.Model.EventHandlers.UserDenormalizer;
@@ -143,7 +141,7 @@ namespace CAPI.Android
             
             var dashboardeventHandler =
                 new DashboardDenormalizer(questionnaireStore, surveyStore);
-            bus.RegisterHandler(dashboardeventHandler, typeof (SnapshootLoaded));
+            bus.RegisterHandler(dashboardeventHandler, typeof (NewCompleteQuestionnaireCreated));
             bus.RegisterHandler(dashboardeventHandler, typeof (QuestionnaireStatusChanged));
         }
 

@@ -5,14 +5,13 @@
 // -----------------------------------------------------------------------
 
 using System;
+using Main.Core.Documents;
 using Main.Core.View;
 using Main.DenormalizerStorage;
 using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
 
 namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
 {
@@ -47,16 +46,21 @@ namespace CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails
         public void GenerateEvents(Guid questionnaireId)
         {
             var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-            var eventStore = NcqrsEnvironment.Get<IEventStore>() as ISnapshootEventStore;
-            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>() as InMemorySnapshootStore;
+            var eventStore = NcqrsEnvironment.Get<IEventStore>();
+            var snapshotStore = NcqrsEnvironment.Get<ISnapshotStore>();
 
             long minVersion = 0;
-            var snapshot = eventStore.GetLatestSnapshoot(questionnaireId);
+            var snapshot = snapshotStore.GetSnapshot(questionnaireId, long.MaxValue);
             if (snapshot != null)
             {
-                bus.Publish(snapshot);
-                snapshotStore.SaveEventToSnapshotStore(snapshot);
-                minVersion = snapshot.EventSequence + 1;
+                var originalDoc = snapshot.Payload as CompleteQuestionnaireDocument;
+                if (originalDoc != null)
+                {
+                    this._documentStorage.Store(
+                        new CompleteQuestionnaireView(originalDoc),
+                        questionnaireId);
+                    minVersion = snapshot.Version + 1;
+                }
             }
             foreach (CommittedEvent committedEvent in
                 eventStore.ReadFrom(questionnaireId, minVersion, long.MaxValue))

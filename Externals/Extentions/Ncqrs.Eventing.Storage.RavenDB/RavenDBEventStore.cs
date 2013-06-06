@@ -8,7 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 using Raven.Client.Indexes;
 
 namespace Ncqrs.Eventing.Storage.RavenDB
@@ -19,8 +19,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     using System.Linq;
     using System.Linq.Expressions;
 
-    using Ncqrs.Restoring.EventStapshoot;
-
     using Raven.Client;
     using Raven.Client.Document;
 
@@ -29,7 +27,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
     /// <summary>
     /// The raven DB event store.
     /// </summary>
-    public class RavenDBEventStore : IStreamableEventStore, ISnapshootEventStore
+    public class RavenDBEventStore : IStreamableEventStore
     {
         #region Fields
 
@@ -161,101 +159,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
         }
 
-
-        public Guid? GetLastEvent(Guid aggregateRootId)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                var eventLast = session
-                    .Query<StoredEvent, Event_ByEventSource>().AsProjection<StoredEventWithoutPayload>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                    .Where(e => e.EventSourceId == aggregateRootId).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
-
-                if (eventLast != null)
-                    return eventLast.EventIdentifier;
-                return null;
-            }
-        }
-
-        public bool IsEventPresent(Guid aggregateRootId, Guid eventIdentifier)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return session.Query<StoredEvent, Event_ByEventSource>().Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout))).Any(e => e.EventSourceId == aggregateRootId && e.EventIdentifier == eventIdentifier);
-            }
-        }
-
-        public CommittedEventStream ReadFromWithoutPayload(Guid id, long minVersion, long maxVersion)
-        {
-            List<CommittedEvent> result = new List<CommittedEvent>();
-            int page = 0;
-            while (true)
-            {
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    var chunk = session
-                        .Query<StoredEvent, Event_ByEventSource>()
-                        .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .AsProjection<StoredEventWithoutPayload>()
-                        .Where(
-                            x => x.EventSourceId == id && x.EventSequence >= minVersion && x.EventSequence <= maxVersion).OrderBy(e => e.EventSequence)
-                        .Skip(page * pageSize)
-                        .Take(pageSize).ToList();
-                        
-
-                    if (!chunk.Any())
-                    {
-                        break;
-                    }
-                    result.AddRange(chunk.Select(
-                            e =>
-                            new CommittedEvent(Guid.Empty, e.EventIdentifier, e.EventSourceId, e.EventSequence,
-                                               DateTime.Now, new object(), new Version(1, 1))));
-                    page++;
-                }
-            }
-
-            return new CommittedEventStream(id, result);
-        }
-
-        public int CountOfAllEventsWithoutSnapshots()
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-                return session
-                    .Query<StoredEvent>()
-                    .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                    .Where(@event => !@event.IsSnapshot)
-                    .Count();
-            }
-        }
-
-        public IEnumerable<CommittedEvent> GetAllEventsWithoutSnapshots()
-        {
-            int returnedEventCount = 0;
-
-            while (true)
-            {
-                using (IDocumentSession session = this.DocumentStore.OpenSession())
-                {
-                    var storedEvent = session
-                        .Query<StoredEvent>()
-                        .Customize(x => x.WaitForNonStaleResultsAsOfNow())
-                        .Where(@event => !@event.IsSnapshot)
-                        .OrderBy(y => y.EventSequence)
-                        .Skip(returnedEventCount)
-                        .Take(1)
-                        .SingleOrDefault();
-
-                    bool allEventsWereReturned = storedEvent == null;
-                    if (allEventsWereReturned)
-                        yield break;
-
-                    yield return ToCommittedEvent(storedEvent);
-                    returnedEventCount++;
-                }
-            }
-        }
-
         /// <summary>
         /// The read from.
         /// </summary>
@@ -332,23 +235,6 @@ namespace Ncqrs.Eventing.Storage.RavenDB
 
                 throw new ConcurrencyException(sourceId, version);
             }
-        }
-
-        public CommittedEvent GetLatestSnapshoot(Guid aggreagateRootId)
-        {
-            using (IDocumentSession session = this.DocumentStore.OpenSession())
-            {
-
-                var snapshoot =
-                    session.Query<StoredEvent, Event_ByEventSource>()
-                           .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                           .Where(e => e.EventSourceId == aggreagateRootId &&  e.IsSnapshot ).OrderByDescending(e=>e.EventSequence).FirstOrDefault();
-                if (snapshoot!=null)
-                {
-                    return ToCommittedEvent(snapshoot);
-                }
-            }
-            return null;
         }
 
         #endregion
@@ -434,8 +320,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     CommitId = commitId,
                     Data = uncommittedEvent.Payload,
                     EventSequence = uncommittedEvent.EventSequence,
-                    EventSourceId = uncommittedEvent.EventSourceId,
-                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded
+                    EventSourceId = uncommittedEvent.EventSourceId
                 };
         }
 

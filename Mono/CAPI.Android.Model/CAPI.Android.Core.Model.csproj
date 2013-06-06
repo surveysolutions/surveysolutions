@@ -75,6 +75,7 @@
     <Compile Include="ProjectionStorage\ProjectionQuery.cs" />
     <Compile Include="ProjectionStorage\ProjectionsDataBaseHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnapshotStore\AndroidSnapshotStore.cs" />
     <Compile Include="Syncronization\AClientEventStreamProvider.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardFactory.cs" />
     <Compile Include="ViewModel\Dashboard\DashboardInput.cs" />
@@ -137,10 +138,6 @@
     <ProjectReference Include="..\AndroidNcqrs.Eventing.Storage.SQLite\AndroidNcqrs.Eventing.Storage.SQLite.csproj">
       <Project>{f9a0b560-a8bf-4914-88fb-7d98df4242ef}</Project>
       <Name>AndroidNcqrs.Eventing.Storage.SQLite</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AndroidNcqrs.Restoring.EventStapshoot\AndroidNcqrs.Restoring.EventStapshoot.csproj">
-      <Project>{30be60c9-980f-40e1-a8fd-c2a5959827d3}</Project>
-      <Name>AndroidNcqrs.Restoring.EventStapshoot</Name>
     </ProjectReference>
     <ProjectReference Include="..\AndroidNCQRS\AndroidNCQRS.csproj">
       <Project>{1b9537f5-8650-467a-a280-df6ea396d6c5}</Project>

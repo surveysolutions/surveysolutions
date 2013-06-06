@@ -81,9 +81,7 @@ namespace Core.Supervisor.Tests
             var userId = Guid.Parse("11111111111111111111111111111111");
             var lastEventId = Guid.Parse("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
 
-            streamableEventStore.Setup(x => x.GetLastEvent(userId))
-                                .Returns(lastEventId);
-
+           
             denormalizerMock.Setup(x => x.Query(It.IsAny<Func<IQueryable<UserDocument>, List<Guid>>>()))
                             .Returns(new List<Guid> { userId });
 

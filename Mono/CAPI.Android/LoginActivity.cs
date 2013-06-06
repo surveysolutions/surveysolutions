@@ -22,7 +22,7 @@ using Ncqrs;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-using Ncqrs.Restoring.EventStapshoot.EventStores;
+
 using Ninject;
 
 namespace CAPI.Android

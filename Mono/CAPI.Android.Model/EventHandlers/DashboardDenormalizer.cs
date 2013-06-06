@@ -9,11 +9,11 @@ using Main.Core.Entities.SubEntities.Complete;
 using Main.Core.Events.Questionnaire.Completed;
 using Main.DenormalizerStorage;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Restoring.EventStapshoot;
+
 
 namespace CAPI.Android.Core.Model.EventHandlers
 {
-    public class DashboardDenormalizer : IEventHandler<SnapshootLoaded>, IEventHandler<QuestionnaireStatusChanged>{
+    public class DashboardDenormalizer : IEventHandler<NewCompleteQuestionnaireCreated>, IEventHandler<QuestionnaireStatusChanged>{
         private readonly IDenormalizerStorage<QuestionnaireDTO> _questionnaireDTOdocumentStorage;
         private readonly IDenormalizerStorage<SurveyDto> _surveyDTOdocumentStorage;
 
@@ -27,12 +27,9 @@ namespace CAPI.Android.Core.Model.EventHandlers
 
         #region Implementation of IEventHandler<in SnapshootLoaded>
 
-        public void Handle(IPublishedEvent<SnapshootLoaded> evnt)
+        public void Handle(IPublishedEvent<NewCompleteQuestionnaireCreated> evnt)
         {
-            var document = evnt.Payload.Template.Payload as CompleteQuestionnaireDocument;
-            if (document == null)
-                return;
-          
+            var document = evnt.Payload.Questionnaire;
             PropeedCompleteQuestionnaire(document);
         }
 

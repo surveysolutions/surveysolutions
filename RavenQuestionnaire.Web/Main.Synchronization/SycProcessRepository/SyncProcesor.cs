@@ -197,14 +197,6 @@ namespace Main.Synchronization.SycProcessRepository
         /// </returns>
         protected IEnumerable<UncommittedEventStream> BuildEventStreams(IEnumerable<AggregateRootEvent> stream)
         {
-            if (streamableEventStore != null)
-            {
-                return stream.GroupBy(x => x.EventSourceId).Select(
-                    g =>
-                    g.CreateUncommittedEventStream(this.streamableEventStore.ReadFromWithoutPayload(g.Key, long.MinValue,
-                                                                                                    long.MaxValue)));
-
-            }
             return
                 stream.GroupBy(x => x.EventSourceId).Select(
                     g => g.CreateUncommittedEventStream(this.eventStore.ReadFrom(g.Key, long.MinValue, long.MaxValue)));
@@ -285,17 +277,6 @@ namespace Main.Synchronization.SycProcessRepository
             if (uncommittedEvent == null || uncommittedEvent.Payload == null)
             {
                 return;
-            }
-
-            if (uncommittedEvent.Payload is SnapshootLoaded)
-            {
-                var document =
-                    (uncommittedEvent.Payload as SnapshootLoaded).Template.Payload as CompleteQuestionnaireDocument;
-                if (document != null)
-                {
-                    CompleteQuestionnaireBrowseItem item = this.surveys.GetById(document.PublicKey);
-                    this.MeasureDifference(item, document);
-                }
             }
 
             if (uncommittedEvent.Payload is NewUserCreated)

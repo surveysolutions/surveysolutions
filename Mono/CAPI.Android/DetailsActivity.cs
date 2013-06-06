@@ -6,12 +6,15 @@ using Android.Support.V4.View;
 using Android.Widget;
 using CAPI.Android.Controls.QuestionnaireDetails;
 using CAPI.Android.Core;
+using CAPI.Android.Core.Model.SnapshotStore;
 using CAPI.Android.Core.Model.ViewModel.QuestionnaireDetails;
 using System.Linq;
 using CAPI.Android.Events;
 using CAPI.Android.Extensions;
 using Main.Core.Domain;
-using Ncqrs.Restoring.EventStapshoot;
+using Ncqrs;
+using Ncqrs.Eventing.Storage;
+
 
 /*
 using FragmentTransaction = Android.App.FragmentTransaction;
@@ -161,6 +164,13 @@ namespace CAPI.Android
             GC.Collect();
         }
 
+        public override void Finish()
+        {
+            base.Finish();
+            var storage = NcqrsEnvironment.Get<ISnapshotStore>() as AndroidSnapshotStore;
+            if (storage != null)
+                storage.Flush(QuestionnaireId);
+        }
 
         public override void OnLowMemory()
         {
