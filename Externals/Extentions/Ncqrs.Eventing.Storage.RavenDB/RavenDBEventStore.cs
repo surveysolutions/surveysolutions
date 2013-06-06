@@ -7,6 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Net;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Ncqrs.Restoring.EventStapshoot.EventStores;
 using Raven.Client.Indexes;
@@ -66,7 +67,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         /// <param name="pageSize"></param>
         public RavenDBEventStore(string ravenUrl, int pageSize)
         {
-            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions() }.Initialize();
+            this.DocumentStore = new DocumentStore { Url = ravenUrl, Conventions = CreateConventions()}.Initialize();
             this.DocumentStore.JsonRequestFactory.ConfigureRequest += (sender, e) =>
                 {
                     e.Request.Timeout = 10 * 60 * 1000; /*ms*/
@@ -134,7 +135,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     List<UniqueEventsResults> chunk = session
                         .Query<StoredEvent, UniqueEventsIndex>()
                         .Customize(x => x.WaitForNonStaleResults(TimeSpan.FromSeconds(timeout)))
-                        .AsProjection<UniqueEventsResults>()
+                        .AsProjection<UniqueEventsResults>().OrderBy(x=>x.EventTimeStamp)
                         .Skip(page*pageSize)
                         .Take(pageSize)
                         .ToList();
@@ -156,7 +157,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                         .ToList());
             }
 
-            return retval;
+            return retval/*.OrderBy(e=>e.EventTimeStamp)*/;
             //  return from chunk in this.GetStreamByChunk() from item in chunk select ToCommittedEvent(item);
 
         }
@@ -464,7 +465,8 @@ namespace Ncqrs.Eventing.Storage.RavenDB
                     Data = uncommittedEvent.Payload,
                     EventSequence = uncommittedEvent.EventSequence,
                     EventSourceId = uncommittedEvent.EventSourceId,
-                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded
+                    IsSnapshot = uncommittedEvent.Payload is SnapshootLoaded,
+                    EventType = uncommittedEvent.Payload.GetType().Name
                 };
         }
 

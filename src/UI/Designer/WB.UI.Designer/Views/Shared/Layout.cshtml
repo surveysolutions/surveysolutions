@@ -1,5 +1,6 @@
 @using WB.UI.Designer
 @using WB.UI.Shared.Web.Membership
+@using WB.UI.Designer.Code
 @{
     IMembershipUserService userHelper = ViewBag.UserHelper;
 }
@@ -13,6 +14,7 @@
     @this.RenderSection("Styles", required: false)
     @this.RenderSection("Scripts", required: false)
     @this.Html.Partial("_html5shiv")
+    @Html.Partial("_trackers")
     @* favicons and touch icons go here *@
 </head>
 <body class="loading">

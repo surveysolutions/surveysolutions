@@ -462,6 +462,10 @@
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
     <Content Include="Views\Shared\_alerts.cshtml" />
     <Content Include="Views\Team\_PartialGridInterviewers.cshtml" />
+    <Content Include="Configuration\Vitalii.Supervisor.Web.config">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Service References\DesignerPublicService\PublicService2.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -593,7 +597,6 @@
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Configuration\Stacy.Supervisor.Web.config" />
     <Content Include="Configuration\Dev.Supervisor.Web.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

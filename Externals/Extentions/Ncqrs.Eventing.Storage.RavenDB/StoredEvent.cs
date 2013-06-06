@@ -21,5 +21,7 @@ namespace Ncqrs.Eventing.Storage.RavenDB
         public Version Version { get; set; }
         [JsonProperty(TypeNameHandling = TypeNameHandling.All)]
         public object Data { get; set; }
+
+        public string EventType { get; set; }
     }
 }

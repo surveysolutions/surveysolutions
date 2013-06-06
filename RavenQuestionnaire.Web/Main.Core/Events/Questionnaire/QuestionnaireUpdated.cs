@@ -31,6 +31,11 @@ namespace Main.Core.Events.Questionnaire
         /// </summary>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Gets or sets the status of questionnaire.
+        /// </summary>
+        public bool IsPublic { get; set; }
+
         #endregion
     }
 }

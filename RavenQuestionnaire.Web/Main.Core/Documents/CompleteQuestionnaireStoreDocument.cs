@@ -134,6 +134,12 @@ namespace Main.Core.Documents
         /// </summary>
         public Guid? CreatedBy { get; set; }
 
+
+        /// <summary>
+        /// Gets or sets the is public.
+        /// </summary>
+        public bool IsPublic { get; set; }
+
         /// <summary>
         /// Gets or sets the propagated.
         /// </summary>
