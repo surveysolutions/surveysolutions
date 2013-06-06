@@ -11,3 +11,29 @@
     padding: 15px;
     text-align: center;
 }
+
+header {
+    font-weight: bold; 
+    font-size: 140%; 
+    text-align: center; 
+    padding-bottom: 10px;
+}
+h1 {
+    font-weight: bold;
+    font-size: 120%;
+}
+h2 {
+    font-weight: bold;
+    font-style: italic;
+    font-size: 100%;
+}
+h3 {
+    font-weight: normal;
+    font-size: 100%;
+}
+.answer-options {
+    list-style-type: none;
+}
+.answer-value {
+    font-weight: bold;
+}
