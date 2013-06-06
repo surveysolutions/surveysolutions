@@ -117,7 +117,7 @@ namespace Core.HQ.Synchronization
 
             foreach (var item in model)
             {
-                retval.AddRange(this.GetEventStreamById<QuestionnaireAR>(item.QuestionnaireId));
+                retval.AddRange(this.GetEventStreamById(item.QuestionnaireId));
             }
         }
 
@@ -132,7 +132,7 @@ namespace Core.HQ.Synchronization
             IQueryable<UserDocument> model = this.denormalizer.Query<UserDocument>().Where(q => q.Roles != null && !q.Roles.Contains(UserRoles.Administrator));
             foreach (UserDocument item in model)
             {
-                retval.AddRange(base.GetEventStreamById<UserAR>(item.PublicKey));
+                retval.AddRange(base.GetEventStreamById(item.PublicKey));
             }
         }
 
@@ -154,7 +154,7 @@ namespace Core.HQ.Synchronization
                     continue;
                 }
 
-                retval.AddRange(base.GetEventStreamById<CompleteQuestionnaireAR>(item.CompleteQuestionnaireId));
+                retval.AddRange(base.GetEventStreamById(item.CompleteQuestionnaireId));
             }
         }
 
@@ -170,7 +170,7 @@ namespace Core.HQ.Synchronization
             
             foreach (FileDescription item in model)
             {
-                retval.AddRange(base.GetEventStreamById<FileAR>(Guid.Parse(item.FileName)));
+                retval.AddRange(base.GetEventStreamById(Guid.Parse(item.FileName)));
             }
         }
 
