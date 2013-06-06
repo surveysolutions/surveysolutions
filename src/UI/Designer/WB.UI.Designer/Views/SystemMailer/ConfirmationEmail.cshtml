@@ -1,0 +1,7 @@
+@model WB.UI.Designer.Models.EmailConfirmationModel
+
+Hello @Model.UserName, <br/>
+<br/> 
+To complete the registration process click on this link 
+@Url.Action("RegisterConfirmation", "Account", new { token = Model.ConfirmationToken }, Request.Url.Scheme)
+

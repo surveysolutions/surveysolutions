@@ -201,7 +201,8 @@
         commands[config.commands.updateQuestionnaire] = function (questionnaire) {
             return {
                 questionnaireId: questionnaire.id(),
-                title: questionnaire.title()
+                title: questionnaire.title(),
+                isPublic : questionnaire.isPublic()
             };
         };
 
