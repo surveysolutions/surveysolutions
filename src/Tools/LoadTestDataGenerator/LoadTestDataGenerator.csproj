@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="LoadTestDataGeneratorRegistry.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="CompositionRoot.cs" />
