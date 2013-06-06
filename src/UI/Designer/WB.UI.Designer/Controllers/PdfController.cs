@@ -25,6 +25,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult PreviewQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            ViewBag.QuestionnaireGuid = questionnaire.PublicKey;
 
             return this.View(questionnaire);
         }
@@ -32,6 +33,7 @@ namespace WB.UI.Designer.Controllers
         public ActionResult RenderQuestionnaire(Guid id)
         {
             QuestionnaireView questionnaire = this.LoadQuestionnaire(id);
+            ViewBag.QuestionnaireGuid = questionnaire.PublicKey;
 
             return this.View(questionnaire);
         }
