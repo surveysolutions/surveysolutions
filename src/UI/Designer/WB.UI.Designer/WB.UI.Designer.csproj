@@ -253,7 +253,13 @@
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Code\PasswordPolicyFactory.cs" />
+    <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
+    <Compile Include="Pdf\PdfConvertEnvironment.cs" />
+    <Compile Include="Pdf\PdfConvertException.cs" />
+    <Compile Include="Pdf\PdfConvertTimeoutException.cs" />
+    <Compile Include="Pdf\PdfDocument.cs" />
+    <Compile Include="Pdf\PdfOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ExpressionReplacer.cs" />
     <Compile Include="Utils\IExpressionReplacer.cs" />
