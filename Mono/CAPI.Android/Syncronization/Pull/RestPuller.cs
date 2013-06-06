@@ -6,6 +6,7 @@ using System.Security.Authentication;
 using System.Text;
 using Main.Synchronization.Credentials;
 using RestSharp;
+using SynchronizationMessages.Synchronization;
 using WB.Core.SharedKernel.Utils.Logging;
 
 namespace CAPI.Android.Syncronization.Pull
@@ -21,11 +22,10 @@ namespace CAPI.Android.Syncronization.Pull
             this.baseAddress = baseAddress;
             this.validator = validator;
         }
-
-        public string RequestChunck(Guid id)
+        public byte[] RequestChunck(Guid id)
         {
-            return string.Format("hello capi {}", id);
-            var restClient = new RestClient(this.baseAddress);
+            return PackageHelper.Compress(string.Format("hello capi {0}", id));
+            /*var restClient = new RestClient(this.baseAddress);
             var request = new RestRequest(getChunckPath, Method.POST);
             var currentCredentials = validator.RequestCredentials();
             request.AddParameter("login", currentCredentials.Login);
@@ -46,7 +46,7 @@ namespace CAPI.Android.Syncronization.Pull
 
                 throw exception;
             }
-            return response.Content;
+            return response.Content;*/
         }
     }
 }

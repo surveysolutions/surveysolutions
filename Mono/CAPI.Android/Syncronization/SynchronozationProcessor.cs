@@ -47,33 +47,38 @@ namespace CAPI.Android.Syncronization
         private void Validate()
         {
             OnStatusChanged(new SynchronizationEvent("validating"));
-            foreach (var chunck in remoteChuncksForDownload.Where(c=>c.Value))
+            foreach (var chunck in remoteChuncksForDownload.Where(c=>c.Value).Select(c=>c.Key).ToList())
             {
-                pulledDataProcessor.Proccess(chunck.Key);
+                pulledDataProcessor.Proccess(chunck);
             }
         }
 
         private void Pull()
         {
-            int i = 0;
-            foreach (var chunckId in remoteChuncksForDownload.Keys)
+            ExitIfCanceled();
+            OnStatusChanged(new SynchronizationEventWithPercent("pulling", 0));
+            int i = 1;
+            foreach (var chunckId in remoteChuncksForDownload.Select(c=>c.Key).ToList())
             {
-                ExitIfCanceled();
+                if(ct.IsCancellationRequested)
+                    return;
                 var data = puller.RequestChunck(chunckId);
                 pulledDataProcessor.Save(data, chunckId);
                 remoteChuncksForDownload[chunckId] = true;
                 OnStatusChanged(new SynchronizationEventWithPercent("pulling",
-                                                                    (int) ((i/remoteChuncksForDownload.Count)*100)));
+                                                                    (i*100)/remoteChuncksForDownload.Count));
+                Thread.Sleep(millisecondsTimeout/2);
                 i++;
             }
         }
 
         private void Push()
         {
-            ExitIfCanceled();
+            OnStatusChanged(new SynchronizationEventWithPercent("pushing", 0));
             for (int i = 0; i < chunkCount; i++)
             {
-                OnStatusChanged(new SynchronizationEventWithPercent("pushing", i*chunkCount));
+                ExitIfCanceled();
+                OnStatusChanged(new SynchronizationEventWithPercent("pushing", (i + 1)*chunkCount));
                 Thread.Sleep(millisecondsTimeout);
             }
         }

@@ -93,37 +93,8 @@ namespace CAPI.Android
         protected CapiApplication(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
-
-            // initialize app if necessary
-            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
-            {
-                _setup.Initialize();
-            }
-
-            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
-            kernel.Bind<Context>().ToConstant(this);
-            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
-            NcqrsInit.Init(kernel);
-     
-            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
-
-            #region register handlers
-
-            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
-
-            InitQuestionnariesStorage(bus);
-
-            InitUserStorage(bus);
-
-            InitFileStorage(bus);
-
-            InitDashboard(bus);
-            
-           // InitChangeLog(bus);
-
-            #endregion
-
+           
+           
 
         }
 
@@ -193,6 +164,37 @@ namespace CAPI.Android
             CrashManager.Initialize(this);
             CrashManager.AttachSender(() => new FileReportSender("CAPI"));
             RestoreAppState();
+
+            var _setup = MvxAndroidSetupSingleton.GetOrCreateSetup(Context);
+
+            // initialize app if necessary
+            if (_setup.State == Cirrious.MvvmCross.Platform.MvxBaseSetup.MvxSetupState.Uninitialized)
+            {
+                _setup.Initialize();
+            }
+
+            kernel = new StandardKernel(new AndroidCoreRegistry("connectString", false));
+            kernel.Bind<Context>().ToConstant(this);
+            kernel.Bind<ISyncProcessRepository>().To<SyncProcessRepository>();
+            NcqrsInit.Init(kernel);
+
+            NcqrsEnvironment.SetDefault<IStreamableEventStore>(NcqrsEnvironment.Get<IEventStore>() as IStreamableEventStore);
+
+            #region register handlers
+
+            var bus = NcqrsEnvironment.Get<IEventBus>() as InProcessEventBus;
+
+            InitQuestionnariesStorage(bus);
+
+            InitUserStorage(bus);
+
+            InitFileStorage(bus);
+
+            InitDashboard(bus);
+
+            InitChangeLog(bus);
+
+            #endregion
         }
 
         private void RestoreAppState()

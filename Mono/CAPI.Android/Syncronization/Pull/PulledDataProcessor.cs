@@ -20,20 +20,24 @@ namespace CAPI.Android.Syncronization.Pull
 {
     public class PulledDataProcessor
     {
+        private const string syncTemp = "sync_temp";
+
         public PulledDataProcessor(IChangeLogManipulator changelog, ICommandService commandService)
         {
             this.changelog = changelog;
             this.commandService = commandService;
+            var dirPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), syncTemp);
+            if (!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
         }
 
         private readonly IChangeLogManipulator changelog;
         private readonly ICommandService commandService;
-        public void Save(string content, Guid chunckId)
+        public void Save(byte[] bytes, Guid chunckId)
         {
             var path = GetFileName(chunckId);
             using (var fs = File.Open(path, FileMode.CreateNew))
             {
-                var bytes = GetBytes(content);
                 fs.Write(bytes, 0, bytes.Length);
             }
         }
@@ -53,13 +57,13 @@ namespace CAPI.Android.Syncronization.Pull
             commandService.Execute(command);
             changelog.CreatePublicRecord(chunckId, command.EventSourceId);*/
 
-            throw new NotImplementedException("implement excecution logic");
+//            throw new NotImplementedException("implement excecution logic");
             File.Delete(path);
         }
 
         private string GetFileName(Guid id)
         {
-            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),"sync_temp",
+            return System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal),syncTemp,
                                           id.ToString());
         }
         private byte[] GetBytes(string str)
