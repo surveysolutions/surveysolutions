@@ -1,0 +1,38 @@
+﻿@{
+    ViewBag.Title = "Control Panel: Read Layer";
+}
+
+<h3>Read Layer Control Panel</h3>
+
+<pre id="statusArea" style="height: 400px; overflow-y: scroll;">
+Requesting status...
+</pre>
+
+@Html.ActionLink("Rebuild", "RebuildReadLayer", new {}, new { @class = "btn " })
+
+@Html.ActionLink("Stop", "StopReadLayerRebuilding", new {}, new { @class = "btn " })
+
+<script type="text/javascript">
+
+    function updateReadLayerStatus() {
+        return $.ajax({
+            url: '@Url.Action("GetReadLayerStatus")',
+            data: { timestamp: new Date().getMilliseconds() }
+        }).done(function (result) {
+            $('#statusArea').text(result + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+        }).fail(function (xhr, status, error) {
+            $('#statusArea').text(error + '\r\n' + xhr.responseText + '\r\n\r\nUpdated from server: ' + new Date().toTimeString());
+        });
+    }
+
+    function updateReadLayerStatusNeverending() {
+        $.when(updateReadLayerStatus()).always(function() {
+            setTimeout(updateReadLayerStatusNeverending, 500);
+        });
+    }
+
+    $(function () {
+        updateReadLayerStatusNeverending();
+    });
+
+</script>
