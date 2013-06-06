@@ -2,9 +2,8 @@
 using System.Diagnostics;
 using System.Text;
 using System.IO;
-using System.Web;
 
-namespace Codaxy.WkHtmlToPdf
+namespace WB.UI.Designer.Pdf
 {
     public class PdfConvertException : Exception
     {
