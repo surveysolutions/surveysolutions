@@ -1,8 +1,9 @@
 ﻿
+using WB.UI.Designer.Pdf;
+
 namespace WB.UI.Designer.Controllers
 {
-    using Codaxy.WkHtmlToPdf;
-    using Main.Core.View;
+	using Main.Core.View;
     using System;
     using System.Configuration;
     using System.IO;
