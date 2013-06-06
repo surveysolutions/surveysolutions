@@ -90,6 +90,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure", "Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj", "{44762E2D-1380-441B-B924-7CAEAFAF5955}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Core.Infrastructure.Raven", "Core\Infrastructure\WB.Core.Infrastructure.Raven\WB.Core.Infrastructure.Raven.csproj", "{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -354,6 +356,14 @@ Global
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.MONODROID|Any CPU.Build.0 = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44762E2D-1380-441B-B924-7CAEAFAF5955}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.MONODROID|Any CPU.ActiveCfg = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.MONODROID|Any CPU.Build.0 = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -398,5 +408,6 @@ Global
 		{39AEBC09-5A81-47C8-B68D-4984199AE1FE} = {CF96E784-AEB4-4267-B335-9CD48D329ECA}
 		{75470164-4087-4E9B-845A-5400C038A499} = {C124A725-4A8A-4451-9276-9A9C0F8BE072}
 		{44762E2D-1380-441B-B924-7CAEAFAF5955} = {F5B28D65-7FEE-4AC6-B8C7-A57E71B7CD93}
+		{0F67084B-3ECB-4F88-BA20-5A6C7ACC35BF} = {F5B28D65-7FEE-4AC6-B8C7-A57E71B7CD93}
 	EndGlobalSection
 EndGlobal
