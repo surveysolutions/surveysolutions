@@ -53,13 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CoreInfrastructureModule.cs" />
     <Compile Include="IReadLayerAdministrationService.cs" />
     <Compile Include="IReadLayerStatusService.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="MaintenanceException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Implementation\ReadLayerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
