@@ -25,7 +25,8 @@ namespace CAPI.Android.Core.Model.ChangeLog
         public void DeleteDraftChangeSet(Guid recordId)
         {
             var path = GetFileName(recordId);
-            File.Delete(path);
+            if (File.Exists(path))
+                File.Delete(path);
         }
 
         private string GetFileName(Guid publicKey)

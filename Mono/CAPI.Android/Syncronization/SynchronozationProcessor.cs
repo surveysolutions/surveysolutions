@@ -54,7 +54,7 @@ namespace CAPI.Android.Syncronization
             handshake = new RestHandshake();
 
             pullDataProcessor = new PullDataProcessor(changelog, NcqrsEnvironment.Get<ICommandService>());
-            pushDataProcessor = new PushDataProcessor();
+            pushDataProcessor = new PushDataProcessor(changelog);
         }
 
         #region operations

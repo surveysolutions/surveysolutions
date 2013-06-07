@@ -9,12 +9,20 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using CAPI.Android.Core.Model.ChangeLog;
 using SynchronizationMessages.Synchronization;
 
 namespace CAPI.Android.Syncronization.Push
 {
     public class PushDataProcessor
     {
+        private readonly IChangeLogManipulator changelog;
+
+        public PushDataProcessor(IChangeLogManipulator changelog)
+        {
+            this.changelog = changelog;
+        }
+
         private const int chunkCount = 10;
         
         public IList<ChunckDescription> GetChuncks()
@@ -31,6 +39,7 @@ namespace CAPI.Android.Syncronization.Push
 
         public void MarkChunckAsPushed(Guid chunckId)
         {
+            changelog.MarkDraftChangesetAsPublic(chunckId);
         }
     }
 
