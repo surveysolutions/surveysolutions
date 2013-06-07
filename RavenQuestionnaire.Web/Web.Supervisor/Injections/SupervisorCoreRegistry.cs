@@ -1,5 +1,6 @@
 using System.Web.Configuration;
 
+using WB.Core.Infrastructure.Raven.Implementation;
 using WB.Core.SharedKernel.Utils.Logging;
 using WB.UI.Shared.Web.Filters;
 

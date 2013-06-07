@@ -1,4 +1,6 @@
-﻿namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
+﻿using WB.Core.Infrastructure;
+
+namespace Main.Core.Tests.Domain.QuestionnaireDenormalizerTests
 {
     using System;
 

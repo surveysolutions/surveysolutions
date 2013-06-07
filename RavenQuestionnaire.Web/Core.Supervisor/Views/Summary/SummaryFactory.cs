@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.Summary
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.Summary
 {
     using System;
     using System.Collections.Generic;

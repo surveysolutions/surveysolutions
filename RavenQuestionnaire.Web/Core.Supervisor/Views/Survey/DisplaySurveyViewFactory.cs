@@ -1,3 +1,5 @@
+using WB.Core.Infrastructure;
+
 namespace Core.Supervisor.Views.Survey
 {
     using System;

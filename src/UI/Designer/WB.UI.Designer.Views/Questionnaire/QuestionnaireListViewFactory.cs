@@ -13,6 +13,8 @@ using System;
 using System.Linq;
 using Main.Core.Utility;
 
+using WB.Core.Infrastructure;
+
 namespace WB.UI.Designer.Views.Questionnaire
 {
     /// <summary>

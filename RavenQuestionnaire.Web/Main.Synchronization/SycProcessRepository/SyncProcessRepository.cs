@@ -6,6 +6,9 @@
 //   TODO: Update summary.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
+using WB.Core.Infrastructure;
+
 namespace Main.Synchronization.SycProcessRepository
 {
     using System;

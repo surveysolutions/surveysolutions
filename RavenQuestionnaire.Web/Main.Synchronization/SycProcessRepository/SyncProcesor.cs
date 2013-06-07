@@ -10,6 +10,8 @@
 using Main.Core.Commands.Synchronization;
 using Ncqrs.Commanding.ServiceModel;
 
+using WB.Core.Infrastructure;
+
 namespace Main.Synchronization.SycProcessRepository
 {
     using System;

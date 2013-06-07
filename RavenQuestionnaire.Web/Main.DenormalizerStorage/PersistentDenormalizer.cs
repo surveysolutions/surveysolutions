@@ -12,6 +12,8 @@ using System.Linq.Expressions;
 using System.Runtime.Caching;
 using System.Threading;
 
+using WB.Core.Infrastructure;
+
 namespace Main.DenormalizerStorage
 {
     /// <summary>

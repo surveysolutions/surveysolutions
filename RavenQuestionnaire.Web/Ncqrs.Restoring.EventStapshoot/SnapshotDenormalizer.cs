@@ -6,6 +6,8 @@ using Main.DenormalizerStorage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 
+using WB.Core.Infrastructure;
+
 namespace Ncqrs.Restoring.EventStapshoot
 {
     public class SnapshotDenormalizer:IEventHandler<SnapshootLoaded>

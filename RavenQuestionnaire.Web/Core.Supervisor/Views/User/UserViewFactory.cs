@@ -1,4 +1,6 @@
-﻿namespace Core.Supervisor.Views.User
+﻿using WB.Core.Infrastructure;
+
+namespace Core.Supervisor.Views.User
 {
     using System;
     using System.Linq;

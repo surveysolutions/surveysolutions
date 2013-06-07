@@ -10,6 +10,8 @@
 using Main.Core.View;
 using Main.DenormalizerStorage;
 
+using WB.Core.Infrastructure;
+
 namespace RavenQuestionnaire.Core.Views.Collection
 {
     using System.Collections.Generic;
