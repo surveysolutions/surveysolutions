@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-using System.Text;
-using Main.Core.Commands.Questionnaire;
+﻿using Main.Core.Commands.Questionnaire;
 using Main.Core.Commands.Questionnaire.Completed;
 using Main.Core.Commands.User;
 using Main.Core.Documents;
@@ -15,25 +13,28 @@ using Ncqrs.Commanding.ServiceModel;
 using Ncqrs.Eventing.Storage.RavenDB.RavenIndexes;
 using Ncqrs.Restoring.EventStapshoot;
 using Raven.Abstractions.Data;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using Raven.Abstractions.Indexing;
 using Raven.Client;
 using Raven.Client.Document;
-using Raven.Client.Extensions;
 using Raven.Imports.Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LoadTestDataGenerator
 {
+    using Main.Core.View;
+    using Main.Core.View.User;
     using System.Threading.Tasks;
 
     public partial class LoadTestDataGenerator : Form
     {
         protected readonly ICommandService CommandService;
+        protected readonly IViewRepository ViewRepository;
         protected readonly IDenormalizerStorage<CompleteQuestionnaireStoreDocument> SurveyStorage;
         protected readonly DocumentStore RavenStore;
         const string IndexForDelete = "AllEvents";
@@ -42,13 +43,14 @@ namespace LoadTestDataGenerator
         private QuestionnaireDocument template;
         private IEnumerable<IQuestion> featuredQuestions;
 
-        public LoadTestDataGenerator(ICommandService commandService,
+        public LoadTestDataGenerator(IViewRepository repository, ICommandService commandService,
             IDenormalizerStorage<CompleteQuestionnaireStoreDocument> surveyStorage,
             DocumentStore ravenStore)
         {
             this.RavenStore = ravenStore;
             this.CommandService = commandService;
             this.SurveyStorage = surveyStorage;
+            this.ViewRepository = repository;
             InitializeComponent();
 
             var databaseName = ConfigurationManager.AppSettings["Raven.DefaultDatabase"];
@@ -58,6 +60,7 @@ namespace LoadTestDataGenerator
             }
             defaultDatabaseName.Text = databaseName;
 
+            this.PrepareDatabase();
             this.UpdateEventsStatistics();
         }
 
@@ -75,52 +78,51 @@ namespace LoadTestDataGenerator
 
             Task.Run(() =>
             {
-                this.PrepareDatabase();
-
                 if (this.clearDatabase.Checked)
                 {
-                    UpdateStatus("start cleaning database");
+                    UpdateStatus("clean database");
                     this.ClearDatabase();
-                    UpdateStatus("database cleaned successfully");
                 }
-
-                this.UpdateEventsStatistics();
 
                 if (this.generateSupervisorEvents.Checked)
                 {
-                    UpdateStatus("start generating supervisor's events");
                     this.GenerateSupervisorsEvents();
-                    UpdateStatus("supervisor's events generated successfully");
                 }
-
-                this.UpdateEventsStatistics();
 
                 if (this.generateCapiEvents.Checked)
                 {
-                    UpdateStatus("start generating CAPI's events");
+                    UpdateStatus("create CAPI's events");
                     this.GenerateCapiEvents();
-                    UpdateStatus("CAPI's events generated successfully");
                 }
+
+                this.Stop();
             });
         }
 
         private void PrepareToStart()
         {
             generate.Enabled = false;
+            lstLog.Items.Clear();
         }
 
         private void Start()
         {
-            ctrlProgress.Maximum = (int.Parse(surveys_amount.Text) * (chkGenerateSnapshoots.Checked ? 5 : 4))
+            var surveys_count = int.Parse(surveys_amount.Text);
+
+            ctrlProgress.Maximum = (surveys_count
+                                    * ( /*template+status+assignment to supervisor+assignment to interviewer*/4))
+                                   + (chkGenerateSnapshoots.Checked ? surveys_count : 0)
                                    + int.Parse(supervisorsCount.Text) + int.Parse(interviewersCount.Text)
-                                   + (chkSetAnswers.Checked ? featuredQuestions.Count() : 0)
-                                   + (chkHeadquarter.Checked ? 2 : 1);
+                                   + (chkSetAnswers.Checked ? featuredQuestions.Count() * surveys_count : 0)
+                                   + (chkHeadquarter.Checked ? 1 : 0)
+                                   + (generateCapiEvents.Checked ? surveys_count * 2 : 0) + ( /*create template*/1);
         }
 
         private void Stop()
         {
-            generate.InvokeIfRequired<Button>(x => x.Enabled = true);
+            generate.InvokeIfRequired(x => x.Enabled = true);
             ctrlProgress.GetCurrentParent().InvokeIfRequired(x => ctrlProgress.Value = 0);
+            this.UpdateStatus("done");
         }
 
         private void IncreaseProgress()
@@ -130,30 +132,32 @@ namespace LoadTestDataGenerator
 
         private void UpdateStatus(string status)
         {
-            processStatus.GetCurrentParent().InvokeIfRequired(x => processStatus.Text = status);
-        }
-
-        private void UpdateStatistic(string statistic)
-        {
-            eventsStatistics.InvokeIfRequired(x => eventsStatistics.Text = statistic);
+            lstLog.InvokeIfRequired(x=>x.Items.Add(status));
+            UpdateEventsStatistics();
         }
 
         private void UpdateEventsStatistics()
         {
-            var statistics = new List<EventStatisticItem>();
-            using (IDocumentSession session = this.RavenStore.OpenSession())
-            {
-                statistics.AddRange(session
-                    .Query<EventStatisticItem>(IndexForStatistics)
-                    .Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
-            }
-            var sb = new StringBuilder();
-            foreach (var statistic in statistics.OrderByDescending(x => x.Count))
-            {
-                sb.AppendFormat("{0,-7} {1}", statistic.Count, statistic.Type);
-                sb.AppendLine();
-            }
-            UpdateStatistic(sb.ToString());
+            Task.Run(
+                () =>
+                    {
+                        var statistics = new List<EventStatisticItem>();
+                        using (IDocumentSession session = this.RavenStore.OpenSession())
+                        {
+                            statistics.AddRange(
+                                session.Query<EventStatisticItem>(IndexForStatistics)
+                                       .Customize(customization => customization.WaitForNonStaleResultsAsOfNow()));
+                        }
+                        eventsStatistics.InvokeIfRequired(
+                            _ =>
+                            {
+                                _.Items.Clear();
+                                statistics.OrderByDescending(x => x.Count)
+                                          .ToList()
+                                          .ForEach(x => _.Items.Add(string.Format("{0,-7} {1}", x.Count, x.Type)));
+                            });
+                    });
+            eventsStatistics.Text = sb.ToString();
         }
 
         private void PrepareDatabase()
@@ -181,16 +185,18 @@ namespace LoadTestDataGenerator
         private void GenerateCapiEvents()
         {
             var surveyIds = this.GetSurveyIds();
+            this.UpdateStatus("full capi events");
             foreach (var surveyId in surveyIds)
             {
                 FillAnswers(surveyId);
                 var responsible = this.SurveyStorage.GetById(surveyId).Responsible;
                 CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.CreateSnapshoot(surveyId);
+                this.IncreaseProgress();
             }
 
             var rand = RandomObject;
-
+            this.UpdateStatus("partial capi events");
             foreach (var surveyId in surveyIds)
             {
                 if (rand.Next(10) != 5) continue;
@@ -200,6 +206,7 @@ namespace LoadTestDataGenerator
                 this.FillAnswers(surveyId, true);
                 this.CompleteSurvey(surveyId, SurveyStatus.Complete, responsible);
                 this.CreateSnapshoot(surveyId);
+                this.IncreaseProgress();
             }
         }
 
@@ -216,7 +223,7 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, this.GetDummyAnswers(question), GetDummyAnswer(question), null));
+                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, this.GetDummyCompleteAnswers(question), GetDummyAnswer(question), null));
             }
             var allQuestions = survey.GetQuestions().Where(x => !(x is IAutoPropagate)).ToList();
             foreach (var question in allQuestions)
@@ -225,7 +232,7 @@ namespace LoadTestDataGenerator
                 {
                     continue;
                 }
-                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyAnswers(question), GetDummyAnswer(question), question.PropagationPublicKey));
+                this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyCompleteAnswers(question), GetDummyAnswer(question), question.PropagationPublicKey));
             }
         }
 
@@ -295,17 +302,17 @@ namespace LoadTestDataGenerator
 
         private void GenerateSupervisorsEvents()
         {
-            UserDocument hq = null;
-            if (chkHeadquarter.Checked && !string.IsNullOrEmpty(txtHQName.Text))
-            {
-                hq = this.GenerateHeadquarter();
-            }
+            UserDocument hq = this.GenerateHeadquarter();
 
             this.StoreTemplate(template, hq);
 
+            UpdateStatus("create supervisors");
             var supervisors = this.GenerateSupervisors(int.Parse(this.supervisorsCount.Text));
+            UpdateStatus("create interviewers");
             var interviewers = this.GenerateInterviewers(int.Parse(this.interviewersCount.Text), supervisors);
+            UpdateStatus("create survey");
             var surveyIds = this.GenerateSurveys(int.Parse(this.surveys_amount.Text), template, hq).ToList();
+            UpdateStatus("create featured questions");
             foreach (var surveyId in surveyIds)
             {
                 if (featuredQuestions != null)
@@ -323,13 +330,12 @@ namespace LoadTestDataGenerator
             }
             if (chkGenerateSnapshoots.Checked)
             {
+                UpdateStatus("create snapshoots");
                 foreach (var surveyId in surveyIds)
                 {
                     this.CreateSnapshoot(surveyId);
                 }
             }
-
-            this.Stop();
         }
 
         private QuestionnaireDocument ReadTemplate(string path)
@@ -341,14 +347,50 @@ namespace LoadTestDataGenerator
 
         private UserDocument GenerateHeadquarter()
         {
-            var hq = new UserDocument()
+            UserDocument hq;
+
+            if (chkHeadquarter.Checked)
+            {
+                UpdateStatus("create headquarter");
+                var hqView =
+                    this.ViewRepository.Load<UserViewInputModel, UserView>(
+                        new UserViewInputModel(txtHQName.Text, txtHQName.Text));
+                if (hqView == null)
                 {
-                    PublicKey = Guid.NewGuid(),
-                    UserName = txtHQName.Text,
-                    Roles = new List<UserRoles>() { UserRoles.Headquarter }
-                };
-            CommandService.Execute(new CreateUserCommand(hq.PublicKey, hq.UserName, SimpleHash.ComputeHash(hq.UserName), hq.UserName + "@mail.org", hq.Roles.ToArray(), false, null));
-            this.IncreaseProgress();
+                    hq = new UserDocument()
+                    {
+                        PublicKey = Guid.NewGuid(),
+                        UserName = string.IsNullOrEmpty(txtHQName.Text) ? "hq" : txtHQName.Text,
+                        Roles = new List<UserRoles>() { UserRoles.Headquarter }
+                    };
+                    CommandService.Execute(new CreateUserCommand(hq.PublicKey, hq.UserName, SimpleHash.ComputeHash(hq.UserName), hq.UserName + "@mail.org", hq.Roles.ToArray(), false, null));
+                }
+                else
+                {
+                    hq = new UserDocument() { PublicKey = hqView.PublicKey };
+                }
+                this.IncreaseProgress();
+            }
+            else
+            {
+                var hqView =
+                    this.ViewRepository.Load<UserBrowseInputModel, UserBrowseView>(
+                        new UserBrowseInputModel(UserRoles.Headquarter));
+                if (hqView.Items.Any())
+                {
+                    hq = new UserDocument() { PublicKey = hqView.Items.FirstOrDefault().Id };
+                }
+                else
+                {
+                    hq = new UserDocument()
+                    {
+                        PublicKey = Guid.NewGuid(),
+                        UserName = "hq",
+                        Roles = new List<UserRoles>() { UserRoles.Headquarter }
+                    };
+                    CommandService.Execute(new CreateUserCommand(hq.PublicKey, hq.UserName, SimpleHash.ComputeHash(hq.UserName), hq.UserName + "@mail.org", hq.Roles.ToArray(), false, null));
+                }
+            }
 
             return hq;
         }
@@ -418,6 +460,7 @@ namespace LoadTestDataGenerator
             foreach (var question in featuredQuestions)
             {
                 this.CommandService.Execute(new SetAnswerCommand(surveyId, question.PublicKey, GetDummyAnswers(question), GetDummyAnswer(question), null));
+                this.IncreaseProgress();
             }
         }
 
@@ -454,6 +497,35 @@ namespace LoadTestDataGenerator
         }
 
         private List<Guid> GetDummyAnswers(IQuestion q)
+        {
+            var random = RandomObject;
+            if (q is IMultyOptionsQuestion)
+            {
+                var rand = random;
+                var question = (MultyOptionsQuestion)q;
+                var answersCount = question.Answers.Count;
+                var selectedAnswersCount = rand.Next(1, answersCount + 1);
+                var result = new List<Guid>();
+                for (int i = 0; i < selectedAnswersCount; i++)
+                {
+                    var answer = question.Answers[rand.Next(0, answersCount)];
+                    result.Add(answer.PublicKey);
+                }
+                return result.Distinct().ToList();
+            }
+            if (q is ISingleQuestion)
+            {
+                var question = (SingleQuestion)q;
+                var answersCount = question.Answers.Count;
+                return new List<Guid>()
+                    {
+                        question.Answers[random.Next(answersCount)].PublicKey
+                    };
+            }
+            return new List<Guid>() { Guid.NewGuid() };
+        }
+
+        private List<Guid> GetDummyCompleteAnswers(IQuestion q)
         {
             var random = RandomObject;
             if (q is IMultyOptionsQuestion)
